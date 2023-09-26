@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { OverlaysearchComponent } from './components/overlaysearch/overlaysearch.component';
 import { InterruptPopupComponent } from './components/interrupt-popup/interrupt-popup.component';
 import { RestorePopupComponent } from './components/restore-popup/restore-popup.component';
@@ -29,26 +29,75 @@ import { SuggestionsComponent } from './render-comp/suggestions/suggestions.comp
 import { SmalltalkComponent } from './render-comp/smalltalk/smalltalk.component';
 import { AutomationComponent } from './render-comp/automation/automation.component';
 import { FeedbackComponent } from './render-comp/feedback/feedback.component';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
-import { NgxEchartsModule } from 'ngx-echarts';
-import * as echarts from 'echarts';
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
+const COMPONENTS = [
+  OverlaysearchComponent, 
+  InterruptPopupComponent, 
+  RestorePopupComponent, 
+  SummaryPopupComponent, 
+  TerminateComponent, 
+  RandomUUIDPipe, 
+  RemoveSpecialCharPipe, 
+  ReplaceQuotStringWithDoubleQuotPipe, 
+  SanitizeHtmlPipe, 
+  RawHtmlPipe, 
+  KoreGenerateuuidPipe, 
+  HtmlEntityPipe, 
+  EmptyObjectCheckPipe, 
+  FormatAMPMPipe, 
+  LoaderComponent, 
+  TypeaheadComponent, 
+  RemoveTagFromStringPipe, 
+  ReplaceTextWithTagPipe, 
+  UserBotHistoryComponent, 
+  ConverTimestampToDatePipe, 
+  SafeHtmlPipe,
+  SmalltalkComponent,
+  SuggestionsComponent, 
+  AutomationComponent, 
+  FeedbackComponent
+]
 @NgModule({
-  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe, FormatAMPMPipe, LoaderComponent, TypeaheadComponent, RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent, ConverTimestampToDatePipe, SafeHtmlPipe,
-    SmalltalkComponent,SuggestionsComponent, AutomationComponent, FeedbackComponent],
+  declarations: [
+    ...COMPONENTS
+  ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     PerfectScrollbarModule,
-    NgxEchartsModule.forRoot({ echarts }),
+    TranslateModule.forChild({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
   ],
-  providers:[TemplateRenderClassService, SanitizeHtmlPipe, RandomUUIDPipe, RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe,
-  EmptyObjectCheckPipe, FormatAMPMPipe, RemoveTagFromStringPipe, ReplaceTextWithTagPipe],
-  exports : [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe,
-    RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe,
-    FormatAMPMPipe, LoaderComponent, TypeaheadComponent,RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent, ConverTimestampToDatePipe,
-    SafeHtmlPipe,SmalltalkComponent,SuggestionsComponent, AutomationComponent, FeedbackComponent, NgxEchartsModule]
+  providers:[
+    TemplateRenderClassService, 
+    SanitizeHtmlPipe, 
+    RandomUUIDPipe, 
+    RemoveSpecialCharPipe,
+    ReplaceQuotStringWithDoubleQuotPipe, 
+    RawHtmlPipe, 
+    KoreGenerateuuidPipe, 
+    HtmlEntityPipe,
+    EmptyObjectCheckPipe, 
+    FormatAMPMPipe, 
+    RemoveTagFromStringPipe, 
+    ReplaceTextWithTagPipe
+  ],
+  exports : [
+    ...COMPONENTS,
+    TranslateModule
+  ]
 })
 export class SharedModule { }

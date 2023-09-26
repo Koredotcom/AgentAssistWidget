@@ -4,13 +4,14 @@
     "baseUrl": "./",
     "downlevelIteration": true,
     "outDir": "./dist/out-tsc",
-    "sourceMap": true,
+    "sourceMap": false,
     "declaration": false,
     "module": "es2020",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
+    "strict": false,
     "paths": {
       "@kore.services/*": [
         "./src/app/services/*"

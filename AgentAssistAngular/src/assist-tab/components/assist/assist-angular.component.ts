@@ -995,17 +995,7 @@ export class AssistComponent implements OnInit {
       }
       this.commonService.clickEventObjectsBeforeTabShift.push(clickObject);
     } else {
-      if (eventName == IdReferenceConst.ASSISTTERMINATE) {
-        // this.terminateButtonClick(uuid)
-      } else if (eventName == IdReferenceConst.OVERRIDE_BTN) {
-        // this.handleOverridBtnClick(uuid, dialogId);
-      } else if (eventName == IdReferenceConst.CANCEL_OVERRIDE_BTN) {
-        // this.handleCancelOverrideBtnClick(uuid, dialogId);
-      } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
-        // this.designAlterService.handleDropdownToggle(uuid);
-      } else if (eventName == IdReferenceConst.ASSIST_RUN_BUTTON) {
-        // this.handleRunButtonClick(uuid, data);
-      } else if (eventName == IdReferenceConst.ENTITY_EDIT) {
+      if (eventName == IdReferenceConst.ENTITY_EDIT) {
         this.handleEntityEditClick(uuid);
       } else if (eventName == IdReferenceConst.EDIT_CANCEL_BTN) {
         this.handleEditCancelBtnClick(uuid);
@@ -1013,15 +1003,35 @@ export class AssistComponent implements OnInit {
         this.handleRestoreBtnClick(uuid);
       } else if (eventName == IdReferenceConst.SAVE_BTN) {
         this.handleSaveBtnClick(uuid);
-      } else if (eventName == IdReferenceConst.AGENT_RUN_BTN) {
-        // this.handleMybotRunClick(uuid, data);
-      } else if (eventName == IdReferenceConst.SEEMORE_BTN) {
-        // this.handleSeeMoreLessClickEvents(uuid, data);
-      } else if (eventName == IdReferenceConst.CHECK){
-          // setTimeout(() => {
-          //   this.handleFaqArrowClick(uuid, dialogId, data);
-          // }, 500);
       }
+
+      // if (eventName == IdReferenceConst.ASSISTTERMINATE) {
+      //   // this.terminateButtonClick(uuid)
+      // } else if (eventName == IdReferenceConst.OVERRIDE_BTN) {
+      //   // this.handleOverridBtnClick(uuid, dialogId);
+      // } else if (eventName == IdReferenceConst.CANCEL_OVERRIDE_BTN) {
+      //   // this.handleCancelOverrideBtnClick(uuid, dialogId);
+      // } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
+      //   // this.designAlterService.handleDropdownToggle(uuid);
+      // } else if (eventName == IdReferenceConst.ASSIST_RUN_BUTTON) {
+      //   // this.handleRunButtonClick(uuid, data);
+      // } else if (eventName == IdReferenceConst.ENTITY_EDIT) {
+      //   this.handleEntityEditClick(uuid);
+      // } else if (eventName == IdReferenceConst.EDIT_CANCEL_BTN) {
+      //   this.handleEditCancelBtnClick(uuid);
+      // } else if (eventName == IdReferenceConst.RESTORE_BTN) {
+      //   this.handleRestoreBtnClick(uuid);
+      // } else if (eventName == IdReferenceConst.SAVE_BTN) {
+      //   this.handleSaveBtnClick(uuid);
+      // } else if (eventName == IdReferenceConst.AGENT_RUN_BTN) {
+      //   // this.handleMybotRunClick(uuid, data);
+      // } else if (eventName == IdReferenceConst.SEEMORE_BTN) {
+      //   // this.handleSeeMoreLessClickEvents(uuid, data);
+      // } else if (eventName == IdReferenceConst.CHECK){
+      //     // setTimeout(() => {
+      //     //   this.handleFaqArrowClick(uuid, dialogId, data);
+      //     // }, 500);
+      // }
     }
   }
 

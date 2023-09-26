@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { userAgInputMessages } from 'src/common/helper/data-models';
 import { EVENTS } from 'src/common/helper/events';
 import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -24,21 +25,24 @@ export class AppComponent implements OnDestroy {
   isGrantSuccess = false;
   errorMsg : string = '';
   subsciption = new Subscription();
-  constructor(private webSocketService: WebSocketService,
-              private service: CommonService,
-              private route: ActivatedRoute,
-              private handleSubjectService: HandleSubjectService,
-              private randomID: KoreGenerateuuidPipe,
-              private localStorageService: LocalStorageService,
-              private templateChatConfig: TemplateRenderClassService,
-              private router: Router) {
-  }
+  constructor(
+      private webSocketService: WebSocketService,
+      private service: CommonService,
+      private route: ActivatedRoute,
+      private handleSubjectService: HandleSubjectService,
+      private randomID: KoreGenerateuuidPipe,
+      private localStorageService: LocalStorageService,
+      private templateChatConfig: TemplateRenderClassService,
+      private translate: TranslateService
+    ){}
+    
   ngOnDestroy(): void {
     this.subsciption1.unsubscribe();
     this.subsciption.unsubscribe();
   }
 
   ngOnInit() {
+    this.translate.use('en');
     window.addEventListener("unload", (event) => {
       window.removeEventListener("message", this.receiveMessage);
       this.localStorageService.agentDetails = {};

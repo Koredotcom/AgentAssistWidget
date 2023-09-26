@@ -20,33 +20,33 @@
                     <div class="tab-icon" id="HistoryTabIcon" (click)="changeActiveTab(projConstants.HISTORY)"
                         [ngClass]="{'active-tab': activeTab == projConstants.HISTORY}" *ngIf="showHistoryTab">
                         <i class="ast-bot font-13" id="HistoryIcon"></i>
-                        <div class="title-tab" id="AssistLabel">{{projConstants.HISTORY}}</div>
-                        <div class="custom-tootltip-tabs">{{projConstants.HISTORY}}</div>
+                        <div class="title-tab" id="AssistLabel">{{projConstants.HISTORY | translate}}</div>
+                        <div class="custom-tootltip-tabs">{{projConstants.HISTORY | translate}}</div>
                     </div>
                     <div class="tab-icon" id="transcriptIcon" (click)="changeActiveTab(projConstants.TRANSCRIPT)"
                         [ngClass]="{'active-tab': activeTab == projConstants.TRANSCRIPT}"
                         [class.hide]="!commonService.isCallConversation">
                         <i class="ast-transcipt font-15" id="scriptIcon"></i>
-                        <div class="title-tab" id="transcriptLabel">{{projConstants.TRANSCRIPT}}</div>
-                        <div class="custom-tootltip-tabs">{{projConstants.TRANSCRIPT}}</div>
+                        <div class="title-tab" id="transcriptLabel">{{projConstants.TRANSCRIPT | translate}}</div>
+                        <div class="custom-tootltip-tabs">{{projConstants.TRANSCRIPT | translate}}</div>
                     </div>
                     <div class="tab-icon" id="userAutoIcon" (click)="changeActiveTab(projConstants.ASSIST)"
                         [ngClass]="{'active-tab': activeTab == projConstants.ASSIST}">
                         <i class="ast-bot font-13" id="userBotIcon"></i>
-                        <div class="title-tab" id="AssistLabel">{{projConstants.ASSIST}}</div>
-                        <div class="custom-tootltip-tabs">{{projConstants.ASSIST}}</div>
+                        <div class="title-tab" id="AssistLabel">{{projConstants.ASSIST | translate}}</div>
+                        <div class="custom-tootltip-tabs">{{projConstants.ASSIST | translate}}</div>
                     </div>
                     <div class="tab-icon" id="searchAutoIcon" (click)="changeActiveTab(projConstants.LIBRARY)"
                         [ngClass]="{'active-tab': activeTab == projConstants.LIBRARY}">
                         <i class="ast-library font-13" id="searchIcon"></i>
-                        <div class="title-tab" id="LibraryLabel">{{projConstants.LIBRARY}}</div>
-                        <div class="custom-tootltip-tabs">{{projConstants.LIBRARY}}</div>
+                        <div class="title-tab" id="LibraryLabel">{{projConstants.LIBRARY | translate}}</div>
+                        <div class="custom-tootltip-tabs">{{projConstants.LIBRARY | translate}}</div>
                     </div>
                     <div class="tab-icon" id="agentAutoIcon" (click)="changeActiveTab(projConstants.MYBOT)"
                         [ngClass]="{'active-tab': activeTab == projConstants.MYBOT}">
                         <i class="ast-automation font-13" id="agentBotIcon"></i>
-                        <div class="title-tab" id="MybotLabel">{{projConstants.MYBOT}}</div>
-                        <div class="custom-tootltip-tabs">{{projConstants.MYBOT}}</div>
+                        <div class="title-tab" id="MybotLabel">{{projConstants.MYBOT | translate}}</div>
+                        <div class="custom-tootltip-tabs">{{projConstants.MYBOT | translate}}</div>
                     </div>
                 </div>
                 <div class="taoggle-with-text">

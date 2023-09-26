@@ -14,10 +14,10 @@ export const ImageFileNames = {
 export const ImageFilePath = "assets/images/"
 
 export const ProjConstants = {
-    ASSIST : 'Assist',
-    MYBOT : 'My Bot',
-    TRANSCRIPT : "Transcript",
-    LIBRARY : 'Library',
+    ASSIST : 'ASSIST',
+    MYBOT : 'MYBOT',
+    TRANSCRIPT : "TRANSCRIPT",
+    LIBRARY : 'LIBRARY',
     VOICE : 'voice',
     CHAT : 'chat',
     BOTID : 'botId',
@@ -53,7 +53,7 @@ export const ProjConstants = {
     RESTORE : 'Restore',
     SUMMARY : 'Summary',
     INTENT : 'IntentName',
-    HISTORY: 'History',
+    HISTORY: 'HISTORY',
     PS_Y_REACH_START : 'ps-y-reach-start',
     PS_Y_REACH_END : 'ps-y-reach-end',
     PS_SCROLL_UP : 'ps-scroll-up',
