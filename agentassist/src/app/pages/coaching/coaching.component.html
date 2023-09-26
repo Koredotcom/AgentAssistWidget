@@ -57,7 +57,7 @@
                                                         <button class="edit-btn" (click)="openFLowCreation(flowCreation, rule, 'edit')">
                                                             <i class="icon-sa-welcome-edit"></i>
                                                         </button>
-                                                        <button class="delete-btn" [disabled]="!rule.deletable" [ngClass]="{'disabled': !rule.deletable}" (click)="openDeleteRule(rule)">
+                                                        <button class="delete-btn" [disabled]="rule.deletable === false" [ngClass]="{'disabled': rule.deletable === false}" (click)="openDeleteRule(rule)">
                                                             <i class="icon-sa-welcome-delete"></i>
                                                         </button>
                                                     </div>
@@ -86,11 +86,13 @@
                                                     </div> -->
                                                     <div class="title-text w-18 last-updated-text" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{(rule.lModOn | date:'mediumDate')}}">{{rule.lModOn | date:'mediumDate'}}</div>
                                                     <div class="last-updated-toggle w-10">
-                                                        <label class="kr-sg-toggle" *ngIf="rule.deletable">
+                                                        <label class="kr-sg-toggle" *ngIf="rule.deletable !== false; else alwaysEnabled">
                                                             <input type="checkbox" [checked]="rule.isActive" (click)="changeRuleStatus(rule, rule._id)">
                                                             <div class="slider"></div>
                                                         </label>
-                                                        <span *ngIf="!rule.deletable" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="Always Enabled">Always Enabled</span>
+                                                        <ng-template #alwaysEnabled>
+                                                            <span *ngIf="!rule.deletable" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="Always Enabled">Always Enabled</span>
+                                                        </ng-template>
                                                     </div>
                                                 </div>
                                             </ng-container>

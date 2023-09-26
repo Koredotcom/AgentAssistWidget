@@ -55,7 +55,7 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
   @Input() checkListType = 'primary';
   @Input() createOrUpdate = 'create';
   @Input() currentCheckList:any = {};
-  @Input() allTagList : string[];
+  @Input() allTagList : any = [];
   @Output() closeE = new EventEmitter();
   @Output() closeChecklist = new EventEmitter();
   @Output() saveEvent = new EventEmitter();
@@ -232,9 +232,9 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
         (<FormArray>this.checkListForm?.controls["tags"]).push(this.fb.group({ name: value }))
         // this.tags.push({ name: value });
       }
-     
-      if(this.allTagList.indexOf(value) == -1){
-        this.allTagList.push(value);
+      let flag = this.allTagList.findIndex(item => item.name === value);
+      if(flag < 0){
+        this.allTagList.push({name : value, checked : true});
       }
     }
   

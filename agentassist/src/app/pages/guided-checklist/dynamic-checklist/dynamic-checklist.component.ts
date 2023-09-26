@@ -19,7 +19,7 @@ import { DeleteComponent } from '../common/delete/delete.component';
 export class DynamicChecklistComponent implements OnInit, OnChanges {
   @Input() checkListType;
   @Output() update = new EventEmitter();
-
+  @Output() createCl = new EventEmitter();
   searchField = new FormControl();
   selAcc = this.local.getSelectedAccount();
   loading = false;
@@ -164,6 +164,10 @@ export class DynamicChecklistComponent implements OnInit, OnChanges {
         });
       }
     });
+  }
+
+  createChecklist(){
+    this.createCl.emit('dynamic');
   }
 
 }

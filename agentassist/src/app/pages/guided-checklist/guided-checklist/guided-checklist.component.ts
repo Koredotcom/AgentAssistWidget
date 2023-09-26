@@ -11,6 +11,7 @@ import { workflowService } from '@kore.services/workflow.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-guided-checklist',
@@ -25,6 +26,7 @@ export class GuidedChecklistComponent implements OnInit {
   isStageListOpen = false;
   @ViewChild('checkList1') checkList1: PrimaryChecklistComponent;
   @ViewChild('checkList2') checkList2: DynamicChecklistComponent;
+  loading = false;
   subs = new SubSink();
   selAcc = this.local.getSelectedAccount();
   constructor(
@@ -60,6 +62,7 @@ export class GuidedChecklistComponent implements OnInit {
         }
       }
       if(event.data.action === 'destroyedChecklist') {
+        this.modalService.dismissAll();
       }
     })
   }
@@ -113,13 +116,24 @@ export class GuidedChecklistComponent implements OnInit {
   }
 
   publush(){
+    this.loading = true;
     let botId = this.workflowService.getCurrentBtSmt(true)._id;
     this.service.invoke('publish.checklist', {}, {botId})
+    .pipe(
+      finalize(()=>{
+        this.loading = false;
+      })
+    )
     .subscribe((data)=>{
       this.notificationService.notify(this.translate.instant('COACHING.PUBLISH_SUCCESS'), 'success');
     },(err)=>{
       this.notificationService.showError(err, this.translate.instant("COACHING.PUBLISH_FAILURE"));
     });
+  }
+
+  createFCl(event){
+    this.checkListType = event;
+    this.createCheckList(this.checklistCreation)
   }
 
 }

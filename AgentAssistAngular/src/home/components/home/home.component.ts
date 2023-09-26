@@ -54,7 +54,6 @@ export class HomeComponent implements OnInit {
   coachingNudges : any = [];
   coachingHints : any = [];
   sourceDesktop : any = this.commonService?.configObj?.source;
-
   chartOption: EChartsOption;
   initChartOption : EChartsOption;
   showFullSentiChart : boolean = false;
@@ -67,7 +66,8 @@ export class HomeComponent implements OnInit {
   isGuidedChecklistApiSuccess = false;
   checklists= [];
   selectedPlayBook = '';
-
+  avgHeight = 400;
+  isGrab = false;
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService,
@@ -226,9 +226,11 @@ export class HomeComponent implements OnInit {
     if(!this.commonService.realtimeSentiData[this.connectionDetails.conversationId]){
       this.commonService.realtimeSentiData[this.connectionDetails.conversationId] = [];
     }
-    let polarity = coachingConst.SENTI_POLARITY_MAP[data.polarity];
-    this.commonService.realtimeSentiData[this.connectionDetails.conversationId].push(polarity);
-    this.formatRealtimeSentiChartData();
+    let polarity = coachingConst.SENTI_POLARITY_MAP[data?.polarity];
+    if(data?.polarity > 0 && data?.polarity <=10){
+      this.commonService.realtimeSentiData[this.connectionDetails.conversationId].push(polarity);
+      this.formatRealtimeSentiChartData();
+    }
   }
 
   formatRealtimeSentiChartData(){
@@ -1179,12 +1181,5 @@ setProactiveMode(){
         this.sendChecklistEvent();
       }
     }
-  }
-  expand(e){
-    console.log("🚀 ~ file: home.component.ts:1190 ~ HomeComponent ~ expand ~ e:", e)
-  }
-
-  squeeze(e){
-    console.log("🚀 ~ file: home.component.ts:1194 ~ HomeComponent ~ squeeze ~ e:", e)
   }
 }
