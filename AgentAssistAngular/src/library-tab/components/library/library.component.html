@@ -38,13 +38,13 @@
                                     <div class="title-text" [id]="'automation-' + i">{{dialogue.value.intentName}}</div>
                                 </div>
                                 <div class="action-links">
-                                    <button class="send-run-btn" [id]="'useCase-' + i" (click)="dialogueRunClick(dialogue,projConstants.ASSIST)">{{projConstants.RUN}}</button>
+                                    <button class="send-run-btn" [id]="'useCase-' + i" (click)="dialogueRunClick(dialogue,projConstants.ASSIST)">{{projConstants.RUN | translate}}</button>
                                     <div class="elipse-dropdown-info" [id]="'showRunForAgentBtn-' + i">
                                         <div class="elipse-icon" [id]="'elipseIcon-' + i" (click)="handleRunAgent(dialogue.key, $event)">
                                             <i class="ast-overflow" [id]="'overflowIcon-' + i"></i>
                                         </div>
                                         <div class="dropdown-content-elipse" [id]="'runAgtBtn-' + i" *ngIf="dialogue.value.agentRunButton" (click)="$event.stopPropagation()">
-                                            <div class="list-option" [id]="'agentSelect-' + i" (click)="dialogueRunClick(dialogue,projConstants.MYBOT)">{{projConstants.AGENTASSIST_RUN}}</div>
+                                            <div class="list-option" [id]="'agentSelect-' + i" (click)="dialogueRunClick(dialogue,projConstants.MYBOT)">{{projConstants.AGENTASSIST_RUN | translate}}</div>
                                         </div>
                                     </div>
                                 </div>

@@ -31,6 +31,8 @@ import { AutomationComponent } from './render-comp/automation/automation.compone
 import { FeedbackComponent } from './render-comp/feedback/feedback.component';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { NgxEchartsModule } from 'ngx-echarts';
+import * as echarts from 'echarts';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -68,6 +70,7 @@ const COMPONENTS = [
     ...COMPONENTS
   ],
   imports: [
+    NgxEchartsModule.forRoot({ echarts }),
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -97,7 +100,8 @@ const COMPONENTS = [
   ],
   exports : [
     ...COMPONENTS,
-    TranslateModule
+    TranslateModule,
+    NgxEchartsModule
   ]
 })
 export class SharedModule { }

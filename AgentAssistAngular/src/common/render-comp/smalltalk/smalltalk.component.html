@@ -16,7 +16,7 @@
                     </div>
                     <div class="action-links">
                         <button class="send-run-btn" id="sendMsg"
-                            (click)="handleSendCopyButton(projConstants.SEND, smallTalkData.sendData)">Send</button>
+                            (click)="handleSendCopyButton(projConstants.SEND, smallTalkData.sendData)">{{'SEND' | translate}}</button>
                         <div class="copy-btn"
                             (click)="handleSendCopyButton(projConstants.COPY, smallTalkData.sendData)">
                             <i class="ast-copy"></i>
@@ -67,7 +67,7 @@
                     <div class="title-data" id="displayData-{{smallTalkData.uuid}}">{{smallTalkData?.data?.userInput}}</div>
                     <div class="action-links">
                         <button class="send-run-btn" id="sendMsg"
-                            (click)="handleSendCopyButton(projConstants.SEND, smallTalkData?.data?.userInput)">Send</button>
+                            (click)="handleSendCopyButton(projConstants.SEND, smallTalkData?.data?.userInput)">{{'SEND' | translate}}</button>
                         <div class="copy-btn"
                             (click)="handleSendCopyButton(projConstants.COPY, smallTalkData?.data?.userInput)">
                             <i class="ast-copy"></i>

@@ -36,7 +36,7 @@
                                     *ngTemplateOutlet="automation.templateRender ? askultemplate : asknormalText; context: { $implicit: automation }">
                                 </ng-container>
                                 <div class="action-links">
-                                    <button class="send-run-btn" id="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, automation.sendData)" *ngIf="automation.showSend">Send</button>
+                                    <button class="send-run-btn" id="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, automation.sendData)" *ngIf="automation.showSend">{{'SEND' | translate}}</button>
                                     <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, automation.sendData)" *ngIf="automation.showCopy">
                                         <i class="ast-copy"></i>
                                     </div>
@@ -68,7 +68,7 @@
                                         [innerHTML]="automation.template"></ul>
                                 </div>
                                 <div class="action-links">
-                                    <button class="send-run-btn" attr.id="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, automation.sendData)" *ngIf="automation.showSend">Send</button>
+                                    <button class="send-run-btn" attr.id="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, automation.sendData)" *ngIf="automation.showSend">{{'SEND' | translate}}</button>
                                     <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, automation.sendData)" *ngIf="automation.showCopy">
                                         <i class="ast-copy"></i>
                                     </div>

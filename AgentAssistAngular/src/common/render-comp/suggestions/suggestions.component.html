@@ -18,22 +18,22 @@
                                 [href]="snippet.page_url" target="_blank">Know more</a></button>
                     </div>
                     <button class="ghost-btn" [id]="'snippetseeMore-' + suggestionResponse.uuid + i" *ngIf="snippet.showMoreButton"
-                        (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.READ_MORE}}</button>
+                        (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.READ_MORE | translate}}</button>
                     <button class="ghost-btn" [id]="'snippetseeLess-' + suggestionResponse.uuid + i" *ngIf="snippet.showLessButton"
-                        (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.READ_LESS}}</button>
+                        (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.READ_LESS | translate}}</button>
                 </div>
                 <!-- <div class="action-links">
-                        <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND}}</button>
+                        <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND | translate}}</button>
                         <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
                             <i class="ast-copy"></i>
                         </div>
                     </div> -->
             </div>
             <!-- <div class="link-view-full-article ghost-btn" [id]="'snippetFullView-' + suggestionResponse.uuid + i" *ngIf="snippetAllView"
-                (click)="showAllResultsClick(projConstants.VIEW_ALL_SNIPPETS)">{{projConstants.VIEW_ALL_SNIPPETS}}</div>
+                (click)="showAllResultsClick(projConstants.VIEW_ALL_SNIPPETS)">{{projConstants.VIEW_ALL_SNIPPETS | translate}}</div>
             <div class="link-view-full-article ghost-btn" [id]="'snippetFewView-' + suggestionResponse.uuid + i"
                 *ngIf="!snippetAllView && searchResponse.snippets?.length > 2"
-                (click)="showAllResultsClick(projConstants.VIEW_FEW_SNIPPETS)">{{projConstants.VIEW_FEW_SNIPPETS}}</div> -->
+                (click)="showAllResultsClick(projConstants.VIEW_FEW_SNIPPETS)">{{projConstants.VIEW_FEW_SNIPPETS | translate}}</div> -->
         </div>
     </div>
 
@@ -55,7 +55,7 @@
                 </div>
                 <div class="action-links">
                     <button class="send-run-btn" [id]="'run-' + suggestionResponse.uuid + i"
-                        (click)="dialogueRunClick(dialog,projConstants.ASSIST)">{{projConstants.RUN}}
+                        (click)="dialogueRunClick(dialog,projConstants.ASSIST)">{{projConstants.RUN | translate}}
                     </button>
                     
                     <div class="elipse-dropdown-info" [ngClass]="{'active-elipse' : dialog.agentRunButton}" [id]="'showRunForAgentBtn-' + suggestionResponse.uuid + i">
@@ -65,7 +65,7 @@
                         <div class="dropdown-content-elipse" [id]="'runAgtBtn-' + suggestionResponse.uuid + i" *ngIf="dialog.agentRunButton"
                             (click)="$event.stopPropagation()">
                             <div class="list-option" [id]="'agentSelect-' + suggestionResponse.uuid + i"
-                                (click)="dialogueRunClick(dialog,projConstants.MYBOT)">{{projConstants.AGENTASSIST_RUN}}
+                                (click)="dialogueRunClick(dialog,projConstants.MYBOT)">{{projConstants.AGENTASSIST_RUN | translate}}
                             </div>
                         </div>
                     </div>
@@ -138,10 +138,10 @@
                                 [innerHtml]="commonService.handleEmptyLine(ansObj.ans)"></div>
                             <div class="seemore-link-text" [id]="'desc-faq-lib-' + suggestionResponse.uuid + i + ii"
                                 (click)="toggleShowMoreLessButtonsForFaq(ansObj, i, ii)" *ngIf="ansObj.showMoreButton">
-                                {{projConstants.READ_MORE}}</div>
+                                {{projConstants.READ_MORE | translate}}</div>
                             <div class="seemore-link-text" [id]="'desc-faq-lib-' + suggestionResponse.uuid + i + ii"
                                 (click)="toggleShowMoreLessButtonsForFaq(ansObj, i, ii)" *ngIf="ansObj.showLessButton">
-                                {{projConstants.READ_LESS}}</div>
+                                {{projConstants.READ_LESS | translate}}</div>
                             <div class="actions-send-copy">
                                 <div class="send-icon" [id]="sendMsg"
                                     (click)="handleSendCopyButton(projConstants.SEND,ansObj, projConstants.FAQ)">
@@ -156,22 +156,22 @@
                     </div>
                     <button class="ghost-btn" [id]="'seeMore-' + suggestionResponse.uuid + i"
                         *ngIf="faq.showMoreButton && faq.answer.length == 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))"
-                        (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.READ_MORE}}</button>
+                        (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.READ_MORE | translate}}</button>
                     <button class="ghost-btn" [id]="'seeMore-' + suggestionResponse.uuid + i"
                         *ngIf="faq.showMoreButton && faq.answer.length > 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))"
-                        (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.READ_MORE}} |
-                        {{projConstants.EXPAND}}</button>
+                        (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.READ_MORE | translate}} |
+                        {{projConstants.EXPAND | translate}}</button>
                     <button class="ghost-btn" [id]="'seeLess-' + suggestionResponse.uuid + i"
                         *ngIf="faq.showLessButton && !faq.seeMoreWrapper && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))"
-                        (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.READ_LESS}}</button>
+                        (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.READ_LESS | translate}}</button>
                     <button class="ghost-btn show-less-btn" [id]="'seeLess-' + suggestionResponse.uuid + i"
                         *ngIf="faq.showLessButton && faq.seeMoreWrapper && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))"
-                        (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.CLOSE}}</button>
+                        (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.CLOSE | translate}}</button>
 
                 </div>
                 <div class="action-links" *ngIf="!faq.seeMoreWrapper && faq.answer && faq.answer.length > 0">
                     <button class="send-run-btn" [id]="sendMsg"
-                        (click)="handleSendCopyButton(projConstants.SEND,faq.answer[0], projConstants.FAQ)">{{projConstants.SEND}}</button>
+                        (click)="handleSendCopyButton(projConstants.SEND,faq.answer[0], projConstants.FAQ)">{{projConstants.SEND | translate}}</button>
                     <div class="copy-btn"
                         (click)="handleSendCopyButton(projConstants.COPY,faq.answer[0], projConstants.FAQ)">
                         <i class="ast-copy"></i>
@@ -179,10 +179,10 @@
                 </div>
             </div>
             <!-- <div class="link-view-full-article ghost-btn" [id]="'faqFullView-' + suggestionResponse.uuid + i" *ngIf="faqAllView"
-                (click)="showAllResultsClick(projConstants.VIEW_ALL_FAQ)">{{projConstants.VIEW_ALL_FAQ}}</div>
+                (click)="showAllResultsClick(projConstants.VIEW_ALL_FAQ)">{{projConstants.VIEW_ALL_FAQ | translate}}</div>
             <div class="link-view-full-article ghost-btn" [id]="'faqFewView-' + suggestionResponse.uuid + i"
                 *ngIf="!faqAllView && searchResponse.faqs?.length > 2"
-                (click)="showAllResultsClick(projConstants.VIEW_FEW_FAQ)">{{projConstants.VIEW_FEW_FAQ}}</div> -->
+                (click)="showAllResultsClick(projConstants.VIEW_FEW_FAQ)">{{projConstants.VIEW_FEW_FAQ | translate}}</div> -->
         </div>
     </div>
 
@@ -205,13 +205,13 @@
                                 [href]="article.link" target="_blank">View Full Article</a></div>
                     </div>
                     <button class="ghost-btn" [id]="'articleseeMore-' + suggestionResponse.uuid + i" *ngIf="article.showMoreButton"
-                        (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_MORE}}</button>
+                        (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_MORE | translate}}</button>
                     <button class="ghost-btn" [id]="'articleseeLess-' + suggestionResponse.uuid + i" *ngIf="article.showLessButton"
-                        (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_LESS}}</button>
+                        (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_LESS | translate}}</button>
                 </div>
                 <div class="action-links" *ngIf="article.content">
                     <button class="send-run-btn" [id]="sendMsg"
-                        (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND}}</button>
+                        (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND | translate}}</button>
                     <div class="copy-btn"
                         (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
                         <i class="ast-copy"></i>
@@ -219,10 +219,10 @@
                 </div>
             </div>
             <!-- <div class="link-view-full-article ghost-btn" [id]="'articleFullView-' + suggestionResponse.uuid + i" *ngIf="articleAllView"
-                (click)="showAllResultsClick(projConstants.VIEW_ALL_ARTICLES)">{{projConstants.VIEW_ALL_ARTICLES}}</div>
+                (click)="showAllResultsClick(projConstants.VIEW_ALL_ARTICLES)">{{projConstants.VIEW_ALL_ARTICLES | translate}}</div>
             <div class="link-view-full-article ghost-btn" [id]="'articleFewView-' + suggestionResponse.uuid + i"
                 *ngIf="!articleAllView && searchResponse.articles?.length > 2"
-                (click)="showAllResultsClick(projConstants.VIEW_FEW_ARTICLES)">{{projConstants.VIEW_FEW_ARTICLES}}</div> -->
+                (click)="showAllResultsClick(projConstants.VIEW_FEW_ARTICLES)">{{projConstants.VIEW_FEW_ARTICLES | translate}}</div> -->
         </div>
     </div>
 </div>

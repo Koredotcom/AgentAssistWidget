@@ -1,7 +1,23 @@
 {
-    "ASSIST": "Assist",
-    "LIBRARY": "Library",
-    "MYBOT": "My Bot",
-    "TRANSCRIPT": "Transcript",
-    "HISTORY": "HISTORY"
+    "Assist": "Assist",
+    "Library": "Library",
+    "My Bot": "My Bot",
+    "Transcript": "Transcript",
+    "History": "History",
+    "voice": "voice",
+    "chat": "chat",
+    "RUN": "RUN",
+    "Run with Agent Inputs": "Run with Agent Inputs",
+    "Send": "Send",
+    "Copy": "Copy",
+    "Read more": "Read more",
+    "Read less": "Read less",
+    "Expand": "Expand",
+    "Close": "Close",
+    "View All FAQs": "View All FAQs",
+    "View Few FAQs": "View Few FAQs",
+    "View All Articles": "View All Articles",
+    "View Few Articles": "View Few Articles",
+    "View All Snippets": "View All Snippets",
+    "View Few Snippets": "View Few Snippets"
 }
