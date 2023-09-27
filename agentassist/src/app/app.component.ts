@@ -240,76 +240,76 @@ export class AppComponent implements OnDestroy {
   }
 
   getAuthorizedRoute(url: string): string {
-    const roles = this.authService.getSelectedAccount()?.roles;
-    const isDeveloper = this.authService.getSelectedAccount()?.isDeveloper;
-    let route: string;
+    // const roles = this.authService.getSelectedAccount()?.roles;
+    // const isDeveloper = this.authService.getSelectedAccount()?.isDeveloper;
+    // let route: string;
 
-    if (isDeveloper) return '/onboarding';
+    // if (isDeveloper) return '/onboarding';
 
-    for (let role of roles) {
-      if (role === 'admin') {
-        return '/onboarding';
-      } else if (role === 'SmartAssist Agent Admin') {
-        return '/config/agents';
-      } else {
-        const permissions = this.authService.getSelectedAccount()?.permissions;
+    // for (let role of roles) {
+    //   if (role === 'admin') {
+    //     return '/onboarding';
+    //   } else if (role === 'SmartAssist Agent Admin') {
+    //     return '/config/agents';
+    //   } else {
+    //     const permissions = this.authService.getSelectedAccount()?.permissions;
 
-        switch (url) {
-          case '/config/agents':
-            if (permissions.find(f => f === 'AGENT_VIEW' || f === 'AGENT_GROUP_VIEW')) return url;
-          case '/config/agent-assist':
-            if (permissions.find(f => f === 'STANDARD_RESPONSE_VIEW')) return url;
-          case '/config/wait-experiences':
-            if (permissions.find(f => f === 'WAITING_EXPERIENCE_VIEW')) return url;
-          case '/config/skills':
-            if (permissions.find(f => (f === 'SKIL_VIEW' || f === 'SKILL_GROUP_VIEW'))) return url;
-          case '/config/queue-settings':
-            if (permissions.find(f => (f === 'QUEUE_SETTINGS_VIEW'))) return url;
-          case '/config/operationalHours':
-            if (permissions.find(f => (f === 'HOURS_OF_OPERATION_VIEW'))) return url;
-          case '/config/roleManagement':
-            if (permissions.find(f => (f === 'ROLE_MANAGEMENT_VIEW'))) return url;
-          case '/config/agentStatus':
-            if (permissions.find(f => (f === 'AGENT_STATUS_SETTINGS_VIEW'))) return url;
-          case '/config/languages':
-            if (permissions.find(f => (f === 'LANGUAGE_SETTINGS_VIEW' || f === 'WAITING_EXPERIENCE_FULL'))) return url;
-          case '/config/widgets':
-            if (permissions.find(f => (f === 'AGENT_WIDGET_MANAGEMENT_VIEW'))) return url;
-          case ('/config/agent-settings'):
-            if (permissions.find(f => (f === 'LANGUAGE_SETTINGS_VIEW' || f === 'AGENT_STATUS_SETTINGS_VIEW' || f === 'HOURS_OF_OPERATION_VIEW' || f === 'QUEUE_SETTINGS_VIEW' || f === 'ROLE_MANAGEMENT_VIEW'))) return url;
-        }
+    //     switch (url) {
+    //       case '/config/agents':
+    //         if (permissions.find(f => f === 'AGENT_VIEW' || f === 'AGENT_GROUP_VIEW')) return url;
+    //       case '/config/agent-assist':
+    //         if (permissions.find(f => f === 'STANDARD_RESPONSE_VIEW')) return url;
+    //       case '/config/wait-experiences':
+    //         if (permissions.find(f => f === 'WAITING_EXPERIENCE_VIEW')) return url;
+    //       case '/config/skills':
+    //         if (permissions.find(f => (f === 'SKIL_VIEW' || f === 'SKILL_GROUP_VIEW'))) return url;
+    //       case '/config/queue-settings':
+    //         if (permissions.find(f => (f === 'QUEUE_SETTINGS_VIEW'))) return url;
+    //       case '/config/operationalHours':
+    //         if (permissions.find(f => (f === 'HOURS_OF_OPERATION_VIEW'))) return url;
+    //       case '/config/roleManagement':
+    //         if (permissions.find(f => (f === 'ROLE_MANAGEMENT_VIEW'))) return url;
+    //       case '/config/agentStatus':
+    //         if (permissions.find(f => (f === 'AGENT_STATUS_SETTINGS_VIEW'))) return url;
+    //       case '/config/languages':
+    //         if (permissions.find(f => (f === 'LANGUAGE_SETTINGS_VIEW' || f === 'WAITING_EXPERIENCE_FULL'))) return url;
+    //       case '/config/widgets':
+    //         if (permissions.find(f => (f === 'AGENT_WIDGET_MANAGEMENT_VIEW'))) return url;
+    //       case ('/config/agent-settings'):
+    //         if (permissions.find(f => (f === 'LANGUAGE_SETTINGS_VIEW' || f === 'AGENT_STATUS_SETTINGS_VIEW' || f === 'HOURS_OF_OPERATION_VIEW' || f === 'QUEUE_SETTINGS_VIEW' || f === 'ROLE_MANAGEMENT_VIEW'))) return url;
+    //     }
 
-        for (let p of permissions) {
-          switch (p) {
-            case 'AGENT_VIEW':
-            case 'AGENT_GROUP_VIEW':
-              return '/config/agents';
-            case 'STANDARD_RESPONSE_VIEW':
-              return '/config/agent-assist';
-            case 'WAITING_EXPERIENCE_VIEW':
-              return '/config/wait-experiences';
-            case 'SKILL_VIEW':
-            case 'SKILL_GROUP_VIEW':
-              return '/config/skills';
-            case 'LANGUAGE_SETTINGS_VIEW':
-              return '/config/languages';
-            case 'AGENT_WIDGET_MANAGEMENT_VIEW':
-              return '/config/widgets';
-            case 'AGENT_STATUS_SETTINGS_VIEW':
-            case 'HOURS_OF_OPERATION_VIEW':
-            case 'QUEUE_SETTINGS_VIEW':
-            case 'ROLE_MANAGEMENT_VIEW':
-              return '/config/agent-settings';
-          }
-        }
+    //     for (let p of permissions) {
+    //       switch (p) {
+    //         case 'AGENT_VIEW':
+    //         case 'AGENT_GROUP_VIEW':
+    //           return '/config/agents';
+    //         case 'STANDARD_RESPONSE_VIEW':
+    //           return '/config/agent-assist';
+    //         case 'WAITING_EXPERIENCE_VIEW':
+    //           return '/config/wait-experiences';
+    //         case 'SKILL_VIEW':
+    //         case 'SKILL_GROUP_VIEW':
+    //           return '/config/skills';
+    //         case 'LANGUAGE_SETTINGS_VIEW':
+    //           return '/config/languages';
+    //         case 'AGENT_WIDGET_MANAGEMENT_VIEW':
+    //           return '/config/widgets';
+    //         case 'AGENT_STATUS_SETTINGS_VIEW':
+    //         case 'HOURS_OF_OPERATION_VIEW':
+    //         case 'QUEUE_SETTINGS_VIEW':
+    //         case 'ROLE_MANAGEMENT_VIEW':
+    //           return '/config/agent-settings';
+    //       }
+    //     }
 
-        if (permissions.find(f => f === 'AGENT_DESKTOP_CONSOLE_VIEW')) {
-          const url = window.location.protocol + '//' + window.location.host + "/agentdesktop";
-          window.open(url, '_self');
-        }
-      }
-    }
-    return route;
+    //     if (permissions.find(f => f === 'AGENT_DESKTOP_CONSOLE_VIEW')) {
+    //       const url = window.location.protocol + '//' + window.location.host + "/agentdesktop";
+    //       window.open(url, '_self');
+    //     }
+    //   }
+    // }
+    return url;
   }
 
   onBotClick() {
