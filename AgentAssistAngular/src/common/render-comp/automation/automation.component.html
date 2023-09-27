@@ -5,7 +5,8 @@
         </div>
         <div class="header-text" attr.id="dropDownTitle-{{automationData.uuid}}">{{automationData.data.intentName}}
         </div>
-        <i class="ast-carrotup rotate-carrot" attr.id="dialogueArrow-{{automationData.uuid}}"></i>
+        <i class="ast-carrotup rotate-carrot" attr.id="dialogueArrow-{{automationData.uuid}}" *ngIf="automationData.showAutomation"></i>
+        <i class="ast-carrotup" attr.id="dialogueArrow-{{automationData.uuid}}" *ngIf="!automationData.showAutomation"></i>
         <button class="btn-danger" attr.id="terminateAgentDialog-{{automationData.uuid}}" (click)="terminateButtonClick()" *ngIf="!automationData.endAutomation">Terminate</button>
     </div>
     <div class="collapse-acc-data" attr.id="dropDownData-{{automationData.uuid}}" *ngIf="automationData.showAutomation">

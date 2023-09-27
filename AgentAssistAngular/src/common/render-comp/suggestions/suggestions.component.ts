@@ -185,7 +185,6 @@ export class SuggestionsComponent implements OnInit, OnDestroy{
       this.articleAllView = this.searchResponse.articles && this.searchResponse.articles.length > 2 ? true : false;
       this.snippetAllView = this.searchResponse.snippets && this.searchResponse.snippets.length > 2 ? true : false;
       this.searchResultText = this.searchResponse.totalSearchResults == 1 ? "Search result for" : "Search results for";
-      console.log(this.searchResponse.faqs, 'search response faqs');
       
       setTimeout(() => {
         this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
@@ -193,7 +192,6 @@ export class SuggestionsComponent implements OnInit, OnDestroy{
         this.handleSeeMoreButton(this.searchResponse.snippets, this.projConstants.SNIPPET);
       }, 100);
       this.checkFaqAnswerNotRenderCountAndRequest();
-      console.log(response, this.searchResponse, "response inside handle search response **************");
     } else if (response && response.suggestions && this.commonService.suggestionsAnswerPlaceableIDs.length > 0) {
       
       // response.suggestions.faqs = this.commonService.formatFAQResponse(response.suggestions.faqs);

@@ -806,6 +806,10 @@ export class MybotComponent implements OnInit {
             }
             this.mybotResponseArray.push(renderResponse);
             this.mybotResponseArray = [...this.mybotResponseArray];
+
+            if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
+              this.myBotDialogPositionId = previousTaskPositionId;
+            }
           }
         }
 
@@ -863,11 +867,11 @@ export class MybotComponent implements OnInit {
 
             this.automationFlagUpdate(previousId, true)
 
-            if (res.isPrompt || res.entityRequest) {
-              if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
-                this.myBotDialogPositionId = previousTaskPositionId;
-              }
-            }
+            // if (res.isPrompt || res.entityRequest) {
+            //   if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
+            //     this.myBotDialogPositionId = previousTaskPositionId;
+            //   }
+            // }
 
             renderResponse = {
               data: res,

@@ -1290,6 +1290,11 @@ export class AssistComponent implements OnInit {
             }
             this.assistResponseArray.push(renderResponse);
             this.assistResponseArray = [...this.assistResponseArray];
+
+            if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
+              this.dialogPositionId = previousTaskPositionId;
+            }
+            
           }
         }
 
@@ -1355,11 +1360,11 @@ export class AssistComponent implements OnInit {
 
             this.automationFlagUpdate(previousId,true)
 
-            if (res.isPrompt || res.entityRequest) {
-              if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
-                this.dialogPositionId = previousTaskPositionId;
-              }
-            }
+            // if (res.isPrompt || res.entityRequest) {
+              // if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
+              //   this.dialogPositionId = previousTaskPositionId;
+              // }
+            // }
             
             renderResponse = {
               data: res,
