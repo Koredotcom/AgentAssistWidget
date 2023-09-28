@@ -51,7 +51,6 @@ import { WSelDialogComponent } from '../pages/w-sel-dialog/w-sel-dialog.componen
 import { DigitOnlyDirective } from '../helpers/directives/digit-only.directive';
 import { ArraySortPipe } from '../helpers/filters/sort.pipe';
 import { ConversationConfigComponent } from '../pages/usecases/conversation-config/conversation-config.component';
-import { ConnectToBotComponent } from '../pages/connect-to-bot/connect-to-bot.component';
 import { StrictFilterPipe } from '../helpers/filters/strict-filter';
 import { JsEditorComponent } from './js-editor/js-editor.component';
 import { AceEditorModule } from 'ng2-ace-editor';
@@ -107,7 +106,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ArraySortPipe,
     DigitOnlyDirective,
     ConversationConfigComponent,
-    ConnectToBotComponent,
     StrictFilterPipe,
     JsEditorComponent
   ],
@@ -172,7 +170,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ArraySortPipe,
     DigitOnlyDirective,
     ConversationConfigComponent,
-    ConnectToBotComponent,
     StrictFilterPipe,
     AceEditorModule,
     JsEditorComponent

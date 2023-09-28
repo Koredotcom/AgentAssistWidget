@@ -36,7 +36,6 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { RefreshTokenInterceptor } from '@kore.services/inteceptors/refresh-token-interceptor';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
-import { channelsConfigService } from '@kore.services/channelsConfig.service';
 import { SafePipe } from './helpers/filters/safe.pipe';
 import { UserUtterancesComponent } from './pages/usecases/user-utterances/user-utterances.component';
 // import { ConversationConfigComponent } from './pages/usecases/conversation-config/conversation-config.component';
@@ -219,7 +218,7 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
       useClass: RefreshTokenInterceptor,
       multi: true,
     },
-    AuthGuard, AppDataResolver, AccountsDataService, SideBarService, CanDeactivateGuard, channelsConfigService,DecimalPipe
+    AuthGuard, AppDataResolver, AccountsDataService, SideBarService, CanDeactivateGuard,DecimalPipe
   ],
   exports: [NgbdDatepickerRange],
   bootstrap: [AppComponent]
