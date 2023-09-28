@@ -1,6 +1,6 @@
 
 <div class="agent-aspects-wrapper">
-    <div [hidden]="((viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) || (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)) || agentAspectData.actualData.length == 0">
+    <div [hidden]="((viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) || (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)) || agentAspectData?.actualData?.length == 0">
         <div #wordCloud class="echart-wordCloudContainer" [ngClass]="{'echart-wordCloudContainer-hide' : (viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)}"></div>
     </div>
 
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <div class="table-agent-feedback" *ngIf="agentAspectData && agentAspectData.actualData.length > 0">
+        <div class="table-agent-feedback" *ngIf="agentAspectData && agentAspectData?.actualData?.length > 0">
             <div class="table-header row">
                 <div class="title col-6">{{"DASHBOARD.AGENT_ASPECT_SEARCH_KEYWORD_COLUMN" | translate}}</div>
                 <div class="title col-6 text-right">{{"DASHBOARD.AGENT_ASPECT_TOTAL_SEARCHES_COLUMN" | translate}}</div>
@@ -48,7 +48,7 @@
 
 
 
-    <ng-container *ngIf="(viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE) && agentAspectData.actualData.length > 0">
+    <ng-container *ngIf="(viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE) && agentAspectData?.actualData?.length > 0">
         <div class="cards-data-boards agent-feedback-cards">
             <div class="card-sec max_width_50">
                 <div class="inner-data-sec">
@@ -93,7 +93,7 @@
         <div #wordCloudExhaustive [ngClass]="(viewType == VIEWTYPELIST.PARTIAL_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE) ? 'echart-wordCloudContainer-hide' : 'echart-wordCloudContainer'"></div>
     </div>
 
-    <div class="empty-title" *ngIf="!agentAspectData || agentAspectData.actualData.length === 0">Not enough data available</div>
+    <div class="empty-title" *ngIf="!agentAspectData || agentAspectData?.actualData?.length === 0">Not enough data available</div>
 
     <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.AGENT_ASPECT)" *ngIf="(viewType == VIEWTYPELIST.PARTIAL_VIEW)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
 
