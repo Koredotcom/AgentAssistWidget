@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Observable, BehaviorSubject, from, Subject } from 'rxjs';
 import { DeflectAppConfig } from '../data/configurations.model';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -6,6 +6,7 @@ import { NotificationService } from '@kore.services/notification.service';
 import { environment } from '@kore.environment';
 import { AppService } from './app.service';
 import { LocalStoreService } from './localstore.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -79,7 +80,8 @@ export class workflowService {
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
     private appService: AppService,
-    private local: LocalStoreService
+    private local: LocalStoreService,
+    private route: ActivatedRoute
   ) {
     this.onPremise = environment.ON_PREMISE;
     this.registerEventsFromParent();

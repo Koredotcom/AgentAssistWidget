@@ -249,7 +249,7 @@ export class AuthService {
     let param = {'accountId': _id};
     this.service.invoke('get.agentDesktopEnabled.info', param).subscribe(res => {
       this.isAgentDesktopEnabled$.next(res.isAgentDesktopEnabled);
-      this.isAgentCoachongEnable$.next(res.isAgentCoachingEnabled);
+      this.isAgentCoachongEnable$.next(true);
     }
     , error => {
       console.log(error);
@@ -302,7 +302,9 @@ export class AuthService {
       isAgentAssist = '';
     }
 
-    this.service.invoke('get.automationbots', {isAgentAssist}).subscribe(res => {
+    this.service.invoke('get.automationbots').subscribe(res => {
+      res = [JSON.parse(window.localStorage.getItem('selectedBot'))];
+      console.log("resssssssssssssssssssssssssssssssssssss", res);
       if (res && res.length) {
         this.workflowService.showAppCreationHeader(false);
         this.smartAssistBots = res;

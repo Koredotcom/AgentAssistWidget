@@ -1453,7 +1453,7 @@ export class EndPointsService {
     }
 
     this.serviceList['get.automationbots'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots?isAgentAssist=:isAgentAssist',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots',
       method: 'get'
     }
 
