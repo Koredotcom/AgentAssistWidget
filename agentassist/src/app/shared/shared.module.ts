@@ -21,17 +21,6 @@ import { FindSkillPipe } from '../helpers/filters/find-skill.pipe';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { FilterPipe } from '../helpers/filters/filter.pipe';
-
-import 'froala-editor/js/plugins.pkgd.min.js';
-import 'froala-editor/js/plugins/align.min.js';
-import 'froala-editor/js/languages/de.js';
-
-import 'froala-editor/js/third_party/font_awesome.min';
-import 'froala-editor/js/third_party/image_tui.min';
-import 'froala-editor/js/third_party/spell_checker.min';
-import 'froala-editor/js/third_party/embedly.min';
-
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { DateFormatPipe } from '../helpers/filters/dateformat.pipe';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { CustomMarkdownEditorComponent } from '../helpers/lib/md-editor.component';
@@ -105,8 +94,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient],
       },
     }),
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot(),
     NgxDaterangepickerMd.forRoot(),
     AceEditorModule
   ],
@@ -130,8 +117,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     FindSkillPipe,
     DateFormatPipe,
     CustomMarkdownEditorComponent,
-    FroalaEditorModule,
-    FroalaViewModule,
     NgxDaterangepickerMd,
     TitleCasePipe,
     HasPermissionDirective,

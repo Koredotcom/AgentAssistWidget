@@ -37,9 +37,7 @@
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/lato-font/css/lato-font.min.css",
               "src/app/helpers/lib/assets/highlight.js/agate.min.css",
-              "src/assets/fonts/inter/inter-font.css",
-              "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
-              "node_modules/froala-editor/css/froala_style.min.css"
+              "src/assets/fonts/inter/inter-font.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -57,8 +55,7 @@
             "allowedCommonJsDependencies": [
               "echarts",
               "moment-timezone",
-              "rxjs",
-              "froala-editor"
+              "rxjs"
             ]
           },
           "configurations": {
