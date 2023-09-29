@@ -12,7 +12,6 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import * as _ from 'underscore';
 import { AppService } from '@kore.services/app.service';
 import { ScriptLoaderService } from '@kore.services/scriptloader.service';
-// import { MixPanelService } from './helpers/mixPanel.service';
 
 declare const $: any;
 @Component({
@@ -47,7 +46,6 @@ export class AppComponent implements OnDestroy {
     private service: ServiceInvokerService,
     private appService: AppService,
     public scriptLoader: ScriptLoaderService,
-    // public mixPanel:MixPanelService,
   ) {
 
     // this language will be used as a fallback when a translation isn't found in the current language
@@ -136,7 +134,6 @@ export class AppComponent implements OnDestroy {
     this.onResize();
 
     this.scriptLoader.loadScripts();
-    // this.setMixPanel();
   }
 
   bindEvent(element, eventName, eventHandler) {
@@ -346,25 +343,6 @@ export class AppComponent implements OnDestroy {
   //   this.showChatWindow = false;
   // }
 
-  // setMixPanel(){
-  //   let userInfo:any = {};
-  //   const jStorage = JSON.parse(window.localStorage.getItem('jStorage'));
-  //   if (jStorage  && jStorage.currentAccount && jStorage.currentAccount.userInfo) {
-  //            userInfo = jStorage.currentAccount.userInfo;
-  //   }
-  //   if (userInfo && userInfo.emailId){
-  //     let eventPayload =  {
-  //       $email: userInfo.emailId,
-  //       FirstName: userInfo.firstName,
-  //       LastName: userInfo.lastName,
-  //       USER_ID:userInfo.id,
-  //       $name:userInfo.fName + ' ' +userInfo.lName,
-  //       NAME:userInfo.fName + ' ' +userInfo.lName,
-  //     }
-  //     this.mixPanel.reset();
-  //     this.mixPanel.setUserInfo(userInfo.emailId,eventPayload);
-  //   }
-  // }
 
   // loadscripts(){
   //   const path = window.location.href
