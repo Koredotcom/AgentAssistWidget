@@ -40,14 +40,13 @@ const routes: Routes = [
           { path: '**', redirectTo: (isSmartassist ? 'coaching' : 'usecases') },
         ]
       },
-
+      {
+        path: 'onboarding', component: OnboardingComponent
+      },
       { path: 'bt', component: AutomationComponent },
       { path: 'bt/:type', component: BTContainerComponent },
       { path: 'dashboard', loadChildren: () => import('./pages/dashboard/agentassist-dashboard/agentassist-dashboard.module').then(m => m.AgentassistDashboardModule)},
     ]
-  },
-  {
-    path: 'onboarding', component: OnboardingComponent
   },
 ];
 

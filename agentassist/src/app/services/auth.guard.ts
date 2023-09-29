@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import {AuthService} from '@kore.services/auth.service';
 import {AppUrlsService} from '@kore.services/app.urls.service'
@@ -11,8 +11,7 @@ import {AppUrlsService} from '@kore.services/app.urls.service'
 export class AuthGuard implements CanActivate {
   constructor(
     private authService:AuthService,
-    private appUrlsService:AppUrlsService,
-    private route: Router
+    private appUrlsService:AppUrlsService
   ){}
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -21,11 +20,8 @@ export class AuthGuard implements CanActivate {
     if(!this.authService.isAuthenticated() && !this.authService.hasToken) {
       this.appUrlsService.redirectToLogin();
       return false;
+    }else{
+      return true;
     }
-    // if(!this.authService.smartAssistBots?.length){
-    //   this.route.navigate(['/onboarding']);
-    // }
-    return true;
-
   }
 }

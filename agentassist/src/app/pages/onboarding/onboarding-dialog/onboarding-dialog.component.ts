@@ -86,27 +86,27 @@ export class OnboardingDialogComponent implements OnInit, AfterViewInit, OnDestr
   //   this.createInstance();
   // }
 
-  createInstance(takeTour?) {
-    if (!(/^[a-zA-Z0-9][a-zA-Z0-9_<>*. ]+$/.test(this.model.name.trim()))) {
-      this.notificationService.notify(this.translate.instant("ONBOARDING_INSTANCE_NAME_ALLOWS"), 'warning');
-      return;
-    }
+  // createInstance(takeTour?) {
+  //   if (!(/^[a-zA-Z0-9][a-zA-Z0-9_<>*. ]+$/.test(this.model.name.trim()))) {
+  //     this.notificationService.notify(this.translate.instant("ONBOARDING_INSTANCE_NAME_ALLOWS"), 'warning');
+  //     return;
+  //   }
 
-    this.saveInProgress = true;
-    this.subs.sink = this.service.invoke('post.instances', null, this.model)
-      .pipe(finalize(() => this.saveInProgress = false))
-      .subscribe(res => {
+  //   this.saveInProgress = true;
+  //   this.subs.sink = this.service.invoke('post.instances', null, this.model)
+  //     .pipe(finalize(() => this.saveInProgress = false))
+  //     .subscribe(res => {
 
-        // this.mixPanel.postEvent('Instance setup complete', this.mixPanel.events['Instance setup complete']);
+  //       // this.mixPanel.postEvent('Instance setup complete', this.mixPanel.events['Instance setup complete']);
 
-        this.notificationService.notify("Instance created successfully!", "success");
-        this.appService.appendNewInstaceBot(res);
-        this.authService.deflectApps.next(null);
-        this.closeDialog(takeTour);
-        this.router.navigate(['home']);
-        // setTimeout(() => { this.router.navigate(['home']) })
-      }, err => this.notificationService.showError(err));
-  }
+  //       this.notificationService.notify("Instance created successfully!", "success");
+  //       this.appService.appendNewInstaceBot(res);
+  //       this.authService.deflectApps.next(null);
+  //       this.closeDialog(takeTour);
+  //       this.router.navigate(['home']);
+  //       // setTimeout(() => { this.router.navigate(['home']) })
+  //     }, err => this.notificationService.showError(err));
+  // }
 
   closeDialog(takeTour?, isMigrated?) {
     this.dialogRef.close();

@@ -24,6 +24,7 @@ import { finalize, take, takeUntil } from 'rxjs/operators';
   encapsulation: ViewEncapsulation.None
 })
 export class MainmenuComponent implements OnInit, OnDestroy {
+  Permissions = Permissions;
   selected: string = "";
   allPlans: BillingPlan[];
   getCurrentPlan: Subscription;
@@ -85,43 +86,46 @@ export class MainmenuComponent implements OnInit, OnDestroy {
 
     // this.getCurrentBotFromAutomationBotList();
     
-    // this.availBal = this.workflowService.updateAvailBal$.subscribe(
-    //   res => {
-    //     this.getBalance();
-    //   }
-    // );
-    // this.upBtSub = this.workflowService.updateBotDetails$.subscribe(
-    //   (res: any) => {
-    //     this.currentBt = res;
-    //     this.workflowService.setCurrentBt(this.currentBt);
-    //   }
-    // );
-    // this.swtchBot = this.workflowService.switchBt$.subscribe(
-    //   res => {
-    //     this.authService.getDeflectApps();
-    //     this.switchBots(res);
-    //   }
-    // );
+    this.availBal = this.workflowService.updateAvailBal$.subscribe(
+      res => {
+        this.getBalance();
+      }
+    );
+    this.upBtSub = this.workflowService.updateBotDetails$.subscribe(
+      (res: any) => {
+        this.currentBt = res;
+        this.workflowService.setCurrentBt(this.currentBt);
+      }
+    );
+    this.swtchBot = this.workflowService.switchBt$.subscribe(
+      res => {
+        this.authService.getDeflectApps();
+        this.switchBots(res);
+      }
+    );
 
     this.subs.sink = this.authService.deflectApps.subscribe( (res : any) => {
       if(res){
-        this.workflowService.setCurrentBt(res[0]);
-        this.workflowService.deflectApps(res[0]);
+        console.log("inside subscribe", res);
+        
         this.getCurrentBotFromAutomationBotList();
       }
     });
   }
 
   getCurrentBotFromAutomationBotList(){
-    // let _id = this.localStoreService.getSelectedAccount()?.accountId || this.authService.getSelectedAccount()?.accountId;
-    // if (this.appService.selectedInstanceApp$.value) {
-    //   this.getBalance();
-    // }
+    let _id = this.localStoreService.getSelectedAccount()?.accountId || this.authService.getSelectedAccount()?.accountId;
+  
+    if (this.appService.selectedInstanceApp$.value) {
+      this.getBalance();
+    }
     if (this.workflowService.deflectAppsData.length || this.workflowService.deflectAppsData._id) {
+     
       this.smartABots = this.authService.smartAssistBots || [];
       this.smartABots.forEach((v: any) => {
         v.name = v.name.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
       });
+      
       this.currentBt = this.workflowService.getCurrentBt(true) && Object.keys(this.workflowService.getCurrentBt(true)).length > 0 ? this.workflowService.getCurrentBt(true) : _.findWhere(this.authService.smartAssistBots, { _id: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id });
       this.workflowService.setCurrentBt(this.currentBt);
     }
@@ -130,34 +134,33 @@ export class MainmenuComponent implements OnInit, OnDestroy {
 
   filterLinkedBotIds(){
     this.filteredSmartABots = {};
-    this.smartABots?.forEach((bot) => {
+    this.smartABots.forEach((bot) => {
       if(bot._id){
         this.filteredSmartABots[bot._id] = bot;
       }
     });
 
-    if(this.smartABots){
-      for(let bot of this.smartABots){
-        let filterdBot = this.filteredSmartABots[bot._id];
-        if(bot.type == 'universalbot'){
-  
-          let linkedBots = [];
-          let linkedBotIds = {};
-  
-          let config_publish_bot_array = [...bot?.configuredBots, ...bot.publishedBots];
-  
-          config_publish_bot_array.forEach((config_publish_bot) => {
-            linkedBotIds[config_publish_bot._id] = true;
-          });  
-     
-          linkedBots = this.smartABots.filter(element => linkedBotIds[element._id]); 
-          filterdBot.linkedBots = Object.assign([], linkedBots);
-          for(let botId in linkedBotIds){
-            delete this.filteredSmartABots[botId]
-          }        
-        }
-      }        
-    }
+    
+    for(let bot of this.smartABots){
+      let filterdBot = this.filteredSmartABots[bot._id];
+      if(bot.type == 'universalbot'){
+
+        let linkedBots = [];
+        let linkedBotIds = {};
+
+        let config_publish_bot_array = [...bot?.configuredBots, ...bot.publishedBots];
+
+        config_publish_bot_array.forEach((config_publish_bot) => {
+          linkedBotIds[config_publish_bot._id] = true;
+        });  
+   
+        linkedBots = this.smartABots.filter(element => linkedBotIds[element._id]); 
+        filterdBot.linkedBots = Object.assign([], linkedBots);
+        for(let botId in linkedBotIds){
+          delete this.filteredSmartABots[botId]
+        }        
+      }
+    }        
   }
 
   getBalance() {
@@ -169,7 +172,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
       }
     } else {
       params = {
-        streamId: this.workflowService.deflectApps()?._id || this.workflowService.deflectApps()[0]?._id,
+        streamId: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id,
       }
     }
 
