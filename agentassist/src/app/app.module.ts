@@ -36,22 +36,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { SafePipe } from './helpers/filters/safe.pipe';
 import { UserUtterancesComponent } from './pages/usecases/user-utterances/user-utterances.component';
 // import { ConversationConfigComponent } from './pages/usecases/conversation-config/conversation-config.component';
-import { FaqConfigComponent } from './pages/usecases/faq-config/faq-config.component';
-import { UsecasesHeaderComponent } from './pages/usecases/uc-main/uc-header/uc-header.component';
-import { UsecasesTableMainComponent } from './pages/usecases/uc-main/uc-table-main/uc-table-main.component';
-import { UsecasesTableViewSelectionComponent } from './pages/usecases/uc-main/uc-table-main/uc-table-view-selection/uc-table-view-selection.component';
-import { UsecasesTableViewComponent } from './pages/usecases/uc-main/uc-table-main/uc-table-view/uc-table-view.component';
-import { UsecasesCreateFormComponent } from './pages/usecases/uc-main/uc-create-form/uc-create-form.component';
-import { UsecasesTableEditNameComponent } from './pages/usecases/uc-main/uc-table-main/uc-table-view/uc-table-edit-name/uc-table-edit-name.component';
-import { FilterUsecasesPipe } from './pages/usecases/uc-main/uc-table-main/filter-uc.pipe';
-import { UcTableRowsComponent } from './pages/usecases/uc-main/uc-table-main/uc-table-view/uc-table-rows/uc-table-rows.component';
+// import { UsecasesHeaderComponent } from './pages/usecases/uc-main/uc-header/uc-header.component';
+// import { UsecasesCreateFormComponent } from './pages/usecases/uc-main/uc-create-form/uc-create-form.component';
 // AoT requires an exported function for factories
 import { UcDeleteConfirmComponent } from './helpers/components/uc-delete-confirm/uc-delete-confirm.component';
-import { UcGroupbyComponent } from './pages/usecases/uc-main/uc-table-main/uc-table-view/uc-groupby/uc-groupby.component';
-import { WelcomeComponent } from './pages/welcome/welcome.component';
+// import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { InSetupComponent } from './pages/settings/in-setup/in-setup.component';
 import { AdvSettingsComponent } from './pages/settings/adv-settings/adv-settings.component';
-import { EmptyScreensComponent } from './pages/usecases/uc-main/uc-table-main/uc-table-view/empty-screens/empty-screens.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { InviteDialogComponent } from './helpers/components/invite-dialog/invite-dialog.component';
@@ -65,18 +56,12 @@ import { ConfigurationsComponent } from './pages/configurations/configurations.c
 import { LangSwitchDialogComponent } from './helpers/components/lang-switch-dialog/lang-switch-dialog.component';
 
 import { AutomationChannelsComponent } from './pages/automation-channels/automation-channels.component';
-import { NewConversationComponent } from './pages/agent-assist/new-conversation/new-conversation.component';
-import { ConversationListComponent } from './pages/agent-assist/conversation-list/conversation-list.component';
-import { ConfigConversationComponent } from './pages/agent-assist/config-conversation/config-conversation.component';
 import { InstallTemplatesComponent } from './pages/usecases/popUps/install-templates/install-templates.component';
-import { ExpTableRowComponent } from './pages/usecases/exp-table-row/exp-table-row.component';
-import { NewFlowExpComponent } from './pages/usecases/new-flow-exp/new-flow-exp.component';
 import { DockStatusComponent } from './pages/dock-status/dock-status.component';
 import { BTContainerComponent } from './pages/bt-container/bt-container.component';
 import { BTMainmenuComponent } from '../app/components/bt-mainmenu/bt-mainmenu.component';
 import { AutomationComponent } from './pages/automation/automation.component';
 import { VoiceSettingsComponent } from './pages/voice-settings/voice-settings.component';
-import { AttachFlowComponent } from './pages/voice-settings/attach-flow/attach-flow.component';
 import { NewHoursOfOperationComponent } from './pages/agent-settings/new-hours-of-operation/new-hours-of-operation.component';
 import { UserManagementComponent } from './pages/agent-settings/user-management/user-management.component';
 import { NewRoleComponent } from './pages/agent-settings/user-management/new-role/new-role.component';
@@ -113,19 +98,11 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     SafePipe,
     UserUtterancesComponent,
     // ConversationConfigComponent,
-    FaqConfigComponent,
-    UsecasesHeaderComponent,
-    UsecasesTableMainComponent,
-    UsecasesTableViewSelectionComponent,
-    UsecasesTableViewComponent,
-    UsecasesCreateFormComponent,
-    UsecasesTableEditNameComponent,
-    FilterUsecasesPipe,
+    // UsecasesHeaderComponent,
+    // UsecasesCreateFormComponent,
     AutoFocusDirective,
-    UcTableRowsComponent,
     UcDeleteConfirmComponent,
-    UcGroupbyComponent,
-    WelcomeComponent,
+    // WelcomeComponent,
     InSetupComponent,
     AdvSettingsComponent,
     InviteDialogComponent,
@@ -138,19 +115,13 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     ConfigurationsComponent,
     LangSwitchDialogComponent,
     AutomationChannelsComponent,
-    NewConversationComponent,
-    ConversationListComponent,
-    ConfigConversationComponent,
     InstallTemplatesComponent,
     LangSwitchDialogComponent,
-    ExpTableRowComponent,
-    NewFlowExpComponent,
     DockStatusComponent,
     BTContainerComponent,
     BTMainmenuComponent,
     AutomationComponent,
     VoiceSettingsComponent,
-    AttachFlowComponent,
     NewHoursOfOperationComponent,
     UserManagementComponent,
     NewRoleComponent,

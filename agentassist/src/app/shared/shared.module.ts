@@ -7,7 +7,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TemplatesChatHistoryComponent } from '../pages/templates-chat-history/templates-chat-history.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { NgInitDirective } from '../helpers/directives/ng-init.directive';
-import { PhoneNumberComponent } from '../pages/settings/in-setup/phone-number/phone-number.component';
 import { IvrComponent } from '../pages/settings/in-setup/ivr/ivr.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './../modules/material.module';
@@ -36,7 +35,6 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { DateFormatPipe } from '../helpers/filters/dateformat.pipe';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { CustomMarkdownEditorComponent } from '../helpers/lib/md-editor.component';
-import { EmptyScreensComponent } from '../pages/usecases/uc-main/uc-table-main/uc-table-view/empty-screens/empty-screens.component';
 import { HasPermissionDirective } from '../helpers/directives/has-permission.directive';
 import { SkillsDdComponent } from '../pages/usecases/skills-dd/skills-dd.component';
 import { AgentsDdComponent } from '../pages/agents/agents-dd/agents-dd.component';
@@ -45,16 +43,13 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { WSelDialogComponent } from '../pages/w-sel-dialog/w-sel-dialog.component';
 import { DigitOnlyDirective } from '../helpers/directives/digit-only.directive';
 import { ArraySortPipe } from '../helpers/filters/sort.pipe';
-import { ConversationConfigComponent } from '../pages/usecases/conversation-config/conversation-config.component';
 import { StrictFilterPipe } from '../helpers/filters/strict-filter';
 import { AceEditorModule } from 'ng2-ace-editor';
 import { LookupPipe } from '../helpers/filters/lookup.pipe';
-import { UbEmptyScreensComponent } from '../pages/usecases/uc-main/uc-table-main/uc-table-view/ub-empty-screens/ub-empty-screens.component';
 
 const COMPONENTS = [
   SliderComponentComponent,
   TemplatesChatHistoryComponent,
-  PhoneNumberComponent,
   IvrComponent,
   VoicePreferencesComponent,
   ChannelsComponent
@@ -82,8 +77,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     SkillsMapPipe,
     FindSkillPipe,
     CustomMarkdownEditorComponent,
-    EmptyScreensComponent,
-    UbEmptyScreensComponent,
     HasPermissionDirective,
     SkillsDdComponent,
     AgentsDdComponent,
@@ -92,7 +85,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     DigitOnlyDirective,
     ArraySortPipe,
     DigitOnlyDirective,
-    ConversationConfigComponent,
     StrictFilterPipe,
   ],
   imports: [
@@ -141,8 +133,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     FroalaEditorModule,
     FroalaViewModule,
     NgxDaterangepickerMd,
-    EmptyScreensComponent,
-    UbEmptyScreensComponent,
     TitleCasePipe,
     HasPermissionDirective,
     SkillsDdComponent,
@@ -152,7 +142,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     DigitOnlyDirective,
     ArraySortPipe,
     DigitOnlyDirective,
-    ConversationConfigComponent,
     StrictFilterPipe,
     AceEditorModule,
   ],

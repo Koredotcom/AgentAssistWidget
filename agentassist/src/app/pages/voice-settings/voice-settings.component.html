@@ -240,20 +240,16 @@
     </div>
 </div>
 
-<app-slider-component id="attacheFlowSlider" #attacheFlowSlider='app-slider'>
-    <app-attach-flow [isUpdate]="updateCallFlowList" [voiceContactDetails]="emitDetails" [callFlowVoiceList]="expFlowList" *ngIf="showAttacheFlowSlider" (closed)="closeAFSlider($event)" (emitUpdate)="flowUpdateBool()"></app-attach-flow>
-</app-slider-component>
-
-<app-slider-component id="incomingPhNumber" #incomingPhNumberSlider='app-slider'>
+<!-- <app-slider-component id="incomingPhNumber" #incomingPhNumberSlider='app-slider'>
     <app-phone-number *ngIf="showIncomingPhNumberSlider" [selectedPhonenumber]="IncomingPhoneNumber.settings.phoneNumber" (purchasedNewNum)="NewNumberisPurchased($event)" (closed)="closePhSlider($event)"></app-phone-number>
     <app-phone-number *ngIf="updatePhNumberSlider" [selectedPhonenumber]="phoneNumsDetailsList" (removeNumFromChannel)="removePhoneNum($event)" (purchasedNewNum)="NewNumberisPurchased($event)" (closed)="closePhSlider($event)"></app-phone-number>
-</app-slider-component>
+</app-slider-component> -->
 
 <app-slider-component id="incomingIVR" #incomingIVRSlider='app-slider'>
     <app-ivr *ngIf="showIncomingIVRSlider" [incomingSetup]="incomingSetup" [model]="ivrData" (closed)="closeIVRSlider($event)" (newSipData)="newSipSetUp($event)"></app-ivr>
     <app-ivr *ngIf="updateIVRSlider" [incomingSetup]="sipNumsDetailsList" [model]="ivrData" (closed)="closeIVRSlider($event)" (newSipData)="newSipSetUp($event)"></app-ivr>
 </app-slider-component>
 
-<app-slider-component id="flowSlider" #flowSlider='app-slider'>
+<!-- <app-slider-component id="flowSlider" #flowSlider='app-slider'>
     <app-new-flow-exp *ngIf="showFlowSlider"></app-new-flow-exp>
-</app-slider-component>
+</app-slider-component> -->

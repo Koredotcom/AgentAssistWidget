@@ -23,7 +23,7 @@ import { environment } from '../../../environments/environment';
 import { SDKWidgetModel } from 'src/app/pages/settings/settings.model';
 import { DockStatusService } from '@kore.services/dockstatusService/dock-status.service';
 import { AppService } from '@kore.services/app.service';
-import { MixPanelService } from 'src/app/helpers/mixPanel.service';
+// import { MixPanelService } from 'src/app/helpers/mixPanel.service';
 
 declare const $: any;
 declare const koreBotChat: any;
@@ -84,7 +84,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private iconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer,
     private service: ServiceInvokerService,
-    private mixPanel: MixPanelService,
+    // private mixPanel: MixPanelService,
     private translate: TranslateService,
     public dockService: DockStatusService,
     public appService: AppService
@@ -377,7 +377,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   navigateToDoc() {
     window.open('https://docs.kore.ai/agentassist/');
-    this.mixPanel.postEvent('SG - Help doc viewed', this.mixPanel.events['SG - Help doc viewed']);
+    // this.mixPanel.postEvent('SG - Help doc viewed', this.mixPanel.events['SG - Help doc viewed']);
   }
 
 

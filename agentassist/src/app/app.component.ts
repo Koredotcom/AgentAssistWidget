@@ -12,7 +12,7 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import * as _ from 'underscore';
 import { AppService } from '@kore.services/app.service';
 import { ScriptLoaderService } from '@kore.services/scriptloader.service';
-import { MixPanelService } from './helpers/mixPanel.service';
+// import { MixPanelService } from './helpers/mixPanel.service';
 
 declare const $: any;
 @Component({
@@ -47,7 +47,7 @@ export class AppComponent implements OnDestroy {
     private service: ServiceInvokerService,
     private appService: AppService,
     public scriptLoader: ScriptLoaderService,
-    public mixPanel:MixPanelService,
+    // public mixPanel:MixPanelService,
   ) {
 
     // this language will be used as a fallback when a translation isn't found in the current language

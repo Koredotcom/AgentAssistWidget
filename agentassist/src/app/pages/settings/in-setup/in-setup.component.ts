@@ -11,7 +11,7 @@ import { SettingsService } from '../setttings.service';
 import { fadeInOutAnimation, fadeInAnimation } from 'src/app/helpers/animations/animations';
 import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-confirm/uc-delete-confirm.component';
 import { MatDialog } from '@angular/material/dialog';
-import { MixPanelWrapper } from 'src/app/helpers/mixpanel';
+// import { MixPanelWrapper } from 'src/app/helpers/mixpanel';
 import { TranslateService } from '@ngx-translate/core';
 
 declare const $: any;
@@ -45,7 +45,7 @@ export class InSetupComponent implements OnInit {
     private notificationService: NotificationService,
     private settingsService: SettingsService,
     private dialog: MatDialog,
-    private mixPanel: MixPanelWrapper,
+    // private mixPanel: MixPanelWrapper,
     private translate: TranslateService
   ) { }
 

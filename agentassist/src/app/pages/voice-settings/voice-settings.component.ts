@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { MixPanelService } from 'src/app/helpers/mixPanel.service';
+// import { MixPanelService } from 'src/app/helpers/mixPanel.service';
 // import { MIXPANEL_EVENTS } from 'src/app/helpers/mixpanel-events';
 import { DockStatusService } from '@kore.services/dockstatusService/dock-status.service';
 declare const $: any;
@@ -129,7 +129,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
     public dialog: MatDialog,
     private translate: TranslateService,
     private readonly route: ActivatedRoute,
-    private mixPanel: MixPanelService,
+    // private mixPanel: MixPanelService,
     private dockStatusService: DockStatusService
     ) {
 

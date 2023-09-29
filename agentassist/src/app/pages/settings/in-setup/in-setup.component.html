@@ -30,9 +30,9 @@
 </div>
 
 
-<app-slider-component id="incomingPhNumber" #incomingPhNumberSlider='app-slider'>
+<!-- <app-slider-component id="incomingPhNumber" #incomingPhNumberSlider='app-slider'>
     <app-phone-number *ngIf="showIncomingPhNumberSlider" [selectedPhonenumber]="incomingSetup.phoneNumberConfigDetails" (closed)="closePhSlider($event)"></app-phone-number>
-</app-slider-component>
+</app-slider-component> -->
 
 <app-slider-component id="incomingIVR" #incomingIVRSlider='app-slider'>
     <app-ivr *ngIf="showIncomingIVRSlider" [model]="ivrData" (closed)="closeIVRSlider($event)" [incomingSetup]="incomingSetup"></app-ivr>
