@@ -11,6 +11,7 @@ import { MixPanelWrapper } from '../helpers/mixpanel';
 import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
 import { MixPanelService } from '../helpers/mixPanel.service';
+import { Router } from '@angular/router';
 
 declare const $: any;
 
@@ -44,7 +45,8 @@ export class AuthService {
     public workflowService: workflowService,
     private translate: TranslateService,
     private injector: Injector,
-    private mixPanel: MixPanelService
+    private mixPanel: MixPanelService,
+    private route: Router
   ) {
     if (window.location.hash && window.location.hash.indexOf('#id_token') == 0 && window.location.search && window.location.search.indexOf('?qp') == 0) {
       this.hasToken = true;
@@ -308,6 +310,8 @@ export class AuthService {
         this.smartAssistBots = res;
         this.universalBot = this.getUniversalBotDetails(res);
         this.agentAssistAutomationBots = this.getAgentAssistBotsDetails(res);
+      }else{
+        this.route.navigate(['/onboarding']);
       }
       this.deflectApps.next(res);
       this.workflowService.deflectApps(res);

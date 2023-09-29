@@ -15,7 +15,7 @@ import { Subject } from 'rxjs';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { AppService } from '@kore.services/app.service';
 import { VoiceChannelDataSharingService } from '@kore.services/voice-channel-data-sharing.service';
-import { DockStatusService } from '@kore.services/dockstatusService/dock-status.service';
+import { DockStatusService } from "@kore.services/dockstatusService/dock-status.service";
 @Component({
   selector: 'app-phone-number',
   templateUrl: './phone-number.component.html',

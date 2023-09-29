@@ -42,7 +42,7 @@ export class AgentUsecasesComponent implements OnInit, OnDestroy {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      fromEvent(this.searchTerm.nativeElement, 'input')
+      fromEvent(this.searchTerm?.nativeElement, 'input')
         .pipe(
           map((event: any) => event.target.value),
           debounceTime(500),

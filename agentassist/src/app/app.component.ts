@@ -21,7 +21,7 @@ declare const $: any;
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnDestroy {
-  loading = true
+  loading = false
   isFullScreen: boolean = false;
   appsData: any;
   showIframe = false;
@@ -53,9 +53,9 @@ export class AppComponent implements OnDestroy {
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang('en');
 
-    router.events.subscribe((event: RouterEvent) => {
-      this.navigationInterceptor(event)
-    });
+    // router.events.subscribe((event: RouterEvent) => {
+    //   this.navigationInterceptor(event)
+    // });
   }
 
   ngOnInit() {
@@ -164,46 +164,61 @@ export class AppComponent implements OnDestroy {
   // const route = _self.getAuthorizedRoute(_self.url);
   
   navigationInterceptor(event: RouterEvent): void {
-    const _self = this;
-    if (event instanceof NavigationStart) {
-      if (event.url.indexOf('/chathistory') == 0) {
-        _self.isFullScreen = true;
-        return;
-      } else {
-        _self.isFullScreen = false;
-      }
-      this.authService.deflectApps.subscribe(function (res) {
-        if (!res) return;
-        _self.appsData = res;
-        _self.loading = true;
-      })
-    }
-    if (event instanceof NavigationEnd) {
-      _self.url = event.url;
-      this.authService.deflectApps.subscribe(function (res) {
-        if (!res) return;
-        _self.appsData = res;
-        _self.loading = false;
-        if (!_self.authService.smartAssistBots) {
-          _self.router.navigate([(_self.url || 'onboarding')]);
-        }
+    // const _self = this;
+    // this.authService.deflectApps.subscribe(function (res) {
+    //   if (res){
+    //     _self.appsData = res;
+    //     // this.appService.showGuideLink$?.next(false);
+    //   };
+    // })
+    // this.authService.deflectApps.subscribe(function (res) {
+    //   if (!res && event['url'] && !event['url']?.includes('/onboarding')){
+    //     _self.router.navigate([(_self.url || '/onboarding')]);
+    //     _self.isFullScreen = false;
+    //     _self.loading = false;
+    //   };
+    // })
+    // const _self = this;
+    // if (event instanceof NavigationStart) {
+    //   if (event.url.indexOf('/chathistory') == 0) {
+    //     _self.isFullScreen = true;
+    //     return;
+    //   } else {
+    //     _self.isFullScreen = false;
+    //   }
+    //   this.authService.deflectApps.subscribe(function (res) {
+    //     if (!res) return;
+    //     _self.appsData = res;
+    //     _self.loading = true;
+    //   })
+    // }
+    // if (event instanceof NavigationEnd) {
+    //   _self.url = event.url;
+    //   this.authService.deflectApps.subscribe(function (res) {
+    //     if (!res) return;
+    //     _self.appsData = res;
+    //     _self.loading = false;
+    //     if (!_self.authService.smartAssistBots) {
+    //       _self.router.navigate([(_self.url || 'onboarding')]);
+    //     }
 
-        if (_self.workflowService.doOpenInstallTemps || _self.authService.hasToken) {
-          _self.router.navigate([(_self.url || '/onboarding')]);
-        }
-      })
+    //     if (_self.workflowService.doOpenInstallTemps || _self.authService.hasToken) {
+    //       _self.router.navigate([(_self.url || '/onboarding')]);
+    //     }
+    //   })
 
-      this.appService.showGuideLink$.next(false);
-    }
+    //   this.appService.showGuideLink$.next(false);
+    // }
 
     // Set loading state to false in both of the below events to hide the spinner in case a request fails
-    if (event instanceof NavigationCancel) {
-      this.loading = false
-    }
-    if (event instanceof NavigationError) {
-      this.loading = false
-    }
+    // if (event instanceof NavigationCancel) {
+    //   this.loading = false
+    // }
+    // if (event instanceof NavigationError) {
+    //   this.loading = false
+    // }
   }
+  
 
   @HostListener('window:resize', ['$event'])
   onResize(event?) {

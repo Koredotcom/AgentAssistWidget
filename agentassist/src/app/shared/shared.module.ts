@@ -3,8 +3,6 @@ import { CommonModule, TitleCasePipe } from '@angular/common';
 import { SliderComponentComponent } from './slider-component/slider-component.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
-import { PercentageDonutChartComponent } from './percentage-donut-chart/percentage-donut-chart.component';
-import { PaginationComponent } from './pagination/pagination.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TemplatesChatHistoryComponent } from '../pages/templates-chat-history/templates-chat-history.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
@@ -14,7 +12,6 @@ import { IvrComponent } from '../pages/settings/in-setup/ivr/ivr.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './../modules/material.module';
 import { VoicePreferencesComponent } from '../pages/settings/adv-settings/voice-preferences/voice-preferences.component';
-import { SipTransferComponent } from '../pages/settings/sip-transfer/sip-transfer.component';
 import { ChannelsComponent } from '../pages/settings/channels/channels.component';
 
 import { SkillsMapPipe } from '../helpers/filters/skills-map.pipe';
@@ -38,9 +35,7 @@ import 'froala-editor/js/third_party/embedly.min';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { DateFormatPipe } from '../helpers/filters/dateformat.pipe';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
-import { AgentGpMatchComponent } from './agents/agent-gp-match/agent-gp-match.component';
 import { CustomMarkdownEditorComponent } from '../helpers/lib/md-editor.component';
-import { DragDropDirective } from './drag-drop.directive';
 import { EmptyScreensComponent } from '../pages/usecases/uc-main/uc-table-main/uc-table-view/empty-screens/empty-screens.component';
 import { HasPermissionDirective } from '../helpers/directives/has-permission.directive';
 import { SkillsDdComponent } from '../pages/usecases/skills-dd/skills-dd.component';
@@ -52,21 +47,16 @@ import { DigitOnlyDirective } from '../helpers/directives/digit-only.directive';
 import { ArraySortPipe } from '../helpers/filters/sort.pipe';
 import { ConversationConfigComponent } from '../pages/usecases/conversation-config/conversation-config.component';
 import { StrictFilterPipe } from '../helpers/filters/strict-filter';
-import { JsEditorComponent } from './js-editor/js-editor.component';
 import { AceEditorModule } from 'ng2-ace-editor';
-import { PlaceHolderDirective } from '../helpers/directives/placeholder.directive';
 import { LookupPipe } from '../helpers/filters/lookup.pipe';
 import { UbEmptyScreensComponent } from '../pages/usecases/uc-main/uc-table-main/uc-table-view/ub-empty-screens/ub-empty-screens.component';
 
 const COMPONENTS = [
   SliderComponentComponent,
-  PercentageDonutChartComponent,
-  PaginationComponent,
   TemplatesChatHistoryComponent,
   PhoneNumberComponent,
   IvrComponent,
   VoicePreferencesComponent,
-  SipTransferComponent,
   ChannelsComponent
 ];
 
@@ -91,13 +81,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     DateFormatPipe,
     SkillsMapPipe,
     FindSkillPipe,
-    DragDropDirective,
     CustomMarkdownEditorComponent,
-    AgentGpMatchComponent,
     EmptyScreensComponent,
     UbEmptyScreensComponent,
     HasPermissionDirective,
-    PlaceHolderDirective,
     SkillsDdComponent,
     AgentsDdComponent,
     ChipListAutocompleteFixDirective,
@@ -107,7 +94,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     DigitOnlyDirective,
     ConversationConfigComponent,
     StrictFilterPipe,
-    JsEditorComponent
   ],
   imports: [
     CommonModule,
@@ -151,17 +137,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     TranslateModule,
     FindSkillPipe,
     DateFormatPipe,
-    DragDropDirective,
     CustomMarkdownEditorComponent,
     FroalaEditorModule,
     FroalaViewModule,
     NgxDaterangepickerMd,
-    AgentGpMatchComponent,
     EmptyScreensComponent,
     UbEmptyScreensComponent,
     TitleCasePipe,
     HasPermissionDirective,
-    PlaceHolderDirective,
     SkillsDdComponent,
     AgentsDdComponent,
     ChipListAutocompleteFixDirective,
@@ -172,7 +155,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConversationConfigComponent,
     StrictFilterPipe,
     AceEditorModule,
-    JsEditorComponent
   ],
 })
 export class SharedModule { }

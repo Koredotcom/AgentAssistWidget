@@ -13,15 +13,12 @@ import { MainmenuComponent } from './components/mainmenu/mainmenu.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthGuard } from "@kore.services/auth.guard";
 import { AuthInterceptor } from '@kore.services/inteceptors/auth-interceptor';
-import { AccountsDataService } from '@kore.services/dataservices/accounts-data.service';
 import { AppDataResolver } from '@kore.services/resolvers/app.data.resolve';
 import { NotificationMessageComponent } from './components/notification-message/notification-message.component';
-import { NgbdDatepickerRange } from './components/custom-range/datepicker-range';
 import { SideBarService } from '@kore.services/header.service';
 import { ToastrModule } from 'ngx-toastr';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FieldTypePipe } from './helpers/filters/field-type.pipe';
-import { ScrollSpyDirective } from './helpers/directives/scroll-spy.directive';
 import { AutoFocusDirective } from './helpers/directives/auto-focus.directive';
 import { ConfirmationDialogComponent } from './helpers/components/confirmation-dialog/confirmation-dialog.component';
 import { ConversationalLogsComponent } from './pages/conversational-logs/conversational-logs.component';
@@ -55,13 +52,11 @@ import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { InSetupComponent } from './pages/settings/in-setup/in-setup.component';
 import { AdvSettingsComponent } from './pages/settings/adv-settings/adv-settings.component';
 import { EmptyScreensComponent } from './pages/usecases/uc-main/uc-table-main/uc-table-view/empty-screens/empty-screens.component';
-import { ChatPersonalizationComponent } from './pages/settings/sdk-pref/chat-personalization/chat-personalization.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { InviteDialogComponent } from './helpers/components/invite-dialog/invite-dialog.component';
 import { RoundPipe } from './helpers/filters/round.pipe';
 import { UpdateBotComponent } from './pages/w-sel-dialog/update-bot/update-bot.component';
-import { DeploymentCodeComponent } from './pages/settings/sdk-pref/deployment-code/deployment-code.component';
 import { AgentsComponent } from './pages/agents/agents.component';
 import { NewAgentComponent } from './pages/agents/new-agent/new-agent.component';
 import { NewAgentGroupComponent } from './pages/agents/new-agent-group/new-agent-group.component';
@@ -109,9 +104,7 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     ContentComponent,
     MainmenuComponent,
     NotificationMessageComponent,
-    NgbdDatepickerRange,
     FieldTypePipe,
-    ScrollSpyDirective,
     ConfirmationDialogComponent,
     ConversationalLogsComponent,
     ChatHistoryComponent,
@@ -135,11 +128,9 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     WelcomeComponent,
     InSetupComponent,
     AdvSettingsComponent,
-    ChatPersonalizationComponent,
     InviteDialogComponent,
     RoundPipe,
     UpdateBotComponent,
-    DeploymentCodeComponent,
     AgentsComponent,
     NewAgentComponent,
     NewAgentGroupComponent,
@@ -218,9 +209,8 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
       useClass: RefreshTokenInterceptor,
       multi: true,
     },
-    AuthGuard, AppDataResolver, AccountsDataService, SideBarService, CanDeactivateGuard,DecimalPipe
+    AuthGuard, AppDataResolver, SideBarService, CanDeactivateGuard,DecimalPipe
   ],
-  exports: [NgbdDatepickerRange],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -46,9 +46,7 @@ const routes: Routes = [
           { path: '**', redirectTo: (isSmartassist ? 'coaching' : 'usecases') },
         ]
       },
-      {
-        path: 'onboarding', component: OnboardingComponent
-      },
+
       { path: 'bt', component: AutomationComponent },
       { path: 'bt/:type', component: BTContainerComponent },
       {
@@ -60,9 +58,9 @@ const routes: Routes = [
       { path: 'dashboard', loadChildren: () => import('./pages/dashboard/agentassist-dashboard/agentassist-dashboard.module').then(m => m.AgentassistDashboardModule)},
     ]
   },
-
-  { path: 'chathistory', loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule) },
-
+  {
+    path: 'onboarding', component: OnboardingComponent
+  },
 ];
 
 @NgModule({

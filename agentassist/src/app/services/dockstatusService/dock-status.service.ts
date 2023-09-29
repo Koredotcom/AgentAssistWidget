@@ -34,7 +34,7 @@ export class DockStatusService {
         private translate: TranslateService,
         private appService: AppService
     ) {
-        this.selectedApp = this.workflowService.deflectApps();
+        // this.selectedApp = this.workflowService.deflectApps();
     }
 
     getDockStatus(job: string, id?) {
