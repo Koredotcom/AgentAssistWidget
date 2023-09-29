@@ -11,15 +11,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './../modules/material.module';
 import { VoicePreferencesComponent } from '../pages/settings/adv-settings/voice-preferences/voice-preferences.component';
 
-import { SkillsMapPipe } from '../helpers/filters/skills-map.pipe';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { FindSkillPipe } from '../helpers/filters/find-skill.pipe';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { FilterPipe } from '../helpers/filters/filter.pipe';
-import { DateFormatPipe } from '../helpers/filters/dateformat.pipe';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { CustomMarkdownEditorComponent } from '../helpers/lib/md-editor.component';
 import { ChipListAutocompleteFixDirective } from '../helpers/directives/chip-list-autocomplete-fix.directive';
@@ -55,9 +52,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ...COMPONENTS,
     ...DIRECTIVES,
     ...PIPES,
-    DateFormatPipe,
-    SkillsMapPipe,
-    FindSkillPipe,
     CustomMarkdownEditorComponent,
     ChipListAutocompleteFixDirective,
     WSelDialogComponent,
@@ -102,10 +96,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxMaterialTimepickerModule,
     ColorPickerModule,
     CommonModule,
-    SkillsMapPipe,
     TranslateModule,
-    FindSkillPipe,
-    DateFormatPipe,
     CustomMarkdownEditorComponent,
     NgxDaterangepickerMd,
     TitleCasePipe,

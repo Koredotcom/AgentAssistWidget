@@ -18,14 +18,11 @@ import { NotificationMessageComponent } from './components/notification-message/
 import { SideBarService } from '@kore.services/header.service';
 import { ToastrModule } from 'ngx-toastr';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { FieldTypePipe } from './helpers/filters/field-type.pipe';
 import { AutoFocusDirective } from './helpers/directives/auto-focus.directive';
 import { ConfirmationDialogComponent } from './helpers/components/confirmation-dialog/confirmation-dialog.component';
 import { ConversationalLogsComponent } from './pages/conversational-logs/conversational-logs.component';
 import { HttpLoaderFactory, SharedModule } from './shared/shared.module';
 import { FileUploadModule } from 'ng2-file-upload';
-import { CanDeactivateGuard } from './helpers/guards/can-deactivate-guard.service';
-import { ChatHistoryComponent } from './components/chat-history/chat-history.component';
 import { MarkdownEditorResizeSensorComponent } from './helpers/lib/resize-sensor/resize-sensor.component';
 import { EditorUrlDialogComponent } from './helpers/components/editor-url-dialog/editor-url-dialog.component';
 import { MomentModule } from 'ngx-moment';
@@ -44,7 +41,6 @@ import { AdvSettingsComponent } from './pages/settings/adv-settings/adv-settings
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { InviteDialogComponent } from './helpers/components/invite-dialog/invite-dialog.component';
-import { RoundPipe } from './helpers/filters/round.pipe';
 import { UpdateBotComponent } from './pages/w-sel-dialog/update-bot/update-bot.component';
 import { ConfigurationsComponent } from './pages/configurations/configurations.component';
 import { LangSwitchDialogComponent } from './helpers/components/lang-switch-dialog/lang-switch-dialog.component';
@@ -73,10 +69,8 @@ import { SkillsDdComponent } from './pages/usecases/skills-dd/skills-dd.componen
     ContentComponent,
     MainmenuComponent,
     NotificationMessageComponent,
-    FieldTypePipe,
     ConfirmationDialogComponent,
     ConversationalLogsComponent,
-    ChatHistoryComponent,
     MarkdownEditorResizeSensorComponent,
     EditorUrlDialogComponent,
     SafePipe,
@@ -84,7 +78,6 @@ import { SkillsDdComponent } from './pages/usecases/skills-dd/skills-dd.componen
     UcDeleteConfirmComponent,
     AdvSettingsComponent,
     InviteDialogComponent,
-    RoundPipe,
     UpdateBotComponent,
     ConfigurationsComponent,
     LangSwitchDialogComponent,
@@ -131,7 +124,7 @@ import { SkillsDdComponent } from './pages/usecases/skills-dd/skills-dd.componen
       },
     })
   ],
-  entryComponents: [NotificationMessageComponent, ConfirmationDialogComponent, ChatHistoryComponent, EditorUrlDialogComponent],
+  entryComponents: [NotificationMessageComponent, ConfirmationDialogComponent, EditorUrlDialogComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
@@ -143,7 +136,7 @@ import { SkillsDdComponent } from './pages/usecases/skills-dd/skills-dd.componen
       useClass: RefreshTokenInterceptor,
       multi: true,
     },
-    AuthGuard, AppDataResolver, SideBarService, CanDeactivateGuard,DecimalPipe
+    AuthGuard, AppDataResolver, SideBarService,DecimalPipe
   ],
   bootstrap: [AppComponent]
 })
