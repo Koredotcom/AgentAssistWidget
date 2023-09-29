@@ -45,16 +45,15 @@
 		<div class="group-links">
 			<div class="group-heading">EXPERIENCES</div>
 
-			<div class="link-router" [routerLink]="['usecases']" routerLinkActive="active" *hasPermission="['admin']">
+			<div class="link-router" [routerLink]="['usecases']" routerLinkActive="active">
 				<i class="icon-sa-union"></i>
 				<span class="link-name">{{'NAV.USECASES' | translate}}</span>
 			</div>
-			<div class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active"
-				*hasPermission="['admin']">
+			<div class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active">
 				<img src="assets/icons/leftmenu/conv-logs.svg"><span class="link-name">{{'NAV.CONVERSATIONAL_LOGS' |
 					translate}}</span>
 			</div>
-			<div class="link-router" [routerLink]="['welcomeEvents']" routerLinkActive="active" *hasPermission="['admin']">
+			<div class="link-router" [routerLink]="['welcomeEvents']" routerLinkActive="active">
 				<i class="icon-sa-survey"></i>
 				<span class="link-name">{{'NAV.WELCOMEEVENT' | translate}}</span>
 			</div>
@@ -63,12 +62,12 @@
 		<ng-container *ngIf="isCoachingDisable">
 		<div class="group-links">
 			<div class="group-heading">{{ 'NAV.COACH_TITLE' | translate }}</div>
-				<div class="link-router" [routerLink]="['coaching']" routerLinkActive="active" *hasPermission="['admin']">
+				<div class="link-router" [routerLink]="['coaching']" routerLinkActive="active">
 					<i class="icon-coaching-menu-icon"></i>
 					<span class="link-name">{{'NAV.COACHING' | translate}}</span>
 					<span class="beta-tag">Beta</span>
 				</div>
-				<div class="link-router" [routerLink]="['guided-checklist']" routerLinkActive="active" *hasPermission="['admin']">
+				<div class="link-router" [routerLink]="['guided-checklist']" routerLinkActive="active">
 					<i class="icon-sa-play-book"></i>
 					<span class="link-name">{{'NAV.CHECKLIST.TITLE' | translate}}</span>
 					<span class="beta-tag">Beta</span>
@@ -78,41 +77,22 @@
 
 		<div class="group-links">
 			<div class="group-heading">System SETUP</div>
-			<div class="link-router" [routerLink]="['channels']" routerLinkActive="active" *hasPermission="['admin']">
+			<div class="link-router" [routerLink]="['channels']" routerLinkActive="active">
 				<i class="icon-sa-connections"></i><span class="link-name">{{'NAV.CHANNELS' |
 					translate}}</span>
 			</div>
-			<!-- <div class="link-router" [routerLink]="['agents']" routerLinkActive="active" *hasPermission="['AGENT_VIEW', 'AGENT_GROUP_VIEW']">
-				<img src="assets/icons/leftmenu/agent.svg"><span class="link-name">{{'NAV.AGENTS' | translate}}</span>
-			</div> -->
-			<!-- <div *hasPermission="['ROLE_MANAGEMENT_VIEW']" class="link-router" [routerLink]="['roleManagement']" routerLinkActive="active">
-				<img src="assets/icons/leftmenu/new/role-managment.svg"><span class="link-name">Role Management</span>
-			</div> -->
-			<!-- <div class="link-router" [routerLink]="['surveys']" routerLinkActive="active" *hasPermission="['admin']">
-				<img src="assets/icons/leftmenu/new/dispositions.svg"><span class="link-name">{{'NAV.SURVEYS' | translate}}</span>
-			</div>
-			<div class="link-router d-none" [routerLink]="['deployment']" routerLinkActive="active">
-				<img src="assets/icons/leftmenu/new/dispositions.svg"><span class="link-name">Deployment</span>
-			</div> -->
-			<div class="link-router" [routerLink]="['languages']" routerLinkActive="active" *hasPermission="['admin']"
+			<div class="link-router" [routerLink]="['languages']" routerLinkActive="active"
 				(click)="getAdvSettings()">
 				<img src="assets/icons/leftmenu/languages-speech.svg"><span class="link-name">Speech Recognition</span>
 			</div>
-			<div class="link-router" [routerLink]="['searchAssist']" routerLinkActive="active"
-				*hasPermission="['admin']" (click)="getAdvSettings()">
+			<div class="link-router" [routerLink]="['searchAssist']" routerLinkActive="active" (click)="getAdvSettings()">
 				<i class="icon-sa-search"></i><span class="link-name">SearchAssist</span>
 			</div>
 			<ng-container *ngIf="isCoachingDisable">
-				<div class="link-router" [routerLink]="['advanced-nlu']" routerLinkActive="active" *hasPermission="['admin']">
+				<div class="link-router" [routerLink]="['advanced-nlu']" routerLinkActive="active">
 					<i class="icon-sa-settings"></i><span class="link-name">Advanced NLU</span>
 				</div>
 			</ng-container>
-			<!-- <div class="link-router" [routerLink]="['agent-assist']" routerLinkActive="active" *hasPermission="['STANDARD_RESPONSE_VIEW']">
-				<img src="assets/icons/leftmenu/agent-assist.svg"><span class="link-name">{{'ONBOARDING.STD_RESPONSE' | translate}}</span>
-			</div>
-			<div class="link-router" [routerLink]="['widgets']" routerLinkActive="active" *hasPermission="['AGENT_WIDGET_MANAGEMENT_VIEW']">
-				<img src="assets/icons/leftmenu/settings.svg"><span class="link-name">Widgets</span>
-			</div> -->
 		</div>
 	</div>
 

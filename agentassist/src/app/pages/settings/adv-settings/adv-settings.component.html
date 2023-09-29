@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="card-data" [class.disabled]="!incomingSetupConfigured || !enableVoicePreview || !showVoicePreferences" [class.noEvents]="!enableVoicePreview || !showVoicePreferences" placement="bottom-center" [ngbTooltip]="!incomingSetupConfigured? ('VOICE_PREF_WARNING' | translate): ''" [container]='"body"' tooltipClass="tooltip_settings" (click)="openVPSlider()" *hasPermission="['admin']">
+        <div class="card-data" [class.disabled]="!incomingSetupConfigured || !enableVoicePreview || !showVoicePreferences" [class.noEvents]="!enableVoicePreview || !showVoicePreferences" placement="bottom-center" [ngbTooltip]="!incomingSetupConfigured? ('VOICE_PREF_WARNING' | translate): ''" [container]='"body"' tooltipClass="tooltip_settings" (click)="openVPSlider()">
             <div class="titles-sec">
                 <div class="primary-title">{{'SETTINGS.SPEECH_RECOGNITION' | translate}}</div>
                 <div class="secondary-title">{{'SETTINGS.SPEECH_PREFERENCES_DESC' | translate}}</div>

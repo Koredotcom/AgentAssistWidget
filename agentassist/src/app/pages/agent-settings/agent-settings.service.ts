@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { FileUpload, Widget, WidgetVariables } from './agent-settings.model';
-import { Role } from './user-management/user-management.model';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { AuthService } from '@kore.services/auth.service';
 import { tap } from 'rxjs/operators';

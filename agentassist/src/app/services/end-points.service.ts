@@ -75,46 +75,46 @@ export class EndPointsService {
     //   method: 'post'
     // };
 
-    this.serviceList['get.callflow.data'] = {
-      endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/messages',
-      method: 'get'
-    };
+    // this.serviceList['get.callflow.data'] = {
+    //   endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/messages',
+    //   method: 'get'
+    // };
 
-    this.serviceList['save.callflow.data'] = {
-      endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/messages',
-      method: 'put'
-    };
+    // this.serviceList['save.callflow.data'] = {
+    //   endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/messages',
+    //   method: 'put'
+    // };
 
-    this.serviceList['put.updateFormFields'] = {
-      endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/formfields',
-      method: 'put'
-    };
+    // this.serviceList['put.updateFormFields'] = {
+    //   endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/formfields',
+    //   method: 'put'
+    // };
 
-    this.serviceList['get.getFormFields'] = {
-      endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/formfields',
-      method: 'get'
-    };
+    // this.serviceList['get.getFormFields'] = {
+    //   endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/formfields',
+    //   method: 'get'
+    // };
 
-    this.serviceList['get.summary'] = {
-      endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/summary',
-      method: 'get'
-    };
+    // this.serviceList['get.summary'] = {
+    //   endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/summary',
+    //   method: 'get'
+    // };
 
     this.serviceList['get.plans'] = {
       endpoint: this.API_SERVER_URL + '/organization/billing/plans',
       method: 'get'
     };
 
-    this.serviceList['post.payProCheckout'] = {
-      endpoint: this.API_SERVER_URL + '/organization/billing/plans/:productId/checkout',
-      method: 'post'
-    };
+    // this.serviceList['post.payProCheckout'] = {
+    //   endpoint: this.API_SERVER_URL + '/organization/billing/plans/:productId/checkout',
+    //   method: 'post'
+    // };
 
 
-    this.serviceList['get.payProStatus'] = {
-      endpoint: this.API_SERVER_URL + '/organization/billing/payments/:reqId/status',
-      method: 'get'
-    };
+    // this.serviceList['get.payProStatus'] = {
+    //   endpoint: this.API_SERVER_URL + '/organization/billing/payments/:reqId/status',
+    //   method: 'get'
+    // };
 
 
     this.serviceList['post.publish'] = {
@@ -122,55 +122,55 @@ export class EndPointsService {
       method: 'post'
     }
 
-    this.serviceList['post.deploy.publish'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:appId/deployments/publish?isAgentAssist=true',
-      method: 'post'
-    }
+    // this.serviceList['post.deploy.publish'] = {
+    //   endpoint: this.API_SERVER_URL + '/smartassist/apps/:appId/deployments/publish?isAgentAssist=true',
+    //   method: 'post'
+    // }
 
     this.serviceList['get.deploy.status'] = {
       endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/deployments/status',
       method: 'get'
     }
 
-    this.serviceList['get.ivrConfiguration.data'] = {
-      endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/voicesettings',
-      method: 'get'
-    };
+    // this.serviceList['get.ivrConfiguration.data'] = {
+    //   endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/voicesettings',
+    //   method: 'get'
+    // };
 
-    this.serviceList['save.ivrConfiguration.data'] = {
-      endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/voicesettings',
-      method: 'put'
-    };
+    // this.serviceList['save.ivrConfiguration.data'] = {
+    //   endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/voicesettings',
+    //   method: 'put'
+    // };
 
     this.serviceList['deflect.seed.data'] = {
       endpoint: this.API_SERVER_URL + '/users/:userId/builder/seed_data',
       method: 'get'
     };
 
-    this.serviceList['enable.ivr.configuration'] = {
-      endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/enableConfiguration',
-      method: 'post'
-    };
+    // this.serviceList['enable.ivr.configuration'] = {
+    //   endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/enableConfiguration',
+    //   method: 'post'
+    // };
 
-    this.serviceList['real.time.dashboardData'] = {
-      endpoint: this.API_SERVER_URL + '/builder/metrics/usage/user/:userId/org/:orgId/stream/:streamId/rta/stats?isDeflect=true&metrics=inProgressSessions,automation,digitalFormInput,nAgentSessions',
-      method: 'get'
-    };
+    // this.serviceList['real.time.dashboardData'] = {
+    //   endpoint: this.API_SERVER_URL + '/builder/metrics/usage/user/:userId/org/:orgId/stream/:streamId/rta/stats?isDeflect=true&metrics=inProgressSessions,automation,digitalFormInput,nAgentSessions',
+    //   method: 'get'
+    // };
 
-    this.serviceList['get.journey.flow'] = {
-      endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/metrics/journeyFlow?startDate=:startDate&endDate=:endDate',
-      method: 'get'
-    };
+    // this.serviceList['get.journey.flow'] = {
+    //   endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/metrics/journeyFlow?startDate=:startDate&endDate=:endDate',
+    //   method: 'get'
+    // };
 
-    this.serviceList['get.configuration'] = {
-      endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/configuration',
-      method: 'get'
-    };
+    // this.serviceList['get.configuration'] = {
+    //   endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/configuration',
+    //   method: 'get'
+    // };
 
-    this.serviceList['post.configuration'] = {
-      endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/configuration',
-      method: 'post'
-    };
+    // this.serviceList['post.configuration'] = {
+    //   endpoint: this.API_SERVER_URL + '/deflectai/apps/:appId/configuration',
+    //   method: 'post'
+    // };
 
     this.serviceList['get.agent.instructions'] = {
       endpoint: this.API_SERVER_URL + '/deflectai/agents/:agentKey/instructions',
@@ -1462,15 +1462,15 @@ export class EndPointsService {
       method: 'post'
     }
 
-    this.serviceList['get.configurationStatus'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:instanceId/configurationStatus',
-      method: 'get'
-    }
+    // this.serviceList['get.configurationStatus'] = {
+    //   endpoint: this.API_SERVER_URL + '/smartassist/apps/:instanceId/configurationStatus',
+    //   method: 'get'
+    // }
 
-    this.serviceList['post.configurationStatus'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:instanceId/configurationStatus',
-      method: 'post'
-    }
+    // this.serviceList['post.configurationStatus'] = {
+    //   endpoint: this.API_SERVER_URL + '/smartassist/apps/:instanceId/configurationStatus',
+    //   method: 'post'
+    // }
 
     // Channel Voice API's
     // HEADERS: SAT headers

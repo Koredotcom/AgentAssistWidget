@@ -4,14 +4,12 @@ import { SliderComponentComponent } from './slider-component/slider-component.co
 import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TemplatesChatHistoryComponent } from '../pages/templates-chat-history/templates-chat-history.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { NgInitDirective } from '../helpers/directives/ng-init.directive';
 import { IvrComponent } from '../pages/settings/in-setup/ivr/ivr.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './../modules/material.module';
 import { VoicePreferencesComponent } from '../pages/settings/adv-settings/voice-preferences/voice-preferences.component';
-import { ChannelsComponent } from '../pages/settings/channels/channels.component';
 
 import { SkillsMapPipe } from '../helpers/filters/skills-map.pipe';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -24,9 +22,7 @@ import { FilterPipe } from '../helpers/filters/filter.pipe';
 import { DateFormatPipe } from '../helpers/filters/dateformat.pipe';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { CustomMarkdownEditorComponent } from '../helpers/lib/md-editor.component';
-import { HasPermissionDirective } from '../helpers/directives/has-permission.directive';
 import { SkillsDdComponent } from '../pages/usecases/skills-dd/skills-dd.component';
-import { AgentsDdComponent } from '../pages/agents/agents-dd/agents-dd.component';
 import { ChipListAutocompleteFixDirective } from '../helpers/directives/chip-list-autocomplete-fix.directive';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { WSelDialogComponent } from '../pages/w-sel-dialog/w-sel-dialog.component';
@@ -38,10 +34,8 @@ import { LookupPipe } from '../helpers/filters/lookup.pipe';
 
 const COMPONENTS = [
   SliderComponentComponent,
-  TemplatesChatHistoryComponent,
   IvrComponent,
   VoicePreferencesComponent,
-  ChannelsComponent
 ];
 
 const PIPES = [
@@ -66,9 +60,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SkillsMapPipe,
     FindSkillPipe,
     CustomMarkdownEditorComponent,
-    HasPermissionDirective,
     SkillsDdComponent,
-    AgentsDdComponent,
     ChipListAutocompleteFixDirective,
     WSelDialogComponent,
     DigitOnlyDirective,
@@ -119,9 +111,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CustomMarkdownEditorComponent,
     NgxDaterangepickerMd,
     TitleCasePipe,
-    HasPermissionDirective,
     SkillsDdComponent,
-    AgentsDdComponent,
     ChipListAutocompleteFixDirective,
     WSelDialogComponent,
     DigitOnlyDirective,

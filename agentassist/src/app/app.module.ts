@@ -47,30 +47,16 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { InviteDialogComponent } from './helpers/components/invite-dialog/invite-dialog.component';
 import { RoundPipe } from './helpers/filters/round.pipe';
 import { UpdateBotComponent } from './pages/w-sel-dialog/update-bot/update-bot.component';
-import { AgentsComponent } from './pages/agents/agents.component';
-import { NewAgentComponent } from './pages/agents/new-agent/new-agent.component';
-import { NewAgentGroupComponent } from './pages/agents/new-agent-group/new-agent-group.component';
-import { HistoryComponent } from './pages/history/history.component';
 import { ConfigurationsComponent } from './pages/configurations/configurations.component';
 import { LangSwitchDialogComponent } from './helpers/components/lang-switch-dialog/lang-switch-dialog.component';
 
 import { AutomationChannelsComponent } from './pages/automation-channels/automation-channels.component';
 import { InstallTemplatesComponent } from './pages/usecases/popUps/install-templates/install-templates.component';
-import { DockStatusComponent } from './pages/dock-status/dock-status.component';
 import { BTContainerComponent } from './pages/bt-container/bt-container.component';
 import { BTMainmenuComponent } from '../app/components/bt-mainmenu/bt-mainmenu.component';
 import { AutomationComponent } from './pages/automation/automation.component';
 import { VoiceSettingsComponent } from './pages/voice-settings/voice-settings.component';
-import { NewHoursOfOperationComponent } from './pages/agent-settings/new-hours-of-operation/new-hours-of-operation.component';
-import { UserManagementComponent } from './pages/agent-settings/user-management/user-management.component';
-import { NewRoleComponent } from './pages/agent-settings/user-management/new-role/new-role.component';
-import { NewUserComponent } from './pages/agent-settings/user-management/new-user/new-user.component';
-import { UmTableComponent } from './pages/agent-settings/user-management/um-table/um-table.component';
-import { RmTableComponent } from './pages/agent-settings/user-management/rm-table/rm-table.component';
 import { LanguagesSpeechComponent } from './pages/languages-speech/languages-speech.component';
-import { LanguageSettingsComponent } from './pages/agent-settings/language-settings/language-settings.component';
-import { ExternalWidgetComponent } from './pages/agent-settings/external-widget/external-widget.component';
-import { AddWidgetComponent } from './pages/agent-settings/external-widget/add-widget/add-widget.component';
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/onboarding-dialog.component';
 import { CommonModule, DecimalPipe } from '@angular/common';
@@ -106,35 +92,20 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     InviteDialogComponent,
     RoundPipe,
     UpdateBotComponent,
-    AgentsComponent,
-    NewAgentComponent,
-    NewAgentGroupComponent,
-    HistoryComponent,
     ConfigurationsComponent,
     LangSwitchDialogComponent,
     AutomationChannelsComponent,
     InstallTemplatesComponent,
     LangSwitchDialogComponent,
-    DockStatusComponent,
     BTContainerComponent,
     BTMainmenuComponent,
     AutomationComponent,
     VoiceSettingsComponent,
-    NewHoursOfOperationComponent,
-    UserManagementComponent,
-    NewRoleComponent,
-    NewUserComponent,
-    UmTableComponent,
-    RmTableComponent,
     LanguagesSpeechComponent,
-    LanguageSettingsComponent,
-    ExternalWidgetComponent,
-    AddWidgetComponent,
     OnboardingComponent,
     OnboardingDialogComponent,
     SearchAssistComponent,
     SaDeleteConfirmComponent,
-    // AutomationIntentvsEntityStringPipe,
     ConvsHistoryLogsComponent,
     AccWarningDialogComponent
   ],
