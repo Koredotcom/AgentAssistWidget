@@ -41,7 +41,6 @@ import { UserUtterancesComponent } from './pages/usecases/user-utterances/user-u
 // AoT requires an exported function for factories
 import { UcDeleteConfirmComponent } from './helpers/components/uc-delete-confirm/uc-delete-confirm.component';
 // import { WelcomeComponent } from './pages/welcome/welcome.component';
-import { InSetupComponent } from './pages/settings/in-setup/in-setup.component';
 import { AdvSettingsComponent } from './pages/settings/adv-settings/adv-settings.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
@@ -103,7 +102,6 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     AutoFocusDirective,
     UcDeleteConfirmComponent,
     // WelcomeComponent,
-    InSetupComponent,
     AdvSettingsComponent,
     InviteDialogComponent,
     RoundPipe,
