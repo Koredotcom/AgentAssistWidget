@@ -22,7 +22,6 @@ import { FilterPipe } from '../helpers/filters/filter.pipe';
 import { DateFormatPipe } from '../helpers/filters/dateformat.pipe';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { CustomMarkdownEditorComponent } from '../helpers/lib/md-editor.component';
-import { SkillsDdComponent } from '../pages/usecases/skills-dd/skills-dd.component';
 import { ChipListAutocompleteFixDirective } from '../helpers/directives/chip-list-autocomplete-fix.directive';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { WSelDialogComponent } from '../pages/w-sel-dialog/w-sel-dialog.component';
@@ -60,7 +59,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     SkillsMapPipe,
     FindSkillPipe,
     CustomMarkdownEditorComponent,
-    SkillsDdComponent,
     ChipListAutocompleteFixDirective,
     WSelDialogComponent,
     DigitOnlyDirective,
@@ -111,7 +109,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     CustomMarkdownEditorComponent,
     NgxDaterangepickerMd,
     TitleCasePipe,
-    SkillsDdComponent,
     ChipListAutocompleteFixDirective,
     WSelDialogComponent,
     DigitOnlyDirective,

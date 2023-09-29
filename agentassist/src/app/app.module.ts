@@ -34,7 +34,6 @@ import { RefreshTokenInterceptor } from '@kore.services/inteceptors/refresh-toke
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { SafePipe } from './helpers/filters/safe.pipe';
-import { UserUtterancesComponent } from './pages/usecases/user-utterances/user-utterances.component';
 // import { ConversationConfigComponent } from './pages/usecases/conversation-config/conversation-config.component';
 // import { UsecasesHeaderComponent } from './pages/usecases/uc-main/uc-header/uc-header.component';
 // import { UsecasesCreateFormComponent } from './pages/usecases/uc-main/uc-create-form/uc-create-form.component';
@@ -51,7 +50,6 @@ import { ConfigurationsComponent } from './pages/configurations/configurations.c
 import { LangSwitchDialogComponent } from './helpers/components/lang-switch-dialog/lang-switch-dialog.component';
 
 import { AutomationChannelsComponent } from './pages/automation-channels/automation-channels.component';
-import { InstallTemplatesComponent } from './pages/usecases/popUps/install-templates/install-templates.component';
 import { BTContainerComponent } from './pages/bt-container/bt-container.component';
 import { BTMainmenuComponent } from '../app/components/bt-mainmenu/bt-mainmenu.component';
 import { AutomationComponent } from './pages/automation/automation.component';
@@ -66,6 +64,7 @@ import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm
 import { AutomationIntentvsEntityStringPipe } from './helpers/filters/automation-intentvs-entity-string.pipe';
 import { ConvsHistoryLogsComponent } from './pages/conversational-logs/convs-history-logs/convs-history-logs.component';
 import { AccWarningDialogComponent } from './helpers/components/acc-warning-dialog/acc-warning-dialog.component';
+import { SkillsDdComponent } from './pages/usecases/skills-dd/skills-dd.component';
 
 @NgModule({
   declarations: [
@@ -81,13 +80,8 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     MarkdownEditorResizeSensorComponent,
     EditorUrlDialogComponent,
     SafePipe,
-    UserUtterancesComponent,
-    // ConversationConfigComponent,
-    // UsecasesHeaderComponent,
-    // UsecasesCreateFormComponent,
     AutoFocusDirective,
     UcDeleteConfirmComponent,
-    // WelcomeComponent,
     AdvSettingsComponent,
     InviteDialogComponent,
     RoundPipe,
@@ -95,7 +89,6 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     ConfigurationsComponent,
     LangSwitchDialogComponent,
     AutomationChannelsComponent,
-    InstallTemplatesComponent,
     LangSwitchDialogComponent,
     BTContainerComponent,
     BTMainmenuComponent,
@@ -107,7 +100,8 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     SearchAssistComponent,
     SaDeleteConfirmComponent,
     ConvsHistoryLogsComponent,
-    AccWarningDialogComponent
+    AccWarningDialogComponent,
+    SkillsDdComponent
   ],
   imports: [
     CommonModule,
