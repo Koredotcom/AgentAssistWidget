@@ -52,10 +52,13 @@ export class AutomationComponent implements OnInit {
  formatAssistAutomation(automationsArray){
   let i = 0;
   for(let automation of automationsArray){
-    let templateRender = (!automation?.result?.parsedPayload || automation?.noTemplateRender || (automation?.componentType == 'dialogAct' && (automation?.srcChannel != 'msteams' && automation?.srcChannel != 'rtm'))) ? false : true
+    let templateRender = (automation?.noTemplateRender || (automation?.componentType == 'dialogAct' && (automation?.srcChannel != 'msteams' && automation?.srcChannel != 'rtm'))) ? false : true
+
+    // let templateRender = (!automation?.result?.parsedPayload || automation?.noTemplateRender || (automation?.componentType == 'dialogAct' && (automation?.srcChannel != 'msteams' && automation?.srcChannel != 'rtm'))) ? false : true
     automation.templateRender = templateRender;
     
-    if(automation?.result?.parsedPayload && automation?.templateRender){
+    // if(automation?.result?.parsedPayload && automation?.templateRender)
+    if(automation?.templateRender){
       automation.template = this.commonService.getTemplateHtml(automation.templateRender, automation.result);
     }
     automation.agentInputId = this.randomUUIDPipe.transform();
