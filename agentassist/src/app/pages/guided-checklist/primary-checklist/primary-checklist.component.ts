@@ -131,6 +131,7 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
   }
 
   updateCl(e){
+    this.loading = true;
     this.update.emit(e);
   }
 
