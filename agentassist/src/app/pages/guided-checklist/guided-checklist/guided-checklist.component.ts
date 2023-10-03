@@ -107,6 +107,10 @@ export class GuidedChecklistComponent implements OnInit {
   getCheckListById(clId){
     let botId = this.workflowService.getCurrentBtSmt(true)._id;
     this.service.invoke('get.checklistbyid', {botId, clId})
+    .pipe(finalize(()=>{
+      this.checkList1.loading = false;
+      this.checkList2.loading = false;
+    }))
     .subscribe((data)=>{
       this.isStageListOpen = true;
       this.createOrUpdate = 'update';
