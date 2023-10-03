@@ -33,6 +33,7 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
 
   showPhHoldAudio = false;
   showVoicePreferences:boolean = false;
+  showErrorMsg = false;
 
   subs = new SubSink();
 
@@ -91,6 +92,7 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
        channelList = voiceList;
        if(channelList.sipTransfers.length > 0){
          this.showVoicePreferences = true;
+         this.showErrorMsg = false;
          const _params = { streamId:this.authService.getAgentAssistStreamId(),
                          'isAgentAssist':true }
          this.loading = true;
@@ -105,6 +107,7 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
        }
        else{
         this.showVoicePreferences = false;
+        this.showErrorMsg = true;
        }
       })
     } 
