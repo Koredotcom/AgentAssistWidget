@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-                <button *ngIf="isProceedToClose && checklists?.length" class="proceed-toclise-btn" (click)="proceedToClose()">
+                <button *ngIf="isProceedToClose && checklists?.length && !openAck" class="proceed-toclise-btn" (click)="proceedToClose()">
                     <div class="circle">
                         <i class="ast-tick-solid"></i>
                     </div>
