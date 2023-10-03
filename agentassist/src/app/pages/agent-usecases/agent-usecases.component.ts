@@ -38,6 +38,7 @@ export class AgentUsecasesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initBots();
+    this.selectedBot();
   }
 
   ngAfterViewInit() {
@@ -52,6 +53,14 @@ export class AgentUsecasesComponent implements OnInit, OnDestroy {
         });
     }, 100);
     // this.iSearch.nativeElement.focus();
+  }
+
+  selectedBot() {
+    if(this.workflowService.currentSelectedBotDetails.type === 'default') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   initBots() {
@@ -69,6 +78,7 @@ export class AgentUsecasesComponent implements OnInit, OnDestroy {
 
     this.subs.sink = this.workflowService.updateBotDetails$.subscribe((bot)=>{
       console.log(bot, "inside udpate use case");
+      this.selectedBot();
       if(bot){
         this.currentBt = bot;
       }
