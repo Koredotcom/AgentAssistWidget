@@ -71,7 +71,7 @@
                     <div class="tab-name" data-toggle="tab" href="#convers" (click)="ucType = 'dialog'; selectGroup('')">{{"ANALYTICS.CONVERSATIONS" | translate}}</div>
                 </li>
             </ul>
-            <button (click)="openConversation()" type="button" class="kr-sg-button-primary btn_lg new-hours-btn" [disabled]="!selectedBot()"><img src="assets/icons/add.svg">{{"USECASES.NEW_UC" | translate}}</button>
+            <button (click)="openConversation()" type="button" class="kr-sg-button-primary btn_lg new-hours-btn" [disabled]="workflowService?.currentSelectedBotDetails?.type !== 'default'"><img src="assets/icons/add.svg">{{"USECASES.NEW_UC" | translate}}</button>
         </div>
     </header>
 
