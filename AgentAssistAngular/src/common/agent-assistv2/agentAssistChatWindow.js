@@ -2295,15 +2295,11 @@
                     // let dummyDiv = document.createElement('div');
                     // dummyDiv.appendChild(_adaptiveCard.render())
                     messageHtml = $(_adaptiveCard.render());
-                    try {
                         _adaptiveCard.onExecuteAction = function(action) {
                           if (action._propertyBag && action._propertyBag.type === "Action.OpenUrl") {
                             window.open(action._propertyBag.url, "_blank");
                           }
                         };
-                    } catch (error) {
-
-                    }
                   }
                 else if (msgData.message[0] && msgData.message[0].cInfo && msgData.message[0].cInfo.body && msgData.message[0].cInfo.body && msgData.message[0].cInfo.body.contentType && msgData.message[0].cInfo.body.contentType.includes('.microsoft.'))  {
                     let msgClone = {
