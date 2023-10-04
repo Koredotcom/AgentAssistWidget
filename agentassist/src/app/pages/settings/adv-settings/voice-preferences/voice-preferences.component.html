@@ -126,7 +126,7 @@
         </div>
         <div class="footer-sec" *ngIf="workflowService.appState !== 'published'">            
             <button class="kr-sg-button-secondary-two btn_lg mr-2">Cancel</button>    
-            <button class="kr-sg-button-primary btn_lg" [disabled]="saveInProgress" (click)="configureVoicePreferenaces()">{{(saveInProgress? 'BUTTONS.SAVING': 'BUTTONS.SAVE') | translate}}</button>    
+            <button class="kr-sg-button-primary btn_lg" [disabled]="saveInProgress || (dialects.length && !selectedDialect)" (click)="configureVoicePreferenaces()">{{(saveInProgress? 'BUTTONS.SAVING': 'BUTTONS.SAVE') | translate}}</button>    
         </div>
     </div>
 
