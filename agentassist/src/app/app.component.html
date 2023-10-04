@@ -1,31 +1,19 @@
 <meta name="viewport" content="width=device-width, user-scalable=no">
+
 <div *ngIf="!loading && !isFullScreen">
     <app-header></app-header>
     <div [ngClass]="showIframe ? '':'d-none'">
-        <!-- <div class="spin-wait" [hidden]="!isBufferIFrame">
-            <mat-spinner diameter="18"></mat-spinner>
-        </div> -->
         <ng-container>
             <iframe [src]="iFrameUrl | safe" frameborder="0" id="botStoreIframe" style="height: calc(100vh - 60px)" width="100%"></iframe>
         </ng-container>
     </div>
-    <!-- <app-mainmenu class="toShowAppHeader"  [hidden]="showIframe"></app-mainmenu> -->
     <app-content class="container-fluid p-0" [hidden]="showIframe"></app-content>
-    <!-- <div class="testing-bot-icon-bottom" (click)="onBotClick()" [hidden]="workflowService.hideTestFlow">
-        <i class="icon-sa-testing-icon"></i>
-        <span *ngIf="isInCall || isInChat" [ngClass]="{'status-indications': (isInCall || isInChat), 'call-running' : isInCall, 'chat-running': isInChat}"></span>
-    </div> -->
 </div>
 
 <div class="loaderContainer" *ngIf="loading && !isFullScreen">
     <img src="assets/images/logoIcon.png" class="loaderLogoImage" >
 </div>
 
-
-
 <div *ngIf="isFullScreen" [ngClass]="showIframe ? 'd-none':''">
     <app-content></app-content>
 </div>
-
-<!-- <app-connect-to-bot *ngIf="showChatWindow" [isBotWindowMinized]="isBotWindowMinized" (close)="closeBotWindow($event)"></app-connect-to-bot> -->
-

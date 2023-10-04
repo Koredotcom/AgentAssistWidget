@@ -22,7 +22,7 @@ declare const $: any;
 export class AppComponent implements OnDestroy {
   loading = true
   isFullScreen: boolean = false;
-  appsData: any;
+  // appsData: any;
   showIframe = false;
   url: string;
   iframeEl: any;
@@ -47,24 +47,18 @@ export class AppComponent implements OnDestroy {
     private appService: AppService,
     public scriptLoader: ScriptLoaderService,
   ) {
-
-    // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang('en');
-
     router.events.subscribe((event: RouterEvent) => {
       this.navigationInterceptor(event)
     })
-    // this.authInfo = localstore.getAuthInfo();
   }
 
   ngOnInit() {
     if(window.location.href.includes('smartassist')){
       document.getElementsByTagName('html')[0].classList.add('init-smartassist');
     }
-    // the lang to use, if the lang isn't available, it will use the current loader to get them
     const self = this;
     this.iFrameUrl = `${this.workflowService.resolveHostUrl()}/botstore/store?product=SmartAssist-App#from=SmartAssist`;
-    // this.url = `http://localhost:4200/botstore/store?product=SmartAssist-App#from=SmartAssist`;
     this.ldBtStore = this.workflowService.loadBotStore$.subscribe(
       res => {
         this.showIframe = true;
@@ -74,14 +68,9 @@ export class AppComponent implements OnDestroy {
           userId: this.authService.getUserId(),
           loadBot: 'reloadBotstore'
         };
-        // To send user deatils to child application
         this.iframeEl.contentWindow.postMessage(message, '*');
         this.service.invoke('get.token').subscribe(
           res => {
-            // this.url = `http://localhost:4200/botstore/store?product=SmartAssist-App#from=SmartAssist`;
-            // this.url = `${this.workflowService.resolveHostUrl()}/botstore/store?product=SmartAssist-App#from=SmartAssist`;
-            // this.isBufferIFrame = true;
-            // this.showIframe = true;
             setTimeout(() => {
               this.isBufferIFrame = false;
               this.bindEvent(window, 'message', (e) => {
@@ -114,8 +103,6 @@ export class AppComponent implements OnDestroy {
           this.iframeEl.contentWindow.postMessage(tokenInfo, '*');
         }
       });
-    // const browserLang = this.translate.getBrowserLang();
-    // this.localstore.appLanguage = this.localstore.appLanguage || (browserLang.match(/ja/) ? browserLang : 'en');
     const lang = this.authService.externalQp?.appLanguage || this.localstore.appLanguage;
     if (lang) { this.translate.use(lang); }
 
@@ -135,12 +122,8 @@ export class AppComponent implements OnDestroy {
 
       $('body').addClass('app-lang-' + this.localstore.appLanguage);
     });
-
-    // this.appsData = this.workflowService.deflectApps();
     this.onResize();
-
     this.scriptLoader.loadScripts();
-    this.setMixPanel();
   }
 
   bindEvent(element, eventName, eventHandler) {
@@ -150,57 +133,21 @@ export class AppComponent implements OnDestroy {
   navigationInterceptor(event: RouterEvent): void {
     const _self = this;
     if (event instanceof NavigationStart) {
-      if (event.url.indexOf('/chathistory') == 0) {
-        _self.isFullScreen = true;
-        return;
-      } else {
-        _self.isFullScreen = false;
-      }
       this.authService.deflectApps.subscribe(function (res) {
-        if (!res) return;
-        _self.appsData = res;
+        if (!res?.length) return;
         _self.loading = true;
       })
     }
     if (event instanceof NavigationEnd) {
       _self.url = event.url;
       this.authService.deflectApps.subscribe(function (res) {
-        if (!res) return;
-        _self.appsData = res;
+        if (!res?.length) return;
         _self.loading = false;
-        // if (_self.appsData.length === 0) {
-        //   // if (_self.router.url !== '/onboarding' && _self.router.url !== '/config' && _self.router.url !== '/manage-deflection') {
-        //   //   _self.router.navigate(['/apps']);
-        //   // }
-        //   // if (_self.router.url === '/config' ||  _self.router.url === '/manage-deflection') {
-        //   //   return;
-        //   // }
-        //   _self.router.navigate(['/apps']);
-        //   setTimeout(() => {
-        //     $(".toShowAppHeader").addClass('d-none');
-        //   }, 350);
-        // }
         if (!_self.authService.smartAssistBots) {
-          const route = _self.getAuthorizedRoute(_self.url);
-          _self.router.navigate([(route || 'onboarding')]);
-        }
-
-        //  if (_self.appService.instanceApps.length === 0) {
-        //   const route = _self.getAuthorizedRoute(_self.url);
-        //   _self.router.navigate([(route || 'onboarding')]);
-        //   // return _self.router.navigate(['onboarding']);
-        // }
-
-        if (_self.workflowService.doOpenInstallTemps || _self.authService.hasToken) {
-          const route = _self.getAuthorizedRoute(_self.url);
-          _self.router.navigate([(route || '/onboarding')]);
+          _self.router.navigate([('/onboarding')]);
         }
       })
-
-      this.appService.showGuideLink$.next(false);
     }
-
-    // Set loading state to false in both of the below events to hide the spinner in case a request fails
     if (event instanceof NavigationCancel) {
       this.loading = false
     }
@@ -209,11 +156,14 @@ export class AppComponent implements OnDestroy {
     }
   }
 
+  // getAuthorizedRoute(url: string): string{
+  //   return '/onboarding';
+  // }
+
   @HostListener('window:resize', ['$event'])
   onResize(event?) {
     this.workflowService.disablePerfectScroll = window.innerWidth <= 600;
   }
-
 
   ngOnDestroy() {
     this.ldBtStore.unsubscribe();
@@ -235,79 +185,6 @@ export class AppComponent implements OnDestroy {
       if (params_arr.length) rtn = rtn + "?" + params_arr.join("&");
     }
     return rtn;
-  }
-
-  getAuthorizedRoute(url: string): string {
-    const roles = this.authService.getSelectedAccount()?.roles;
-    const isDeveloper = this.authService.getSelectedAccount()?.isDeveloper;
-    let route: string;
-
-    if (isDeveloper) return '/onboarding';
-
-    for (let role of roles) {
-      if (role === 'admin') {
-        return '/onboarding';
-      } else if (role === 'SmartAssist Agent Admin') {
-        return '/config/agents';
-      } else {
-        const permissions = this.authService.getSelectedAccount()?.permissions;
-
-        switch (url) {
-          case '/config/agents':
-            if (permissions.find(f => f === 'AGENT_VIEW' || f === 'AGENT_GROUP_VIEW')) return url;
-          case '/config/agent-assist':
-            if (permissions.find(f => f === 'STANDARD_RESPONSE_VIEW')) return url;
-          case '/config/wait-experiences':
-            if (permissions.find(f => f === 'WAITING_EXPERIENCE_VIEW')) return url;
-          case '/config/skills':
-            if (permissions.find(f => (f === 'SKIL_VIEW' || f === 'SKILL_GROUP_VIEW'))) return url;
-          case '/config/queue-settings':
-            if (permissions.find(f => (f === 'QUEUE_SETTINGS_VIEW'))) return url;
-          case '/config/operationalHours':
-            if (permissions.find(f => (f === 'HOURS_OF_OPERATION_VIEW'))) return url;
-          case '/config/roleManagement':
-            if (permissions.find(f => (f === 'ROLE_MANAGEMENT_VIEW'))) return url;
-          case '/config/agentStatus':
-            if (permissions.find(f => (f === 'AGENT_STATUS_SETTINGS_VIEW'))) return url;
-          case '/config/languages':
-            if (permissions.find(f => (f === 'LANGUAGE_SETTINGS_VIEW' || f === 'WAITING_EXPERIENCE_FULL'))) return url;
-          case '/config/widgets':
-            if (permissions.find(f => (f === 'AGENT_WIDGET_MANAGEMENT_VIEW'))) return url;
-          case ('/config/agent-settings'):
-            if (permissions.find(f => (f === 'LANGUAGE_SETTINGS_VIEW' || f === 'AGENT_STATUS_SETTINGS_VIEW' || f === 'HOURS_OF_OPERATION_VIEW' || f === 'QUEUE_SETTINGS_VIEW' || f === 'ROLE_MANAGEMENT_VIEW'))) return url;
-        }
-
-        for (let p of permissions) {
-          switch (p) {
-            case 'AGENT_VIEW':
-            case 'AGENT_GROUP_VIEW':
-              return '/config/agents';
-            case 'STANDARD_RESPONSE_VIEW':
-              return '/config/agent-assist';
-            case 'WAITING_EXPERIENCE_VIEW':
-              return '/config/wait-experiences';
-            case 'SKILL_VIEW':
-            case 'SKILL_GROUP_VIEW':
-              return '/config/skills';
-            case 'LANGUAGE_SETTINGS_VIEW':
-              return '/config/languages';
-            case 'AGENT_WIDGET_MANAGEMENT_VIEW':
-              return '/config/widgets';
-            case 'AGENT_STATUS_SETTINGS_VIEW':
-            case 'HOURS_OF_OPERATION_VIEW':
-            case 'QUEUE_SETTINGS_VIEW':
-            case 'ROLE_MANAGEMENT_VIEW':
-              return '/config/agent-settings';
-          }
-        }
-
-        if (permissions.find(f => f === 'AGENT_DESKTOP_CONSOLE_VIEW')) {
-          const url = window.location.protocol + '//' + window.location.host + "/agentdesktop";
-          window.open(url, '_self');
-        }
-      }
-    }
-    return route;
   }
 
   onBotClick() {
@@ -333,24 +210,6 @@ export class AppComponent implements OnDestroy {
     this.showChatWindow = false;
   }
 
-  setMixPanel(){
-    let userInfo:any = {};
-    const jStorage = JSON.parse(window.localStorage.getItem('jStorage'));
-    if (jStorage  && jStorage.currentAccount && jStorage.currentAccount.userInfo) {
-             userInfo = jStorage.currentAccount.userInfo;
-    }
-    if (userInfo && userInfo.emailId){
-      let eventPayload =  {
-        $email: userInfo.emailId,
-        FirstName: userInfo.firstName,
-        LastName: userInfo.lastName,
-        USER_ID:userInfo.id,
-        $name:userInfo.fName + ' ' +userInfo.lName,
-        NAME:userInfo.fName + ' ' +userInfo.lName,
-      }
-    }
-  }
-
   loadscripts(){
     const path = window.location.href
     if(path && (path.includes('/conversation') || path.includes('/storypreview'))){
@@ -368,7 +227,6 @@ export class AppComponent implements OnDestroy {
      this.dependentsLoaded = true;
      })
   }
-
   loadDependentLibs(url: string,type) {
     const head = <HTMLDivElement> document.head;
     if(type === 'script'){
@@ -386,5 +244,4 @@ export class AppComponent implements OnDestroy {
       head.appendChild(style);
     }
   }
-
 }

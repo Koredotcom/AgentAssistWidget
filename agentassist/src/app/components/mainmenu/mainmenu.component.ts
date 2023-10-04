@@ -86,11 +86,11 @@ export class MainmenuComponent implements OnInit, OnDestroy {
 
     // this.getCurrentBotFromAutomationBotList();
     
-    this.availBal = this.workflowService.updateAvailBal$.subscribe(
-      res => {
-        this.getBalance();
-      }
-    );
+    // this.availBal = this.workflowService.updateAvailBal$.subscribe(
+    //   res => {
+    //     this.getBalance();
+    //   }
+    // );
     this.upBtSub = this.workflowService.updateBotDetails$.subscribe(
       (res: any) => {
         this.currentBt = res;
@@ -116,9 +116,9 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   getCurrentBotFromAutomationBotList(){
     let _id = this.localStoreService.getSelectedAccount()?.accountId || this.authService.getSelectedAccount()?.accountId;
   
-    if (this.appService.selectedInstanceApp$.value) {
-      this.getBalance();
-    }
+    // if (this.appService.selectedInstanceApp$.value) {
+    //   this.getBalance();
+    // }
     if (this.workflowService.deflectAppsData.length || this.workflowService.deflectAppsData._id) {
      
       this.smartABots = this.authService.smartAssistBots || [];
@@ -134,50 +134,51 @@ export class MainmenuComponent implements OnInit, OnDestroy {
 
   filterLinkedBotIds(){
     this.filteredSmartABots = {};
-    this.smartABots.forEach((bot) => {
+    (this.smartABots || []).forEach((bot) => {
       if(bot._id){
         this.filteredSmartABots[bot._id] = bot;
       }
     });
 
-    
-    for(let bot of this.smartABots){
-      let filterdBot = this.filteredSmartABots[bot._id];
-      if(bot.type == 'universalbot'){
-
-        let linkedBots = [];
-        let linkedBotIds = {};
-
-        let config_publish_bot_array = [...bot?.configuredBots, ...bot.publishedBots];
-
-        config_publish_bot_array.forEach((config_publish_bot) => {
-          linkedBotIds[config_publish_bot._id] = true;
-        });  
-   
-        linkedBots = this.smartABots.filter(element => linkedBotIds[element._id]); 
-        filterdBot.linkedBots = Object.assign([], linkedBots);
-        for(let botId in linkedBotIds){
-          delete this.filteredSmartABots[botId]
-        }        
-      }
-    }        
-  }
-
-  getBalance() {
-    this.isPlanLoading = true;
-    let params;
-    if (this.workflowService.getCurrentBt()._id) {
-      params = {
-        streamId: this.workflowService.getCurrentBt()._id,
-      }
-    } else {
-      params = {
-        streamId: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id,
-      }
+    if(this.smartABots){
+      for(let bot of this.smartABots){
+        let filterdBot = this.filteredSmartABots[bot._id];
+        if(bot.type == 'universalbot'){
+  
+          let linkedBots = [];
+          let linkedBotIds = {};
+  
+          let config_publish_bot_array = [...bot?.configuredBots, ...bot.publishedBots];
+  
+          config_publish_bot_array.forEach((config_publish_bot) => {
+            linkedBotIds[config_publish_bot._id] = true;
+          });  
+     
+          linkedBots = this.smartABots.filter(element => linkedBotIds[element._id]); 
+          filterdBot.linkedBots = Object.assign([], linkedBots);
+          for(let botId in linkedBotIds){
+            delete this.filteredSmartABots[botId]
+          }        
+        }
+      }        
     }
+  }
+
+  // getBalance() {
+  //   this.isPlanLoading = true;
+  //   let params;
+  //   if (this.workflowService.getCurrentBt()._id) {
+  //     params = {
+  //       streamId: this.workflowService.getCurrentBt()._id,
+  //     }
+  //   } else {
+  //     params = {
+  //       streamId: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id,
+  //     }
+  //   }
 
    
-  }
+  // }
 
   getPlans() {
     this.service.invoke("get.plans").subscribe((res: BillingPlan[]) => {

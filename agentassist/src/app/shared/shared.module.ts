@@ -27,11 +27,15 @@ import { ArraySortPipe } from '../helpers/filters/sort.pipe';
 import { StrictFilterPipe } from '../helpers/filters/strict-filter';
 import { AceEditorModule } from 'ng2-ace-editor';
 import { LookupPipe } from '../helpers/filters/lookup.pipe';
+import { EmptyScreensComponent } from '../pages/usecases/uc-main/uc-table-main/uc-table-view/empty-screens/empty-screens.component';
+import { UbEmptyScreensComponent } from '../pages/usecases/uc-main/uc-table-main/uc-table-view/ub-empty-screens/ub-empty-screens.component';
 
 const COMPONENTS = [
   SliderComponentComponent,
   IvrComponent,
   VoicePreferencesComponent,
+  EmptyScreensComponent,
+  UbEmptyScreensComponent
 ];
 
 const PIPES = [

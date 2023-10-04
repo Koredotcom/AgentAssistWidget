@@ -32,20 +32,14 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    if(this.appService.selectedInstanceApp$.value) {
-        if(this.authService.agentAssistAutomationBots.length > 0) {
-          this.router.navigate(['/config/usecases']);
-        } else {
-          this.initDialog();
-        }
-      // this.showWarningMessage();
-    }
-    /* if (this.appService.instanceApps.length && !this.appService.isMigrated) {
-      this.router.navigate(['home']);
-    } */
-    else {
-      this.initDialog();
-    }
+    
+    this.appService.selectedInstanceApp$.subscribe((val)=>{
+      if(this.authService.agentAssistAutomationBots.length > 0) {
+        this.router.navigate(['/config/usecases']);
+      } else {
+        this.initDialog();
+      }
+    })
   }
 
   marketURL(){

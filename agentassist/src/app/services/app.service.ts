@@ -12,10 +12,7 @@ export class AppService {
 
     instanceApps: any[] = [];
     selectedInstanceApp$ = new BehaviorSubject<any>({});
-
     hideHomePage$ = new BehaviorSubject<boolean>(false);
-    showGuideLink$ = new BehaviorSubject<boolean>(false);
-
     isMigrated: boolean;
 
     constructor(
