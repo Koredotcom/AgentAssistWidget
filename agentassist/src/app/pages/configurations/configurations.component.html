@@ -1,4 +1,7 @@
-<app-mainmenu class="toShowAppHeader" type="config"></app-mainmenu>
+<app-mainmenu class="toShowAppHeader" type="config" *ngIf="!isUnifiedPlatform"></app-mainmenu>
+
+<app-xo-menu type="config" *ngIf="isUnifiedPlatform"></app-xo-menu>
+
 <div class="container-fluid configurations deflectContainer" [ngClass]="{'guideLink': (appService.showGuideLink$ | async)}">
     <!-- <div class="checklist-info">
         <div class="info">Great! Just 3 more steps and you are done, lets move to the next step.</div>

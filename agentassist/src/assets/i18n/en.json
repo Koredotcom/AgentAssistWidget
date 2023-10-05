@@ -2133,5 +2133,6 @@
     "CHECKLIST.CLDUPDATE_SUCCESS": "Status updated successfully",
     "CHECKLIST.CLSAVE_FAILURE": "Failed to save checklist",
     "CHECKLIST.STEPCREATEFAILURE": "Failed to save step",
-    "CHECKLIST.STEPUPDATEFAILURE": "Failed to update step"
+    "CHECKLIST.STEPUPDATEFAILURE": "Failed to update step",
+    "UNIFIED_SIDENAV_AGENT_ASSIST": "AgentAssist"
 }

@@ -1,171 +1,62 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from "@angular/core";
+import { SubSink } from 'subsink';
 declare const $;
 @Component({
   selector: "app-xo-menu",
   templateUrl: "./xo-menu.component.html",
   styleUrls: ["./xo-menu.component.scss"],
+  encapsulation: ViewEncapsulation.None
 })
 export class XoMenuComponent implements OnInit {
   constructor() {}
   minimizeSidenavItems = false;
   @Output() minimizeSidenav = new EventEmitter();
+  @Output() menuItemSelected = new EventEmitter();
   SelectedSideMenu = "";
+  subs = new SubSink();
+
   ngOnInit(): void {}
   x = {
     subModules: [
       {
-        id: "flows",
-        name: "lbl_flows_routing",
-        icon: "assets/icons/unified-icons/sa-unified-dataflow.svg",
+        id: "agent_exp",
+        name: "AGENT EXPERIENCE",
+        icon: "assets/icons/unified-icons/Iconusers.svg",
         subModules: [
           {
-            id: "flows",
-            name: "lbl_conditional_flows",
+            id: "coaching",
+            name: "Agent Coaching",
             icon: "",
             meta: {
-              permission: ["FLOW_MANAGEMENT_VIEW"],
-              moduleRoute: "flows",
+              permission: [""],
+              moduleRoute: "coaching",
             },
           },
           {
-            id: "wait-experiences",
-            name: "Waiting Flows",
+            id: "playbook",
+            name: "Agent Playbook",
             icon: "",
             meta: {
-              permission: ["WAITING_EXPERIENCE_VIEW"],
-              moduleRoute: "wait-experiences",
-            },
-          },
-        ],
-      },
-      {
-        id: "queues",
-        name: "ROUTING",
-        icon: "assets/icons/unified-icons/sa-unified-reverse-right.svg",
-        subModules: [
-          {
-            id: "queues",
-            name: "Queues",
-            icon: "",
-            meta: {
-              permission: ["QUEUE", "QUEUE_SETTINGS_VIEW"],
-              moduleRoute: "queues",
-            },
-          },
-          {
-            id: "skills",
-            name: "Skills",
-            icon: "",
-            meta: {
-              permission: [
-                "SKILL_SETTING_MANAGEMENT_VIEW",
-                "SKILL_MANAGEMENT_VIEW",
-              ],
-              moduleRoute: "skills",
-            },
-          },
-        ],
-      },
-      {
-        id: "users",
-        name: "AGENT & SUPERVISORS",
-        icon: "assets/icons/unified-icons/sa-unified-users.svg",
-        subModules: [
-          {
-            id: "users",
-            name: "Agent Management",
-            icon: "",
-            meta: {
-              permission: [
-                "AGENT_SETTING_MANAGEMENT_VIEW",
-                "USER_MANAGEMENT_VIEW",
-                "USER_MANAGEMENT_VIEW_AND_INVITE",
-              ],
-              moduleRoute: "users",
+              permission: [""],
+              moduleRoute: "guided-checklist",
             },
             subModules: [
               {
-                id: "users",
-                name: "Agents",
+                id: "static",
+                name: "Static",
                 icon: "",
                 meta: {
-                  permission: [
-                    "AGENT_SETTING_MANAGEMENT_VIEW",
-                    "USER_MANAGEMENT_VIEW",
-                    "USER_MANAGEMENT_VIEW_AND_INVITE",
-                  ],
-                  moduleRoute: "users",
+                  permission: [],
+                  moduleRoute: "static",
                 },
               },
               {
-                id: "agents",
-                name: "Agent Groups",
+                id: "dynamic",
+                name: "Dynamic",
                 icon: "",
                 meta: {
-                  permission: [
-                    "AGENT_SETTING_MANAGEMENT_VIEW",
-                    "AGENT_GROUP_MANAGEMENT_VIEW",
-                  ],
-                  moduleRoute: "agents",
-                },
-              },
-              {
-                id: "agentStatus",
-                name: "Agent Status",
-                icon: "",
-                meta: {
-                  permission: ["AGENT_STATUS_VIEW"],
-                  moduleRoute: "agentStatus",
-                },
-              },
-              {
-                id: "agents-settings",
-                name: "Agent Settings",
-                icon: "",
-                meta: {
-                  permission: [
-                    "AGENT_SETTING_MANAGEMENT_VIEW",
-                    "AGENT_SETTINGS_VIEW",
-                  ],
-                  moduleRoute: "agents-settings",
-                },
-              },
-            ],
-          },
-          {
-            id: "dispositioncodes",
-            name: "Dispositions",
-            icon: "",
-            meta: {
-              permission: [
-                "DISPOSITION_MANAGEMENT_VIEW",
-                "DISPOSITION_MANAGEMENT_YES",
-              ],
-              moduleRoute: "dispositioncodes",
-            },
-            subModules: [
-              {
-                id: "sets",
-                name: "Disposition Sets",
-                icon: "",
-                meta: {
-                  permission: [
-                    "DISPOSITION_MANAGEMENT_VIEW",
-                    "DISPOSITION_MANAGEMENT_YES",
-                  ],
-                  moduleRoute: "sets",
-                },
-              },
-              {
-                id: "codes",
-                name: "Disposition Codes",
-                icon: "",
-                meta: {
-                  permission: [
-                    "DISPOSITION_MANAGEMENT_VIEW",
-                    "DISPOSITION_MANAGEMENT_YES",
-                  ],
-                  moduleRoute: "codes",
+                  permission: [],
+                  moduleRoute: "dynamic",
                 },
               },
             ],
@@ -173,129 +64,30 @@ export class XoMenuComponent implements OnInit {
         ],
       },
       {
-        id: "operationalHours",
+        id: "agent_configurations",
         name: "CONFIGURATIONS",
-        icon: "assets/icons/unified-icons/sa-unified-configurations.svg",
+        icon: "assets/icons/unified-icons/Iconsettings.svg",
         subModules: [
           {
-            id: "operationalHours",
-            name: "Hours of Operation",
+            id: "events",
+            name: "Welcome Events",
             icon: "",
             meta: {
-              permission: ["HOURS_OF_OPERATION_VIEW"],
-              moduleRoute: "operationalHours",
-            },
-          },
-          {
-            id: "languages",
-            name: "Languages & Speech",
-            icon: "",
-            meta: {
-              permission: [
-                "LANGUAGE_AND_SPEECH_CONTROL_VIEW",
-                "LANGUAGE_AND_SPEECH_CONTROL_YES",
-              ],
-              moduleRoute: "languages",
-            },
-          },
-          {
-            id: "agentsDefaults",
-            name: "Default Flows",
-            icon: "",
-            meta: {
-              permission: ["DEFAULT_FLOWS_VIEW", "DEFAULT_FLOWS_YES"],
-              moduleRoute: "agentsDefaults",
-            },
-          },
-          {
-            id: "agent-assist",
-            name: "Response Templates",
-            icon: "",
-            meta: {
-              permission: ["STANDARD_RESPONSE_VIEW", "STANDARD_RESPONSES_VIEW"],
-              moduleRoute: "agent-assist",
-            },
-          },
-          {
-            id: "surveys",
-            name: "Surveys",
-            icon: "",
-            meta: {
-              permission: ["SURVEY_MANAGEMENT_VIEW", "SURVEY_MANAGEMENT_YES"],
-              moduleRoute: "surveys",
-            },
-          },
-          {
-            id: "forms",
-            name: "Secure Forms",
-            icon: "",
-            meta: {
-              permission: ["SURVEY_MANAGEMENT_VIEW", "SURVEY_MANAGEMENT_YES"],
-              moduleRoute: "forms",
+              permission: [],
+              moduleRoute: "welcomeEvents",
             },
           },
           {
             id: "widgets",
-            name: "Widgets",
+            name: "widgets",
             icon: "",
             meta: {
-              permission: ["WIDGET_MANAGEMENT_VIEW", "WIDGET_MANAGEMENT_YES"],
-              moduleRoute: "widgets",
+              permission: [],
+              moduleRoute: "widget-settings",
             },
-          },
-          {
-            id: "channels",
-            name: "Email Inbox Config",
-            icon: "",
-            meta: {
-              permission: ["CHANNEL_MANAGEMENT_VIEW", "CHANNEL_MANAGEMENT_YES"],
-              moduleRoute: "channels",
-            },
-          },
-          {
-            id: "agentAssistSettings",
-            name: "AgentAssist Settings",
-            icon: "",
-            meta: {
-              permission: ["AGENT_ASSIST_SETTINGS_VIEW"],
-              moduleRoute: "agentAssistSettings",
-            },
-          },
-          {
-            id: "api-setup",
-            name: "Advanced Settings",
-            icon: "",
-            meta: {
-              permission: ["API_VIEW", "API_YES"],
-              moduleRoute: "api-setup",
-            },
-            subModules: [
-              {
-                id: "avdapi-setup",
-                name: "API Setup",
-                icon: "",
-                meta: {
-                  permission: ["API_VIEW", "API_YES"],
-                  moduleRoute: "api-setup",
-                },
-              },
-              {
-                id: "advanced-settings",
-                name: "Advanced Settings",
-                icon: "",
-                meta: {
-                  permission: [
-                    "WFM_CONFIG_MANAGEMENT_YES",
-                    "WIDGET_MANAGEMENT_VIEW",
-                    "WIDGET_MANAGEMENT_YES",
-                  ],
-                  moduleRoute: "advanced-settings",
-                },
-              },
-            ],
           },
         ],
-      },
+      }
     ],
   };
   blurFrame: any;
@@ -312,5 +104,25 @@ export class XoMenuComponent implements OnInit {
       $(".right-wrapper-dynamic-content").removeClass('active');
       this.minimizeSidenav.emit(false);
     }
+  }
+
+  showSubMenuUnified(module){
+    if(this.minimizeSidenavItems){
+      this.SelectedSideMenu = module
+    }
+  }
+
+  sidebarViewUpdate(view) {
+    console.log('sidebar', view);
+    this.blurFrame = view.open;
+  }
+  
+  menuSelected(item){
+    this.menuItemSelected.emit(item);
+  }
+
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }
