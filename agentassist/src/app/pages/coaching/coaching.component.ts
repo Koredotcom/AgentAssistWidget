@@ -193,7 +193,6 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.cdRef.detectChanges();
     })).subscribe(data => {
       if (data) {
-        data.results?.sort((a, b) => (a.default <= b.default ? 1 : -1));
         data.results?.map(obj => {
           obj.tags = obj.tags || [];
           obj.channels = obj.channels || [];
