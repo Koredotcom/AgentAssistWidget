@@ -34,8 +34,8 @@
                 <ng-container *ngFor="let occ of occurances;let i = index">
                     <li ngbDropdownItem class="list-item-li" (click)="clickOcc(occ)">
                         <!-- <span class="title">Each Occurrence  -->
-                            <span *ngIf="i == 0">{{occ}} time</span>
-                            <span *ngIf="i != 0">{{occ}} times</span>
+                            <span *ngIf="i == 0" class="title">{{occ}} time</span>
+                            <span *ngIf="i != 0" class="title">{{occ}} times</span>
                         <!-- </span> -->
                         <i [ngClass]="{'icon-sa-conv-check': occ === selOcc}"></i>
                     </li>

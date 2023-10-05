@@ -83,6 +83,18 @@
                 height: 40px;
             }
         }
+        .check-icon-block {
+            width: 46px;
+            height: 34px;
+            flex-shrink: 0;
+            text-align: right;
+            color: #039855;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            font-size: 14px;
+        }
         .s-title{
             font-weight: 400;
             font-size: 16px;
