@@ -1,0 +1,32 @@
+<div class="xop-inner-page-menu" [ngClass]="{'xop-innerpage-menu-min': minimizeSidenavItems}">
+	<div [ngClass]="{'forSliderFromIframe':blurFrame}"></div>
+	<div class="xop-inner-page-menu-heading">
+	  <div class="xop-inner-page-menu-heading-text">{{"UNIFIED_SIDENAV_CONTACT_CENTER"| translate}}</div>
+	</div>
+	<perfect-scrollbar class="xop-inner-page-menu-scroll">
+		<ng-container *ngFor="let item of x?.subModules || []; let i= index">
+			<div class="xop-innerpage-menu-list-container" [ngClass]="{'xop-innerpage-menu-list-childs-show': SelectedSideMenu === item.name }">
+			  <div class="xop-innerpage-menu-list-parent" (click)="showSubMenuUnified(item.name)">
+			  <span class="xop-innerpage-menu-list-parent-icon">
+				<img [src]="item.icon">
+			  </span>
+			  <span class="xop-innerpage-menu-list-parent-title"> {{item.name | uppercase | translate}} </span>
+			  </div>
+			  <div class="xop-innerpage-menu-list-childs">
+				  <ng-container *ngFor="let subMenuItem of item.subModules; let j = index">
+					  <div class="xop-innerpage-menu-list-child" routerLink="{{subMenuItem?.meta?.moduleRoute}}" routerLinkActive="active" [ngClass]="{'active': selectedSideNavItem === subMenuItem?.id}" *hasPermission="subMenuItem?.meta?.permission" (click)="menuSelected(subMenuItem)" >
+						  {{subMenuItem.name | uppercase | translate}}
+					</div>
+			</ng-container>
+			</div>
+			</div>
+		</ng-container>
+	</perfect-scrollbar>
+  
+	<span class="collapse-nav" (click)="toggleLeftNav()">
+		<i class="icon-sa-chevron-left-dark"></i>
+	</span>
+  
+  </div>
+
+
