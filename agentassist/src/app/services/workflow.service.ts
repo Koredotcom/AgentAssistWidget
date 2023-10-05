@@ -75,6 +75,7 @@ export class workflowService {
 
   isChatsOptionsUpdated = false;
   hideTestFlow: boolean;
+  UnifiedPlatform = false;
 
   constructor(
     private service: ServiceInvokerService,
@@ -282,5 +283,16 @@ export class workflowService {
 
         }
     }, false);
-}
+  }
+
+  isUnifiedPlatform(){
+    if(!this.UnifiedPlatform){
+    let element = this.route.snapshot.queryParams;
+    this.UnifiedPlatform = (element?.isUnifiedPlatform === 'true' || element?.isUnifiedPlatform === true) 
+    ? true : false;
+      return this.UnifiedPlatform;
+    }else{
+      return this.UnifiedPlatform;
+    }
+  }
 }

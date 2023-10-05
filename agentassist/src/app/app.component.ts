@@ -13,6 +13,7 @@ import * as _ from 'underscore';
 import { AppService } from '@kore.services/app.service';
 import { ScriptLoaderService } from '@kore.services/scriptloader.service';
 import { MixPanelService } from './helpers/mixPanel.service';
+import { IframeService } from '@kore.services/iframe.service';
 
 declare const $: any;
 @Component({
@@ -48,6 +49,7 @@ export class AppComponent implements OnDestroy {
     private appService: AppService,
     public scriptLoader: ScriptLoaderService,
     public mixPanel:MixPanelService,
+    private iframeS: IframeService
   ) {
 
     // this language will be used as a fallback when a translation isn't found in the current language
@@ -174,7 +176,9 @@ export class AppComponent implements OnDestroy {
           const route = _self.getAuthorizedRoute(_self.url);
           _self.router.navigate([(route || 'onboarding')]);
         }
-
+        setTimeout(() => {
+          _self.iframeS.post('dependenciesLoaded', {loaded: true});
+        }, 10);
         if (_self.workflowService.doOpenInstallTemps || _self.authService.hasToken) {
           const route = _self.getAuthorizedRoute(_self.url);
           _self.router.navigate([(route || '/onboarding')]);
