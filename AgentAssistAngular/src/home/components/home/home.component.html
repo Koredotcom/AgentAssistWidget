@@ -87,8 +87,9 @@
             </div>
         </div>
         <ng-container *ngIf="isChecklistOpened && activeTab === projConstants.ASSIST">
-            <div class="app-checklist-wrapper">
+            <div class="app-checklist-wrapper" [ngClass]="{'min-height-adjust': checkList?.triggeredDynCheckLists?.length}">
                 <app-checklists 
+                    #checkList
                     [connectionDetails]="connectionDetails" 
                     [checklists]="checklists"
                     [ccVersion]="checkListData?.ccVersion"

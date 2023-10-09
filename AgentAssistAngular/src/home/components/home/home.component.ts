@@ -14,6 +14,7 @@ import { MockDataService } from 'src/common/services/mock-data.service';
 import { CoachingActionStoreService } from 'src/app/coaching-action-store.service';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { EChartsOption } from 'echarts';
+import { ChecklistsComponent } from 'src/assist-tab/components/checklists/checklists.component';
 // import { ServiceInvokerService } from 'src/common/services/service-invoker.service';
 declare const $: any;
 @Component({
@@ -27,6 +28,7 @@ export class HomeComponent implements OnInit {
   @ViewChild('psBottom') psBottom: PerfectScrollbarComponent;
   @ViewChild('overlayps') overlayps : PerfectScrollbarComponent;
   @ViewChild('overlayhint') overlayhint : PerfectScrollbarComponent;
+  @ViewChild('checkList') checkList : ChecklistsComponent;
 
   imageFilePath: string = ImageFilePath;
   imageFileNames: any = ImageFileNames;
@@ -68,13 +70,18 @@ export class HomeComponent implements OnInit {
   selectedPlayBook = '';
   avgHeight = 400;
   isGrab = false;
-  constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
-    public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
-    private designAlterService: DesignAlterService, private localStorageService: LocalStorageService,
-    private mockDataService : MockDataService,
+  constructor(
+    public handleSubjectService: HandleSubjectService, 
+    public websocketService: WebSocketService,
+    public sanitizeHTMLPipe: SanitizeHtmlPipe, 
+    public commonService: CommonService, 
+    private koregenerateUUIDPipe: KoreGenerateuuidPipe,
+    private designAlterService: DesignAlterService, 
+    private localStorageService: LocalStorageService,
     private cdRef : ChangeDetectorRef,
-    private coachingActionStore : CoachingActionStoreService, private randomUUIDPipe : RandomUUIDPipe ) {}
-
+    private randomUUIDPipe : RandomUUIDPipe 
+  ) {}
+    
 
   ngOnInit(): void {
     this.subscribeEvents();
