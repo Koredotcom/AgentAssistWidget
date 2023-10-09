@@ -40,9 +40,10 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         }
       // this.showWarningMessage();
     }
-    if (this.appService.instanceApps.length && !this.appService.isMigrated) {
+    /* if (this.appService.instanceApps.length && !this.appService.isMigrated) {
       this.router.navigate(['home']);
-    } else {
+    } */
+    else {
       this.initDialog();
     }
   }

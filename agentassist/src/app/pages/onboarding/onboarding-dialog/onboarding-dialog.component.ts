@@ -9,7 +9,7 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { finalize } from 'rxjs/operators';
-import { MixPanelService } from 'src/app/helpers/mixPanel.service';
+// import { MixPanelService } from 'src/app/helpers/mixPanel.service';
 import { SubSink } from 'subsink';
 import { InstanceModel } from '../onboarding.model';
 import { workflowService } from '@kore.services/workflow.service';
@@ -48,14 +48,14 @@ export class OnboardingDialogComponent implements OnInit, AfterViewInit, OnDestr
     private authService: AuthService,
     private translate: TranslateService,
     private interactiveHelp: InteractiveHelpService,
-    private mixPanel: MixPanelService,
+    // private mixPanel: MixPanelService,
     public workflowService: workflowService,
     private modalService: NgbModal,
   ) { }
 
   ngOnInit(): void {
     //this.initBots();
-    this.mixPanel.postEvent('Welcome screen loaded', this.mixPanel.events['Welcome screen loaded']);
+    // this.mixPanel.postEvent('Welcome screen loaded', this.mixPanel.events['Welcome screen loaded']);
   }
 
   ngAfterViewInit() {
@@ -86,27 +86,27 @@ export class OnboardingDialogComponent implements OnInit, AfterViewInit, OnDestr
   //   this.createInstance();
   // }
 
-  createInstance(takeTour?) {
-    if (!(/^[a-zA-Z0-9][a-zA-Z0-9_<>*. ]+$/.test(this.model.name.trim()))) {
-      this.notificationService.notify(this.translate.instant("ONBOARDING_INSTANCE_NAME_ALLOWS"), 'warning');
-      return;
-    }
+  // createInstance(takeTour?) {
+  //   if (!(/^[a-zA-Z0-9][a-zA-Z0-9_<>*. ]+$/.test(this.model.name.trim()))) {
+  //     this.notificationService.notify(this.translate.instant("ONBOARDING_INSTANCE_NAME_ALLOWS"), 'warning');
+  //     return;
+  //   }
 
-    this.saveInProgress = true;
-    this.subs.sink = this.service.invoke('post.instances', null, this.model)
-      .pipe(finalize(() => this.saveInProgress = false))
-      .subscribe(res => {
+  //   this.saveInProgress = true;
+  //   this.subs.sink = this.service.invoke('post.instances', null, this.model)
+  //     .pipe(finalize(() => this.saveInProgress = false))
+  //     .subscribe(res => {
 
-        this.mixPanel.postEvent('Instance setup complete', this.mixPanel.events['Instance setup complete']);
+  //       // this.mixPanel.postEvent('Instance setup complete', this.mixPanel.events['Instance setup complete']);
 
-        this.notificationService.notify("Instance created successfully!", "success");
-        this.appService.appendNewInstaceBot(res);
-        this.authService.deflectApps.next(null);
-        this.closeDialog(takeTour);
-        this.router.navigate(['home']);
-        // setTimeout(() => { this.router.navigate(['home']) })
-      }, err => this.notificationService.showError(err));
-  }
+  //       this.notificationService.notify("Instance created successfully!", "success");
+  //       this.appService.appendNewInstaceBot(res);
+  //       this.authService.deflectApps.next(null);
+  //       this.closeDialog(takeTour);
+  //       this.router.navigate(['home']);
+  //       // setTimeout(() => { this.router.navigate(['home']) })
+  //     }, err => this.notificationService.showError(err));
+  // }
 
   closeDialog(takeTour?, isMigrated?) {
     this.dialogRef.close();
@@ -114,7 +114,7 @@ export class OnboardingDialogComponent implements OnInit, AfterViewInit, OnDestr
     if (takeTour) {
       this.interactiveHelp.openHelp('INITIAL_PRODUCT_TOUR')
     } else {
-      this.mixPanel.postEvent('Welcome screen skipped', this.mixPanel.events['Welcome screen skipped']);
+      // this.mixPanel.postEvent('Welcome screen skipped', this.mixPanel.events['Welcome screen skipped']);
     }
 
     if (isMigrated) {

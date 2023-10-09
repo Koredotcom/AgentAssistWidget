@@ -7,10 +7,8 @@ import { Observer, from, Subject, BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
 import { ReplaySubject } from 'rxjs'
 import * as _ from 'underscore';
-import { MixPanelWrapper } from '../helpers/mixpanel';
 import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
-import { MixPanelService } from '../helpers/mixPanel.service';
 
 declare const $: any;
 
@@ -44,7 +42,6 @@ export class AuthService {
     public workflowService: workflowService,
     private translate: TranslateService,
     private injector: Injector,
-    private mixPanel: MixPanelService
   ) {
     if (window.location.hash && window.location.hash.indexOf('#id_token') == 0 && window.location.search && window.location.search.indexOf('?qp') == 0) {
       this.hasToken = true;
@@ -69,7 +66,6 @@ export class AuthService {
       res => {
         // const mixPanel = this.injector.get(MixPanelWrapper);
         // mixPanel.postEvent('Sign Out');
-        this.mixPanel.postEvent('Sign Out', {});
         this.authInfo = false;
         this.localstore.removeAuthInfo();
         this.appUrls.redirectToLoginBotStore(true)

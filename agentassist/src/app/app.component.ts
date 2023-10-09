@@ -12,7 +12,6 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import * as _ from 'underscore';
 import { AppService } from '@kore.services/app.service';
 import { ScriptLoaderService } from '@kore.services/scriptloader.service';
-import { MixPanelService } from './helpers/mixPanel.service';
 import { IframeService } from '@kore.services/iframe.service';
 
 declare const $: any;
@@ -24,7 +23,7 @@ declare const $: any;
 export class AppComponent implements OnDestroy {
   loading = true
   isFullScreen: boolean = false;
-  appsData: any;
+  // appsData: any;
   showIframe = false;
   url: string;
   iframeEl: any;
@@ -48,7 +47,6 @@ export class AppComponent implements OnDestroy {
     private service: ServiceInvokerService,
     private appService: AppService,
     public scriptLoader: ScriptLoaderService,
-    public mixPanel:MixPanelService,
     private iframeS: IframeService
   ) {
 
@@ -154,15 +152,15 @@ export class AppComponent implements OnDestroy {
   navigationInterceptor(event: RouterEvent): void {
     const _self = this;
     if (event instanceof NavigationStart) {
-      if (event.url.indexOf('/chathistory') == 0) {
-        _self.isFullScreen = true;
-        return;
-      } else {
-        _self.isFullScreen = false;
-      }
+      // if (event.url.indexOf('/chathistory') == 0) {
+      //   _self.isFullScreen = true;
+      //   return;
+      // } else {
+      //   _self.isFullScreen = false;
+      // }
       this.authService.deflectApps.subscribe(function (res) {
         if (!res) return;
-        _self.appsData = res;
+        // _self.appsData = res;
         _self.loading = true;
       })
     }
@@ -170,18 +168,18 @@ export class AppComponent implements OnDestroy {
       _self.url = event.url;
       this.authService.deflectApps.subscribe(function (res) {
         if (!res) return;
-        _self.appsData = res;
+        // _self.appsData = res;
         _self.loading = false;
         if (!_self.authService.smartAssistBots) {
-          const route = _self.getAuthorizedRoute(_self.url);
-          _self.router.navigate([(route || 'onboarding')]);
+          // const route = _self.getAuthorizedRoute(_self.url);
+          _self.router.navigate([(_self.url || 'onboarding')]);
         }
         setTimeout(() => {
           _self.iframeS.post('dependenciesLoaded', {loaded: true});
         }, 10);
         if (_self.workflowService.doOpenInstallTemps || _self.authService.hasToken) {
-          const route = _self.getAuthorizedRoute(_self.url);
-          _self.router.navigate([(route || '/onboarding')]);
+          // const route = _self.getAuthorizedRoute(_self.url);
+          _self.router.navigate([(_self.url || '/onboarding')]);
         }
       })
 
@@ -337,8 +335,6 @@ export class AppComponent implements OnDestroy {
         $name:userInfo.fName + ' ' +userInfo.lName,
         NAME:userInfo.fName + ' ' +userInfo.lName,
       }
-      this.mixPanel.reset();
-      this.mixPanel.setUserInfo(userInfo.emailId,eventPayload);
     }
   }
 

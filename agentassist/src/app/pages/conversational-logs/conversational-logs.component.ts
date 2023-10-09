@@ -8,7 +8,6 @@ import { debounceTime, distinctUntilChanged, finalize, map } from 'rxjs/operator
 import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
 import { Moment } from 'moment';
 import { LocalStoreService } from '@kore.services/localstore.service';
-import { mock_logs } from 'src/app/data/conversational-logs.model';
 export interface IAnalyticsFilters {
   startDate: string | any,
   endDate: string | any,

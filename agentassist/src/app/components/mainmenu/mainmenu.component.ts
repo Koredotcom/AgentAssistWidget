@@ -12,7 +12,6 @@ import { VoicePreferencesModel } from 'src/app/pages/settings/settings.model';
 import * as _ from 'underscore';
 import { AuthService } from '../../services/auth.service';
 import { NavigationEnd, Router } from '@angular/router';
-import { Permissions } from 'src/app/data/permissions.model';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { SubSink } from 'subsink';
 import { AppService } from '@kore.services/app.service';
