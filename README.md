@@ -1,2 +1,0 @@
-# AgentAssistWidget
-AgentAssist Widget
