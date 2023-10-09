@@ -245,7 +245,7 @@ export class AuthService {
     let param = {'accountId': _id};
     this.service.invoke('get.agentDesktopEnabled.info', param).subscribe(res => {
       this.isAgentDesktopEnabled$.next(res.isAgentDesktopEnabled);
-      this.isAgentCoachongEnable$.next(true);
+      this.isAgentCoachongEnable$.next(res.isAgentCoachingEnabled);
     }
     , error => {
       console.log(error);
@@ -298,7 +298,7 @@ export class AuthService {
       isAgentAssist = '';
     }
 
-    this.service.invoke('get.automationbots').subscribe(res => {
+    this.service.invoke('get.automationbots', {isAgentAssist}).subscribe(res => {
       if(this.workflowService.isUnifiedPlatform()) {
         res = [JSON.parse(window.localStorage.getItem('selectedBot'))];
       }
