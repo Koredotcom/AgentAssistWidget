@@ -1,7 +1,7 @@
 <div class="xop-inner-page-menu" [ngClass]="{'xop-innerpage-menu-min': minimizeSidenavItems}">
 	<div [ngClass]="{'forSliderFromIframe':blurFrame}"></div>
 	<div class="xop-inner-page-menu-heading">
-	  <div class="xop-inner-page-menu-heading-text">{{"UNIFIED_SIDENAV_CONTACT_CENTER"| translate}}</div>
+	  <div class="xop-inner-page-menu-heading-text">{{"UNIFIED_SIDENAV_AGENT_ASSIST"| translate}}</div>
 	</div>
 	<perfect-scrollbar class="xop-inner-page-menu-scroll">
 		<ng-container *ngFor="let item of x?.subModules || []; let i= index">
@@ -14,7 +14,7 @@
 			  </div>
 			  <div class="xop-innerpage-menu-list-childs">
 				  <ng-container *ngFor="let subMenuItem of item.subModules; let j = index">
-					  <div class="xop-innerpage-menu-list-child" routerLink="{{subMenuItem?.meta?.moduleRoute}}" routerLinkActive="active" [ngClass]="{'active': selectedSideNavItem === subMenuItem?.id}" *hasPermission="subMenuItem?.meta?.permission" (click)="menuSelected(subMenuItem)" >
+					  <div class="xop-innerpage-menu-list-child" routerLink="{{subMenuItem?.meta?.moduleRoute}}" routerLinkActive="active" [ngClass]="{'active': selectedSideNavItem === subMenuItem?.id}" (click)="menuSelected(subMenuItem)" >
 						  {{subMenuItem.name | uppercase | translate}}
 					</div>
 			</ng-container>
