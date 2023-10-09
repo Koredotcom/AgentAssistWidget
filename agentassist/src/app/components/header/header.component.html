@@ -89,7 +89,7 @@
 <header>
     <nav class="deflectHeader navbar navbar-expand-lg navbar-light white">
         <div class="header-sec row m-0 col-12 p-0">
-            <ng-container *ngIf="!workflowService.UnifiedPlatform">
+            <ng-container *ngIf="workflowService.UnifiedPlatform">
                 <div class="today-history-config-tabs" *hasPermission="['admin']">
                     <!-- <div class="name-tab" [routerLink]="['/today']" routerLinkActive="active">{{"CALENDAR.TODAY" | translate}}</div> -->
                     <!-- <div class="name-tab" [routerLink]="['/history']" routerLinkActive="active">{{"NAV_DASHBOARD" | translate}}</div> -->
