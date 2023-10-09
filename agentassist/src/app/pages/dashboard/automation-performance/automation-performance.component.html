@@ -1,5 +1,5 @@
 <div class="automation-perforamce-wrapper">
-    <ng-container *ngIf="automationData.total > 0; else elseNoData">
+    <ng-container *ngIf="automationData?.total > 0; else elseNoData">
       <div echarts [options]="chartOption" class="chart-container"></div>
       <div class="legend-wrapper">
           <div class="legends-info" *ngFor="let obj of automationPerformanceChartData">
