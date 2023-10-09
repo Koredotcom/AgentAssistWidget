@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '@kore.services/app.service';
+import { workflowService } from '@kore.services/workflow.service';
 
 @Component({
   selector: 'app-configurations',
@@ -8,9 +9,12 @@ import { AppService } from '@kore.services/app.service';
 })
 export class ConfigurationsComponent implements OnInit {
 
-  constructor(public appService: AppService) { }
+  isUnifiedPlatform
+
+  constructor(public appService: AppService, private workflowService: workflowService) { }
 
   ngOnInit(): void {
+    this.isUnifiedPlatform = this.workflowService.isUnifiedPlatform();
   }
 
 }
