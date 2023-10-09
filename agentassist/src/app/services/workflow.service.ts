@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Observable, BehaviorSubject, from, Subject } from 'rxjs';
 import { DeflectAppConfig } from '../data/configurations.model';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -6,6 +6,7 @@ import { NotificationService } from '@kore.services/notification.service';
 import { environment } from '@kore.environment';
 import { AppService } from './app.service';
 import { LocalStoreService } from './localstore.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -74,12 +75,14 @@ export class workflowService {
 
   isChatsOptionsUpdated = false;
   hideTestFlow: boolean;
+  UnifiedPlatform = false;
 
   constructor(
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
     private appService: AppService,
-    private local: LocalStoreService
+    private local: LocalStoreService,
+    private route: ActivatedRoute
   ) {
     this.onPremise = environment.ON_PREMISE;
     this.registerEventsFromParent();
@@ -280,5 +283,16 @@ export class workflowService {
 
         }
     }, false);
-}
+  }
+
+  isUnifiedPlatform(){
+    if(!this.UnifiedPlatform){
+    let element = this.route.snapshot.queryParams;
+    this.UnifiedPlatform = (element?.isUnifiedPlatform === 'true' || element?.isUnifiedPlatform === true) 
+    ? true : false;
+      return this.UnifiedPlatform;
+    }else{
+      return this.UnifiedPlatform;
+    }
+  }
 }

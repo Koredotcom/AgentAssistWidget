@@ -32,8 +32,7 @@ export class AppService {
     getInstaceApps(): Observable<any> {
         return this.service.invoke('get.instances')
             .pipe(tap((res) => {
-                this.instanceApps = res;       
-                console.log(res);         
+                this.instanceApps = res;  
                 this.selectedInstanceApp$.next(res[0]);
                 
             }, err => {
