@@ -299,8 +299,9 @@ export class AuthService {
     }
 
     this.service.invoke('get.automationbots').subscribe(res => {
-      res = [JSON.parse(window.localStorage.getItem('selectedBot'))];
-      console.log("resssssssssssssssssssssssssssssssssssss", res);
+      if(this.workflowService.isUnifiedPlatform()) {
+        res = [JSON.parse(window.localStorage.getItem('selectedBot'))];
+      }
       if (res && res.length) {
         this.workflowService.showAppCreationHeader(false);
         this.smartAssistBots = res;
