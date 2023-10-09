@@ -3,7 +3,7 @@
         <!-- <img src="assets/icons/settings/adv-settings.svg"> -->
         {{'LANGUAGE_SPEECH' | translate}}
     </div>
-    <div class="info-tip" *ngIf="!showVoicePreferences">
+    <div class="info-tip" *ngIf="showErrorMsg">
         <img src="assets/icons/info-blue.svg">
         <div class="info-text">{{"SPEECH.CREATE_VOICE_CONFIG" | translate}}</div>
     </div>

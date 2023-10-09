@@ -20,6 +20,7 @@ export class AutomationPerformanceComponent implements OnInit {
   @Input() viewType : string;
   onChangeCall : boolean = false;
   automationPerformanceChartData : any = [];
+  automationData: any;
   payload: any = {
     "startDate": " ",
     "endDate":" ",
@@ -68,6 +69,7 @@ export class AutomationPerformanceComponent implements OnInit {
 
   updateAutomationPerformanceData(){
     this.service.invoke('automationPerformance', this.params, this.payload).subscribe((data : any) => {
+      this.automationData = data;
       this.automationPerformanceChartData = [];
       let colorObj : any = {
         "Successfully Completed" : '#47B39C',

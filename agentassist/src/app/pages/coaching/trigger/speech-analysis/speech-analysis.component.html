@@ -31,7 +31,10 @@
             <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
                 <div class="seconds-input">
                     <div class="kr-sg-input-text">
-                        <input type="number" digitOnly placeholder="Enter Seconds here" class="input-text" (keyup.enter)="onEnterTimeCT(showTimerCT);deadairtimerdropdownct.close()" [(ngModel)]="showTimerCT">
+                        <input type="number" digitOnly placeholder="Enter Seconds here" class="input-text" [(ngModel)]="showTimerCT" (keyup.enter)="onEnterTimeCT(showTimerCT);deadairtimerdropdownct.close()">
+                    </div>
+                    <div class="check-icon-block" (click)="onEnterTimeCT(showTimerCT);deadairtimerdropdownct.close()">
+                        <i class="icon-sa-conv-check"></i>
                     </div>
                     <!-- <div class="s-title">seconds</div> -->
                 </div>
@@ -60,7 +63,10 @@
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="seconds-input">
                 <div class="kr-sg-input-text">
-                    <input type="number" digitOnly placeholder="Enter Seconds here" class="input-text" (keyup.enter)="onEnterTime(showTimer);deadairtimerdropdown.close()" [(ngModel)]="showTimer">
+                    <input type="number" digitOnly placeholder="Enter Seconds here" class="input-text" [(ngModel)]="showTimer" (keyup.enter)="onEnterTime(showTimer);deadairtimerdropdown.close()">
+                </div>
+                <div class="check-icon-block" (click)="onEnterTime(showTimer);deadairtimerdropdown.close()">
+                    <i class="icon-sa-conv-check"></i>
                 </div>
                 <!-- <div class="s-title">seconds</div> -->
             </div>
@@ -118,7 +124,10 @@
             <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
                 <div class="seconds-input">
                     <div class="kr-sg-input-text">
-                        <input type="number" digitOnly placeholder="Enter wordcount" class="input-text" (keyup.enter)="onEnterWords(showWordcount);speechspeedwordcount.close()" [(ngModel)]="showWordcount">
+                        <input type="number" digitOnly placeholder="Enter wordcount" class="input-text" [(ngModel)]="showWordcount" (keyup.enter)="onEnterWords(showWordcount);speechspeedwordcount.close()">
+                    </div>
+                    <div class="check-icon-block" (click)="onEnterWords(showWordcount);speechspeedwordcount.close()">
+                        <i class="icon-sa-conv-check"></i>
                     </div>
                     <!-- <div class="s-title">words per minute</div> -->
                 </div>
@@ -190,6 +199,9 @@
                 <input type="number" digitOnly placeholder="Enter Percentage" class="input-text"
                     (keyup.enter)="onEnterPercentage(showPercentage[0]);"
                     [(ngModel)]="showPercentage[0]">
+            </div>
+            <div class="check-icon-block" (click)="onEnterPercentage(showPercentage[0]);">
+                <i class="icon-sa-conv-check"></i>
             </div>
             <!-- <div class="s-title">seconds</div> -->
         </div>

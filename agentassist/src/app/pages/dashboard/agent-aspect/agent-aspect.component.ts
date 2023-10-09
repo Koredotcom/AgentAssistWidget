@@ -102,11 +102,13 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
       this.wordCloudChart.resize();
       this.wordCloudChart.setOption(this.wordCloudOptions);
     }, 500);
-  }
+  } 
 
   updateAgentAspectData(){
     if(this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData){
-      this.updateViewData(this.widgetData);
+      this.service.invoke('agentsLookingfor', this.params, this.payload).subscribe((data : any) => {
+      this.updateViewData(data);
+      });
     }else{
       // this.dashboardService.getAgentAspectData().subscribe((data : any) => {
       //   if(data){
