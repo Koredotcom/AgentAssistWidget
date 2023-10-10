@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder,FormControl, FormGroup, Validators } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
 import { CoachingService } from '../../coaching.service';
@@ -16,6 +16,15 @@ export class NudgeAgentComponent implements OnInit {
   @Input() createOrEdit: string = '';
   @Output() deleteAction = new EventEmitter();
   msgTypes = COACHINGCNST.TYPE_OF_HINT;
+
+
+  coachingCnst : any = COACHINGCNST;
+  closeTypes = COACHINGCNST.TYPE_OF_CLOSE;
+  closeType: string = '';
+  time : number;
+  variableTime : number;
+
+
   selMsgType: string = '';
   nudgeMsg: string = '';
   showNudgeMsg: string = '';
@@ -44,10 +53,19 @@ export class NudgeAgentComponent implements OnInit {
       this.selMsgType = formVal.expression;
       this.nudgeMsg = formVal.message.title;
       this.showNudgeMsg = formVal.message.title;
+
+      this.closeType = formVal.message.postAction;
+      this.time = formVal.message.time ? formVal.message.time : 5;
+      this.variableTime = formVal.message.time ? formVal.message.time : 5;
+
       this.selectedAdherence = formVal.adherence?.adType;
       if(this.selectedAdherence == COACHINGCNST.UTTERANCE && !formVal?.adherence.utteranceCount){
         this.selectedAdherence = null;
       }
+    }else if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
+      const formVal = this.form.value;
+      this.time = formVal.message.time;
+      this.variableTime = formVal.message.time;
     }
   }
 
@@ -74,8 +92,37 @@ export class NudgeAgentComponent implements OnInit {
     (this.form.controls.message as FormGroup).controls.title.setValue(this.nudgeMsg);
   }
 
+
+  clickCloseT(closeT){
+    this.closeType = closeT;
+    (this.form.controls.message as FormGroup).controls.postAction.setValue(this.closeType);
+    if(closeT === 'doesnot_auto_close'){
+      (this.form.controls?.message as FormGroup)?.removeControl('time');
+    }else{
+      (this.form.controls?.message as FormGroup)?.addControl('time', new FormControl(5));
+    }
+    this.resetValidators();
+  }
+
   deleteActionRule(){
     this.deleteAction.emit(this.index-1);
+  }
+  
+  onEnterTime(e){
+    this.time = e ? e : 1;
+    (this.form.controls.message as FormGroup).controls?.time.setValue(this.time);
+  }
+
+
+  resetValidators() {
+    if (this.closeType == this.coachingCnst.AUTO_CLOSE) {
+      this.time = 5;
+      (this.form.controls?.message as FormGroup)?.controls?.time?.setValidators(Validators.required);
+      (this.form.controls?.message as FormGroup)?.controls?.time?.setValue(this.time);
+    } else {
+      (this.form.controls?.message as FormGroup)?.controls?.time?.clearValidators();
+    }
+    (this.form.controls?.message as FormGroup)?.controls?.time?.updateValueAndValidity();
   }
 
   selectAdherenceClick(type){

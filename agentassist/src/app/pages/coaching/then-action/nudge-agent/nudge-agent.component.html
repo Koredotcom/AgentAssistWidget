@@ -2,7 +2,7 @@
     <span class="utt-name-desc">Nudge agent with this  </span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!selMsgType}" ngbDropdownToggle>
-            <span class="choose-text">{{selMsgType ? selMsgType : '{ Choose }'}}</span>
+            <span class="choose-text">{{selMsgType ? selMsgType : '{ Type }'}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <ng-container *ngFor="let type of msgTypes">
@@ -19,7 +19,7 @@
 
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #nudgeMessage="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!showNudgeMsg}" (click)="nudgeMsg = showNudgeMsg">
-            <span class="choose-text">{{showNudgeMsg ? showNudgeMsg : '{ Choose }'}}</span>
+            <span class="choose-text">{{showNudgeMsg ? showNudgeMsg : '{ Message }'}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="variable-value-input with-check-icon">
@@ -40,6 +40,41 @@
             </div>
         </ul>
     </div>
+
+    <span class="utt-name-desc">that</span>
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!closeType}">
+            <span class="choose-text">{{ closeTypes[closeType] ? closeTypes[closeType] : '{ Choose }' }}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngFor="let closeT of closeTypes | keyvalue">
+                <li ngbDropdownItem class="list-item-li" (click)="clickCloseT(closeT.key)">
+                    <span class="title">{{closeT.value}}</span>
+                    <i [ngClass]="{'icon-sa-conv-check' : closeType === closeT.key}"></i>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+    <ng-container *ngIf="closeType == coachingCnst.AUTO_CLOSE">
+        <span class="utt-name-desc">after</span>
+        <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #closeTimer="ngbDropdown">
+            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!time}" (click)="variableTime = time">{{time}} seconds</button>
+            <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+                <div class="seconds-input">
+                    <div class="kr-sg-input-text">
+                        <input type="number" digitOnly placeholder="Enter Seconds here" (keyup.enter)="onEnterTime(variableTime);closeTimer.close()" class="input-text" [(ngModel)]="variableTime">
+                    </div>
+                    <div class="s-title">seconds</div>
+                </div>
+            </ul>
+        </div>
+    </ng-container>
+
+
+
+
+
+
     <div class="add-adherence" *ngIf="!selectedAdherence">
         <!-- <button class="add-adherence-btn" (click)="openAdherence()">
             <span class="choose-text"> {{(form?.value?.adherence?.utteranceCount) ? form?.value?.adherence?.utteranceCount + ' utterance(s)' : '+ Add Adherence'}}</span>

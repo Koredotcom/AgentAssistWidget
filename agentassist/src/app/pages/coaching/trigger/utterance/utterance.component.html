@@ -57,7 +57,7 @@
             </li>
             <li class="list-item-li" data-toggle="collapse" href="#bytime" (click)="clickOnType(coachingCnst.TRIGGER_BYTIME);">
                 <span class="title">By time</span>
-                <i class="icon-sa-conv-check" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME"></i>
+                <i class="icon-sa-conv-check" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME" (click)="onEnterTime(selectedList.nSeconds);utteranceTimer.close()"></i>
             </li>
 
             <div class="inside-conv-time-dropdown collapse" id="bytime" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME">
@@ -85,7 +85,7 @@
            
             <li class="list-item-li" data-toggle="collapse" href="#numofmsg" (click)="clickOnType(coachingCnst.TRIGGER_BYMEESAGECOUNT);">
                 <span class="title">By number of messages</span>
-                <i class="icon-sa-conv-check" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT"></i>
+                <i class="icon-sa-conv-check" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT" (click)="onEnterMessages(selectedList.nMessages);utteranceTimer.close()" ></i>
             </li>
 
             <div class="inside-conv-time-dropdown collapse" id="numofmsg" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT">

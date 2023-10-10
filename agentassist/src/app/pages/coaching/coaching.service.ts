@@ -289,7 +289,8 @@ export class CoachingService {
       type: this.coachingCnst.NUDGE_AGENT,
       expression: ['', [Validators.required]],
       message : this.fb.group({
-        title: ['', Validators.required]
+        title: ['', Validators.required],
+        postAction : ['', Validators.required],
       })
     }
   }
@@ -300,7 +301,8 @@ export class CoachingService {
       type: this.coachingCnst.NUDGE_AGENT,
       expression: [obj.expression, [Validators.required]],
       message : this.fb.group({
-        title: [obj.message?.title, Validators.required]
+        title: [obj.message?.title, Validators.required],
+        postAction : [obj.message?.postAction, Validators.required]
       })
     }
     if(obj.adherence){
@@ -309,6 +311,9 @@ export class CoachingService {
         addUtterances: [[]],
         deleteUtterances: [[]],
       });
+      if(obj.message?.time){
+        (<FormGroup> nudgeForm.message).addControl('time', new FormControl(obj.message?.time))
+      }
 
       if(obj.adherence?.adType){
         (<FormGroup> nudgeForm.adherence).addControl('adType', new FormControl(obj.adherence?.adType))
