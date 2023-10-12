@@ -177,8 +177,14 @@ export class workflowService {
 
   getCurrentBtSmt(automationBot?: boolean) {
     if (automationBot) {
-      if(!window.location.href.includes('smartassist')) {
+      if(!window.location.href.includes('smartassist') && !this.UnifiedPlatform) {
         return { ...this.currentBtDetails };
+      } else if(this.UnifiedPlatform) {
+        let unifiedBot: any;
+        let selectedBotObj = this.local.getSelectedBotDetails();
+        // console.log("🚀 ~ file: workflow.service.ts:185 ~ workflowService ~ getCurrentBtSmt ~ selectedBotObj:", selectedBotObj)
+        // unifiedBot['_id'] = selectedBotObj._id;
+        return selectedBotObj;
       } else {
         let selAcc = this.local.getSelectedAccount();
         let smBotObj = selAcc['instanceBots'][0];

@@ -69,6 +69,20 @@ export class LocalStoreService {
     }
   }
 
+  public getSelectedBotDetails(): any {
+    try {
+      let _selectedBot = window[this.storageType].getItem("selectedBot");
+      if(_selectedBot) {
+        _selectedBot = JSON.parse(_selectedBot);
+      } else {
+        return false;
+      }
+      return _selectedBot;
+    } catch (error) {
+      return false;
+    }
+  }
+
   public setSelectedAccount(account) {
     window[this.storageType].setItem('selectedAccount', JSON.stringify(account));
   }
