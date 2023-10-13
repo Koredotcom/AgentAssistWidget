@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "baseHref": "/koreagentassist-sdk/",
-            "outputPath": "dist/src",
+            "outputPath": "dist/AgentAssistWidget",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
