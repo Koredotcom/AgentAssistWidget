@@ -13,6 +13,10 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { TranscriptComponent } from './components/transcript/transcript.component';
 import { SearchComponent } from './components/search/search.component';
 import { MybotComponent } from './components/mybot/mybot.component';
+import { DialogComponent } from './components/common/components/dialog/dialog.component';
+import { FeedbackComponent } from './components/common/components/feedback/feedback.component';
+import { SmalltalkComponent } from './components/common/components/smalltalk/smalltalk.component';
+import { SuggestionsComponent } from './components/common/components/suggestions/suggestions.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,11 @@ import { MybotComponent } from './components/mybot/mybot.component';
     SettingsComponent,
     TranscriptComponent,
     SearchComponent,
-    MybotComponent
+    MybotComponent,
+    DialogComponent,
+    FeedbackComponent,
+    SmalltalkComponent,
+    SuggestionsComponent
   ],
   imports: [
     BrowserModule,
