@@ -17,6 +17,7 @@ import { DialogComponent } from './components/common/components/dialog/dialog.co
 import { FeedbackComponent } from './components/common/components/feedback/feedback.component';
 import { SmalltalkComponent } from './components/common/components/smalltalk/smalltalk.component';
 import { SuggestionsComponent } from './components/common/components/suggestions/suggestions.component';
+import { ChecklistComponent } from './components/checklist/checklist.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { SuggestionsComponent } from './components/common/components/suggestions
     DialogComponent,
     FeedbackComponent,
     SmalltalkComponent,
-    SuggestionsComponent
+    SuggestionsComponent,
+    ChecklistComponent
   ],
   imports: [
     BrowserModule,
