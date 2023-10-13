@@ -6,7 +6,6 @@ const routes: Routes = [
   {
     path : 'UI/agentassist-iframe.html', component : AppComponent
   }
-
 ];
 
 @NgModule({
