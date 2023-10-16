@@ -39,6 +39,9 @@ export class AppComponent implements OnDestroy {
 
   iFrameUrl: string;
   dependentsLoaded: any;
+
+  isUnifiedPlatform = false;
+  hideHeader: boolean = false;
   constructor(private router: Router,
     private authService: AuthService,
     public localstore: LocalStoreService,
@@ -49,7 +52,8 @@ export class AppComponent implements OnDestroy {
     private appService: AppService,
     public scriptLoader: ScriptLoaderService,
     public mixPanel:MixPanelService,
-    private iframeS: IframeService
+    private iframeS: IframeService,
+    private _activatedRoute: ActivatedRoute
   ) {
 
     // this language will be used as a fallback when a translation isn't found in the current language
@@ -152,6 +156,17 @@ export class AppComponent implements OnDestroy {
   }
 
   navigationInterceptor(event: RouterEvent): void {
+    this.isUnifiedPlatform = this.workflowService.isUnifiedPlatform();
+    let element = this._activatedRoute.snapshot.queryParams;
+
+    if(this.isUnifiedPlatform){
+      $('html, body').addClass('if-load-in-unified-agentassist');
+      
+      element?.tab ? $('app-header').addClass('ShowHeader') :  $('app-header').removeClass('ShowHeader');
+    }else{
+      $('html, body').removeClass('if-load-in-unified-agentassist');
+    }
+
     const _self = this;
     if (event instanceof NavigationStart) {
       if (event.url.indexOf('/chathistory') == 0) {
