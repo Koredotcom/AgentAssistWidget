@@ -11,8 +11,9 @@ app-xo-menu{
 	background-color: #FFFFFF;
 	// width: 226px;
 	height: calc(100vh - 60px);
+	border-right: 1px solid var(--xop-tile-border-color);
 	.xop-inner-page-menu{
-		background: var(--xop-side-menu-bg-color);
+		background-color: #FFFFFF;
 		width: 226px;
 		flex-shrink: 0;
 		height: 100%;
@@ -47,7 +48,7 @@ app-xo-menu{
 	  
 		}
 		.xop-inner-page-menu-scroll{
-		  height: calc(100vh - 112px);
+		  height: calc(100vh - 109px);
 		}
 		.collapse-nav{
 		  position: absolute;
@@ -68,6 +69,7 @@ app-xo-menu{
 		  i{
 			color: #667085;
 			font-weight: bold;
+			line-height: 0;
 		  }
 		}
 		.xop-innerpage-menu-list-container{
@@ -102,7 +104,11 @@ app-xo-menu{
 		  }
 		  .xop-innerpage-menu-list-childs{
 			padding-left: 28px;
+			display: flex;
+			flex-direction: column;
+			gap: 1px;
 			.xop-innerpage-menu-list-child{
+				width: 100%;
 			  cursor: pointer;
 			  font-size: 14px;
 			  font-weight: 500;
@@ -114,6 +120,7 @@ app-xo-menu{
 			  text-overflow: ellipsis;
 			  color: var(--xop-secondary-font-color);
 			  padding: 8px;
+			  border-radius: 8px;
 			  &:hover{
 				background: var(--xop-action-bg-color);
 				color: var(--xop-action-color);

@@ -206,7 +206,84 @@
                 }
             }
         }
-    }   
+    }  
+    &.dynamic-checklist-data-isunified{
+        .search-data-input{
+            position: fixed;
+            right: 290px;
+            width: 220px;
+            top: 93px;
+            margin: 0;
+            padding: 0;
+            .kr-sg-input-inline-search{
+                width: 100%;
+                input{
+                    height: 40px;
+                    border: 1px solid var(--gray-300, #D0D5DD);
+                }
+            }
+        }
+        .table-wrapper-checklist-scroll{
+            height: calc(100vh - 157px);
+            .inner-content-data {
+                padding: 0 24px;
+                .content-scroll-data-checklist {
+                    border-radius: 8px;
+                    background: var(--base-white, #FFF);
+                    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10);
+                    .header-table-checklist{
+                        border: 1px solid var(--gray-200, #EAECF0);
+                        background: var(--gray-50, #F9FAFB);
+                        border-radius: 8px 8px 0px 0px;
+                        height: 44px;
+                        .titles-data{
+                            color: var(--gray-500, var(--primary-colors-gray-500, #667085));
+                            font-size: 12px;
+                            font-weight: 500;
+                            line-height: 18px;
+                            text-transform: capitalize;
+                        }
+                    }
+                    .shadow-freeze{
+                        display: none;
+                    }
+                    .body-data-table-wrapper-cl{
+                        border: 1px solid transparent;
+                        border-bottom: 1px solid var(--gray-200, #EAECF0);
+                        background: #FFFFFF !important;
+                        min-height: 64px;
+                        &:last-child{
+                            border-radius: 0px 0px 8px 8px;
+                        }
+                        .title-text{
+                            color: var(--gray-500, var(--primary-colors-gray-500, #667085));
+                            font-size: 14px;
+                            font-weight: 400;
+                            line-height: 20px;
+                        }
+                        .cheklist{
+                            .title{
+                                color: var(--gray-900, #101828);
+                                font-size: 14px;
+                                font-weight: 500;
+                                line-height: 20px;
+                            }
+                            .desc-text{
+                                color: var(--gray-500, var(--primary-colors-gray-500, #667085));
+                                font-size: 14px;
+                                font-weight: 400;
+                                line-height: 20px;
+                            }
+                            .voice-msg-icons{
+                                color: #667085;
+                                font-size: 16px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } 
 }
 .init-loading{
     display: flex;
