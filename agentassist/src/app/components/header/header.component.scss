@@ -6,11 +6,11 @@
   padding: 12px 30px 12px 20px;
   background: $whiteColor;
   box-shadow: 0px 0px 6px $agentAccordionBorder;
+  height: 58px;
   .header-sec{
     display: flex;
     width: 100%;
     align-items: center;
-
     .today-history-config-tabs{
       position: absolute;
       display: flex;

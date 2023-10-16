@@ -15,7 +15,7 @@
 			  <div class="xop-innerpage-menu-list-childs">
 				  <ng-container *ngFor="let subMenuItem of item.subModules; let j = index">
 					  <div class="xop-innerpage-menu-list-child" routerLink="{{subMenuItem?.meta?.moduleRoute}}" routerLinkActive="active" [ngClass]="{'active': selectedSideNavItem === subMenuItem?.id}" (click)="menuSelected(subMenuItem)" >
-						  {{subMenuItem.name | uppercase | translate}}
+						  {{subMenuItem.name | translate}}
 					</div>
 			</ng-container>
 			</div>
@@ -24,7 +24,11 @@
 	</perfect-scrollbar>
   
 	<span class="collapse-nav" (click)="toggleLeftNav()">
-		<i class="icon-sa-chevron-left-dark"></i>
+		<i>
+			<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+				<path d="M10 12L6 8L10 4" stroke="#667085" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+		</i>
 	</span>
   
   </div>
