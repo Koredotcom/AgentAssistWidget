@@ -1,0 +1,19 @@
+
+.agent-widget-wrapper-data{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--gray-100, #F2F4F7);
+    width: 466px;
+    margin: 0 auto;
+    header{
+
+    }
+    section{
+        flex: 1 1 auto;
+        overflow: auto;
+    }
+    footer{
+
+    }
+}

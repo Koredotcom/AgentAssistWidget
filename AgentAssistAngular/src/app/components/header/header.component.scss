@@ -1,0 +1,25 @@
+
+.widget-header-sec{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 6px 10px;
+    min-height: 43px;
+    background: #FFF;
+    .logo-sec{
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        gap: 8px;
+        width: 100%;
+        .divider-line{
+            background: #EAECF0;
+            width: 1px;
+            flex-shrink: 0;
+            height: 15px;
+        }
+    }
+    .right-chart-data{
+        flex-shrink: 0;
+    }
+}

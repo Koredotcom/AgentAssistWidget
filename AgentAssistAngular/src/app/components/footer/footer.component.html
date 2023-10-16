@@ -1,1 +1,50 @@
-<p>footer works!</p>
+<div class="widget-footer-wrapper">
+    <div class="line-divider"></div>
+    <div class="footer-links-data">
+        <button class="btn_footer" (click)="openEnd(content)">
+            <div class="svg_icon">
+               <i class="krIocnsFont-search-refraction"></i>
+            </div>
+            <p>Search</p>
+        </button>
+        <button class="btn_footer">
+            <div class="svg_icon">
+                <i class="krIocnsFont-message-smile-square"></i>
+            </div>
+            <p>My Bot</p>
+        </button>
+        <button class="btn_footer assist_tab selected-tab">
+            <div class="svg_icon">
+                <i class="krIocnsFont-message-chat-circle"></i>
+            </div>
+            <p>Assist</p>
+        </button>
+        <button class="btn_footer">
+            <div class="svg_icon">
+                <i class="krIocnsFont-file-check-02"></i>
+            </div>
+            <p>Transcript</p>
+        </button>
+        <button class="btn_footer">
+            <div class="svg_icon">
+                <i class="krIocnsFont-settings-01"></i>
+            </div>
+            <p>Settings</p>
+        </button>
+    </div>
+</div>
+
+
+
+<ng-template #content let-offcanvas>
+	<div class="offcanvas-header">
+		<h4 class="offcanvas-title">Offcanvas title</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+	</div>
+	<div class="offcanvas-body">
+		<p>One fine body&hellip;</p>
+		<div class="text-end">
+			<button type="button" class="btn btn-outline-dark" (click)="offcanvas.close('Close click')">Close</button>
+		</div>
+	</div>
+</ng-template>
