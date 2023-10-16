@@ -9,7 +9,17 @@ export class FooterComponent {
   constructor(private offcanvasService: NgbOffcanvas){
 
   }
-  openEnd(content: TemplateRef<any>) {
-		this.offcanvasService.open(content, { position: 'bottom' });
+  selectedTab = '';
+  canvas:any;
+  actionOnButton(selectedTab: string, canvas: any){
+    this.canvas?.close();
+    if(selectedTab === 'assist'){
+      return;
+    }
+    this.selectedTab = selectedTab;
+    this.openCanvas(canvas)
+  }
+  openCanvas(canvas: TemplateRef<any>) {
+		this.canvas = this.offcanvasService.open(canvas, { position: 'top', backdrop:false });
 	}
 }

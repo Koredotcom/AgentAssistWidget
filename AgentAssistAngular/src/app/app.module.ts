@@ -18,6 +18,12 @@ import { FeedbackComponent } from './components/common/components/feedback/feedb
 import { SmalltalkComponent } from './components/common/components/smalltalk/smalltalk.component';
 import { SuggestionsComponent } from './components/common/components/suggestions/suggestions.component';
 import { ChecklistComponent } from './components/checklist/checklist.component';
+import { DialogSuggestionComponent } from './components/common/components/dialog-suggestion/dialog-suggestion.component';
+import { RestartDialogComponent } from './components/common/components/restart-dialog/restart-dialog.component';
+import { InterruptionComponent } from './components/common/components/interruption/interruption.component';
+import { SentimentScoreComponent } from './components/common/components/sentiment-score/sentiment-score.component';
+import { NudgesComponent } from './components/common/components/nudges/nudges.component';
+import { HintsComponent } from './components/common/components/hints/hints.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +41,13 @@ import { ChecklistComponent } from './components/checklist/checklist.component';
     FeedbackComponent,
     SmalltalkComponent,
     SuggestionsComponent,
-    ChecklistComponent
+    ChecklistComponent,
+    DialogSuggestionComponent,
+    RestartDialogComponent,
+    InterruptionComponent,
+    SentimentScoreComponent,
+    NudgesComponent,
+    HintsComponent
   ],
   imports: [
     BrowserModule,

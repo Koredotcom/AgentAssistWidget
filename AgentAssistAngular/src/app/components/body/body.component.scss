@@ -12,20 +12,6 @@
     padding: 8px;
     .widgets-list-card{
         height: 50%;
-        .playbook-wrapper{
-            border-radius: 6px;
-            border: 1px solid var(--gray-modern-300, #CDD5DF);
-            background: var(--base-white, #FFF);
-            overflow: auto;
-            height: 100%;
-        }
-        .assist-wrapper{
-            border-radius: 6px;
-            border: 1px solid var(--gray-modern-300, #CDD5DF);
-            background: var(--base-white, #FFF);
-            overflow: auto;
-            height: 100%;
-        }
     }
     .resize-divider{
         flex-shrink: 0;
