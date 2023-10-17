@@ -24,6 +24,7 @@ import { InterruptionComponent } from './components/common/components/interrupti
 import { SentimentScoreComponent } from './components/common/components/sentiment-score/sentiment-score.component';
 import { NudgesComponent } from './components/common/components/nudges/nudges.component';
 import { HintsComponent } from './components/common/components/hints/hints.component';
+import { EmptyObjectCheckPipe } from './pipes/empty-object-check.pipe';
 import { FormsModule } from '@angular/forms';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -53,7 +54,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     InterruptionComponent,
     SentimentScoreComponent,
     NudgesComponent,
-    HintsComponent
+    HintsComponent,
+    EmptyObjectCheckPipe
   ],
   imports: [
     TranslateModule.forRoot({
@@ -69,7 +71,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [EmptyObjectCheckPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
