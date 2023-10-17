@@ -140,7 +140,7 @@ export class AppComponent {
   }
 
   initAgentAssist(params : any) {
-     this.connectionDetails['conversationId'] = this.connectionDetails.conversationid || this.connectionDetails.conversationId
+    //  this.connectionDetails['conversationId'] = this.connectionDetails.conversationid || this.connectionDetails.conversationId
     // constructed url in 3rd party agentdesktops
     if(this.connectionDetails.token && this.connectionDetails.botId && this.connectionDetails.agentassisturl && this.connectionDetails.conversationId){
       if(this.connectionDetails.fromSAT){

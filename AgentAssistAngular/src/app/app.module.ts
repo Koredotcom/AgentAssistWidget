@@ -25,6 +25,7 @@ import { SentimentScoreComponent } from './components/common/components/sentimen
 import { NudgesComponent } from './components/common/components/nudges/nudges.component';
 import { HintsComponent } from './components/common/components/hints/hints.component';
 import { EmptyObjectCheckPipe } from './pipes/empty-object-check.pipe';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { EmptyObjectCheckPipe } from './pipes/empty-object-check.pipe';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    FormsModule
   ],
   providers: [EmptyObjectCheckPipe],
   bootstrap: [AppComponent]

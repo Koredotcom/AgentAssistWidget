@@ -119,4 +119,11 @@ export class LocalStorageService {
     return false;
   }
 
+  setLanguageInfo(lang: string){
+    window.localStorage.setItem('lang', lang);
+  }
+
+  getLanguage(): string{
+    return window.localStorage.getItem('lang') as string;
+  }
 }

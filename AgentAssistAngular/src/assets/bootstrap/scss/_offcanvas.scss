@@ -163,6 +163,16 @@
   }
 }
 
+body{
+  &.if-assist-click-offcanvas{
+    .custom-backdrop-off-canvas{
+      display: none !important;
+    }
+    .offCanvasWrapperContaier{
+      display: none !important;
+    }
+  }
+}
 .offcanvas-title {
   margin-bottom: 0;
   line-height: var(--#{$prefix}offcanvas-title-line-height);
