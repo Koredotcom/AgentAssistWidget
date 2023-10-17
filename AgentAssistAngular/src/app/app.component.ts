@@ -7,6 +7,7 @@ import { userAgInputMessages } from './helpers/data.models';
 import { EVENTS } from './helpers/events';
 import { RootService } from './services/root.service';
 import { TranslateService } from '@ngx-translate/core';
+import { DirService } from './services/dir.service';
 
 @Component({
   selector: 'app-root',
@@ -27,8 +28,9 @@ export class AppComponent {
               private route: ActivatedRoute,
               private rootService: RootService,
               private localStorageService: LocalStorageService,
-              private router: Router) {
-                this.translate.setDefaultLang('en');
+              private dirService: DirService
+  ) {
+    this.translate.setDefaultLang('en');
   }
   
   ngOnDestroy(): void {
@@ -36,6 +38,10 @@ export class AppComponent {
   }
 
   ngOnInit() {
+
+    const lang = this.localStorageService.getLanguage();
+    this.dirService.setDirection(lang === 'ar' ? 'rtl' : 'ltr');
+
     window.addEventListener("unload", (event) => {
       window.removeEventListener("message", this.receiveMessage);
       this.localStorageService.agentDetails = {};

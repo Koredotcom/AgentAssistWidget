@@ -14,5 +14,9 @@
     "FAQ_U": "FAQ",
     "FAQ_DESC": "Check out frequently asked questions about AgentAssist.",
     "KORE_ACADEMY": "Kore Academy",
-    "KORE_ACA_DESC": "Learn more about AgentAssist by going through the academy courses."
+    "KORE_ACA_DESC": "Learn more about AgentAssist by going through the academy courses.",
+    "SEARCH": "Search",
+    "MY_BOT": "My Bot",
+    "ASSIST": "Assist",
+    "TRANSCRIPT": "Transcript"
 }

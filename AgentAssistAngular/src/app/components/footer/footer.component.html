@@ -1,35 +1,35 @@
 <div class="widget-footer-wrapper">
     <div class="line-divider"></div>
     <div class="footer-links-data">
-        <button class="btn_footer" (click)="actionOnButton('search', content)">
+        <button class="btn_footer" (click)="actionOnButton('search', content)" [ngClass]="{'selected-tab sel-bg': selectedTab === 'search'}">
             <div class="svg_icon">
                <i class="krIocnsFont-search-refraction"></i>
             </div>
-            <p>Search</p>
+            <p>{{'SEARCH' | translate}}</p>
         </button>
-        <button class="btn_footer" (click)="actionOnButton('mybot', content)">
+        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === 'mybot'}" (click)="actionOnButton('mybot', content)">
             <div class="svg_icon">
                 <i class="krIocnsFont-message-smile-square"></i>
             </div>
-            <p>My Bot</p>
+            <p>{{'MY_BOT' | translate}}</p>
         </button>
-        <button class="btn_footer assist_tab selected-tab" (click)="actionOnButton('assist', content)">
+        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === 'assist'}" (click)="actionOnButton('assist', content)">
             <div class="svg_icon">
                 <i class="krIocnsFont-message-chat-circle"></i>
             </div>
-            <p>Assist</p>
+            <p>{{'ASSIST' | translate}}</p>
         </button>
-        <button class="btn_footer" (click)="actionOnButton('transcript', content)">
+        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === 'transcript'}" (click)="actionOnButton('transcript', content)">
             <div class="svg_icon">
                 <i class="krIocnsFont-file-check-02"></i>
             </div>
-            <p>Transcript</p>
+            <p>{{'TRANSCRIPT' | translate}}</p>
         </button>
-        <button class="btn_footer" (click)="actionOnButton('settings', content)">
+        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === 'settings'}" (click)="actionOnButton('settings', content)">
             <div class="svg_icon">
                 <i class="krIocnsFont-settings-01"></i>
             </div>
-            <p>Settings</p>
+            <p>{{'SETTINGS' | translate}}</p>
         </button>
     </div>
 </div>

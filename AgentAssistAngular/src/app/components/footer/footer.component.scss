@@ -55,7 +55,7 @@
                     display: block;
                 }
             }
-            &.assist_tab{
+            &.sel-bg{
                 border-radius: 45px;
                 background: var(--gray-200, #EAECF0);
                 &.selected-tab{
@@ -78,7 +78,7 @@
                 font-size: 18px;
             }
             p{
-                display: none;
+                // display: none;
                 margin: 0;
                 font-size: 10px;
                 font-weight: 600;

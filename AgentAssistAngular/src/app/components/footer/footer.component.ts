@@ -9,7 +9,7 @@ export class FooterComponent {
   constructor(private offcanvasService: NgbOffcanvas){
 
   }
-  selectedTab = '';
+  selectedTab = 'assist';
   canvas:any;
   actionOnButton(selectedTab: string, canvas: any){
     this.selectedTab = selectedTab;
