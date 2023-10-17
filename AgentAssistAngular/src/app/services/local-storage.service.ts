@@ -6,4 +6,12 @@ import { Injectable } from '@angular/core';
 export class LocalStorageService {
 
   constructor() { }
+
+  setLanguageInfo(lang: string){
+    window.localStorage.setItem('lang', lang);
+  }
+
+  getLanguage(): string{
+    return window.localStorage.getItem('lang') as string;
+  }
 }

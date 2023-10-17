@@ -12,14 +12,18 @@ export class FooterComponent {
   selectedTab = '';
   canvas:any;
   actionOnButton(selectedTab: string, canvas: any){
-    this.canvas?.close();
     this.selectedTab = selectedTab;
     if(selectedTab === 'assist'){
+      document.body.classList.add("if-assist-click-offcanvas");
       return;
+    }else{
+      document.body.classList.remove("if-assist-click-offcanvas");
     }
-    this.openCanvas(canvas);
+    if(!this.canvas){
+      this.openCanvas(canvas);
+    }
   }
   openCanvas(canvas: TemplateRef<any>) {
-		this.canvas = this.offcanvasService.open(canvas, { position: 'bottom', keyboard:false, backdropClass: 'custom-backdrop-off-canvas', panelClass: 'offCanvasWrapperContaier' });
+		this.canvas = this.offcanvasService.open(canvas, { position: 'bottom', keyboard:false, backdropClass: 'custom-backdrop-off-canvas', panelClass: 'offCanvasWrapperContaier', backdrop:'static' });
 	}
 }

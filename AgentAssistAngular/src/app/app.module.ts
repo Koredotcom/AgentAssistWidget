@@ -24,6 +24,7 @@ import { InterruptionComponent } from './components/common/components/interrupti
 import { SentimentScoreComponent } from './components/common/components/sentiment-score/sentiment-score.component';
 import { NudgesComponent } from './components/common/components/nudges/nudges.component';
 import { HintsComponent } from './components/common/components/hints/hints.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { HintsComponent } from './components/common/components/hints/hints.compo
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
