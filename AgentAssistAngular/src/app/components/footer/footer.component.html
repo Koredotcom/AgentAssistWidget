@@ -37,8 +37,8 @@
 
 
 <ng-template #content let-offcanvas>
-    <app-search *ngIf="selectedTab === 'search'"></app-search>
-    <app-mybot *ngIf="selectedTab === 'mybot'"></app-mybot>
-    <app-transcript *ngIf="selectedTab === 'transcript'"></app-transcript>
-    <app-settings *ngIf="selectedTab === 'settings'"></app-settings>
+    <app-search *ngIf="selectedTab === 'search'" class="h-100"></app-search>
+    <app-mybot *ngIf="selectedTab === 'mybot'" class="h-100"></app-mybot>
+    <app-transcript *ngIf="selectedTab === 'transcript'" class="h-100"></app-transcript>
+    <app-settings *ngIf="selectedTab === 'settings'" class="h-100"></app-settings>
 </ng-template>

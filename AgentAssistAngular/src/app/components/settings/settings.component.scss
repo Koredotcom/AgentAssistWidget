@@ -1,0 +1,126 @@
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    20%,40%{
+        opacity: 0.3;
+    }
+    50%,80%{
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    20%,40%{
+        opacity: 0.3;
+    }
+    50%,80%{
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.settings-wrapper-info{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .body-settings-wrapper{
+        flex: 1 1 auto;
+        height: 100%;
+        overflow: auto;
+        padding: 8px;
+        // max-height: 390px;
+        .proactive-mode-data{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 5px;
+        }
+        .theme-settings-wrapper-data{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 12px;
+            .theme-settings{
+                border-radius: 4px;
+                border: 1px solid var(--gray-200, #EAECF0);
+                background: var(--base-white, #FFF);
+                padding: 11px;
+                .heading-sec{
+                    display: flex;
+                    width: 100%;
+                    align-items: center;
+                    gap: 5px;
+                    .left-titles-info{
+                        width: 100%;
+                        h1{
+                            color: var(--gray-modern-700, #364152);
+                            font-size: 14px;
+                            font-weight: 500;
+                            line-height: 16px;
+                            margin: 0;
+                        }
+                        p{
+                            color: var(--gray-modern-500, #697586);
+                            font-size: 12px;
+                            font-weight: 500;
+                            line-height: 16px;
+                            margin: 0;
+                        }
+                    }
+                    .form-check{
+                        flex-shrink: 0;
+                        margin: 0;
+                        padding: 0;
+                        line-height: 0;
+                        min-height: auto;
+                        .form-check-input{
+                            cursor: pointer;
+                            margin: 0;
+                            line-height: 0;
+                            float: none;
+                        }
+                    }
+                }
+                .theme-info-img{
+                    margin-top: 6px;
+                    border-radius: 8px;
+                    background: var(--gray-50, #F9FAFB);
+                    padding: 10px;
+                    text-align: center;
+
+                }
+            }
+        }
+        .language-settigs{
+            border-radius: 4px;
+            border: 1px solid var(--gray-200, #EAECF0);
+            background: var(--base-white, #FFF);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            -webkit-animation-name: fadeIn;
+            animation-name: fadeIn;
+            -webkit-animation-duration: 1s;
+            animation-duration: 1s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+        }
+        .card-group-help{
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 100%;
+        }
+    }
+}

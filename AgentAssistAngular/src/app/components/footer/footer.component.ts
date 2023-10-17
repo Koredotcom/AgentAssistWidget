@@ -13,13 +13,13 @@ export class FooterComponent {
   canvas:any;
   actionOnButton(selectedTab: string, canvas: any){
     this.canvas?.close();
+    this.selectedTab = selectedTab;
     if(selectedTab === 'assist'){
       return;
     }
-    this.selectedTab = selectedTab;
-    this.openCanvas(canvas)
+    this.openCanvas(canvas);
   }
   openCanvas(canvas: TemplateRef<any>) {
-		this.canvas = this.offcanvasService.open(canvas, { position: 'top', backdrop:false });
+		this.canvas = this.offcanvasService.open(canvas, { position: 'bottom', keyboard:false, backdropClass: 'custom-backdrop-off-canvas', panelClass: 'offCanvasWrapperContaier' });
 	}
 }

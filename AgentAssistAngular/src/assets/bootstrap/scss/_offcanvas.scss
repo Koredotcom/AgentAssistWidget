@@ -43,9 +43,11 @@
       background-color: var(--#{$prefix}offcanvas-bg);
       background-clip: padding-box;
       outline: 0;
-      @include box-shadow(var(--#{$prefix}offcanvas-box-shadow));
+      border-radius: 12px 12px 0px 0px;
       @include transition(var(--#{$prefix}offcanvas-transition));
-
+      &.offCanvasWrapperContaier{
+        bottom: 64px;
+      }
       &.offcanvas-start {
         top: 0;
         left: 0;
@@ -79,6 +81,9 @@
         max-height: 100%;
         border-top: var(--#{$prefix}offcanvas-border-width) solid var(--#{$prefix}offcanvas-border-color);
         transform: translateY(100%);
+        &.offCanvasWrapperContaier{
+          max-height: 100%;
+        }
       }
 
       &.showing,
@@ -121,11 +126,35 @@
 }
 
 .offcanvas-header {
+  border-radius: 8px 8px 0px 0px;
+  border: 0px solid var(--gray-300, #D0D5DD);
+  background: #FFF;
   display: flex;
+  gap: 4px;
   align-items: center;
-  justify-content: space-between;
-  padding: var(--#{$prefix}offcanvas-padding-y) var(--#{$prefix}offcanvas-padding-x);
-
+  min-height: 40px;
+  padding: 8px 12px;
+  .back-canvas{
+    border: 0;
+    background: transparent;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #344054;
+    cursor: pointer;
+  }
+  p{
+    span{
+      color: var(--gray-modern-500, #697586);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 20px;
+    }
+  }
   .btn-close {
     padding: calc(var(--#{$prefix}offcanvas-padding-y) * .5) calc(var(--#{$prefix}offcanvas-padding-x) * .5);
     margin-top: calc(-.5 * var(--#{$prefix}offcanvas-padding-y));

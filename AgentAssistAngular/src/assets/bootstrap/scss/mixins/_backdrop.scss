@@ -3,11 +3,15 @@
   position: fixed;
   top: 0;
   left: 0;
+  backdrop-filter: blur(8px);
   z-index: $zindex;
   width: 100vw;
   height: 100vh;
   background-color: $backdrop-bg;
-
+  &.custom-backdrop-off-canvas{
+    height: calc(100% - 113px);
+    top: 48px;
+  }
   // Fade for backdrop
   &.fade { opacity: 0; }
   &.show { opacity: $backdrop-opacity; }
