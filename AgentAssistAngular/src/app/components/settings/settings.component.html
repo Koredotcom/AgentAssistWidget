@@ -3,8 +3,8 @@
         <button class="back-canvas" (click)="setting = ''" *ngIf="setting !== ''">
             <i class="krIocnsFont-chevron-left"></i>
         </button>
-        <p class="paragraph semibold">Settings<span> <ng-container *ngIf="setting !== ''"> / {{setting |
-                    titlecase}}</ng-container></span></p>
+        <p class="paragraph semibold">{{'SETTINGS' | translate}}<span> <ng-container *ngIf="setting !== ''"> / {{setting |
+                    titlecase | translate}}</ng-container></span></p>
     </div>
     <div class="body-settings-wrapper">
         <ng-container *ngIf="setting === ''">
@@ -19,7 +19,7 @@
                             </svg>
                         </div>
                         <div class="card-content">
-                            <div class="card-title"><span>Proactive Mode</span></div>
+                            <div class="card-title"><span>{{'PROACTIVE_MODE' | translate}}</span></div>
                         </div>
                         <div class="card-right-data">
                             <div class="form-check form-switch xs">
@@ -39,7 +39,7 @@
                             </svg>
                         </div>
                         <div class="card-content">
-                            <div class="card-title"><span>Help & Support</span></div>
+                            <div class="card-title"><span>{{'HELP_AND_SUPPORT' | translate}}</span></div>
                         </div>
                         <div class="card-right-data">
                             <button class="arrow-right">
@@ -56,7 +56,7 @@
                             </svg>
                         </div>
                         <div class="card-content">
-                            <div class="card-title"><span>Language</span>
+                            <div class="card-title"><span>{{'LANGUAGE' | translate}}</span>
                                 <div class="badge-text">English</div>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                             </svg>
                         </div>
                         <div class="card-content">
-                            <div class="card-title"><span>Theme</span>
+                            <div class="card-title"><span>{{'THEME' | translate}}</span>
                                 <div class="badge-text">Light</div>
                             </div>
                         </div>
@@ -95,8 +95,8 @@
                         <i class="krIocnsFont-image-01"></i>
                     </div>
                     <div class="card-content">
-                        <div class="card-title">Documentation</div>
-                        <div class="card-desc">Check out our in-depth documentation articles.</div>
+                        <div class="card-title">{{'DOCUMENTATION' | translate}}</div>
+                        <div class="card-desc">{{'DOC_DESC' | translate}}</div>
                     </div>
                     <div class="card-right-data">
                         <button class="arrow-right">
@@ -109,8 +109,8 @@
                         <i class="krIocnsFont-image-01"></i>
                     </div>
                     <div class="card-content">
-                        <div class="card-title">FAQ</div>
-                        <div class="card-desc">Check out frequently asked questions about AgentAssist.</div>
+                        <div class="card-title">{{'FAQ_U' | translate}}</div>
+                        <div class="card-desc">{{'FAQ_DESC' | translate}}</div>
                     </div>
                     <div class="card-right-data">
                         <button class="arrow-right">
@@ -123,8 +123,8 @@
                         <i class="krIocnsFont-image-01"></i>
                     </div>
                     <div class="card-content">
-                        <div class="card-title">Kore Academy</div>
-                        <div class="card-desc">Learn more about AgentAssist by going through the academy courses.</div>
+                        <div class="card-title">{{'KORE_ACADEMY' | translate}}</div>
+                        <div class="card-desc">{{'KORE_ACA_DESC' | translate}}</div>
                     </div>
                     <div class="card-right-data">
                         <button class="arrow-right">
@@ -163,8 +163,8 @@
                 <div class="theme-settings">
                     <div class="heading-sec">
                         <div class="left-titles-info">
-                            <h1>Automatic</h1>
-                            <p>This will use your system default mode</p>
+                            <h1>{{'AUTOMATIC' | translate}}</h1>
+                            <p>{{'THEME_DESC' | translate}}</p>
                         </div>
                         <div class="form-check sm">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
@@ -177,7 +177,7 @@
                 <div class="theme-settings">
                     <div class="heading-sec">
                         <div class="left-titles-info">
-                            <h1>Dark</h1>
+                            <h1>{{'DARK' | translate}}</h1>
                         </div>
                         <div class="form-check sm">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
@@ -190,7 +190,7 @@
                 <div class="theme-settings">
                     <div class="heading-sec">
                         <div class="left-titles-info">
-                            <h1>Light</h1>
+                            <h1>{{'LIGHT' | translate}}</h1>
                         </div>
                         <div class="form-check sm">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">

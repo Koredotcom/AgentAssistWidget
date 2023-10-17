@@ -1,0 +1,18 @@
+{
+    "PROACTIVE_MODE": "Proactive Mode",
+    "SETTINGS": "Settings",
+    "HELP_AND_SUPPORT": "Help & Support",
+    "HELP": "Help",
+    "LANGUAGE": "Language",
+    "THEME": "Theme",
+    "AUTOMATIC": "Automatic",
+    "DARK": "Dark",
+    "LIGHT": "Light",
+    "THEME_DESC": "This will use your system default mode",
+    "DOCUMENTATION": "Documentation",
+    "DOC_DESC": "Check out our in-depth documentation articles.",
+    "FAQ_U": "FAQ",
+    "FAQ_DESC": "Check out frequently asked questions about AgentAssist.",
+    "KORE_ACADEMY": "Kore Academy",
+    "KORE_ACA_DESC": "Learn more about AgentAssist by going through the academy courses."
+}
