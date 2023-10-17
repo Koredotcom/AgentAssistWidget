@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { languages } from 'src/app/proj.const';
 import { DirService } from 'src/app/services/dir.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
@@ -14,10 +15,13 @@ export class SettingsComponent implements OnInit {
   ){}
 
   setting = '';
+  languages:any = languages
   defLanguage = 'en';
+  selectedTheme = 'automatic';
 
   ngOnInit(): void {
-    this.defLanguage = this.localStorageService.getLanguage();
+    this.defLanguage = this.localStorageService.getLanguage() || 'en';
+    this.selectedTheme = this.localStorageService.getTheme() || 'auto';
     this.checkRtl();
   }
 
@@ -32,5 +36,9 @@ export class SettingsComponent implements OnInit {
     }else{
       this.dirService.setDirection('ltr');
     }
+  }
+
+  chooseTheme(){
+    this.localStorageService.setTheme(this.selectedTheme);
   }
 }

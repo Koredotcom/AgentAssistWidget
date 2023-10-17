@@ -57,7 +57,7 @@
                         </div>
                         <div class="card-content">
                             <div class="card-title"><span>{{'LANGUAGE' | translate}}</span>
-                                <div class="badge-text">English</div>
+                                <div class="badge-text">{{languages[defLanguage]}}</div>
                             </div>
                         </div>
                         <div class="card-right-data">
@@ -76,7 +76,7 @@
                         </div>
                         <div class="card-content">
                             <div class="card-title"><span>{{'THEME' | translate}}</span>
-                                <div class="badge-text">Light</div>
+                                <div class="badge-text">{{selectedTheme | titlecase}}</div>
                             </div>
                         </div>
                         <div class="card-right-data">
@@ -167,7 +167,7 @@
                             <p>{{'THEME_DESC' | translate}}</p>
                         </div>
                         <div class="form-check sm">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <input value="automatic" (change)="chooseTheme()" [(ngModel)]="selectedTheme" class="form-check-input" type="radio"  name="themeRadio">
                         </div>
                     </div>
                     <div class="theme-info-img">
@@ -180,7 +180,7 @@
                             <h1>{{'DARK' | translate}}</h1>
                         </div>
                         <div class="form-check sm">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                            <input value="dark" (change)="chooseTheme()" [(ngModel)]="selectedTheme" class="form-check-input" type="radio" name="themeRadio">
                         </div>
                     </div>
                     <div class="theme-info-img">
@@ -193,7 +193,7 @@
                             <h1>{{'LIGHT' | translate}}</h1>
                         </div>
                         <div class="form-check sm">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
+                            <input value="light" (change)="chooseTheme()" [(ngModel)]="selectedTheme" class="form-check-input" type="radio" name="themeRadio">
                         </div>
                     </div>
                     <div class="theme-info-img">

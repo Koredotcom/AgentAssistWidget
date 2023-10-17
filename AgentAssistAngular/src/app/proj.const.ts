@@ -58,3 +58,11 @@ export const storageConst = {
     SEARCH_VALUE : 'search',
     PROACTIVE_MODE : 'proactiveMode'
 }
+
+export const languages = {
+    en: 'English',
+    ar: 'Arabic',
+    ja: 'Japanese',
+    chi: 'Chinese',
+    fr: 'French'
+}

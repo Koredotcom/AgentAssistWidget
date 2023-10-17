@@ -119,11 +119,19 @@ export class LocalStorageService {
     return false;
   }
 
-  setLanguageInfo(lang: string){
+  setLanguageInfo(lang: string) {
     window.localStorage.setItem('lang', lang);
   }
 
-  getLanguage(): string{
+  getLanguage(): string {
     return window.localStorage.getItem('lang') as string;
+  }
+
+  setTheme(theme: string) {
+    window.localStorage.setItem('theme', theme);
+  }
+
+  getTheme(): string {
+    return window.localStorage.getItem('theme') as string;
   }
 }
