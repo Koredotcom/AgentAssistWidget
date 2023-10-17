@@ -34,7 +34,7 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "src/assets/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/@popperjs/core/dist/umd/popper.js",
               "src/assets/bootstrap/dist/js/bootstrap.bundle.min.js"
             ]
           },
