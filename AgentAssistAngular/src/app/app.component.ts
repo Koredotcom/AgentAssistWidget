@@ -6,6 +6,7 @@ import { SubSink } from "subsink";
 import { userAgInputMessages } from './helpers/data.models';
 import { EVENTS } from './helpers/events';
 import { RootService } from './services/root.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,8 @@ import { RootService } from './services/root.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  
+
+
   isGrantSuccess = false;
   errorMsg : string = '';
   subs = new SubSink();
@@ -21,10 +23,12 @@ export class AppComponent {
   connectionDetails : any = {};
 
   constructor(private webSocketService: WebSocketService,
+              private translate: TranslateService,
               private route: ActivatedRoute,
               private rootService: RootService,
               private localStorageService: LocalStorageService,
               private router: Router) {
+                this.translate.setDefaultLang('en');
   }
   
   ngOnDestroy(): void {
@@ -153,5 +157,4 @@ export class AppComponent {
     }
 
   }
-  
 }

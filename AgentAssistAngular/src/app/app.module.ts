@@ -26,7 +26,12 @@ import { NudgesComponent } from './components/common/components/nudges/nudges.co
 import { HintsComponent } from './components/common/components/hints/hints.component';
 import { EmptyObjectCheckPipe } from './pipes/empty-object-check.pipe';
 import { FormsModule } from '@angular/forms';
-
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,10 +58,18 @@ import { FormsModule } from '@angular/forms';
     EmptyObjectCheckPipe
   ],
   imports: [
+    TranslateModule.forRoot({
+      loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient],
+      },
+    }),
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [EmptyObjectCheckPipe],
   bootstrap: [AppComponent]
