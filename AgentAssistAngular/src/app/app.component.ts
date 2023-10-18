@@ -9,6 +9,7 @@ import { RootService } from './services/root.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DirService } from './services/dir.service';
 import { ServiceInvokerService } from './services/service-invoker.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -175,75 +176,48 @@ export class AppComponent {
     }
   }
 
-  async getAssistData(params){
-    let feedback = await this.assistFeedback(params);
-    let history = await this.assistHistory(params);
-    console.log(feedback, "feedback");
-    console.log(history, "history")
-    
-  }
-
-  async getmybotData(params){
-    let feedback = await this.mybotFeedback(params);
-    let history = await this.mybotHistory(params);
-    console.log(feedback, "mybot feedback");
-    console.log(history, "mybot history");
-  }
-
-  async mybotHistory(params){
-    return new Promise((resolve, reject) => {
-      let serviceMethod = params.fromSAT ? 'get.mybotHistorySA' : 'get.mybotHistoryTP';
-      let botId = this.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
-      this.serviceInvoker.invoke(serviceMethod,{botId : params.botId, convId : params.conversationId}, {},{historyAPiCall : 'true'}, params.agentassisturl ).subscribe((res)=> {
-        console.log(res, "response");
-        resolve(res);
-      },(err)=> {
-        reject(err);
-      });
+  getAssistData(params) {
+    let feedback = this.assistFeedback(params);
+    let history = this.assistHistory(params);
+    forkJoin([feedback, history]).subscribe(res => {
+      console.log(res, "feedback");
     });
   }
 
-  async assistHistory(params){
-    return new Promise((resolve, reject) => {
-      let serviceMethod = params.fromSAT ? 'get.assistHistorySA' : 'get.assistHistoryTP';
-      let botId = this.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
-      this.serviceInvoker.invoke(serviceMethod,{botId : params.botId, convId : params.conversationId}, {},{historyAPiCall : 'true'}, params.agentassisturl ).subscribe((res)=> {
-        console.log(res, "response");
-        resolve(res);
-      },(err)=> {
-        reject(err);
-      });
+  getmybotData(params) {
+    let feedback = this.mybotFeedback(params);
+    let history = this.mybotHistory(params);
+    forkJoin([feedback, history]).subscribe(res => {
+      console.log(res, "feedback");
     });
   }
 
-  async assistFeedback(params){
-    return new Promise((resolve, reject) => {
-      this.serviceInvoker.invoke('get.assistFeedback',{tab : 'assist', botId : params.botId}, {},{}, params.agentassisturl ).subscribe((res)=> {
-        console.log(res, "response");
-        resolve(res);
-      },(err)=> {
-        reject(err);
-      });
-    });
+  mybotHistory(params) {
+    let serviceMethod = params.fromSAT ? 'get.mybotHistorySA' : 'get.mybotHistoryTP';
+    let botId = this.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
+    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { historyAPiCall: 'true' }, params.agentassisturl)
   }
 
-  async mybotFeedback(params){
-    return new Promise((resolve, reject) => {
-      this.serviceInvoker.invoke('get.mybotFeedback',{tab : 'mybot', botId : params.botId}, {},{}, params.agentassisturl ).subscribe((res)=> {
-        console.log(res, "response");
-        resolve(res);
-      },(err)=> {
-        reject(err);
-      });
-    });
+  assistHistory(params) {
+    let serviceMethod = params.fromSAT ? 'get.assistHistorySA' : 'get.assistHistoryTP';
+    let botId = this.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
+    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { historyAPiCall: 'true' }, params.agentassisturl);
   }
 
-  isEmptyStr(s){
+  assistFeedback(params) {
+    return this.serviceInvoker.invoke('get.assistFeedback', { tab: 'assist', botId: params.botId }, {}, {}, params.agentassisturl);
+  }
+
+  mybotFeedback(params) {
+    return this.serviceInvoker.invoke('get.mybotFeedback', { tab: 'mybot', botId: params.botId }, {}, {}, params.agentassisturl);
+  }
+
+  isEmptyStr(s) {
     let str = s?.trim();
     str = str?.replaceAll('"', '').replaceAll("'", '');
-    if(str && str.length>1 && str!==""){
+    if (str && str.length > 1 && str !== "") {
       return true;
-    }else{
+    } else {
       return false;
     }
   }

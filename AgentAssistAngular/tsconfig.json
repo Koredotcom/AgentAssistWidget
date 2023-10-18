@@ -24,9 +24,6 @@
       "dom"
     ],
     "paths": {
-      "@kore.environment": [
-        "./src/environments/environment"
-      ]
     }
   },
   "angularCompilerOptions": {
