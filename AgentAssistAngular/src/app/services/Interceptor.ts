@@ -10,21 +10,23 @@ export class I1 implements HttpInterceptor {
 
     }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {  
-        const {botId, fromSAT, token, accountId} = this.rootService.getConnectionDetails(); 
-        console.log(fromSAT, "from sat");
-        
+        const {fromSAT, token, accountId} = this.rootService.getConnectionDetails(); 
+        let botId = req.headers.get('botId');        
         let headerObj : any = {"content-type": 'application/json', 'iid' : botId ? botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'};
-        let headers : any = req.headers.keys();
-        console.log(headers, "headers", headers.indexOf("historyAPiCall"));
-        
+        let headers : any = req.headers.keys();        
         if(headers.indexOf("historyAPiCall") >= 0){
-            if(fromSAT){
-                headerObj.Authorization = 'bearer' + ' ' + token,
-                headerObj.eAD = false,
+            if(fromSAT && token){
+                headerObj.Authorization = 'bearer' + ' ' + token;
+                headerObj.eAD = false;
                 headerObj.accountId = accountId
             }else{
-                headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken
+                headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
             }
+        }
+
+        if(headers.indexOf("transcriptHistory") >= 0){
+            headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken,
+            headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
         }
         const modified = req.clone({setHeaders: headerObj});
         return next.handle(modified);

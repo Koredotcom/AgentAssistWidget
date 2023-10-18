@@ -99,6 +99,7 @@ export class AppComponent {
       this.initiateSocketConnection(params);
       this.getAssistData(params);
       this.getmybotData(params);
+      this.getTranscriptData(params);
     },(err)=> {
       if (err.status === 500) {
         this.errorMsg = "Issue identified with the backend services! Please reach out to AgentAssist Admin.";
@@ -195,21 +196,46 @@ export class AppComponent {
   mybotHistory(params) {
     let serviceMethod = params.fromSAT ? 'get.mybotHistorySA' : 'get.mybotHistoryTP';
     let botId = this.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
-    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { historyAPiCall: 'true' }, params.agentassisturl)
+    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { historyAPiCall: 'true', botId : botId }, params.agentassisturl)
   }
 
   assistHistory(params) {
     let serviceMethod = params.fromSAT ? 'get.assistHistorySA' : 'get.assistHistoryTP';
     let botId = this.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
-    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { historyAPiCall: 'true' }, params.agentassisturl);
+    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { historyAPiCall: 'true', botId : botId }, params.agentassisturl);
   }
 
   assistFeedback(params) {
-    return this.serviceInvoker.invoke('get.assistFeedback', { tab: 'assist', botId: params.botId }, {}, {}, params.agentassisturl);
+    return this.serviceInvoker.invoke('get.assistFeedback', { tab: 'assist', botId: params.botId }, {}, {botId : params.botId }, params.agentassisturl);
   }
 
   mybotFeedback(params) {
-    return this.serviceInvoker.invoke('get.mybotFeedback', { tab: 'mybot', botId: params.botId }, {}, {}, params.agentassisturl);
+    return this.serviceInvoker.invoke('get.mybotFeedback', { tab: 'mybot', botId: params.botId }, {}, {botId : params.botId }, params.agentassisturl);
+  }
+
+  getTranscriptData(params){
+    this.getUserBotHistory(params);
+    this.getTranscriptHistory(params);
+  }
+
+  getUserBotHistory(params){
+    let userBotConversationDetails = this.rootService.getUserBotConvosDataDetails();
+    let botId = userBotConversationDetails?.botId || params?.botId;
+    let userId = userBotConversationDetails?.userId;
+    let sessionId = userBotConversationDetails?.sessionId;
+    console.log(userId, "userid", sessionId, "sessionId", userBotConversationDetails);
+    
+    this.serviceInvoker.invoke('get.userBotHistory', { botId: botId, convId: params.conversationId, userId, sessionId }, {}, { transcriptHistory: 'true', botId : botId }, params.agentassisturl).subscribe((res)=> {
+      console.log(res, "user bot conversation history");
+      
+    })
+  }
+
+  getTranscriptHistory(params){
+    this.serviceInvoker.invoke('get.transcriptHistory', { convId: params.conversationId }, {}, { transcriptHistory: 'true', botId : params.botId }, params.agentassisturl).subscribe((res)=> {
+      console.log(res, "transcript history");
+      
+    })
   }
 
   isEmptyStr(s) {

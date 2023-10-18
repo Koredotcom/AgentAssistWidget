@@ -63,6 +63,18 @@ export class EndPointsService {
       method: 'get',
       defaultEndPoint : false
     }
+
+    this.serviceList['get.userBotHistory'] = {
+      endpoint : '/api/1.1/botmessages/chathistorytoagentassist?botId=:botId&userId=:userId&sessionId=:sessionId&limit=-1&msgDirection=true',
+      method : 'get',
+      defaultEndPoint : false
+    }
+    
+    this.serviceList['get.transcriptHistory'] = {
+      endpoint : '/agentassist/api/v1/agentassistconversations/:convId/conversation?page=1&limit=1000',
+      method : 'get',
+      defaultEndPoint : false
+    }
   }
 
 }
