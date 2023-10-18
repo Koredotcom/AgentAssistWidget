@@ -26,6 +26,10 @@
   background: #FFF;
   border-radius: 4px;
   cursor: pointer;
+  transition: 0.2s all ease;
+  &:hover{
+    background: #F8FAFC;
+  }
   &.help-cards{
     border: 1px solid var(--neutral-200, #E5E5E5);
     gap: 12px;

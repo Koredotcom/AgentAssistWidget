@@ -11,13 +11,9 @@
   min-height: auto;
   padding: 1px 0px 1px 24px;
   margin-bottom: 0;
-  outline-offset: 0;
-  cursor: pointer;
-  line-height: normal;
   cursor: pointer;
   line-height: normal;
   outline-offset: 0;
-  cursor: pointer;
   &.sm{
     .form-check-input{
       width: 16px;
@@ -73,6 +69,7 @@
   background-size: contain;
   border: $form-check-input-border;
   print-color-adjust: exact; // Keep themed appearance for print
+  outline-offset: 0;
   cursor: pointer;
   @include transition($form-check-transition);
 
@@ -87,12 +84,13 @@
     cursor: pointer;
     border-radius: $form-check-radio-border-radius;
   }
-  .form-check-label{
-    display: inline-block;
+  +.form-check-label{
+    display: block;
     color: var(--gray-700, #344054);
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
+    cursor: pointer;
   }
 
   &:active {

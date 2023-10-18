@@ -93,3 +93,10 @@
         }
     }
 }
+
+::ng-deep .canvas-auto-height{
+    background: #fff;
+    border-radius: 12px 12px 0px 0px;
+    max-height: 100%;
+    display: block;
+}
