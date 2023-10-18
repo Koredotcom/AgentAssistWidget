@@ -16,6 +16,8 @@ export class ServiceInvokerService {
   };
 
   public invoke(serviceId?:String, qParams?:any, payload?:any, headers?:any, serverUrl? : any): Observable<any> {
+    console.log(serviceId, qParams, serverUrl, "serviceid");
+    
     let conf = this.prepareHttpCall(serviceId, qParams, payload, headers, serverUrl);
     var _args : any = [conf.url];
     if(conf.method==='get'||conf.method==='delete' || (conf.method==='post' && serviceId == "post.queuestats.csvexport")){

@@ -82,6 +82,8 @@ export class AppComponent {
   }
 
   grantCall(params : any) {
+    console.log("grant call");
+    
     var payload = {
       "assertion": params.token,
       "botInfo": {
@@ -92,7 +94,10 @@ export class AppComponent {
     }
     this.serviceInvoker.invoke('post.grant',{}, payload,{},params.agentassisturl).subscribe((res)=> {
       console.log(res);
+      this.rootService.grantResponseObj = res;
       this.initiateSocketConnection(params);
+      this.getAssistData(params);
+      this.getmybotData(params);
     },(err)=> {
       if (err.status === 500) {
         this.errorMsg = "Issue identified with the backend services! Please reach out to AgentAssist Admin.";
@@ -169,4 +174,80 @@ export class AppComponent {
       }
     }
   }
+
+  async getAssistData(params){
+    let feedback = await this.assistFeedback(params);
+    let history = await this.assistHistory(params);
+    console.log(feedback, "feedback");
+    console.log(history, "history")
+    
+  }
+
+  async getmybotData(params){
+    let feedback = await this.mybotFeedback(params);
+    let history = await this.mybotHistory(params);
+    console.log(feedback, "mybot feedback");
+    console.log(history, "mybot history");
+  }
+
+  async mybotHistory(params){
+    return new Promise((resolve, reject) => {
+      let serviceMethod = params.fromSAT ? 'get.mybotHistorySA' : 'get.mybotHistoryTP';
+      let botId = this.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
+      this.serviceInvoker.invoke(serviceMethod,{botId : params.botId, convId : params.conversationId}, {},{historyAPiCall : 'true'}, params.agentassisturl ).subscribe((res)=> {
+        console.log(res, "response");
+        resolve(res);
+      },(err)=> {
+        reject(err);
+      });
+    });
+  }
+
+  async assistHistory(params){
+    return new Promise((resolve, reject) => {
+      let serviceMethod = params.fromSAT ? 'get.assistHistorySA' : 'get.assistHistoryTP';
+      let botId = this.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
+      this.serviceInvoker.invoke(serviceMethod,{botId : params.botId, convId : params.conversationId}, {},{historyAPiCall : 'true'}, params.agentassisturl ).subscribe((res)=> {
+        console.log(res, "response");
+        resolve(res);
+      },(err)=> {
+        reject(err);
+      });
+    });
+  }
+
+  async assistFeedback(params){
+    return new Promise((resolve, reject) => {
+      this.serviceInvoker.invoke('get.assistFeedback',{tab : 'assist', botId : params.botId}, {},{}, params.agentassisturl ).subscribe((res)=> {
+        console.log(res, "response");
+        resolve(res);
+      },(err)=> {
+        reject(err);
+      });
+    });
+  }
+
+  async mybotFeedback(params){
+    return new Promise((resolve, reject) => {
+      this.serviceInvoker.invoke('get.mybotFeedback',{tab : 'mybot', botId : params.botId}, {},{}, params.agentassisturl ).subscribe((res)=> {
+        console.log(res, "response");
+        resolve(res);
+      },(err)=> {
+        reject(err);
+      });
+    });
+  }
+
+  isEmptyStr(s){
+    let str = s?.trim();
+    str = str?.replaceAll('"', '').replaceAll("'", '');
+    if(str && str.length>1 && str!==""){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+
+
 }

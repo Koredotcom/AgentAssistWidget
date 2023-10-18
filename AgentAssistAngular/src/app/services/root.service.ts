@@ -12,6 +12,7 @@ export class RootService {
   connectionDetails : any = {};
   assistTabSessionId = '';
   myBotTabSessionId = '';
+  grantResponseObj : any = {};
 
   constructor() { }
 
