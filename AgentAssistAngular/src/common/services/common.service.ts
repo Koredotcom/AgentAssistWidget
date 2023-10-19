@@ -86,19 +86,9 @@ export class CommonService {
             'childBotName': this.childBotDetails?.childBotName || '',
             'userInput': data
           }
-          if (data?.entities) {
-            agent_assist_request['entities'] = data?.entities;
-          } else {
-            agent_assist_request['entities'] = [];
-          }
-          if(this.configObj?.autoBotId && this.configObj?.autoBotId !== 'undefined') {
-            agent_assist_request['autoBotId'] = this.configObj.autoBotId;
-          } else {
-            agent_assist_request['autoBotId'] = '';
-          }
-          if (data?.intentName && data?.userInput) {
-            agent_assist_request['query'] = data.userInput
-          }
+          agent_assist_request['entities'] = data?.entities || [];
+          agent_assist_request['autoBotId'] = this.configObj?.autoBotId || '';
+            agent_assist_request['query'] = data?.userInput || data;
           this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
         } else if(this.activeTab === ProjConstants.MYBOT) {
           let agent_assist_agent_request_params: any = {
@@ -111,17 +101,9 @@ export class CommonService {
             'childBotId': data?.childBotId || '',
             'childBotName': data?.childBotName || ''
           }
-          if(this.configObj?.autoBotId && this.configObj?.autoBotId !== 'undefined') {
-            agent_assist_agent_request_params['autoBotId'] = this.configObj.autoBotId;
-          } else {
-            agent_assist_agent_request_params['autoBotId'] = '';
-          }
-          if (data.intentName && data.userInput) {
-            agent_assist_agent_request_params['query'] = data.userInput
-          }
-          if (data?.language) {
-            agent_assist_agent_request_params['language'] = data.language; // Return the default value for null, undefined, or "''"
-          }
+          agent_assist_agent_request_params['autoBotId'] = this.configObj?.autoBotId || '';
+          agent_assist_agent_request_params.query = data?.userInput || data;
+          agent_assist_agent_request_params['language'] = data.language || 'en'; // Return the default value for null, undefined, or "''"
           this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
         }
       }
