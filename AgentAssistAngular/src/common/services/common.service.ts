@@ -65,10 +65,53 @@ export class CommonService {
   realtimeSentiData : any = {};
 
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
-    private localStorageService: LocalStorageService,private templateRenderClassService: TemplateRenderClassService) {
+    private localStorageService: LocalStorageService,private templateRenderClassService: TemplateRenderClassService, private websocketService: WebSocketService) {
     this.setScrollContent();
     this.aaHelpers = new agentAssistHelpers();
+    this.msTeamsTemplatePostbackMessage()
+    window.addEventListener("message", (e: any) => {
+      let data: any;
+      if(e.data?.method === 'msteamsTemplate') {
+        data = e.data?.payload;
+        let connectionDetails: any = Object.assign({}, this.configObj);
+        if(this.activeTab === ProjConstants.ASSIST) {
+          let agent_assist_request = {
+            'conversationId': connectionDetails?.conversationId,
+            'query': data,
+            'botId': connectionDetails?.botid,
+            'agentId': '',
+            'experience': this.isCallConversation === true ? 'voice' : 'chat',
+            // 'positionId': data.positionId
+            'childBotId': this.childBotDetails?.childBotId || '',
+            'childBotName': this.childBotDetails?.childBotName || '',
+            'userInput': data
+          }
+          agent_assist_request['entities'] = data?.entities || [];
+          agent_assist_request['autoBotId'] = this.configObj?.autoBotId || '';
+            agent_assist_request['query'] = data?.userInput || data;
+          this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+        } else if(this.activeTab === ProjConstants.MYBOT) {
+          let agent_assist_agent_request_params: any = {
+            'isSearch': false,
+            'conversationId': connectionDetails?.conversationId,
+            'query': data,
+            'botId': connectionDetails?.botid,
+            'experience': this.isCallConversation === true ? 'voice' : 'chat',
+            'positionId': data?.positionId,
+            'childBotId': data?.childBotId || '',
+            'childBotName': data?.childBotName || ''
+          }
+          agent_assist_agent_request_params['autoBotId'] = this.configObj?.autoBotId || '';
+          agent_assist_agent_request_params.query = data?.userInput || data;
+          agent_assist_agent_request_params['language'] = data.language || 'en'; // Return the default value for null, undefined, or "''"
+          this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
+        }
+      }
+    });
+    
   }
+
+  
 
 
   //initialize and update scroll related variables
@@ -1365,6 +1408,10 @@ export class CommonService {
     } else if (eventName == IdReferenceConst.COPYMSG) {
       parent.postMessage(message, '*');
     }
+  }
+
+  msTeamsTemplatePostbackMessage(){
+    
   }
 
 }
