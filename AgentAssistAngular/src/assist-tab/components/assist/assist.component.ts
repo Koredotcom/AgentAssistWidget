@@ -278,7 +278,6 @@ export class AssistComponent implements OnInit {
     let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
     let welcomeMessageParams: any = {
       'waitTime': 2000,
-      'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
       'id': this.connectionDetails.conversationId,
       "isSendWelcomeMessage": shouldProcessResponse,
       'agentassistInfo' : agent_user_details,
@@ -287,6 +286,11 @@ export class AssistComponent implements OnInit {
       'uId': this.userBotSessionDetails?.userId || '',
       'sId': this.userBotSessionDetails?.sessionId || '',
       'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT,
+    }
+    if (this.connectionDetails.fromSAT) {
+      welcomeMessageParams['userName'] = this.connectionDetails?.endUserName || 'user';
+    } else {
+      welcomeMessageParams['userName'] = parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user'
     }
     if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
