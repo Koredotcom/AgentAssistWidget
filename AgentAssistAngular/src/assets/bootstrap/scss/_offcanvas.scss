@@ -154,6 +154,7 @@
     cursor: pointer;
   }
   p{
+    width: 100%;
     span{
       color: var(--gray-modern-500, #697586);
       font-size: 12px;
@@ -161,12 +162,21 @@
       line-height: 20px;
     }
   }
-  .btn-close {
-    padding: calc(var(--#{$prefix}offcanvas-padding-y) * .5) calc(var(--#{$prefix}offcanvas-padding-x) * .5);
-    margin-top: calc(-.5 * var(--#{$prefix}offcanvas-padding-y));
-    margin-right: calc(-.5 * var(--#{$prefix}offcanvas-padding-x));
-    margin-bottom: calc(-.5 * var(--#{$prefix}offcanvas-padding-y));
+  .maximize-btn{
+    width: 16px;
+    height: 16px;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
   }
+}
+.body-canvas-wrapper{
+  flex: 1 1 auto;
+  height: 100%;
+  overflow: auto;
+  padding: 8px;
+  background: #F8FAFC;
 }
 
 body{

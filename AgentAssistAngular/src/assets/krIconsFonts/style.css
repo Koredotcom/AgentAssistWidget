@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'krIocnsFont';
-  src:  url('fonts/krIocnsFont.eot?hoqom1');
-  src:  url('fonts/krIocnsFont.eot?hoqom1#iefix') format('embedded-opentype'),
-    url('fonts/krIocnsFont.ttf?hoqom1') format('truetype'),
-    url('fonts/krIocnsFont.woff?hoqom1') format('woff'),
-    url('fonts/krIocnsFont.svg?hoqom1#krIocnsFont') format('svg');
+  src:  url('fonts/krIocnsFont.eot?uwnxeu');
+  src:  url('fonts/krIocnsFont.eot?uwnxeu#iefix') format('embedded-opentype'),
+    url('fonts/krIocnsFont.ttf?uwnxeu') format('truetype'),
+    url('fonts/krIocnsFont.woff?uwnxeu') format('woff'),
+    url('fonts/krIocnsFont.svg?uwnxeu#krIocnsFont') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.krIocnsFont-light-bulb:before {
+  content: "\e909";
+}
 .krIocnsFont-link-external-02:before {
   content: "\e900";
 }

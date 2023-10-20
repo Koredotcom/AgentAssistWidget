@@ -29,6 +29,8 @@ import { FormsModule } from '@angular/forms';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -69,7 +71,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     NgbModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbTooltipModule
   ],
   providers: [EmptyObjectCheckPipe],
   bootstrap: [AppComponent]
