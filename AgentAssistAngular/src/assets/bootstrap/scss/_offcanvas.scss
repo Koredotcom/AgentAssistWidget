@@ -188,6 +188,31 @@ body{
       display: none !important;
     }
   }
+  &.if-maximized-canvas{
+    .custom-backdrop-off-canvas{
+      display: none;
+    }
+    .offcanvas{
+      &.offcanvas-bottom{
+        &.offCanvasWrapperContaier{
+          height: calc(100% - 108px);
+          padding: 8px 8px 0px 8px;
+          .canvas-auto-height{
+            border: 1px solid #D0D5DD;
+            box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08);
+            border-radius: 6px;
+            height: 100%;
+            display: block;
+            .transcipt-wrapper-info{
+              .body-canvas-wrapper{
+                border-radius: 0px 0px 6px 6px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 .offcanvas-title {
   margin-bottom: 0;
