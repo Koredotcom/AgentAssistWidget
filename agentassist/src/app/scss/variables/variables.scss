@@ -913,7 +913,7 @@ input::placeholder{
 			height: 44px;
 		}
 		&::before {
-			content: "\e91c";
+			content: "\e927";
 			position: absolute;
 			font-size: 14px;
 			height: auto;
@@ -1004,6 +1004,39 @@ input::placeholder{
 			&:hover {
 				background-color: var(--xop-table-header-bg-color);
 			}
+			&.selected {
+				position: relative;
+				background-color: var(--xop-table-header-bg-color);
+				padding-right: 30px;
+
+				&::before {
+					content: "\e98d";
+					position: absolute;
+					right: 10px;
+					top: 14px;
+					transition: all 0.3s ease-in;
+					z-index: 1;
+					height: auto;
+					font-family: 'icomoon' !important;
+					speak: never;
+					font-style: normal;
+					font-weight: normal;
+					font-variant: normal;
+					text-transform: none;
+					line-height: 1;
+
+					/* Better Font Rendering =========== */
+					-webkit-font-smoothing: antialiased;
+					-moz-osx-font-smoothing: grayscale;
+					font-size: 12px;
+					color: #2B75E4;
+				}
+			}
+			&.disabled {
+				background-color: var(--xop-table-header-bg-color);
+				color: var(--primaryColor);
+				font-weight: bold;
+			}
 			a {
 				color: var(--gray-900, #101828);
 				font-size: 14px;
@@ -1018,51 +1051,13 @@ input::placeholder{
 				transition: 0.2s all ease;
 				text-decoration: none;
 				padding: 0px;
+				background: transparent !important;
 
 				i {
 					margin-right: 6px;
 					font-weight: 400;
 					font-size: $font-s-14;
 					color: var(--primaryColor);
-				}
-
-				&.selected {
-					position: relative;
-					background-color: var(--xop-table-header-bg-color);
-					padding-right: 30px;
-
-					&::before {
-						content: "\e95e";
-						position: absolute;
-						right: 10px;
-						top: 10px;
-						transition: all 0.3s ease-in;
-						z-index: 1;
-						height: auto;
-						font-family: 'icomoon' !important;
-						speak: never;
-						font-style: normal;
-						font-weight: normal;
-						font-variant: normal;
-						text-transform: none;
-						line-height: 1;
-
-						/* Better Font Rendering =========== */
-						-webkit-font-smoothing: antialiased;
-						-moz-osx-font-smoothing: grayscale;
-						font-size: 12px;
-						color: #2B75E4;
-					}
-				}
-
-				&:hover {
-					background-color: var(--xop-table-header-bg-color);
-				}
-
-				&.disabled {
-					background-color: var(--xop-table-header-bg-color);
-					color: var(--primaryColor);
-					font-weight: bold;
 				}
 			}
 		}
