@@ -26,6 +26,25 @@ export class IframeService {
     this.registerEventsFromParent();
   }
 
+  expand(selector){
+    let message: any = {
+        action: 'expand',
+        selector: selector,
+    };
+    window.parent.postMessage(
+        message,
+        '*');
+  }
+  collapse(selector){
+      let message: any = {
+          action: 'collapse',
+          selector: selector,
+      };
+      window.parent.postMessage(
+          message,
+          '*');
+  }
+
   registerEventsFromParent() {
     window.addEventListener("message", (e) => {
       if (e.data && e.data.action) {

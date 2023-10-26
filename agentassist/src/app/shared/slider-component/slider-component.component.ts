@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { IframeService } from '@kore.services/iframe.service';
 
 declare const $: any;
 
@@ -11,7 +12,9 @@ declare const $: any;
 })
 export class SliderComponentComponent implements OnInit {
   rightClass: any;
-  constructor() { }
+  constructor(
+    private iframeEvents: IframeService
+  ) { }
 
 
   ngOnInit() {
@@ -19,6 +22,7 @@ export class SliderComponentComponent implements OnInit {
   }
 
   openSlider(parentSelector, width) {
+    this.iframeEvents.expand('#frameAgentAssistContainer');
     this.rightClass = width;
     let modalEle = "#sliderComponent";
     let sliderEle = $(modalEle);
@@ -34,6 +38,7 @@ export class SliderComponentComponent implements OnInit {
   }
 
   closeSlider(parentSelector) {
+    this.iframeEvents.collapse('#frameAgentAssistContainer');
     let modalEle = "#sliderComponent";
     var sliderEle = $(modalEle);
     if (parentSelector) {

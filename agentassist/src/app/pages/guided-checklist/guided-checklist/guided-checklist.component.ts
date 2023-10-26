@@ -12,6 +12,7 @@ import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
 import { finalize } from 'rxjs/operators';
+import { IframeService } from '@kore.services/iframe.service';
 
 @Component({
   selector: 'app-guided-checklist',
@@ -29,6 +30,7 @@ export class GuidedChecklistComponent implements OnInit {
   loading = false;
   subs = new SubSink();
   selAcc = this.local.getSelectedAccount();
+  isUnifiedPlatform = false;
   constructor(
     private modalService : NgbModal,
     private auth: AuthService,
@@ -37,10 +39,12 @@ export class GuidedChecklistComponent implements OnInit {
     private workflowService: workflowService,
     private clS: ChecklistService,
     private notificationService: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private iframeEvents: IframeService
   ) { }
   @ViewChild('checklistCreation') checklistCreation: ElementRef;
   ngOnInit(): void {
+    this.isUnifiedPlatform =this.workflowService.isUnifiedPlatform();
     this.getConfigDetails();
     this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
       if (ele) {
@@ -87,6 +91,7 @@ export class GuidedChecklistComponent implements OnInit {
     this.currentCheckList = {};
     this.createOrUpdate = 'create';
     this.modalFlowCreateRef = this.modalService.open(checklistCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+    this.iframeEvents.expand('#frameAgentAssistContainer');
   }
 
 
@@ -97,6 +102,7 @@ export class GuidedChecklistComponent implements OnInit {
       this.checkList2.getDynamicList(true);
     }
     this.modalFlowCreateRef.close();
+    this.iframeEvents.collapse('#frameAgentAssistContainer');
     this.isStageListOpen = false;
   }
 
@@ -115,6 +121,7 @@ export class GuidedChecklistComponent implements OnInit {
       this.isStageListOpen = true;
       this.createOrUpdate = 'update';
       this.modalFlowCreateRef = this.modalService.open(this.checklistCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+      this.iframeEvents.expand('#frameAgentAssistContainer');
       this.currentCheckList = {...data[0]};
     });
   }

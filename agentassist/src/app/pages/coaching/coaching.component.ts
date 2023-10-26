@@ -15,6 +15,7 @@ import { CoachingService } from './coaching.service';
 import { SubSink } from 'subsink';
 import { Router } from '@angular/router';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
+import { IframeService } from '@kore.services/iframe.service';
 @Component({
   selector: 'app-coaching',
   templateUrl: './coaching.component.html',
@@ -63,7 +64,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private cs: CoachingService,
     private router: Router,
-    private zone : NgZone
+    private zone : NgZone,
+    private iframeEvents: IframeService
   ) { }
 
   ngOnDestroy(): void {
@@ -240,6 +242,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
                 this.showNoneIntent = true;
               } else {
                 this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+                this.iframeEvents.expand('#frameAgentAssistContainer');
               }
               setTimeout(() => {
                 window.dispatchEvent(new Event('resize'));
@@ -262,6 +265,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.currentRule = {...{}};
       this.createOrEdit = COACHINGCNST.CREATE;
       this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+      this.iframeEvents.expand('#frameAgentAssistContainer');
     }
   }
 
@@ -368,6 +372,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
       centered: true,
       backdrop: 'static',
     });
+    this.iframeEvents.expand('#frameAgentAssistContainer');
   }
   onReachEnd(event){
     if(!this.isLoading && this.hasMore && event.target.scrollTop > 0){
@@ -378,6 +383,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
   closeRule() {
     this.modalService.dismissAll();
+    this.iframeEvents.collapse('#frameAgentAssistContainer');
   }
 
   sortOnClick(){
