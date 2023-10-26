@@ -4470,7 +4470,7 @@ $numbers: 1000;
         &.show {
             .dropdown-toggle {
                 &::before {
-                    content: "\e95b" !important;
+                    content: "\e927" !important;
                     position: absolute;
                     font-size: 14px;
                     height: auto;
@@ -4489,13 +4489,15 @@ $numbers: 1000;
                     /* Better Font Rendering =========== */
                     -webkit-font-smoothing: antialiased;
                     -moz-osx-font-smoothing: grayscale;
+                    background-image: none;
+                    transform: rotate(180deg);
                 }
             }
         }
         .dropdown-toggle {
             &.show{
                 &::before {
-                    content: "\e95b" !important;
+                    content: "\e927" !important;
                     position: absolute;
                     font-size: 14px;
                     height: auto;
@@ -4514,6 +4516,8 @@ $numbers: 1000;
                     /* Better Font Rendering =========== */
                     -webkit-font-smoothing: antialiased;
                     -moz-osx-font-smoothing: grayscale;
+                    background-image: none;
+                    transform: rotate(180deg);
                 }
             }
         }
@@ -4571,5 +4575,8 @@ $numbers: 1000;
                 margin: 0 !important;
             }
         }
+    }
+    #toast-container{
+        top: 65px !important;
     }
 }
