@@ -52,7 +52,9 @@ export class CoachingComponent implements OnInit, OnDestroy {
   sortOrder : 'desc' | 'asc' = 'asc';
   showNoneIntent = false;
   configFeatures : any;
+  isUnifiedPlatform = false;
   @ViewChild('noneIntent', { static: true }) noneIntent: SliderComponentComponent;
+
   constructor(
     private modalService: NgbModal, private service: ServiceInvokerService,
     private workflowService: workflowService, private cdRef: ChangeDetectorRef,
@@ -70,6 +72,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isUnifiedPlatform =this.workflowService.isUnifiedPlatform();
     this.workflowService.getCurrentBtSmt(true)._id
     this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
       this.isCoachingDisable = isEnabled;

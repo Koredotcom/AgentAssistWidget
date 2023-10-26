@@ -212,7 +212,7 @@
             position: fixed;
             right: 290px;
             width: 220px;
-            top: 83px;
+            top: 93px;
             margin: 0;
             padding: 0;
             .kr-sg-input-inline-search{
@@ -227,6 +227,7 @@
             height: calc(100vh - 157px);
             .inner-content-data {
                 padding: 24px;
+                padding: 0 24px;
                 .content-scroll-data-checklist {
                     border-radius: 8px;
                     background: var(--base-white, #FFF);
