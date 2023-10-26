@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { NotificationService } from '@kore.services/notification.service';
@@ -23,7 +23,7 @@ export class SkillsDdComponent implements OnInit {
   selectable = true;
   removable = true;
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  skillCtrl = new FormControl();
+  skillCtrl = new UntypedFormControl();
   filteredSkills: Observable<string[]>;
   addedSkills: { color: string, name: string }[] = [];
   addedSkillsId: string[] = [];

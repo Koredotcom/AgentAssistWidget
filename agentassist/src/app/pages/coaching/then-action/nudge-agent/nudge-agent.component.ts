@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
 import { CoachingService } from '../../coaching.service';
@@ -10,7 +10,7 @@ import { CoachingService } from '../../coaching.service';
   styleUrls: ['./nudge-agent.component.scss']
 })
 export class NudgeAgentComponent implements OnInit {
-  @Input() form: FormGroup;
+  @Input() form: UntypedFormGroup;
   @Input() index : number;
   @Input() length : number;
   @Input() createOrEdit: string = '';
@@ -32,7 +32,7 @@ export class NudgeAgentComponent implements OnInit {
   }
 
   constructor(private cdRef : ChangeDetectorRef, private coachingService : CoachingService,
-    private fb : FormBuilder) { }
+    private fb : UntypedFormBuilder) { }
 
   ngOnInit(): void {
     
@@ -71,7 +71,7 @@ export class NudgeAgentComponent implements OnInit {
 
   submitnudgeMsg(){
     this.showNudgeMsg = this.nudgeMsg;
-    (this.form.controls.message as FormGroup).controls.title.setValue(this.nudgeMsg);
+    (this.form.controls.message as UntypedFormGroup).controls.title.setValue(this.nudgeMsg);
   }
 
   deleteActionRule(){
@@ -82,7 +82,7 @@ export class NudgeAgentComponent implements OnInit {
     this.selectedAdherence = type;
     this.adherenceClick = true;
     if(!this.form.get('adherence')){
-      (<FormGroup> this.form).addControl('adherence',this.fb.group(this.coachingService.getAdherenceForm()));
+      (<UntypedFormGroup> this.form).addControl('adherence',this.fb.group(this.coachingService.getAdherenceForm()));
     }
     this.cdRef.detectChanges();
   }
@@ -91,7 +91,7 @@ export class NudgeAgentComponent implements OnInit {
     this.selectedAdherence = null;
     this.adherenceClick = true;
     if(!flag){
-      (<FormGroup> this.form).removeControl('adherence');    
+      (<UntypedFormGroup> this.form).removeControl('adherence');    
     }
   }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from './coaching.cnst';
 import { v4 as uuid } from 'uuid';
 import { AuthService } from '@kore.services/auth.service';
@@ -114,7 +114,7 @@ export class CoachingService {
   ];
   ruleDesc = '';
   
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
     private auth : AuthService,
     private workflowService : workflowService,
     private service : ServiceInvokerService) { }
@@ -170,16 +170,16 @@ export class CoachingService {
     if(obj.frequency){
 
       if(obj.frequency?.duration){
-        (<FormGroup> utteranceObj.frequency).addControl('duration', new FormControl(obj.frequency?.duration))
+        (<UntypedFormGroup> utteranceObj.frequency).addControl('duration', new UntypedFormControl(obj.frequency?.duration))
       }
       if(obj.frequency?.period){
-        (<FormGroup> utteranceObj.frequency).addControl('period', new FormControl(obj.frequency?.period))
+        (<UntypedFormGroup> utteranceObj.frequency).addControl('period', new UntypedFormControl(obj.frequency?.period))
       }
       if(obj.frequency?.nSeconds){
-        (<FormGroup> utteranceObj.frequency).addControl('nSeconds', new FormControl(obj.frequency?.nSeconds))
+        (<UntypedFormGroup> utteranceObj.frequency).addControl('nSeconds', new UntypedFormControl(obj.frequency?.nSeconds))
       }
       if(obj.frequency?.nMessages){
-        (<FormGroup> utteranceObj.frequency).addControl('nMessages', new FormControl(obj.frequency?.nMessages))
+        (<UntypedFormGroup> utteranceObj.frequency).addControl('nMessages', new UntypedFormControl(obj.frequency?.nMessages))
       }
       if(obj?.default){
         utteranceObj['default'] = [obj.default];
@@ -226,24 +226,24 @@ export class CoachingService {
     if(obj.frequency){
 
       if(obj.frequency?.nWords){
-        (<FormGroup> objC.frequency).addControl('nWords', new FormControl(obj.frequency?.nWords))
+        (<UntypedFormGroup> objC.frequency).addControl('nWords', new UntypedFormControl(obj.frequency?.nWords))
       }
       if(obj.frequency?.timeTaken){
-        (<FormGroup> objC.frequency).addControl('timeTaken', new FormControl(obj.frequency?.timeTaken))
+        (<UntypedFormGroup> objC.frequency).addControl('timeTaken', new UntypedFormControl(obj.frequency?.timeTaken))
       }
 
       if(obj.frequency?.duration){
-        (<FormGroup> objC.frequency).addControl('duration', new FormControl(obj.frequency?.duration))
+        (<UntypedFormGroup> objC.frequency).addControl('duration', new UntypedFormControl(obj.frequency?.duration))
       }
       if(obj.frequency?.period){
-        (<FormGroup> objC.frequency).addControl('period', new FormControl(obj.frequency?.period))
+        (<UntypedFormGroup> objC.frequency).addControl('period', new UntypedFormControl(obj.frequency?.period))
       }
       if(obj.frequency?.nSeconds){
-        (<FormGroup> objC.frequency).addControl('nSeconds', new FormControl(obj.frequency?.nSeconds))
+        (<UntypedFormGroup> objC.frequency).addControl('nSeconds', new UntypedFormControl(obj.frequency?.nSeconds))
       }
 
       if(obj.frequency?.nMessages){
-        (<FormGroup> objC.frequency).addControl('nMessages', new FormControl(obj.frequency?.nMessages))
+        (<UntypedFormGroup> objC.frequency).addControl('nMessages', new UntypedFormControl(obj.frequency?.nMessages))
       }
       
       // if(obj.frequency?.comparator){
@@ -311,24 +311,24 @@ export class CoachingService {
       });
 
       if(obj.adherence?.adType){
-        (<FormGroup> nudgeForm.adherence).addControl('adType', new FormControl(obj.adherence?.adType))
+        (<UntypedFormGroup> nudgeForm.adherence).addControl('adType', new UntypedFormControl(obj.adherence?.adType))
       }
 
       if(obj.adherence?.ackText){
-        (<FormGroup>nudgeForm.adherence).addControl('ackText', new FormControl(obj.adherence?.ackText))
+        (<UntypedFormGroup>nudgeForm.adherence).addControl('ackText', new UntypedFormControl(obj.adherence?.ackText))
       }
   
       if(obj.adherence?.session){
-        (<FormGroup> nudgeForm.adherence).addControl('session', new FormControl(obj.adherence?.session))
+        (<UntypedFormGroup> nudgeForm.adherence).addControl('session', new UntypedFormControl(obj.adherence?.session))
       }
       if(obj.adherence?.nMins){
-        (<FormGroup> nudgeForm.adherence).addControl('nMins', new FormControl(obj.adherence?.nMins))
+        (<UntypedFormGroup> nudgeForm.adherence).addControl('nMins', new UntypedFormControl(obj.adherence?.nMins))
       }
       if(obj.adherence?.nMessages){
-        (<FormGroup> nudgeForm.adherence).addControl('nMessages', new FormControl(obj.adherence?.nMessages))
+        (<UntypedFormGroup> nudgeForm.adherence).addControl('nMessages', new UntypedFormControl(obj.adherence?.nMessages))
       }
       if(obj.adherence?.utteranceCount){
-        (<FormGroup> nudgeForm.adherence).addControl('utteranceCount', new FormControl(obj.adherence?.utteranceCount, Validators.required))
+        (<UntypedFormGroup> nudgeForm.adherence).addControl('utteranceCount', new UntypedFormControl(obj.adherence?.utteranceCount, Validators.required))
       }
     }
 
@@ -387,7 +387,7 @@ export class CoachingService {
     }
 
     if(obj.message?.time){
-      (<FormGroup> hintForm.message).addControl('time', new FormControl(obj.message?.time))
+      (<UntypedFormGroup> hintForm.message).addControl('time', new UntypedFormControl(obj.message?.time))
     }
   
     if (obj.adherence) {
@@ -396,24 +396,24 @@ export class CoachingService {
         deleteUtterances: [[]],
       });
       if (obj.adherence?.adType) {
-        (<FormGroup>hintForm.adherence).addControl('adType', new FormControl(obj.adherence?.adType))
+        (<UntypedFormGroup>hintForm.adherence).addControl('adType', new UntypedFormControl(obj.adherence?.adType))
       }
 
       if(obj.adherence?.ackText){
-        (<FormGroup>hintForm.adherence).addControl('ackText', new FormControl(obj.adherence?.ackText))
+        (<UntypedFormGroup>hintForm.adherence).addControl('ackText', new UntypedFormControl(obj.adherence?.ackText))
       }
 
       if (obj.adherence?.session) {
-        (<FormGroup>hintForm.adherence).addControl('session', new FormControl(obj.adherence?.session))
+        (<UntypedFormGroup>hintForm.adherence).addControl('session', new UntypedFormControl(obj.adherence?.session))
       }
       if (obj.adherence?.nMins) {
-        (<FormGroup>hintForm.adherence).addControl('nMins', new FormControl(obj.adherence?.nMins))
+        (<UntypedFormGroup>hintForm.adherence).addControl('nMins', new UntypedFormControl(obj.adherence?.nMins))
       }
       if (obj.adherence?.nMessages) {
-        (<FormGroup>hintForm.adherence).addControl('nMessages', new FormControl(obj.adherence?.nMessages))
+        (<UntypedFormGroup>hintForm.adherence).addControl('nMessages', new UntypedFormControl(obj.adherence?.nMessages))
       }
       if (obj.adherence?.utteranceCount) {
-        (<FormGroup>hintForm.adherence).addControl('utteranceCount', new FormControl(obj.adherence?.utteranceCount,Validators.required))
+        (<UntypedFormGroup>hintForm.adherence).addControl('utteranceCount', new UntypedFormControl(obj.adherence?.utteranceCount,Validators.required))
       }
     }
 

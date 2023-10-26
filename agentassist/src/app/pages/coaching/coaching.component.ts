@@ -9,7 +9,7 @@ import { workflowService } from '@kore.services/workflow.service';
 import { finalize, debounceTime, tap } from 'rxjs/operators';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
 import { CoachingService } from './coaching.service';
 import { SubSink } from 'subsink';
@@ -38,7 +38,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   selectedRuleIndex: number;
   createOrEdit: string = COACHINGCNST.CREATE;
   currentRule: any;
-  searchField = new FormControl();
+  searchField = new UntypedFormControl();
   searching: boolean = false;
   publishInprogress: boolean = false;
   rulePresent: boolean = false;

@@ -5,7 +5,7 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { OpenAIService } from '../../open-ai.service';
 import { debounceTime, finalize, tap } from 'rxjs/operators';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { COACHINGCNST } from '../../coaching.cnst';
 import { CoachingService } from '../../coaching.service';
 import { AuthService } from '@kore.services/auth.service';
@@ -20,7 +20,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AdherenceComponent implements OnInit {
 
-  @Input() form: FormGroup;
+  @Input() form: UntypedFormGroup;
   @Input() createOrEdit = '';
   @Output() onClose = new EventEmitter();
   @Output() saveUtterance = new EventEmitter();
@@ -33,7 +33,7 @@ export class AdherenceComponent implements OnInit {
   loaded = false;
   isGeneratingText: boolean = null;
   openAiUtteranceArray: any = [];
-  searchKey = new FormControl();
+  searchKey = new UntypedFormControl();
   utteranceText: string;
   selectedUtterancesArray: any = [];
   addButtonClick: boolean = false;
@@ -152,10 +152,10 @@ export class AdherenceComponent implements OnInit {
   }
 
   saveUtteranceStrings() {
-    (this.form.controls.adherence as FormGroup).controls?.deleteUtterances?.setValue([...Object.keys(this.deletedUIds), ...this.form.value.adherence.deleteUtterances]);
-    (this.form.controls.adherence as FormGroup).controls?.addUtterances?.setValue(this.selectedNewUtterances);
+    (this.form.controls.adherence as UntypedFormGroup).controls?.deleteUtterances?.setValue([...Object.keys(this.deletedUIds), ...this.form.value.adherence.deleteUtterances]);
+    (this.form.controls.adherence as UntypedFormGroup).controls?.addUtterances?.setValue(this.selectedNewUtterances);
     const le = this.selectedNewUtterances?.length + this.selectedUtterancesArray?.length;
-    (this.form.controls.adherence as FormGroup).controls?.utteranceCount?.setValue(le > 0 ? le : '');
+    (this.form.controls.adherence as UntypedFormGroup).controls?.utteranceCount?.setValue(le > 0 ? le : '');
     this.closeAdherence(COACHINGCNST.UTTERANCE);
 
   }

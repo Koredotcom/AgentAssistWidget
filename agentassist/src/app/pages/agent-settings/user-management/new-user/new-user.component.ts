@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-new-user',
@@ -8,24 +8,24 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 })
 export class NewUserComponent implements OnInit {
 
-  inviteForm: FormGroup;
+  inviteForm: UntypedFormGroup;
   showBulk = false;
 
   @Output() close = new EventEmitter();
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: UntypedFormBuilder) { }
 
   ngOnInit(): void {
-    this.inviteForm = new FormGroup({
-      email: new FormArray([])
+    this.inviteForm = new UntypedFormGroup({
+      email: new UntypedFormArray([])
     });
-    let emailDetails = new FormControl(null, Validators.required);
-    (<FormArray>this.inviteForm.get('email')).push(emailDetails);
-    (<FormArray>this.inviteForm.get('email')).push(emailDetails);
+    let emailDetails = new UntypedFormControl(null, Validators.required);
+    (<UntypedFormArray>this.inviteForm.get('email')).push(emailDetails);
+    (<UntypedFormArray>this.inviteForm.get('email')).push(emailDetails);
   }
 
   get emails() {
-    return (<FormArray>this.inviteForm.get('email')).controls;
+    return (<UntypedFormArray>this.inviteForm.get('email')).controls;
   }
 
   toggleBulkInvite(event) {

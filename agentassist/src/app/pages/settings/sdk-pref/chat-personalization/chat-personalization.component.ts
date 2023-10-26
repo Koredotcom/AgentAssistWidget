@@ -6,7 +6,7 @@ import { SettingsService } from '../../setttings.service';
 import { SDKWidgetModel } from '../../settings.model';
 import { finalize } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { fadeInAnimation, fadeInOutAnimation } from 'src/app/helpers/animations/animations';
 import { AuthService } from '@kore.services/auth.service';
 import { FileUploadService } from '@kore.services/fileUploadService/file-upload.service';
@@ -28,7 +28,7 @@ export class ChatPersonalizationComponent implements OnInit, OnDestroy {
   widgets: SDKWidgetModel[] = [];
   currentWidget: SDKWidgetModel;
   activeWidget: SDKWidgetModel;
-  widgetForm: FormGroup;
+  widgetForm: UntypedFormGroup;
   loading: boolean = true;
   saveInProgress: boolean = false;
   showConfirmation: boolean = false;
@@ -82,7 +82,7 @@ export class ChatPersonalizationComponent implements OnInit, OnDestroy {
     public workflowService: workflowService,
     private notificationService: NotificationService,
     private settingsService: SettingsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private authService: AuthService,
     private fUpload: FileUploadService,
     private translate: TranslateService,

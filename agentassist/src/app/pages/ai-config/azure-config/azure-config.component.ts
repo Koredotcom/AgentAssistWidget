@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -15,7 +15,7 @@ export class AzureConfigComponent implements OnInit, OnChanges {
   @Input() integrations: any = {};
   @Output() closeEvent = new EventEmitter();
   @Output() successAzureObj = new EventEmitter();
-  azureForm : FormGroup;
+  azureForm : UntypedFormGroup;
   mode = 'create';
   constructor(
     private service: ServiceInvokerService,
@@ -30,16 +30,16 @@ export class AzureConfigComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.azureForm = new FormGroup(
+    this.azureForm = new UntypedFormGroup(
       {
-        "config": new FormGroup({
-          "azure" : new FormGroup({
-            "apiKey": new FormControl('', Validators.required),
-            "tenant": new FormControl('', Validators.required),
-            "modelConfig": new FormGroup({
-              "GPT-3": new FormControl('', Validators.required)
+        "config": new UntypedFormGroup({
+          "azure" : new UntypedFormGroup({
+            "apiKey": new UntypedFormControl('', Validators.required),
+            "tenant": new UntypedFormControl('', Validators.required),
+            "modelConfig": new UntypedFormGroup({
+              "GPT-3": new UntypedFormControl('', Validators.required)
             }),
-            "Guidelines": new FormControl(true, Validators.required),
+            "Guidelines": new UntypedFormControl(true, Validators.required),
           })
         }),
       }
@@ -52,12 +52,12 @@ export class AzureConfigComponent implements OnInit, OnChanges {
   patchForm(){
     if(this.integrations?.apiKey){
       this.mode = 'edit';
-      ((this.azureForm?.controls['config'] as FormGroup)?.controls['azure'] as FormGroup)?.patchValue(this.integrations);
+      ((this.azureForm?.controls['config'] as UntypedFormGroup)?.controls['azure'] as UntypedFormGroup)?.patchValue(this.integrations);
     }
   }
 
-  get getAzureForm(): FormGroup{
-    return ((this.azureForm.controls['config'] as FormGroup).controls['azure'] as FormGroup)
+  get getAzureForm(): UntypedFormGroup{
+    return ((this.azureForm.controls['config'] as UntypedFormGroup).controls['azure'] as UntypedFormGroup)
   }
 
   saveAzure(){

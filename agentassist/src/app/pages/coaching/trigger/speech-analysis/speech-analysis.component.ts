@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { COACHINGCNST } from '../../coaching.cnst';
 
@@ -10,7 +10,7 @@ import { COACHINGCNST } from '../../coaching.cnst';
 })
 export class SpeechAnalysisComponent implements OnInit {
 
-  @Input() form : FormGroup;
+  @Input() form : UntypedFormGroup;
   @Input() index : number;
   @Input() length : number;
   @Input() createOrEdit: string = '';
@@ -46,8 +46,8 @@ export class SpeechAnalysisComponent implements OnInit {
       return null;
     }
 
-    let enteredTime = (this.form.controls.frequency as FormGroup).value?.timeTaken as number;
-    let inConvTime = (this.form.controls.frequency as FormGroup).value?.nSeconds as number;
+    let enteredTime = (this.form.controls.frequency as UntypedFormGroup).value?.timeTaken as number;
+    let inConvTime = (this.form.controls.frequency as UntypedFormGroup).value?.nSeconds as number;
 
     if (enteredTime <= inConvTime) {
       this.utteranceTimer?.close();
@@ -64,7 +64,7 @@ export class SpeechAnalysisComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    (this.form.controls.frequency as FormGroup).controls.timeTaken?.setValue(this.timer);
+    (this.form.controls.frequency as UntypedFormGroup).controls.timeTaken?.setValue(this.timer);
     this.selectedOperator = this.form.controls.operator?.value;
   }
 
@@ -122,7 +122,7 @@ export class SpeechAnalysisComponent implements OnInit {
       this.showPercentage = [];
       this.selectedPercentage = [];
       this.selectedCompator = comp;
-      (this.form.controls.conditions as FormGroup)?.controls?.operator.setValue(this.selectedCompator);
+      (this.form.controls.conditions as UntypedFormGroup)?.controls?.operator.setValue(this.selectedCompator);
     }
   }
 
@@ -132,19 +132,19 @@ export class SpeechAnalysisComponent implements OnInit {
 
       this.form.removeControl('conditions');
 
-      (<FormGroup>this.form.controls.frequency).removeControl('nWords');
-      (<FormGroup>this.form.controls.frequency).removeControl('timeTaken');
+      (<UntypedFormGroup>this.form.controls.frequency).removeControl('nWords');
+      (<UntypedFormGroup>this.form.controls.frequency).removeControl('timeTaken');
 
       if(type === this.coachingCnst.SPEECHSPEED){
         this.wordcount = COACHINGCNST.SELECTED_WORDCOUNT;
-        (<FormGroup>this.form.controls.frequency).addControl('nWords', new FormControl(COACHINGCNST.SELECTED_WORDCOUNT));
+        (<UntypedFormGroup>this.form.controls.frequency).addControl('nWords', new UntypedFormControl(COACHINGCNST.SELECTED_WORDCOUNT));
       }else if(type === this.coachingCnst.CROSSTALK || type === this.coachingCnst.DEADAIR){
         this.timer = COACHINGCNST.SELECTED_TIMER;
-        (<FormGroup>this.form.controls.frequency).addControl('timeTaken', new FormControl(COACHINGCNST.SELECTED_TIMER));
+        (<UntypedFormGroup>this.form.controls.frequency).addControl('timeTaken', new UntypedFormControl(COACHINGCNST.SELECTED_TIMER));
       }else if(type == this.coachingCnst.TALKRATIO){
-        this.form.addControl('conditions', new FormGroup({
-          'operator' : new FormControl('', [Validators.required]),
-          'value' : new FormControl('', [Validators.required])
+        this.form.addControl('conditions', new UntypedFormGroup({
+          'operator' : new UntypedFormControl('', [Validators.required]),
+          'value' : new UntypedFormControl('', [Validators.required])
         }));
       }
       this.setDefaultBy(type);
@@ -163,7 +163,7 @@ export class SpeechAnalysisComponent implements OnInit {
     this.selUser = value ? value : '';
     this.form.removeControl('by');
     if(type != COACHINGCNST.CROSSTALK && type != COACHINGCNST.TALKRATIO){
-      this.form.addControl('by', new FormControl(this.selUser, [Validators.required]))
+      this.form.addControl('by', new UntypedFormControl(this.selUser, [Validators.required]))
     }
   }
 
@@ -175,7 +175,7 @@ export class SpeechAnalysisComponent implements OnInit {
         let utteranceConvSelectionList = COACHINGCNST.UTTERANCE_CONV_REMOVE_LIST[item];
         if (item != type) {
           for (let param of utteranceConvSelectionList) {
-            (<FormGroup>this.form.controls.frequency).removeControl(param);
+            (<UntypedFormGroup>this.form.controls.frequency).removeControl(param);
           }
         } else {
           addConvSelectionList = COACHINGCNST.UTTERANCE_CONV_REMOVE_LIST[item];
@@ -186,10 +186,10 @@ export class SpeechAnalysisComponent implements OnInit {
         if(param == 'nSeconds'){
           validatorList.push(this.validatePasswordMatch.bind(this));
         }
-        (<FormGroup>this.form.controls.frequency).addControl(param, new FormControl(COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION[param], validatorList));
+        (<UntypedFormGroup>this.form.controls.frequency).addControl(param, new UntypedFormControl(COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION[param], validatorList));
         this.selectedList[param] = COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION[param];
       }
-      (this.form.controls.frequency as FormGroup).controls?.duration?.setValue(type);
+      (this.form.controls.frequency as UntypedFormGroup).controls?.duration?.setValue(type);
       this.resetFormValuesBasedOnConvSelection(type);
     }
     if(type == this.coachingCnst.TRIGGER_BYTIME){
@@ -212,8 +212,8 @@ export class SpeechAnalysisComponent implements OnInit {
   onEnterPeriod(e){
     this.inconvList.period = e;
     this.selectedList.period = e;
-    if((this.form.controls.frequency as FormGroup).controls?.period){
-      (this.form.controls.frequency as FormGroup).controls?.period.setValue(this.inconvList.period);
+    if((this.form.controls.frequency as UntypedFormGroup).controls?.period){
+      (this.form.controls.frequency as UntypedFormGroup).controls?.period.setValue(this.inconvList.period);
     }    
   }
 
@@ -230,9 +230,9 @@ export class SpeechAnalysisComponent implements OnInit {
     }
     this.inconvList.nSeconds = e;
     this.selectedList.nSeconds = e;
-    if((this.form.controls.frequency as FormGroup).controls?.nSeconds){
-      (this.form.controls.frequency as FormGroup).controls?.nSeconds.setValue(this.inconvList.nSeconds * (this.selectedSpeechType == this.coachingCnst.TALKRATIO ? 60 : 1));
-      (this.form.controls.frequency as FormGroup).controls?.nSeconds.updateValueAndValidity();
+    if((this.form.controls.frequency as UntypedFormGroup).controls?.nSeconds){
+      (this.form.controls.frequency as UntypedFormGroup).controls?.nSeconds.setValue(this.inconvList.nSeconds * (this.selectedSpeechType == this.coachingCnst.TALKRATIO ? 60 : 1));
+      (this.form.controls.frequency as UntypedFormGroup).controls?.nSeconds.updateValueAndValidity();
     }
   }
 
@@ -252,18 +252,18 @@ export class SpeechAnalysisComponent implements OnInit {
 
   clearComparator(){
     this.selectedCompator = null;
-    (this.form.controls.conditions as FormGroup)?.controls?.operator?.setValue('');
+    (this.form.controls.conditions as UntypedFormGroup)?.controls?.operator?.setValue('');
 
   }
 
   clearPercentage(){
     this.selectedPercentage = [];
-    (this.form.controls.conditions as FormGroup)?.controls?.value?.setValue([]);
+    (this.form.controls.conditions as UntypedFormGroup)?.controls?.value?.setValue([]);
   }
 
   clearConvType(){
     this.selectedConvType = null;
-    (this.form.controls.frequency as FormGroup).controls?.duration?.setValue('');
+    (this.form.controls.frequency as UntypedFormGroup).controls?.duration?.setValue('');
   }
 
   changeOperator(op){
@@ -277,53 +277,53 @@ export class SpeechAnalysisComponent implements OnInit {
 
   clickOcc(occ){
     this.selOcc = occ;
-    (this.form.controls.frequency as FormGroup).controls.nOccurrences.setValue(occ);
+    (this.form.controls.frequency as UntypedFormGroup).controls.nOccurrences.setValue(occ);
   }
 
   onEnterTime(e){
     this.timer = e ? e : 1;
-    (this.form.controls.frequency as FormGroup).controls?.timeTaken?.setValue(this.timer);
-    (this.form.controls.frequency as FormGroup).controls?.nSeconds?.updateValueAndValidity();
+    (this.form.controls.frequency as UntypedFormGroup).controls?.timeTaken?.setValue(this.timer);
+    (this.form.controls.frequency as UntypedFormGroup).controls?.nSeconds?.updateValueAndValidity();
   }
 
   onEnterTimeCT(e){
     this.timer = e && e > 1 ? e : 2;
-    (this.form.controls.frequency as FormGroup).controls?.timeTaken?.setValue(this.timer);
+    (this.form.controls.frequency as UntypedFormGroup).controls?.timeTaken?.setValue(this.timer);
     // if(this.timer > this.selectedList.nSeconds){
     //   this.onEnterSeconds(this.timer);
     // }
-    (this.form.controls.frequency as FormGroup).controls?.nSeconds?.updateValueAndValidity();
+    (this.form.controls.frequency as UntypedFormGroup).controls?.nSeconds?.updateValueAndValidity();
   }
 
   onEnterPercentage(e){
     this.selectedPercentage[0] = (e ? e : 1);
-    (this.form.controls.conditions as FormGroup)?.controls?.value?.setValue(this.selectedPercentage);
+    (this.form.controls.conditions as UntypedFormGroup)?.controls?.value?.setValue(this.selectedPercentage);
     this.trdropdown.close();
   }
 
   submitPercentage(){
     this.selectedPercentage = Object.assign([],this.showPercentage);
-    (this.form.controls.conditions as FormGroup)?.controls?.value?.setValue(this.selectedPercentage);
+    (this.form.controls.conditions as UntypedFormGroup)?.controls?.value?.setValue(this.selectedPercentage);
     this.trdropdown.close();
   }
 
   onEnterWords(e){
     this.wordcount = e ? e : 1;
-    (this.form.controls.frequency as FormGroup).controls?.nWords?.setValue(this.wordcount);
+    (this.form.controls.frequency as UntypedFormGroup).controls?.nWords?.setValue(this.wordcount);
   }
 
   resetFormValidators(type){
     if(type){
       this.setDefaultBy(type, this.selUser);
       let actualParams = COACHINGCNST.VALIDATORS[type];
-      for(let key in (this.form.controls?.frequency as FormGroup)?.controls){        
+      for(let key in (this.form.controls?.frequency as UntypedFormGroup)?.controls){        
         if(actualParams.includes(key)){
           let validatorList : any = [Validators.required];
-          (this.form.controls?.frequency as FormGroup)?.controls[key].setValidators(validatorList);
+          (this.form.controls?.frequency as UntypedFormGroup)?.controls[key].setValidators(validatorList);
         }else if(key != 'nSeconds'){          
-          (this.form.controls?.frequency as FormGroup)?.controls[key].clearValidators();
+          (this.form.controls?.frequency as UntypedFormGroup)?.controls[key].clearValidators();
         }
-        (this.form.controls?.frequency as FormGroup)?.controls[key].updateValueAndValidity();
+        (this.form.controls?.frequency as UntypedFormGroup)?.controls[key].updateValueAndValidity();
       }
     }    
   }

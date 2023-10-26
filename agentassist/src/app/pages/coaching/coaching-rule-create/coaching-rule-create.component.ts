@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from '../coaching.cnst';
 import { CoachingService } from '../coaching.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -31,7 +31,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   // @ViewChild('newRuleModal', { static: true }) newRuleModal;
 
   loading = false;
-  ruleForm: FormGroup;
+  ruleForm: UntypedFormGroup;
   // ruleBasic: FormGroup;
   modalRef : any;
   formTouched : boolean = false;
@@ -55,7 +55,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   // triggerFormControlsArray : any = [];
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private coachingService : CoachingService,
     private cd: ChangeDetectorRef,
     private workflowService : workflowService,
@@ -131,14 +131,14 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
       this.ruleForm.setControl('tags', this.fb.array(this.currentRule?.tags));
       this.filteredTagsOriginal = this.currentRule?.tags;
       this.channelList = this.currentRule?.channels;
-      (<FormArray>this.ruleForm?.controls["triggers"]).clear();
-      (<FormArray>this.ruleForm?.controls["actions"]).clear();
+      (<UntypedFormArray>this.ruleForm?.controls["triggers"]).clear();
+      (<UntypedFormArray>this.ruleForm?.controls["actions"]).clear();
       (this.currentRule?.triggers || []).forEach(element => {
-        (<FormArray>this.ruleForm?.controls["triggers"])
+        (<UntypedFormArray>this.ruleForm?.controls["triggers"])
         .push(this.getFormGroupObject(element, this.currentRule));
       });
       (this.currentRule?.actions || []).forEach(element => {
-        (<FormArray>this.ruleForm?.controls["actions"])
+        (<UntypedFormArray>this.ruleForm?.controls["actions"])
         .push(this.getFormGroupObject(element, this.currentRule));
       });
       this.updateSpeechAnalysisTrigger();
@@ -194,19 +194,19 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   }
 
   createForm(){
-    this.ruleForm = new FormGroup(
+    this.ruleForm = new UntypedFormGroup(
       {
-        "name": new FormControl('',[Validators.required]),
-        "description": new FormControl('', [Validators.required]),
+        "name": new UntypedFormControl('',[Validators.required]),
+        "description": new UntypedFormControl('', [Validators.required]),
         "tags": this.fb.array([]),
         "channels": this.fb.array([], [Validators.required]),
-        "botId": new FormControl(this.workflowService.getCurrentBtSmt(true)._id, [Validators.required]),
+        "botId": new UntypedFormControl(this.workflowService.getCurrentBtSmt(true)._id, [Validators.required]),
         "triggers": this.fb.array([]),
         "actions": this.fb.array([]),
         "assignees": this.fb.array([]),
-        "deleteTriggers": new FormControl([]),
-        "deleteActions": new FormControl([]),
-        "isActive" : new FormControl(true, [Validators.required])
+        "deleteTriggers": new UntypedFormControl([]),
+        "deleteActions": new UntypedFormControl([]),
+        "isActive" : new UntypedFormControl(true, [Validators.required])
       }
     );
   }
@@ -301,10 +301,10 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
 
   selectTriggerClick(clickType){
     if(clickType == this.coachingCnst.UTTERANCE){
-      (<FormArray>this.ruleForm.controls["triggers"])
+      (<UntypedFormArray>this.ruleForm.controls["triggers"])
       .push(this.fb.group(this.coachingService.getUtteranceFormControlObject()))
     }else if(clickType == this.coachingCnst.SPEECH_ANALYSIS){
-      (<FormArray>this.ruleForm.controls["triggers"])
+      (<UntypedFormArray>this.ruleForm.controls["triggers"])
       .push(this.fb.group(this.coachingService.getSpeechAnalysisFormControlObject()))
     }/* else if(clickType == this.coachingCnst.VARIABLE){
       (<FormArray>this.ruleForm.controls["triggers"])
@@ -325,13 +325,13 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
 
   selectActionClick(clickType){
     if(clickType == this.coachingCnst.NUDGE_AGENT) {
-      (<FormArray>this.ruleForm.controls["actions"])
+      (<UntypedFormArray>this.ruleForm.controls["actions"])
       .push(this.fb.group(this.coachingService.getNudgeFromObj()))
     } else if(clickType == this.coachingCnst.HINT_AGENT){
-      (<FormArray>this.ruleForm.controls["actions"])
+      (<UntypedFormArray>this.ruleForm.controls["actions"])
       .push(this.fb.group(this.coachingService.getHintFromObj()))
     } else if(clickType == this.coachingCnst.EMAIL_MANAGER){
-        (<FormArray>this.ruleForm.controls["actions"])
+        (<UntypedFormArray>this.ruleForm.controls["actions"])
         .push(this.fb.group(this.coachingService.getEmailManagerFromObj()))
     }
 
@@ -353,19 +353,19 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
 
   deleteTrigger(index){
     if(this.createOrEdit === COACHINGCNST.EDIT){
-      let id = (<FormArray>this.ruleForm.controls["triggers"]).at(index)?.value?._id;
+      let id = (<UntypedFormArray>this.ruleForm.controls["triggers"]).at(index)?.value?._id;
       // (<FormArray>this.ruleForm.controls["deleteTriggers"]).push(id);
       this.ruleForm.controls["deleteTriggers"].value.push(id);
     }
-    (<FormArray>this.ruleForm.controls["triggers"]).removeAt(index);
+    (<UntypedFormArray>this.ruleForm.controls["triggers"]).removeAt(index);
   }
 
   deleteAction(index){
     if(this.createOrEdit === COACHINGCNST.EDIT){
-      let id = (<FormArray>this.ruleForm.controls["actions"]).at(index)?.value?._id;
+      let id = (<UntypedFormArray>this.ruleForm.controls["actions"]).at(index)?.value?._id;
       this.ruleForm.controls["deleteActions"].value.push(id);
     }
-    (<FormArray>this.ruleForm.controls["actions"]).removeAt(index);
+    (<UntypedFormArray>this.ruleForm.controls["actions"]).removeAt(index);
   }
 
   closeRuleScreen(rule?) {

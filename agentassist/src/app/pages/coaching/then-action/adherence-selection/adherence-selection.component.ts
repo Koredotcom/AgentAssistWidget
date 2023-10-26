@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
@@ -12,7 +12,7 @@ import { CoachingService } from '../../coaching.service';
 })
 export class AdherenceSelectionComponent implements OnInit {
 
-  @Input() adherenceForm: FormGroup;
+  @Input() adherenceForm: UntypedFormGroup;
   @Input() createOrEdit: string = '';
   @Input() adherenceSelection : string;
   @Input() adhereClick : boolean;
@@ -41,7 +41,7 @@ export class AdherenceSelectionComponent implements OnInit {
 
   constructor(private cdRef : ChangeDetectorRef,
     private coachingService : CoachingService,
-    private fb : FormBuilder,
+    private fb : UntypedFormBuilder,
     private service : ServiceInvokerService) { }
 
   ngOnChanges(changes : any){
@@ -108,7 +108,7 @@ export class AdherenceSelectionComponent implements OnInit {
           utterIds.push(element._id);
         });        
         if(utterIds.length > 0){
-          (this.adherenceForm.controls.adherence as FormGroup).controls?.deleteUtterances?.setValue([...utterIds]);
+          (this.adherenceForm.controls.adherence as UntypedFormGroup).controls?.deleteUtterances?.setValue([...utterIds]);
          
         }
       }
@@ -124,10 +124,10 @@ export class AdherenceSelectionComponent implements OnInit {
 
     if(this.selectedSession == COACHINGCNST.ACTION_SESSION_NMINS){
       this.selectedMinutes = e ? e : 1;
-      (this.adherenceForm.controls.adherence as FormGroup).controls?.nMins.setValue(this.selectedMinutes);
+      (this.adherenceForm.controls.adherence as UntypedFormGroup).controls?.nMins.setValue(this.selectedMinutes);
     }else if(this.selectedSession == COACHINGCNST.ACTION_SESSION_NMESSAGES){
       this.selectedMessages = e ? e : 1;
-      (this.adherenceForm.controls.adherence as FormGroup).controls?.nMessages.setValue(this.selectedMessages);
+      (this.adherenceForm.controls.adherence as UntypedFormGroup).controls?.nMessages.setValue(this.selectedMessages);
     }
     
   }
@@ -140,23 +140,23 @@ export class AdherenceSelectionComponent implements OnInit {
         let adherenceSelectionList = COACHINGCNST.ADHERENCE_REMOVE_LIST[item];
         if(item != type){
           for(let param of adherenceSelectionList){
-            (<FormGroup>this.adherenceForm.controls.adherence).removeControl(param);
+            (<UntypedFormGroup>this.adherenceForm.controls.adherence).removeControl(param);
           }
         }
       }
       if(type == COACHINGCNST.UTTERANCE){
 
-        (<FormGroup>this.adherenceForm.controls.adherence).addControl('session', new FormControl(this.selectedSession));
-        (<FormGroup>this.adherenceForm.controls.adherence).addControl('utteranceCount', new FormControl('',[Validators.required]));
+        (<UntypedFormGroup>this.adherenceForm.controls.adherence).addControl('session', new UntypedFormControl(this.selectedSession));
+        (<UntypedFormGroup>this.adherenceForm.controls.adherence).addControl('utteranceCount', new UntypedFormControl('',[Validators.required]));
         // setTimeout(() => {
         //   (this.adherenceForm.controls?.adherence as FormGroup)?.controls['utteranceCount'].setValidators(Validators.required);
         //   (this.adherenceForm.controls?.adherence as FormGroup)?.controls['utteranceCount'].updateValueAndValidity();
         // }, 100);
       }else if(type == COACHINGCNST.ACKNOWLEDGE){
-        (<FormGroup>this.adherenceForm.controls.adherence).addControl('ackText', new FormControl(this.selectedAckButtonText,[Validators.required]));
+        (<UntypedFormGroup>this.adherenceForm.controls.adherence).addControl('ackText', new UntypedFormControl(this.selectedAckButtonText,[Validators.required]));
       }
     }
-    (this.adherenceForm.controls?.adherence as FormGroup)?.controls?.adType.setValue(type);
+    (this.adherenceForm.controls?.adherence as UntypedFormGroup)?.controls?.adType.setValue(type);
   }
 
   clickOnSessionSelection(session){
@@ -165,7 +165,7 @@ export class AdherenceSelectionComponent implements OnInit {
       let sessionSelectionList = COACHINGCNST.HINT_NUDGE_SESSION_VALIDATORS[item];
       if(item != session){
         for(let param of sessionSelectionList){
-          (<FormGroup>this.adherenceForm.controls?.adherence).removeControl(param);
+          (<UntypedFormGroup>this.adherenceForm.controls?.adherence).removeControl(param);
         }
       }
     }
@@ -173,9 +173,9 @@ export class AdherenceSelectionComponent implements OnInit {
     if(session === COACHINGCNST.ACTION_SESSION_ANYTIME){
       //  add controls for anytime
     }else if(session === COACHINGCNST.ACTION_SESSION_NMINS){
-      (<FormGroup>this.adherenceForm.controls?.adherence).addControl(COACHINGCNST.ACTION_SESSION_NMINS, new FormControl(COACHINGCNST.SELECTED_ACTION_MINS));
+      (<UntypedFormGroup>this.adherenceForm.controls?.adherence).addControl(COACHINGCNST.ACTION_SESSION_NMINS, new UntypedFormControl(COACHINGCNST.SELECTED_ACTION_MINS));
     }else if(session == COACHINGCNST.ACTION_SESSION_NMESSAGES){
-      (<FormGroup>this.adherenceForm.controls?.adherence).addControl(COACHINGCNST.ACTION_SESSION_NMESSAGES, new FormControl(COACHINGCNST.SELECTED_ACTION_MESSAGES));
+      (<UntypedFormGroup>this.adherenceForm.controls?.adherence).addControl(COACHINGCNST.ACTION_SESSION_NMESSAGES, new UntypedFormControl(COACHINGCNST.SELECTED_ACTION_MESSAGES));
     };
     this.resetFormValidatorsBasedOnSession(session);
   }
@@ -184,15 +184,15 @@ export class AdherenceSelectionComponent implements OnInit {
   resetFormValidatorsBasedOnSession(sessionType){
     if(sessionType){
       let actualParams = COACHINGCNST.HINT_NUDGE_SESSION_VALIDATORS[sessionType];
-      for(let key in (this.adherenceForm.controls?.adherence as FormGroup)?.controls){
+      for(let key in (this.adherenceForm.controls?.adherence as UntypedFormGroup)?.controls){
         if(actualParams?.includes(key)){
-          (this.adherenceForm.controls?.adherence as FormGroup)?.controls[key].setValidators(Validators.required);
+          (this.adherenceForm.controls?.adherence as UntypedFormGroup)?.controls[key].setValidators(Validators.required);
         }else{
-          (this.adherenceForm.controls?.adherence as FormGroup)?.controls[key].clearValidators();
+          (this.adherenceForm.controls?.adherence as UntypedFormGroup)?.controls[key].clearValidators();
         }
-        (this.adherenceForm.controls?.adherence as FormGroup)?.controls[key].updateValueAndValidity();
+        (this.adherenceForm.controls?.adherence as UntypedFormGroup)?.controls[key].updateValueAndValidity();
       }
-      (this.adherenceForm.controls?.adherence as FormGroup)?.controls?.session.setValue(sessionType);
+      (this.adherenceForm.controls?.adherence as UntypedFormGroup)?.controls?.session.setValue(sessionType);
     }
   }
 
@@ -201,7 +201,7 @@ export class AdherenceSelectionComponent implements OnInit {
       this.ackButtonText = 'Ok';
     }
     this.selectedAckButtonText = this.ackButtonText;
-    (this.adherenceForm.controls.adherence as FormGroup).controls?.ackText?.setValue(this.ackButtonText);
+    (this.adherenceForm.controls.adherence as UntypedFormGroup).controls?.ackText?.setValue(this.ackButtonText);
   }
 
 

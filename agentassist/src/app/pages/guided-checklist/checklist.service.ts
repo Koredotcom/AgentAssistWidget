@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, Validators } from '@angular/forms';
 import { GuidedChecklistModule } from './guided-checklist.module';
 import { CHECKLISTCNST } from './checklist.const';
 
 @Injectable()
 export class ChecklistService {
   constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) { }
   metaForUtternace:any = {};
   getCheckListForm(botId, checkListType){

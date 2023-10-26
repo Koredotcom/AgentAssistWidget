@@ -5,7 +5,7 @@ import { SettingsService } from '../setttings.service';
 import {ServiceInvokerService} from "@kore.services/service-invoker.service";
 import { workflowService } from '@kore.services/workflow.service';
 import { NotificationService } from '@kore.services/notification.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
 import { ASSETS } from '../../channels/channels.model';
 
@@ -27,7 +27,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
   selectedApp: any;
   instructions: any[] = [];
   selectedAgent: any;
-  agentForm: FormGroup;
+  agentForm: UntypedFormGroup;
   sdkApps: any[] = [];
   selectedSdkApp: any;
   assets = ASSETS;
@@ -44,7 +44,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
               public workflowService:workflowService,
               private notificationService: NotificationService,
               private translate: TranslateService,
-              public fb: FormBuilder,
+              public fb: UntypedFormBuilder,
               private authService: AuthService,
               private dockService: DockStatusService
           ) { }
@@ -181,7 +181,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
         e.defaultValue = hostUrl + "/agentSdk/stream/" + (this.workflowService.getCurrentBt()._id) + "/sendToUser";
       }
       // formFields[e.name] = new FormControl('', validators);
-      formFields[e.name] = new FormControl((bindValues && this.agentDetails && this.agentDetails[e.name]) || e.defaultValue || '', validators);
+      formFields[e.name] = new UntypedFormControl((bindValues && this.agentDetails && this.agentDetails[e.name]) || e.defaultValue || '', validators);
     });
     this.agentForm = this.fb.group(formFields, { updateOn: "change" });
     // this.agentForm.valueChanges.subscribe(value => {

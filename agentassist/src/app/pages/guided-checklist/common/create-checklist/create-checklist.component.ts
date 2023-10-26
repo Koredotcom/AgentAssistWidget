@@ -1,6 +1,6 @@
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { AuthService } from '@kore.services/auth.service';
@@ -21,7 +21,7 @@ import { ChecklistService } from '../../checklist.service';
 export class StageCreateComponent implements OnInit, AfterViewInit {
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private service: ServiceInvokerService,
     private auth: AuthService,
     private local: LocalStoreService,
@@ -40,8 +40,8 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
   };
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  tagControl :  FormControl = new FormControl();
-  triggerBy: FormGroup;
+  tagControl :  UntypedFormControl = new UntypedFormControl();
+  triggerBy: UntypedFormGroup;
   assignType = 'all';
   loading = false;
   tags:any = [];
@@ -53,7 +53,7 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
   loadtrigger = false;
   channelList : any = ['voice', 'chat'];
   @ViewChild('triggerByComp') triggerByComp: TriggerByComponent;
-  @Input() checkListForm: FormGroup;
+  @Input() checkListForm: UntypedFormGroup;
   @Input() checkListType = 'primary';
   @Input() createOrUpdate = 'create';
   @Input() currentCheckList:any = {};
@@ -72,7 +72,7 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
   
     this.subscribeValues();
     this.assignOriginalToDisplayList();
-    this.selectedchannelList = (this.checkListForm?.controls['channels'] as FormArray).getRawValue(); 
+    this.selectedchannelList = (this.checkListForm?.controls['channels'] as UntypedFormArray).getRawValue(); 
     
   }
 
@@ -105,15 +105,15 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
 
   channelSelection(event, item){
     if(event.target.checked){
-      (this.checkListForm.controls['channels'] as FormArray)
+      (this.checkListForm.controls['channels'] as UntypedFormArray)
       .push(
-        new FormControl(item)
+        new UntypedFormControl(item)
         );
       }else{
       let addedCl = (this.checkListForm.controls['channels']).value;
       let inx = (addedCl || []).indexOf(item);
       if(inx >= 0){
-        (this.checkListForm.controls['channels'] as FormArray)
+        (this.checkListForm.controls['channels'] as UntypedFormArray)
         .removeAt(inx);
       }
     }
@@ -137,10 +137,10 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
 
   channelChat(checked) {
     if (checked) {
-      (this.checkListForm.controls['channels'] as FormArray).value.push(new FormControl('chat'));
+      (this.checkListForm.controls['channels'] as UntypedFormArray).value.push(new UntypedFormControl('chat'));
     } else {
-      let inx = (this.checkListForm.controls['channels'] as FormArray).value.findIndex((item) => item === 'chat');
-      (this.checkListForm.controls['channels'] as FormArray).removeAt(inx);
+      let inx = (this.checkListForm.controls['channels'] as UntypedFormArray).value.findIndex((item) => item === 'chat');
+      (this.checkListForm.controls['channels'] as UntypedFormArray).removeAt(inx);
     }
   }
 
@@ -232,7 +232,7 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
       });
       if (filterIndex == -1) {
 
-        (<FormArray>this.checkListForm?.controls["tags"]).push(this.fb.group({ name: value }))
+        (<UntypedFormArray>this.checkListForm?.controls["tags"]).push(this.fb.group({ name: value }))
         // this.tags.push({ name: value });
       }
       let flag = this.allTagList.findIndex(item => item.name === value);
@@ -254,7 +254,7 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
       return item.name == tag;
     });    
     if (index >= 0) {
-      (<FormArray>this.checkListForm.controls["tags"]).removeAt(index);
+      (<UntypedFormArray>this.checkListForm.controls["tags"]).removeAt(index);
       // this.tags.splice(index, 1);
     }    
     this.assignOriginalToDisplayList();

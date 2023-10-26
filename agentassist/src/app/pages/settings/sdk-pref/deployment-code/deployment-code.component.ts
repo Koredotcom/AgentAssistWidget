@@ -2,7 +2,7 @@ import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } fro
 import { workflowService } from '@kore.services/workflow.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { NotificationService } from '@kore.services/notification.service';
-import { FormArray, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
 import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-confirm/uc-delete-confirm.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -25,8 +25,8 @@ export class DeploymentCodeComponent implements OnInit {
   linkTag: string = '';
   streamId: string;
 
-  domainForm: FormGroup;
-  domains: FormArray;
+  domainForm: UntypedFormGroup;
+  domains: UntypedFormArray;
   saveInProgress: boolean = false;
 
   @Output() closed = new EventEmitter();
@@ -41,8 +41,8 @@ export class DeploymentCodeComponent implements OnInit {
 
   ngOnInit(): void {
     this.streamId = this.workflowService.getCurrentBt()._id;
-    this.domainForm = new FormGroup({ domains: new FormArray([]) });
-    this.domains = this.domainForm.get('domains') as FormArray;
+    this.domainForm = new UntypedFormGroup({ domains: new UntypedFormArray([]) });
+    this.domains = this.domainForm.get('domains') as UntypedFormArray;
     this.fetchDomains();
   }
 
@@ -64,15 +64,15 @@ export class DeploymentCodeComponent implements OnInit {
 
   initForm(domains: string[]) {
     if (domains?.length) {
-      domains.forEach((domain, i) => this.domains.insert(i, new FormControl(domain, Validators.required)));
+      domains.forEach((domain, i) => this.domains.insert(i, new UntypedFormControl(domain, Validators.required)));
     } else {
-      this.domains.insert(0, new FormControl('', Validators.required))
+      this.domains.insert(0, new UntypedFormControl('', Validators.required))
     }
   }
 
   addNewDomain() {
     if (this.domains.valid) {
-      this.domains.insert(0, new FormControl('', Validators.required));
+      this.domains.insert(0, new UntypedFormControl('', Validators.required));
       this.setFoucs();
     };
     this.domains.markAsDirty();

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { NotificationService } from '@kore.services/notification.service';
@@ -34,7 +34,7 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
   @Output() createCl = new EventEmitter();
   modalRef:any;
 
-  searchField = new FormControl();
+  searchField = new UntypedFormControl();
   loading = false;
   selAcc = this.local.getSelectedAccount();
   primaryCheckList = [];

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { COACHINGCNST } from '../../coaching.cnst';
@@ -16,7 +16,7 @@ export class CreateRuleComponent implements OnInit {
   @ViewChild('tagInput', {static : true}) tagInput: ElementRef;
   @ViewChild('trigger', {static : false}) trigger : MatAutocompleteTrigger;
 
-  @Input() ruleForm: FormGroup;
+  @Input() ruleForm: UntypedFormGroup;
   @Input() allTagList : string[];
   @Input() filteredTagsOriginal;
   @Input() createOrEdit : string;
@@ -30,13 +30,13 @@ export class CreateRuleComponent implements OnInit {
   tags:any = [];
   filteredTagsDisplay : any;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  tagControl :  FormControl = new FormControl();
+  tagControl :  UntypedFormControl = new UntypedFormControl();
   ruleName : string;
   ruleDesc : string;
   channelList : any[] = [];
   
   constructor(private cdRef : ChangeDetectorRef,
-    private fb: FormBuilder, 
+    private fb: UntypedFormBuilder, 
     private activeModal : NgbActiveModal 
     ) { }
 
@@ -65,7 +65,7 @@ export class CreateRuleComponent implements OnInit {
     this.ruleName = this.ruleForm.value.name;
     this.ruleDesc = this.ruleForm.value.description;
     this.tags = this.filteredTagsOriginal.map((str, index) => ({ name: str}));   
-    this.channelList = (this.ruleForm?.controls['channels'] as FormArray).getRawValue(); 
+    this.channelList = (this.ruleForm?.controls['channels'] as UntypedFormArray).getRawValue(); 
   }
 
   selectedOption(item, index){

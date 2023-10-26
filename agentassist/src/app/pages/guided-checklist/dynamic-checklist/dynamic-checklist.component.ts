@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { NotificationService } from '@kore.services/notification.service';
@@ -20,7 +20,7 @@ export class DynamicChecklistComponent implements OnInit, OnChanges {
   @Input() checkListType;
   @Output() update = new EventEmitter();
   @Output() createCl = new EventEmitter();
-  searchField = new FormControl();
+  searchField = new UntypedFormControl();
   selAcc = this.local.getSelectedAccount();
   loading = false;
   dynamicList = [];

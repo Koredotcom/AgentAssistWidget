@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { CHECKLISTCNST } from '../../checklist.const';
 import { TriggerByComponent } from '../trigger-by/trigger-by.component';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -16,7 +16,7 @@ import { ChecklistService } from '../../checklist.service';
 export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() closeE = new EventEmitter();
   @Output() saveStep = new EventEmitter();
-  @Input() stepForm: FormGroup;
+  @Input() stepForm: UntypedFormGroup;
   @Input() createOrUpdateStep = 'create';
   @Output() updateStep = new EventEmitter();
   @ViewChild('triggerBy') triggerBy : TriggerByComponent;
@@ -80,7 +80,7 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
     private auth: AuthService,
     private local: LocalStoreService,
     private workflowService: workflowService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private clS: ChecklistService
   ) { }
 
@@ -135,18 +135,18 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
   changeStepButton(key){
     this.dialogId= '';
     this.selectedStepButton = key;
-    (this.stepForm.controls['confirmButtons'] as FormArray).clear();
+    (this.stepForm.controls['confirmButtons'] as UntypedFormArray).clear();
     if(this.selectedStepButton === 'confirmation'){
       let buttons = this.clS.getConfirmationBtns();
       buttons.forEach((item)=>{
-        (this.stepForm.controls['confirmButtons'] as FormArray)
+        (this.stepForm.controls['confirmButtons'] as UntypedFormArray)
         .push(this.fb.group(
           item
         ))
       })
     }else{
       let button = this.clS.getRunBtn();
-      (this.stepForm.controls['confirmButtons'] as FormArray)
+      (this.stepForm.controls['confirmButtons'] as UntypedFormArray)
         .push(this.fb.group(
           button,
         ))
@@ -155,8 +155,8 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   colorUpdate(color, index) {
-    ((this.stepForm.controls['confirmButtons'] as FormArray)
-    .at(index) as FormGroup)
+    ((this.stepForm.controls['confirmButtons'] as UntypedFormArray)
+    .at(index) as UntypedFormGroup)
     .controls['color'].patchValue(color.key);
   }
 
@@ -204,10 +204,10 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
   selectedDiaog(item){
     this.selectedRunDialog = item.value;
     this.dialogId= item.key;
-    ((this.stepForm.controls['confirmButtons'] as FormArray).at(0) as FormGroup).controls['dialogId'].patchValue(item.key);
+    ((this.stepForm.controls['confirmButtons'] as UntypedFormArray).at(0) as UntypedFormGroup).controls['dialogId'].patchValue(item.key);
   }
 
   deleteButtons(inx){
-    ((this.stepForm.controls['confirmButtons'] as FormArray).removeAt(inx));
+    ((this.stepForm.controls['confirmButtons'] as UntypedFormArray).removeAt(inx));
   }
 }
