@@ -14,7 +14,7 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { InviteDialogComponent } from '../../helpers/components/invite-dialog/invite-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common';
 
 import * as _ from 'underscore';
 import { Subscription } from 'rxjs';

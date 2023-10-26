@@ -19,7 +19,7 @@ import { ChannelsComponent } from '../pages/settings/channels/channels.component
 
 import { SkillsMapPipe } from '../helpers/filters/skills-map.pipe';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { FindSkillPipe } from '../helpers/filters/find-skill.pipe';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';

@@ -13,7 +13,7 @@ import { WSelectionService } from './w-sel.service';
 import { Subscription } from 'rxjs';
 import { AppService } from '@kore.services/app.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common';
 import { OnboardingDialogComponent } from '../onboarding/onboarding-dialog/onboarding-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 

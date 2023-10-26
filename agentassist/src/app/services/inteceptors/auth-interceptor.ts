@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse
-} from '@angular/common/http';
+} from '@angular/common';
 
 
 import { Observable } from 'rxjs';

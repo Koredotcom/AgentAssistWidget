@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,7 +10,7 @@ import { ContentComponent } from './components/content/content.component';
 //import { ScrollTrackerDirective } from './components/dashboard-home/dashboard-home.component';
 import { MainmenuComponent } from './components/mainmenu/mainmenu.component';
 
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common';
 import { AuthGuard } from "@kore.services/auth.guard";
 import { AuthInterceptor } from '@kore.services/inteceptors/auth-interceptor';
 import { AccountsDataService } from '@kore.services/dataservices/accounts-data.service';

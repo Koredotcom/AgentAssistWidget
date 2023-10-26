@@ -6,7 +6,7 @@ import {catchError} from 'rxjs/operators';
 
 import { Injectable, Injector } from '@angular/core';
 // tslint:disable-next-line:max-line-length
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpSentEvent, HttpHeaderResponse, HttpProgressEvent, HttpResponse, HttpUserEvent, HttpErrorResponse } from '@angular/common/http';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpSentEvent, HttpHeaderResponse, HttpProgressEvent, HttpResponse, HttpUserEvent, HttpErrorResponse } from '@angular/common';
 
 import {AuthService} from "@kore.services/auth.service";
 import { AppUrlsService } from '@kore.services/app.urls.service';
