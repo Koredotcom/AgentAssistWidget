@@ -10,13 +10,20 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "paths": {
-      "@kore.services/*": [ "./src/app/services/*" ],
-      "@kore.environment": [ "./src/environments/environment" ],
-      "@kore.modules":["./src/app/modules/*"], 
-      "@kore.components":["./src/app/components/*"]
-      
+      "@kore.services/*": [
+        "./src/app/services/*"
+      ],
+      "@kore.environment": [
+        "./src/environments/environment"
+      ],
+      "@kore.modules": [
+        "./src/app/modules/*"
+      ],
+      "@kore.components": [
+        "./src/app/components/*"
+      ]
     },
     "typeRoots": [
       "node_modules/@types"
@@ -24,6 +31,7 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "useDefineForClassFields": false
   }
 }
