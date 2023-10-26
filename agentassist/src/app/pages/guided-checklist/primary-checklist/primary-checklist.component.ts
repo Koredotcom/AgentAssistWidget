@@ -10,6 +10,7 @@ import { finalize, debounceTime, tap } from 'rxjs/operators';
 import { CHECKLISTCNST } from '../checklist.const';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteComponent } from '../common/delete/delete.component';
+import { IframeService } from '@kore.services/iframe.service';
 @Component({
   selector: 'app-primary-checklist',
   templateUrl: './primary-checklist.component.html',
@@ -25,7 +26,8 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
     private zone : NgZone,
     private cdRef : ChangeDetectorRef,
     private notificationService: NotificationService, private translate: TranslateService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private iframeEvents: IframeService
   ) { }
   @Input() checkListType;
   @Output() update = new EventEmitter();
