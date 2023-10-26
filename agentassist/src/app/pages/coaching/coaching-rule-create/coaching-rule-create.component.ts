@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { CreateRuleComponent } from './create-rule/create-rule.component';
+import { IframeService } from '@kore.services/iframe.service';
 @Component({
   selector: 'app-coaching-rule-create',
   templateUrl: './coaching-rule-create.component.html',
@@ -63,7 +64,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     private auth: AuthService,
     private local: LocalStoreService,
     private notificationService: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private iframeEvents: IframeService
   ) { }
 
   ngAfterViewInit(): void {
@@ -392,6 +394,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     this.modalFlowCreateRef.componentInstance.createOrEdit = this.createOrEdit;
     this.modalFlowCreateRef.componentInstance.disableApplyButton = false;
     this.modalFlowCreateRef.componentInstance.default = this.currentRule?.default;
+    this.iframeEvents.expand('#frameAgentAssistContainer');
     this.modalFlowCreateRef.componentInstance.submitRuleForm.subscribe(data => {
       if(data){
         let payload : any = {};
