@@ -28,8 +28,9 @@ export class IframeService {
 
   expand(selector){
     let message: any = {
-        action: 'expand',
+        action:'sidenav-toggle',
         selector: selector,
+        payload:{isExpand:true},
     };
     window.parent.postMessage(
         message,
@@ -37,8 +38,9 @@ export class IframeService {
   }
   collapse(selector){
       let message: any = {
-          action: 'collapse',
-          selector: selector,
+        action:'sidenav-toggle',
+        selector: selector,
+        payload:{isExpand:false},
       };
       window.parent.postMessage(
           message,
