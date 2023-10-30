@@ -45,7 +45,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   voicePreferences: VoicePreferencesModel;
   filteredSmartABots : any = {};
-  isCoachingDisable = false;
+  isCoachingDisable = true;
   @ViewChild('wUpdateBot', { static: false }) private wUpdateBot;
   @ViewChild('wSContent', { static: false }) private wSContent;
   @ViewChild(NgbDropdown) private dropdown: NgbDropdown;
