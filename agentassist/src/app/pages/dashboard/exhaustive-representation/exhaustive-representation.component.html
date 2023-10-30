@@ -8,7 +8,7 @@
           <img src="assets/images/close.svg" (click)="close()" />
         </div>
     </div>
-    <perfect-scrollbar class="scroll-content">
+    
         <div class="body-scroll-data">
             <ng-container *ngIf="componentType === DASHBORADCOMPONENTTYPE.CUSTOMER_ASPECT">
                 <app-customer-aspect [filters]="filters" [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW" [customerDropdownSelection]="customerDropdownSelection" [widgetData]="compData"></app-customer-aspect>
@@ -26,6 +26,5 @@
                <app-automation-override-report  [filters]="filters" [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW" [widgetData]="compData"></app-automation-override-report>
             </ng-container>
         </div>
-    </perfect-scrollbar>
 </div>
 

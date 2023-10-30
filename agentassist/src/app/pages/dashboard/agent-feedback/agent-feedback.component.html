@@ -79,52 +79,56 @@
         </div>
     </ng-container>
     <ng-conatiner *ngIf="(viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW)">
-        <div class="agent-feedback-data-info">
-            <div class="cards-data-boards agent-feedback-cards">
-                <div class="card-sec max_width_100">
-                    <div class="inner-data-sec">
-                        <div class="title-text-info">
-                            <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_TOTAL_RESPONSE" | translate}}</span>
+        <perfect-scrollbar class="scroll-content" (psYReachEnd)="onReachEnd($event)">
+            <div class="body-scroll-data">
+                <div class="agent-feedback-data-info">
+                    <div class="cards-data-boards agent-feedback-cards">
+                        <div class="card-sec max_width_100">
+                            <div class="inner-data-sec">
+                                <div class="title-text-info">
+                                    <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_TOTAL_RESPONSE" | translate}}</span>
+                                </div>
+                                <div class="count-heading">{{agentFeedbackData.totalResp}}</div>
+                            </div>
                         </div>
-                        <div class="count-heading">{{agentFeedbackData.totalResp}}</div>
+                        <div class="card-sec max_width_100">
+                            <div class="inner-data-sec">
+                                <div class="title-text-info">
+                                    <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</span>
+                                    <i class="icon-ast_thumbsup"></i>
+                                </div>
+                                <div class="count-heading">{{agentFeedbackData.helpfulResp | number: '1.0-0'}}%</div>
+                            </div>
+                        </div>
+                        <div class="card-sec max_width_100">
+                            <div class="inner-data-sec">
+                                <div class="title-text-info">
+                                    <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</span>
+                                    <i class="icon-sat_thumsdown"></i>
+                                </div>
+                                <div class="count-heading">{{agentFeedbackData.nothelpfulResp | number: '1.0-0'}}%</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="card-sec max_width_100">
-                    <div class="inner-data-sec">
-                        <div class="title-text-info">
-                            <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</span>
-                            <i class="icon-ast_thumbsup"></i>
+                    <div class="table-agent-feedback">
+                        <div class="table-header row">
+                            <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_INTENT_NAME_COLUMN" | translate}}</div>
+                            <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</div>
+                            <div class="title col-4 text-right">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</div>
                         </div>
-                        <div class="count-heading">{{agentFeedbackData.helpfulResp | number: '1.0-0'}}%</div>
-                    </div>
-                </div>
-                <div class="card-sec max_width_100">
-                    <div class="inner-data-sec">
-                        <div class="title-text-info">
-                            <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</span>
-                            <i class="icon-sat_thumsdown"></i>
-                        </div>
-                        <div class="count-heading">{{agentFeedbackData.nothelpfulResp | number: '1.0-0'}}%</div>
+                        <ng-container>
+                            <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackTableData">
+                                <div class="col-4 title">{{obj.intentName}}</div>
+                                <div class="col-4 title">{{obj.likedPercent | number: '1.0-0'}}%</div>
+                                <div class="col-4 title text-right">{{obj.dislikedPercent | number: '1.0-0'}}%</div>
+                            </div>
+
+
+                        </ng-container>
                     </div>
                 </div>
             </div>
-            <div class="table-agent-feedback">
-                <div class="table-header row">
-                    <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_INTENT_NAME_COLUMN" | translate}}</div>
-                    <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</div>
-                    <div class="title col-4 text-right">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</div>
-                </div>
-                <ng-container>
-                    <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackTableData">
-                        <div class="col-4 title">{{obj.intentName}}</div>
-                        <div class="col-4 title">{{obj.likedPercent | number: '1.0-0'}}%</div>
-                        <div class="col-4 title text-right">{{obj.dislikedPercent | number: '1.0-0'}}%</div>
-                    </div>
-
-
-                </ng-container>
-            </div>
-        </div>
+        </perfect-scrollbar>
     </ng-conatiner>
 
 </div>

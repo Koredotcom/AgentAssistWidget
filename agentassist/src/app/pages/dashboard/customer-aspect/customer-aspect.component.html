@@ -10,19 +10,23 @@
     </div>
     <div class="tab-details-info">
         <ng-container *ngIf="customerAspectData && customerAspectData.length > 0">
-            <div class="row-data" *ngFor="let data of customerAspectData">
-                <div class="title-with-count">
-                    <img [src]="customerAspectTabvsImage[data.type]">
-                    <span class="title">{{data.name}} </span>    
-                    <div class="count-percentage">
-                        <span class="percentage">{{data.percent | number : '1.1-1'}}%</span>
-                        <span class="count-">({{data.count}})</span>
-                    </div>                               
+            <perfect-scrollbar class="scroll-content" (psYReachEnd)="onReachEnd($event)">
+                <div class="body-scroll-data">
+                    <div class="row-data" *ngFor="let data of customerAspectData">
+                        <div class="title-with-count">
+                            <img [src]="customerAspectTabvsImage[data.type]">
+                            <span class="title">{{data.name}} </span>    
+                            <div class="count-percentage">
+                                <span class="percentage">{{data.percent | number : '1.1-1'}}%</span>
+                                <span class="count-">({{data.count}})</span>
+                            </div>                               
+                        </div>
+                        <div class="slider-percentage">
+                            <div class="data-percentage" [style.width.%]="data.percent"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="slider-percentage">
-                    <div class="data-percentage" [style.width.%]="data.percent"></div>
-                </div>
-            </div>
+            </perfect-scrollbar>
             <div class="view-all-btn" *ngIf="viewType == VIEWTYPELIST.PARTIAL_VIEW" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.CUSTOMER_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
         </ng-container>
         <div class="empty-cust-aspects-data" *ngIf="!customerAspectData || customerAspectData.length == 0">
