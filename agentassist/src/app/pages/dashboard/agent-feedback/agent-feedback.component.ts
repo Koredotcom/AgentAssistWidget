@@ -53,7 +53,7 @@ export class AgentFeedbackComponent implements OnInit {
   ngOnInit(): void {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
     if(this.params.streamId !== '') {
-      this.updateAgentFeedbackData();
+      // this.updateAgentFeedbackData();
     }
 
   }

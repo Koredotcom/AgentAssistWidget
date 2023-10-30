@@ -58,7 +58,7 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
-    this.updateAgentAspectData();
+    // this.updateAgentAspectData();
   }
 
   ngOnChanges(changes : any){
