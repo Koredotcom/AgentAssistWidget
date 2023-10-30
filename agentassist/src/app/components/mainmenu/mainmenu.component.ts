@@ -135,33 +135,34 @@ export class MainmenuComponent implements OnInit, OnDestroy {
 
   filterLinkedBotIds(){
     this.filteredSmartABots = {};
-    this.smartABots?.forEach((bot) => {
+    (this.smartABots || []).forEach((bot) => {
       if(bot._id){
         this.filteredSmartABots[bot._id] = bot;
       }
     });
 
-    
-    for(let bot of this.smartABots){
-      let filterdBot = this.filteredSmartABots[bot._id];
-      if(bot.type == 'universalbot'){
-
-        let linkedBots = [];
-        let linkedBotIds = {};
-
-        let config_publish_bot_array = [...bot?.configuredBots, ...bot.publishedBots];
-
-        config_publish_bot_array.forEach((config_publish_bot) => {
-          linkedBotIds[config_publish_bot._id] = true;
-        });  
-   
-        linkedBots = this.smartABots.filter(element => linkedBotIds[element._id]); 
-        filterdBot.linkedBots = Object.assign([], linkedBots);
-        for(let botId in linkedBotIds){
-          delete this.filteredSmartABots[botId]
-        }        
-      }
-    }        
+    if(this.smartABots){
+      for(let bot of this.smartABots){
+        let filterdBot = this.filteredSmartABots[bot._id];
+        if(bot.type == 'universalbot'){
+  
+          let linkedBots = [];
+          let linkedBotIds = {};
+  
+          let config_publish_bot_array = [...bot?.configuredBots, ...bot.publishedBots];
+  
+          config_publish_bot_array.forEach((config_publish_bot) => {
+            linkedBotIds[config_publish_bot._id] = true;
+          });  
+     
+          linkedBots = this.smartABots.filter(element => linkedBotIds[element._id]); 
+          filterdBot.linkedBots = Object.assign([], linkedBots);
+          for(let botId in linkedBotIds){
+            delete this.filteredSmartABots[botId]
+          }        
+        }
+      }        
+    }
   }
 
   getBalance() {
