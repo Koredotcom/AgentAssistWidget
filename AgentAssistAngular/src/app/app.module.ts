@@ -30,6 +30,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { FaqSuggestionsComponent } from './components/common/components/faq-suggestions/faq-suggestions.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -57,7 +58,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     SentimentScoreComponent,
     NudgesComponent,
     HintsComponent,
-    EmptyObjectCheckPipe
+    EmptyObjectCheckPipe,
+    FaqSuggestionsComponent
   ],
   imports: [
     TranslateModule.forRoot({

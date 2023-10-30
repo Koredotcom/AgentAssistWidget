@@ -43,12 +43,14 @@
             min-width: 62px;
             height: 48px;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             gap: 4px;
             flex: 1;
             transition: 0.2s all ease;
+            @media screen and (max-width:600px){
+                flex-direction: column;
+            }
             &.selected-tab{
                 color:#2970FF;
                 p{
