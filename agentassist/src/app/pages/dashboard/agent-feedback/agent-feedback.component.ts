@@ -24,6 +24,7 @@ export class AgentFeedbackComponent implements OnInit {
   streamId: string;
   agentFeedbackData: any = {};
   agentFeedbackTableData: any = [];
+  agentFeedbackPartialTableData: any = [];
   onChangeCall: boolean = false;
   params ={
     streamId : ''
@@ -89,7 +90,7 @@ export class AgentFeedbackComponent implements OnInit {
       }
       let botId = this.dashboardService.getSelectedBotDetails()._id;
       let params: any = {
-        botId,
+        streamId: botId,
       };
       let body: any = {
         limit: this.limit,
@@ -125,10 +126,11 @@ export class AgentFeedbackComponent implements OnInit {
   }
 
   updateViewData(data) {
-    this.agentFeedbackData = Object.assign({}, data);
+    // this.agentFeedbackData = Object.assign({}, data);
     if (data.usecases) {
+      this.agentFeedbackData = Object.assign({}, data);
       if (this.viewType == VIEWTYPE.PARTIAL_VIEW) {
-        this.agentFeedbackTableData = data.usecases.length <= 3 ? data.usecases : data.usecases.slice(0, 3);
+        this.agentFeedbackPartialTableData = data.usecases.length <= 3 ? data.usecases : data.usecases.slice(0, 3);
       } else {
         this.agentFeedbackTableData.push(...data.usecases);
       }

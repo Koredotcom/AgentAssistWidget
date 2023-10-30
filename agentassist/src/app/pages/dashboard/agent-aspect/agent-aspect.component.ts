@@ -30,8 +30,9 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
 
   wordCloudOptions: any;
   wordCloudChart: any;
-  agentAspectData : any;
+  agentAspectData : any = {};
   agentAspectTableData : any = [];
+  agentAspectPartialTableData: any = []
   onChangeCall : boolean = false;
   params ={
     streamId : ''
@@ -111,19 +112,14 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
     }, 500);
   } 
 
-  updateAgentAspectData(empty=false){
+  updateAgentAspectData(){
     if(this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData){
       // let this = this;
       this.isLoading = true;
       this.cdRef.detectChanges();
-      if(empty){
-        this.skip = 0;
-        this.limit = 14;
-        this.fetched = this.fetched;
-      }
       let botId = this.dashboardService.getSelectedBotDetails()._id;
       let params: any = {
-        botId,
+        streamId :botId,
       };
       let body: any = {
         limit: this.limit,
@@ -136,10 +132,9 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
         this.cdRef.detectChanges();
       })).subscribe(data => {
         if (data) {
-          if(empty){
-          }
           this.skip = this.skip+1;
           this.hasMore = data.hasMore;
+          this.fetched = data.fetched;
           this.updateViewData(data);
           // this.agentAspectTableData.push(...data.actualData);
           this.cdRef.detectChanges();
@@ -160,12 +155,14 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
   }
 
   updateViewData(data){
-    this.agentAspectData = data;
+    
     if(data.actualData && data.actualData.length > 0){
+      this.agentAspectData = {...this.agentAspectData, ...data};
       this.formatWorldCloudData(data.actualData);
       if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
-        this.agentAspectTableData = data.actualData.length <= 3 ? data.actualData : data.actualData.slice(0,3);
+        this.agentAspectPartialTableData = data.actualData.length <= 3 ? data.actualData : data.actualData.slice(0,3);
       }else {
+        console.log(this.agentAspectTableData, data.actualData);
         this.agentAspectTableData.push(...data.actualData);
         // this.agentAspectTableData = data.actualData;
       }

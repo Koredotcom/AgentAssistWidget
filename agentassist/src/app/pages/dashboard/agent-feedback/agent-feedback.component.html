@@ -35,8 +35,8 @@
                 <div class="title col-3">{{"DASHBOARD.AGENT_FEEDBACK_RESPONSES_COLUMN" | translate}}</div>
                 <div class="title col-5">{{"DASHBOARD.AGENT_FEEDBACK_LIKE_COLUMN" | translate}}/{{"DASHBOARD.AGENT_FEEDBACK_DISLIKE_COLUMN" | translate}}</div>
             </div>
-            <ng-container *ngIf="agentFeedbackTableData && agentFeedbackTableData.length > 0">
-                <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackTableData">
+            <ng-container *ngIf="agentFeedbackPartialTableData && agentFeedbackPartialTableData.length > 0">
+                <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackPartialTableData">
                     <div class="col-4 title">{{obj.intentName}}</div>
                     <div class="col-3 title">{{obj.responses}}</div>
                     <div class="col-5 like-dislike">
@@ -55,7 +55,7 @@
                 <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.AGENT_FEEDBACK)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
             </ng-container>
 
-            <ng-container *ngIf="!agentFeedbackTableData || agentFeedbackTableData.length == 0">
+            <ng-container *ngIf="!agentFeedbackPartialTableData || agentFeedbackPartialTableData.length == 0">
                 <!-- <div class="table-body-feedback row empty-data" *ngFor="let item of [1,2,3,4]">
                     <div class="col-4 title">
                         <span></span>
