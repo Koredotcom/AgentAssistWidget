@@ -62,9 +62,9 @@ export class ConfigurationsComponent implements OnInit {
     this.isSidenavCollapsed = event
     if(event){
       document.getElementById('unifiedContainer')?.classList?.add('collapsed-unified-left-menu');
-      document.getElementById('unifiedContainer')?.classList?.remove('is-unified-deflect-container');
-    }else{
       document.getElementById('unifiedContainer')?.classList?.add('is-unified-deflect-container');
+    }else{
+      // document.getElementById('unifiedContainer')?.classList?.add('is-unified-deflect-container');
       document.getElementById('unifiedContainer').classList.remove('collapsed-unified-left-menu');
     }
   }
