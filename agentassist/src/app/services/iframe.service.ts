@@ -1,6 +1,7 @@
 import {
   Injectable
 } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   BehaviorSubject,
   Subject
@@ -22,7 +23,7 @@ export class IframeService {
   builderxEvents$ = new BehaviorSubject({});
   navigationItems$ = new BehaviorSubject({});
 
-  constructor() {
+  constructor(private router: Router) {
     this.registerEventsFromParent();
   }
 
@@ -48,10 +49,32 @@ export class IframeService {
   }
 
   registerEventsFromParent() {
+    let self=this;
     window.addEventListener("message", (e) => {
       if (e.data && e.data.action) {
         var data = e.data;
         switch (data.action) {
+
+          case 'routeModule':
+            if(e.data.payload){
+                let navigationExtra = {
+                    skipLocationChange: true
+                  };
+            
+                  self.router.navigateByUrl( '/', navigationExtra).then(() => {
+                    let navState:any = {
+                    replaceUrl: true
+                  };
+                
+                  self.router.navigateByUrl(`${e.data.payload.module}?tab=${e.data.payload.tab}`, navState);
+                  });
+                // self.router.navigateByUrl(`${e.data.payload.module}?tab=${e.data.payload.tab}`); 
+            }
+            break;
+            case 'builderxEvent':
+                            if (data && data.payload) {
+                                self.builderxEvents$.next(data);
+                            }
           case "postNavigationItems":
             if (data && data.payload) {
               this.navigationItems$.next(data.payload);
