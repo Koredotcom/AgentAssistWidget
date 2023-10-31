@@ -7,11 +7,14 @@ import { ProjConstants } from '../proj.const';
 })
 export class RootService {
 
+  socketConnection$ : BehaviorSubject<any> = new BehaviorSubject(null);
+
   public userBotConversationDetails : any;
 
   connectionDetails : any = {};
   assistTabSessionId = '';
   myBotTabSessionId = '';
+  grantResponseObj : any = {};
 
   constructor() { }
 
@@ -42,6 +45,17 @@ export class RootService {
     this.connectionDetails = parmasObj;
   }
 
+  isEmptyStr(s) {
+    let str = s?.trim();
+    str = str?.replaceAll('"', '').replaceAll("'", '');
+    if (str && str.length > 1 && str !== "") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
   setUserBotConversationDataDetails(data : any) {
     if (data && data.sessionId) {
       this.userBotConversationDetails = data;
@@ -50,6 +64,10 @@ export class RootService {
 
   getUserBotConvosDataDetails() {
     return this.userBotConversationDetails;
+  }
+
+  setSocketConnection(data){
+    this.socketConnection$.next(data);
   }
 
   

@@ -8,6 +8,8 @@ import { EVENTS } from './helpers/events';
 import { RootService } from './services/root.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DirService } from './services/dir.service';
+import { ServiceInvokerService } from './services/service-invoker.service';
+
 
 @Component({
   selector: 'app-root',
@@ -27,7 +29,8 @@ export class AppComponent {
     private route: ActivatedRoute,
     private rootService: RootService,
     private localStorageService: LocalStorageService,
-    private dirService: DirService
+    private dirService: DirService,
+    private serviceInvoker : ServiceInvokerService
   ) {
     this.translate.setDefaultLang('en');
   }
@@ -75,26 +78,35 @@ export class AppComponent {
     setTimeout(() => {
       // this.rootService.setLoader(true);
       this.webSocketService.socketConnection();
+      this.rootService.setSocketConnection(true);
       // this.rootService.setLoader(false);
     }, 100);
   }
 
-  // grantCall(params) {
-  //   this.rootService.setLoader(true);
-  //   this.service.grantCall(params.token, params.botid, params.agentassisturl).then((res) => {
-  //     console.log(res, "sucess")
-  //     this.service.grantResponseObj = res;
-  //    this.initiateSocketConnection(params);
-  //   }).catch((err) => {
-  //     this.rootService.setLoader(false);
-  //     if (err.status === 500) {
-  //       this.errorMsg = "Issue identified with the backend services! Please reach out to AgentAssist Admin.";
-  //     } else {
-  //       this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin.";
-  //     }
-  //     this.isGrantSuccess = false;
-  //   });
-  // }
+  grantCall(params : any) {
+    console.log("grant call");
+    
+    var payload = {
+      "assertion": params.token,
+      "botInfo": {
+        "chatBot": "sample Bot",
+        "taskBotId": params.botId
+      },
+      "token": {}
+    }
+    this.serviceInvoker.invoke('post.grant',{}, payload,{},params.agentassisturl).subscribe((res)=> {
+      console.log(res);
+      this.rootService.grantResponseObj = res;
+      this.initiateSocketConnection(params);
+    },(err)=> {
+      if (err.status === 500) {
+        this.errorMsg = "Issue identified with the backend services! Please reach out to AgentAssist Admin.";
+      } else {
+        this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin.";
+      }
+      this.isGrantSuccess = false;
+    });
+  }
 
   // handleSourceType(params) {
   //   let sourceType = params.source;
@@ -158,8 +170,10 @@ export class AppComponent {
         this.connectionDetails = this.rootService.getConnectionDetails();
         this.initiateSocketConnection(this.connectionDetails);
       } else {
-        // this.grantCall(params);
+        this.grantCall(params);
       }
     }
   }
+
+
 }
