@@ -1,1 +1,66 @@
-<p>transcript works!</p>
+<div class="transcipt-wrapper-info">
+    <div class="offcanvas-header">
+        <p class="paragraph semibold">Transcript</p>
+        <button class="maximize-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M2 5.33333H2.13333C3.25344 5.33333 3.81349 5.33333 4.24131 5.11535C4.61764 4.9236 4.9236 4.61764 5.11535 4.24131C5.33333 3.81349 5.33333 3.25344 5.33333 2.13333V2M2 10.6667H2.13333C3.25344 10.6667 3.81349 10.6667 4.24131 10.8847C4.61764 11.0764 4.9236 11.3824 5.11535 11.7587C5.33333 12.1865 5.33333 12.7466 5.33333 13.8667V14M10.6667 2V2.13333C10.6667 3.25344 10.6667 3.81349 10.8847 4.24131C11.0764 4.61764 11.3824 4.9236 11.7587 5.11535C12.1865 5.33333 12.7466 5.33333 13.8667 5.33333H14M10.6667 14V13.8667C10.6667 12.7466 10.6667 12.1865 10.8847 11.7587C11.0764 11.3824 11.3824 11.0764 11.7587 10.8847C12.1865 10.6667 12.7466 10.6667 13.8667 10.6667H14" stroke="#667085" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="body-canvas-wrapper">
+        <div class="transcipt-content-data">
+            <ng-container *ngFor="let i of [].constructor(6)">
+                <div class="transcipt-bot-bubble-comp">
+                    <div class="bot-bubble-content hover-show-copy">
+                        <div class="top-info">
+                            <div class="you-text">Kore.ai Bot</div>
+                            <div class="time-tamp"><time>4:21 pm, Today</time></div>
+                        </div>
+                        <div class="bubble-msg-with-img">
+                            <div class="bubble-msg">Automobile policy renewal, got it! I can help you renew your policy.</div>
+                            <div class="intent-suggestion-buld" ngbTooltip="bala">
+                                <sub>1</sub>
+                                <i class="krIocnsFont-light-bulb"></i>
+                            </div>
+                            <div class="copy-bubble">
+                                <svg width="15" height="16" viewBox="0 0 15 16" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M13.123 2.81483C13.1008 2.56823 12.8935 2.375 12.6411 2.375H5.57208L5.52803 2.37698C5.28144 2.39923 5.08821 2.60648 5.08821 2.85887V5.58821H2.35887C2.09164 5.58821 1.875 5.80484 1.875 6.07208V13.1411C1.875 13.4084 2.09164 13.625 2.35887 13.625H9.42792C9.69516 13.625 9.91179 13.4084 9.91179 13.1411V10.4118H12.6411L12.6852 10.4098C12.9318 10.3876 13.125 10.1803 13.125 9.92792V2.85887L13.123 2.81483ZM9.91179 9.44405H12.1573V3.34274H6.05595V5.58821H9.42792C9.69516 5.58821 9.91179 5.80484 9.91179 6.07208V9.44405ZM8.94405 6.55595V12.6573H2.84274V6.55595H8.94405Z" fill="#697586"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="transcipt-agent-joined-banner">
+                    <div class="border-seperation"></div>
+                    <div class="agent-joined-wrapper">
+                        <div class="agent-name">Agent joined the conversation</div>
+                        <div class="time-stamp">
+                            <time>Today at 2:45pm</time>
+                        </div>
+                    </div>
+                    <div class="border-seperation"></div>
+                </div>
+                <div class="transcipt-agent-bubble-comp">
+                    <div class="agent-bubble-content hover-show-copy">
+                        <div class="top-info">
+                            <div class="time-tamp"><time>8:11 pm, Today</time></div>
+                            <div class="you-text">You</div>
+                        </div>
+                        <div class="bubble-msg-with-img">
+                            <div class="intent-suggestion-buld" ngbTooltip="bala">
+                                <sub>1</sub>
+                                <i class="krIocnsFont-light-bulb"></i>
+                            </div>
+                            <div class="bubble-msg">Hi Charlie. Yes, I need help my current policy.</div>
+                            <div class="copy-bubble">
+                                <svg width="15" height="16" viewBox="0 0 15 16" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M13.123 2.81483C13.1008 2.56823 12.8935 2.375 12.6411 2.375H5.57208L5.52803 2.37698C5.28144 2.39923 5.08821 2.60648 5.08821 2.85887V5.58821H2.35887C2.09164 5.58821 1.875 5.80484 1.875 6.07208V13.1411C1.875 13.4084 2.09164 13.625 2.35887 13.625H9.42792C9.69516 13.625 9.91179 13.4084 9.91179 13.1411V10.4118H12.6411L12.6852 10.4098C12.9318 10.3876 13.125 10.1803 13.125 9.92792V2.85887L13.123 2.81483ZM9.91179 9.44405H12.1573V3.34274H6.05595V5.58821H9.42792C9.69516 5.58821 9.91179 5.80484 9.91179 6.07208V9.44405ZM8.94405 6.55595V12.6573H2.84274V6.55595H8.94405Z" fill="#697586"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>            
+        </div>
+    </div>
+</div>

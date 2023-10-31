@@ -1,0 +1,40 @@
+[dir="rtl"]{
+    .search-block-data-suggestions {
+        .search-block-input {
+            .input-block {
+                .form-control{
+                    padding: 8px 40px 8px 12px !important;
+                }
+                .suggestion-input{
+                    padding: 8px 40px 8px 12px !important;
+                }
+                svg{
+                    left: auto;
+                    right: 12px;
+                }
+            }
+        }
+    }  
+    .transcipt-bot-bubble-comp {
+        .bot-bubble-content{
+            padding: 0 0 0 15% !important;
+            .bubble-msg-with-img {
+                .copy-bubble{
+                    left: -24px !important;
+                    right: auto !important;
+                }
+            }
+        }        
+    }
+    .transcipt-agent-bubble-comp{
+        .agent-bubble-content{
+            padding: 0 15% 0 0 !important;
+            .bubble-msg-with-img {
+                .copy-bubble{
+                    right: -24px !important;
+                    left: auto !important;
+                }                
+            }
+        } 
+    }
+}

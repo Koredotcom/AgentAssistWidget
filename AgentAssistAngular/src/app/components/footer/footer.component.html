@@ -3,31 +3,31 @@
     <div class="footer-links-data">
         <button class="btn_footer" (click)="actionOnButton('search', content)" [ngClass]="{'selected-tab sel-bg': selectedTab === 'search'}">
             <div class="svg_icon">
-               <i class="krIocnsFont-search-refraction"></i>
+               <i class="krIocnsFont-transcript"></i>
             </div>
             <p>{{'SEARCH' | translate}}</p>
         </button>
         <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === 'mybot'}" (click)="actionOnButton('mybot', content)">
             <div class="svg_icon">
-                <i class="krIocnsFont-message-smile-square"></i>
+                <i class="krIocnsFont-my-bot"></i>
             </div>
             <p>{{'MY_BOT' | translate}}</p>
         </button>
         <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === 'assist'}" (click)="actionOnButton('assist', content)">
             <div class="svg_icon">
-                <i class="krIocnsFont-message-chat-circle"></i>
+                <i class="krIocnsFont-link-external-02"></i>
             </div>
             <p>{{'ASSIST' | translate}}</p>
         </button>
         <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === 'transcript'}" (click)="actionOnButton('transcript', content)">
             <div class="svg_icon">
-                <i class="krIocnsFont-file-check-02"></i>
+                <i class="krIocnsFont-transcript"></i>
             </div>
             <p>{{'TRANSCRIPT' | translate}}</p>
         </button>
         <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === 'settings'}" (click)="actionOnButton('settings', content)">
             <div class="svg_icon">
-                <i class="krIocnsFont-settings-01"></i>
+                <i class="krIocnsFont-my-bot"></i>
             </div>
             <p>{{'SETTINGS' | translate}}</p>
         </button>
@@ -37,8 +37,10 @@
 
 
 <ng-template #content let-offcanvas>
-    <app-search [ngClass]="{'dis-none' : selectedTab !== 'search'}" class="h-100"></app-search>
-    <app-mybot [ngClass]="{'dis-none' : selectedTab !== 'mybot'}" class="h-100"></app-mybot>
-    <app-transcript [ngClass]="{'dis-none' : selectedTab !== 'transcript'}" class="h-100"></app-transcript>
-    <app-settings [ngClass]="{'dis-none' : selectedTab !== 'settings'}" class="h-100"></app-settings>
+    <div class="canvas-auto-height">
+        <app-search [ngClass]="{'dis-none' : selectedTab !== 'search'}" class="h-100"></app-search>
+        <app-mybot [ngClass]="{'dis-none' : selectedTab !== 'mybot'}" class="h-100"></app-mybot>
+        <app-transcript [ngClass]="{'dis-none' : selectedTab !== 'transcript'}" class="h-100"></app-transcript>
+        <app-settings [ngClass]="{'dis-none' : selectedTab !== 'settings'}" class="h-100"></app-settings>
+    </div>
 </ng-template>
