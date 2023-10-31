@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { IDashboardFilter } from '../dashboard-filters/dateFilter.model';
 import { actualvsDisplayTitle, DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { DashboardService } from '../dashboard.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { AuthService } from '@kore.services/auth.service';
 import { SubSink } from 'subsink';
+import { finalize, debounceTime, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-customer-aspect',
@@ -42,12 +43,20 @@ export class CustomerAspectComponent implements OnInit {
     "skip":0,  // pages to skip (default 0)
     "limit":3, // number of record to be fetched
     "fetched":0  // count of previously fetched responses (default 0)
-
   }
+
+  isLoading: boolean = false;
+  hasMore: boolean = false;
+  skip = 0
+  limit = 14;
+  fetched = 0;
 
   subs = new SubSink();
 
-  constructor(private dashboardService : DashboardService, private service : ServiceInvokerService, private authService : AuthService) { }
+  constructor(private dashboardService : DashboardService, 
+    private service : ServiceInvokerService, 
+    private authService : AuthService,
+    private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
@@ -81,14 +90,42 @@ export class CustomerAspectComponent implements OnInit {
     }, 10);
   }
 
-  updateCustomerAspectData() {
+  updateCustomerAspectData(empty =false) {
     if (this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData) {
       this.updateViewData(this.widgetData);
       this.payload.dataType = this.customerTabSelection;
-        this.payload.sessionType = this.customerDropdownSelection;
-        this.service.invoke('customersLookingfor', this.params, this.payload).subscribe((data : any) => {
+      this.payload.sessionType = this.customerDropdownSelection;
+      this.isLoading = true;
+      this.cdRef.detectChanges();
+      if(empty){
+        this.skip = 0;
+        this.limit = 14;
+        this.fetched = this.fetched;
+      }
+      let botId = this.dashboardService.getSelectedBotDetails()._id;
+      let params: any = {
+        botId,
+      };
+      let body: any = {
+        limit: this.limit,
+        skip: this.skip,
+        fetched: this.fetched
+      }
+      body = {...body, ... this.payload}
+      this.service.invoke('customersLookingfor', this.params, body).pipe(finalize(() => {
+        this.isLoading = false;
+        this.cdRef.detectChanges();
+      })).subscribe(data => {
+        if (data) {
+          if(empty){
+          }
+          this.skip = this.skip+1;
+          this.hasMore = data.hasMore;
           this.updateViewData(data);
-        });
+          // this.agentAspectTableData.push(...data.actualData);
+          this.cdRef.detectChanges();
+        }
+    });
     } else {
       // this.dashboardService.getCustomerAspectData(this.customerDropdownSelection, this.customerTabSelection).subscribe(resp => {
       //   if (resp) {
@@ -112,7 +149,7 @@ export class CustomerAspectComponent implements OnInit {
       if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
         this.customerAspectData = data.length <=4 ? data : data.slice(0,4);
       }else {
-        this.customerAspectData = data;
+        this.customerAspectData.push(...data);
       }
     }
   }
@@ -124,7 +161,14 @@ export class CustomerAspectComponent implements OnInit {
 
   openSlider(componentName){
     this.openSliderChild.emit({componentName : componentName, data : this.customerAspectAcutalData});
+  }
 
+  onReachEnd(event) {
+    if(!this.isLoading && this.hasMore && event.target.scrollTop > 0){
+      // this.zone.run(()=>{
+        this.updateCustomerAspectData();
+      // })
+    }
   }
 
 

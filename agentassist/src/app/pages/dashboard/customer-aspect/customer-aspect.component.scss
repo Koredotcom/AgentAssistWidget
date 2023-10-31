@@ -146,3 +146,10 @@
         }
     }
 }
+
+.customer-scroll-content-data{
+    height:calc(100vh - 116px);
+    .body-customer-scroll-data{
+        padding: 15px 20px 30px 0px;
+    }
+}
