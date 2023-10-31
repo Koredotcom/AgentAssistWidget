@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, SimpleChange, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnInit, Output, Renderer2, SimpleChange, ViewChild } from '@angular/core';
 import { SubSink } from 'subsink';
 import { DashboardService } from '../dashboard.service';
 import * as echarts from 'echarts';
@@ -7,6 +7,7 @@ import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { IDashboardFilter } from '../dashboard-filters/dateFilter.model';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { AuthService } from '@kore.services/auth.service';
+import { finalize, debounceTime, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-agent-aspect',
@@ -29,8 +30,9 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
 
   wordCloudOptions: any;
   wordCloudChart: any;
-  agentAspectData : any;
+  agentAspectData : any = {};
   agentAspectTableData : any = [];
+  agentAspectPartialTableData: any = []
   onChangeCall : boolean = false;
   params ={
     streamId : ''
@@ -44,13 +46,19 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
     "fetched":0  // count of previously fetched responses (default 0)
   }
 
+  isLoading: boolean = false;
+  hasMore: boolean = false;
+  skip = 0
+  limit = 14;
+  fetched = 0;
+
 
   constructor(public dashboardService: DashboardService, private cdr: ChangeDetectorRef,
-    private renderer : Renderer2, private service : ServiceInvokerService, private authService: AuthService) { }
+    private renderer : Renderer2, private service : ServiceInvokerService, private authService: AuthService, private zone : NgZone, private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
-    this.updateAgentAspectData();
+    // this.updateAgentAspectData();
   }
 
   ngOnChanges(changes : any){
@@ -106,15 +114,39 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
 
   updateAgentAspectData(){
     if(this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData){
-      this.service.invoke('agentsLookingfor', this.params, this.payload).subscribe((data : any) => {
-      this.updateViewData(data);
+      // let this = this;
+      this.isLoading = true;
+      this.cdRef.detectChanges();
+      let botId = this.dashboardService.getSelectedBotDetails()._id;
+      let params: any = {
+        streamId :botId,
+      };
+      let body: any = {
+        limit: this.limit,
+        skip: this.skip,
+        fetched: this.fetched
+      }
+      body = {...body, ... this.payload}
+      this.service.invoke('agentsLookingfor', params, body).pipe(finalize(() => {
+        this.isLoading = false;
+        this.cdRef.detectChanges();
+      })).subscribe(data => {
+        if (data) {
+          this.skip = this.skip+1;
+          this.hasMore = data.hasMore;
+          this.fetched = data.fetched;
+          this.updateViewData(data);
+          // this.agentAspectTableData.push(...data.actualData);
+          this.cdRef.detectChanges();
+        }
       });
-    }else{
+  } else{
       // this.dashboardService.getAgentAspectData().subscribe((data : any) => {
       //   if(data){
       //     this.updateViewData(data);
       //   }
       // })
+      
 
       this.service.invoke('agentsLookingfor', this.params, this.payload).subscribe((data : any) => {
         this.updateViewData(data);
@@ -123,13 +155,16 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
   }
 
   updateViewData(data){
-    this.agentAspectData = data;
+    
     if(data.actualData && data.actualData.length > 0){
+      this.agentAspectData = {...this.agentAspectData, ...data};
       this.formatWorldCloudData(data.actualData);
       if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
-        this.agentAspectTableData = data.actualData.length <= 3 ? data.actualData : data.actualData.slice(0,3);
+        this.agentAspectPartialTableData = data.actualData.length <= 3 ? data.actualData : data.actualData.slice(0,3);
       }else {
-        this.agentAspectTableData = data.actualData;
+        console.log(this.agentAspectTableData, data.actualData);
+        this.agentAspectTableData.push(...data.actualData);
+        // this.agentAspectTableData = data.actualData;
       }
     }
   }
@@ -156,6 +191,14 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
 
   openSlider(componentName){
     this.openSliderChild.emit({componentName : componentName, data : this.agentAspectData});
+  }
+
+  onReachEnd(event){
+    if(!this.isLoading && this.hasMore && event.target.scrollTop > 0){
+      // this.zone.run(()=>{
+        this.updateAgentAspectData();
+      // })
+    }
   }
 
 }
