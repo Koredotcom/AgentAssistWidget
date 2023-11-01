@@ -7,7 +7,10 @@ export interface userAgInputMessages {
       "profImage": string, //url
       "type": string //AGENT (or) USER
     },
-    "wordLevelTimeStamps"?: any,
+    "wordLevelTimeStamps"?: {
+      "conversationId"?: string,
+      "transcripts":any
+    },
     "botId"?: string,
     "type": string, //AGENT (or) USER
     "sessionId"?: string,
