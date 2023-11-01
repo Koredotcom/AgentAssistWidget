@@ -24,6 +24,7 @@ export class AppComponent implements OnDestroy {
   isGrantSuccess = false;
   errorMsg : string = '';
   subsciption = new Subscription();
+  wordTimeStamps: any = {};
   constructor(private webSocketService: WebSocketService,
               private service: CommonService,
               private route: ActivatedRoute,
@@ -112,13 +113,16 @@ export class AppComponent implements OnDestroy {
   }
   subsciption1 = new Subscription()
   receiveMessage(e) {
+    if(e.data?.wordLevelTimeStamps) {
+      this.wordTimeStamps = e.data.wordLevelTimeStamps
+    }
     if(e.data.name === 'init_agentassist') {
       console.log(e, "data from smartAssist");
         var chatConfig = this.templateChatConfig.chatConfig;
         let urlParams = e.data.urlParams;
         this.service.configObj = urlParams;
         this.initAgentAssist(chatConfig, urlParams);
-      } else if(e.data.name === 'userBotConvos') {
+    } else if(e.data.name === 'userBotConvos') {
         console.log(e.data);
         if (e.data && (e.data.sessionId && e.data.userId)) {
           this.handleSubjectService.setUserBotConversationDataDetails(e.data);
@@ -137,17 +141,18 @@ export class AppComponent implements OnDestroy {
       console.log(e.data);
       this.emitUserAgentMessage(e.data, 'user_inp_msg');
     }
+    
   }
 
   emitUserAgentMessage(payload: userAgInputMessages, eType='') {
     // emit userAgentMsg
+    payload['wordTimeStamps'] = this.wordTimeStamps;
     if( eType === 'user_inp_msg') {
       this.webSocketService.emitEvents(EVENTS.user_sent_message, payload);
     } else if(eType === 'agent_inp_msg') {
       this.webSocketService.emitEvents(EVENTS.agent_sent_message, payload);
     }
-
-
+    this.wordTimeStamps = {};
   }
 
   initAgentAssist(chatConfig, params) {
