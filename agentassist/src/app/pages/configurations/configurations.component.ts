@@ -58,7 +58,7 @@ export class ConfigurationsComponent implements OnInit {
     }
   }
 
-  minimizeSidenav(event){
+   minimizeSidenav(event){
     this.isSidenavCollapsed = event
     if(event){
       document.getElementById('unifiedContainer')?.classList?.add('collapsed-unified-left-menu');
