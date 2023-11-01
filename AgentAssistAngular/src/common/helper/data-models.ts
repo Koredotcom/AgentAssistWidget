@@ -7,6 +7,7 @@ export interface userAgInputMessages {
       "profImage": string, //url
       "type": string //AGENT (or) USER
     },
+    "wordLevelTimeStamps"?: any,
     "botId"?: string,
     "type": string, //AGENT (or) USER
     "sessionId"?: string,
@@ -25,6 +26,6 @@ export interface userAgInputMessages {
       "fileType": string
     }],
     "templatePayload"?: [],
-    "sentType"?: string, // send (or) copy
-    "wordLevelTimeStamps"?: {}
+    "sentType"?: string // send (or) copy
+    
 }
