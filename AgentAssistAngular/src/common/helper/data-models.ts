@@ -25,5 +25,6 @@ export interface userAgInputMessages {
       "fileType": string
     }],
     "templatePayload"?: [],
-    "sentType"?: string // send (or) copy
+    "sentType"?: string, // send (or) copy
+    "wordLevelTimeStamps"?: {}
 }
