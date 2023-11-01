@@ -129,6 +129,7 @@ export class TranscriptComponent implements OnInit {
     }
         this.prepareConversation();
         if (userInputData.author.type === 'USER') {
+          userAgentMessage['wordLevelTimeStamps'] = userInputData?.wordLevelTimeStamps || '';
           this.processTranscriptData(userInputData);
           if(this.commonService.OverRideMode) {
             userAgentMessage['type'] = 'user';
@@ -142,7 +143,7 @@ export class TranscriptComponent implements OnInit {
           this.processAgentMessages(userInputData);
           userAgentMessage['type'] = 'agent';
           userAgentMessage.author['type'] = 'agent';
-          this.websocketService.emitEvents(EVENTS.user_sent_message, userAgentMessage)
+          this.websocketService.emitEvents(EVENTS.agent_sent_message, userAgentMessage)
         }
       }
     });
