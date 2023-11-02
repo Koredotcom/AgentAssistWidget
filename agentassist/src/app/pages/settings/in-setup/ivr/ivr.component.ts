@@ -197,53 +197,53 @@ export class IvrComponent implements OnInit {
   // }
 
 
-  onDidNumberFocus(event) {
-    this.OnDidNumberUpdated(event);
-  }
+  // onDidNumberFocus(event) {
+  //   this.OnDidNumberUpdated(event);
+  // }
 
-  OnDidNumberUpdated(event): void {
+  // OnDidNumberUpdated(event): void {
     
-    const input = event.input;
-    const value = this.model.didNumber;
-    if ((value || '').trim()) {
+  //   const input = event.input;
+  //   const value = this.model.didNumber;
+  //   if ((value || '').trim()) {
      
-      this.didLengthSet = true;
-      if (this.model.didNumber.length === 0) {
-        this.notificationService.notify("SIP doesn't support empty value", 'warning');
-        return;
-      }
+  //     this.didLengthSet = true;
+  //     if (this.model.didNumber.length === 0) {
+  //       this.notificationService.notify("SIP doesn't support empty value", 'warning');
+  //       return;
+  //     }
       
 
-      // if (this.didNumbers.indexOf(value.trim()) > -1) {
-      //   return;
-      // }
-      this.isDidExist = true;
-      if(this.sipNewURI){
-      this.sipValue = this.sipNewURI.split(/[@:]/);
-      }
-      else{
-        this.sipValue = this.model.sipURI.split(/[@:]/);
-      }
-      if(this.sipValue[1] == this.model.didNumber){
-      this.sipValue.splice(1,1);
-      this.sipMerge = value +'@'+ this.sipValue[1];
-      this.sipValue.splice(1,1);
-      }
-      else if(this.sipValue[1] != this.model.didNumber){
-      this.sipMerge = value +'@'+ this.sipValue[1];
-      this.sipValue.splice(1,1);
-      }
-      this.sipValue.splice(1,0,this.sipMerge);
-      this.sipNewURI = this.sipValue.join(':');
-      this.didNumbers[0] = (value.trim());     
-    }
+  //     // if (this.didNumbers.indexOf(value.trim()) > -1) {
+  //     //   return;
+  //     // }
+  //     this.isDidExist = true;
+  //     if(this.sipNewURI){
+  //     this.sipValue = this.sipNewURI.split(/[@:]/);
+  //     }
+  //     else{
+  //       this.sipValue = this.model.sipURI.split(/[@:]/);
+  //     }
+  //     if(this.sipValue[1] == this.model.didNumber){
+  //     this.sipValue.splice(1,1);
+  //     this.sipMerge = value +'@'+ this.sipValue[1];
+  //     this.sipValue.splice(1,1);
+  //     }
+  //     else if(this.sipValue[1] != this.model.didNumber){
+  //     this.sipMerge = value +'@'+ this.sipValue[1];
+  //     this.sipValue.splice(1,1);
+  //     }
+  //     this.sipValue.splice(1,0,this.sipMerge);
+  //     this.sipNewURI = this.sipValue.join(':');
+  //     this.didNumbers[0] = (value.trim());     
+  //   }
 
-    // Reset the input value
-    if (input) {
-      input.value = '';
-      this.isDidExist = false;
-    }
-  }
+  //   // Reset the input value
+  //   if (input) {
+  //     input.value = '';
+  //     this.isDidExist = false;
+  //   }
+  // }
 
   selectedVoicePreferences(ttsPreference) {
     this.model.voicePreference = '';
@@ -354,8 +354,8 @@ export class IvrComponent implements OnInit {
         "settings": {
           "sipURI": this.sipNewURI,
           "network": this.model.network,
-          "didNumber": this.didNumbers,
-          "didNumbers" : [{number : this.didNumbers[0], inboundCall : true, outboundCall : false}],
+          "didNumber": [this.model.didNumber],
+          "didNumbers" : [{number : this.model.didNumber, inboundCall : true, outboundCall : false}],
           "sipTransportType": this.model.sipTransportType,
           "sipUserName": this.model.sipUserName,
           "sipPassword": this.model.sipPassword,
@@ -390,8 +390,8 @@ export class IvrComponent implements OnInit {
         "_id": this.selectedSipInfo._id,
         "sipURI": this.sipNewURI,
         "network": this.model.network,
-        "didNumber": this.didNumbers,
-        "didNumbers" : [{number : this.didNumbers[0], inboundCall : true, outboundCall : false}],
+        "didNumber": [this.model.didNumber],
+        "didNumbers" : [{number : this.model.didNumber, inboundCall : true, outboundCall : false}],
         "sipTransportType": this.model.sipTransportType,
         "sipUserName": this.model.sipUserName,
         "sipPassword": this.model.sipPassword,
