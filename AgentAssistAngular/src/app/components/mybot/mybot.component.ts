@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
 import { forkJoin } from 'rxjs';
+import { chatWindow } from '@koredev/kore-web-sdk';
 
 @Component({
   selector: 'app-mybot',
@@ -20,6 +21,9 @@ export class MybotComponent {
   ngOnInit(): void {
     
     this.subscribeEvents();
+    const chatWindowInstance = new chatWindow();
+    let msgData = {} // dummy Template json object 
+    const html = chatWindowInstance.generateMessageDOM(msgData);
   }
 
   subscribeEvents(){
