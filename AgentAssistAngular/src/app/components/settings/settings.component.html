@@ -23,8 +23,9 @@
                         </div>
                         <div class="card-right-data">
                             <div class="form-check form-switch xs">
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                    id="flexSwitchCheckDefault">
+                                <input class="form-check-input" type="checkbox" role="switch" id="checkProActive" #proactiveMode
+                                    [checked]="proactiveModeEnabled" (change)="proactiveToggle(proactiveMode.checked)"
+                                    [disabled]="connectionDetails.source === projConstants.SMARTASSIST_SOURCE && connectionDetails.isProactiveAgentAssistEnabled === false">
                             </div>
                         </div>
                     </div>

@@ -17,18 +17,22 @@ export class I1 implements HttpInterceptor {
         if(headers.indexOf("historyAPiCall") >= 0){
             if(fromSAT && token){
                 headerObj.Authorization = 'bearer' + ' ' + token;
-                headerObj.eAD = false;
+                headerObj.eAD = 'false';
                 headerObj.accountId = accountId
             }else{
                 headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
             }
-        }
-
-        if(headers.indexOf("transcriptHistory") >= 0){
+        }else if(headers.indexOf("transcriptHistory") >= 0){
             headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken,
             headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
+        }else if(headers.indexOf("autoSearch") >= 0){
+            headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
+            headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
+            headerObj.eAD = 'true';
         }
         const modified = req.clone({setHeaders: headerObj});
+        console.log(headerObj, "header obj*******");
+        
         return next.handle(modified);
     }
 

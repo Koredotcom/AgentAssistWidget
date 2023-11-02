@@ -1,0 +1,45 @@
+<!-- <p>
+    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+      Link with href
+    </a>
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+      Button with data-bs-target
+    </button>
+  </p>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body">
+      Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+    </div>
+  </div> -->
+
+  <ng-container *ngFor="let snippet of searchedSnippetList;let i = index">
+      <div class="faq-suggestions-wrapper">
+        <div class="faq-s-header">
+            <h1>{{snippet.title}}</h1>
+            <div class="faq-actions">
+                <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.SNIPPET)">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <g clip-path="url(#clip0_1947_78928)">
+                          <path d="M10.6666 10.6666V12.5333C10.6666 13.28 10.6666 13.6534 10.5213 13.9386C10.3934 14.1895 10.1895 14.3934 9.93857 14.5213C9.65336 14.6666 9.27999 14.6666 8.53325 14.6666H3.46659C2.71985 14.6666 2.34648 14.6666 2.06126 14.5213C1.81038 14.3934 1.60641 14.1895 1.47858 13.9386C1.33325 13.6534 1.33325 13.28 1.33325 12.5333V7.46659C1.33325 6.71985 1.33325 6.34648 1.47858 6.06126C1.60641 5.81038 1.81038 5.60641 2.06126 5.47858C2.34648 5.33325 2.71985 5.33325 3.46659 5.33325H5.33325M7.46659 10.6666H12.5333C13.28 10.6666 13.6534 10.6666 13.9386 10.5213C14.1895 10.3934 14.3934 10.1895 14.5213 9.93857C14.6666 9.65336 14.6666 9.27999 14.6666 8.53325V3.46659C14.6666 2.71985 14.6666 2.34648 14.5213 2.06126C14.3934 1.81038 14.1895 1.60641 13.9386 1.47858C13.6534 1.33325 13.28 1.33325 12.5333 1.33325H7.46659C6.71985 1.33325 6.34648 1.33325 6.06126 1.47858C5.81038 1.60641 5.60641 1.81038 5.47858 2.06126C5.33325 2.34648 5.33325 2.71985 5.33325 3.46659V8.53325C5.33325 9.27999 5.33325 9.65336 5.47858 9.93857C5.60641 10.1895 5.81038 10.3934 6.06126 10.5213C6.34648 10.6666 6.71985 10.6666 7.46659 10.6666Z" stroke="#101828" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_1947_78928">
+                            <rect width="16" height="16" fill="white"/>
+                          </clipPath>
+                        </defs>
+                    </svg>
+                </button>
+                <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, snippet , projConstants.SNIPPET)">Send</button>
+            </div>
+        </div>
+        <div class="faq-body-content">
+            <div class="collapse show data-faq-paragraph" id="collapseExample">            
+                <p>{{snippet.content}}</p>
+            </div>
+            <a class="moreText" href="#collapseExample" data-bs-toggle="collapse" role="button" aria-expanded="false">
+                <span class="more-text">More</span>
+                <span class="less-text">Less</span>
+            </a>
+        </div>
+      </div>
+  </ng-container>

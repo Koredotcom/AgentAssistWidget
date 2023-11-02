@@ -32,6 +32,15 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { I1 } from './services/Interceptor';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FaqSuggestionsComponent } from './components/common/components/faq-suggestions/faq-suggestions.component';
+import { FormatAmpmPipe } from './pipes/format-ampm.pipe';
+import { RandomUuidPipe } from './pipes/random-uuid.pipe';
+import { ArticleSuggestionsComponent } from './components/common/components/article-suggestions/article-suggestions.component';
+import { SnippetSuggestionsComponent } from './components/common/components/snippet-suggestions/snippet-suggestions.component';
+import { RemoveTagFromStringPipe } from './pipes/remove-tag-from-string.pipe';
+import { ReplaceTextWithTagPipe } from './pipes/replace-text-with-tag.pipe';
+import { TranscriptHistoryComponent } from './components/transcript-history/transcript-history.component';
+import { ConverTimestampToDatePipe } from './pipes/conver-timestamp-to-date.pipe';
+import { UserBotHistoryComponent } from './components/user-bot-history/user-bot-history.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -60,7 +69,16 @@ export function HttpLoaderFactory(http: HttpClient) {
     NudgesComponent,
     HintsComponent,
     EmptyObjectCheckPipe,
-    FaqSuggestionsComponent
+    FaqSuggestionsComponent,
+    FormatAmpmPipe,
+    RandomUuidPipe,
+    ArticleSuggestionsComponent,
+    SnippetSuggestionsComponent,
+    RemoveTagFromStringPipe,
+    ReplaceTextWithTagPipe,
+    TranscriptHistoryComponent,
+    ConverTimestampToDatePipe,
+    UserBotHistoryComponent
   ],
   imports: [
     TranslateModule.forRoot({
@@ -82,7 +100,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: I1,
       multi: true
-  },],
+  },FormatAmpmPipe,RandomUuidPipe,RemoveTagFromStringPipe, ReplaceTextWithTagPipe, ConverTimestampToDatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

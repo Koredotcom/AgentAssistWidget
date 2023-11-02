@@ -17,7 +17,7 @@ export class LocalStorageService {
   }
 
 
-  setLocalStorageItem(storageObject : any, currentTab : string){
+  setLocalStorageItem(storageObject : any, currentTab?){
     
     let appState = this.getLocalStorageState();
     let conversationId = this.rootService.getConnectionDetails().conversationId;
