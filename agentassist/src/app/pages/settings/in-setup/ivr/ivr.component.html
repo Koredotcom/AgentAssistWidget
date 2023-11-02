@@ -92,7 +92,7 @@
                 </div>               -->
                 <div *ngIf="showAudioCodes" class="mb-23">
                     <div class="label-text font-weight-bold">{{'SETTINGS.DID_NUMBER' | translate}}</div>
-                    <input type="text" id="didNumber" class="sys-input" style="width: 100%;" [(ngModel)]="model.didNumber" [ngModelOptions]="{updateOn: 'blur', standalone: true}" #didNumber="ngModel" required (focus)="onDidNumberFocus($event)" (focusout)="OnDidNumberUpdated($event)">
+                    <input type="text" id="didNumber" class="sys-input" style="width: 100%;" [(ngModel)]="model.didNumber" [ngModelOptions]="{updateOn: 'blur', standalone: true}" #didNumber="ngModel" required>
                     <div class="kr-sg-input-text">                                                             
                         <div class="error-msg" *ngIf="didNumber.touched && didNumber.errors && didNumber.errors.required && !model.didNumber.length ">{{'SETTINGS.DID_NUMBER_REQUIRED' | translate}}</div>              
                     </div>
