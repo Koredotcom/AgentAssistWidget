@@ -5,31 +5,31 @@ import { RootService } from 'src/app/services/root.service';
 import { SubSink } from 'subsink';
 
 @Component({
-  selector: 'app-faq-suggestions',
-  templateUrl: './faq-suggestions.component.html',
-  styleUrls: ['./faq-suggestions.component.scss']
+  selector: 'app-snippet-suggestions',
+  templateUrl: './snippet-suggestions.component.html',
+  styleUrls: ['./snippet-suggestions.component.scss']
 })
-export class FaqSuggestionsComponent implements OnInit, OnDestroy{
+export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
   subs = new SubSink();
   projConstants: any = ProjConstants;
-  searchResponse : any = {};
-  searchedFAQList : any = [];
+  searchedSnippetList : any = [];
 
-  constructor(private handleSubjectService : HandleSubjectService, private rootService : RootService){
+  constructor(private handleSubjectService : HandleSubjectService,
+    private rootService : RootService){
 
   }
 
   ngOnInit(): void {
     this.subscribeEvents();
   }
-  
+
   subscribeEvents(){
     this.subs.sink = this.handleSubjectService.searchResponse$.subscribe((searchResponse)=> {
       console.log(searchResponse, 'searchResponse');
-      this.searchedFAQList = [];
-      if(searchResponse && searchResponse.dialogs){
-        this.searchedFAQList = searchResponse.dialogs;
+      this.searchedSnippetList = [];
+      if(searchResponse && searchResponse.snippets){
+        this.searchedSnippetList = searchResponse.snippets;
       }
     });
   }
@@ -41,4 +41,5 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
   ngOnDestroy(){
     this.subs.unsubscribe();
   }
+
 }

@@ -1,20 +1,49 @@
-<ng-container *ngFor="let i of [].constructor(8)">
-    <div class="dialog-task-wrapper">
-        <p>Place Order</p>
-        <div class="dialog-actions">
-            <button class="primary-btn">RUN</button>
-            <div ngbDropdown class="elipse-ngbdropdown">
-                <button type="button" id="elipseDrp" ngbDropdownToggle>
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <path d="M5.9999 8.925C5.46142 8.925 5.0249 9.36152 5.0249 9.9C5.0249 10.4385 5.46142 10.875 5.9999 10.875C6.53838 10.875 6.9749 10.4385 6.9749 9.9C6.9749 9.36152 6.53838 8.925 5.9999 8.925Z" fill="#202124"/>
-                        <path d="M5.0249 6C5.0249 5.46152 5.46142 5.025 5.9999 5.025C6.53838 5.025 6.9749 5.46152 6.9749 6C6.9749 6.53848 6.53838 6.975 5.9999 6.975C5.46142 6.975 5.0249 6.53848 5.0249 6Z" fill="#202124"/>
-                        <path d="M5.0249 2.1C5.0249 1.56152 5.46142 1.125 5.9999 1.125C6.53838 1.125 6.9749 1.56152 6.9749 2.1C6.9749 2.63848 6.53838 3.075 5.9999 3.075C5.46142 3.075 5.0249 2.63848 5.0249 2.1Z" fill="#202124"/>
-                    </svg>
-                </button>
-                <div ngbDropdownMenu aria-labelledby="elipseDrp">
-                    <button ngbDropdownItem aria-disabled="true">Run with Agent’s input</button>
+
+<ng-container *ngIf="!searchedDialogList.length">
+    <ng-container *ngFor="let dialogue of menuResponse | keyvalue;let i = index">
+        <div class="dialog-task-wrapper">
+            <p>{{dialogue?.value['intentName']}}</p>
+            <!-- <p>dialog</p> -->
+            <div class="dialog-actions">
+                <button class="primary-btn" (click)="dialogueRunClick(dialogue,projConstants.ASSIST)">RUN</button>
+                <div ngbDropdown class="elipse-ngbdropdown">
+                    <button type="button" id="elipseDrp" ngbDropdownToggle>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M5.9999 8.925C5.46142 8.925 5.0249 9.36152 5.0249 9.9C5.0249 10.4385 5.46142 10.875 5.9999 10.875C6.53838 10.875 6.9749 10.4385 6.9749 9.9C6.9749 9.36152 6.53838 8.925 5.9999 8.925Z" fill="#202124"/>
+                            <path d="M5.0249 6C5.0249 5.46152 5.46142 5.025 5.9999 5.025C6.53838 5.025 6.9749 5.46152 6.9749 6C6.9749 6.53848 6.53838 6.975 5.9999 6.975C5.46142 6.975 5.0249 6.53848 5.0249 6Z" fill="#202124"/>
+                            <path d="M5.0249 2.1C5.0249 1.56152 5.46142 1.125 5.9999 1.125C6.53838 1.125 6.9749 1.56152 6.9749 2.1C6.9749 2.63848 6.53838 3.075 5.9999 3.075C5.46142 3.075 5.0249 2.63848 5.0249 2.1Z" fill="#202124"/>
+                        </svg>
+                    </button>
+                    <div ngbDropdownMenu aria-labelledby="elipseDrp">
+                        <button ngbDropdownItem aria-disabled="true" (click)="dialogueRunClick(dialogue,projConstants.MYBOT)">Run with Agent’s input</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 </ng-container>
+
+<ng-container *ngIf="searchedDialogList.length">
+    <ng-container *ngFor="let dialog of searchedDialogList;let i = index">
+        <div class="dialog-task-wrapper">
+            <p>{{dialog.name}}</p>
+            <!-- <p>dialog</p> -->
+            <div class="dialog-actions">
+                <button class="primary-btn" (click)="dialogueRunClick(dialog,projConstants.ASSIST)">RUN</button>
+                <div ngbDropdown class="elipse-ngbdropdown">
+                    <button type="button" id="elipseDrp" ngbDropdownToggle>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M5.9999 8.925C5.46142 8.925 5.0249 9.36152 5.0249 9.9C5.0249 10.4385 5.46142 10.875 5.9999 10.875C6.53838 10.875 6.9749 10.4385 6.9749 9.9C6.9749 9.36152 6.53838 8.925 5.9999 8.925Z" fill="#202124"/>
+                            <path d="M5.0249 6C5.0249 5.46152 5.46142 5.025 5.9999 5.025C6.53838 5.025 6.9749 5.46152 6.9749 6C6.9749 6.53848 6.53838 6.975 5.9999 6.975C5.46142 6.975 5.0249 6.53848 5.0249 6Z" fill="#202124"/>
+                            <path d="M5.0249 2.1C5.0249 1.56152 5.46142 1.125 5.9999 1.125C6.53838 1.125 6.9749 1.56152 6.9749 2.1C6.9749 2.63848 6.53838 3.075 5.9999 3.075C5.46142 3.075 5.0249 2.63848 5.0249 2.1Z" fill="#202124"/>
+                        </svg>
+                    </button>
+                    <div ngbDropdownMenu aria-labelledby="elipseDrp">
+                        <button ngbDropdownItem aria-disabled="true" (click)="dialogueRunClick(dialog,projConstants.MYBOT)">Run with Agent’s input</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>
+

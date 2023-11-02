@@ -12,7 +12,7 @@ export class EndPointsService {
   }
 
   public getServiceInfo(serviceId : string, serverUrl : string): any {
-    let serviceInfo = this.serviceList[serviceId] || {};;
+    let serviceInfo = Object.assign({},this.serviceList[serviceId] || {});
     if(!serviceInfo.defaultEndPoint){
       serviceInfo.endpoint = serverUrl + serviceInfo.endpoint;
     }
@@ -73,6 +73,12 @@ export class EndPointsService {
     this.serviceList['get.transcriptHistory'] = {
       endpoint : '/agentassist/api/v1/agentassistconversations/:convId/conversation?page=1&limit=1000',
       method : 'get',
+      defaultEndPoint : false
+    }
+
+    this.serviceList['post.autoSearch'] = {
+      endpoint : '/agentassist/api/v1/searchaccounts/autosearch?botId=:botId',
+      method : 'post',
       defaultEndPoint : false
     }
   }

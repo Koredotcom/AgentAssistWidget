@@ -4,6 +4,8 @@ import { io } from 'socket.io-client';
 import { EVENTS } from '../helpers/events';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { RootService } from './root.service';
+import { LocalStorageService } from './local-storage.service';
+import { HandleSubjectService } from './handle-subject.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +30,7 @@ export class WebSocketService {
   sendCheckListOpened$ = new Subject<any>();
   isWelcomeResonse = false;
 
-  constructor(private rootService : RootService,) {
+  constructor(private rootService : RootService, private localStorageService : LocalStorageService) {
   }
 
   socketConnection(){
@@ -54,10 +56,37 @@ export class WebSocketService {
     this._agentAsisstSocket.on("connect", () => {
       // if(!window._agentAssistSocketEventListener){
         this.listenEvents();
+        this.commonEmitEvents(true);
       //   window._agentAssistSocketEventListener = true;
       // }
     });
-    
+  }
+
+  commonEmitEvents(shouldProcessResponse){
+    const {botId, conversationId, isCall, autoBotId, interactiveLanguage} = this.rootService.getConnectionDetails()
+    let parsedCustomData: any = {};
+    let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
+    let welcomeMessageParams: any = {
+      'waitTime': 2000,
+      'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
+      'id': conversationId,
+      "isSendWelcomeMessage": shouldProcessResponse,
+      'agentassistInfo' : agent_user_details,
+      'botId': botId,
+      'sendMenuRequest': true,
+      'uId': this.rootService.userBotConversationDetails?.userId || '',
+      'sId': this.rootService.userBotConversationDetails?.sessionId || '',
+      'experience' : (isCall && isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT,
+    }
+    if(autoBotId && autoBotId !== 'undefined') {
+      welcomeMessageParams['autoBotId'] = autoBotId;
+    } else {
+      welcomeMessageParams['autoBotId'] = '';
+    }
+    if (interactiveLanguage !== null && typeof interactiveLanguage !== 'undefined' && interactiveLanguage !== "''") {
+      welcomeMessageParams['language'] = interactiveLanguage; // Return the default value for null, undefined, or "''"
+    }
+    this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }
 
   emitEvents(eventName : string,requestParams : any) {
