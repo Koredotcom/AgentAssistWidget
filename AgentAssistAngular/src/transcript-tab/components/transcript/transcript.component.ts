@@ -129,7 +129,7 @@ export class TranscriptComponent implements OnInit {
     }
         this.prepareConversation();
         if (userInputData.author.type === 'USER') {
-          userAgentMessage['wordLevelTimeStamps'] = userInputData?.wordLevelTimeStamps || '';
+          agent_assist_request['wordLevelTimeStamps'] = userInputData?.wordLevelTimeStamps || '';
           this.processTranscriptData(userInputData);
           if(this.commonService.OverRideMode) {
             userAgentMessage['type'] = 'user';
