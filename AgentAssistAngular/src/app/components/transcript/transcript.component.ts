@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormatAmpmPipe } from 'src/app/pipes/format-ampm.pipe';
 import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
 import { ProjConstants } from 'src/app/proj.const';
@@ -12,7 +12,7 @@ import { SubSink } from 'subsink';
   templateUrl: './transcript.component.html',
   styleUrls: ['./transcript.component.scss']
 })
-export class TranscriptComponent {
+export class TranscriptComponent  implements OnInit, OnDestroy{
 
   @Output() maxMinButtonClick = new EventEmitter();
 
@@ -126,6 +126,10 @@ export class TranscriptComponent {
     console.log("min max button click");
     
     this.maxMinButtonClick.emit(true);
+  }
+
+  ngOnDestroy(){
+    this.subs.unsubscribe();
   }
 
   

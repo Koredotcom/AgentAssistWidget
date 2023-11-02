@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ProjConstants } from 'src/app/proj.const';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
@@ -9,7 +9,7 @@ import { SubSink } from 'subsink';
   templateUrl: './dialog-suggestion.component.html',
   styleUrls: ['./dialog-suggestion.component.scss']
 })
-export class DialogSuggestionComponent implements OnInit{
+export class DialogSuggestionComponent implements OnInit, OnDestroy{
 
   subs = new SubSink();
   menuResponse: any = {};
@@ -71,6 +71,10 @@ export class DialogSuggestionComponent implements OnInit{
     //   this.agent_run_click(runDialogueObject, false)
     // }
     // this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
+  }
+
+  ngOnDestroy(){
+    this.subs.unsubscribe();
   }
 
 }

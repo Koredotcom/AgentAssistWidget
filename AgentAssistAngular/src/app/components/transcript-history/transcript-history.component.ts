@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProjConstants } from 'src/app/proj.const';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
@@ -9,7 +9,7 @@ import { SubSink } from 'subsink';
   templateUrl: './transcript-history.component.html',
   styleUrls: ['./transcript-history.component.scss']
 })
-export class TranscriptHistoryComponent implements OnInit{
+export class TranscriptHistoryComponent implements OnInit, OnDestroy{
 
   subs = new SubSink();
   connectionDetails : any;
@@ -275,6 +275,10 @@ export class TranscriptHistoryComponent implements OnInit{
         this.historyResponse = data.result;
       }
     // });
+  }
+
+  ngOnDestroy(){
+    this.subs.unsubscribe();
   }
 
 }

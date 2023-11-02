@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { languages, ProjConstants, storageConst } from 'src/app/proj.const';
 import { DirService } from 'src/app/services/dir.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { RootService } from 'src/app/services/root.service';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
   constructor(
     private localStorageService: LocalStorageService,
     private dirService: DirService,
@@ -18,6 +19,7 @@ export class SettingsComponent implements OnInit {
     private handleSubjectService : HandleSubjectService
   ){}
 
+  subs = new SubSink();
   setting = '';
   languages:any = languages
   defLanguage = 'en';
@@ -83,4 +85,9 @@ export class SettingsComponent implements OnInit {
     let proactiveModeStatus = (typeof convState[storageConst.PROACTIVE_MODE] === 'boolean') ? convState[storageConst.PROACTIVE_MODE] : true;
     this.proactiveToggle(proactiveModeStatus);
   }
+
+  ngOnDestroy(){
+    this.subs.unsubscribe();
+  }
+
 }

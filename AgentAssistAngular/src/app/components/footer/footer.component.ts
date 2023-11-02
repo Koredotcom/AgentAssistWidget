@@ -1,20 +1,22 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit, Renderer2, TemplateRef } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, Renderer2, TemplateRef } from '@angular/core';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ProjConstants, storageConst } from 'src/app/proj.const';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { RootService } from 'src/app/services/root.service';
+import { SubSink } from 'subsink';
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit{
+export class FooterComponent implements OnInit, OnDestroy{
 
   selectedTab = 'assist';
   canvas:any;
   projConstants : any = ProjConstants;
   connectionDetails : any;
+  subs = new SubSink()
 
   constructor(private offcanvasService: NgbOffcanvas, private localStorageService : LocalStorageService,
     private rootService: RootService, 
@@ -65,6 +67,10 @@ export class FooterComponent implements OnInit{
     }
    
     
+  }
+
+  ngOnDestroy(){
+    this.subs.unsubscribe();
   }
 
 }
