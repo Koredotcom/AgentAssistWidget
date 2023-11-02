@@ -535,6 +535,12 @@ input::placeholder{
 	padding-left: 0;
 	float: left;
     width: calc(100% - 246px);
+	&.is-unified-deflect-container{
+		width: calc(100% - 227px);
+		&.collapsed-unified-left-menu{
+			width: calc(100% - 63px);
+		}
+	}
 }   
 
 .is-unified-deflect-container{

@@ -17,7 +17,7 @@
     </div>
     <app-content></app-content>
 </div>
-<div *ngIf="isUnifiedPlatform" class="container-fluid configurations is-unified-deflect-container" [ngClass]="{'guideLink': (appService.showGuideLink$ | async)}" id="unifiedContainer">
+<div *ngIf="isUnifiedPlatform" class="container-fluid configurations deflectContainer" [ngClass]="{'guideLink': (appService.showGuideLink$ | async)}" id="unifiedContainer">
     <!-- <div class="checklist-info">
         <div class="info">Great! Just 3 more steps and you are done, lets move to the next step.</div>
         <div class="link-settings" [routerLink]="'/home'">
