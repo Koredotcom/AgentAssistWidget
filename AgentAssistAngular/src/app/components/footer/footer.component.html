@@ -3,7 +3,7 @@
     <div class="footer-links-data">
         <button class="btn_footer" (click)="actionOnButton('search', content)" [ngClass]="{'selected-tab sel-bg': selectedTab === 'search'}">
             <div class="svg_icon">
-               <i class="krIocnsFont-transcript"></i>
+               <i class="krIocnsFont-search-md"></i>
             </div>
             <p>{{'SEARCH' | translate}}</p>
         </button>
@@ -15,7 +15,7 @@
         </button>
         <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === 'assist'}" (click)="actionOnButton('assist', content)">
             <div class="svg_icon">
-                <i class="krIocnsFont-link-external-02"></i>
+                <i class="krIocnsFont-assist"></i>
             </div>
             <p>{{'ASSIST' | translate}}</p>
         </button>
@@ -27,7 +27,7 @@
         </button>
         <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === 'settings'}" (click)="actionOnButton('settings', content)">
             <div class="svg_icon">
-                <i class="krIocnsFont-my-bot"></i>
+                <i class="krIocnsFont-settings"></i>
             </div>
             <p>{{'SETTINGS' | translate}}</p>
         </button>

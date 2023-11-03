@@ -1,1 +1,14 @@
-<p>dialog works!</p>
+<div class="dialog-task-wrapper">
+    <p>Order Pizza</p>
+    <div class="dialog-actions">
+        <button class="primary-btn">RUN</button>
+        <div ngbDropdown class="elipse-ngbdropdown">
+            <button type="button" id="elipseDrp" ngbDropdownToggle>
+                <i class="krIocnsFont-outlined"></i>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="elipseDrp">
+                <button ngbDropdownItem aria-disabled="true">Run with Agent’s input</button>
+            </div>
+        </div>
+    </div>
+</div>

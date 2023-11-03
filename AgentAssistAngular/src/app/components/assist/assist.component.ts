@@ -30,6 +30,9 @@ export class AssistComponent implements OnInit{
       }
     })
   }
+  minimizeToggle(){
+    
+  }
 
   getAssistData(params) {
     this.loader = true;

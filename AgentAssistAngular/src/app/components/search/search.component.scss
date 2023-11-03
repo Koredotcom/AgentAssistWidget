@@ -8,7 +8,7 @@
     .suggestionslist-conntent-search{
         padding: 8px 12px 0px 12px;
         flex: 1 1 auto;
-        overflow: hidden;
+        overflow: auto;
         display: flex;
         flex-direction: column;
         gap: 4px;
@@ -16,9 +16,9 @@
             border-radius: 4px;
             border: 1px solid var(--gray-100, #F2F4F7);
             background: var(--base-white, #FFF);
-            height: 100%;
-            max-height: 100%;
-            overflow: hidden;
+            // height: 100%;
+            // max-height: 100%;
+            // overflow: hidden;
             display: flex;
             flex-direction: column;
             .suggestion-header{
