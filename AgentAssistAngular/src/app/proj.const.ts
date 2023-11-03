@@ -3,6 +3,8 @@ export const ProjConstants = {
     MYBOT : 'My Bot',
     TRANSCRIPT : "Transcript",
     LIBRARY : 'Library',
+    SETTINGS : 'Settings',
+    SEARCH : 'Search',
     VOICE : 'voice',
     CHAT : 'chat',
     BOTID : 'botId',
@@ -58,7 +60,11 @@ export const storageConst = {
     AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT : 'automationGoingOnAfterRefreshMyBot',
     FAQ_LIST : 'faqList',
     SEARCH_VALUE : 'search',
-    PROACTIVE_MODE : 'proactiveMode'
+    PROACTIVE_MODE : 'proactiveMode',
+    LANGUAGE : 'lang',
+    THEME : 'theme',
+    ENGLISH : 'en',
+    AUTO : 'auto'
 }
 
 export const languages = {

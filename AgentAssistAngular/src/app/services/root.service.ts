@@ -8,6 +8,7 @@ import { ProjConstants } from '../proj.const';
 export class RootService {
 
   socketConnection$ : BehaviorSubject<any> = new BehaviorSubject(null);
+  activeTab$ : BehaviorSubject<any> = new BehaviorSubject(null);
 
   public userBotConversationDetails : any;
 
@@ -102,6 +103,12 @@ export class RootService {
 
   setSocketConnection(data){
     this.socketConnection$.next(data);
+  }
+
+  setActiveTab(tab){
+    if(tab){
+      this.activeTab$.next(tab);
+    }
   }
 
   formatSearchResponse(response) {
@@ -228,6 +235,54 @@ export class RootService {
       parent.postMessage(message, '*');
     }
   }
+
+  confirmationNodeRenderDataTransform(data){
+    if((data.componentType == 'dialogAct' || data.entityType == 'list_of_values')  && data.buttons && data.buttons.length > 0){
+      if(!data.applyDefaultTemplate){
+        data.componentType = '';
+        data.entityType = '';
+      }
+    }
+    return data;
+  }
+
+  confirmationNodeRenderForHistoryDataTransform(res){
+    if(res && res.agentAssistDetails && (res.agentAssistDetails.componentType == 'dialogAct' || res.agentAssistDetails.entityType == 'list_of_values' || res.agentAssistDetails.newEntityType == 'list_of_values')  && res.components && res.components.length > 0 && res.components[0].data && res.components[0].data.text){
+
+      if(!res.agentAssistDetails.applyDefaultTemplate){
+
+        res.agentAssistDetails.componentType = '';
+        res.agentAssistDetails.newEntityType = '';
+      }
+    }
+    return res;
+  }
+
+  handleEmptyLine(answer, quotflag){
+    let eleanswer = '';
+    if(typeof answer === 'string'){
+        eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
+        eleanswer = this.replaceLtGt(eleanswer, quotflag)
+        // eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
+        if(quotflag) {
+          eleanswer = this.replaceLtGt(eleanswer, quotflag)
+        }
+        return eleanswer;
+
+    }
+    return eleanswer
+  }
+
+  replaceLtGt(htmlString, quotflag) {
+    let newHtmlStr;
+    newHtmlStr = htmlString.replaceAll("&lt;", "<");
+    newHtmlStr = newHtmlStr.replaceAll("&gt;", ">");
+    if(quotflag) {
+      newHtmlStr = newHtmlStr.replaceAll('"', "&quot;");
+    }
+    return newHtmlStr;
+  }
+
 
 
   getAgentMessage() {

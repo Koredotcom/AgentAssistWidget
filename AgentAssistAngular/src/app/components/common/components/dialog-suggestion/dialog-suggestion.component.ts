@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ProjConstants } from 'src/app/proj.const';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
+import { RootService } from 'src/app/services/root.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { SubSink } from 'subsink';
 
@@ -16,7 +17,8 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
   projConstants: any = ProjConstants;
   searchedDialogList : any = [];
 
-  constructor(private websocketService : WebSocketService, private handleSubjectService : HandleSubjectService){
+  constructor(private websocketService : WebSocketService, private handleSubjectService : HandleSubjectService,
+    private rootService : RootService){
 
   }
 
@@ -57,6 +59,8 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
 
   dialogueRunClick(dialog, clickType) {
     console.log(dialog, "dialog******");
+
+    this.rootService.setActiveTab('assist');
     
     // dialog.value.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
     // let runDialogueObject = Object.assign({}, dialog.value);

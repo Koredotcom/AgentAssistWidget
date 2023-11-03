@@ -9,7 +9,7 @@
                             <path d="M3.43177 5.58181C3.95016 5.42055 4.50272 5.33341 5.07867 5.33341C8.22095 5.33341 10.6668 7.9272 10.6668 11.0001C10.6668 11.5425 10.5906 12.07 10.4478 12.571C10.8092 12.506 11.1596 12.4091 11.4959 12.2831C11.5434 12.2654 11.5907 12.2472 11.6387 12.2308C11.6773 12.2353 11.7159 12.2413 11.7544 12.247L13.8964 12.561C13.9975 12.5758 14.1122 12.5927 14.2122 12.5984C14.323 12.6047 14.4951 12.604 14.6775 12.5255C14.9053 12.4276 15.0886 12.2485 15.1918 12.023C15.2744 11.8424 15.2791 11.6703 15.2753 11.5595C15.272 11.4593 15.2578 11.3442 15.2452 11.2428L14.9746 9.04417C14.9675 8.98701 14.9639 8.95699 14.9618 8.93498C14.9735 8.88682 14.9955 8.84022 15.0131 8.79403C15.2656 8.13202 15.4036 7.41465 15.4036 6.66675C15.4036 3.34892 12.6975 0.666748 9.36851 0.666748C6.41132 0.666748 3.94561 2.7833 3.43177 5.58181Z" fill="#155EEF"/>
                         </svg>
                     </div>
-                    <h1>Top Dialog Suggestion</h1>
+                    <h1>Dialog Task</h1>
                 </div>
                 <div class="suggestion-body-search">
                     <app-dialog-suggestion></app-dialog-suggestion>
@@ -75,10 +75,8 @@
 
 
     <div class="search-block-input">
-        <div class="suggestions-info">
-            <button>Edit Order</button>
-            <button>Edit Payment</button>
-            <button>Edit Catalog</button>
+        <div class="suggestions-info" *ngIf="searchText && querySuggestions.length">
+            <button *ngFor="let suggestion of querySuggestions">{{suggestion}}</button>
             <p>Suggested</p>
         </div>
         <div class="input-block">

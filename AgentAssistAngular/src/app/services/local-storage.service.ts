@@ -56,6 +56,14 @@ export class LocalStorageService {
       if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.PROACTIVE_MODE])){
         appState[conversationId][storageConst.PROACTIVE_MODE] = storageObject[storageConst.PROACTIVE_MODE];
       }
+
+      if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.THEME])){
+        appState[conversationId][storageConst.THEME] = storageObject[storageConst.THEME];
+      }
+
+      if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.LANGUAGE])){
+        appState[conversationId][storageConst.LANGUAGE] = storageObject[storageConst.LANGUAGE];
+      }
       
     }
     localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
@@ -88,6 +96,8 @@ export class LocalStorageService {
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH] = false;
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] = false;
         // appState[conversationId][storageConst.PROACTIVE_MODE] = true;
+        appState[conversationId][storageConst.LANGUAGE] = storageConst.ENGLISH;
+        appState[conversationId][storageConst.THEME] = storageConst.AUTO;
         localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
         console.log("initialize local storage");
       }

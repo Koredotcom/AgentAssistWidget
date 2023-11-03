@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormatAmpmPipe } from 'src/app/pipes/format-ampm.pipe';
 import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
 import { ProjConstants } from 'src/app/proj.const';
@@ -15,6 +15,8 @@ import { SubSink } from 'subsink';
 export class TranscriptComponent  implements OnInit, OnDestroy{
 
   @Output() maxMinButtonClick = new EventEmitter();
+  @ViewChild('transcriptTabHistoryText', {static: false}) private transcriptTabHistoryText: ElementRef<HTMLDivElement>
+  
 
   subs = new SubSink();
   parsedCustomData : any;
@@ -24,6 +26,12 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
   showEmptyScreen: boolean = true;
 
   projConstants : any = ProjConstants;
+
+  userBotConversationShow: boolean = false;
+  transcriptScrollTopText: string = 'Scroll up for Bot Conversation History';
+
+  sourceDesktop: any = this.rootService.connectionDetails.source;
+
 
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
     private websocketService : WebSocketService, private formatAMPMPipe : FormatAmpmPipe,
@@ -128,9 +136,31 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     this.maxMinButtonClick.emit(true);
   }
 
+  onScroll() {
+    if (!this.userBotConversationShow) {
+      console.log("scroll event ******");
+      if(this.transcriptTabHistoryText){
+        let scrollInView = this.isScrolledIntoView()
+        console.log(scrollInView);
+        if (scrollInView) {
+          this.userBotConversationShow = true;
+          this.transcriptScrollTopText = 'Agent Joined the Conversation';
+        }
+      }
+    }
+  }
+
+  isScrolledIntoView(){
+    const rect = this.transcriptTabHistoryText.nativeElement.getBoundingClientRect();
+    const topShown = rect.top >= 0;
+    const bottomShown = rect.bottom <= window.innerHeight;
+    console.log(topShown, bottomShown, rect.top, rect.bottom, 'top && bottom');
+    
+    return (topShown && bottomShown);
+  }
+
   ngOnDestroy(){
     this.subs.unsubscribe();
   }
-
   
 }

@@ -1,1 +1,44 @@
-<p>user-bot-history works!</p>
+<ng-container *ngFor="let conv of historyResponse">
+    <div class="transcipt-bot-bubble-comp"
+        *ngIf="conv.type == 'incoming' && conv.components && conv.components[0]?.data.text">
+        <div class="bot-bubble-content hover-show-copy">
+            <div class="top-info">
+                <!-- <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName +
+                    this.parsedCustomData?.lName) ||
+                    'Customer'}}</div> -->
+                <div class="time-tamp"><time>{{conv.timestampValue | converTimestampToDate}}</time></div>
+            </div>
+            <div class="bubble-msg-with-img">
+                <div class="bubble-msg" *ngIf="!conv.isTemplateRender && renderHTMLPrompt(conv?.components[0]?.data?.text)"
+                    [innerHTML]="renderHTMLPrompt(conv?.components[0]?.data?.text)">{{conv.message}}</div>
+                <div class="bubble-msg" *ngIf="conv.isTemplateRender">
+                    <div class="title-data">
+                        <ul class="chat-container" [id]="'displayData-' + conv._id" [innerHTML]="conv.template">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <div class="transcipt-agent-bubble-comp"
+        *ngIf="conv.type == 'outgoing' && conv.components && conv.components[0]?.data.text">
+        <div class="agent-bubble-content hover-show-copy">
+            <div class="top-info">
+                <div class="time-tamp"><time>{{conv.timestampValue | converTimestampToDate}}</time></div>
+                <div class="you-text">Bot</div>
+            </div>
+            <div class="bubble-msg-with-img">
+                <div class="bubble-msg">{{conv.message}}</div>
+                <div class="bubble-msg" *ngIf="!conv.isTemplateRender && renderHTMLPrompt(conv?.components[0]?.data?.text)"
+                    [innerHTML]="renderHTMLPrompt(conv?.components[0]?.data?.text)">{{conv.message}}</div>
+                <div class="bubble-msg" *ngIf="conv.isTemplateRender">
+                    <div class="title-data">
+                        <ul class="chat-container" [id]="'displayData-' + conv._id" [innerHTML]="conv.template">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>  
