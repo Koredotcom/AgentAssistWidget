@@ -10,16 +10,16 @@
                     </div>
                 </div>
                 <div class="actions-assist-header">
-                    <button class="solid-action">
+                    <button class="solid-action" aria-label="button">
                         <i class="krIocnsFont-list"></i>
                     </button>
-                    <button class="solid-action">
+                    <button class="solid-action" aria-label="button">
                         <i class="krIocnsFont-refresh"></i>
                     </button>
-                    <button class="solid-action stop-assist">
+                    <button class="solid-action stop-assist" aria-label="button">
                         <span></span>
                     </button>
-                    <button class="solid-action minimize-btn" href="#assistCollapse" data-bs-toggle="collapse" (click)="minimizeToggle()">
+                    <button class="solid-action minimize-btn" aria-label="button" href="#assistCollapse" data-bs-toggle="collapse" (click)="minimizeToggle()">
                         <i class="krIocnsFont-minimize"></i>
                     </button>
                 </div>
@@ -53,14 +53,14 @@
     <div class="dialog-suggestion-wrapper">
         <div class="top-section">
             <div class="svg_img">
-                <img src="assets/images/icons/dialog.svg">
+                <img src="assets/images/icons/dialog.svg" alt="Image">
             </div>
             <p>Dialog :</p>
             <span [ngbTooltip]="tipContent">i will like to...</span>
         </div>
         <app-dialog></app-dialog>
         <div class="btn-more-solid">
-            <button class="btn_link">Not what you are looking for</button>
+            <button class="btn_link" aria-label="button">Not what you are looking for</button>
         </div>
     </div>
 </ng-template>
@@ -70,22 +70,22 @@
     <div class="ask-cust-node">
         <div class="top-section">
             <div class="svg_img">
-                <img src="assets/images/icons/askcust.svg">
+                <img src="assets/images/icons/askcust.svg" alt="Image">
             </div>
             <p>Ask Customer</p>
         </div>
         <div class="msg-node-cust">
             <div class="send-copy-actions">
-                <button class="solidbtn">
+                <button class="solidbtn" aria-label="button">
                     <i class="krIocnsFont-copy"></i>
                 </button>
-                <button class="solidbtn">Send</button>
+                <button class="solidbtn" aria-label="button">Send</button>
             </div>
             <div class="sent-msg-text">Sent</div>
             <p>What pizza base would you like to have for your order? We have Thin Crust and Multigrain</p>
             <div class="cust-choice-yes-no">
-                <button class="active-btn">Yes</button>
-                <button>No</button>
+                <button class="active-btn" aria-label="button">Yes</button>
+                <button aria-label="button">No</button>
             </div>
         </div>
     </div>
@@ -98,19 +98,19 @@
     <div class="entity-mesage-data">
         <div class="input-block-entity">
             <p>PizzaBase: </p>
-            <input type="text">
+            <input type="text" aria-label="Input">
             <div class="border-outline"></div>
             <div class="actions-inputs">
-                <button class="remove-input">
+                <button class="remove-input" aria-label="Button">
                     <i class="krIocnsFont-close"></i>
                 </button>
-                <button class="check-input">
+                <button class="check-input" aria-label="button">
                     <i class="krIocnsFont-check"></i>
                 </button>
-                <button class="success-check-input">
+                <button class="success-check-input" aria-label="button">
                     <i class="krIocnsFont-check-circle"></i>
                 </button>
-                <button class="wrong-res-info">
+                <button class="wrong-res-info" aria-label="button">
                     <i class="krIocnsFont-warning-solid"></i>
                     <span>3</span>
                 </button>

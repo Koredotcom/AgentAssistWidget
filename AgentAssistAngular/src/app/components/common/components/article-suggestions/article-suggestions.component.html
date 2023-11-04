@@ -4,10 +4,10 @@
     <div class="faq-s-header">
         <h1>{{article.title}}</h1>
         <div class="faq-actions">
-            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
+            <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
                 <i class="krIocnsFont-copy"></i>
             </button>
-            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, article , projConstants.ARTICLE)">Send</button>
+            <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, article , projConstants.ARTICLE)">Send</button>
         </div>
     </div>
     <div class="faq-body-content">
