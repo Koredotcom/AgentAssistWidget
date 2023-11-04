@@ -1,0 +1,60 @@
+
+
+.nudges-template-data{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    .nudges-card{
+        border-radius: 24px;
+        background: var(--success-500-main, #22C55E);
+        box-shadow: 15px 15px 26px 0px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        padding: 6px 16px;
+        gap: 6px;
+        &.info-nudge{
+            background: var(--neutral-200, #E5E5E5);
+            p{
+                color: var(--generic-black, #000);
+            }
+            .close-nudge{
+                color: var(--generic-black, #000);
+            }
+        }
+        &.warning-nudge{
+            background: var(--warning-500-main, #F59E0B);
+        }
+        &.danger-nudge{
+            background: var(--destructive-500-main, #EF4444);
+        }
+        .icon_block{
+            flex-shrink: 0;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+        }
+        p{
+            color: var(--generic-white, #FFF);
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            margin: 0;
+            width: 100%;
+        }
+        .close-nudge{
+            width: 16px;
+            height: 16px;
+            background: transparent;
+            padding: 0;
+            border: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+        }   
+    }
+}

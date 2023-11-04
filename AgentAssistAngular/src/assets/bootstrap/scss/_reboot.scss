@@ -24,6 +24,12 @@ body{
   height: 100%;
 }
 
+:focus-visible{
+	outline-color: #2970FF;
+  outline-offset: 1px;
+  outline-style: auto;
+}
+
 body::-webkit-scrollbar {
   width: 10px;
   height: 10px;

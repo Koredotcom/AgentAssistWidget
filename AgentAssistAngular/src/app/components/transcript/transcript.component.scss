@@ -96,20 +96,20 @@
                 padding: 8px 12px;
                 margin: 2px 0;
             }
-            .copy-bubble{
-                position: absolute;
-                left: -24px;
-                top: auto;
-                z-index: 1;
-                cursor: pointer;
-                font-size: 14px;
-                display: none;
-                svg{
-                    path{
-                        fill: #121926;
-                    }
-                }
-            }
+            // .copy-bubble{
+            //     position: absolute;
+            //     left: -24px;
+            //     top: auto;
+            //     z-index: 1;
+            //     cursor: pointer;
+            //     font-size: 14px;
+            //     display: none;
+            //     svg{
+            //         path{
+            //             fill: #121926;
+            //         }
+            //     }
+            // }
             .agent-img{
                 position: absolute;
                 right: -32px;
@@ -144,10 +144,8 @@
                 color: #697586;
             }
             .you-text{
+                @extend .time-tamp;
                 font-weight: 600;
-                font-size: 12px;
-                line-height: 15px;
-                color: #697586;
             }
         }
     }
@@ -195,9 +193,7 @@
                 color: #697586;
             }
             .you-text{
-                font-weight: 600;
-                font-size: 12px;
-                line-height: 15px;
+                @extend .time-tamp;
                 color: #697586;
             }
         }
@@ -252,20 +248,20 @@
                 word-break: break-word;
                 white-space: break-spaces;
             }
-            .copy-bubble{
-                position: absolute;
-                right: -24px;
-                top: auto;
-                z-index: 1;
-                cursor: pointer;
-                font-size: 14px;
-                display: none;
-                svg{
-                    path{
-                        fill: #121926;
-                    }
-                }
-            }
+            // .copy-bubble{
+            //     position: absolute;
+            //     right: -24px;
+            //     top: auto;
+            //     z-index: 1;
+            //     cursor: pointer;
+            //     font-size: 14px;
+            //     display: none;
+            //     svg{
+            //         path{
+            //             fill: #121926;
+            //         }
+            //     }
+            // }
         }
     }
 }

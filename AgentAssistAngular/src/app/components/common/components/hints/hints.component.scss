@@ -1,0 +1,148 @@
+
+
+
+@-webkit-keyframes shake {
+    0%,100% {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    10%,30%,50%,70%,90% {
+        -webkit-transform: translate3d(-10px, 0, 0);
+        transform: translate3d(-10px, 0, 0);
+    }
+    20%,40%,60%,80% {
+        -webkit-transform: translate3d(10px, 0, 0);
+        transform: translate3d(10px, 0, 0);
+    }
+}
+
+@keyframes shake {
+    0%,100% {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    10%,30%,50%,70%,90% {
+        -webkit-transform: translate3d(-10px, 0, 0);
+        transform: translate3d(-10px, 0, 0);
+    }
+    20%,40%,60%,80% {
+        -webkit-transform: translate3d(10px, 0, 0);
+        transform: translate3d(10px, 0, 0);
+    }
+}
+
+
+.hints-template-data{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .hint-card{
+        border-radius: 12px;
+        background: var(--success-600, #16A34A);
+        box-shadow: 0px 25px 50px -12px rgba(16, 24, 40, 0.25);
+        position: relative;
+        padding: 12px;
+        -webkit-animation-name: shake;
+        animation-name: shake;
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+        animation-delay: 1s;
+        -webkit-animation-delay: 1s;
+        &.info-hint{
+            background: var(--gray-neutral-500, #6C737F);
+            box-shadow: 0px 25px 50px -12px rgba(16, 24, 40, 0.25);
+            .top-card-info{
+                .icon_block{
+                    border: 2px solid var(--neutral-200, #E5E5E5);
+                    background: var(--base-white, #FFF);
+                    color: #667085;
+                }
+            }
+        }
+        &.warning-hint{
+            background: var(--warning-500, #F79009);
+            box-shadow: 0px 25px 50px -12px rgba(16, 24, 40, 0.25);
+            .top-card-info{
+                .icon_block{
+                    border: 2px solid var(--warning-100, #FEF0C7);
+                    background: var(--base-white, #FFF);
+                    color: #F79009;
+                }
+            }
+        }
+        &.danger-hint{
+            background: var(--destructive-500-main, #EF4444);
+            box-shadow: 0px 25px 50px -12px rgba(16, 24, 40, 0.25);
+            .top-card-info{
+                .icon_block{
+                    border: 2px solid var(--error-200, #FECDCA);
+                    background: var(--base-white, #FFF);
+                    color: #F04438;
+                }
+            }
+        }
+        .top-card-info{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            .icon_block{
+                display: flex;
+                width: 24px;
+                height: 24px;
+                justify-content: center;
+                align-items: center;
+                border-radius: 28px;
+                border: 2px solid var(--success-100, #D1FADF);
+                background: var(--gray-modern-200, #E3E8EF);
+                flex-shrink: 0;
+                color: #039855;
+            }
+            h1{
+                color: var(--base-white, #FFF);
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 20px;
+                margin: 0;
+                width: 100%;
+            }
+            .close-hint{
+                flex-shrink: 0;
+                width: 20px;
+                height: 20px;
+                background: transparent;
+                padding: 0;
+                border: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                font-size: 20px;
+            }
+        }
+        .body-hint{
+            padding: 6px 0;
+            p{
+                color: var(--base-white, #FFF);
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 20px;
+                margin: 0;
+            }
+        }
+        .footer-hint{
+            text-align: right;
+            button{
+                color: var(--base-white, #FFF);
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 20px;
+                padding: 0;
+                border: 0;
+                background: transparent;
+                cursor: pointer;
+            }
+        }
+    }
+}

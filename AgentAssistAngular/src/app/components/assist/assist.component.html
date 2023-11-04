@@ -32,6 +32,8 @@
                     <ng-container [ngTemplateOutlet]="dialogSuggestion"></ng-container>
                     <ng-container [ngTemplateOutlet]="askCust"></ng-container>
                     <ng-container [ngTemplateOutlet]="entityMessage"></ng-container>
+                    <ng-container [ngTemplateOutlet]="feedback"></ng-container>
+                    <ng-container [ngTemplateOutlet]="dialogEnded"></ng-container>                    
                 </div>
           </div>
         </div>
@@ -51,17 +53,14 @@
     <div class="dialog-suggestion-wrapper">
         <div class="top-section">
             <div class="svg_img">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0.842074 11C0.842074 8.62207 2.72777 6.66666 5.08769 6.66666C7.4476 6.66666 9.3333 8.62207 9.3333 11C9.3333 13.3779 7.4476 15.3333 5.08769 15.3333C4.60259 15.3333 4.13528 15.25 3.69961 15.0963C3.6276 15.0708 3.58293 15.0551 3.55018 15.0443C3.54423 15.0423 3.53937 15.0407 3.53547 15.0395L3.53185 15.0399C3.50898 15.0424 3.47782 15.0466 3.42005 15.0545L1.42351 15.3272C1.20748 15.3567 0.990664 15.2787 0.842944 15.1183C0.695224 14.9579 0.635267 14.7355 0.682393 14.5226L1.08996 12.6814C1.10412 12.6175 1.1117 12.5829 1.11656 12.5576C1.11684 12.5561 1.11732 12.5535 1.11732 12.5535C1.11611 12.5493 1.11458 12.5441 1.11266 12.5377C1.10168 12.5014 1.08554 12.4518 1.05929 12.3715C0.918168 11.9395 0.842074 11.4781 0.842074 11Z" fill="#155EEF"/>
-                    <path d="M3.43165 5.58172C3.95004 5.42046 4.50259 5.33332 5.07855 5.33332C8.22083 5.33332 10.6667 7.9271 10.6667 11C10.6667 11.5424 10.5905 12.0699 10.4477 12.5709C10.809 12.506 11.1595 12.409 11.4958 12.283C11.5433 12.2653 11.5906 12.2471 11.6385 12.2307C11.6772 12.2352 11.7157 12.2412 11.7543 12.2469L13.8962 12.5609C13.9973 12.5757 14.1121 12.5926 14.2121 12.5983C14.3229 12.6046 14.495 12.6039 14.6774 12.5254C14.9052 12.4275 15.0885 12.2484 15.1917 12.0229C15.2743 11.8423 15.279 11.6702 15.2752 11.5594C15.2718 11.4592 15.2576 11.3441 15.2451 11.2427L14.9744 9.04408C14.9674 8.98692 14.9638 8.9569 14.9617 8.93489C14.9733 8.88672 14.9954 8.84013 15.013 8.79394C15.2655 8.13193 15.4035 7.41456 15.4035 6.66666C15.4035 3.34883 12.6973 0.666656 9.36839 0.666656C6.4112 0.666656 3.94549 2.78321 3.43165 5.58172Z" fill="#155EEF"/>
-                </svg>
+                <img src="assets/images/icons/dialog.svg">
             </div>
             <p>Dialog :</p>
             <span [ngbTooltip]="tipContent">i will like to...</span>
         </div>
         <app-dialog></app-dialog>
         <div class="btn-more-solid">
-            <button>Not what you are looking for</button>
+            <button class="btn_link">Not what you are looking for</button>
         </div>
     </div>
 </ng-template>
@@ -71,9 +70,7 @@
     <div class="ask-cust-node">
         <div class="top-section">
             <div class="svg_img">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99992 1.33333C4.31802 1.33333 1.33325 4.3181 1.33325 8C1.33325 8.88554 1.50627 9.73233 1.82096 10.5072C1.84938 10.5772 1.86573 10.6176 1.87693 10.6474L1.88034 10.6566L1.87992 10.6598C1.87658 10.6844 1.87107 10.7179 1.86039 10.782L1.46188 13.173C1.444 13.2801 1.42399 13.3999 1.41614 13.504C1.40757 13.6174 1.40459 13.7979 1.4864 13.9887C1.58754 14.2245 1.77545 14.4124 2.01125 14.5135C2.202 14.5953 2.38249 14.5923 2.49595 14.5838C2.6 14.5759 2.71982 14.5559 2.82691 14.538L5.21795 14.1395C5.28198 14.1288 5.31551 14.1233 5.34012 14.12L5.34329 14.1196L5.3525 14.123C5.38233 14.1342 5.42274 14.1505 5.49273 14.179C6.26758 14.4936 7.11437 14.6667 7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8C14.6666 4.3181 11.6818 1.33333 7.99992 1.33333ZM3.99992 8C3.99992 7.44771 4.44763 7 4.99992 7C5.5522 7 5.99992 7.44771 5.99992 8C5.99992 8.55228 5.5522 9 4.99992 9C4.44763 9 3.99992 8.55228 3.99992 8ZM6.99992 8C6.99992 7.44771 7.44763 7 7.99992 7C8.5522 7 8.99992 7.44771 8.99992 8C8.99992 8.55228 8.5522 9 7.99992 9C7.44763 9 6.99992 8.55228 6.99992 8ZM10.9999 7C10.4476 7 9.99992 7.44771 9.99992 8C9.99992 8.55228 10.4476 9 10.9999 9C11.5522 9 11.9999 8.55228 11.9999 8C11.9999 7.44771 11.5522 7 10.9999 7Z" fill="#155EEF"/>
-                </svg>
+                <img src="assets/images/icons/askcust.svg">
             </div>
             <p>Ask Customer</p>
         </div>
@@ -84,18 +81,40 @@
                 </button>
                 <button class="solidbtn">Send</button>
             </div>
+            <div class="sent-msg-text">Sent</div>
             <p>What pizza base would you like to have for your order? We have Thin Crust and Multigrain</p>
+            <div class="cust-choice-yes-no">
+                <button class="active-btn">Yes</button>
+                <button>No</button>
+            </div>
         </div>
     </div>
 </ng-template>
 
+
 <!-- Entity Message -->
 <ng-template #entityMessage>
+    <!-- error-no-reponse class add it when error-->
     <div class="entity-mesage-data">
         <div class="input-block-entity">
             <p>PizzaBase: </p>
             <input type="text">
             <div class="border-outline"></div>
+            <div class="actions-inputs">
+                <button class="remove-input">
+                    <i class="krIocnsFont-close"></i>
+                </button>
+                <button class="check-input">
+                    <i class="krIocnsFont-check"></i>
+                </button>
+                <button class="success-check-input">
+                    <i class="krIocnsFont-check-circle"></i>
+                </button>
+                <button class="wrong-res-info">
+                    <i class="krIocnsFont-warning-solid"></i>
+                    <span>3</span>
+                </button>
+            </div>
         </div>
         <p class="info-entity-text">Awaiting Response  |  Type to override</p>
     </div>
@@ -105,5 +124,23 @@
     <div class="tipcontent-dialog-suggestion">
         <p>intent identified :</p>
         <span>i will like to order pizza</span>
+    </div>
+</ng-template>
+
+
+<ng-template #feedback>
+    <app-feedback></app-feedback>
+</ng-template>
+
+
+<ng-template #dialogEnded>
+    <div class="dialog-ended-wrapper">
+        <div class="line_bar"></div>
+        <div class="middle-info">
+            <p>Dialog</p>
+            <button class="btn_link">Order Pizza</button>
+            <p>ended</p>
+        </div>
+        <i class="krIocnsFont-check-circle"></i>
     </div>
 </ng-template>

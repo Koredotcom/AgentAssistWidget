@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'krIocnsFont';
-  src:  url('fonts/krIocnsFont.eot?sw0g9g');
-  src:  url('fonts/krIocnsFont.eot?sw0g9g#iefix') format('embedded-opentype'),
-    url('fonts/krIocnsFont.ttf?sw0g9g') format('truetype'),
-    url('fonts/krIocnsFont.woff?sw0g9g') format('woff'),
-    url('fonts/krIocnsFont.svg?sw0g9g#krIocnsFont') format('svg');
+  src:  url('fonts/krIocnsFont.eot?15yke3');
+  src:  url('fonts/krIocnsFont.eot?15yke3#iefix') format('embedded-opentype'),
+    url('fonts/krIocnsFont.ttf?15yke3') format('truetype'),
+    url('fonts/krIocnsFont.woff?15yke3') format('woff'),
+    url('fonts/krIocnsFont.svg?15yke3#krIocnsFont') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,42 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.krIocnsFont-warning-solid:before {
+  content: "\e91c";
+}
+.krIocnsFont-check:before {
+  content: "\e919";
+}
+.krIocnsFont-check-circle:before {
+  content: "\e91b";
+}
+.krIocnsFont-thumbs-up-solid:before {
+  content: "\e918";
+}
+.krIocnsFont-thumbs-down:before {
+  content: "\e91a";
+}
+.krIocnsFont-exclamation:before {
+  content: "\e917";
+}
+.krIocnsFont-hand:before {
+  content: "\e911";
+}
+.krIocnsFont-info-circle:before {
+  content: "\e912";
+}
+.krIocnsFont-alert-triangle:before {
+  content: "\e913";
+}
+.krIocnsFont-close-md:before {
+  content: "\e914";
+}
+.krIocnsFont-close:before {
+  content: "\e915";
+}
+.krIocnsFont-thumbs-up:before {
+  content: "\e916";
+}
 .krIocnsFont-copy:before {
   content: "\e910";
 }

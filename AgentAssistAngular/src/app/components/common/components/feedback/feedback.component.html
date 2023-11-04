@@ -1,1 +1,32 @@
-<p>feedback works!</p>
+<div class="feedback-wrapper">
+    <div class="feedback-actions-info">
+        <div class="left-sec-info">
+            <div class="icon_block">
+                <img src="assets/images/icons/help-hand.svg">
+            </div>
+            <h1>Helpful?</h1>
+            <button class="feedback-btn-thumb" href="#thankyou" data-bs-toggle="collapse">
+                <i class="krIocnsFont-thumbs-up-solid"></i>
+            </button>
+            <button class="feedback-btn-thumb" href="#helpImprove" data-bs-toggle="collapse">
+                <i class="krIocnsFont-thumbs-down"></i>
+            </button>
+        </div>
+        <p class="thankyou-text collapse" id="thankyou">Thank you!</p>
+    </div>
+    <div class="improve-feedback-block collapse" id="helpImprove">
+        <div class="improve-options-text">
+            <button class="improve-lable-text active-improve-btn">Wrong suggestion</button>
+            <button class="improve-lable-text">Content error</button>
+            <button class="improve-lable-text">Time taking</button>
+            <button class="improve-lable-text">Incorrect intent</button>
+            <button class="improve-lable-text">Other</button>
+        </div>
+        <div class="input-improve-text">
+            <textarea placeholder="Add additional comments here" class="form-control"></textarea>
+            <button class="send-btn-feedback">
+                <i class="krIocnsFont-check-circle"></i>
+            </button>
+        </div>
+    </div>
+</div>

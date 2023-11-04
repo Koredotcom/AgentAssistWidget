@@ -37,4 +37,30 @@
             }
         } 
     }
+    .card-assist {
+        .assist-header {
+            .assist-header-content {
+                .left-title-info {
+                    .bottom-titles{
+                        span{
+                            padding: 0 6px 0 0 !important;
+                            border-left: 0 !important;
+                            border-right: 1px solid var(--gray-300, #D0D5DD);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .ask-cust-node {
+        .msg-node-cust {
+            .send-copy-actions, .sent-msg-text{
+                right: auto !important;
+                left: 4px !important;
+            }
+            p{
+                padding: 0 0 0 24px !important;
+            }
+        }
+    }
 }

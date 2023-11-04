@@ -1,1 +1,88 @@
-<p>hints works!</p>
+<div class="hints-template-data">
+    <!-- <ng-container [ngTemplateOutlet]="DangerHint"></ng-container>
+    <ng-container [ngTemplateOutlet]="warningHint"></ng-container> -->
+    <ng-container [ngTemplateOutlet]="infoHint"></ng-container>
+    <ng-container [ngTemplateOutlet]="PositiveHint"></ng-container>
+</div>
+
+<ng-template #PositiveHint>
+    <div class="hint-card">
+        <div class="top-card-info">
+            <div class="icon_block">
+                <i class="krIocnsFont-thumbs-up"></i>
+            </div>
+            <h1>Great Job!</h1>
+            <button class="close-hint">
+                <i class="krIocnsFont-close-md"></i>
+            </button>
+        </div>
+        <div class="body-hint">
+            <p>You did a fantastic job providing the customer with the latest discounts.</p>
+        </div>
+        <div class="footer-hint">
+            <button>OK, Great!</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #infoHint>
+    <div class="hint-card info-hint">
+        <div class="top-card-info">
+            <div class="icon_block">
+                <i class="krIocnsFont-exclamation"></i>
+            </div>
+            <h1>Great Job!</h1>
+            <button class="close-hint">
+                <i class="krIocnsFont-close-md"></i>
+            </button>
+        </div>
+        <div class="body-hint">
+            <p>You did a fantastic job providing the customer with the latest discounts.</p>
+        </div>
+        <div class="footer-hint">
+            <button>OK, Great!</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #warningHint>
+    <div class="hint-card warning-hint">
+        <div class="top-card-info">
+            <div class="icon_block">
+                <i class="krIocnsFont-alert-triangle"></i>
+            </div>
+            <h1>Great Job!</h1>
+            <button class="close-hint">
+                <i class="krIocnsFont-close-md"></i>
+            </button>
+        </div>
+        <div class="body-hint">
+            <p>You did a fantastic job providing the customer with the latest discounts.</p>
+        </div>
+        <div class="footer-hint">
+            <button>OK, Great!</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #DangerHint>
+    <div class="hint-card danger-hint">
+        <div class="top-card-info">
+            <div class="icon_block">
+                <i class="krIocnsFont-hand"></i>
+            </div>
+            <h1>Great Job!</h1>
+            <button class="close-hint">
+                <i class="krIocnsFont-close-md"></i>
+            </button>
+        </div>
+        <div class="body-hint">
+            <p>You did a fantastic job providing the customer with the latest discounts.</p>
+        </div>
+        <div class="footer-hint">
+            <button>OK, Great!</button>
+        </div>
+    </div>
+</ng-template>
+
+

@@ -1,1 +1,53 @@
-<p>nudges works!</p>
+
+
+<div class="nudges-template-data">
+    <ng-container [ngTemplateOutlet]="dangerNudge"></ng-container>
+    <ng-container [ngTemplateOutlet]="warningNudge"></ng-container>
+    <ng-container [ngTemplateOutlet]="infoNudge"></ng-container>
+    <ng-container [ngTemplateOutlet]="PositiveNudge"></ng-container>
+</div>
+
+<ng-template #PositiveNudge>
+    <div class="nudges-card">
+        <div class="icon_block">
+            <i class="krIocnsFont-thumbs-up"></i>
+        </div>
+        <p>Great Job</p>
+        <button class="close-nudge">
+            <i class="krIocnsFont-close-md"></i>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #infoNudge>
+    <div class="nudges-card info-nudge">
+        <p>Check customer’s account</p>
+        <button class="close-nudge">
+            <i class="krIocnsFont-close-md"></i>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #warningNudge>
+    <div class="nudges-card warning-nudge">
+        <div class="icon_block">
+            <i class="krIocnsFont-alert-triangle"></i>
+        </div>
+        <p>Offer Discounts</p>
+        <button class="close-nudge">
+            <i class="krIocnsFont-close-md"></i>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #dangerNudge>
+    <div class="nudges-card danger-nudge">
+        <div class="icon_block">
+            <i class="krIocnsFont-hand"></i>
+        </div>
+        <p>Transfer to Manager</p>
+        <button class="close-nudge">
+            <i class="krIocnsFont-close-md"></i>
+        </button>
+    </div>
+</ng-template>

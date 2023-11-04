@@ -1,0 +1,138 @@
+
+
+.feedback-wrapper{
+    border-radius: 0px 10px 10px 10px;
+    border: 1px solid var(--gray-modern-300, #CDD5DF);
+    background: var(--gray-modern-50, #F8FAFC);
+    padding: 8px;
+    .feedback-actions-info{
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        .left-sec-info{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            width: 100%;
+            .icon_block{
+                flex-shrink: 0;
+            }
+            h1{
+                color: var(--neutral-900, #171717);
+                font-size: 12px;
+                font-weight: 500;
+                line-height: 18px;
+                margin: 0;
+            }
+            .feedback-btn-thumb{
+                border-radius: 4px;
+                border: 1px solid var(--neutral-200, #E5E5E5);
+                background: var(--generic-white, #FFF);
+                display: flex;
+                width: 28px;
+                height: 28px;
+                padding: 0;
+                justify-content: center;
+                align-items: center;
+                gap: 6px;
+                color: #101828;
+                font-size: 16px;
+                cursor: pointer;
+                transition: 0.2s all ease;
+                &[aria-expanded="true"]{
+                    background: var(--primary-500, #2970FF);
+                    color: #FFFFFF;
+                }
+                &:disabled{
+                    opacity: 0.3;
+                }
+                &.active-feedback-btn{
+                    background: var(--primary-500, #2970FF);
+                    color: #FFFFFF;
+                }
+                &:hover{
+                    background: var(--primary-500, #2970FF);
+                    color: #FFFFFF;
+                }
+            }
+        }
+        .thankyou-text{
+            flex-shrink: 0;
+            color: var(--primary-500-main, #2B75E4);
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 20px;
+            margin: 0;
+            padding-right: 8px;
+        }
+    }
+    .improve-feedback-block{
+        padding: 8px 8px 0px 24px;
+        .improve-options-text{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 12px;
+            .improve-lable-text{
+                border-radius: 16px;
+                background: var(--gray-100, #F2F4F7);
+                display: flex;
+                padding: 2px 8px;
+                justify-content: center;
+                align-items: center;
+                color: var(--gray-700, #344054);
+                font-size: 12px;
+                font-weight: 500;
+                line-height: 18px;
+                border: 0;
+                min-height: 22px;
+                transition: 0.2s all ease;
+                &:hover{
+                    background: #EFF4FF;
+                    color: #004EEB;
+                }
+                &.active-improve-btn{
+                    background: #EFF4FF;
+                    color: #004EEB;
+                }
+            }
+        }
+        .input-improve-text{
+            display: flex;
+            align-items: center;
+            textarea{
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 18px;
+                resize: none;
+            }
+            .send-btn-feedback{
+                width: 36px;
+                height: 36px;
+                flex-shrink: 0;
+                padding: 0;
+                border: 0;
+                background: transparent;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #2970FF;
+                font-size: 20px;
+                cursor: pointer;
+                &:disabled{
+                    opacity: 0.3;
+                }
+            }
+        }
+    }
+}
+
+
+::ng-deep [dir="rtl"]{
+    .feedback-wrapper{
+        .improve-feedback-block{
+            padding-right: 24px !important;
+            padding-left: 8px !important;
+        }
+    }
+}
