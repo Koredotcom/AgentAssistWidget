@@ -46,6 +46,8 @@ import { RestartComponent } from './components/restart/restart.component';
 import { TerminateComponent } from './components/terminate/terminate.component';
 import { ListviewComponent } from './components/listview/listview.component';
 import { TaskProgressComponent } from './components/task-progress/task-progress.component';
+import { AskCustomerComponent } from './ask-customer/ask-customer.component';
+import { TellCustomerComponent } from './tell-customer/tell-customer.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -88,7 +90,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     RestartComponent,
     TerminateComponent,
     ListviewComponent,
-    TaskProgressComponent
+    TaskProgressComponent,
+    AskCustomerComponent,
+    TellCustomerComponent
   ],
   imports: [
     TranslateModule.forRoot({
