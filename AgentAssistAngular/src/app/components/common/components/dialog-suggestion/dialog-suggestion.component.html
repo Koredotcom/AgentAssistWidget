@@ -2,7 +2,10 @@
 <ng-container *ngIf="!searchedDialogList.length">
     <ng-container *ngFor="let dialogue of menuResponse | keyvalue;let i = index">
         <div class="dialog-task-wrapper">
-            <p>{{dialogue?.value['intentName']}}</p>
+            <div class="title-paragraph">
+                <p>{{dialogue?.value['intentName']}}</p>
+                <span>(buy_bot)</span>
+            </div>
             <div class="dialog-actions">
                 <button class="primary-btn" (click)="dialogueRunClick(dialogue,projConstants.ASSIST)">RUN</button>
                 <div ngbDropdown class="elipse-ngbdropdown">
@@ -21,7 +24,10 @@
 <ng-container *ngIf="searchedDialogList.length">
     <ng-container *ngFor="let dialog of searchedDialogList;let i = index">
         <div class="dialog-task-wrapper">
-            <p>{{dialog.name}}</p>
+            <div class="title-paragraph">
+                <p>{{dialog.name}}</p>
+                <span>(buy_bot)</span>
+            </div>
             <div class="dialog-actions">
                 <button class="primary-btn" (click)="dialogueRunClick(dialog,projConstants.ASSIST)">RUN</button>
                 <div ngbDropdown class="elipse-ngbdropdown">
@@ -36,4 +42,31 @@
         </div>
     </ng-container>
 </ng-container>
+
+<!-- <ng-container [ngTemplateOutlet]="dialogSuggestion"></ng-container> -->
+
+<!-- Dialogs Suggestion -->
+<ng-template #dialogSuggestion>
+    <div class="dialog-suggestion-wrapper">
+        <div class="top-section">
+            <div class="svg_img">
+                <img src="assets/images/icons/dialog.svg" alt="Image">
+            </div>
+            <p>Dialog :</p>
+            <span [ngbTooltip]="tipContent">i will like to...</span>
+            <div class="dialog-count">4</div>
+        </div>
+        <app-dialog></app-dialog>
+        <div class="btn-more-solid">
+            <button class="btn_link" aria-label="button">Not what you are looking for</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #tipContent>
+    <div class="tipcontent-dialog-suggestion">
+        <p>intent identified :</p>
+        <span>i will like to order pizza</span>
+    </div>
+</ng-template>
 

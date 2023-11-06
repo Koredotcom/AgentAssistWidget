@@ -1,45 +1,59 @@
 
 .faq-suggestions-wrapper{
     width: 100%;
-    padding: 8px;
+    padding: 0px 8px;
     min-height: 30px;
-    margin: 4px 0;
+    margin: 0px 0 8px 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    .faq-actions{
+        flex-shrink: 0;
+        gap: 5px;
+        display: flex;
+        align-items: center;
+        .solidbtn{
+            position: relative;
+            border-radius: 4px;
+            border: 1px solid var(--neutral-200, #E5E5E5);
+            background: var(--generic-white, #FFF);
+            padding: 2px 8px;
+            min-height: 24px;
+            color: var(--neutral-800, #262626);
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 16px;
+            cursor: pointer;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            i{
+                font-size: 12px;
+            }
+        }
+    }
     .faq-s-header{
         display: flex;
         align-items: center;
         gap: 10px;
-        h1{
-            color: var(--gray-modern-900, #121926);
-            font-size: 12px;
-            font-weight: 600;
-            line-height: 18px;
-            margin: 0;
+        .titles-info-heading{
             width: 100%;
-        }
-        .faq-actions{
-            flex-shrink: 0;
-            gap: 5px;
             display: flex;
             align-items: center;
-            .solidbtn{
-                position: relative;
-                border-radius: 4px;
-                border: 1px solid var(--neutral-200, #E5E5E5);
-                background: var(--generic-white, #FFF);
-                padding: 2px 8px;
-                min-height: 24px;
-                color: var(--neutral-800, #262626);
-                text-align: center;
-                font-size: 11px;
-                font-weight: 500;
-                line-height: 16px;
-                cursor: pointer;
-                i{
-                    font-size: 12px;
-                }
+            gap: 4px;
+            overflow: hidden;
+            h1{
+                color: var(--gray-modern-900, #121926);
+                font-size: 12px;
+                font-weight: 600;
+                line-height: 18px;
+                margin: 0;
+            }
+            span{
+                color: var(--gray-modern-500, #697586);
+                font-size: 12px;
+                font-weight: 600;
+                line-height: 18px;
             }
         }
     }
@@ -47,18 +61,21 @@
         display: flex;
         align-items: flex-end;
         gap: 10px;
-        .data-faq-paragraph{
-            &.collapse{
-                display: block !important;
-                height: auto !important;
-                overflow: inherit !important;
-                transition: none !important;
-                &:not(.show){
-                    p{
-                        display: block;
-                    }
-                }
+        position: relative;
+        transition: 0.2 all ease;
+        &:hover{
+            .faq-actions{
+                display: flex;
             }
+        }
+        .faq-actions{
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 1;
+            display: none;
+        }
+        .data-faq-paragraph{
             p{
                 color: var(--gray-modern-600, #4B5565);
                 font-size: 12px;
@@ -69,6 +86,9 @@
                 -webkit-line-clamp: 3;
                 -webkit-box-orient: vertical;  
                 overflow: hidden;
+                &.show-full-text{
+                    display: block;
+                }
             }
         }
         .moreText{
@@ -78,19 +98,37 @@
             line-height: 18px;
             text-decoration: none;
             cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
             .less-text{
                 display: none;
             }
             .more-text{
                 display: block;
             }
-            &.collapsed{
-                .less-text{
-                    display: block;
-                }
-                .more-text{
-                    display: none;
-                }
+        }
+    }
+    .close-expand{
+        color: var(--warning-500-main, #F59E0B);
+        line-height: normal;
+        text-align: inherit;
+        padding: 5px 0;
+    }
+    .btn-more-solid{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+}
+
+::ng-deep [dir="rtl"]{
+    .faq-suggestions-wrapper {
+        .faq-body-content {
+            .faq-actions{
+                right: auto !important;
+                left: 0 !important;
             }
         }
     }

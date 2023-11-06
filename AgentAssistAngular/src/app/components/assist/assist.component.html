@@ -28,10 +28,9 @@
         <div class="collapse-tab">
           <div class="card-body">
                 <div class="card_body_acc_content">
-                    <ng-container [ngTemplateOutlet]="listingTriggers"></ng-container>
-                    <ng-container [ngTemplateOutlet]="dialogSuggestion"></ng-container>
-                    <ng-container [ngTemplateOutlet]="askCust"></ng-container>
-                    <ng-container [ngTemplateOutlet]="entityMessage"></ng-container>
+                    <ng-container [ngTemplateOutlet]="dialogStarted"></ng-container>  
+                    <app-ask-customer></app-ask-customer>
+                    <ng-container [ngTemplateOutlet]="listingTriggers"></ng-container>                    
                     <ng-container [ngTemplateOutlet]="feedback"></ng-container>
                     <ng-container [ngTemplateOutlet]="dialogEnded"></ng-container>                    
                 </div>
@@ -47,51 +46,6 @@
         <p>AgentAssist is actively listing to your conversation and ready to assist automatically when triggered.</p>
     </div>
 </ng-template>
-
-<!-- Dialogs Suggestion -->
-<ng-template #dialogSuggestion>
-    <div class="dialog-suggestion-wrapper">
-        <div class="top-section">
-            <div class="svg_img">
-                <img src="assets/images/icons/dialog.svg" alt="Image">
-            </div>
-            <p>Dialog :</p>
-            <span [ngbTooltip]="tipContent">i will like to...</span>
-            <div class="dialog-count">4</div>
-        </div>
-        <app-dialog></app-dialog>
-        <div class="btn-more-solid">
-            <button class="btn_link" aria-label="button">Not what you are looking for</button>
-        </div>
-    </div>
-</ng-template>
-
-<!-- Ask Customer Message Node v3 -->
-<ng-template #askCust>
-    <div class="ask-cust-node">
-        <div class="top-section">
-            <div class="svg_img">
-                <img src="assets/images/icons/askcust.svg" alt="Image">
-            </div>
-            <p>Ask Customer</p>
-        </div>
-        <div class="msg-node-cust">
-            <div class="send-copy-actions">
-                <button class="solidbtn" aria-label="button">
-                    <i class="krIocnsFont-copy"></i>
-                </button>
-                <button class="solidbtn" aria-label="button">Send</button>
-            </div>
-            <div class="sent-msg-text">Sent</div>
-            <p>What pizza base would you like to have for your order? We have Thin Crust and Multigrain</p>
-            <div class="cust-choice-yes-no">
-                <button class="active-btn" aria-label="button">Yes</button>
-                <button aria-label="button">No</button>
-            </div>
-        </div>
-    </div>
-</ng-template>
-
 
 <!-- Entity Message -->
 <ng-template #entityMessage>
@@ -121,18 +75,23 @@
     </div>
 </ng-template>
 
-<ng-template #tipContent>
-    <div class="tipcontent-dialog-suggestion">
-        <p>intent identified :</p>
-        <span>i will like to order pizza</span>
-    </div>
-</ng-template>
-
-
 <ng-template #feedback>
     <app-feedback></app-feedback>
 </ng-template>
 
+
+
+<ng-template #dialogStarted>
+    <div class="dialog-ended-wrapper">
+        <div class="middle-info">
+            <p>Dialog</p>
+            <button class="btn_link">Order Pizza</button>
+            <p>ended</p>
+        </div>
+        <div class="line_bar"></div>
+        <i class="krIocnsFont-check-circle"></i>
+    </div>
+</ng-template>
 
 <ng-template #dialogEnded>
     <div class="dialog-ended-wrapper">

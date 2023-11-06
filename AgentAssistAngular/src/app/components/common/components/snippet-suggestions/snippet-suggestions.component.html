@@ -1,36 +1,26 @@
-<!-- <p>
-    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-      Link with href
-    </a>
-    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-      Button with data-bs-target
-    </button>
-  </p>
-  <div class="collapse" id="collapseExample">
-    <div class="card card-body">
-      Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
-    </div>
-  </div> -->
 
-  <ng-container *ngFor="let snippet of searchedSnippetList;let i = index">
-      <div class="faq-suggestions-wrapper">
-        <div class="faq-s-header">
-            <h1>{{snippet.title}}</h1>
-            <div class="faq-actions">
-                <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.SNIPPET)">
-                   <i class="krIocnsFont-copy"></i>
-                </button>
-                <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, snippet , projConstants.SNIPPET)">Send</button>
-            </div>
-        </div>
-        <div class="faq-body-content">
-            <div class="collapse show data-faq-paragraph" id="collapseExample">            
-                <p>{{snippet.content}}</p>
-            </div>
-            <a class="moreText" href="#collapseExample" data-bs-toggle="collapse" role="button" aria-expanded="false">
-                <span class="more-text">More</span>
-                <span class="less-text">Less</span>
-            </a>
-        </div>
+<ng-container *ngFor="let snippet of searchedSnippetList;let i = index">
+  <div class="faq-suggestions-wrapper">
+    <div class="faq-s-header">
+      <div class="titles-info-heading">
+        <h1 class="text-truncate">{{snippet.title}}</h1>
       </div>
-  </ng-container>
+      <div class="faq-actions">
+        <button class="solidbtn">Know More</button>
+        <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.SNIPPET)">
+          <i class="krIocnsFont-copy"></i>
+        </button>
+        <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, snippet , projConstants.SNIPPET)">Send</button>
+      </div>
+    </div>
+    <div class="faq-body-content">
+      <div class="data-faq-paragraph">            
+        <p>{{snippet.content}}</p>
+      </div>
+      <a class="moreText" href="#collapseExample" data-bs-toggle="collapse" role="button" aria-expanded="false">
+        <span class="more-text">More</span>
+        <span class="less-text">Less</span>
+      </a>
+    </div>
+  </div>
+</ng-container>

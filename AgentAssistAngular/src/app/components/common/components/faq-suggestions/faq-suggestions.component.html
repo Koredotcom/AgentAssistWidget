@@ -1,21 +1,65 @@
 
 <div class="faq-suggestions-wrapper">
-  <div class="faq-s-header">
-      <h1>How to check eligibility for a Refund? {{content.scrollHeight}}</h1>
-      <div class="faq-actions">
-          <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, 'faq', projConstants.FAQ)">
-              <i class="krIocnsFont-copy"></i>
-          </button>
-          <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, 'faq', projConstants.FAQ)">Send</button>
-      </div>
-  </div>
-  <div class="faq-body-content">
-      <div class="collapse show data-faq-paragraph" id="collapseExample">            
-          <p #content>Here is how to check your eligibility for refund Here is how to check your eligibility for refund  Here is how to check your eligibility for refund  : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order Here is how to check your eligibility for refund : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order</p>
-      </div>
-      <a class="moreText" href="#collapseExample" data-bs-toggle="collapse" role="button" aria-expanded="false">
-          <span class="more-text" *ngIf="content.scrollHeight > 36">More</span>
-          <span class="less-text" *ngIf="content.scrollHeight > 36">Less</span>
-      </a>
-  </div>
+    <div class="faq-s-header">
+        <div class="titles-info-heading">
+            <h1 class="text-truncate">How to check eligibility for a Refund? {{content.scrollHeight}}</h1>
+            <span>1/4</span>
+        </div>
+        <div class="faq-actions">
+            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, 'faq', projConstants.FAQ)">
+                <i class="krIocnsFont-copy"></i>
+            </button>
+            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, 'faq', projConstants.FAQ)">Send</button>
+        </div>
+    </div>
+    <div class="faq-body-content">
+        <div class="faq-actions">
+            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, 'faq', projConstants.FAQ)">
+                <i class="krIocnsFont-copy"></i>
+            </button>
+            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, 'faq', projConstants.FAQ)">Send</button>
+        </div>
+        <div class="data-faq-paragraph">            
+            <p #content>Here is how to check your eligibility for refund Here is how to check your eligibility for refund  Here is how to check your eligibility for refund  : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order Here is how to check your eligibility for refund : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order</p>
+        </div>
+        <a class="moreText">
+            <span class="more-text">Expand / </span>
+            <span class="more-text" *ngIf="content.scrollHeight > 36">More</span>
+            <span class="less-text" *ngIf="content.scrollHeight > 36">Less</span>
+        </a>
+    </div>
+    <div class="faq-body-content">
+        <div class="faq-actions">
+            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, 'faq', projConstants.FAQ)">
+                <i class="krIocnsFont-copy"></i>
+            </button>
+            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, 'faq', projConstants.FAQ)">Send</button>
+        </div>
+        <div class="data-faq-paragraph">            
+            <p #content>Here is how to check your eligibility for refund Here is how to check your eligibility for refund  Here is how to check your eligibility for refund  : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order Here is how to check your eligibility for refund : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order</p>
+        </div>
+        <a class="moreText">
+            <span class="more-text" *ngIf="content.scrollHeight > 36">More</span>
+            <span class="less-text" *ngIf="content.scrollHeight > 36">Less</span>
+        </a>
+    </div>
+    <div class="faq-body-content">
+        <div class="faq-actions">
+            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, 'faq', projConstants.FAQ)">
+                <i class="krIocnsFont-copy"></i>
+            </button>
+            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, 'faq', projConstants.FAQ)">Send</button>
+        </div>
+        <div class="data-faq-paragraph">            
+            <p #content>Here is how to check your eligibility for refund Here is how to check your eligibility for refund  Here is how to check your eligibility for refund  : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order Here is how to check your eligibility for refund : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order</p>
+        </div>
+        <a class="moreText">
+            <span class="more-text" *ngIf="content.scrollHeight > 36">More</span>
+            <span class="less-text" *ngIf="content.scrollHeight > 36">Less</span>
+        </a>
+    </div>
+    <div class="btn-more-solid">
+        <button class="btn_link" aria-label="button">Not what you are looking for</button>
+    </div>
+    <button class="close-expand btn_link">Close</button>
 </div>

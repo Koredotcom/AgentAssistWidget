@@ -2,7 +2,9 @@
 <ng-container *ngFor="let article of articlesList">
   <div class="faq-suggestions-wrapper">
     <div class="faq-s-header">
-        <h1>{{article.title}}</h1>
+        <div class="titles-info-heading">
+            <h1 class="text-truncate">{{article.title}}</h1>
+        </div>
         <div class="faq-actions">
             <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
                 <i class="krIocnsFont-copy"></i>
@@ -11,10 +13,10 @@
         </div>
     </div>
     <div class="faq-body-content">
-        <div class="collapse show data-faq-paragraph" id="collapseExample">            
+        <div class="data-faq-paragraph">            
             <p [innerHTML]="article?.content | removeTagFromString | replaceTextWithTag : article.userInput"></p>
         </div>
-        <a class="moreText" href="#collapseExample" data-bs-toggle="collapse" role="button" aria-expanded="false">
+        <a class="moreText" role="button" aria-expanded="false">
             <span class="more-text">More</span>
             <span class="less-text">Less</span>
         </a>

@@ -110,6 +110,9 @@ h6 {
 .w-100{
   width: 100%;
 }
+p{
+  margin: 0;
+}
 // Lists
 
 ol,
@@ -122,6 +125,11 @@ ul,
 dl {
   margin-top: 0;
   margin-bottom: 1rem;
+}
+
+.disabled-msg{
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 ol ol,
@@ -261,7 +269,9 @@ button,
 textarea {
   resize: vertical; // 1
 }
-
+.text-truncate {
+  @include text-truncate();
+}
 
 ::-webkit-datetime-edit-fields-wrapper,
 ::-webkit-datetime-edit-text,
