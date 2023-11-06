@@ -4,14 +4,14 @@
             <div class="top-info">
                 <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName + this.parsedCustomData?.lName) ||
                     'Customer'}}</div>
-                <div class="time-tamp"><time>{{conv.timestampValue | converTimestampToDate}}}</time></div>
+                <div class="time-tamp"><time>{{conv.timestampValue | converTimestampToDate}}</time></div>
             </div>
             <div class="bubble-msg-with-img">
                 <div class="bubble-msg">{{conv.message}}</div>
-                <div class="intent-suggestion-buld" ngbTooltip="bala">
+                <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
                     <sub>1</sub>
                     <i class="krIocnsFont-light-bulb"></i>
-                </div>
+                </div> -->
                 <!-- <div class="copy-bubble">
                     <i class="krIocnsFont-copy"></i>
                 </div> -->
@@ -26,11 +26,11 @@
                 <div class="you-text">You</div>
             </div>
             <div class="bubble-msg-with-img">
+                <div class="bubble-msg">{{conv.message}}</div>
                 <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
                     <sub>1</sub>
                     <i class="krIocnsFont-light-bulb"></i>
                 </div> -->
-                <div class="bubble-msg">{{conv.message}}</div>
                 <!-- <div class="copy-bubble">
                     <i class="krIocnsFont-copy"></i>
                 </div> -->

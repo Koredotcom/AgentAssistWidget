@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, Renderer2, TemplateRef } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ProjConstants, storageConst } from 'src/app/proj.const';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
@@ -12,11 +12,16 @@ import { SubSink } from 'subsink';
 })
 export class FooterComponent implements OnInit, OnDestroy{
 
-  selectedTab = 'assist';
+  @ViewChild('content', {static: false}) private content: ElementRef<HTMLDivElement>
+
+
+  selectedTab = ProjConstants.ASSIST;
   canvas:any;
   projConstants : any = ProjConstants;
   connectionDetails : any;
-  subs = new SubSink()
+  subs = new SubSink();
+
+
 
   constructor(private offcanvasService: NgbOffcanvas, private localStorageService : LocalStorageService,
     private rootService: RootService, 
@@ -35,13 +40,21 @@ export class FooterComponent implements OnInit, OnDestroy{
         this.connectionDetails  = this.rootService.getConnectionDetails();
         this.localStorageService.initializeLocalStorageState();
       }
+    });
+
+    this.rootService.activeTab$.subscribe(tab => {
+      if(tab){
+        this.actionOnButton(tab);
+      }
     })
+
   }
  
-  actionOnButton(selectedTab: string, canvas: any){
+  actionOnButton(selectedTab: string){
+    let canvas = this.content;
     this.selectedTab = selectedTab;
     let offclickCanvasClass = 'if-assist-click-offcanvas'
-    if(selectedTab === 'assist'){
+    if(selectedTab === ProjConstants.ASSIST){
       document.body.classList.add(offclickCanvasClass);
       return;
     }else{
@@ -53,7 +66,7 @@ export class FooterComponent implements OnInit, OnDestroy{
     let className = 'if-maximized-canvas';
     this.renderer.removeClass(this.document.body, className);
   }
-  openCanvas(canvas: TemplateRef<any>) {
+  openCanvas(canvas) {
 		this.canvas = this.offcanvasService.open(canvas, { position: 'bottom', keyboard:false, backdropClass: 'custom-backdrop-off-canvas', panelClass: 'offCanvasWrapperContaier', backdrop:'static' });
 	}
 

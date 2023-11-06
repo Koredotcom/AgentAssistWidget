@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ProjConstants } from 'src/app/proj.const';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
@@ -10,6 +10,8 @@ import { SubSink } from 'subsink';
   styleUrls: ['./transcript-history.component.scss']
 })
 export class TranscriptHistoryComponent implements OnInit, OnDestroy{
+
+// @ViewChild('transcriptScrollContainer', {static: false}) private transcriptScrollContainer: ElementRef<HTMLDivElement>
 
   subs = new SubSink();
   connectionDetails : any;
@@ -276,6 +278,12 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
       }
     // });
   }
+
+//   scrollToBottom() {
+//     try {
+//       this.transcriptScrollContainer.nativeElement.scrollTop = this.transcriptScrollContainer.nativeElement.scrollHeight;
+//     } catch (err) { }
+//   }
 
   ngOnDestroy(){
     this.subs.unsubscribe();

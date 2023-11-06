@@ -30,23 +30,36 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.defLanguage = this.localStorageService.getLanguage() || 'en';
-    this.selectedTheme = this.localStorageService.getTheme() || 'auto';
-    this.checkRtl();
-    this.subscribeEvents();
-    this.setProactiveMode();
+    this.subscribeEvents(); 
   }
 
   subscribeEvents(){
     this.rootService.socketConnection$.subscribe(res => {
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();
+        this.getLocalStorageParams();
+        this.checkRtl();
       }
     })
   }
 
+  getLocalStorageParams(){
+    let appState : any = this.localStorageService.getLocalStorageState();
+    let convState = appState[this.connectionDetails.conversationId];
+    console.log(convState, "conv state *********");
+    
+    this.defLanguage = convState[storageConst.LANGUAGE] || storageConst.ENGLISH;
+    this.selectedTheme = convState[storageConst.THEME] || storageConst.AUTO;
+
+    this.setProactiveMode(convState);
+  }
+
   selectedLang(_event: any){
-    this.localStorageService.setLanguageInfo(this.defLanguage);
+    let storageObject: any = {
+      [storageConst.LANGUAGE]: this.defLanguage
+    }
+    this.localStorageService.setLocalStorageItem(storageObject);
+    // this.localStorageService.setLanguageInfo(this.defLanguage);
     this.checkRtl();
   }
 
@@ -58,27 +71,29 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  chooseTheme(){
-    this.localStorageService.setTheme(this.selectedTheme);
+  chooseTheme() {
+    let storageObject: any = {
+      [storageConst.THEME]: this.selectedTheme
+    }
+    this.localStorageService.setLocalStorageItem(storageObject);
+    // this.localStorageService.setTheme(this.selectedTheme);
   }
 
-    //proactive tab toggle click
-    proactiveToggle(proactiveModeEnabled) {
-      this.proactiveModeEnabled = (proactiveModeEnabled == ProjConstants.PROACTIVE_INITIAL_MODE) ? true : proactiveModeEnabled;
-      this.handleSubjectService.setProactiveModeStatus(proactiveModeEnabled);
-      this.updateProactiveModeState(this.proactiveModeEnabled);
-    }
-  
-    updateProactiveModeState(modeStatus){
-      let storageObject: any = {
-        [storageConst.PROACTIVE_MODE]: modeStatus
-      }
-      this.localStorageService.setLocalStorageItem(storageObject);
+  //proactive tab toggle click
+  proactiveToggle(proactiveModeEnabled) {
+    this.proactiveModeEnabled = (proactiveModeEnabled == ProjConstants.PROACTIVE_INITIAL_MODE) ? true : proactiveModeEnabled;
+    this.handleSubjectService.setProactiveModeStatus(proactiveModeEnabled);
+    this.updateProactiveModeState(this.proactiveModeEnabled);
   }
-  
-  setProactiveMode(){
-    let appState : any = this.localStorageService.getLocalStorageState();
-    let convState = appState[this.connectionDetails.conversationId];
+
+  updateProactiveModeState(modeStatus) {
+    let storageObject: any = {
+      [storageConst.PROACTIVE_MODE]: modeStatus
+    }
+    this.localStorageService.setLocalStorageItem(storageObject);
+  }
+
+  setProactiveMode(convState){
     if(this.connectionDetails.source == this.projConstants.SMARTASSIST_SOURCE && typeof convState[storageConst.PROACTIVE_MODE] != 'boolean'){
       convState[storageConst.PROACTIVE_MODE] = this.connectionDetails.isProactiveAgentAssistEnabled;
     }

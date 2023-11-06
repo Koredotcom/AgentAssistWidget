@@ -6,7 +6,7 @@
                     <div class="icon_block">
                         <img src="assets/images/icons/dialog.svg" alt="Top Dialog Suggestion">
                     </div>
-                    <h1>Top Dialog Suggestion</h1>
+                    <h1>Dialog Task</h1>
                 </div>
                 <div class="suggestion-body-search">
                     <app-dialog-suggestion></app-dialog-suggestion>
@@ -63,10 +63,8 @@
 
 
     <div class="search-block-input">
-        <div class="suggestions-info">
-            <button>Edit Order</button>
-            <button>Edit Payment</button>
-            <button>Edit Catalog</button>
+        <div class="suggestions-info" *ngIf="searchText && querySuggestions.length">
+            <button *ngFor="let suggestion of querySuggestions">{{suggestion}}</button>
             <p>Suggested</p>
         </div>
         <div class="input-block">
