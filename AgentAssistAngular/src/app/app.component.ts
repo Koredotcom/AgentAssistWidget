@@ -127,6 +127,8 @@ export class AppComponent implements OnInit, OnDestroy{
       console.log(e, 'data from smartAssist');
       let urlParams = e.data.urlParams;
       // this.service.configObj = urlParams;
+      this.rootService.formatConnectionDetails(urlParams);
+      this.connectionDetails = this.rootService.getConnectionDetails();
       this.initAgentAssist(urlParams);
     } else if (e.data.name === 'userBotConvos') {
       console.log(e.data);
@@ -171,7 +173,6 @@ export class AppComponent implements OnInit, OnDestroy{
       this.connectionDetails.conversationId
     ) {
       if (this.connectionDetails.fromSAT) {
-        this.rootService.formatConnectionDetails(params);
         this.connectionDetails = this.rootService.getConnectionDetails();
         this.initiateSocketConnection(this.connectionDetails);
       } else {
