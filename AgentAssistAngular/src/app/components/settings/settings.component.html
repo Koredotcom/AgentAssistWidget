@@ -1,4 +1,4 @@
-<div class="settings-wrapper-info" *ngIf="true">
+<div class="settings-wrapper-info">
     <div class="offcanvas-header">
         <button class="back-canvas" (click)="setting = ''" *ngIf="setting !== ''">
             <i class="krIocnsFont-chevron-left"></i>
@@ -204,42 +204,4 @@
             </div>
         </ng-container>
     </div>
-</div>
-
-<div class="interputions-botttom-info" *ngIf="false">
-    <div class="interputions-canvas-wrapper">
-        <button class="btn_link">
-            <i class="krIocnsFont-close-md"></i>
-        </button>
-        <ng-container>
-            <h1>Interruption Occured</h1>
-            <p>Identified intent <span>‘Cancel Order’</span>. Running this would terminate your existing conversation.</p>
-            <h2>“I am so sorry but it looks like I have to get to someplace urgently. Would it be possible to cancel the order I just placed?”</h2>
-            <button class="_btn primaryBtn w-100">Accept and Run</button>
-            <button class="_btn secondaryBtn w-100">Run Later</button>
-            <button class="_btn solidBtn w-100">Cancel</button>
-        </ng-container>
-
-        <ng-container>
-            <h1>Terminate Conversation</h1>
-            <p>Are you sure you want to terminate the dialog task? AgentAsssit will no longer be able to make suggestions. </p>        
-            <button class="_btn dangerBtn w-100">Yes Terminate</button>
-            <button class="_btn solidBtn w-100">No, Cancel</button>
-            <button class="_btn solidBtn w-100">Continue with override mode</button>
-        </ng-container>
-
-        <ng-container>
-            <h1>Task Progress Warning</h1>
-            <p>The dialogue task that you are attempting to run is currently in progress on the "Assist" tab. Proceeding will result in the termination of the task on the "Assist" tab.</p>           
-            <button class="_btn primaryBtn w-100">Yes, Proceed</button>
-            <button class="_btn secondaryBtn w-100">No</button>
-        </ng-container>
-    </div>  
-</div>
-
-
-<div class="interputions-botttom-info" *ngIf="false">
-    <div class="interputions-canvas-wrapper">
-        
-    </div>  
 </div>

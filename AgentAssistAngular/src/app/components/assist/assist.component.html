@@ -19,13 +19,13 @@
                     <button class="solid-action stop-assist" aria-label="button">
                         <span></span>
                     </button>
-                    <button class="solid-action minimize-btn" aria-label="button" href="#assistCollapse" data-bs-toggle="collapse" (click)="minimizeToggle()">
+                    <button class="solid-action minimize-btn" aria-label="button" (click)="minimizeToggle()">
                         <i class="krIocnsFont-minimize"></i>
                     </button>
                 </div>
             </div>
         </div>
-        <div id="assistCollapse" class="collapse show">
+        <div class="collapse-tab">
           <div class="card-body">
                 <div class="card_body_acc_content">
                     <ng-container [ngTemplateOutlet]="listingTriggers"></ng-container>
@@ -57,6 +57,7 @@
             </div>
             <p>Dialog :</p>
             <span [ngbTooltip]="tipContent">i will like to...</span>
+            <div class="dialog-count">4</div>
         </div>
         <app-dialog></app-dialog>
         <div class="btn-more-solid">

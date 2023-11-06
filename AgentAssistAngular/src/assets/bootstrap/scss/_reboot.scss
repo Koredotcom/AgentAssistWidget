@@ -5,17 +5,6 @@
   box-sizing: border-box;
 }
 
-:root {
-  @if $font-size-root != null {
-    @include font-size(var(--#{$prefix}root-font-size));
-  }
-
-  @if $enable-smooth-scroll {
-    @media (prefers-reduced-motion: no-preference) {
-      scroll-behavior: smooth;
-    }
-  }
-}
 html{
   overflow: hidden;
   height: 100%;
@@ -60,70 +49,46 @@ body::-webkit-scrollbar {
 // scss-docs-start reboot-body-rules
 body {
   margin: 0; // 1
-  font-family: var(--#{$prefix}body-font-family);
-  @include font-size(var(--#{$prefix}body-font-size));
-  font-weight: var(--#{$prefix}body-font-weight);
-  line-height: var(--#{$prefix}body-line-height);
-  color: var(--#{$prefix}body-color);
-  text-align: var(--#{$prefix}body-text-align);
-  background-color: var(--#{$prefix}body-bg); // 2
-  -webkit-text-size-adjust: 100%; // 3
-  -webkit-tap-highlight-color: rgba($black, 0); // 4
-}
-
-hr {
-  margin: $hr-margin-y 0;
-  color: $hr-color; // 1
-  border: 0;
-  border-top: $hr-border-width solid $hr-border-color;
-  opacity: $hr-opacity;
+  font-family: 'Inter';
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  color: #121926;
+  background-color: #fff;
+  -webkit-text-size-adjust: 100%;
 }
 
 
-// Typography
-//
-// 1. Remove top margins from headings
-//    By default, `<h1>`-`<h6>` all receive top and bottom margins. We nuke the top
-//    margin for easier control within type scales as it avoids margin collapsing.
 
 %heading {
   margin-top: 0; // 1
-  margin-bottom: $headings-margin-bottom;
-  font-family: $headings-font-family;
-  font-style: $headings-font-style;
-  font-weight: $headings-font-weight;
-  line-height: $headings-line-height;
-  color: var(--#{$prefix}heading-color);
+  margin-bottom: 0px;
+  font-weight: 400;
+  line-height: normal;
 }
 
 h1 {
   @extend %heading;
-  @include font-size($h1-font-size);
 }
 
 h2 {
   @extend %heading;
-  @include font-size($h2-font-size);
 }
 
 h3 {
   @extend %heading;
-  @include font-size($h3-font-size);
 }
 
 h4 {
   @extend %heading;
-  @include font-size($h4-font-size);
 }
 
 h5 {
   @extend %heading;
-  @include font-size($h5-font-size);
 }
 
 h6 {
   @extend %heading;
-  @include font-size($h6-font-size);
 }
 
 %paragraph {
@@ -142,9 +107,8 @@ h6 {
 .h-100{
   height: 100%;
 }
-p {
-  margin-top: 0;
-  margin-bottom: $paragraph-margin-bottom;
+.w-100{
+  width: 100%;
 }
 // Lists
 
@@ -180,18 +144,12 @@ dd {
 
 b,
 strong {
-  font-weight: $font-weight-bolder;
-}
-
-
-small {
-  @include font-size($small-font-size);
+  font-weight: 700;
 }
 
 sub,
 sup {
   position: relative;
-  @include font-size($sub-sup-font-size);
   line-height: 0;
   vertical-align: baseline;
 }
@@ -201,11 +159,10 @@ sup { top: -.5em; }
 // Links
 
 a {
-  color: rgba(var(--#{$prefix}link-color-rgb), var(--#{$prefix}link-opacity, 1));
-  text-decoration: $link-decoration;
+  color: var(--primary-500, #2970FF);
+  text-decoration: none;
   &:hover {
-    --#{$prefix}link-color-rgb: var(--#{$prefix}link-hover-color-rgb);
-    text-decoration: $link-hover-decoration;
+    color: var(--primary-500, #2970FF);
   }
 }
 
@@ -216,11 +173,6 @@ a:not([href]):not([class]) {
     text-decoration: none;
   }
 }
-
-
-// Figures
-//
-// Apply a consistent margin strategy (matches our type styles).
 
 figure {
   margin: 0;
@@ -241,7 +193,7 @@ table {
 }
 
 th {
-  font-weight: $table-th-font-weight; // 1
+  font-weight: 500; // 1
   text-align: inherit; // 2
   text-align: -webkit-match-parent; // 3
 }
@@ -273,7 +225,6 @@ optgroup,
 textarea {
   margin: 0; // 1
   font-family: inherit;
-  @include font-size(inherit);
   line-height: inherit;
 }
 
@@ -295,10 +246,10 @@ button,
 [type="reset"],
 [type="submit"] {
   -webkit-appearance: button; // 2
-  @if $enable-button-pointers {
-    &:not(:disabled) {
-      cursor: pointer; // 3
-    }
+  cursor: pointer;
+  &:disabled{
+    opacity: 0.3;
+    pointer-events: none;
   }
 }
 

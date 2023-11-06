@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'krIocnsFont';
-  src:  url('fonts/krIocnsFont.eot?15yke3');
-  src:  url('fonts/krIocnsFont.eot?15yke3#iefix') format('embedded-opentype'),
-    url('fonts/krIocnsFont.ttf?15yke3') format('truetype'),
-    url('fonts/krIocnsFont.woff?15yke3') format('woff'),
-    url('fonts/krIocnsFont.svg?15yke3#krIocnsFont') format('svg');
+  src:  url('fonts/krIocnsFont.eot?nzkzh3');
+  src:  url('fonts/krIocnsFont.eot?nzkzh3#iefix') format('embedded-opentype'),
+    url('fonts/krIocnsFont.ttf?nzkzh3') format('truetype'),
+    url('fonts/krIocnsFont.woff?nzkzh3') format('woff'),
+    url('fonts/krIocnsFont.svg?nzkzh3#krIocnsFont') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.krIocnsFont-keyboard:before {
+  content: "\e91d";
+}
 .krIocnsFont-warning-solid:before {
   content: "\e91c";
 }
