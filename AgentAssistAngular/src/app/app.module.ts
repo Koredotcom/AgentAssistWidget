@@ -41,6 +41,11 @@ import { ReplaceTextWithTagPipe } from './pipes/replace-text-with-tag.pipe';
 import { TranscriptHistoryComponent } from './components/transcript-history/transcript-history.component';
 import { ConverTimestampToDatePipe } from './pipes/conver-timestamp-to-date.pipe';
 import { UserBotHistoryComponent } from './components/user-bot-history/user-bot-history.component';
+import { InterruptComponent } from './components/interrupt/interrupt.component';
+import { RestartComponent } from './components/restart/restart.component';
+import { TerminateComponent } from './components/terminate/terminate.component';
+import { ListviewComponent } from './components/listview/listview.component';
+import { TaskProgressComponent } from './components/task-progress/task-progress.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -78,7 +83,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReplaceTextWithTagPipe,
     TranscriptHistoryComponent,
     ConverTimestampToDatePipe,
-    UserBotHistoryComponent
+    UserBotHistoryComponent,
+    InterruptComponent,
+    RestartComponent,
+    TerminateComponent,
+    ListviewComponent,
+    TaskProgressComponent
   ],
   imports: [
     TranslateModule.forRoot({

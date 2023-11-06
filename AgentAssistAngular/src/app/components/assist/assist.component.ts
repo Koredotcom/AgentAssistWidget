@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
 import { forkJoin } from 'rxjs';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-assist',
   templateUrl: './assist.component.html',
   styleUrls: ['./assist.component.scss']
 })
-export class AssistComponent implements OnInit{
+export class AssistComponent implements OnInit, OnDestroy{
 
   connectionDetails : any = {};
   loader : boolean = false;
+  subs = new SubSink();
 
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService){
     
@@ -22,13 +24,18 @@ export class AssistComponent implements OnInit{
     this.subscribeEvents();
   }
 
+  ngOnDestroy(){
+    this.subs.unsubscribe();
+  }
+
+
   subscribeEvents(){
-    this.rootService.socketConnection$.subscribe(res => {
+    this.subs.sink = this.rootService.socketConnection$.subscribe(res => {
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();
         this.getAssistData(this.connectionDetails);
       }
-    })
+    });
   }
   minimizeToggle(){
     

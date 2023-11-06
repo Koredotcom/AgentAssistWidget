@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from './services/local-storage.service';
 import { WebSocketService } from './services/web-socket.service';
@@ -16,7 +16,7 @@ import { ServiceInvokerService } from './services/service-invoker.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy{
   isGrantSuccess = false;
   errorMsg: string = '';
   subs = new SubSink();
@@ -71,6 +71,11 @@ export class AppComponent {
       window.parent.postMessage(message, '*');
     });
   }
+
+  ngOnDestroy(){
+    this.subs.unsubscribe();
+  }
+
 
   initiateSocketConnection(params: any) {
     this.isGrantSuccess = true;
