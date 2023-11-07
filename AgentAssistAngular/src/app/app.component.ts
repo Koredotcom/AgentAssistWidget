@@ -146,10 +146,13 @@ export class AppComponent implements OnDestroy {
 
   emitUserAgentMessage(payload: userAgInputMessages, eType='') {
     // emit userAgentMsg
-    payload['wordTimeStamps'] = this.wordTimeStamps;
+    
     if( eType === 'user_inp_msg') {
       this.webSocketService.emitEvents(EVENTS.user_sent_message, payload);
     } else if(eType === 'agent_inp_msg') {
+      if(Object.keys(this.wordTimeStamps).length) {
+        payload['wordLevelTimeStamps'] = this.wordTimeStamps;
+      }
       this.webSocketService.emitEvents(EVENTS.agent_sent_message, payload);
     }
     this.wordTimeStamps = {};
