@@ -38,7 +38,7 @@
                 <div class="title col-6 text-right">{{"DASHBOARD.AGENT_ASPECT_TOTAL_SEARCHES_COLUMN" | translate}}</div>
             </div>
             <ng-container>
-                <div class="table-body-feedback row" *ngFor="let obj of agentAspectTableData.slice(0,3)">
+                <div class="table-body-feedback row" *ngFor="let obj of agentAspectPartialTableData.slice(0,3)">
                     <div class="col-6 title">{{obj.input}}</div>
                     <div class="col-6 title text-right f_w_600">{{obj.percent | number : '1.1-1'}}% ({{obj.count}})</div>
                 </div>
@@ -49,44 +49,49 @@
 
 
     <ng-container *ngIf="(viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE) && agentAspectData?.actualData?.length > 0">
-        <div class="cards-data-boards agent-feedback-cards">
-            <div class="card-sec max_width_50">
-                <div class="inner-data-sec">
-                    <div class="title-text-info">
-                        <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_TOTAL_SEARCH_REQ" | translate}}</span>
-                        <div class="value-data" [ngClass]="{'negtive': !agentAspectData?.totalSearchReq?.increment}">
-                            <i [ngClass]="agentAspectData?.totalSearchReq?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                            <span>{{ agentAspectData?.totalSearchReq?.percent ? (agentAspectData?.totalSearchReq?.percent | number : '1.1-1') : '0'}}%</span>
+        <perfect-scrollbar class="scroll-content-data" (psYReachEnd)="onReachEnd($event)">
+            <div class="body-scroll-data">
+                <div class="cards-data-boards agent-feedback-cards content-scroll-data">
+                    <div class="card-sec max_width_50">
+                        <div class="inner-data-sec">
+                            <div class="title-text-info">
+                                <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_TOTAL_SEARCH_REQ" | translate}}</span>
+                                <div class="value-data" [ngClass]="{'negtive': !agentAspectData?.totalSearchReq?.increment}">
+                                    <i [ngClass]="agentAspectData?.totalSearchReq?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                                    <span>{{ agentAspectData?.totalSearchReq?.percent ? (agentAspectData?.totalSearchReq?.percent | number : '1.1-1') : '0'}}%</span>
+                                </div>
+                            </div>
+                            <div class="count-heading">{{agentAspectData?.totalSearchReq?.count ? (agentAspectData?.totalSearchReq?.count | number : '1.1-1') : '0'}}</div>
                         </div>
                     </div>
-                    <div class="count-heading">{{agentAspectData?.totalSearchReq?.count ? (agentAspectData?.totalSearchReq?.count | number : '1.1-1') : '0'}}</div>
-                </div>
-            </div>
-            <div class="card-sec max_width_50">
-                <div class="inner-data-sec">
-                    <div class="title-text-info">
-                        <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_SEARCH_RESULTS_USED" | translate}}</span>
-                        <div class="value-data" [ngClass]="{'negtive': !agentAspectData?.searchResultsUsed?.increment}">
-                            <i [ngClass]="agentAspectData?.searchResultsUsed?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                            <span>{{agentAspectData?.searchResultsUsed?.percent ? (agentAspectData?.searchResultsUsed?.percent | number : '1.1-1') : '0'}}%</span>
+                    <div class="card-sec max_width_50">
+                        <div class="inner-data-sec">
+                            <div class="title-text-info">
+                                <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_SEARCH_RESULTS_USED" | translate}}</span>
+                                <div class="value-data" [ngClass]="{'negtive': !agentAspectData?.searchResultsUsed?.increment}">
+                                    <i [ngClass]="agentAspectData?.searchResultsUsed?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                                    <span>{{agentAspectData?.searchResultsUsed?.percent ? (agentAspectData?.searchResultsUsed?.percent | number : '1.1-1') : '0'}}%</span>
+                                </div>
+                            </div>
+                            <div class="count-heading">{{agentAspectData?.searchResultsUsed?.count ? (agentAspectData?.searchResultsUsed?.count | number : '1.1-1') : '0'}}%</div>
                         </div>
                     </div>
-                    <div class="count-heading">{{agentAspectData?.searchResultsUsed?.count ? (agentAspectData?.searchResultsUsed?.count | number : '1.1-1') : '0'}}%</div>
+                </div>
+                <div class="table-agent-feedback">
+                    <div class="table-header row">
+                        <div class="title col-6">{{"DASHBOARD.AGENT_ASPECT_VIEWALL_KEYWORD_COLUMN" | translate}}</div>
+                        <div class="title col-6 text-right">{{"DASHBOARD.AGENT_ASPECT_VIEWALL_COUNT_COLUMN" | translate}} | {{"DASHBOARD.AGENT_ASPECT_VIEWALL_TOTAL_PERCENT_COLUMN" | translate}}</div>
+                    </div>
+                    <ng-container>
+                        <div class="table-body-feedback row" *ngFor="let obj of agentAspectTableData">
+                            <div class="col-6 title">{{obj.input}}</div>
+                            <div class="col-6 title text-right f_w_500">{{obj.count}} | {{(obj.percent | number : '1.1-1')}}%</div>
+                        </div>
+                    </ng-container>
                 </div>
             </div>
-        </div>
-        <div class="table-agent-feedback">
-            <div class="table-header row">
-                <div class="title col-6">{{"DASHBOARD.AGENT_ASPECT_VIEWALL_KEYWORD_COLUMN" | translate}}</div>
-                <div class="title col-6 text-right">{{"DASHBOARD.AGENT_ASPECT_VIEWALL_COUNT_COLUMN" | translate}} | {{"DASHBOARD.AGENT_ASPECT_VIEWALL_TOTAL_PERCENT_COLUMN" | translate}}</div>
-            </div>
-            <ng-container>
-                <div class="table-body-feedback row" *ngFor="let obj of agentAspectTableData">
-                    <div class="col-6 title">{{obj.input}}</div>
-                    <div class="col-6 title text-right f_w_500">{{obj.count}} | {{(obj.percent | number : '1.1-1')}}%</div>
-                </div>
-            </ng-container>
-        </div>
+        </perfect-scrollbar>
+            
     </ng-container>
 
     <div [hidden]="((viewType == VIEWTYPELIST.PARTIAL_VIEW) || (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)) || agentAspectTableData.length == 0 ">

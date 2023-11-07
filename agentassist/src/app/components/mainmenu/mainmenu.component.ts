@@ -45,7 +45,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   voicePreferences: VoicePreferencesModel;
   filteredSmartABots : any = {};
-  isCoachingDisable = false;
+  isCoachingDisable = true;
   @ViewChild('wUpdateBot', { static: false }) private wUpdateBot;
   @ViewChild('wSContent', { static: false }) private wSContent;
   @ViewChild(NgbDropdown) private dropdown: NgbDropdown;
@@ -135,7 +135,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
 
   filterLinkedBotIds(){
     this.filteredSmartABots = {};
-    this.smartABots?.forEach((bot) => {
+    this.smartABots.forEach((bot) => {
       if(bot._id){
         this.filteredSmartABots[bot._id] = bot;
       }
@@ -173,7 +173,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
       }
     } else {
       params = {
-        streamId: this.workflowService.deflectApps()?._id || this.workflowService.deflectApps()[0]?._id,
+        streamId: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id,
       }
     }
 

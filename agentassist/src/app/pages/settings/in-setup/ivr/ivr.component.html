@@ -69,7 +69,7 @@
                     <div class="label-text">{{'SETTINGS.DID_NUMBER' | translate}}</div>
                     <input type="text" placeholder="9876543210" class="input-text">                                
                 </div>
-                <div *ngIf="showAudioCodes" class="mb-23">
+                <!-- <div *ngIf="showAudioCodes" class="mb-23">
                     <div class="label-text font-weight-bold">{{'SETTINGS.DID_NUMBER' | translate}}</div>    
                     <mat-form-field class="example-chip-list" [floatLabel]="'never'">
                         <mat-chip-list #chipList>
@@ -89,7 +89,14 @@
                     <div class="kr-sg-input-text">                                                             
                         <div class="error-msg" *ngIf="didNumber.touched && didNumber.errors && didNumber.errors.required && !didNumbers.length">{{'SETTINGS.DID_NUMBER_REQUIRED' | translate}}</div>              
                     </div>
-                </div>              
+                </div>               -->
+                <div *ngIf="showAudioCodes" class="mb-23">
+                    <div class="label-text font-weight-bold">{{'SETTINGS.DID_NUMBER' | translate}}</div>
+                    <input type="text" id="didNumber" class="sys-input" style="width: 100%;" [(ngModel)]="model.didNumber" [ngModelOptions]="{updateOn: 'blur', standalone: true}" #didNumber="ngModel" required>
+                    <div class="kr-sg-input-text">                                                             
+                        <div class="error-msg" *ngIf="didNumber.touched && didNumber.errors && didNumber.errors.required && !model.didNumber.length ">{{'SETTINGS.DID_NUMBER_REQUIRED' | translate}}</div>              
+                    </div>
+                </div>
                 <div class="kr-sg-dropdowns mb-23">
                     <div class="label-text">{{'SETTINGS.SIP_TRANSPORT_TYPE' | translate}}<span class="optional"></span></div>
                     <div class="dropdown dropdown-open">
@@ -113,7 +120,7 @@
             </div>     
         </perfect-scrollbar>  
         <div class="footer-sec">
-            <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="saveInProgress || ivrForm.invalid || !didNumbers.length" (click)="SipTransferConfig()">{{(saveInProgress ? 'BUTTONS.SAVING' : 'BUTTONS.SAVE') | translate}}</button>        
+            <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="saveInProgress || ivrForm.invalid || !model.didNumber.length" (click)="SipTransferConfig()">{{(saveInProgress ? 'BUTTONS.SAVING' : 'BUTTONS.SAVE') | translate}}</button>        
             <button class="kr-sg-button-secondary btn_lg ml-1" (click)="close()">{{'BUTTONS.CANCEL' | translate}}</button>        
         </div>
     </form>

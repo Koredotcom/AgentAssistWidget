@@ -31,7 +31,7 @@ export class IvrComponent implements OnInit {
   showAudioCodes: boolean = true;
   isDidExist:boolean = false;
   didLengthSet:boolean = false;
-  didNumbers: any[] = [];
+  didNumbers: any;
   sipTransportTypes: any[] = []
   voiceListSub: Subscription;
   asrPreferences: any[] = [];
@@ -54,7 +54,7 @@ export class IvrComponent implements OnInit {
     sipURI: string,
     incomingIpAddresses: string,
     languagePreference: 'en_US',
-    didNumber: string[],
+    didNumber: '',
     sipTransportType: string,
     sipHost: string, // optional
     sipUserName: string, //optional
@@ -142,7 +142,7 @@ export class IvrComponent implements OnInit {
       console.log(this.selectedSipInfo);
       this.updateSipConfig = true;
       this.model.sipURI = this.sipNewURI;
-      this.model.didNumber = this.selectedSipInfo.didNumber;
+      this.model.didNumber = this.selectedSipInfo.didNumber[0];
       this.model.fqdn = this.selectedSipInfo.fqdn;
       this.model.incomingIpAddresses = this.selectedSipInfo.incomingIpAddresses;
       this.model.network = this.selectedSipInfo.network;
@@ -178,71 +178,72 @@ export class IvrComponent implements OnInit {
     this.model.network = this.model.network || 'listofIp';
     this.model.incomingIpAddresses = (this.model.incomingIpAddresses as any).join(",");
     this.didNumbers = typeof this.model.didNumber === 'object' ? this.model.didNumber : [this.model.didNumber];
-    this.model.didNumber = null;
+    // this.model.didNumber = null;
     this.model.fqdn = (this.model.fqdn as any).join(",");
     this.data = $.extend(true, {}, this.model);
   }
 
-  onDIDNumberRemove(tag): void {
-    this.isDidExist = true;
-    this.sipValue = this.sipNewURI.split(/[@:]/);
-    if(this.didNumbers.length == 1){
-    this.sipValue.splice(1,1);
-    }
-    this.sipNewURI = this.sipValue.join(':');
-    const index = this.didNumbers.indexOf(tag);
-    if (index >= 0) {
-      this.didNumbers.splice(index, 1);
-    }
-  }
+  // onDIDNumberRemove(tag): void {
+  //   this.isDidExist = true;
+  //   this.sipValue = this.sipNewURI.split(/[@:]/);
+  //   if(this.didNumbers.length == 1){
+  //   this.sipValue.splice(1,1);
+  //   }
+  //   this.sipNewURI = this.sipValue.join(':');
+  //   const index = this.didNumbers.indexOf(tag);
+  //   if (index >= 0) {
+  //     this.didNumbers.splice(index, 1);
+  //   }
+  // }
 
 
-  onDidNumberFocus(event) {
-    this.OnDidNumberUpdated(event);
-  }
+  // onDidNumberFocus(event) {
+  //   this.OnDidNumberUpdated(event);
+  // }
 
-  OnDidNumberUpdated(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-    if ((value || '').trim()) {
+  // OnDidNumberUpdated(event): void {
+    
+  //   const input = event.input;
+  //   const value = this.model.didNumber;
+  //   if ((value || '').trim()) {
      
-      this.didLengthSet = true;
-      if (this.didNumbers.length >= 1) {
-        
-        this.notificationService.notify("SIP doesn't support more than 1 number", 'warning');
-        return;
-      }
+  //     this.didLengthSet = true;
+  //     if (this.model.didNumber.length === 0) {
+  //       this.notificationService.notify("SIP doesn't support empty value", 'warning');
+  //       return;
+  //     }
+      
 
-      if (this.didNumbers.indexOf(value.trim()) > -1) {
-        return;
-      }
-      this.isDidExist = true;
-      if(this.sipNewURI){
-      this.sipValue = this.sipNewURI.split(/[@:]/);
-      }
-      else{
-        this.sipValue = this.model.sipURI.split(/[@:]/);
-      }
-      if(this.sipValue[1] == this.model.didNumber){
-      this.sipValue.splice(1,1);
-      this.sipMerge = value +'@'+ this.sipValue[1];
-      this.sipValue.splice(1,1);
-      }
-      else if(this.sipValue[1] != this.model.didNumber){
-      this.sipMerge = value +'@'+ this.sipValue[1];
-      this.sipValue.splice(1,1);
-      }
-      this.sipValue.splice(1,0,this.sipMerge);
-      this.sipNewURI = this.sipValue.join(':');
-      this.didNumbers.push(value.trim());
-     
-    }
+  //     // if (this.didNumbers.indexOf(value.trim()) > -1) {
+  //     //   return;
+  //     // }
+  //     this.isDidExist = true;
+  //     if(this.sipNewURI){
+  //     this.sipValue = this.sipNewURI.split(/[@:]/);
+  //     }
+  //     else{
+  //       this.sipValue = this.model.sipURI.split(/[@:]/);
+  //     }
+  //     if(this.sipValue[1] == this.model.didNumber){
+  //     this.sipValue.splice(1,1);
+  //     this.sipMerge = value +'@'+ this.sipValue[1];
+  //     this.sipValue.splice(1,1);
+  //     }
+  //     else if(this.sipValue[1] != this.model.didNumber){
+  //     this.sipMerge = value +'@'+ this.sipValue[1];
+  //     this.sipValue.splice(1,1);
+  //     }
+  //     this.sipValue.splice(1,0,this.sipMerge);
+  //     this.sipNewURI = this.sipValue.join(':');
+  //     this.didNumbers[0] = (value.trim());     
+  //   }
 
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-  }
+  //   // Reset the input value
+  //   if (input) {
+  //     input.value = '';
+  //     this.isDidExist = false;
+  //   }
+  // }
 
   selectedVoicePreferences(ttsPreference) {
     this.model.voicePreference = '';
@@ -353,7 +354,8 @@ export class IvrComponent implements OnInit {
         "settings": {
           "sipURI": this.sipNewURI,
           "network": this.model.network,
-          "didNumber": this.didNumbers,
+          "didNumber": [this.model.didNumber],
+          "didNumbers" : [{number : this.model.didNumber, inboundCall : true, outboundCall : false}],
           "sipTransportType": this.model.sipTransportType,
           "sipUserName": this.model.sipUserName,
           "sipPassword": this.model.sipPassword,
@@ -388,7 +390,8 @@ export class IvrComponent implements OnInit {
         "_id": this.selectedSipInfo._id,
         "sipURI": this.sipNewURI,
         "network": this.model.network,
-        "didNumber": this.didNumbers,
+        "didNumber": [this.model.didNumber],
+        "didNumbers" : [{number : this.model.didNumber, inboundCall : true, outboundCall : false}],
         "sipTransportType": this.model.sipTransportType,
         "sipUserName": this.model.sipUserName,
         "sipPassword": this.model.sipPassword,
