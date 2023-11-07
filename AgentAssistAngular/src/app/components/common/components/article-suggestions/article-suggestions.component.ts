@@ -40,6 +40,10 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
     this.rootService.handleSendCopyButton(actionType, faq_or_article_obj, selectType)
   }
 
+  toggleShowMoreLess(article){
+    article.showMoreButton = !article.showMoreButton;
+  }
+
   ngOnDestroy(){
     this.subs.unsubscribe();
   }

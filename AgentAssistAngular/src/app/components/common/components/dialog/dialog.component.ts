@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-dialog',
@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./dialog.component.scss']
 })
 export class DialogComponent {
-
+  @Input() automationData : any;
+  @Input() agentassistArrayIndex : number;
+  @Input() agentassistResponseArrayLength : number;
+  @Output() scrollBottom = new EventEmitter();
+  @Output() handlePopupEvent = new EventEmitter();
 }

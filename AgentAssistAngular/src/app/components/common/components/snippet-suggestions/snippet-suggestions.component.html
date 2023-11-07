@@ -6,7 +6,7 @@
         <h1 class="text-truncate">{{snippet.title}}</h1>
       </div>
       <div class="faq-actions">
-        <button class="solidbtn">Know More</button>
+        <button class="solidbtn" *ngIf="snippet.page_url"><a [href]="snippet.page_url" target="_blank">Know More</a></button>
         <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.SNIPPET)">
           <i class="krIocnsFont-copy"></i>
         </button>
@@ -15,11 +15,11 @@
     </div>
     <div class="faq-body-content">
       <div class="data-faq-paragraph">            
-        <p>{{snippet.content}}</p>
+        <p [ngClass]="{'show-full-text' : !snippet.showMoreButton}" #snippetContent>{{snippet.content}}</p>
       </div>
-      <a class="moreText" href="#collapseExample" data-bs-toggle="collapse" role="button" aria-expanded="false">
-        <span class="more-text">More</span>
-        <span class="less-text">Less</span>
+      <a class="moreText" role="button" aria-expanded="false" *ngIf="snippetContent.scrollHeight > 36">
+        <span class="more-text" *ngIf="snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">More</span>
+        <span class="less-text" *ngIf="!snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">Less</span>
       </a>
     </div>
   </div>

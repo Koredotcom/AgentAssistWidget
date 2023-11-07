@@ -78,6 +78,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
 
   initiateSocketConnection(params: any) {
+    this.localStorageService.initializeLocalStorageState();
     this.isGrantSuccess = true;
     // this.handleSourceType(params);
     setTimeout(() => {

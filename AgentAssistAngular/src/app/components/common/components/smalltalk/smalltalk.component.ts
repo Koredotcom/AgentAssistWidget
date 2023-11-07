@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { ProjConstants, RenderResponseType } from 'src/app/proj.const';
 
 @Component({
   selector: 'app-smalltalk',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class SmalltalkComponent {
 
+  @Input() smallTalkData : any = {};
+  @Input() agentassistArrayIndex : number;
+  @Input() agentassistResponseArrayLength : number;
+  @Input() agentAssistResp : any;
+  
+  projConstants : any = ProjConstants;
+  renderResponseType : any = RenderResponseType;
 }

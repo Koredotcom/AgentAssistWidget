@@ -14,11 +14,17 @@
     </div>
     <div class="faq-body-content">
         <div class="data-faq-paragraph">            
-            <p [innerHTML]="article?.content | removeTagFromString | replaceTextWithTag : article.userInput"></p>
+            <p [ngClass]="{'show-full-text' : !article.showMoreButton}" [innerHTML]="article?.content | removeTagFromString | replaceTextWithTag : article.userInput" #articleContent></p>
+            
+            <div class="btn-more-solid">
+                <a class="btn_link" aria-label="button"
+                    [href]="article.link" target="_blank">View Full Article</a>
+            </div>
+           
         </div>
-        <a class="moreText" role="button" aria-expanded="false">
-            <span class="more-text">More</span>
-            <span class="less-text">Less</span>
+        <a class="moreText" role="button" aria-expanded="false" *ngIf="articleContent.scrollHeight > 36">
+            <span class="more-text" *ngIf="article?.showMoreButton" (click)="toggleShowMoreLess(article)">More</span>
+            <span class="less-text" *ngIf="!article?.showMoreButton" (click)="toggleShowMoreLess(article)">Less</span>
         </a>
     </div>
   </div>

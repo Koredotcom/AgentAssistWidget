@@ -1,1 +1,6 @@
-<p>smalltalk works!</p>
+<ng-container *ngIf="smallTalkData.data.isPrompt">
+    <app-ask-customer [automation]="smallTalkData"></app-ask-customer>
+</ng-container>
+<ng-container *ngIf="!smallTalkData.data.isPrompt">
+    <app-tell-customer [automation]="smallTalkData"></app-tell-customer>
+</ng-container>

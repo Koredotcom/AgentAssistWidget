@@ -1,65 +1,43 @@
 
-<div class="faq-suggestions-wrapper">
+<div class="faq-suggestions-wrapper" *ngFor="let faq of searchedFAQList">
     <div class="faq-s-header">
         <div class="titles-info-heading">
-            <h1 class="text-truncate">How to check eligibility for a Refund? {{content.scrollHeight}}</h1>
-            <span>1/4</span>
+            <h1 class="text-truncate">{{faq.displayName ? faq.displayName : faq.question}} </h1>
+            <span
+                *ngIf="faq.answer && faq.answer.length > 1 && ((!faq.seeMoreWrapper && faq.answerRender) || (faq.toggle && !faq.answerRender && !faq.seeMoreWrapper))">1/{{faq.answer.length}}</span>
+            <span *ngIf="faq.childBotName">({{faq.childBotName}}) </span>
+        
+            <i class="krIocnsFont-thumbs-up-solid" *ngIf="!faq.answerRender && !faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
+            <i class="krIocnsFont-chevron-down" *ngIf="!faq.answerRender && faq.toggle"
+                (click)="getFaqAnswerAndtoggle(faq)"></i>
         </div>
-        <div class="faq-actions">
-            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, 'faq', projConstants.FAQ)">
+
+        <div class="faq-actions" *ngIf="!faq.seeMoreWrapper && faq.answer && faq.answer?.length > 0">
+            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, faq.answer[0], projConstants.FAQ)">
                 <i class="krIocnsFont-copy"></i>
             </button>
-            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, 'faq', projConstants.FAQ)">Send</button>
+            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, faq.answer[0], projConstants.FAQ)">Send</button>
         </div>
     </div>
-    <div class="faq-body-content">
-        <div class="faq-actions">
-            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, 'faq', projConstants.FAQ)">
-                <i class="krIocnsFont-copy"></i>
-            </button>
-            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, 'faq', projConstants.FAQ)">Send</button>
+
+    <ng-container *ngIf="faq.answer && faq.answer.length > 0 && ((faq.toggle && !faq.answerRender) || faq.answerRender)">
+        <div class="faq-body-content" *ngFor="let ansObj of faq.answer | slice : 0 : faq.answerCount;let ii = index">
+            <div class="faq-actions" *ngIf="ii != 0 || (ii == 0 && faq.seeMoreWrapper)">
+                <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, ansObj, projConstants.FAQ)">
+                    <i class="krIocnsFont-copy"></i>
+                </button>
+                <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, ansObj, projConstants.FAQ)">Send {{faqcontent.scrollHeight}}</button>
+            </div>
+            <div class="data-faq-paragraph">            
+                <p #faqcontent [ngClass]="{'show-full-text' : !ansObj['showMoreButton']}"  [innerHtml]="rootService.handleEmptyLine(ansObj['ans'])"></p>
+            </div>
+            <a class="moreText">
+                <!-- <span class="more-text" (click)="toggleShowMoreLess(faq)" *ngIf="faq.showMoreButton && faq.answer.length > 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))">Expand / </span> -->
+                <span class="more-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && ansObj['showMoreButton']">More</span>
+                <span class="less-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && !ansObj['showMoreButton']">Less</span>
+            </a>
         </div>
-        <div class="data-faq-paragraph">            
-            <p #content>Here is how to check your eligibility for refund Here is how to check your eligibility for refund  Here is how to check your eligibility for refund  : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order Here is how to check your eligibility for refund : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order</p>
-        </div>
-        <a class="moreText">
-            <span class="more-text">Expand / </span>
-            <span class="more-text" *ngIf="content.scrollHeight > 36">More</span>
-            <span class="less-text" *ngIf="content.scrollHeight > 36">Less</span>
-        </a>
-    </div>
-    <div class="faq-body-content">
-        <div class="faq-actions">
-            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, 'faq', projConstants.FAQ)">
-                <i class="krIocnsFont-copy"></i>
-            </button>
-            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, 'faq', projConstants.FAQ)">Send</button>
-        </div>
-        <div class="data-faq-paragraph">            
-            <p #content>Here is how to check your eligibility for refund Here is how to check your eligibility for refund  Here is how to check your eligibility for refund  : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order Here is how to check your eligibility for refund : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order</p>
-        </div>
-        <a class="moreText">
-            <span class="more-text" *ngIf="content.scrollHeight > 36">More</span>
-            <span class="less-text" *ngIf="content.scrollHeight > 36">Less</span>
-        </a>
-    </div>
-    <div class="faq-body-content">
-        <div class="faq-actions">
-            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, 'faq', projConstants.FAQ)">
-                <i class="krIocnsFont-copy"></i>
-            </button>
-            <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, 'faq', projConstants.FAQ)">Send</button>
-        </div>
-        <div class="data-faq-paragraph">            
-            <p #content>Here is how to check your eligibility for refund Here is how to check your eligibility for refund  Here is how to check your eligibility for refund  : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order Here is how to check your eligibility for refund : 1. Find the email of order confirmation. 2) Click on the link to view order. 3) Select the option to cancel the order</p>
-        </div>
-        <a class="moreText">
-            <span class="more-text" *ngIf="content.scrollHeight > 36">More</span>
-            <span class="less-text" *ngIf="content.scrollHeight > 36">Less</span>
-        </a>
-    </div>
-    <div class="btn-more-solid">
-        <button class="btn_link" aria-label="button">Not what you are looking for</button>
-    </div>
-    <button class="close-expand btn_link">Close</button>
+        <button class="close-expand btn_link" (click)="toggleExpandAndClose(faq)" *ngIf="faq?.answer?.length > 1 && !faq.seeMoreWrapper">Expand / More</button>
+        <button class="close-expand btn_link" (click)="toggleExpandAndClose(faq)" *ngIf="faq?.answer?.length > 1 && faq.seeMoreWrapper">Close</button>
+    </ng-container>
 </div>

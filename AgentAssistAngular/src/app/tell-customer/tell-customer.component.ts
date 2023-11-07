@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-tell-customer',
@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./tell-customer.component.scss']
 })
 export class TellCustomerComponent {
-
+  @Input() automation : any;
+  
 }

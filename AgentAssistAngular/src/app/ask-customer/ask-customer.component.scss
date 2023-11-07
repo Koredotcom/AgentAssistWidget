@@ -36,8 +36,8 @@
         position: relative;
         margin-top: 4px;
         transition: 0.2s all ease;
-        display: inline-flex;
-        align-items: center;
+        // display: inline-flex;
+        // align-items: center;
         &:hover{
             .send-copy-actions{
                 display: flex;

@@ -7,7 +7,7 @@
                         <img src="assets/images/icons/dialog.svg" alt="Top Dialog Suggestion">
                     </div>
                     <h1 class="text-truncate">Dialog Task</h1>
-                    <span class="count-text">2</span>
+                    <span class="count-text">{{searchResponse?.dialogs?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
                     <app-dialog-suggestion></app-dialog-suggestion>
@@ -19,10 +19,10 @@
                         <img src="assets/images/icons/custchoice.svg" alt="FAQ">
                     </div>
                     <h1 class="text-truncate">FAQ</h1>
-                    <span class="count-text">2</span>
+                    <span class="count-text">{{searchResponse?.faqs?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
-                    <app-faq-suggestions></app-faq-suggestions>
+                    <app-faq-suggestions (faqAnswerToggle)="checkAnswerAndToggle($event)"></app-faq-suggestions>
                 </div>
             </div>
             <div class="sugestions-block">
@@ -31,7 +31,7 @@
                         <img src="assets/images/icons/custchoice.svg" alt="Article">
                     </div>
                     <h1 class="text-truncate">Article</h1>
-                    <span class="count-text">2</span>
+                    <span class="count-text">{{searchResponse?.articles?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
                     <app-article-suggestions></app-article-suggestions>
@@ -43,7 +43,7 @@
                         <img src="assets/images/icons/custchoice.svg" alt="Snippet">
                     </div>
                     <h1 class="text-truncate">Snippet</h1>
-                    <span class="count-text">2</span>
+                    <span class="count-text">{{searchResponse?.snippets?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
                     <app-snippet-suggestions></app-snippet-suggestions>
@@ -56,8 +56,8 @@
                     <div class="icon_block">
                         <img src="assets/images/icons/dialog.svg" alt="Top Dialog Suggestion">
                     </div>
-                    <h1 class="text-truncate">Top Dialog Suggestion</h1>
-                    <span class="count-text">2</span>
+                    <h1 class="text-truncate">All Dialog Tasks</h1>
+                    <!-- <span class="count-text">2</span> -->
                 </div>
                 <div class="suggestion-body-search">
                     <app-dialog-suggestion></app-dialog-suggestion>
