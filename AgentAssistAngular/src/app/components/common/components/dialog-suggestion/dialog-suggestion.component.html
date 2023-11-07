@@ -1,10 +1,11 @@
 
+
 <ng-container *ngIf="!searchedDialogList.length">
     <ng-container *ngFor="let dialogue of menuResponse | keyvalue;let i = index">
         <div class="dialog-task-wrapper">
             <div class="title-paragraph">
                 <p>{{dialogue?.value['intentName']}}</p>
-                <span>(buy_bot)</span>
+                <!-- <span>(buy_bot)</span> -->
             </div>
             <div class="dialog-actions">
                 <button class="primary-btn" (click)="dialogueRunClick(dialogue,projConstants.ASSIST)">RUN</button>
@@ -13,7 +14,8 @@
                         <i class="krIocnsFont-outlined"></i>
                     </button>
                     <div ngbDropdownMenu aria-labelledby="elipseDrp">
-                        <button ngbDropdownItem aria-disabled="true" (click)="dialogueRunClick(dialogue,projConstants.MYBOT)">Run with Agent’s input</button>
+                        <button ngbDropdownItem aria-disabled="true"
+                            (click)="dialogueRunClick(dialogue,projConstants.MYBOT)">Run with Agent’s input</button>
                     </div>
                 </div>
             </div>
@@ -26,7 +28,7 @@
         <div class="dialog-task-wrapper">
             <div class="title-paragraph">
                 <p>{{dialog.name}}</p>
-                <span>(buy_bot)</span>
+                <span *ngIf="dialog.childBotName">({{dialog.childBotName}})</span>
             </div>
             <div class="dialog-actions">
                 <button class="primary-btn" (click)="dialogueRunClick(dialog,projConstants.ASSIST)">RUN</button>
@@ -35,13 +37,15 @@
                         <i class="krIocnsFont-outlined"></i>
                     </button>
                     <div ngbDropdownMenu aria-labelledby="elipseDrp">
-                        <button ngbDropdownItem aria-disabled="true" (click)="dialogueRunClick(dialog,projConstants.MYBOT)">Run with Agent’s input</button>
+                        <button ngbDropdownItem aria-disabled="true"
+                            (click)="dialogueRunClick(dialog,projConstants.MYBOT)">Run with Agent’s input</button>
                     </div>
                 </div>
             </div>
         </div>
     </ng-container>
 </ng-container>
+
 
 <!-- <ng-container [ngTemplateOutlet]="dialogSuggestion"></ng-container> -->
 

@@ -9,6 +9,7 @@ export class HandleSubjectService {
 
   searchResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
   public proactiveModeSubject = new Subject<boolean>();
+  public callConversationSuggestions$ = new Subject<object>();
 
   constructor() { }
 
@@ -18,6 +19,10 @@ export class HandleSubjectService {
 
   setProactiveModeStatus(flag){
     this.proactiveModeSubject.next(flag);
+  }
+
+  setCallConversationSuggestions(obj){
+    this.callConversationSuggestions$.next(obj);
   }
 
 }

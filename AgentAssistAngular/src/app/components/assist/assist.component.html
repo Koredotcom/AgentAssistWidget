@@ -28,11 +28,38 @@
         <div class="collapse-tab">
           <div class="card-body">
                 <div class="card_body_acc_content">
-                    <ng-container [ngTemplateOutlet]="dialogStarted"></ng-container>  
-                    <app-ask-customer></app-ask-customer>
-                    <ng-container [ngTemplateOutlet]="listingTriggers"></ng-container>                    
+                    <!-- <ng-container [ngTemplateOutlet]="dialogStarted"></ng-container>   -->
+                    <app-ask-customer [automation]="welcomeMsgResponse" [isWelcomeMsg]="true"></app-ask-customer>
+                    <!-- <ng-container [ngTemplateOutlet]="listingTriggers"></ng-container>                    
                     <ng-container [ngTemplateOutlet]="feedback"></ng-container>
-                    <ng-container [ngTemplateOutlet]="dialogEnded"></ng-container>                    
+                    <ng-container [ngTemplateOutlet]="dialogEnded"></ng-container>                     -->
+                    <ng-container *ngFor="let res of assistResponseArray; let i = index">
+                        <ng-container *ngIf="res.type == renderResponseType.SUGGESTIONS">
+                            <div class="agent-utt-info" attr.id="agentUttInfo-{{res.uuid}}">
+                                <div class="user-img">
+                                    <img src="assets/images/userIcon.svg">
+                                </div>
+                                <div class="text-user">{{res.data.userInput}}</div>
+                            </div>
+                            <app-suggestions [suggestionResponse]="res" [agentassistArrayIndex]="i"
+                                [agentassistResponseArrayLength]="assistResponseArray.length"
+                                ></app-suggestions>
+                        </ng-container>
+                        <ng-container *ngIf="res.type == renderResponseType.SMALLTALK">
+                            <app-smalltalk [smallTalkData]="res" [agentassistArrayIndex]="i"
+                                [agentassistResponseArrayLength]="assistResponseArray.length"
+                                [agentAssistResp]="agentAssistResponse"></app-smalltalk>
+                        </ng-container>
+                        <ng-container *ngIf="res.type == renderResponseType.AUTOMATION">
+                            <app-dialog [automationData]="res" [agentassistArrayIndex]="i"
+                                [agentassistResponseArrayLength]="assistResponseArray.length"></app-dialog>
+                        </ng-container>
+                        <ng-container *ngIf="res.type == renderResponseType.FEEDBACK">
+                            <app-feedback [feedbackData]="res" (updateFeedbackProperties)="updateFeedbackProperties($event,i)"
+                                [agentassistArrayIndex]="i" [agentassistResponseArrayLength]="assistResponseArray.length">
+                            </app-feedback>
+                        </ng-container>
+                    </ng-container>
                 </div>
           </div>
         </div>

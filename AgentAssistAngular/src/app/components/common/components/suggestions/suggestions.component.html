@@ -1,1 +1,54 @@
-<p>suggestions works!</p>
+<div class="search-block-data-suggestions">
+    <div class="suggestionslist-conntent-search">
+        <ng-container>
+            <div class="sugestions-block">
+                <div class="suggestion-header">
+                    <div class="icon_block">
+                        <img src="assets/images/icons/dialog.svg" alt="Top Dialog Suggestion">
+                    </div>
+                    <h1 class="text-truncate">Dialog Task</h1>
+                    <span class="count-text">{{suggestionResponse.searchResponse?.dialogs?.length}}</span>
+                </div>
+                <div class="suggestion-body-search">
+                    <app-dialog-suggestion></app-dialog-suggestion>
+                </div>
+            </div>
+            <div class="sugestions-block">
+                <div class="suggestion-header">
+                    <div class="icon_block">
+                        <img src="assets/images/icons/custchoice.svg" alt="FAQ">
+                    </div>
+                    <h1 class="text-truncate">FAQ</h1>
+                    <span class="count-text">{{suggestionResponse.searchResponse?.faqs?.length}}</span>
+                </div>
+                <div class="suggestion-body-search">
+                    <app-faq-suggestions (faqAnswerToggle)="checkAnswerAndToggle($event)"></app-faq-suggestions>
+                </div>
+            </div>
+            <div class="sugestions-block">
+                <div class="suggestion-header">
+                    <div class="icon_block">
+                        <img src="assets/images/icons/custchoice.svg" alt="Article">
+                    </div>
+                    <h1 class="text-truncate">Article</h1>
+                    <span class="count-text">{{suggestionResponse.searchResponse?.articles?.length}}</span>
+                </div>
+                <div class="suggestion-body-search">
+                    <app-article-suggestions></app-article-suggestions>
+                </div>
+            </div>
+            <div class="sugestions-block">
+                <div class="suggestion-header">
+                    <div class="icon_block">
+                        <img src="assets/images/icons/custchoice.svg" alt="Snippet">
+                    </div>
+                    <h1 class="text-truncate">Snippet</h1>
+                    <span class="count-text">{{suggestionResponse.searchResponse?.snippets?.length}}</span>
+                </div>
+                <div class="suggestion-body-search">
+                    <app-snippet-suggestions></app-snippet-suggestions>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>

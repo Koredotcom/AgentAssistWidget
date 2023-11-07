@@ -16,6 +16,8 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
   menuResponse: any = {};
   projConstants: any = ProjConstants;
   searchedDialogList : any = [];
+  suggestionCount : number = 0;
+
 
   constructor(private websocketService : WebSocketService, private handleSubjectService : HandleSubjectService,
     private rootService : RootService){
@@ -31,6 +33,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
       if (menuResponse && menuResponse.usecases) {
         this.menuResponse = this.formatMenuResponse(menuResponse.usecases);
         console.log(this.menuResponse, 'menu response********');
+        this.suggestionCount = this.menuResponse.length || 0;
       }
     });
 
@@ -39,6 +42,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
       this.searchedDialogList = [];
       if(searchResponse && searchResponse.dialogs){
         this.searchedDialogList = searchResponse.dialogs;
+        this.suggestionCount = this.searchedDialogList.length || 0;
       }
     });
   }

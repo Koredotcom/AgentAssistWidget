@@ -12,12 +12,30 @@ export class RootService {
 
   public userBotConversationDetails : any;
 
+  projConstants : any = ProjConstants;
+
+  activeTab : string;
   connectionDetails : any = {};
   assistTabSessionId = '';
   myBotTabSessionId = '';
   grantResponseObj : any = {};
 
-  projConstants : any = ProjConstants;
+  OverRideMode: boolean = false;
+  isAutomationOnGoing: boolean = false;
+  isInitialDialogOnGoing: boolean = false;
+  isRestore : boolean = false;
+
+  entitiestValueArray : any;
+  suggestionsAnswerPlaceableIDs : any = [];
+  
+  currentPositionId;
+  currentPositionIdOfMyBot;
+  childBotDetails = {
+    childBotName : '',
+    childBotId : ''
+  }
+
+  isUpdateFeedBackDetailsFlag : boolean = false;
 
   constructor() { }
 
@@ -108,6 +126,7 @@ export class RootService {
   setActiveTab(tab){
     if(tab){
       this.activeTab$.next(tab);
+      this.activeTab = tab;
     }
   }
 
@@ -131,7 +150,7 @@ export class RootService {
         }
       }
       for (let article of searchResponse.articles) {
-        article.showMoreButton = false;
+        article.showMoreButton = true;
         article.showLessButton = false;
         article.content = article.content ? article.content : '';
         article.contentId = article.contentId;
@@ -144,18 +163,19 @@ export class RootService {
         displayName: faq.displayName,
         taskRefId: faq?.taskRefId,
         answer: (faq.answer && faq.answer.length > 0) ? [] : false,
-        showMoreButton: false,
+        showMoreButton: true,
         showLessButton: false,
         answerRender : faq.answer || false,
         childBotId : faq.childBotId,
-        childBotName : faq.childBotName
+        childBotName : faq.childBotName,
+        answerCount : 1
       }
       if(faq.answer && faq.answer.length > 0){
         for(let ans of faq.answer){
           let object : any = {
             ans : ans,
             taskRefId: faq.taskRefId,
-            showMoreButton : false,
+            showMoreButton : true,
             showLessButton : false,
           }
           faqObject.answer.push(object);
@@ -168,7 +188,7 @@ export class RootService {
         searchResponse.snippets.push(snippet);
       }
       for (let snippet of searchResponse.snippets) {
-        snippet.showMoreButton = false;
+        snippet.showMoreButton = true;
         snippet.showLessButton = false;
       }
     }
@@ -193,6 +213,8 @@ export class RootService {
   }
 
   formatFAQResponse(faqArray){
+    console.log(faqArray, "faq array");
+    
     let searchResponse = [];
     for (let faq of faqArray) {
       let faqObject : any = {
@@ -204,7 +226,9 @@ export class RootService {
         for(let ans of faq.answer){
           let object : any = {
             taskRefId: faq.taskRefId,
-            ans : ans
+            ans : ans,
+            showMoreButton: true,
+            showLessButton: false,
           }
           faqObject.answer.push(object);
         }
@@ -258,7 +282,7 @@ export class RootService {
     return res;
   }
 
-  handleEmptyLine(answer, quotflag){
+  handleEmptyLine(answer, quotflag?){
     let eleanswer = '';
     if(typeof answer === 'string'){
         eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
@@ -283,6 +307,65 @@ export class RootService {
     return newHtmlStr;
   }
 
+  checkAutoBotIdDefined(id){
+    if(!id || id == 'undefined' || id == "null" || id == ""){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  emptyDeep(mixedVar, emptyValues = [undefined, null, '']) {
+    var key, i, len
+    for (i = 0, len = emptyValues.length; i < len; i++) {
+        if (mixedVar === emptyValues[i]) {
+            return true
+        }
+    }
+    if (typeof mixedVar === 'object') {
+        for (const item of Object.values(mixedVar)) {
+            if (!this.emptyDeep(item, emptyValues)) {
+                return false
+            }
+        }
+        return true
+    }
+    return false
+}
+
+
+  //prepare request Prams for agentassist request
+  prepareAgentAssistRequestParams(data) {
+    let agent_assist_request = {
+      'conversationId': data.conversationId,
+      'query': data.value,
+      'botId': data.botId,
+      'agentId': '',
+      'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+      'positionId': data.positionId
+    }
+    if (data.intentName) {
+      agent_assist_request['intentName'] = data.value;
+    }
+    if (data.entities) {
+      agent_assist_request['entities'] = data.entities;
+    } else {
+      agent_assist_request['entities'] = [];
+    }
+    if(data.childBotId) {
+      agent_assist_request['childBotId'] = data.childBotId;
+      agent_assist_request['childBotName'] = data.childBotName;
+    }
+    if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
+      agent_assist_request['autoBotId'] = this.connectionDetails.autoBotId;
+    } else {
+      agent_assist_request['autoBotId'] = '';
+    }
+    if (data.intentName && data.userInput) {
+      agent_assist_request['query'] = data.userInput
+    }
+    return agent_assist_request;
+  }
 
 
   getAgentMessage() {

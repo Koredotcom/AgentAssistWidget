@@ -95,7 +95,7 @@ export class LocalStorageService {
         appState[conversationId][storageConst.INITIALTASK_GOING_ON] = false;
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH] = false;
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] = false;
-        // appState[conversationId][storageConst.PROACTIVE_MODE] = true;
+        appState[conversationId][storageConst.PROACTIVE_MODE] = true;
         appState[conversationId][storageConst.LANGUAGE] = storageConst.ENGLISH;
         appState[conversationId][storageConst.THEME] = storageConst.AUTO;
         localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));

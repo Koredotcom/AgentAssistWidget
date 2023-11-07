@@ -48,6 +48,7 @@ import { ListviewComponent } from './components/listview/listview.component';
 import { TaskProgressComponent } from './components/task-progress/task-progress.component';
 import { AskCustomerComponent } from './ask-customer/ask-customer.component';
 import { TellCustomerComponent } from './tell-customer/tell-customer.component';
+import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -92,7 +93,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ListviewComponent,
     TaskProgressComponent,
     AskCustomerComponent,
-    TellCustomerComponent
+    TellCustomerComponent,
+    KoreGenerateuuidPipe
   ],
   imports: [
     TranslateModule.forRoot({
@@ -114,7 +116,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: I1,
       multi: true
-  },FormatAmpmPipe,RandomUuidPipe,RemoveTagFromStringPipe, ReplaceTextWithTagPipe, ConverTimestampToDatePipe],
+  },FormatAmpmPipe,RandomUuidPipe,RemoveTagFromStringPipe, ReplaceTextWithTagPipe, ConverTimestampToDatePipe, KoreGenerateuuidPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
