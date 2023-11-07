@@ -1,8 +1,23 @@
 <app-mainmenu class="toShowAppHeader" type="config" *ngIf="!isUnifiedPlatform"></app-mainmenu>
 
-<app-xo-menu type="config" *ngIf="isUnifiedPlatform"></app-xo-menu>
+<app-xo-menu type="config" *ngIf="isUnifiedPlatform" (headerTitle)="setPageTitle($event)" (menuItemSelected)="sideMenuSelected($event)" (minimizeSidenav)="minimizeSidenav($event)"></app-xo-menu>
 
-<div class="container-fluid configurations deflectContainer" [ngClass]="{'guideLink': (appService.showGuideLink$ | async)}">
+<div *ngIf="!isUnifiedPlatform" class="container-fluid configurations deflectContainer" [ngClass]="{'guideLink': (appService.showGuideLink$ | async)}" id="unifyBotFluidContainer">
+    <!-- <div class="checklist-info">
+        <div class="info">Great! Just 3 more steps and you are done, lets move to the next step.</div>
+        <div class="link-settings" [routerLink]="'/home'">
+            <div class="action-link">Checklist <img src="assets/icons/home/action-right.svg"></div>
+        </div>
+    </div> -->
+    <div class="check-list-content" *ngIf="appService.showGuideLink$ | async">
+        <div class="remains-check-list">
+            <div class="info-text">Great! Let's go back to the guide to get to the next step of the process.</div>
+            <div class="link-settings" [routerLink]="'/home'">Guide</div>
+        </div>
+    </div>
+    <app-content></app-content>
+</div>
+<div *ngIf="isUnifiedPlatform" class="container-fluid configurations deflectContainer" [ngClass]="{'guideLink': (appService.showGuideLink$ | async)}" id="unifiedContainer">
     <!-- <div class="checklist-info">
         <div class="info">Great! Just 3 more steps and you are done, lets move to the next step.</div>
         <div class="link-settings" [routerLink]="'/home'">

@@ -29,6 +29,9 @@ export class DynamicChecklistComponent implements OnInit, OnChanges {
   limit = 10;
   page = 1;
   modalRef: any;
+
+  isUnifiedPlatform = false;
+
   constructor(
     private service: ServiceInvokerService,
     private auth: AuthService,
@@ -48,6 +51,7 @@ export class DynamicChecklistComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    this.isUnifiedPlatform =this.workflowService.isUnifiedPlatform();
     this.subscribeEvents();
   }
 
