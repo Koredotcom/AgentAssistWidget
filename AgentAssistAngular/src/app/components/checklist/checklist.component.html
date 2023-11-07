@@ -1,1 +1,202 @@
-<div class="playbook-wrapper"></div>
+<div class="playbook-wrapper">
+   <div class="playbook-header-padding">
+        <div class="playbook-header-data">
+            <div class="left-sec-data">
+                <div ngbDropdown class="dropdown playbook-drp" container="body">
+                    <button type="button" id="playbookDrp" ngbDropdownToggle class="playbook-suggestion">
+                        <sub>1</sub>
+                        <i class="krIocnsFont-light-bulb"></i>
+                    </button>
+                    <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
+                        <div class="heading-text-scripts">RECOMENDED  PLAYBOOK</div>
+                        <button ngbDropdownItem aria-disabled="true">
+                            <p>Update Policy</p>
+                            <span>5 steps</span>
+                            <!-- <i class="krIocnsFont-check"></i> -->
+                        </button>
+                        <button ngbDropdownItem aria-disabled="true">
+                            <p>General Support</p>
+                            <span>5 steps</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="dropdowns-text-info">
+                    <div ngbDropdown class="dropdown playbook-drp" container="body">
+                        <button type="button" id="playbookDrp" ngbDropdownToggle>
+                            <span>Insurance Policy</span>
+                            <i class="krIocnsFont-chevron-down arrow-icon"></i>
+                        </button>
+                        <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
+                            <div class="heading-text-scripts">PRIMARY SCRIPTS</div>
+                            <button ngbDropdownItem aria-disabled="true" class="selected">
+                                <p>Insurance Policy</p>
+                                <i class="krIocnsFont-check"></i>
+                            </button>
+                            <button ngbDropdownItem aria-disabled="true">
+                                <p>General Support</p>
+                                <span>5 steps</span>
+                            </button>
+                            <button ngbDropdownItem aria-disabled="true">
+                                <p>Onboarding Customer</p>
+                                <button class="_btn primaryBtn">Resume</button>
+                                <span>5 steps</span>
+                            </button>
+                            <div class="heading-text-scripts">CONDITIONAL SCRIPTS</div>
+                            <button ngbDropdownItem aria-disabled="true">
+                                <p>Service Upgrade</p>
+                                <i class="krIocnsFont-check"></i>
+                            </button>
+                            <button ngbDropdownItem aria-disabled="true">
+                                <p>Price Objection</p>
+                                <span>5 steps</span>
+                            </button>
+                            <button ngbDropdownItem aria-disabled="true">
+                                <p>Refund Requested</p>
+                                <span>5 steps</span>
+                            </button>
+                            <button ngbDropdownItem aria-disabled="true">
+                                <p>Connection Issue</p>
+                                <span>5 steps</span>
+                            </button>
+                            <button ngbDropdownItem aria-disabled="true">
+                                <p>Router Reset</p>
+                                <span>5 steps</span>
+                            </button>
+                            <button ngbDropdownItem aria-disabled="true">
+                                <p>Internet Issues</p>
+                                <span>5 steps</span>
+                            </button>
+                            <button ngbDropdownItem aria-disabled="true">
+                                <p>TV Connection Issues</p>
+                                <span>5 steps</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bottom-titles-info">
+                        <h6>Stage: </h6>
+                        <div ngbDropdown class="dropdown playbook-drp">
+                            <button type="button" id="playbookDrp" ngbDropdownToggle>
+                                <span>Open</span>
+                                <i class="krIocnsFont-chevron-down arrow-icon"></i>
+                            </button>
+                            <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
+                                <button ngbDropdownItem aria-disabled="true" class="selected">
+                                    <p>Open</p>
+                                    <i class="krIocnsFont-check"></i>
+                                </button>
+                                <button ngbDropdownItem aria-disabled="true">
+                                    <p>Resolve</p>
+                                </button>
+                                <button ngbDropdownItem aria-disabled="true">
+                                    <p>Close</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="actions-checklist-header">
+                <button class="solid-action" aria-label="button">
+
+                </button>
+                <button class="solid-action" aria-label="button">
+                    <i class="krIocnsFont-pause"></i>
+                    <!-- <i class="krIocnsFont-play"></i> -->
+                </button>
+                <button class="solid-action stop-assist" aria-label="button">
+                   <i class="krIocnsFont-terminate-playbook"></i>
+                </button>
+                <button class="solid-action minimize-btn" aria-label="button">
+                    <i class="krIocnsFont-minimize"></i>
+                </button>
+            </div>
+        </div>
+   </div>
+   <div class="playbook-wrapper-body">
+        <div class="static-play-book-suggestions" *ngIf="false">
+            <div class="heading-text">
+                <img src="assets/images/icons/list.svg">
+                <p>Playbook Suggestion</p>
+            </div>
+            <ng-container>
+                <div class="dialog-task-wrapper">
+                    <div class="title-paragraph">
+                        <p>New Customer</p>
+                    </div>
+                    <div class="dialog-actions">
+                        <button class="primary-btn">RUN</button>
+                    </div>
+                </div>
+                <div class="dialog-task-wrapper">
+                    <div class="title-paragraph">
+                        <p>General Support</p>
+                    </div>
+                    <div class="dialog-actions">
+                        <button class="primary-btn">RUN</button>
+                    </div>
+                </div>
+                <div class="dialog-task-wrapper">
+                    <div class="title-paragraph">
+                        <p>Insurance Policy</p>
+                    </div>
+                    <div class="dialog-actions">
+                        <button class="primary-btn">RUN</button>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="playbook-steps-info">
+            <button class="playbook-step playbook-step-ongoing">
+                <div class="heading-step">
+                    <h1>Warm Greetings</h1>
+                    <button class="check-btn">
+                        <i class="krIocnsFont-check"></i>
+                    </button>
+                </div>
+                <div class="step-text-send-block">
+                    <div class="step-actions-send-copy">
+                        <button class="solidbtn">
+                            <i class="krIocnsFont-copy"></i>
+                        </button>
+                        <button class="solidbtn">Send</button>
+                    </div>
+                    <p>Hello Customer Name Thank you for calling ShieldSure Insurance This is Agent Name. How may i assist you today? </p>
+                </div>
+            </button>
+            <button class="playbook-step">
+                <div class="heading-step">
+                    <h1>Authenticate Customer</h1>
+                    <button class="check-btn">
+                        <i class="krIocnsFont-check"></i>
+                    </button>
+                </div>
+                <div class="step-text-send-block">
+                    <div class="step-actions-send-copy">
+                        <button class="solidbtn">
+                            <i class="krIocnsFont-copy"></i>
+                        </button>
+                        <button class="solidbtn">Send</button>
+                    </div>
+                    <p>Hello Customer Name Thank you for calling ShieldSure Insurance This is Agent Name. How may i assist you today? </p>
+                </div>
+            </button>
+            <button class="playbook-step">
+                <div class="heading-step">
+                    <h1>Information about Issue</h1>
+                    <button class="check-btn">
+                        <i class="krIocnsFont-check"></i>
+                    </button>
+                </div>
+                <div class="step-text-send-block">
+                    <div class="step-actions-send-copy">
+                        <button class="solidbtn">
+                            <i class="krIocnsFont-copy"></i>
+                        </button>
+                        <button class="solidbtn">Send</button>
+                    </div>
+                    <p>Hello Customer Name Thank you for calling ShieldSure Insurance This is Agent Name. How may i assist you today? </p>
+                </div>
+            </button>
+        </div>
+   </div>
+</div>

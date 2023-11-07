@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'krIocnsFont';
-  src:  url('fonts/krIocnsFont.eot?i8rbnj');
-  src:  url('fonts/krIocnsFont.eot?i8rbnj#iefix') format('embedded-opentype'),
-    url('fonts/krIocnsFont.ttf?i8rbnj') format('truetype'),
-    url('fonts/krIocnsFont.woff?i8rbnj') format('woff'),
-    url('fonts/krIocnsFont.svg?i8rbnj#krIocnsFont') format('svg');
+  src:  url('fonts/krIocnsFont.eot?vsqpg6');
+  src:  url('fonts/krIocnsFont.eot?vsqpg6#iefix') format('embedded-opentype'),
+    url('fonts/krIocnsFont.ttf?vsqpg6') format('truetype'),
+    url('fonts/krIocnsFont.woff?vsqpg6') format('woff'),
+    url('fonts/krIocnsFont.svg?vsqpg6#krIocnsFont') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.krIocnsFont-terminate-playbook:before {
+  content: "\e921";
+}
+.krIocnsFont-play:before {
+  content: "\e91f";
+}
+.krIocnsFont-pause:before {
+  content: "\e920";
+}
 .krIocnsFont-Aimark:before {
   content: "\e91e";
 }

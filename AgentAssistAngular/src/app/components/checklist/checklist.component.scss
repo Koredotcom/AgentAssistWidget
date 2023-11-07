@@ -1,7 +1,306 @@
+
+@-webkit-keyframes slideInUpPlaybookAnim {
+    0% {
+        -webkit-transform: translateY(20px);
+        transform: translateY(20px);
+        visibility: hidden;
+    }
+    20%{
+        visibility: visible;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUpPlaybookAnim {
+    0% {
+        -webkit-transform: translateY(20px);
+        transform: translateY(20px);
+        visibility: visible;
+    }
+    20%{
+        visibility: visible;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
 .playbook-wrapper{
     border-radius: 6px;
     border: 1px solid var(--gray-modern-300, #CDD5DF);
     background: var(--base-white, #FFF);
     overflow: auto;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    .playbook-header-padding{
+        padding: 10px 10px 0px 10px;
+        .playbook-header-data{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px;
+            min-height: 50px;
+            border-bottom: 1px solid var(--gray-modern-300, #CDD5DF);
+            .left-sec-data{
+                width: 100%;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                .dropdown {
+                    &.show{
+                        .dropdown-toggle{
+                            .arrow-icon{
+                                transform: rotate(180deg);
+                            }
+                        }
+                    }
+                    .dropdown-toggle{
+                        color: var(--gray-500, #667085);
+                        font-size: 14px;
+                        font-weight: 600;
+                        line-height: 20px;
+                        background: transparent;
+                        border: 0;
+                        padding: 0;
+                        display: flex;
+                        align-items: center;
+                        gap: 2px;
+                        i{
+                            font-size: 20px;
+                        }
+                    }
+                }
+                .playbook-suggestion{
+                    width: 24px;
+                    height: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
+                    cursor: pointer;
+                    flex-shrink: 0;
+                    sub{
+                        position: absolute;
+                        top: -2px;
+                        right: 0;
+                        display: flex;
+                        width: 12px;
+                        height: 12px;
+                        padding: 0;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 100px;
+                        background: var(--error-600, #D92D20);
+                        color: #FFF;
+                        font-size: 7px;
+                        font-weight: 500;
+                        line-height: normal;
+                        letter-spacing: 0.5px;
+                        text-transform: uppercase;
+                    }
+                    i{
+                        font-size: 20px;
+                        color: #2B75E4;
+                    }
+                }
+                .dropdowns-text-info{
+                    width: 100%;
+                    .bottom-titles-info{
+                        display: flex;
+                        align-items: center;
+                        gap: 5px;
+                        margin-top: 1px;
+                        h6{
+                            color: var(--gray-400, #98A2B3);
+                            font-size: 12px;
+                            font-weight: 500;
+                            line-height: 20px;
+                            flex-shrink: 0;
+                        }
+                    }
+                }
+            }
+            .actions-checklist-header{
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                .solid-action{
+                    border-radius: 3px;
+                    border: 1px solid var(--gray-300, #D0D5DD);
+                    background: var(--generic-white, #FFF);
+                    display: flex;
+                    width: 25px;
+                    height: 25px;
+                    padding: 0;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 6px;
+                    color: #101828;
+                    font-size: 16px;
+                    cursor: pointer;
+                    &:hover{
+                        border: 1px solid var(--primary-300, #84ADFF);
+                        color: #155EEF;
+                    }
+                    &.stop-assist{
+                        border: 1px solid var(--error-200, #FECDCA);
+                        background: var(--generic-white, #FFF);
+                        color: #DC2626;
+                        &:hover{
+                            border: 1px solid var(--error-300, #FDA29B);
+                            box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10);
+                        }
+                    }
+                    &.minimize-btn{
+                        border: 0 !important;
+                    }
+                }
+            }
+        }
+    }
+    .playbook-wrapper-body{
+        flex: 1 1 auto;
+        overflow: auto;
+        padding: 8px;
+        .static-play-book-suggestions{
+            border-radius: 0px 10px 10px 10px;
+            background: var(--gray-modern-50, #F8FAFC);
+            padding: 8px 8px 4px 8px;
+            .heading-text{
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                color: var(--gray-modern-700, #364152);
+                font-size: 11px;
+                font-weight: 600;
+                line-height: 16px;
+                min-height: 28px;
+                img{
+                    flex-shrink: 0;
+                }
+            }
+        }
+        .playbook-steps-info{
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            .playbook-step{
+                text-align: initial;
+                border: 0;
+                padding: 0;
+                border-radius: 6px;   
+                background: transparent;
+                .heading-step{
+                    display: flex;
+                    padding: 4px 8px 4px 12px;
+                    align-items: flex-start;
+                    gap: 4px;
+                    background: transparent;
+                    border-radius: 6px 6px 0px 0px;
+                    min-height: 30px;
+                    h1{
+                        color: #2B75E4;
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 20px;
+                        width: 100%;
+                    }
+                    .check-btn{
+                        flex-shrink: 0;
+                        width: 20px;
+                        height: 20px;
+                        display: none;
+                        align-items: center;
+                        justify-content: center;
+                        border: 2px solid #D4D4D4;
+                        border-radius: 100%;
+                        background: transparent;
+                        font-size: 7px;
+                        font-weight: bold;
+                        color: #D4D4D4;
+                        padding: 0;                       
+                    }
+                }
+                .step-text-send-block{
+                    padding: 8px;
+                    position: relative;
+                    transition: 0.2s all ease;
+                    display: none;
+                    &:hover{
+                        .step-actions-send-copy{
+                            display: flex;
+                        }
+                    }
+                    .step-actions-send-copy{
+                        position: absolute;
+                        right: 8px;
+                        top: 8px;
+                        display: none;
+                        align-items: center;
+                        border-radius: 4px;
+                        background: var(--gray-modern-50, #F8FAFC);
+                        box-shadow: 0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.10);
+                        padding: 6px;
+                        gap: 4px;
+                        .solidbtn{
+                            position: relative;
+                            border-radius: 4px;
+                            border: 1px solid var(--neutral-200, #E5E5E5);
+                            background: var(--generic-white, #FFF);
+                            padding: 2px 8px;
+                            min-height: 24px;
+                            color: var(--neutral-800, #262626);
+                            font-size: 11px;
+                            font-weight: 500;
+                            line-height: 16px;
+                            cursor: pointer;
+                            justify-content: center;
+                            display: flex;
+                            align-items: center;
+                            i{
+                                font-size: 12px;
+                            }
+                        }
+                    }
+                    p{
+                        padding: 0 0 0 12px;
+                        color: var(--gray-700, #344054);
+                        font-size: 14px;
+                        font-weight: 400;
+                        line-height: 20px;
+                    }
+                }       
+                &.playbook-step-ongoing{
+                    background: var(--base-white, #FFF);
+                    box-shadow: -7px 4px 30px 0px rgba(18, 61, 101, 0.20), -8px -6px 80px 0px rgba(255, 255, 255, 0.18) inset;
+                    -webkit-animation-name: slideInUpPlaybookAnim;
+                    animation-name: slideInUpPlaybookAnim;
+                    -webkit-animation-duration: 0.5s;
+                    animation-duration: 0.5s;
+                    -webkit-animation-fill-mode: both;
+                    animation-fill-mode: both;
+                    // animation-delay: 0.5s;
+                    .heading-step{
+                        background: #2B75E4;
+                        h1{
+                            
+                            color: var(--generic-white, #FFF);
+                        }
+                        .check-btn{
+                            display: flex;
+                        }
+                    }   
+                    .step-text-send-block{
+                        display: block;
+                    }   
+                }
+            }        
+        }
+    }
 }

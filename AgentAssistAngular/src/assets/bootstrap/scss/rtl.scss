@@ -66,4 +66,22 @@
     .btn-more-solid{
         justify-content: flex-start !important;
     }
+
+    .playbook-wrapper {
+        .playbook-wrapper-body {
+            .playbook-steps-info {
+                .playbook-step {
+                    .step-text-send-block{
+                        .step-actions-send-copy{
+                            right: auto !important;
+                            left: 8px !important;
+                        }
+                        p{
+                            padding: 0 12px 0 8px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

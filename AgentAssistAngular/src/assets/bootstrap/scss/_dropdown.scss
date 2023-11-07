@@ -12,15 +12,17 @@
   z-index: 1000;
   display: none;
   min-width: auto;
-  padding: 0;
   margin: 0;
   color: #212529;
   text-align: left;
   list-style: none;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid transparent;
-
+  border-radius: 8px;
+  background: var(--gray-25, #FCFCFD);
+  box-shadow: 0px 4px 8px 0px rgba(32, 33, 36, 0.15);
+  border: 0;
+  padding: 8px 12px;
   &[data-bs-popper] {
     top: 100%;
     left: 0;
@@ -31,30 +33,34 @@
 .dropdown-item {
   display: block;
   width: 100%;
-  padding: 8px 10px;
+  padding: 8px 14px;
   clear: both;
-  font-weight: 400;
-  color: #212529;
   text-align: inherit;
   text-decoration: none;
   white-space: nowrap;
   background-color: transparent;
   border: 0;
-
+  color: var(--gray-700, #344054);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  border-radius: 6px;
   &:hover,
   &:focus {
-    color: #212529;
+    color: #344054;
+    background: #EFF4FF;
   }
 
   &.active,
   &:active {
-    color: #212529;
+    color: #344054;
     text-decoration: none;
+    background: #EFF4FF;
   }
 
   &.disabled,
   &:disabled {
-    color: #212529;
+    color: #344054;
     pointer-events: none;
     background-color: transparent;
   }
@@ -62,4 +68,66 @@
 
 .dropdown-menu.show {
   display: block;
+}
+
+
+// PLaybook dropdowns
+
+.playbook-dropdown-content{
+  min-width: 250px;
+  max-height: 300px;
+  overflow: auto;
+  max-width: 350px;
+  .heading-text-scripts{
+    border-radius: 8px 8px 0px 0px;
+    background: var(--gray-100, #F2F4F7);
+    padding: 8px 10px;
+    color: var(--gray-700, #344054);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: capitalize;
+  }
+  .dropdown-item{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 1px 0;
+    white-space: normal;
+    &.selected{
+      background: #EFF4FF;
+    }
+    p{
+      width: 100%;
+      color: var(--gray-700, #344054);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 18px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .primaryBtn{
+      border-radius: 16px;
+      background: var(--blue-600, #1570EF);
+      color: #FFF;
+      font-size: 12px;
+      font-weight: 500;
+      height: 22px;
+      padding: 0 8px;
+      flex-shrink: 0;
+    }
+    span{
+      flex-shrink: 0;
+      color: var(--gray-500, #667085);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 18px;
+    }
+    i{
+      color: #2970FF;
+      flex-shrink: 0;
+      font-size: 10px;
+    }
+  }
 }
