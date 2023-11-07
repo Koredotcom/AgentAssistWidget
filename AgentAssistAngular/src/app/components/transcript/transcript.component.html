@@ -19,9 +19,10 @@
             <ng-container *ngIf="userBotConversationShow">
                 <app-user-bot-history></app-user-bot-history>
             </ng-container>
-            <div>
+            <!-- <div>
                 <span #transcriptTabHistoryText>{{transcriptScrollTopText}}</span>
-            </div>
+            </div> -->
+            <ng-container [ngTemplateOutlet]="summeryTranscipt"></ng-container>
             <app-transcript-history></app-transcript-history>
             <ng-container *ngFor="let trans of transcriptArray">
                 <div class="transcipt-bot-bubble-comp" *ngIf="trans.type == projConstants.INCOMING">
@@ -66,3 +67,53 @@
         </div>
     </div>
 </div>
+
+
+<ng-template #summeryTranscipt>
+    <div class="summery-info-transcript">
+        <div class="heading-text">
+            <i class="krIocnsFont-Aimark"></i>
+            <h1>SUMMARY</h1>
+        </div>
+        <ul>
+            <li>Customer states that their loan repayment amount is  too high</li>
+            <li>Customer wants to see if there is a way to reduce loan repayment amount</li>
+        </ul>
+        <div class="summery-row-data">
+            <div class="row-block">
+                <h1>Queue:</h1>
+                <div class="event-details">
+                    <p class="text-truncate">Policy Renewal, Accountdetails</p>
+                </div>
+            </div>
+            <div class="row-block">
+                <h1>Intent:</h1>
+                <div class="event-details">
+                    <p class="text-truncate">Policy Renewal, Accountdetails</p>
+                    <span class="more-tooltip" [ngbTooltip]="tipContentMore">+1more</span>
+                </div>
+            </div>
+            <div class="row-block">
+                <h1>Wait time:</h1>
+                <div class="event-details">
+                    <p class="text-truncate">4m 12s</p>
+                </div>
+            </div>
+            <div class="row-block">
+                <h1>Sentiment:</h1>
+                <div class="event-details">
+                    <p class="text-truncate">Negative</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #tipContentMore>
+    <div class="tipcontent-summery-more-info">
+        <p>Policy Renewal</p>
+        <p>Account Upgrade</p>
+        <p>Account Update</p>
+    </div>
+</ng-template>

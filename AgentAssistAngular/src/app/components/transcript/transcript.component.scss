@@ -321,3 +321,91 @@
         padding: 8px;
     }
 }
+
+.summery-info-transcript{
+    border-radius: 8px;
+    border: 1px solid var(--gray-300, #D0D5DD);
+    background: var(--gray-modern-100, #EEF2F6);
+    margin: 8px 0;
+    padding: 11px;
+    .heading-text{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        i{
+            flex-shrink: 0;
+            font-size: 20px;
+            color: #111827;
+        }
+        h1{
+            color: var(--primary-900, #112F5B);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: normal;
+            margin: 0;
+        }
+    }
+    ul{
+        margin: 6px 0px 8px 0px;
+        padding: 0 0 0 20px;
+        li{
+            color: var(--gray-modern-800, #202939);
+            font-size: 13px;
+            font-style: italic;
+            font-weight: 400;
+            line-height: 20px;
+        }
+    }
+    .summery-row-data{
+        display: flex;
+        flex-wrap: wrap;
+        .row-block{
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            width: 50%;
+            padding: 2px 6px;
+            h1{
+                color: var(--gray-modern-600, #4B5565);
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 18px;
+                margin: 0;
+                flex-shrink: 0;
+            }
+            .event-details{
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                overflow: hidden;
+                width: 100%;
+                p{
+                    color: var(--gray-modern-800, #202939);
+                    font-size: 12px;
+                    font-weight: 500;
+                    line-height: 18px;
+                }
+                .more-tooltip{
+                    flex-shrink: 0;
+                    color: var(--primary-500-main, #2B75E4);
+                    font-size: 11px;
+                    font-style: italic;
+                    font-weight: 400;
+                    line-height: 16px;
+                }
+            }
+        }
+    }
+}
+
+
+::ng-deep .tipcontent-summery-more-info{
+    p{
+        color: var(--gray-modern-900, #121926);
+        text-align: center;
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 18px;
+    }
+}
