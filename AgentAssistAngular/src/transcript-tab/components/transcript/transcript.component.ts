@@ -143,7 +143,7 @@ export class TranscriptComponent implements OnInit {
           this.processAgentMessages(userInputData);
           userAgentMessage['type'] = 'agent';
           userAgentMessage.author['type'] = 'agent';
-          this.websocketService.emitEvents(EVENTS.agent_sent_message, userAgentMessage)
+          // this.websocketService.emitEvents(EVENTS.agent_sent_message, userAgentMessage)
         }
       }
     });
