@@ -2105,7 +2105,7 @@
     "QUOTA_EXCEEDED": "You exceeded your current quota.",
     "RULE.SUCCESS": "Rule has been created",
     "RULE.UPDATE_SUCCESS" : "Rule has been updated",
-    "NAV.CHECKLIST.TITLE": "Playbook",
+    "NAV.CHECKLIST.TITLE": "Agent Playbook",
     "Account_Error": "Account Error",
     "Account_Error_MSG": "You have logged in using SmartAssist account details. To access AgentAssist, please log in with your AgentAssist credentials or create a fresh account.",
     "LOGIN_BTN": "Login With AgentAssist",
