@@ -176,6 +176,9 @@
                     <p>Click to upload or drag and drop</p>
                     <span>SVG, PNG (max. 800x400px)</span>
                 </div>
+                <div class="progress" *ngIf="progress">
+                    <div class="progress-bar" [style.width]="progress + '%'">{{progress}}%</div>
+                </div>
                 <div *ngIf="this.agentAssistSettings.isCustomisedLogoEnabled.fileName !== ''">
                     <!-- {{ fileList | json }} -->
                     <img [src]="this.agentAssistSettings.isCustomisedLogoEnabled.fileName !== '' ? 'this.agentAssistSettings.isCustomisedLogoEnabled.fileName' : ''" alt="" style="height: 100%; width: 40%;">

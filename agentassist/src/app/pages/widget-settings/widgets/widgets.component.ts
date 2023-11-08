@@ -219,6 +219,9 @@ handleFileDrop(event: DragEvent) {
 
 addFiles(files) {
   // api call
+    const formData = new FormData();
+    formData.append("file", files);
+  // 
   console.log(files);
   this.agentAssistSettings.isCustomisedLogoEnabled.fileName = files[0].name;
 }
