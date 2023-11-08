@@ -1,22 +1,27 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { TranslateService } from '@ngx-translate/core';
 import { clone } from 'src/app/helpers/utils';
+import { map, catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-widgets',
   templateUrl: './widgets.component.html',
   styleUrls: ['./widgets.component.scss']
 })
-export class WidgetsComponent implements OnInit {
+export class WidgetsComponent implements OnInit, OnDestroy {
 
   @ViewChild('fileInput') inputRef: ElementRef<HTMLInputElement>;
 
   isUnifiedPlatform: boolean = false;
   disableButtons: boolean =  false;
   clonedWidgetSettings: any;
+  subs = new SubSink();
+  progress: number;
   voice = 'Voice'
 
   agentAssistSettings = { 
@@ -64,7 +69,7 @@ export class WidgetsComponent implements OnInit {
     let body = {
       botId
     }
-    // this.service.invoke("get.AgentAssistSettings", params).subscribe(
+    // this.subs.sink = this.service.invoke("get.AgentAssistSettings", params).subscribe(
     //   (res) => {
     //     if (res) {
     //       res ={ agentAssistSettings: { 
@@ -175,7 +180,7 @@ export class WidgetsComponent implements OnInit {
       // "id": this.clonedWidgetSettings.id
     } 
 
-    this.service.invoke("put.agentAssistSettings",params, payload)
+    this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
     .subscribe(
       (res) => {
         if (res) {
@@ -218,12 +223,50 @@ handleFileDrop(event: DragEvent) {
 }
 
 addFiles(files) {
+  console.log(files);
   // api call
+    this.progress = 1;
     const formData = new FormData();
     formData.append("file", files);
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
+    const params = {
+      botId
+    };
+
+    const payload = {
+      formData
+    }
+
+    this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload,  {
+      reportProgress: true,
+      observe: 'events',
+    }).pipe(
+      map((event: any) => {
+        console.log(event);
+          this.progress = Math.round((100 / event.total) * event.loaded); 
+          // if (event.type == HttpEventType.UploadProgress) {
+          //   this.progress = Math.round((100 / event.total) * event.loaded);
+          // } else if (event.type == HttpEventType.Response) {
+          //   this.progress = null;
+          // }
+      }))
+    .subscribe(
+      (res) => {
+          this.agentAssistSettings.isCustomisedLogoEnabled.fileName = '';
+      },
+      (err) => {
+        this.notificationService.showError(
+          err,
+          this.translate.instant("FALLBACK_ERROR_MSG")
+        );
+      }
+      )
   // 
-  console.log(files);
-  this.agentAssistSettings.isCustomisedLogoEnabled.fileName = files[0].name;
+  
+}
+
+ngOnDestroy() {
+  this.subs.unsubscribe();
 }
 
 }
