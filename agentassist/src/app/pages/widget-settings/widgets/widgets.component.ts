@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { NotificationService } from '@kore.services/notification.service';
+import { ServiceInvokerService } from '@kore.services/service-invoker.service';
+import { workflowService } from '@kore.services/workflow.service';
+import { TranslateService } from '@ngx-translate/core';
+import { clone } from 'src/app/helpers/utils';
 
 @Component({
   selector: 'app-widgets',
@@ -7,9 +12,144 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WidgetsComponent implements OnInit {
 
-  constructor() { }
+  isUnifiedPlatform: boolean = false;
+  disableButtons: boolean =  false;
+  clonedWidgetSettings: any;
+  voice = 'Voice'
+
+  agentAssistSettings = { 
+    agentAssistWidgetEnabled: true,
+    isProactiveEnabled: true,
+    isAgentCoachingEnabled: true,
+    isAgentResponseEnabled: true,
+    isAgentPlaybookEnabled: true,
+    isSearchAssistEnabled: true,
+    isWidgetLandingEnabled: {
+      isEnabled :  true, 
+       chat: {
+             isEnabled: true, 
+              tab: "assist"  
+           },
+      voice: {
+            isEnabled:  true,
+            tab: "assist" 
+           }
+    },
+    isCustomisedLogoEnabled: {
+      isEnabled: true, 
+      fileId : '',
+     hash : '',
+    fileName: ''
+    }
+  }
+  
+
+  constructor(public workflowService: workflowService,
+    private service: ServiceInvokerService,
+    private notificationService: NotificationService,
+    public translate: TranslateService) { }
 
   ngOnInit(): void {
+    this.isUnifiedPlatform = this.workflowService.isUnifiedPlatform();
+    this.getAgentAssistSettings();
   }
+
+  getAgentAssistSettings() {
+    let botId = this.workflowService.getCurrentBtSmt(true)._id
+    let params = {
+      botId
+    };
+    let body = {
+      botId
+    }
+    this.service.invoke("get.AgentAssistSettings", params).subscribe(
+      (res) => {
+        if (res) {
+          this.clonedWidgetSettings = clone(res);
+          this.agentAssistSettings = {...res};
+        }
+      },
+      (err) => {
+        this.notificationService.showError(
+          err,
+          this.translate.instant("FALLBACK_ERROR_MSG")
+        );
+      }
+    );
+  }
+
+  saveAgentAssistSettings() {
+    this.disableButtons = true;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id
+    const params = {
+      botId
+    };
+
+    const payload = {
+      // "orgId": this.clonedWidgetSettings.orgId,
+      // "accountId": this.clonedWidgetSettings.accountId,
+      // "iId": this.clonedWidgetSettings.iId,
+      // "updatedByAId": this.clonedWidgetSettings.updatedByAId,
+      // "createdByAId": this.clonedWidgetSettings.createdByAId,
+      "agentAssistSettings": {
+          agentAssistWidgetEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.agentAssistWidgetEnabled : false,
+          isProactiveEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isProactiveEnabled : false,
+          isAgentCoachingEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isAgentCoachingEnabled : false,
+          isAgentResponseEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isAgentResponseEnabled :false,
+          isAgentPlaybookEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isAgentPlaybookEnabled: false,
+          isSearchAssistEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isSearchAssistEnabled : false,
+          isWidgetLandingEnabled : {
+            isEnabled :  this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.isEnabled : false, 
+              chat: {
+                    isEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled : false, 
+                      tab: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.chat.tab : 'assist'  
+                  },
+              voice: {
+                    isEnabled:  this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled : false,
+                    tab: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.voice.tab : "assist" 
+                  }
+            },
+            isCustomisedLogoEnabled: {
+              isEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isCustomisedLogoEnabled.isEnabled : true, 
+              fileId : this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isCustomisedLogoEnabled.fileId : '',
+            hash :  this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isCustomisedLogoEnabled.hash : '',
+            fileName: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isCustomisedLogoEnabled.fileName : ''
+            }
+      },
+      // "id": this.clonedWidgetSettings.id
+    } 
+
+    this.service.invoke("put.agentAssistSettings",params, payload)
+    .subscribe(
+      (res) => {
+        if (res) {
+            this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
+            this.disableButtons = false;
+          this.clonedWidgetSettings = clone(res);
+          this.agentAssistSettings = {...res};
+        }
+      },
+      (err) => {
+        this.notificationService.showError(
+          err,
+          this.translate.instant("FALLBACK_ERROR_MSG")
+        );
+      }
+    );
+  }
+
+  cancleAgentAssistSettings() {
+    if(this.clonedWidgetSettings){
+      this.agentAssistSettings.agentAssistWidgetEnabled = {...this.clonedWidgetSettings};
+    }
+}
+
+selectedOption(selectedVal) {
+  if (selectedVal === 'voice') {
+    this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled = !this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled;
+  } else {
+    this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled = !this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled;
+  }
+}
 
 }

@@ -1,4 +1,5 @@
-<div class="widgets-settinggs-wrapper">
+
+<div class="widgets-settinggs-wrapper" [ngClass]="{'agent-assist-settings-wrapper-isunified' : isUnifiedPlatform}">
     <div class="header-data">
         <div class="title">
             <p>AgentAssist Settings</p>
@@ -9,7 +10,7 @@
     <div class="body-widget-data">
         <div class="toggle-info-data m-0">
             <label class="kr-sg-toggle">
-                <input type="checkbox" checked>
+                <input type="checkbox" [(ngModel)]="agentAssistSettings.agentAssistWidgetEnabled">
                 <div class="slider"></div>
             </label>
             <div class="content-data-toggle">
@@ -20,7 +21,7 @@
         <div class="widgets-info-toglles">
             <div class="toggle-info-data">
                 <label class="kr-sg-toggle">
-                    <input type="checkbox" checked>
+                    <input type="checkbox" [(ngModel)]="agentAssistSettings.isProactiveEnabled">
                     <div class="slider"></div>
                 </label>
                 <div class="content-data-toggle">
@@ -30,7 +31,7 @@
             </div>
             <div class="toggle-info-data">
                 <label class="kr-sg-toggle">
-                    <input type="checkbox" checked>
+                    <input type="checkbox" [(ngModel)]="agentAssistSettings.isAgentCoachingEnabled">
                     <div class="slider"></div>
                 </label>
                 <div class="content-data-toggle">
@@ -40,7 +41,7 @@
             </div>
             <div class="toggle-info-data">
                 <label class="kr-sg-toggle">
-                    <input type="checkbox" checked>
+                    <input type="checkbox"  [(ngModel)]="agentAssistSettings.isAgentResponseEnabled">
                     <div class="slider"></div>
                 </label>
                 <div class="content-data-toggle">
@@ -50,7 +51,7 @@
             </div>
             <div class="toggle-info-data">
                 <label class="kr-sg-toggle">
-                    <input type="checkbox" checked>
+                    <input type="checkbox" [(ngModel)]="agentAssistSettings.isAgentPlaybookEnabled">
                     <div class="slider"></div>
                 </label>
                 <div class="content-data-toggle">
@@ -60,7 +61,7 @@
             </div>
             <div class="toggle-info-data">
                 <label class="kr-sg-toggle">
-                    <input type="checkbox" checked>
+                    <input type="checkbox" [(ngModel)]="agentAssistSettings.isSearchAssistEnabled">
                     <div class="slider"></div>
                 </label>
                 <div class="content-data-toggle">
@@ -70,7 +71,7 @@
             </div>
             <div class="toggle-info-data">
                 <label class="kr-sg-toggle">
-                    <input type="checkbox" checked>
+                    <input type="checkbox"  [(ngModel)]="agentAssistSettings.isWidgetLandingEnabled.isEnabled">
                     <div class="slider"></div>
                 </label>
                 <div class="content-data-toggle">
@@ -78,25 +79,61 @@
                     <p>When disabled, agents will land on playbook/assist tab page by default when widget is launched.</p>
                 </div>
             </div>
-            <div class="voice-channel-drp">
-                <div class="label-text">Choose your preferred page you want to set as Landing page</div>
-                <div class="kr-sg-dropdowns" ngbDropdown>
-                    <div class="dropdown dropdown-open">
-                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Transcript</button>
-                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                            <li ngbDropdownItem class="selected">
-                                <a>Transcript</a>
-                            </li>
-                            <li ngbDropdownItem>
-                                <a>Transcript</a>
-                            </li>
-                        </ul>
+            <div>
+                <div>
+                    <div>
+                        <input id="checkbox-1" type="checkbox" (click)="selectedOption('voice'); $event.stopPropagation();" [checked]="this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled">
+                        <div class="label-check text-truncate" for="checkbox-1">
+                            <span>Voice</span>
+                        </div>
                     </div>
-                </div> 
+                    <div class="voice-channel-drp" [ngClass]="!agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled ? 'disableDropdown' : ''">
+                        <div class="label-text">Choose your preferred page you want to set as Landing page</div>
+                        <div class="kr-sg-dropdowns" ngbDropdown>
+                            <div class="dropdown dropdown-open">
+                                <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Transcript</button>
+                                <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                    <li ngbDropdownItem class="selected">
+                                        <a>Transcript</a>
+                                    </li>
+                                    <li ngbDropdownItem>
+                                        <a>Transcript</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+                
+                <div>
+                    <div>
+                        <input id="checkbox-1" type="checkbox" (click)="selectedOption('chat'); $event.stopPropagation();" [checked]="this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled">
+                        <div class="label-check text-truncate" for="checkbox-1">
+                            <span>Chat</span>
+                        </div>
+                    </div>
+                    <div class="chat-channel-drp" [ngClass]="!agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled ? 'disableDropdown' : ''">
+                        <div class="label-text">Choose your preferred page you want to set as Landing page</div>
+                        <div class="kr-sg-dropdowns" ngbDropdown>
+                            <div class="dropdown dropdown-open">
+                                <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Transcript</button>
+                                <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                    <li ngbDropdownItem class="selected">
+                                        <a>Transcript</a>
+                                    </li>
+                                    <li ngbDropdownItem>
+                                        <a>Transcript</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
             </div>
+            
             <div class="toggle-info-data">
                 <label class="kr-sg-toggle">
-                    <input type="checkbox" checked>
+                    <input type="checkbox" [(ngModel)]="agentAssistSettings.isCustomisedLogoEnabled.isEnabled">
                     <div class="slider"></div>
                 </label>
                 <div class="content-data-toggle">
@@ -118,5 +155,10 @@
                 </div>
             </div>
         </div>
+        <div class="save-cancel-btns">
+            <button class="kr-sg-button-secondary-two btn_md" [disabled]= "disableButtons" (click)="cancleAgentAssistSettings()">{{'BUTTONS.CANCEL' | translate}}</button>
+            <button class="kr-sg-button-primary btn_md" [disabled]= "disableButtons" (click)="saveAgentAssistSettings()">{{'BUTTONS.SAVE' | translate}}</button>
+        </div>
     </div>
+    
 </div>

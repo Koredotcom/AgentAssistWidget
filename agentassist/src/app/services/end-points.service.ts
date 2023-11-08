@@ -1799,5 +1799,15 @@ export class EndPointsService {
       endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots?instanceBotId=:instanceBotId&includeInstanceBot=:includeInstanceBot&skipLinkCheck:skipLinkCheck',
       method: 'get'
     }
+
+    this.serviceList['put.agentAssistSettings'] = {
+      endpoint: this.API_SERVER_URL + '',
+      method: 'put'
+    }
+
+    this.serviceList['get.agentAssistSettings'] = {
+      endpoint: this.API_SERVER_URL + '',
+      method: 'get'
+    }
   }
 }
