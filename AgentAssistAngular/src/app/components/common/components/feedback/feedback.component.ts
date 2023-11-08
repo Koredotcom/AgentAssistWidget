@@ -37,10 +37,6 @@ export class FeedbackComponent {
     })
   }
 
-
-  ngOnChanges(changes : any){
-  }
-
   createForm(){
     this.feedbackForm = new FormGroup(
       {

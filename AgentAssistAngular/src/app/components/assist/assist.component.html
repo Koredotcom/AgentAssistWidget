@@ -5,22 +5,23 @@
                 <div class="left-title-info">
                     <h1>Assist</h1>
                     <div class="bottom-titles">
-                        <p>Authenmticate</p>
-                        <span>Step: <b>SSN</b></span>
+                        <p *ngIf="dialogName">{{dialogName}}</p>
+                        <span *ngIf="dialogName && currentRunningStep">Step: <b>{{currentRunningStep}}</b></span>
                     </div>
                 </div>
                 <div class="actions-assist-header">
-                    <button class="solid-action" aria-label="button">
+                    <button class="solid-action" aria-label="button" [ngClass]="{'disabled-msg' : !dialogName}">
                         <i class="krIocnsFont-list"></i>
                     </button>
-                    <button class="solid-action" aria-label="button">
+                    <button class="solid-action" aria-label="button" [ngClass]="{'disabled-msg' : !dialogName}">
                         <i class="krIocnsFont-refresh"></i>
                     </button>
-                    <button class="solid-action stop-assist" aria-label="button">
+                    <button class="solid-action stop-assist" aria-label="button" (click)="terminateDialog()" [ngClass]="{'disabled-msg' : !dialogName}">
                         <span></span>
                     </button>
                     <button class="solid-action minimize-btn" aria-label="button" (click)="minimizeToggle()">
-                        <i class="krIocnsFont-minimize"></i>
+                        <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
+                        <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
                     </button>
                 </div>
             </div>
@@ -35,12 +36,12 @@
                     <ng-container [ngTemplateOutlet]="dialogEnded"></ng-container>                     -->
                     <ng-container *ngFor="let res of assistResponseArray; let i = index">
                         <ng-container *ngIf="res.type == renderResponseType.SUGGESTIONS">
-                            <div class="agent-utt-info" attr.id="agentUttInfo-{{res.uuid}}">
+                            <!-- <div class="agent-utt-info" attr.id="agentUttInfo-{{res.uuid}}">
                                 <div class="user-img">
                                     <img src="assets/images/userIcon.svg">
                                 </div>
                                 <div class="text-user">{{res.data.userInput}}</div>
-                            </div>
+                            </div> -->
                             <app-suggestions [suggestionResponse]="res" [agentassistArrayIndex]="i"
                                 [agentassistResponseArrayLength]="assistResponseArray.length"
                                 ></app-suggestions>
@@ -63,6 +64,12 @@
                 </div>
           </div>
         </div>
+        <ng-container *ngIf="terminateClick">
+            <app-terminate (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
+        </ng-container>
+        <ng-container *ngIf="interruptDialog">
+            <app-interrupt (handlePopupEvent)="handlePopupEvent($event)"></app-interrupt>
+        </ng-container>
     </div>
 </div>
 
@@ -107,27 +114,3 @@
 </ng-template>
 
 
-
-<ng-template #dialogStarted>
-    <div class="dialog-ended-wrapper">
-        <div class="middle-info">
-            <p>Dialog</p>
-            <button class="btn_link">Order Pizza</button>
-            <p>ended</p>
-        </div>
-        <div class="line_bar"></div>
-        <i class="krIocnsFont-check-circle"></i>
-    </div>
-</ng-template>
-
-<ng-template #dialogEnded>
-    <div class="dialog-ended-wrapper">
-        <div class="line_bar"></div>
-        <div class="middle-info">
-            <p>Dialog</p>
-            <button class="btn_link">Order Pizza</button>
-            <p>ended</p>
-        </div>
-        <i class="krIocnsFont-check-circle"></i>
-    </div>
-</ng-template>

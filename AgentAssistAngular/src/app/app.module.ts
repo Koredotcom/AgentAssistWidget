@@ -25,7 +25,7 @@ import { SentimentScoreComponent } from './components/common/components/sentimen
 import { NudgesComponent } from './components/common/components/nudges/nudges.component';
 import { HintsComponent } from './components/common/components/hints/hints.component';
 import { EmptyObjectCheckPipe } from './pipes/empty-object-check.pipe';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -109,7 +109,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgbModule,
     FormsModule,
     HttpClientModule,
-    NgbTooltipModule
+    NgbTooltipModule,
+    ReactiveFormsModule
   ],
   providers: [EmptyObjectCheckPipe,
     {

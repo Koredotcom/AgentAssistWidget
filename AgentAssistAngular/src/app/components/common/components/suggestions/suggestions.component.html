@@ -1,7 +1,7 @@
 <div class="search-block-data-suggestions">
     <div class="suggestionslist-conntent-search">
         <ng-container>
-            <div class="sugestions-block">
+            <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.dialogs?.length">
                 <div class="suggestion-header">
                     <div class="icon_block">
                         <img src="assets/images/icons/dialog.svg" alt="Top Dialog Suggestion">
@@ -13,7 +13,7 @@
                     <app-dialog-suggestion></app-dialog-suggestion>
                 </div>
             </div>
-            <div class="sugestions-block">
+            <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.faqs?.length">
                 <div class="suggestion-header">
                     <div class="icon_block">
                         <img src="assets/images/icons/custchoice.svg" alt="FAQ">
@@ -25,7 +25,7 @@
                     <app-faq-suggestions (faqAnswerToggle)="checkAnswerAndToggle($event)"></app-faq-suggestions>
                 </div>
             </div>
-            <div class="sugestions-block">
+            <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.articles?.length">
                 <div class="suggestion-header">
                     <div class="icon_block">
                         <img src="assets/images/icons/custchoice.svg" alt="Article">
@@ -37,7 +37,7 @@
                     <app-article-suggestions></app-article-suggestions>
                 </div>
             </div>
-            <div class="sugestions-block">
+            <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.snippets?.length">
                 <div class="suggestion-header">
                     <div class="icon_block">
                         <img src="assets/images/icons/custchoice.svg" alt="Snippet">

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-checklist',
@@ -6,5 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./checklist.component.scss']
 })
 export class ChecklistComponent {
+
+  @Output() maxButtonClick = new EventEmitter();
+  @Input() maxButton : boolean;
+
+
+  minimizeToggle(){
+    this.maxButton = !this.maxButton;
+    this.maxButtonClick.emit(this.maxButton);
+  }
 
 }

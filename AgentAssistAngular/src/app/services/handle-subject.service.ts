@@ -8,6 +8,7 @@ import { ProjConstants } from '../proj.const';
 export class HandleSubjectService {
 
   searchResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
+  public runButtonClickEventSubject = new BehaviorSubject<object>(null);
   public proactiveModeSubject = new Subject<boolean>();
   public callConversationSuggestions$ = new Subject<object>();
 
@@ -23,6 +24,10 @@ export class HandleSubjectService {
 
   setCallConversationSuggestions(obj){
     this.callConversationSuggestions$.next(obj);
+  }
+
+  setRunButtonClickEvent(obj) {
+    this.runButtonClickEventSubject.next(obj);
   }
 
 }

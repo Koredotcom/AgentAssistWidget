@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { chatWindow } from '@koredev/kore-web-sdk';
 import { BehaviorSubject } from 'rxjs';
 import { ProjConstants } from '../proj.const';
 
@@ -34,10 +35,14 @@ export class RootService {
     childBotName : '',
     childBotId : ''
   }
+  public chatWindowInstance : any;
+  manualAssistOverrideMode : boolean = false;
 
   isUpdateFeedBackDetailsFlag : boolean = false;
 
-  constructor() { }
+  constructor() { 
+    this.chatWindowInstance = new chatWindow();
+  }
 
   getConnectionDetails(){
     return this.connectionDetails;
@@ -238,12 +243,33 @@ export class RootService {
     return searchResponse;
   }
 
+  handleSendCopyButtonForNodes(actionType, sendData) {
+    let message = {};
+    if (actionType == ProjConstants.SEND) {
+      message = {
+        method: 'send',
+        name: ProjConstants.SENDMSG,
+        conversationId: this.connectionDetails.conversationId,
+        payload: sendData
+      };
+      window.parent.postMessage(message, '*');
+    } else {
+      message = {
+        method: 'copy',
+        name: ProjConstants.COPYMSG,
+        conversationId: this.connectionDetails.conversationId,
+        payload: sendData
+      };
+      parent.postMessage(message, '*');
+    }
+  }
+
   handleSendCopyButton(actionType, faq_or_article_obj, selectType) {
     let message = {};
     if (actionType == this.projConstants.SEND) {
       message = {
         method: 'send',
-        name: "agentAssist.SendMessage",
+        name: ProjConstants.SENDMSG,
         conversationId: this.connectionDetails.conversationId,
         payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
       };
@@ -252,7 +278,7 @@ export class RootService {
     } else {
       message = {
         method: 'copy',
-        name: "agentAssist.CopyMessage",
+        name: ProjConstants.COPYMSG,
         conversationId: this.connectionDetails.conversationId,
         payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
       };
@@ -365,6 +391,19 @@ export class RootService {
       agent_assist_request['query'] = data.userInput
     }
     return agent_assist_request;
+  }
+
+  getTemplateHtml(isTemplateRender, result){
+    let renderMessage = isTemplateRender ? this.chatWindowInstance.generateMessageDOM(result) : '';
+    console.log(renderMessage, "renderMessage*********");
+    
+    if (renderMessage) {
+      let obj =  renderMessage.outerHTML
+      console.log(renderMessage.outerHTML, 'outer html');
+      
+      return (obj);
+    }
+    return null;
   }
 
 

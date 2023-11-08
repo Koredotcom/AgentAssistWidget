@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ProjConstants } from '../proj.const';
 
 @Component({
   selector: 'app-tell-customer',
@@ -8,4 +9,6 @@ import { Component, Input } from '@angular/core';
 export class TellCustomerComponent {
   @Input() automation : any;
   
+  projConstants : any = ProjConstants;
+
 }

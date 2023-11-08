@@ -5,8 +5,8 @@
         </button>
         <h1>Terminate Conversation</h1>
         <p>Are you sure you want to terminate the dialog task? AgentAsssit will no longer be able to make suggestions. </p>        
-        <button class="_btn dangerBtn w-100">Yes Terminate</button>
-        <button class="_btn solidBtn w-100">No, Cancel</button>
-        <button class="_btn solidBtn w-100">Continue with override mode</button>
+        <button class="_btn dangerBtn w-100" (click)="terminateClick(true)">Yes Terminate</button>
+        <button class="_btn solidBtn w-100" (click)="terminateClick(false)">No, Cancel</button>
+        <button class="_btn solidBtn w-100" (click)="terminateClick(false, true)" *ngIf="rootService.activeTab">Continue with override mode</button>
     </div>  
 </div>

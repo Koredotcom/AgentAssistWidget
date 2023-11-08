@@ -25,10 +25,6 @@ export class SuggestionsComponent {
 
   }
 
-  ngOnInit() {
-
-  }
-
   ngOnDestroy() {
     this.subs.unsubscribe();
   }

@@ -1,9 +1,9 @@
 <div class="widget-body-wrapper">
-    <div class="widgets-list-card" #top>
-        <app-checklist></app-checklist>
+    <div class="widgets-list-card" #top [ngClass]="{'minimized-card' : assistMaxButtonClick}">
+        <app-checklist (maxButtonClick)="checkListMaxButtonClickEvent($event)" [maxButton]="assistMaxButtonClick"></app-checklist>
     </div>
     <div class="resize-divider"></div>
-    <div class="widgets-list-card" #bottom>
-        <app-assist></app-assist>
+    <div class="widgets-list-card" #bottom [ngClass]="{'minimized-card' : checkListMaxButtonClick}">
+        <app-assist (maxButtonClick)="assistMaxButtonClickEvent($event)" [maxButton]="checkListMaxButtonClick"></app-assist>
     </div>
 </div>

@@ -4,18 +4,18 @@
     <ng-container *ngFor="let dialogue of menuResponse | keyvalue;let i = index">
         <div class="dialog-task-wrapper">
             <div class="title-paragraph">
-                <p>{{dialogue?.value['intentName']}}</p>
+                <p>{{dialogue?.value['name']}}</p>
                 <!-- <span>(buy_bot)</span> -->
             </div>
             <div class="dialog-actions">
-                <button class="primary-btn" (click)="dialogueRunClick(dialogue,projConstants.ASSIST)">RUN</button>
+                <button class="primary-btn" (click)="dialogueRunClick(dialogue.value,projConstants.ASSIST)">RUN</button>
                 <div ngbDropdown class="elipse-ngbdropdown">
                     <button type="button" id="elipseDrp" ngbDropdownToggle>
                         <i class="krIocnsFont-outlined"></i>
                     </button>
                     <div ngbDropdownMenu aria-labelledby="elipseDrp">
                         <button ngbDropdownItem aria-disabled="true"
-                            (click)="dialogueRunClick(dialogue,projConstants.MYBOT)">Run with Agent’s input</button>
+                            (click)="dialogueRunClick(dialogue.value,projConstants.MYBOT)">Run with Agent’s input</button>
                     </div>
                 </div>
             </div>

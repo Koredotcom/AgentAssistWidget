@@ -106,8 +106,9 @@
                 <button class="solid-action stop-assist" aria-label="button">
                    <i class="krIocnsFont-terminate-playbook"></i>
                 </button>
-                <button class="solid-action minimize-btn" aria-label="button">
-                    <i class="krIocnsFont-minimize"></i>
+                <button class="solid-action minimize-btn" aria-label="button" (click)="minimizeToggle()">
+                    <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
+                    <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
                 </button>
             </div>
         </div>

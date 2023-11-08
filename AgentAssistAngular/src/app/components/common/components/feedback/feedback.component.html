@@ -1,32 +1,35 @@
-<div class="feedback-wrapper">
-    <div class="feedback-actions-info">
-        <div class="left-sec-info">
-            <div class="icon_block">
-                <img src="assets/images/icons/help-hand.svg" alt="Image">
+<form [formGroup]="feedbackForm" (keydown.enter)="$event.preventDefault()">
+    <div class="feedback-wrapper">
+        <div class="feedback-actions-info">
+            <div class="left-sec-info">
+                <div class="icon_block">
+                    <img src="assets/images/icons/help-hand.svg" alt="Image">
+                </div>
+                <h1>Helpful?</h1>
+                <button class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn' : feedbackData?.feedback == feedbackConst.LIKE}" (click)="addFeedback(feedbackConst.LIKE)" aria-label="Button" href="#thankyou" data-bs-toggle="collapse">
+                    <i class="krIocnsFont-thumbs-up-solid"></i>
+                </button>
+                <button class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn' : feedbackData?.feedback == feedbackConst.DISLIKE}" (click)="addFeedback(feedbackConst.DISLIKE)" aria-label="Button" href="#helpImprove" data-bs-toggle="collapse">
+                    <i class="krIocnsFont-thumbs-down"></i>
+                </button>
             </div>
-            <h1>Helpful?</h1>
-            <button class="feedback-btn-thumb" aria-label="Button" href="#thankyou" data-bs-toggle="collapse">
-                <i class="krIocnsFont-thumbs-up-solid"></i>
-            </button>
-            <button class="feedback-btn-thumb" aria-label="Button" href="#helpImprove" data-bs-toggle="collapse">
-                <i class="krIocnsFont-thumbs-down"></i>
-            </button>
+            <p class="thankyou-text" id="thankyou" *ngIf="feedbackData?.feedback == feedbackConst.LIKE">Thank you!</p>
         </div>
-        <p class="thankyou-text collapse" id="thankyou">Thank you!</p>
-    </div>
-    <div class="improve-feedback-block collapse" id="helpImprove">
-        <div class="improve-options-text">
-            <button class="improve-lable-text active-improve-btn" aria-label="Button">Wrong suggestion</button>
-            <button class="improve-lable-text" aria-label="Button">Content error</button>
-            <button class="improve-lable-text" aria-label="Button">Time taking</button>
-            <button class="improve-lable-text" aria-label="Button">Incorrect intent</button>
-            <button class="improve-lable-text" aria-label="Button">Other</button>
-        </div>
-        <div class="input-improve-text">
-            <textarea placeholder="Add additional comments here" class="form-control"></textarea>
-            <button class="send-btn-feedback" aria-label="Button">
-                <i class="krIocnsFont-check-circle"></i>
-            </button>
+        <div class="improve-feedback-block" id="helpImprove" *ngIf="feedbackData?.feedback == feedbackConst.DISLIKE">
+            <div class="improve-options-text">
+                <button class="improve-lable-text" [ngClass]="{'active-improve-btn' : feedbackData.feedbackDetails.includes(suggestion)}"
+                 aria-label="Button" (click)="addDislikeSuggestion(suggestion)"  *ngFor="let suggestion of feedbackConst.DISLIKE_LIST">{{suggestion}}</button>
+                <!-- <button class="improve-lable-text" aria-label="Button">Content error</button>
+                <button class="improve-lable-text" aria-label="Button">Time taking</button>
+                <button class="improve-lable-text" aria-label="Button">Incorrect intent</button>
+                <button class="improve-lable-text" aria-label="Button">Other</button> -->
+            </div>
+            <div class="input-improve-text">
+                <textarea placeholder="Add additional comments here" class="form-control" formControlName="comment"></textarea>
+                <button class="send-btn-feedback" aria-label="Button" [disabled]="!formTouched" (click)="submitFeedback()">
+                    <i class="krIocnsFont-check-circle"></i>
+                </button>
+            </div>
         </div>
     </div>
-</div>
+</form>

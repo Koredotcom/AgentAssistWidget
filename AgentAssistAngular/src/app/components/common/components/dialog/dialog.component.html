@@ -1,1 +1,38 @@
 
+
+<ng-container [ngTemplateOutlet]="dialogStarted"></ng-container>
+<ng-container *ngFor="let automation of automationData.automationsArray; let i = index">
+    <ng-container *ngIf="automation.responseType == renderResponseType.ASSISTRESPONSE">
+        <ng-container *ngIf="automation.data.isPrompt">
+            <app-ask-customer [automation]="automation"></app-ask-customer>
+        </ng-container>
+        <ng-container *ngIf="!automation.data.isPrompt">
+            <app-tell-customer [automation]="automation"></app-tell-customer>
+        </ng-container>
+    </ng-container>
+</ng-container>
+<ng-container [ngTemplateOutlet]="dialogEnded" *ngIf="automationData.endAutomation"></ng-container>
+
+<ng-template #dialogStarted>
+    <div class="dialog-ended-wrapper">
+        <div class="middle-info">
+            <p>Dialog</p>
+            <button class="btn_link">{{automationData.data.intentName}}</button>
+            <p>Started</p>
+        </div>
+        <div class="line_bar"></div>
+        <i class="krIocnsFont-check-circle"></i>
+    </div>
+</ng-template>
+
+<ng-template #dialogEnded>
+    <div class="dialog-ended-wrapper">
+        <div class="line_bar"></div>
+        <div class="middle-info">
+            <p>Dialog</p>
+            <button class="btn_link">{{automationData.data.intentName}}</button>
+            <p>ended</p>
+        </div>
+        <i class="krIocnsFont-check-circle"></i>
+    </div>
+</ng-template>

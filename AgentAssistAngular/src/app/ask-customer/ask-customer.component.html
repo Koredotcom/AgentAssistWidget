@@ -11,7 +11,7 @@
     </ng-container>
 </div>
 
-<div class="ask-cust-node" *ngIf="!isWelcomeMsg && automation">
+<div class="ask-cust-node" *ngIf="!isWelcomeMsg && automation && automation.type == renderResponseType.SMALLTALK">
     <div class="top-section">
         <div class="svg_img">
             <img src="assets/images/icons/askcust.svg" alt="Image">
@@ -21,39 +21,71 @@
     <ng-container [ngTemplateOutlet]="askCustMsg" [ngTemplateOutletContext]="{smallTalkData: automation}"></ng-container> 
 </div>
 
+<div class="ask-cust-node" *ngIf="!isWelcomeMsg && automation && automation.type == renderResponseType.AUTOMATION">
+    <div class="top-section">
+        <div class="svg_img">
+            <img src="assets/images/icons/askcust.svg" alt="Image">
+        </div>
+        <p>{{projConstants.ASK_CUSTOMER}}</p>
+    </div>
+    <ng-container [ngTemplateOutlet]="askCustMsgForAutomation" [ngTemplateOutletContext]="{automationData: automation}"></ng-container> 
+</div>
+
+<ng-template #askCustMsgForAutomation let-automation="automationData">
+    <div class="msg-node-cust">
+        <div class="send-copy-actions">
+            <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, automation)">
+                <i class="krIocnsFont-copy"></i>
+            </button>
+            <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, automation)">Send</button>
+        </div>
+        <!-- <div class="sent-msg-text">Sent</div> -->
+        <!-- <p>{{automation.data.buttons[0].value}}</p> -->
+        <p *ngIf="!automation.templateRender && automation.template">{{automation.data.buttons[0].value}}</p>
+        <div *ngIf="automation.templateRender && automation.template" [innerHTML]="automation.template"></div>
+    </div>
+</ng-template>
+
 <ng-template #askCustMsg let-smallTalk="smallTalkData">
     <div class="msg-node-cust">
         <div class="send-copy-actions">
-            <button class="solidbtn" aria-label="button">
+            <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, smallTalk)">
                 <i class="krIocnsFont-copy"></i>
             </button>
-            <button class="solidbtn" aria-label="button">Send</button>
+            <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, smallTalk)">Send</button>
         </div>
         <!-- <div class="sent-msg-text">Sent</div> -->
         <p>{{smallTalk.value}}</p>
     </div>
 </ng-template>
 
-<div class="entity-mesage-data" *ngIf="!isWelcomeMsg">
+<div class="entity-mesage-data" *ngIf="!isWelcomeMsg" [ngClass]="{'error-no-reponse' : automation.errorCount}">
     <div class="input-block-entity">
         <p>{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}} </p>
-        <input type="text" aria-label="Input">
+        <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride()" [disabled]="automation.disableInput">
         <div class="border-outline"></div>
         <div class="actions-inputs">
-            <button class="remove-input" aria-label="Button">
-                <i class="krIocnsFont-close"></i>
+            <button class="remove-input" aria-label="Button" *ngIf="automation.userInput == projConstants.NO && !automation.errorCount">
+                <i class="krIocnsFont-keyboard"></i>
             </button>
-            <button class="check-input" aria-label="button">
-                <i class="krIocnsFont-check"></i>
-            </button>
-            <button class="success-check-input" aria-label="button">
+            <button class="success-check-input" aria-label="button" *ngIf="automation.userInput == projConstants.YES && !automation.errorCount">
                 <i class="krIocnsFont-check-circle"></i>
             </button>
-            <button class="wrong-res-info" aria-label="button">
+            <button class="remove-input" aria-label="Button" (click)="cancelOverride()" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">
+                <i class="krIocnsFont-close"></i>
+            </button>
+            <button class="check-input" [ngClass]="{'disabled-msg' : !automation.entityValue}" aria-label="button" (click)="handleAgentInput()" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">
+                <i class="krIocnsFont-check"></i>
+            </button>
+            <button class="wrong-res-info" aria-label="button" (click)="cancelOverride()" *ngIf="automation.errorCount">
                 <i class="krIocnsFont-warning-solid"></i>
-                <span>3</span>
+                <span>{{automation.errorCount}}</span>
             </button>
         </div>
     </div>
-    <p class="info-entity-text">Awaiting Response  |  Type to override</p>
+    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.NO">{{projConstants.AGENT_ENTERED}}</p>
+    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.YES">{{projConstants.ACCEPT_RESPONSE}}</p>
+    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p>
+    <p class="info-entity-text" *ngIf="automation.errorCount">Expected Format: {{automation.data.entityType}}  |  Type to override</p>
+
 </div>
