@@ -70,6 +70,17 @@
                         filter: drop-shadow(0px 0.7777777910232544px 1.5555555820465088px rgba(16, 24, 40, 0.06)) drop-shadow(0px 0.7777777910232544px 2.3333334922790527px rgba(16, 24, 40, 0.10));
                     }
                 }
+                &.toggle-enabled-disabled {
+                    .slider {
+                        span {
+                            padding-left: 33px !important;
+                            top: -2px !important;
+                            font-weight: 600;
+                            font-size: 14px;
+                            line-height: 20px;
+                        }
+                    }
+                }
             }
             .content-data-toggle{
                 width: 100%;

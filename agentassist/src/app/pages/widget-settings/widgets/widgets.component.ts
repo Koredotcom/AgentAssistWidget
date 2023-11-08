@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
@@ -11,6 +11,8 @@ import { clone } from 'src/app/helpers/utils';
   styleUrls: ['./widgets.component.scss']
 })
 export class WidgetsComponent implements OnInit {
+
+  @ViewChild('fileInput') inputRef: ElementRef<HTMLInputElement>;
 
   isUnifiedPlatform: boolean = false;
   disableButtons: boolean =  false;
@@ -62,20 +64,74 @@ export class WidgetsComponent implements OnInit {
     let body = {
       botId
     }
-    this.service.invoke("get.AgentAssistSettings", params).subscribe(
-      (res) => {
-        if (res) {
-          this.clonedWidgetSettings = clone(res);
-          this.agentAssistSettings = {...res};
-        }
+    // this.service.invoke("get.AgentAssistSettings", params).subscribe(
+    //   (res) => {
+    //     if (res) {
+    //       res ={ agentAssistSettings: { 
+    //         agentAssistWidgetEnabled: true,
+    //         isProactiveEnabled: true,
+    //         isAgentCoachingEnabled: true,
+    //         isAgentResponseEnabled: true,
+    //         isAgentPlaybookEnabled: true,
+    //         isSearchAssistEnabled: true,
+    //         isWidgetLandingEnabled: {
+    //           isEnabled :  true, 
+    //            chat: {
+    //                  isEnabled: true, 
+    //                   tab: "assist"  
+    //                },
+    //           voice: {
+    //                 isEnabled:  true,
+    //                 tab: "assist" 
+    //                }
+    //         },
+    //         isCustomisedLogoEnabled: {
+    //           isEnabled: true, 
+    //           fileId : '',
+    //          hash : '',
+    //         fileName: ''
+    //         }
+    //       }}
+    //       this.clonedWidgetSettings = clone(res);
+    //       this.agentAssistSettings = {...res};
+    //     }
+    //   },
+    //   (err) => {
+    //     this.notificationService.showError(
+    //       err,
+    //       this.translate.instant("FALLBACK_ERROR_MSG")
+    //     );
+    //   }
+    // );
+
+    let mockRes = { agentAssistSettings: { 
+      agentAssistWidgetEnabled: true,
+      isProactiveEnabled: true,
+      isAgentCoachingEnabled: true,
+      isAgentResponseEnabled: true,
+      isAgentPlaybookEnabled: true,
+      isSearchAssistEnabled: true,
+      isWidgetLandingEnabled: {
+        isEnabled :  true, 
+         chat: {
+               isEnabled: true, 
+                tab: "assist"  
+             },
+        voice: {
+              isEnabled:  true,
+              tab: "assist" 
+             }
       },
-      (err) => {
-        this.notificationService.showError(
-          err,
-          this.translate.instant("FALLBACK_ERROR_MSG")
-        );
+      isCustomisedLogoEnabled: {
+        isEnabled: true, 
+        fileId : '',
+       hash : '',
+      fileName: ''
       }
-    );
+    }}
+    this.clonedWidgetSettings = clone(mockRes);
+    this.agentAssistSettings = {...mockRes.agentAssistSettings};
+    
   }
 
   saveAgentAssistSettings() {
@@ -150,6 +206,21 @@ selectedOption(selectedVal) {
   } else {
     this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled = !this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled;
   }
+}
+
+handleFileDrop(event: DragEvent) {
+  if (event?.dataTransfer?.files?.length) {
+    const files = event.dataTransfer.files;
+    console.log("🚀 ~ file: widgets.component.ts:214 ~ WidgetsComponent ~ handleFileDrop ~ files:", files)
+    this.inputRef.nativeElement.files = files;
+    this.addFiles(files);
+  }
+}
+
+addFiles(files) {
+  // api call
+  console.log(files);
+  this.agentAssistSettings.isCustomisedLogoEnabled.fileName = files[0].name;
 }
 
 }

@@ -9,9 +9,12 @@
     </div>
     <div class="body-widget-data">
         <div class="toggle-info-data m-0">
-            <label class="kr-sg-toggle">
+            <label class="kr-sg-toggle toggle-enabled-disabled">
                 <input type="checkbox" [(ngModel)]="agentAssistSettings.agentAssistWidgetEnabled">
-                <div class="slider"></div>
+                <div class="slider">
+                                <span class="enabled"></span>
+                                <span class="disabled"></span>
+                              </div>
             </label>
             <div class="content-data-toggle">
                 <h1>AgentAssist Widget</h1>
@@ -20,9 +23,11 @@
         </div>
         <div class="widgets-info-toglles">
             <div class="toggle-info-data">
-                <label class="kr-sg-toggle">
+                <label class="kr-sg-toggle toggle-enabled-disabled">
                     <input type="checkbox" [(ngModel)]="agentAssistSettings.isProactiveEnabled">
-                    <div class="slider"></div>
+                    <div class="slider">
+
+                    </div>
                 </label>
                 <div class="content-data-toggle">
                     <h1>Proactive Mode</h1>
@@ -30,9 +35,12 @@
                 </div>
             </div>
             <div class="toggle-info-data">
-                <label class="kr-sg-toggle">
+                <label class="kr-sg-toggle toggle-enabled-disabled">
                     <input type="checkbox" [(ngModel)]="agentAssistSettings.isAgentCoachingEnabled">
-                    <div class="slider"></div>
+                    <div class="slider">
+                                <span class="enabled"></span>
+                                <span class="disabled"></span>
+                              </div>
                 </label>
                 <div class="content-data-toggle">
                     <h1>Agent Coaching</h1>
@@ -40,9 +48,12 @@
                 </div>
             </div>
             <div class="toggle-info-data">
-                <label class="kr-sg-toggle">
+                <label class="kr-sg-toggle toggle-enabled-disabled">
                     <input type="checkbox"  [(ngModel)]="agentAssistSettings.isAgentResponseEnabled">
-                    <div class="slider"></div>
+                    <div class="slider">
+                                <span class="enabled"></span>
+                                <span class="disabled"></span>
+                              </div>
                 </label>
                 <div class="content-data-toggle">
                     <h1>Send Button for Agent Assist Responses</h1>
@@ -50,9 +61,12 @@
                 </div>
             </div>
             <div class="toggle-info-data">
-                <label class="kr-sg-toggle">
+                <label class="kr-sg-toggle toggle-enabled-disabled">
                     <input type="checkbox" [(ngModel)]="agentAssistSettings.isAgentPlaybookEnabled">
-                    <div class="slider"></div>
+                    <div class="slider">
+                                <span class="enabled"></span>
+                                <span class="disabled"></span>
+                              </div>
                 </label>
                 <div class="content-data-toggle">
                     <h1>Agent Playbook</h1>
@@ -60,9 +74,12 @@
                 </div>
             </div>
             <div class="toggle-info-data">
-                <label class="kr-sg-toggle">
+                <label class="kr-sg-toggle toggle-enabled-disabled">
                     <input type="checkbox" [(ngModel)]="agentAssistSettings.isSearchAssistEnabled">
-                    <div class="slider"></div>
+                    <div class="slider">
+                                <span class="enabled"></span>
+                                <span class="disabled"></span>
+                              </div>
                 </label>
                 <div class="content-data-toggle">
                     <h1>SearchAssist</h1>
@@ -70,9 +87,12 @@
                 </div>
             </div>
             <div class="toggle-info-data">
-                <label class="kr-sg-toggle">
+                <label class="kr-sg-toggle toggle-enabled-disabled">
                     <input type="checkbox"  [(ngModel)]="agentAssistSettings.isWidgetLandingEnabled.isEnabled">
-                    <div class="slider"></div>
+                    <div class="slider">
+                                <span class="enabled"></span>
+                                <span class="disabled"></span>
+                              </div>
                 </label>
                 <div class="content-data-toggle">
                     <h1>Widget Landing Tab for Voice Channel</h1>
@@ -132,9 +152,12 @@
             </div>
             
             <div class="toggle-info-data">
-                <label class="kr-sg-toggle">
+                <label class="kr-sg-toggle toggle-enabled-disabled">
                     <input type="checkbox" [(ngModel)]="agentAssistSettings.isCustomisedLogoEnabled.isEnabled">
-                    <div class="slider"></div>
+                    <div class="slider">
+                                <span class="enabled"></span>
+                                <span class="disabled"></span>
+                              </div>
                 </label>
                 <div class="content-data-toggle">
                     <h1>Customize Logo</h1>
@@ -144,7 +167,7 @@
             <div class="customize-logo-data">
                 <div class="logo-h">Logo File</div>
                 <div class="upload-logo-block">
-                    <input type="file">
+                    <input type="file" (dropped)="handleFileDrop($event)"  (change)="addFiles(fileInput.files)" #fileInput>
                     <div class="icon_file_block">
                         <svg width="21" height="20" viewBox="0 0 21 20" fill="none">
                             <path d="M7.16663 13.3333L10.5 10M10.5 10L13.8333 13.3333M10.5 10V17.5M17.1666 13.9524C18.1845 13.1117 18.8333 11.8399 18.8333 10.4167C18.8333 7.88536 16.7813 5.83333 14.25 5.83333C14.0679 5.83333 13.8975 5.73833 13.8051 5.58145C12.7183 3.73736 10.712 2.5 8.41663 2.5C4.96485 2.5 2.16663 5.29822 2.16663 8.75C2.16663 10.4718 2.86283 12.0309 3.98908 13.1613" stroke="#475467" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
@@ -153,6 +176,10 @@
                     <p>Click to upload or drag and drop</p>
                     <span>SVG, PNG (max. 800x400px)</span>
                 </div>
+                <div *ngIf="this.agentAssistSettings.isCustomisedLogoEnabled.fileName !== ''">
+                    <!-- {{ fileList | json }} -->
+                    <img [src]="this.agentAssistSettings.isCustomisedLogoEnabled.fileName !== '' ? 'this.agentAssistSettings.isCustomisedLogoEnabled.fileName' : ''" alt="" style="height: 100%; width: 40%;">
+                  </div>
             </div>
         </div>
         <div class="save-cancel-btns">

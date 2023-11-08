@@ -1809,5 +1809,10 @@ export class EndPointsService {
       endpoint: this.API_SERVER_URL + '',
       method: 'get'
     }
+
+    this.serviceList['post.fileUpload'] = {
+      endpoint: this.API_SERVER_URL + '',
+      method: 'post'
+    }
   }
 }
