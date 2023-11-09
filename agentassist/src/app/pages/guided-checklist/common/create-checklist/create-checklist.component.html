@@ -1,19 +1,4 @@
 <div class="stage-creation-slider-data">
-    <div class="left-tabs">
-        <button class="tab-btn" [ngClass]="{'active-btn': tab === 'basic'}" (click)="tab = 'basic'; basic=true">
-            <i class="icon-coaching--settings"></i>
-        </button>
-        <button class="tab-btn" [ngClass]="{'active-btn': tab === 'assignment'}" (click)="tab = 'assignment'; basic=true">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path opacity="0.4" d="M16 18L18 20L22 16" stroke="#101828" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M12 15.5H7.5C6.10444 15.5 5.40665 15.5 4.83886 15.6722C3.56045 16.06 2.56004 17.0605 2.17224 18.3389C2 18.9067 2 19.6044 2 21M14.5 7.5C14.5 9.98528 12.4853 12 10 12C7.51472 12 5.5 9.98528 5.5 7.5C5.5 5.01472 7.51472 3 10 3C12.4853 3 14.5 5.01472 14.5 7.5Z" stroke="#101828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-
-        </button>
-        <button class="tab-btn" *ngIf="checkListType !== 'primary'" [ngClass]="{'active-btn': tab === 'trigger'}" (click)="tab = 'trigger'; loadtrigger= true; basic=false">
-            <i class="icon-coaching--thendo"></i>
-        </button>
-    </div>
     <div class="tab-content-data">
         <div class="header-sec">
             <div class="title">General Settings</div>
@@ -21,10 +6,15 @@
                 <i class="icon-sa-close"></i>
             </div>
         </div>
+        <div class="tabs-info">
+            <button class="tab-btn" [ngClass]="{'active-btn': tab === 'basic'}" (click)="tab = 'basic'; basic=true">General Settings</button>
+            <button class="tab-btn" [ngClass]="{'active-btn': tab === 'assignment'}" (click)="tab = 'assignment'; basic=true">Assignments</button>
+            <button class="tab-btn" *ngIf="checkListType !== 'primary'" [ngClass]="{'active-btn': tab === 'trigger'}" (click)="tab = 'trigger'; loadtrigger= true; basic=false">Triggers</button>
+        </div>
         <div class="body-data" [formGroup]="checkListForm">
             <perfect-scrollbar>
                 <div class="inner-content-data">
-                    <div [ngClass]="{'d-none': tab !== 'basic'}" class="p-22">
+                    <div [ngClass]="{'d-none': tab !== 'basic'}" class="p-24">
                         <ng-container>
                             <div class="kr-sg-input-text m-b-12">
                                 <div class="label-text">Playbook Name</div>
@@ -38,6 +28,24 @@
                                     class="input-text"></textarea>
                                 <div class="count-char">{{checkListForm.value?.description?.length}}/200</div>
                             </div>
+                            <div class="label-text">Type</div>
+                            <div class="kr-sg-dropdowns m-b-12" ngbDropdown placement="bottom">
+                                <div class="dropdown dropdown-open">
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Primary</button>
+                                    <ul class="dropdown-menu content-menu header_in_development_drpdown p-0" ngbDropdownMenu>
+                                        <li ngbDropdownItem class="p-0">
+                                            <a>Primary</a>
+                                        </li>
+                                        <li ngbDropdownItem class="p-0">
+                                            <a>Primary</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="kr-sg-checkbox add-close-checbox m-b-16">
+                                <input id="checkbox-4" class="checkbox-custom" type="checkbox">
+                                <label for="checkbox-4" class="checkbox-custom-label">Add Close Stage <i class="icon-sa-info"></i></label>
+                            </div>    
                             <div class="label-text m-b-5">Tags</div>
                             <mat-form-field class="example-chip-list m-b-15">
                                 <mat-label>Add Tags</mat-label>
@@ -94,7 +102,7 @@
                             </div>
                         </ng-container>
                     </div>
-                    <div [ngClass]="{'d-none': tab !== 'assignment'}" class="p-22">
+                    <div [ngClass]="{'d-none': tab !== 'assignment'}" class="p-24">
                         <div class="add-utterance-block">
                             <div class="utt-radio-block">
                                 <div class="radio-block-content" [ngClass]="{'active-check': assignType === 'all'}">
