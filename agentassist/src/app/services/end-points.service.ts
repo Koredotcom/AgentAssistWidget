@@ -1801,18 +1801,23 @@ export class EndPointsService {
     }
 
     this.serviceList['put.agentAssistSettings'] = {
-      endpoint: this.API_SERVER_URL + '',
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/organizations/:orgId/agentAssistSettings/:aasId?isAgentAssist=true',
       method: 'put'
     }
 
     this.serviceList['get.agentAssistSettings'] = {
-      endpoint: this.API_SERVER_URL + '',
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/organizations/:orgId/agentAssistSettings?isAgentAssist=true',
       method: 'get'
     }
 
     this.serviceList['post.fileUpload'] = {
-      endpoint: this.API_SERVER_URL + '',
+      endpoint: this.API_SERVER_URL + '/users/:userId/file?isAgentAssist=true',
       method: 'post'
+    }
+
+    this.serviceList['get.uploadedLogo'] = {
+      endpoint: this.API_SERVER_URL + '/attachment/file/:fileId/url?isAgentAssist=true',
+      method: 'get'
     }
   }
 }

@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="widgets-info-toglles"
-        [ngClass]="!agentAssistSettings.agentAssistWidgetEnabled ? 'disableDropdown disabled' : ''">
+        [ngClass]="(!agentAssistSettings?.agentAssistWidgetEnabled) ? 'disableDropdown disabled' : ''">
             <div class="toggle-info-data">
                 <label class="kr-sg-toggle toggle-enabled-disabled">
                     <input type="checkbox" [(ngModel)]="agentAssistSettings.isProactiveEnabled">
@@ -105,19 +105,19 @@
                 </div>
             </div>
 
-            <div class="landing-tab-info" *ngIf="agentAssistSettings.isWidgetLandingEnabled.isEnabled">
+            <div class="landing-tab-info" *ngIf="agentAssistSettings?.isWidgetLandingEnabled?.isEnabled">
                 <div class="info-dropdowns">
                     <div class="kr-sg-checkbox">
-                        <input id="checkbox-1" class="checkbox-custom" type="checkbox" (click)="selectedOption('chat'); $event.stopPropagation();" [checked]="this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled">
+                        <input id="checkbox-1" class="checkbox-custom" type="checkbox" (click)="selectedOption('chat'); $event.stopPropagation();" [checked]="agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled">
                         <label for="checkbox-1" class="checkbox-custom-label">Chat Channel</label>
                     </div> 
                     <div class="dropdown-select-tab">
                         <div class="label-text">Choose your preferred page you want to set as Landing page</div>
                         <div class="kr-sg-dropdowns" ngbDropdown>                    
                             <div class="dropdown dropdown-open">
-                              <button class="dropdown-toggle dropdown-input" [disabled]="!agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled" 
+                              <button class="dropdown-toggle dropdown-input" [disabled]="!agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled" 
                               ngbDropdownToggle 
-                              [ngClass]="!agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled ? 'disableDropdown' : ''">{{agentAssistSettings?.isWidgetLandingEnabled?.chat?.tab}}</button>
+                              [ngClass]="!agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled ? 'disableDropdown' : ''">{{agentAssistSettings?.isWidgetLandingEnabled?.chat?.tab}}</button>
                               <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                 <ng-container *ngFor="let tab of landingPageTabs.chat;">
                                     <li ngbDropdownItem class="p-0" (click)="selectTab('chat' ,tab)">
@@ -131,16 +131,16 @@
                 </div>
                 <div class="info-dropdowns">
                     <div class="kr-sg-checkbox">
-                        <input id="checkbox-12" class="checkbox-custom" type="checkbox" (click)="selectedOption('voice'); $event.stopPropagation();" [checked]="this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled">
+                        <input id="checkbox-12" class="checkbox-custom" type="checkbox" (click)="selectedOption('voice'); $event.stopPropagation();" [checked]="agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled">
                         <label for="checkbox-12" class="checkbox-custom-label">Voice Channel</label>
                     </div> 
                     <div class="dropdown-select-tab">
                         <div class="label-text">Choose your preferred page you want to set as Landing page</div>
                         <div class="kr-sg-dropdowns" ngbDropdown>
                             <div class="dropdown dropdown-open">
-                              <button class="dropdown-toggle dropdown-input" [disabled]="!agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled" 
+                              <button class="dropdown-toggle dropdown-input" [disabled]="!agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled" 
                               ngbDropdownToggle 
-                              [ngClass]="!agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled ? 'disableDropdown' : ''">{{agentAssistSettings?.isWidgetLandingEnabled?.voice?.tab}}</button>
+                              [ngClass]="!agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled ? 'disableDropdown' : ''">{{agentAssistSettings?.isWidgetLandingEnabled?.voice?.tab}}</button>
                               <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                 <ng-container *ngFor="let tab of landingPageTabs.voice;">
                                     <li ngbDropdownItem class="p-0" (click)="selectTab('voice', tab)">
@@ -167,7 +167,7 @@
                     <p>When disabled, AgentAssist and Kore.ai Logo will be visible by default</p>
                 </div>
             </div>
-            <div class="customize-logo-data" *ngIf="agentAssistSettings.isCustomisedLogoEnabled.isEnabled">
+            <div class="customize-logo-data" *ngIf="agentAssistSettings?.isCustomisedLogoEnabled?.isEnabled">
                 <div class="logo-h">Logo File</div>
                 <div class="image-upload-block">
                     <div class="upload-logo-block">
@@ -184,19 +184,16 @@
                         <p>Click to upload or drag and drop</p>
                         <span>SVG, PNG (max. 800x400px)</span>
                     </div>
-                    <div class="uploaded-img" *ngIf="agentAssistSettings?.isCustomisedLogoEnabled?.fileName === ''; else uploaded">
-                        <img src="assets/images/coaching/empty-search.svg">
+                    <div class="uploaded-img" *ngIf="(agentAssistSettings?.isCustomisedLogoEnabled && agentAssistSettings?.isCustomisedLogoEnabled?.fileName && agentAssistSettings?.isCustomisedLogoEnabled?.fileName !== '')">
+                        <img [src]="imgPreview">
                     </div>
-                    <ng-template #uploaded>
-                        <img src="assets/images/coaching/empty-search.svg">
-                        <!-- <img [src]=" 'https://bots.kore.ai/api/getMediaStream/market/' + Screenshot%20(290).png +'?n=5230715913&s=ImRnZ3hwc2drckNRK2ZFNURNYTEwcmNIY3pVTTdsZzA2YThmaXpGZ1hPQzg9Ig$$' " alt=""> -->
-                    </ng-template>
                 </div>
-                <div class="uploading-inprogress-data" *ngIf="agentAssistSettings?.isCustomisedLogoEnabled?.fileName !== ''">
-                    <div class="checked-upload" *ngIf="progress >= 100">
+                <div class="uploading-inprogress-data" [ngClass]="{'failed-inprogress' : (fileTypeFlag || largeFileFlag)}"
+                *ngIf="uploadedImgDetails !== ''">
+                    <div class="checked-upload" *ngIf="progress === 100">
                         <i class="icon-ast_checkright"></i>
                     </div>
-                    <div class="delete-upload">
+                    <div class="delete-upload" (click)="removeFile()">
                         <i class="icon-sa-delete"></i>
                     </div>
                     <div class="icon_block">
@@ -205,10 +202,10 @@
                         </svg>
                     </div>
                     <div class="content-block">
-                        <h1>{{agentAssistSettings?.isCustomisedLogoEnabled?.fileName}}</h1>
+                        <h1>{{agentAssistSettings?.isCustomisedLogoEnabled?.fileName || uploadedImgDetails}}</h1>
                         <p>{{(logoSize) | number : '1.1-1'}} KB</p>
-                        <h3>Uploaded file format do not match with (SVG/PNG)</h3>
-                        <h3>File size exceed the maximum allowed size(5MB)</h3>
+                        <h3 *ngIf="fileTypeFlag">Uploaded file format do not match with (SVG/PNG)</h3>
+                        <h3 *ngIf="largeFileFlag">File size exceed the maximum allowed size(5MB)</h3>
                         <div class="progress-data">
                             <div class="progress-bg">
                                 <div class="bg-progress" [style.width]="progress"></div>
