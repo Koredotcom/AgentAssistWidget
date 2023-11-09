@@ -2134,5 +2134,7 @@
     "CHECKLIST.CLSAVE_FAILURE": "Failed to save checklist",
     "CHECKLIST.STEPCREATEFAILURE": "Failed to save step",
     "CHECKLIST.STEPUPDATEFAILURE": "Failed to update step",
-    "UNIFIED_SIDENAV_AGENT_ASSIST": "AgentAssist"
+    "UNIFIED_SIDENAV_AGENT_ASSIST": "AgentAssist",
+    "CHECKLIST.PRIMARY": "Primary",
+    "CHECKLIST.DYNAMIC": "Dynamic"
 }

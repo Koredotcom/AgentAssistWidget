@@ -33,9 +33,7 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
   
   ngAfterViewInit(): void {
     if(this.createOrUpdate === 'update'){
-      console.log(this.currentCheckList, this.checkListForm)
       setTimeout(() => {
-        
         this.loadtrigger = true;
       });
     }
