@@ -21,8 +21,14 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   disableButtons: boolean =  false;
   clonedWidgetSettings: any;
   subs = new SubSink();
+  uploadedImg: any;
   progress: number;
-  voice = 'Voice'
+  logoSize: any;
+
+  landingPageTabs = {
+    voice: [ 'Transcript', 'Assist Tab', 'library', 'MyBot'],
+    chat: [ 'Assist',  'library', 'MyBot' ]
+  }
 
   agentAssistSettings = { 
     agentAssistWidgetEnabled: true,
@@ -35,11 +41,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       isEnabled :  true, 
        chat: {
              isEnabled: true, 
-              tab: "assist"  
+              tab: "Assist"  
            },
       voice: {
             isEnabled:  true,
-            tab: "assist" 
+            tab: "Transcription" 
            }
     },
     isCustomisedLogoEnabled: {
@@ -120,18 +126,18 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         isEnabled :  true, 
          chat: {
                isEnabled: true, 
-                tab: "assist"  
+                tab: "Assist"  
              },
         voice: {
               isEnabled:  true,
-              tab: "assist" 
+              tab: "Transcript" 
              }
       },
       isCustomisedLogoEnabled: {
         isEnabled: true, 
         fileId : '',
-       hash : '',
-      fileName: ''
+        hash : '',
+        fileName: ''
       }
     }}
     this.clonedWidgetSettings = clone(mockRes);
@@ -163,11 +169,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
             isEnabled :  this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.isEnabled : false, 
               chat: {
                     isEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled : false, 
-                      tab: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.chat.tab : 'assist'  
+                      tab: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.chat.tab : 'Assist'  
                   },
               voice: {
                     isEnabled:  this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled : false,
-                    tab: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.voice.tab : "assist" 
+                    tab: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.voice.tab : "Transcript" 
                   }
             },
             isCustomisedLogoEnabled: {
@@ -194,6 +200,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         this.notificationService.showError(
           err,
           this.translate.instant("FALLBACK_ERROR_MSG")
+          
         );
       }
     );
@@ -213,6 +220,14 @@ selectedOption(selectedVal) {
   }
 }
 
+selectTab(channel, tab) {
+  if(channel === 'chat') {
+    this.agentAssistSettings.isWidgetLandingEnabled.chat.tab = tab;
+  } else {
+    this.agentAssistSettings.isWidgetLandingEnabled.voice.tab = tab;
+  }
+}
+
 handleFileDrop(event: DragEvent) {
   if (event?.dataTransfer?.files?.length) {
     const files = event.dataTransfer.files;
@@ -224,46 +239,88 @@ handleFileDrop(event: DragEvent) {
 
 addFiles(files) {
   console.log(files);
-  // api call
+    // api call
+    let fileFormat =  // regex code here
     this.progress = 1;
     const formData = new FormData();
     formData.append("file", files);
-    let botId = this.workflowService.getCurrentBtSmt(true)._id;
-    const params = {
-      botId
-    };
+    if(files[0].size < 5242880 ) {
+      let botId = this.workflowService.getCurrentBtSmt(true)._id;
+      const params = {
+        botId
+      };
 
-    const payload = {
-      formData
-    }
-
-    this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload,  {
-      reportProgress: true,
-      observe: 'events',
-    }).pipe(
-      map((event: any) => {
-        console.log(event);
-          this.progress = Math.round((100 / event.total) * event.loaded); 
-          // if (event.type == HttpEventType.UploadProgress) {
-          //   this.progress = Math.round((100 / event.total) * event.loaded);
-          // } else if (event.type == HttpEventType.Response) {
-          //   this.progress = null;
-          // }
-      }))
-    .subscribe(
-      (res) => {
-          this.agentAssistSettings.isCustomisedLogoEnabled.fileName = '';
-      },
-      (err) => {
-        this.notificationService.showError(
-          err,
-          this.translate.instant("FALLBACK_ERROR_MSG")
-        );
+      const payload = {
+        formData
       }
-      )
+
+      // this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload,  {
+      //   reportProgress: true,
+      //   observe: 'events',
+      // }).pipe(
+      //   map((event: any) => {
+      //     console.log(event);
+      //       this.progress = Math.round((100 / event.total) * event.loaded); 
+      //       // if (event.type == HttpEventType.UploadProgress) {
+      //       //   this.progress = Math.round((100 / event.total) * event.loaded);
+      //       // } else if (event.type == HttpEventType.Response) {
+      //       //   this.progress = null;
+      //       // }
+      //   }))
+      // .subscribe(
+      //   (res: any) => {
+      //       this.agentAssistSettings.isCustomisedLogoEnabled.fileName = res.fileName;
+      //       this.agentAssistSettings.isCustomisedLogoEnabled.hash = res.hash;
+      //       this.agentAssistSettings.isCustomisedLogoEnabled.fileId = res.fileId;
+      //       this.uploadedImg = res.imgURL;
+      //   },
+      //   (err) => {
+      //     this.notificationService.showError(
+      //       err,
+      //       this.translate.instant("FALLBACK_ERROR_MSG")
+      //     );
+      //   }
+      //   )
+    }
+    
+
+    
   // 
+  // dummy Data
+  this.agentAssistSettings.isCustomisedLogoEnabled.fileName = files[0].name;
+  // this.logoSize = this.convertByteSize(files[0].size);
+  this.logoSize = Math.round((files[0].size) / 1024);
+  console.log("🚀 ~ file: widgets.component.ts:285 ~ WidgetsComponent ~ addFiles ~ this.logoSize:", this.logoSize)
+  this.uploadedImg = '';
+  //
+  let loaded = 0;
+  while(this.progress < 100) {
+    this.progress = Math.round((100 * loaded) / this.logoSize );
+    console.log("🚀 ~ file: widgets.component.ts:291 ~ WidgetsComponent ~ addFiles ~ this.progress:", this.progress)
+    loaded += 20;
+    console.log("🚀 ~ file: widgets.component.ts:293 ~ WidgetsComponent ~ addFiles ~ loaded:", loaded)
+  }
+  
   
 }
+
+convertByteSize(bytes){
+  if (bytes < 1024) {
+    return bytes + ' B';
+  } else if (bytes < 1024 ** 2) {
+      return (bytes / 1024).toFixed(2) + ' KB';
+  } else if (bytes < 1024 ** 3) {
+      return (bytes / (1024 ** 2)).toFixed(2) + ' MB';
+  } else if (bytes < 1024 ** 4) {
+      return (bytes / (1024 ** 3)).toFixed(2) + ' GB';
+  } else if (bytes < 1024 ** 5) {
+      return (bytes / (1024 ** 4)).toFixed(2) + ' TB';
+  } else {
+      return (bytes / (1024 ** 5)).toFixed(2) + ' PB';
+  }
+}
+    
+
 
 ngOnDestroy() {
   this.subs.unsubscribe();
