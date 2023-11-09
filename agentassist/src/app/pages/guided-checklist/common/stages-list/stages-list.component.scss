@@ -215,6 +215,24 @@
                         gap: 10px;
                         align-self: stretch;
                         transition: 0.3s all ease;
+                        position: relative;
+                        .kr-sg-checkbox{
+                            padding: 0;
+                            margin: 0;
+                            flex-shrink: 0;
+                            position: absolute;
+                            right: 20px;
+                            top: auto;
+                            z-index: 1;
+                            .checkbox-custom {
+                                + .checkbox-custom-label{
+                                    color: var(--gray-500, var(--primary-colors-gray-500, #667085));
+                                    font-size: 12px;
+                                    font-weight: 500;
+                                    line-height: 20px;
+                                }
+                            }
+                        }
                         &:hover{
                             .hover-actions{
                                 display: flex;                                
