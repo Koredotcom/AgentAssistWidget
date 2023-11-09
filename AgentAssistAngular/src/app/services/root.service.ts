@@ -23,6 +23,7 @@ export class RootService {
 
   OverRideMode: boolean = false;
   isAutomationOnGoing: boolean = false;
+  isMyBotAutomationOnGoing : boolean = false;
   isInitialDialogOnGoing: boolean = false;
   isRestore : boolean = false;
 
@@ -59,7 +60,6 @@ export class RootService {
         delete parmasObj[key];
       }
       else if(key == "autoBotId"){
-        console.log("------- autobotid----xxxxxxxxxxxxxx", key)
         if(parmasObj[key] && (parmasObj[key] !== "undefined" && parmasObj[key] !== null)){
           parmasObj['autoBotId'] = parmasObj[key];
         }else{
@@ -67,7 +67,6 @@ export class RootService {
         }
       }
     }
-    console.log("-----------parmasObj-----------", parmasObj)
     this.connectionDetails = parmasObj;
   }
 
@@ -217,9 +216,7 @@ export class RootService {
     return arr;
   }
 
-  formatFAQResponse(faqArray){
-    console.log(faqArray, "faq array");
-    
+  formatFAQResponse(faqArray){    
     let searchResponse = [];
     for (let faq of faqArray) {
       let faqObject : any = {
@@ -241,6 +238,59 @@ export class RootService {
       searchResponse.push(faqObject);
     }
     return searchResponse;
+  }
+
+
+  formatHistoryResponseForFAQ(response){
+    if(response){
+      let referenceObjvsAnswer : any = {};
+      let historyResp : any = [];
+      for(let resObj of response){
+        if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
+          if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
+            if(!referenceObjvsAnswer[resObj.channels[0].reqId]){
+              referenceObjvsAnswer[resObj.channels[0].reqId] = [];
+            }
+            if(resObj.components && resObj.components[0] && resObj.components[0].data && resObj.components[0].data.text){
+              referenceObjvsAnswer[resObj.channels[0].reqId].push(resObj.components[0].data.text);
+            }
+          }
+        }
+      }
+  
+      for(let resObj of response){
+        if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
+          if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
+            if(referenceObjvsAnswer[resObj.channels[0].reqId]){
+              resObj.components[0].data.text = referenceObjvsAnswer[resObj.channels[0].reqId];
+              historyResp.push(resObj);
+              referenceObjvsAnswer[resObj.channels[0].reqId] = false;
+            }
+          }
+        }else{
+          historyResp.push(resObj);
+        }
+      }
+      return historyResp;
+    }
+  }
+
+  formatHistoryResonseToNormalRender(res){
+    let result : any = {};
+
+    result = Object.assign({},res.agentAssistDetails);
+
+    result.type = res.type;
+    result.components = res.components;
+    // result.buttons = res.components;
+    result.intentName = res.tN;
+    result._id = res._id;
+    if((result.suggestions || result.ambiguityList)){
+      result.suggestions = (result.suggestions) ? (result.suggestions) : (result.ambiguityList);
+      result.faqResponse = res.agentAssistDetails.faqResponse;
+    }
+
+    return result;
   }
 
   handleSendCopyButtonForNodes(actionType, sendData) {
@@ -273,7 +323,6 @@ export class RootService {
         conversationId: this.connectionDetails.conversationId,
         payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
       };
-      console.log(message, 'message')
       window.parent.postMessage(message, '*');
     } else {
       message = {
@@ -394,13 +443,9 @@ export class RootService {
   }
 
   getTemplateHtml(isTemplateRender, result){
-    let renderMessage = isTemplateRender ? this.chatWindowInstance.generateMessageDOM(result) : '';
-    console.log(renderMessage, "renderMessage*********");
-    
+    let renderMessage = isTemplateRender ? this.chatWindowInstance.generateMessageDOM(result) : '';    
     if (renderMessage) {
-      let obj =  renderMessage.outerHTML
-      console.log(renderMessage.outerHTML, 'outer html');
-      
+      let obj =  renderMessage.outerHTML      
       return (obj);
     }
     return null;
@@ -579,5 +624,8 @@ export class RootService {
     }
   }
 
+  getMockData() {
+    return [{ "_id": "ms-5ae780d1-4df6-5bcd-b069-add9b64d56f8", "cek": { "header": { "alg": "dir", "enc": "aes-256-cbc", "kid": "k-e93b9499-2301-5b96-867e-8d817fd6fc59" } }, "channels": [{ "type": "agentassist", "from": "6328000258a2245ee86010d9/agentassist/c-6342449-13b5-4e2e-8b65-18e85c6669ab", "to": "st-88a140b7-c824-5b95-b765-24d24d618b28", "reqId": "cbr-e7269975-7ac5-5805-a869-4ef550ad6276", "isGroup": false, "body": "Flight status", "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "preferredChannelForResponse": "agentassist", "channelInst": "agentassist", "channelDispName": "AgentAssistV2", "nlMeta": { "intent": "Flight status", "isRefresh": true }, "enable": true, "app_token": "3f6302b3bf1e1ff14962a0d403a11494907d393a931b3f82ec415bec3245b3b3", "post_url": "https://uat-sabots.kore.ai:443/api/v1/internal/aaresponse", "message": "The bot is disabled via Agentassist. You can still talk to the bot via SmartAssist, Ivr Inst C 24 C 967 C 94 C 6 59 D 2 85 E 1 9 Ad 0 Ee 1 B 17 Df, Widget SDK, Web/Mobile Client, Agentassist.", "activeChannels": "SmartAssist,Ivr Inst C 24 C 967 C 94 C 6 59 D 2 85 E 1 9 Ad 0 Ee 1 B 17 Df,Widget SDK,Web/Mobile Client,Agentassist.", "isAsync": true, "tokens": [], "__userInputTime": "2023-11-09T05:10:37.859Z", "__loopCount": 0, "handle": { "clientId": "cs-9870861d-1bbf-59b5-9023-314c97e305a6" }, "userId": "u-4259982a-57f5-5b37-b8de-06753741f4d3" }], "type": "incoming", "status": "received", "createdBy": "u-4259982a-57f5-5b37-b8de-06753741f4d3", "lmodifiedBy": "u-4259982a-57f5-5b37-b8de-06753741f4d3", "createdOn": "2023-11-09T05:10:38.126Z", "lmodifiedOn": "2023-11-09T05:10:38.126Z", "botId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "orgId": "o-0bc185d6-41a2-54e6-8a34-1f9c848276d0", "accountId": "6328000258a2245ee86010d9", "isBB": 0, "ms": 1, "chnl": "agentassist", "isD": 1, "conversationId": "c-6342449-13b5-4e2e-8b65-18e85c6669ab", "components": [{ "_id": "cp-b9c163f0-94e9-5dba-a3ef-2305afc75c2b", "cT": "text", "data": { "text": "Flight status" }, "thumbnails": [] }], "iv": "B4TiAzjrhTvoeuMzFT2Tnw==", "ire": true, "timestampValue": 1699506638130, "__v": 0, "lang": "en", "sT": 1, "sessionId": "654c6451c66723325bad5b0d", "nodeType": 0, "tr0_I": "dg-19d696c6-10f9-5d6e-b615-fd379fa82a28:intent0:b5657e272ba114bbe7bc6ae22d31bfe0", "tr0_O": "dg-19d696c6-10f9-5d6e-b615-fd379fa82a28:entity6:138f7647a5cd0a618b4df4a2851d15ed", "tr0_T": "0", "tr_pId": "dg-ce7d0884-7b12-5149-9f80-d2186eb88ffb:entity2:5154d8c9a6d82c46cf52bc4de40a3764", "resourceid": "messagestore" }, { "_id": "ms-d0474239-a37b-5f3f-ba5f-da48993b4a62", "cek": { "header": { "alg": "dir", "enc": "aes-256-cbc", "kid": "k-e93b9499-2301-5b96-867e-8d817fd6fc59" } }, "channels": [{ "app_token": "3f6302b3bf1e1ff14962a0d403a11494907d393a931b3f82ec415bec3245b3b3", "post_url": "https://uat-sabots.kore.ai:443/api/v1/internal/aaresponse", "to": "6328000258a2245ee86010d9/agentassist/c-6342449-13b5-4e2e-8b65-18e85c6669ab", "from": "st-88a140b7-c824-5b95-b765-24d24d618b28", "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "type": "agentassist", "isAsync": true, "reqId": "cbr-e7269975-7ac5-5805-a869-4ef550ad6276", "isGroup": false, "channelDispName": "AgentAssistV2", "preferredChannelForResponse": "agentassist" }], "type": "outgoing", "status": "pending", "createdOn": "2023-11-09T05:10:38.491Z", "lmodifiedOn": "2023-11-09T05:10:38.491Z", "createdBy": "u-4259982a-57f5-5b37-b8de-06753741f4d3", "components": [{ "_id": "cp-9dcbb7b0-515b-586d-a52b-db3a75ede9f1", "cT": "text", "data": { "text": "Please provide the departure city and arrival city to get the flight status" }, "thumbnails": [] }], "botId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "orgId": "o-0bc185d6-41a2-54e6-8a34-1f9c848276d0", "accountId": "6328000258a2245ee86010d9", "tN": "Flight status", "isBB": 0, "ms": 1, "chnl": "agentassist", "isD": 0, "lang": "en", "conversationId": "c-6342449-13b5-4e2e-8b65-18e85c6669ab", "agentAssistDetails": { "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "positionId": "dg-edjx6y3ui4", "srcChannel": "rtm", "childBotStreamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "experience": "", "userInput": "Flight status", "entityRequest": true, "entityName": "ArrivalCity", "newEntityDisplayName": "FlightStatus", "newEntityType": "composite", "newEntityName": "FlightStatus", "componentType": "entity", "applyDefaultTemplate": false, "isPrompt": true }, "iv": "ktZfcXBaf1OTy81XYJWv/A==", "ire": true, "timestampValue": 1699506638493, "__v": 0, "sT": 1, "sessionId": "654c6451c66723325bad5b0d", "resourceid": "messagestore" }, { "_id": "ms-8bddd2f2-c2c3-50af-83b9-690aed207f34", "cek": { "header": { "alg": "dir", "enc": "aes-256-cbc", "kid": "k-e93b9499-2301-5b96-867e-8d817fd6fc59" } }, "channels": [{ "type": "agentassist", "from": "6328000258a2245ee86010d9/agentassist/c-6342449-13b5-4e2e-8b65-18e85c6669ab", "to": "st-88a140b7-c824-5b95-b765-24d24d618b28", "reqId": "cbr-903e5503-2def-5e79-bcde-70336d11730e", "isGroup": false, "body": "hyderabad,mumbai", "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "preferredChannelForResponse": "agentassist", "channelInst": "agentassist", "channelDispName": "AgentAssistV2", "enable": true, "app_token": "3f6302b3bf1e1ff14962a0d403a11494907d393a931b3f82ec415bec3245b3b3", "post_url": "https://uat-sabots.kore.ai:443/api/v1/internal/aaresponse", "message": "The bot is disabled via Agentassist. You can still talk to the bot via SmartAssist, Ivr Inst C 24 C 967 C 94 C 6 59 D 2 85 E 1 9 Ad 0 Ee 1 B 17 Df, Widget SDK, Web/Mobile Client, Agentassist.", "activeChannels": "SmartAssist,Ivr Inst C 24 C 967 C 94 C 6 59 D 2 85 E 1 9 Ad 0 Ee 1 B 17 Df,Widget SDK,Web/Mobile Client,Agentassist.", "isAsync": true, "tokens": [], "__userInputTime": "2023-11-09T05:10:53.943Z", "__loopCount": 0, "handle": { "clientId": "cs-9870861d-1bbf-59b5-9023-314c97e305a6" }, "userId": "u-4259982a-57f5-5b37-b8de-06753741f4d3" }], "type": "incoming", "status": "received", "createdBy": "u-4259982a-57f5-5b37-b8de-06753741f4d3", "lmodifiedBy": "u-4259982a-57f5-5b37-b8de-06753741f4d3", "createdOn": "2023-11-09T05:10:54.274Z", "lmodifiedOn": "2023-11-09T05:10:54.274Z", "botId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "orgId": "o-0bc185d6-41a2-54e6-8a34-1f9c848276d0", "accountId": "6328000258a2245ee86010d9", "isBB": 0, "ms": 1, "chnl": "agentassist", "isD": 1, "conversationId": "c-6342449-13b5-4e2e-8b65-18e85c6669ab", "components": [{ "_id": "cp-d0c662da-4c62-5837-9e99-3d59436f59b4", "cT": "text", "data": { "text": "hyderabad,mumbai" }, "thumbnails": [] }], "iv": "cinABuDhhr0Z1KBNJu/05Q==", "ire": true, "timestampValue": 1699506654278, "__v": 0, "lang": "en", "sT": 1, "sessionId": "654c6451c66723325bad5b0d", "tr0_I": "dg-19d696c6-10f9-5d6e-b615-fd379fa82a28:entity6:138f7647a5cd0a618b4df4a2851d15ed", "tr0_T": "0", "path": "dg-19d696c6-10f9-5d6e-b615-fd379fa82a28:service3>dg-19d696c6-10f9-5d6e-b615-fd379fa82a28:script5>dg-19d696c6-10f9-5d6e-b615-fd379fa82a28:message4>dg-ce7d0884-7b12-5149-9f80-d2186eb88ffb:intent0>dg-ce7d0884-7b12-5149-9f80-d2186eb88ffb:script1", "tr0_O": "dg-19d696c6-10f9-5d6e-b615-fd379fa82a28:message4:5ef5a10aba8ba1cd06302da99aec20d2", "EOD": 0, "resourceid": "messagestore" }, { "_id": "ms-235c1bb3-0e71-51fc-8536-882292d7716c", "cek": { "header": { "alg": "dir", "enc": "aes-256-cbc", "kid": "k-e93b9499-2301-5b96-867e-8d817fd6fc59" } }, "channels": [{ "app_token": "3f6302b3bf1e1ff14962a0d403a11494907d393a931b3f82ec415bec3245b3b3", "post_url": "https://uat-sabots.kore.ai:443/api/v1/internal/aaresponse", "to": "6328000258a2245ee86010d9/agentassist/c-6342449-13b5-4e2e-8b65-18e85c6669ab", "from": "st-88a140b7-c824-5b95-b765-24d24d618b28", "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "type": "agentassist", "isAsync": true, "reqId": "cbr-903e5503-2def-5e79-bcde-70336d11730e", "isGroup": false, "channelDispName": "AgentAssistV2", "preferredChannelForResponse": "agentassist" }], "type": "outgoing", "status": "pending", "createdOn": "2023-11-09T05:10:54.971Z", "lmodifiedOn": "2023-11-09T05:10:54.971Z", "createdBy": "u-4259982a-57f5-5b37-b8de-06753741f4d3", "components": [{ "_id": "cp-9c43d049-6b0e-535e-ab4e-e587952cd790", "cT": "text", "data": { "text": "" }, "thumbnails": [] }], "botId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "orgId": "o-0bc185d6-41a2-54e6-8a34-1f9c848276d0", "accountId": "6328000258a2245ee86010d9", "tN": "Flight status", "isBB": 0, "ms": 1, "chnl": "agentassist", "isD": 0, "lang": "en", "conversationId": "c-6342449-13b5-4e2e-8b65-18e85c6669ab", "agentAssistDetails": { "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "srcChannel": "rtm", "childBotStreamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "experience": "", "userInput": "hyderabad,mumbai", "isPrompt": false, "entityResponse": true, "entityName": "Flight_status", "entityValue": "hyderabad,mumbai", "skipMessageDelivery": true }, "iv": "MaZ4G9kpEnUeohPzvUlzDQ==", "ire": true, "timestampValue": 1699506654975, "__v": 0, "sT": 1, "sessionId": "654c6451c66723325bad5b0d", "resourceid": "messagestore" }, { "_id": "ms-7130d5d2-ec7a-555a-8f5b-7b97b8c6ce8f", "cek": { "header": { "alg": "dir", "enc": "aes-256-cbc", "kid": "k-e93b9499-2301-5b96-867e-8d817fd6fc59" } }, "channels": [{ "app_token": "3f6302b3bf1e1ff14962a0d403a11494907d393a931b3f82ec415bec3245b3b3", "post_url": "https://uat-sabots.kore.ai:443/api/v1/internal/aaresponse", "to": "6328000258a2245ee86010d9/agentassist/c-6342449-13b5-4e2e-8b65-18e85c6669ab", "from": "st-88a140b7-c824-5b95-b765-24d24d618b28", "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "type": "agentassist", "isAsync": true, "reqId": "cbr-903e5503-2def-5e79-bcde-70336d11730e", "isGroup": false, "channelDispName": "AgentAssistV2", "preferredChannelForResponse": "agentassist" }], "type": "outgoing", "status": "pending", "createdOn": "2023-11-09T05:10:55.966Z", "lmodifiedOn": "2023-11-09T05:10:55.966Z", "createdBy": "u-4259982a-57f5-5b37-b8de-06753741f4d3", "components": [{ "_id": "cp-705e96f7-c1d5-565b-9296-72799ac70515", "cT": "text", "data": { "text": "Please click <a href=\"https://uat-smartassist.kore.ai/r/42726e44515258714561efbfbdefbfbd\">here</a> to view all flight status" }, "thumbnails": [] }], "botId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "orgId": "o-0bc185d6-41a2-54e6-8a34-1f9c848276d0", "accountId": "6328000258a2245ee86010d9", "tN": "Flight status", "isBB": 0, "ms": 1, "chnl": "agentassist", "isD": 0, "lang": "en", "conversationId": "c-6342449-13b5-4e2e-8b65-18e85c6669ab", "agentAssistDetails": { "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "srcChannel": "rtm", "childBotStreamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "experience": "", "userInput": "", "isPrompt": false }, "iv": "cL97BjZk5xM+BMIX8gByOg==", "ire": true, "timestampValue": 1699506655967, "__v": 0, "sT": 1, "sessionId": "654c6451c66723325bad5b0d", "resourceid": "messagestore" }, { "_id": "ms-399b7068-182b-554c-a3c3-99b090d772a3", "cek": { "header": { "alg": "dir", "enc": "aes-256-cbc", "kid": "k-e93b9499-2301-5b96-867e-8d817fd6fc59" } }, "channels": [{ "app_token": "3f6302b3bf1e1ff14962a0d403a11494907d393a931b3f82ec415bec3245b3b3", "post_url": "https://uat-sabots.kore.ai:443/api/v1/internal/aaresponse", "to": "6328000258a2245ee86010d9/agentassist/c-6342449-13b5-4e2e-8b65-18e85c6669ab", "from": "st-88a140b7-c824-5b95-b765-24d24d618b28", "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "type": "agentassist", "isAsync": true, "reqId": "cbr-903e5503-2def-5e79-bcde-70336d11730e", "isGroup": false, "channelDispName": "AgentAssistV2", "preferredChannelForResponse": "agentassist" }], "type": "outgoing", "status": "pending", "createdOn": "2023-11-09T05:10:56.359Z", "lmodifiedOn": "2023-11-09T05:10:56.359Z", "createdBy": "u-4259982a-57f5-5b37-b8de-06753741f4d3", "components": [{ "_id": "cp-801d34dd-8b3d-5044-bd78-c0b608ea1fee", "cT": "text", "data": { "text": "Let me know if you need any other assistance" }, "thumbnails": [] }], "botId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "orgId": "o-0bc185d6-41a2-54e6-8a34-1f9c848276d0", "accountId": "6328000258a2245ee86010d9", "tN": "AnyThingElse", "isBB": 0, "ms": 1, "chnl": "agentassist", "isD": 0, "lang": "en", "conversationId": "c-6342449-13b5-4e2e-8b65-18e85c6669ab", "agentAssistDetails": { "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "srcChannel": "rtm", "childBotStreamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "experience": "", "userInput": "", "endReason": 1, "endOfTask": true, "entityRequest": true, "newEntityDisplayName": "HelpAgain", "newEntityType": "list_of_values", "newEntityName": "HelpAgain", "componentType": "entity", "applyDefaultTemplate": false, "isPrompt": true }, "iv": "iQG5x32C+H+xOnknouoLGA==", "ire": true, "timestampValue": 1699506656361, "__v": 0, "sT": 1, "sessionId": "654c6451c66723325bad5b0d", "resourceid": "messagestore" }, { "_id": "ms-116ae66d-bba9-5178-affe-dae1e265e531", "cek": { "header": { "alg": "dir", "enc": "aes-256-cbc", "kid": "k-e93b9499-2301-5b96-867e-8d817fd6fc59" } }, "channels": [{ "type": "agentassist", "from": "6328000258a2245ee86010d9/agentassist/c-6342449-13b5-4e2e-8b65-18e85c6669ab", "to": "st-88a140b7-c824-5b95-b765-24d24d618b28", "reqId": "cbr-833ce616-8762-597b-959e-702e9ebe191f", "isGroup": false, "body": "No", "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "preferredChannelForResponse": "agentassist", "channelInst": "agentassist", "channelDispName": "AgentAssistV2", "enable": true, "app_token": "3f6302b3bf1e1ff14962a0d403a11494907d393a931b3f82ec415bec3245b3b3", "post_url": "https://uat-sabots.kore.ai:443/api/v1/internal/aaresponse", "message": "The bot is disabled via Agentassist. You can still talk to the bot via SmartAssist, Ivr Inst C 24 C 967 C 94 C 6 59 D 2 85 E 1 9 Ad 0 Ee 1 B 17 Df, Widget SDK, Web/Mobile Client, Agentassist.", "activeChannels": "SmartAssist,Ivr Inst C 24 C 967 C 94 C 6 59 D 2 85 E 1 9 Ad 0 Ee 1 B 17 Df,Widget SDK,Web/Mobile Client,Agentassist.", "isAsync": true, "tokens": [], "__userInputTime": "2023-11-09T05:11:02.842Z", "__loopCount": 0, "handle": { "clientId": "cs-9870861d-1bbf-59b5-9023-314c97e305a6" }, "userId": "u-4259982a-57f5-5b37-b8de-06753741f4d3" }], "type": "incoming", "status": "received", "createdBy": "u-4259982a-57f5-5b37-b8de-06753741f4d3", "lmodifiedBy": "u-4259982a-57f5-5b37-b8de-06753741f4d3", "createdOn": "2023-11-09T05:11:03.113Z", "lmodifiedOn": "2023-11-09T05:11:03.113Z", "botId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "orgId": "o-0bc185d6-41a2-54e6-8a34-1f9c848276d0", "accountId": "6328000258a2245ee86010d9", "isBB": 0, "ms": 1, "chnl": "agentassist", "isD": 1, "conversationId": "c-6342449-13b5-4e2e-8b65-18e85c6669ab", "components": [{ "_id": "cp-a2d989ff-55c3-56fc-b992-af8b2f94de95", "cT": "text", "data": { "text": "No" }, "thumbnails": [] }], "iv": "/3FD+aG7x0ii2z8/vm1ODA==", "ire": true, "timestampValue": 1699506663116, "__v": 0, "lang": "en", "sT": 1, "sessionId": "654c6451c66723325bad5b0d", "EOD": 0, "nodeType": 3, "tr0_I": "smalltalk_9f46b71b:1d1e0b2638e9b2a94bac7fced807fa88", "tr_pId": "dg-ce7d0884-7b12-5149-9f80-d2186eb88ffb:entity2:68fa0de5e2a61edc64a0ba3b2336db71", "path": "dg-ce7d0884-7b12-5149-9f80-d2186eb88ffb:entity2>dg-ce7d0884-7b12-5149-9f80-d2186eb88ffb:message3", "resourceid": "messagestore" }, { "_id": "ms-2abf8e52-7183-576a-90a1-07dcdca63f41", "cek": { "header": { "alg": "dir", "enc": "aes-256-cbc", "kid": "k-e93b9499-2301-5b96-867e-8d817fd6fc59" } }, "channels": [{ "app_token": "3f6302b3bf1e1ff14962a0d403a11494907d393a931b3f82ec415bec3245b3b3", "post_url": "https://uat-sabots.kore.ai:443/api/v1/internal/aaresponse", "to": "6328000258a2245ee86010d9/agentassist/c-6342449-13b5-4e2e-8b65-18e85c6669ab", "from": "st-88a140b7-c824-5b95-b765-24d24d618b28", "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "type": "agentassist", "isAsync": true, "reqId": "cbr-833ce616-8762-597b-959e-702e9ebe191f", "isGroup": false, "channelDispName": "AgentAssistV2", "preferredChannelForResponse": "agentassist" }], "type": "outgoing", "status": "pending", "createdOn": "2023-11-09T05:11:03.716Z", "lmodifiedOn": "2023-11-09T05:11:03.716Z", "createdBy": "u-4259982a-57f5-5b37-b8de-06753741f4d3", "components": [{ "_id": "cp-f70dab1c-a5d8-5cbb-be24-6c8b2bc46d58", "cT": "text", "data": { "text": "Thank you for contacting us. Have a great day." }, "thumbnails": [] }], "botId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "orgId": "o-0bc185d6-41a2-54e6-8a34-1f9c848276d0", "accountId": "6328000258a2245ee86010d9", "tN": "AnyThingElse", "isBB": 0, "ms": 1, "chnl": "agentassist", "isD": 0, "lang": "en", "conversationId": "c-6342449-13b5-4e2e-8b65-18e85c6669ab", "agentAssistDetails": { "streamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "positionId": "dg-edjx6y3ui4", "srcChannel": "rtm", "childBotStreamId": "st-88a140b7-c824-5b95-b765-24d24d618b28", "experience": "", "userInput": "No", "isPrompt": false, "entityResponse": true, "entityName": "HelpAgain", "entityValue": "no" }, "iv": "5O9XMhY1gvltzdMzj7SBAg==", "ire": true, "timestampValue": 1699506663718, "__v": 0, "sT": 1, "sessionId": "654c6451c66723325bad5b0d", "resourceid": "messagestore" }]
+  }
   
 }

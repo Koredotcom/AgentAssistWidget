@@ -1,31 +1,31 @@
 <div class="widget-footer-wrapper">
     <div class="line-divider"></div>
     <div class="footer-links-data">
-        <button class="btn_footer" (click)="actionOnButton(projConstants.SEARCH)" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.SEARCH}">
+        <button class="btn_footer" (click)="changeTab(projConstants.SEARCH)" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.SEARCH}">
             <div class="svg_icon">
                <i class="krIocnsFont-search-md"></i>
             </div>
             <p>{{'SEARCH' | translate}}</p>
         </button>
-        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.MYBOT}" (click)="actionOnButton(projConstants.MYBOT)">
+        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.MYBOT}" (click)="changeTab(projConstants.MYBOT)">
             <div class="svg_icon">
                 <i class="krIocnsFont-my-bot"></i>
             </div>
             <p>{{'MY_BOT' | translate}}</p>
         </button>
-        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.ASSIST}" (click)="actionOnButton(projConstants.ASSIST)">
+        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.ASSIST}" (click)="changeTab(projConstants.ASSIST)">
             <div class="svg_icon">
                 <i class="krIocnsFont-assist"></i>
             </div>
             <p>{{projConstants.ASSIST | translate}}</p>
         </button>
-        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.TRANSCRIPT}" (click)="actionOnButton(projConstants.TRANSCRIPT)">
+        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.TRANSCRIPT}" (click)="changeTab(projConstants.TRANSCRIPT)">
             <div class="svg_icon">
                 <i class="krIocnsFont-transcript"></i>
             </div>
             <p>{{'TRANSCRIPT' | translate}}</p>
         </button>
-        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.SETTINGS}" (click)="actionOnButton(projConstants.SETTINGS)">
+        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.SETTINGS}" (click)="changeTab(projConstants.SETTINGS)">
             <div class="svg_icon">
                 <i class="krIocnsFont-settings"></i>
             </div>
@@ -39,7 +39,7 @@
 <ng-template #content let-offcanvas>
     <div class="canvas-auto-height">
         <app-search [ngClass]="{'dis-none' : selectedTab !== projConstants.SEARCH}" class="h-100" ></app-search>
-        <app-mybot [ngClass]="{'dis-none' : selectedTab !== projConstants.MYBOT}" class="h-100"></app-mybot>
+        <app-mybot [ngClass]="{'dis-none' : selectedTab !== projConstants.MYBOT}" class="h-100" (maxMinButtonClick)="minMaxButtonClick($event)"></app-mybot>
         <app-transcript [ngClass]="{'dis-none' : selectedTab !== projConstants.TRANSCRIPT}" class="h-100" (maxMinButtonClick)="minMaxButtonClick($event)"></app-transcript>
         <app-settings [ngClass]="{'dis-none' : selectedTab !== projConstants.SETTINGS}" class="h-100"></app-settings>
     </div>

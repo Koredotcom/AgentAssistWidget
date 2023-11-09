@@ -11,7 +11,6 @@ export class SmalltalkComponent {
   @Input() smallTalkData : any = {};
   @Input() agentassistArrayIndex : number;
   @Input() agentassistResponseArrayLength : number;
-  @Input() agentAssistResp : any;
   
   projConstants : any = ProjConstants;
   renderResponseType : any = RenderResponseType;

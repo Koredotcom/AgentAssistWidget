@@ -1,5 +1,5 @@
 <!-- Ask Customer Message Node v3 -->
-<div class="ask-cust-node">
+<div class="ask-cust-node" *ngIf="automation.value || automation.template">
     <div class="top-section">
         <div class="svg_img">
             <img src="assets/images/icons/askcust.svg" alt="Image">
@@ -15,7 +15,7 @@
         </div>
         <!-- <div class="sent-msg-text">Sent</div> -->
         <!-- <p>{{automation.data.buttons[0].value}}</p> -->
-        <p *ngIf="!automation.templateRender && automation.template">{{automation.data.buttons[0].value}}</p>
+        <p *ngIf="!automation.templateRender">{{automation.value}}</p>
         <div *ngIf="automation.templateRender && automation.template" [innerHTML]="automation.template"></div>
 
         <!-- <div class="cust-choice-yes-no">

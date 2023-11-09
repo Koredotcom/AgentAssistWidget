@@ -30,19 +30,16 @@ export class DialogComponent {
   formatAssistAutomation(automationsArray) {
     let i = 0;
     for (let automation of automationsArray) {
-      let templateRender = (automation?.noTemplateRender || (automation?.componentType == 'dialogAct' && (automation?.srcChannel != 'msteams' && automation?.srcChannel != 'rtm'))) ? false : true
-
-      // let templateRender = (!automation?.result?.parsedPayload || automation?.noTemplateRender || (automation?.componentType == 'dialogAct' && (automation?.srcChannel != 'msteams' && automation?.srcChannel != 'rtm'))) ? false : true
+      let templateRender = (!automation?.result?.parsedPayload || automation?.noTemplateRender || (automation?.componentType == 'dialogAct' && (automation?.srcChannel != 'msteams' && automation?.srcChannel != 'rtm'))) ? false : true
       automation.templateRender = templateRender;
 
       // if(automation?.result?.parsedPayload && automation?.templateRender)
       if (automation?.templateRender) {
         automation.template = this.rootService.getTemplateHtml(automation.templateRender, automation.result);
       }
-      automation.agentInputId = this.randomUUIDPipe.transform();
-      automation.agentInputEntityName = 'Enter Details';
+      // automation.agentInputId = this.randomUUIDPipe.transform();
+      // automation.agentInputEntityName = 'Enter Details';
       automation.showOverrideDiv = automation.hideOverrideDiv ? false : ((automation.data.isPrompt && automation.proactiveModeStatus ? true : false));
-      automation.stepRunId = 'stepsRunData-' + automation.uuid + i;
 
       this.updateSendCopyParams(automation);
       if (automation.data.newEntityDisplayName || automation.data.newEntityName) {
@@ -53,6 +50,8 @@ export class DialogComponent {
       i++;
 
     }
+    console.log(automationsArray, 'automations array');
+    
   }
 
   updateSendCopyParams(automation) {

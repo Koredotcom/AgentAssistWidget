@@ -18,7 +18,7 @@ export class AskCustomerComponent{
     renderResponseType : any = RenderResponseType;
     inputName : string = ProjConstants.AWAITING;
 
-    constructor(private rootService : RootService, private websocketService : WebSocketService){
+    constructor(public rootService : RootService, private websocketService : WebSocketService){
 
     }
 
@@ -27,11 +27,10 @@ export class AskCustomerComponent{
       if(this.automation?.toggleOverride){
         this.inputName = this.projConstants.OVERRIDE;
       }
-      console.log(this.automation, "automation");
     }
 
     confirmOverride(){
-      if(!this.automation.toggleOverride){
+      if(!this.automation.toggleOverride && this.rootService.activeTab != this.projConstants.MYBOT){
         this.inputName = this.projConstants.OVERRIDE;
         this.automation.toggleOverride = true;
         if(!this.rootService.OverRideMode){
@@ -42,11 +41,13 @@ export class AskCustomerComponent{
     }
 
     cancelOverride(){
-      this.inputName = this.projConstants.AWAITING;
-      this.automation.toggleOverride = false;
-      this.rootService.OverRideMode = false;
-      this.automation.entityValue = '';
-      this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
+      if(this.rootService.activeTab != this.projConstants.MYBOT){
+        this.inputName = this.projConstants.AWAITING;
+        this.automation.toggleOverride = false;
+        this.rootService.OverRideMode = false;
+        this.automation.entityValue = '';
+        this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
+      }
     }
 
     handleOverridBtnClick(connectionDetails, dialogId, toggleOverride) {
@@ -66,10 +67,14 @@ export class AskCustomerComponent{
     handleAgentInput(){
       this.automation.hideOverrideDiv = true;
       this.automation.userInput = this.projConstants.NO;
-      this.AgentAssist_run_click(this.automation.entityValue);
+      if(this.rootService.activeTab == this.projConstants.ASSIST){
+        this.assistInputValue(this.automation.entityValue);
+      }else if(this.rootService.activeTab == this.projConstants.MYBOT){
+         this.mybotInputValue(this.automation.entityValue)
+      }
     }
     
-    AgentAssist_run_click(inputValue) {
+    assistInputValue(inputValue) {
       let connectionDetails = Object.assign({}, this.automation.connectionDetails);
       connectionDetails.value = inputValue;
       connectionDetails.positionId = this.automation.dialogId;
@@ -84,5 +89,17 @@ export class AskCustomerComponent{
       let sendData = this.isWelcomeMsg ? automation.value : automation.sendData;
       this.rootService.handleSendCopyButtonForNodes(method,sendData);
     }
+
+   mybotInputValue(inputValue) {
+    let connectionDetails: any = Object.assign({}, this.automation.connectionDetails);
+    connectionDetails.value = inputValue;
+    connectionDetails.isSearch = false;
+    connectionDetails.positionId = this.automation.dialogId;
+    connectionDetails.childBotName = this.rootService?.childBotDetails.childBotName;
+    connectionDetails.childBotId = this.rootService?.childBotDetails.childBotId;
+    let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
+    this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
+  }
+
    
 }

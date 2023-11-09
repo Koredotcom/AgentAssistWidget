@@ -34,13 +34,11 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
     this.subs.sink = this.websocketService.agentMenuResponse$.subscribe((menuResponse: any) => {
       if (menuResponse && menuResponse.usecases) {
         this.menuResponse = this.formatMenuResponse(menuResponse.usecases);
-        console.log(this.menuResponse, 'menu response********');
         this.suggestionCount = this.menuResponse.length || 0;
       }
     });
 
     this.subs.sink = this.handleSubjectService.searchResponse$.subscribe((searchResponse)=> {
-      console.log(searchResponse, 'searchResponse');
       this.searchedDialogList = [];
       if(searchResponse && searchResponse.dialogs){
         this.searchedDialogList = searchResponse.dialogs;
@@ -59,18 +57,16 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
       dialogueDetails["childBotId"] = dialogue["childBotId"] || "";
       dialogueDetails["childBotName"] = dialogue["childBotName"] || "";
       formattedMenuResponse[dialogue.dialogId] = dialogueDetails;
-    }
-    console.log(formattedMenuResponse, "formatted menu response");
-    
+    }    
     return formattedMenuResponse;
   }
 
   dialogueRunClick(dialog, searchType) {
-    console.log(dialog, "dialog******");
     this.rootService.setActiveTab(searchType);
     dialog.positionId = this.randomUUIDPipe.transform('positionId');
     dialog.intentName = dialog.name;
     dialog.userInput = dialog.name;
+    dialog.agentRunButton = (searchType == this.projConstants.MYBOT) ? true : false;
     // let runDialogueObject = Object.assign({}, this.searchConentObject);
     // Object.assign(runDialogueObject, dialog);
     this.handleSubjectService.setRunButtonClickEvent(dialog);

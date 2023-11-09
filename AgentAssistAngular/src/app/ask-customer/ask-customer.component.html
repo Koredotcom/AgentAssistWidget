@@ -41,7 +41,7 @@
         </div>
         <!-- <div class="sent-msg-text">Sent</div> -->
         <!-- <p>{{automation.data.buttons[0].value}}</p> -->
-        <p *ngIf="!automation.templateRender && automation.template">{{automation.data.buttons[0].value}}</p>
+        <p *ngIf="!automation.templateRender">{{automation.value}}</p>
         <div *ngIf="automation.templateRender && automation.template" [innerHTML]="automation.template"></div>
     </div>
 </ng-template>
@@ -62,10 +62,10 @@
 <div class="entity-mesage-data" *ngIf="!isWelcomeMsg" [ngClass]="{'error-no-reponse' : automation.errorCount}">
     <div class="input-block-entity">
         <p>{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}} </p>
-        <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride()" [disabled]="automation.disableInput">
+        <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride()" [disabled]="automation.disableInput" (keyup.enter)="handleAgentInput()">
         <div class="border-outline"></div>
         <div class="actions-inputs">
-            <button class="remove-input" aria-label="Button" *ngIf="automation.userInput == projConstants.NO && !automation.errorCount">
+            <button class="remove-input" aria-label="Button" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">
                 <i class="krIocnsFont-keyboard"></i>
             </button>
             <button class="success-check-input" aria-label="button" *ngIf="automation.userInput == projConstants.YES && !automation.errorCount">

@@ -1,13 +1,24 @@
 <div class="restart-experience-wrpaaer">
     <div class="restart-experience-canvas-wrapper">
-        <button class="btn_link">
+        <button class="btn_link" (click)="closeListView(false)">
             <i class="krIocnsFont-close-md"></i>
         </button>
-        <h1>Input Values</h1>
-        <ng-container [ngTemplateOutlet]="entityMessageRestart"></ng-container>
-        <ng-container [ngTemplateOutlet]="entityMessageRestart"></ng-container>
+        <ng-container *ngIf="listView">
+            <h1>Input Values</h1>
+                <ng-container [ngTemplateOutlet]="listView"></ng-container>
+        </ng-container>
     </div>  
 </div>
+
+<ng-template #listView>
+    <div class="entity-mesage-data" *ngFor="let obj of entityList">
+        <div class="input-block-entity">
+            <p>{{obj.entityName}}: </p>
+            <input type="text" aria-label="Input" [value]="obj.entityValue" disabled>
+            <div class="border-outline"></div>
+        </div>
+    </div>
+</ng-template>
 
 
 <!-- Entity Message -->

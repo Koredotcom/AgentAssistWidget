@@ -15,9 +15,7 @@ export class EndPointsService {
     let serviceInfo = Object.assign({},this.serviceList[serviceId] || {});
     if(!serviceInfo.defaultEndPoint){
       serviceInfo.endpoint = serverUrl + serviceInfo.endpoint;
-    }
-    console.log(serviceInfo, "service info");
-    
+    }    
     return serviceInfo;
   }
 

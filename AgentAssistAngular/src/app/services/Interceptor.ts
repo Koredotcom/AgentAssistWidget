@@ -30,9 +30,7 @@ export class I1 implements HttpInterceptor {
             headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
             headerObj.eAD = 'true';
         }
-        const modified = req.clone({setHeaders: headerObj});
-        console.log(headerObj, "header obj*******");
-        
+        const modified = req.clone({setHeaders: headerObj});        
         return next.handle(modified);
     }
 

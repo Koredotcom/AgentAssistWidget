@@ -65,6 +65,10 @@ export class FooterComponent implements OnInit, OnDestroy{
     let className = 'if-maximized-canvas';
     this.renderer.removeClass(this.document.body, className);
   }
+
+  changeTab(selectedTab){
+    this.rootService.setActiveTab(selectedTab);
+  }
   openCanvas(canvas) {
 		this.canvas = this.offcanvasService.open(canvas, { position: 'bottom', keyboard:false, backdropClass: 'custom-backdrop-off-canvas', panelClass: 'offCanvasWrapperContaier', backdrop:'static' });
 	}

@@ -4,16 +4,34 @@
             <div class="assist-header-content">
                 <div class="left-title-info">
                     <h1>Assist</h1>
+                    
+                    <div ngbDropdown class="dropdown playbook-drp" #interruptDropdown="ngbDropdown">
+                        <button type="button" id="playbookDrp" ngbDropdownToggle>
+                            <!-- <span>Open</span> -->
+                            <i class="krIocnsFont-chevron-down arrow-icon"></i>
+                        </button>
+                        <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
+                            <div class="dialog-task-wrapper" *ngFor="let dialog of interruptDialogList; let i = index">
+                                <div class="title-paragraph">
+                                    <p>{{dialog.name}}</p>
+                                </div>
+                                <div class="dialog-actions">
+                                    <button class="primary-btn" (click)="dialogueRunClick(dialog, i);interruptDropdown.close()">RUN</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="bottom-titles">
                         <p *ngIf="dialogName">{{dialogName}}</p>
                         <span *ngIf="dialogName && currentRunningStep">Step: <b>{{currentRunningStep}}</b></span>
                     </div>
                 </div>
                 <div class="actions-assist-header">
-                    <button class="solid-action" aria-label="button" [ngClass]="{'disabled-msg' : !dialogName}">
+                    <button class="solid-action" aria-label="button" [ngClass]="{'disabled-msg' : !dialogName}" (click)="handlePopupEvent({status : true, type : projConstants.LISTVIEW})">
                         <i class="krIocnsFont-list"></i>
                     </button>
-                    <button class="solid-action" aria-label="button" [ngClass]="{'disabled-msg' : !dialogName}">
+                    <button class="solid-action" aria-label="button" [ngClass]="{'disabled-msg' : !dialogName}" (click)="restartClickEvent()">
                         <i class="krIocnsFont-refresh"></i>
                     </button>
                     <button class="solid-action stop-assist" aria-label="button" (click)="terminateDialog()" [ngClass]="{'disabled-msg' : !dialogName}">
@@ -49,7 +67,7 @@
                         <ng-container *ngIf="res.type == renderResponseType.SMALLTALK">
                             <app-smalltalk [smallTalkData]="res" [agentassistArrayIndex]="i"
                                 [agentassistResponseArrayLength]="assistResponseArray.length"
-                                [agentAssistResp]="agentAssistResponse"></app-smalltalk>
+                                ></app-smalltalk>
                         </ng-container>
                         <ng-container *ngIf="res.type == renderResponseType.AUTOMATION">
                             <app-dialog [automationData]="res" [agentassistArrayIndex]="i"
@@ -67,8 +85,11 @@
         <ng-container *ngIf="terminateClick">
             <app-terminate (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
         </ng-container>
-        <ng-container *ngIf="interruptDialog">
-            <app-interrupt (handlePopupEvent)="handlePopupEvent($event)"></app-interrupt>
+        <ng-container *ngIf="showInterruptPopup">
+            <app-interrupt (handlePopupEvent)="handlePopupEvent($event)" [currentDialog]="dialogName"></app-interrupt>
+        </ng-container>
+        <ng-container *ngIf="showListView || showRestart">
+            <app-listview [listView]="showListView" [restart]="showRestart" [assistResponseArray]="assistResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
         </ng-container>
     </div>
 </div>

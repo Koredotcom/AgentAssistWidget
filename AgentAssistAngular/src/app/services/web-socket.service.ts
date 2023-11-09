@@ -33,9 +33,7 @@ export class WebSocketService {
   constructor(private rootService : RootService, private localStorageService : LocalStorageService) {
   }
 
-  socketConnection(){
-    console.log("inside socket connection method");
-    
+  socketConnection(){    
     let finalUrl = this.rootService.getConnectionDetails().agentassisturl + '/koreagentassist';
     const config = {
       url: finalUrl, options: {
@@ -48,11 +46,9 @@ export class WebSocketService {
         query: {'jToken': this.rootService.getConnectionDetails().token }
       }
     };
-    console.log(config, 'config');
     
     this._agentAsisstSocket =  io(config.url, config.options);
     this._agentAsisstSocket.connect();
-    console.log("socket connected");
     this._agentAsisstSocket.on("connect", () => {
       // if(!window._agentAssistSocketEventListener){
         this.listenEvents();

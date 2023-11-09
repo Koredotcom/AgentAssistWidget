@@ -89,9 +89,7 @@ export class AppComponent implements OnInit, OnDestroy{
     }, 100);
   }
 
-  grantCall(params : any) {
-    console.log("grant call");
-    
+  grantCall(params : any) {    
     var payload = {
       "assertion": params.token,
       "botInfo": {
@@ -101,7 +99,6 @@ export class AppComponent implements OnInit, OnDestroy{
       "token": {}
     }
     this.serviceInvoker.invoke('post.grant',{}, payload,{},params.agentassisturl).subscribe((res)=> {
-      console.log(res);
       this.rootService.grantResponseObj = res;
       this.initiateSocketConnection(params);
     },(err)=> {

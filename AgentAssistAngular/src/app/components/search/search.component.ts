@@ -42,7 +42,7 @@ export class SearchComponent implements OnInit {
 
   subscribeEvents() {
     this.subs.sink = this.websocketService.agentAssistAgentResponse$.subscribe((agentResponse: any) => {
-      if (agentResponse) {
+      if (agentResponse && agentResponse.isSearch) {
         // if (agentResponse.suggestions) {
         //   agentResponse.suggestions = {
         //     "dialogs": [
