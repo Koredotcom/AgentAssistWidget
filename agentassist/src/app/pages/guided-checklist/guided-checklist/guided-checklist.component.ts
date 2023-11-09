@@ -112,6 +112,7 @@ export class GuidedChecklistComponent implements OnInit {
       this.checkList2.loading = false;
     }))
     .subscribe((data)=>{
+      this.checkListType = data[0].type;
       this.isStageListOpen = true;
       this.createOrUpdate = 'update';
       this.modalFlowCreateRef = this.modalService.open(this.checklistCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });

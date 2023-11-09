@@ -31,21 +31,26 @@
                             <div class="label-text">Type</div>
                             <div class="kr-sg-dropdowns m-b-12" ngbDropdown placement="bottom">
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Primary</button>
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{checkListForm.value?.type | titlecase}}</button>
                                     <ul class="dropdown-menu content-menu header_in_development_drpdown p-0" ngbDropdownMenu>
-                                        <li ngbDropdownItem class="p-0">
+                                        <!-- <ng-container *ngFor="let listType of checklistType;">
+                                            <li ngbDropdownItem class="p-0" (click)="selectedChecklistType(listType)">
+                                                <a>{{listType}}</a>
+                                            </li>
+                                        </ng-container> -->
+                                        <li ngbDropdownItem class="p-0" (click)="selectedChecklistType('primary')">
                                             <a>Primary</a>
                                         </li>
-                                        <li ngbDropdownItem class="p-0">
-                                            <a>Primary</a>
+                                        <li ngbDropdownItem class="p-0" (click)="selectedChecklistType('dynamic')">
+                                            <a>Dynamic</a>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
-                            <div class="kr-sg-checkbox add-close-checbox m-b-16">
+                            <!-- <div class="kr-sg-checkbox add-close-checbox m-b-16">
                                 <input id="checkbox-4" class="checkbox-custom" type="checkbox">
                                 <label for="checkbox-4" class="checkbox-custom-label">Add Close Stage <i class="icon-sa-info"></i></label>
-                            </div>    
+                            </div>     -->
                             <div class="label-text m-b-5">Tags</div>
                             <mat-form-field class="example-chip-list m-b-15">
                                 <mat-label>Add Tags</mat-label>
