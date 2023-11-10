@@ -288,7 +288,7 @@ export class AssistComponent implements OnInit {
       'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT,
     }
     if (this.connectionDetails.fromSAT) {
-      welcomeMessageParams['userName'] = this.connectionDetails?.endUserName || 'user';
+      welcomeMessageParams['userName'] = this.connectionDetails?.endUserName !== 'Anonymous' ? this.connectionDetails?.endUserName : 'user';
     } else {
       welcomeMessageParams['userName'] = parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user'
     }
