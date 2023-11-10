@@ -78,7 +78,8 @@ export const storageConst = {
     LANGUAGE : 'lang',
     THEME : 'theme',
     ENGLISH : 'en',
-    AUTO : 'auto'
+    AUTO : 'auto',
+    ACTIVE_TAB : 'activeTab'
 }
 
 export const languages = {

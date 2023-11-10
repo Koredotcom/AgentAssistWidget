@@ -83,9 +83,13 @@
             </button>
         </div>
     </div>
-    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.NO">{{projConstants.AGENT_ENTERED}}</p>
-    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.YES">{{projConstants.ACCEPT_RESPONSE}}</p>
-    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p>
-    <p class="info-entity-text" *ngIf="automation.errorCount">Expected Format: {{automation.data.entityType}}  |  Type to override</p>
+    <ng-container *ngIf="!automation.errorCount; else errCount">
+        <p class="info-entity-text" *ngIf="automation.userInput == projConstants.NO">{{projConstants.AGENT_ENTERED}}</p>
+        <p class="info-entity-text" *ngIf="automation.userInput == projConstants.YES">{{projConstants.ACCEPT_RESPONSE}}</p>
+        <p class="info-entity-text" *ngIf="automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p>
+    </ng-container>
+    <ng-template #errCount>
+        <p class="info-entity-text">Expected Format: {{automation.data.entityType}}  |  Type to override</p>
+    </ng-template>
 
 </div>

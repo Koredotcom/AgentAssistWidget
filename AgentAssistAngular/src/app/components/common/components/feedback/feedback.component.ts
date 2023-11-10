@@ -37,7 +37,7 @@ export class FeedbackComponent {
     })
   }
 
-  createForm(){
+  createForm(){    
     this.feedbackForm = new FormGroup(
       {
         "botId": new FormControl(this.feedbackData.connectionDetails.botId),
@@ -61,9 +61,9 @@ export class FeedbackComponent {
     }, 100);
   }
 
-  updateFeedbackForm(feedbackResponse){    
+  updateFeedbackForm(feedbackResponse){        
     (this.feedbackForm?.controls?.['feedbackDetails']).setValue(this.feedbackData.feedbackDetails);
-    (this.feedbackForm?.controls?.['comment']).setValue(feedbackResponse.comment);
+    (this.feedbackForm?.controls?.['comment']).setValue(this.feedbackData.comment);
     this.cdRef.detectChanges();
   }
 

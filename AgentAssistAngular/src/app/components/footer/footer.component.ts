@@ -38,6 +38,7 @@ export class FooterComponent implements OnInit, OnDestroy{
     this.rootService.socketConnection$.subscribe(res => {
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();
+        this.updateActiveTab();
       }
     });
 
@@ -45,8 +46,7 @@ export class FooterComponent implements OnInit, OnDestroy{
       if(tab){
         this.actionOnButton(tab);
       }
-    })
-
+    });
   }
  
   actionOnButton(selectedTab: string){
@@ -66,6 +66,13 @@ export class FooterComponent implements OnInit, OnDestroy{
     this.renderer.removeClass(this.document.body, className);
   }
 
+  updateActiveTab(){
+    let appState : any = this.localStorageService.getLocalStorageState();
+    let convState = appState[this.connectionDetails.conversationId];
+    let activeTab = convState[storageConst.ACTIVE_TAB];
+    this.changeTab(activeTab);
+  }
+
   changeTab(selectedTab){
     this.rootService.setActiveTab(selectedTab);
   }
@@ -81,8 +88,6 @@ export class FooterComponent implements OnInit, OnDestroy{
     }else{
       this.renderer.addClass(this.document.body, className);
     }
-   
-    
   }
 
   ngOnDestroy(){

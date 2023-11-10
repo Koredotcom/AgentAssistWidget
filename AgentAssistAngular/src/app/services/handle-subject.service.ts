@@ -11,6 +11,7 @@ export class HandleSubjectService {
   public runButtonClickEventSubject = new BehaviorSubject<object>(null);
   public proactiveModeSubject = new Subject<boolean>();
   public callConversationSuggestions$ = new Subject<object>();
+  public processAgentOrTranscriptResponseSubject = new BehaviorSubject<object>(null);
 
   constructor() { }
 
@@ -28,6 +29,10 @@ export class HandleSubjectService {
 
   setRunButtonClickEvent(obj) {
     this.runButtonClickEventSubject.next(obj);
+  }
+
+  setAgentOrTranscriptResponse(data){
+    this.processAgentOrTranscriptResponseSubject.next(data);
   }
 
 }

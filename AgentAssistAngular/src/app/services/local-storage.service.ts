@@ -72,6 +72,10 @@ export class LocalStorageService {
       if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.LANGUAGE])){
         appState[conversationId][storageConst.LANGUAGE] = storageObject[storageConst.LANGUAGE];
       }
+
+      if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.ACTIVE_TAB])){
+        appState[conversationId][storageConst.ACTIVE_TAB] = storageObject[storageConst.ACTIVE_TAB];
+      }
       
     }
     localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
@@ -105,6 +109,7 @@ export class LocalStorageService {
         appState[conversationId][storageConst.PROACTIVE_MODE] = true;
         appState[conversationId][storageConst.LANGUAGE] = storageConst.ENGLISH;
         appState[conversationId][storageConst.THEME] = storageConst.AUTO;
+        appState[conversationId][storageConst.ACTIVE_TAB] = ProjConstants.ASSIST;
         localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
       }
     }

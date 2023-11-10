@@ -9,6 +9,8 @@ import { RootService } from './services/root.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DirService } from './services/dir.service';
 import { ServiceInvokerService } from './services/service-invoker.service';
+import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
+import { HandleSubjectService } from './services/handle-subject.service';
 
 
 @Component({
@@ -30,7 +32,9 @@ export class AppComponent implements OnInit, OnDestroy{
     private rootService: RootService,
     private localStorageService: LocalStorageService,
     private dirService: DirService,
-    private serviceInvoker : ServiceInvokerService
+    private serviceInvoker : ServiceInvokerService,
+    private koregenerateUUIDPipe : KoreGenerateuuidPipe,
+    private handleSubjectService: HandleSubjectService
   ) {
     this.translate.setDefaultLang('en');
   }
@@ -56,14 +60,9 @@ export class AppComponent implements OnInit, OnDestroy{
       this.connectionDetails = this.rootService.getConnectionDetails();
 
       window.addEventListener('message', this.receiveMessage.bind(this), false);
-      // let parentUrl = document.referrer;
-      // let index = this.urls.findIndex(e=>parentUrl.includes(e));
-
-      // if (!(index>-1)) {
       if (Object.keys(this.connectionDetails).length > 1) {
         this.initAgentAssist(this.connectionDetails);
       }
-      // }
       var message = {
         method: 'agentassist_loaded',
         name: 'agent_assist',
@@ -80,12 +79,9 @@ export class AppComponent implements OnInit, OnDestroy{
   initiateSocketConnection(params: any) {
     this.localStorageService.initializeLocalStorageState();
     this.isGrantSuccess = true;
-    // this.handleSourceType(params);
     setTimeout(() => {
-      // this.rootService.setLoader(true);
       this.webSocketService.socketConnection();
       this.rootService.setSocketConnection(true);
-      // this.rootService.setLoader(false);
     }, 100);
   }
 
@@ -110,15 +106,6 @@ export class AppComponent implements OnInit, OnDestroy{
       this.isGrantSuccess = false;
     });
   }
-
-  // handleSourceType(params) {
-  //   let sourceType = params.source;
-  //   if (sourceType === ProjConstants.SMARTASSIST_SOURCE) {
-  //     $('body').addClass(sourceType);
-  //   } else {
-  //     $('body').addClass('default-color-scheme')
-  //   }
-  // }
 
   receiveMessage(e: any) {
     if (e.data.name === 'init_agentassist') {
@@ -149,6 +136,92 @@ export class AppComponent implements OnInit, OnDestroy{
     } else if (e.data.type === 'USER') {
       console.log(e.data);
       this.emitUserAgentMessage(e.data, 'user_inp_msg');
+    }
+    this.eventListenerFromParent(e);
+  }
+
+  eventListenerFromParent(e) {
+    if (e.data.name === EVENTS.response_resolution_comments && e.data.conversationId == this.connectionDetails.conversationId) {
+      // this.handleResponseResoultionComments(e.data);
+    }
+    if (e.data.name == 'initial_data') {
+      e.data?.data?.forEach((ele) => {
+        let agent_assist_request = {
+          'conversationId': ele.conversationId,
+          'query': ele.value,
+          'botId': ele.botId,
+          'agentId': '',
+          'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+          'positionId': ele?.positionId
+        }
+        if (ele?.intentName) {
+          agent_assist_request['intentName'] = ele.value;
+        }
+        if (ele?.entities) {
+          agent_assist_request['entities'] = ele.entities;
+        } else {
+          agent_assist_request['entities'] = [];
+        }
+        if (ele.conversationId === this.connectionDetails.conversationId) {
+          this.webSocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+        }
+      })
+    }
+    if (e.data.name === 'agentAssist.endOfConversation' && (e.data.conversationId || e.data.conversationid)) {
+      let currentEndedConversationId = e.data.conversationId || e.data.conversationid;
+      if (this.localStorageService.checkConversationIdStateInStorage([currentEndedConversationId])) {
+        let request_resolution_comments = {
+          conversationId: e.data?.conversationId,
+          userId: '',
+          botId: this.connectionDetails.botId,
+          sessionId: this.koregenerateUUIDPipe.transform(),
+          chatHistory: e.data?.payload?.chatHistory
+        }
+        this.webSocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
+        this.webSocketService.emitEvents(EVENTS.end_of_conversation, request_resolution_comments);
+        this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
+      }
+      return;
+    }
+
+    if (e.data.value) {
+      let userInputData = e.data;
+      let agent_assist_request = {
+        'author': {
+          "firstName": userInputData.author?.firstName,
+          "lastName": userInputData.author?.lastName,
+          "type": userInputData.author?.type
+        },
+        'botId': this.connectionDetails.botId,
+        'conversationId': userInputData.conversationid,
+        'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+        'query': userInputData.value,
+        'positionId' : this.rootService.isAutomationOnGoing ? this.rootService.currentPositionId : null
+      }
+      let user_messsage = {
+        "botId": this.connectionDetails.botId,
+        "type": "text",
+        "conversationId": userInputData.conversationid,
+        "value": userInputData.value,
+        "author": {
+          "firstName": userInputData.author?.firstName,
+          "lastName": userInputData.author?.lastName,
+          "type": userInputData.author?.type
+        },
+        "event": "user_message",
+        'positionId' : this.rootService.isAutomationOnGoing ? this.rootService.currentPositionId : null
+      }
+      if (this.connectionDetails.isCallConversation === true) {
+        this.handleSubjectService.setAgentOrTranscriptResponse(userInputData);
+      } else {
+        if (userInputData?.author?.type === 'USER') {
+          if (this.rootService.OverRideMode) {
+            this.webSocketService.emitEvents(EVENTS.user_message, user_messsage);
+          } else {
+            this.webSocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+          }
+        }
+      }
     }
   }
 

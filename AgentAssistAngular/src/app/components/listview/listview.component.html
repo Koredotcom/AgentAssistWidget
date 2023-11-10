@@ -11,12 +11,34 @@
 </div>
 
 <ng-template #listView>
-    <div class="entity-mesage-data" *ngFor="let obj of entityList">
+    <div class="entity-mesage-data" *ngFor="let automation of entityList; let i = index">
         <div class="input-block-entity">
-            <p>{{obj.entityName}}: </p>
-            <input type="text" aria-label="Input" [value]="obj.entityValue" disabled>
+            <p>{{automation.entityName}}: </p>
+            <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride(automation)" [disabled]="automation.disableInput" (keyup.enter)="handleAgentInput(automation)">
             <div class="border-outline"></div>
+            <div class="actions-inputs">                
+                <button class="remove-input" aria-label="Button" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">
+                    <i class="krIocnsFont-keyboard"></i>
+                </button>
+                <button class="success-check-input" aria-label="button" *ngIf="automation.userInput == projConstants.YES && !automation.errorCount">
+                    <i class="krIocnsFont-check-circle"></i>
+                </button>
+                <button class="remove-input" aria-label="Button" (click)="cancelOverride(automation)" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">
+                    <i class="krIocnsFont-close"></i>
+                </button>
+                <button class="check-input" [ngClass]="{'disabled-msg' : !automation.entityValue}" aria-label="button" (click)="handleAgentInput(automation)" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">
+                    <i class="krIocnsFont-check"></i>
+                </button>
+                <button class="wrong-res-info" aria-label="button" (click)="cancelOverride(automation)" *ngIf="automation.errorCount">
+                    <i class="krIocnsFont-warning-solid"></i>
+                    <span>{{automation.errorCount}}</span>
+                </button>
+            </div>
         </div>
+        <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.NO">{{projConstants.AGENT_ENTERED}}</p>
+        <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.YES">{{projConstants.ACCEPT_RESPONSE}}</p>
+        <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p>
+        <p class="info-entity-text" *ngIf="automation.errorCount">Expected Format: {{automation.data.entityType}}  |  Type to override</p>
     </div>
 </ng-template>
 

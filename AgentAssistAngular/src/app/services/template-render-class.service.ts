@@ -245,58 +245,60 @@ export class TemplateRenderClassService {
       parsedPayload: null
     }
     res.components?.forEach((elem) => {
-      let parsedPayload;
-      if (elem.data?.text) {
-        elem.data.text = elem.data?.text.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
-      }
-      let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
-
-      try {
-        if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
-          let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-          parsedPayload = JSON.parse(withoutSpecials);
+      if(elem.data?.text){
+        let parsedPayload;
+        if (elem.data?.text) {
+          elem.data.text = elem.data?.text.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
         }
-      } catch (error) {
-        if (payloadType.text) {
-          let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-          parsedPayload = withoutSpecials;
-        }
-      }
-
-
-      let body = {};
-      body['type'] = elem.cT;
-      if (!parsedPayload) {
-        body['component'] = {
-          "type": elem.cT,
-          "payload": {
-            "type": elem.cT,
-            "text": elem.data.text
+        let payloadType = (elem.data?.text)?.replace(/(&quot\;)/g, "\"");
+  
+        try {
+          if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+            let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+            parsedPayload = JSON.parse(withoutSpecials);
           }
-        };
-        body['cInfo'] = {
-          "body": elem.data.text
-        };
-
-      } else {
-        body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
-        if (parsedPayload?.type === 'message') {
-          body['cInfo'] = {
-            "body": ''
-          };
-        } else if (parsedPayload?.text) {
-          body['cInfo'] = {
-            "body": parsedPayload.text
-          };
-        } else {
-          body['cInfo'] = {
-            "body": parsedPayload
-          };
+        } catch (error) {
+          if (payloadType.text) {
+            let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+            parsedPayload = withoutSpecials;
+          }
         }
-      }
-      if(body['cInfo']['body'] != "" && body['cInfo']['body']){
-        _msgsResponse.message.push(body);
-        _msgsResponse.parsedPayload = parsedPayload;
+  
+  
+        let body = {};
+        body['type'] = elem.cT;
+        if (!parsedPayload) {
+          body['component'] = {
+            "type": elem.cT,
+            "payload": {
+              "type": elem.cT,
+              "text": elem.data.text
+            }
+          };
+          body['cInfo'] = {
+            "body": elem.data.text
+          };
+  
+        } else {
+          body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+          if (parsedPayload?.type === 'message') {
+            body['cInfo'] = {
+              "body": ''
+            };
+          } else if (parsedPayload?.text) {
+            body['cInfo'] = {
+              "body": parsedPayload.text
+            };
+          } else {
+            body['cInfo'] = {
+              "body": parsedPayload
+            };
+          }
+        }
+        if(body['cInfo']['body'] != "" && body['cInfo']['body']){
+          _msgsResponse.message.push(body);
+          _msgsResponse.parsedPayload = parsedPayload;
+        }
       }
     });
     

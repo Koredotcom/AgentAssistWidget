@@ -1,6 +1,6 @@
 
 
-<ng-container [ngTemplateOutlet]="dialogStarted"></ng-container>
+<ng-container [ngTemplateOutlet]="dialogStarted" *ngIf="automationData?.automationsArray?.length"></ng-container>
 <ng-container *ngFor="let automation of automationData.automationsArray; let i = index">
     <ng-container *ngIf="automation.responseType == renderResponseType.ASSISTRESPONSE">
         <ng-container *ngIf="automation.data.isPrompt">
@@ -11,7 +11,7 @@
         </ng-container>
     </ng-container>
 </ng-container>
-<ng-container [ngTemplateOutlet]="dialogEnded" *ngIf="automationData.endAutomation"></ng-container>
+<ng-container [ngTemplateOutlet]="dialogEnded" *ngIf="automationData.endAutomation && automationData?.automationsArray?.length"></ng-container>
 
 <ng-template #dialogStarted>
     <div class="dialog-ended-wrapper">

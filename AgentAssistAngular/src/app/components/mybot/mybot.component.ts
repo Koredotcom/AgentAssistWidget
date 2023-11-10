@@ -95,7 +95,7 @@ export class MybotComponent {
     });
 
     this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
-      if (endoftaskresponse && endoftaskresponse.intType == 'myBot') {
+      if (endoftaskresponse && (endoftaskresponse.intType == 'myBot' || endoftaskresponse.positionId === this.myBotDialogPositionId)) {
         this.dialogTerminatedOrIntrupptedInMyBot();
         // this.viewCustomTempAttachment();
       }
@@ -422,7 +422,7 @@ export class MybotComponent {
   }
 
   mybotFeedback(params) {
-    return this.serviceInvoker.invoke('get.mybotFeedback', { tab: 'mybot', botId: params.botId }, {}, {botId : params.botId }, params.agentassisturl);
+    return this.serviceInvoker.invoke('get.mybotFeedback', { tab: 'mybot', conversationId: params.conversationId }, {}, {botId : params.botId }, params.agentassisturl);
   }
 
   minMaxButtonClick(){

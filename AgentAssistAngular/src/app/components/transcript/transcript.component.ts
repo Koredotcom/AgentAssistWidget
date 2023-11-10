@@ -1,7 +1,9 @@
 import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { EVENTS } from 'src/app/helpers/events';
 import { FormatAmpmPipe } from 'src/app/pipes/format-ampm.pipe';
 import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
 import { ProjConstants } from 'src/app/proj.const';
+import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
@@ -35,7 +37,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
     private websocketService : WebSocketService, private formatAMPMPipe : FormatAmpmPipe,
-    private randomUUidPipe : RandomUuidPipe){
+    private randomUUidPipe : RandomUuidPipe,private handleSubjectService: HandleSubjectService){
   }
 
   ngOnInit(): void {
@@ -74,6 +76,78 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
       if (response && Object.keys(response).length > 0) {
         // this.prepareConversation();
         this.processAgentMessages(response);
+      }
+    });
+
+    this.subs.sink = this.handleSubjectService.processAgentOrTranscriptResponseSubject.subscribe((userInputData: any) => {
+      if (userInputData) {
+        let agent_assist_request = {
+          'author': {
+            "firstName": userInputData.author?.firstName,
+            "lastName": userInputData.author?.lastName,
+            "type": userInputData.author?.type
+          },
+          'botId': this.connectionDetails.botId,
+          'conversationId': userInputData.conversationid,
+          'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+          'query': userInputData.value,
+        }
+        let user_messsage = {
+          "botId": this.connectionDetails.botId,
+          "type": "text",
+          "conversationId": userInputData.conversationid,
+          "value": userInputData.value,
+          "author": {
+            "firstName": userInputData.author?.firstName,
+            "lastName": userInputData.author?.lastName,
+            "type": userInputData.author?.type
+          },
+          "event": "user_message"
+        }
+        let userAgentMessage = {
+          "author": {
+            "id": '',
+            "firstName": '',
+            "email": '',
+            "lastName": '',
+            "profImage": '', //url
+            "type": ""
+          },
+          "botId": this.connectionDetails.botId,
+          "sessionId": '',
+          "conversationId": userInputData.conversationid,
+          "timestamp": '',
+          "accountId": '',
+          "orgId": '',
+          "userId": '',
+          "message": userInputData.value, // user or agent sent message
+          "isTemplate": false,
+          "isAttachement": false,
+          "attachmentDetails": [{
+            "fileName": '',
+            "fileUrl": '',
+            "fileType": ''
+          }],
+          "templatePayload": [],
+          "sentType": '' // send (or) copy
+        }
+        // this.prepareConversation();
+        if (userInputData.author.type === 'USER') {
+          this.processTranscriptData(userInputData);
+          if (this.rootService.OverRideMode) {
+            userAgentMessage['type'] = 'user';
+            userAgentMessage.author['type'] = 'user';
+            this.websocketService.emitEvents(EVENTS.user_sent_message, userAgentMessage)
+            this.websocketService.emitEvents(EVENTS.user_message, user_messsage);
+          } else {
+            this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+          }
+        } else {
+          this.processAgentMessages(userInputData);
+          userAgentMessage['type'] = 'agent';
+          userAgentMessage.author['type'] = 'agent';
+          this.websocketService.emitEvents(EVENTS.user_sent_message, userAgentMessage)
+        }
       }
     });
 

@@ -51,13 +51,13 @@ export class EndPointsService {
     }
 
     this.serviceList['get.assistFeedback'] = {
-      endpoint: '/agentassist/api/v1/agent-feedback/:botId?interaction=:tab',
+      endpoint: '/agentassist/api/v1/agent-feedback/:conversationId?interaction=:tab',
       method: 'get',
       defaultEndPoint : false
     }
 
     this.serviceList['get.mybotFeedback'] = {
-      endpoint: '/agentassist/api/v1/agent-feedback/:botId?interaction=:tab',
+      endpoint: '/agentassist/api/v1/agent-feedback/:conversationId?interaction=:tab',
       method: 'get',
       defaultEndPoint : false
     }
