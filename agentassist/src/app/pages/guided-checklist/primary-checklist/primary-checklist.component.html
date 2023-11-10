@@ -43,8 +43,8 @@
                                     </button>
                                 </div>
                                 <div class="title-text w-13">
-                                    <h1 title="Primary">Primary</h1>
-                                    <h2 title="with Close stage">with Close stage</h2>
+                                    <h1 title="Primary">{{(checkList.type === 'dynamic'? 'Conditional' : checkList.type) | titlecase}}</h1>
+                                    <h2 title="with Close stage" *ngIf="checkList.type === 'dynamic'">{{checkList?.triggerBy?.type === 'dialog' ? checkList?.triggerBy?.type+' Execution' : checkList?.triggerBy?.type+' Based' | titlecase}}</h2>
                                 </div>
                                 <div class="title-text w-15">{{checkList.description}}</div>
                                 <div class="title-text w-15">All Agents</div>
