@@ -13,6 +13,7 @@ import * as _ from 'underscore';
 import { AppService } from '@kore.services/app.service';
 import { ScriptLoaderService } from '@kore.services/scriptloader.service';
 import { MixPanelService } from './helpers/mixPanel.service';
+import { IframeService } from '@kore.services/iframe.service';
 
 declare const $: any;
 @Component({
