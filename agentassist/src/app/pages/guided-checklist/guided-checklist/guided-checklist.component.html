@@ -6,7 +6,7 @@
 <app-primary-checklist></app-primary-checklist>
 <app-dynamic-checklist class="d-none"></app-dynamic-checklist> -->
 
-<div class="checklist-container-wrapper guided-checklist-isunified">
+<div class="checklist-container-wrapper " [ngClass]="{'guided-checklist-isunified' : isUnifiedPlatform}">
     <div class="header-sec-top">
         <div class="left-actions">
             <div class="main-heading">Playbook</div>
