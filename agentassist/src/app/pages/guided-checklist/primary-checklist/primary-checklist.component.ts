@@ -85,7 +85,6 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
       botId,
       searchText: '',
       sortBy: "asc",
-      type: 'primary',
       limit: this.limit,
       page: this.page,
     };
@@ -131,6 +130,7 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
   }
 
   updateCl(e){
+    this.checkListType = e.type;
     this.loading = true;
     this.update.emit(e);
   }
