@@ -188,7 +188,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         this.disableButtons = false;
         this.notificationService.showError(
           err,
-          this.translate.instant("FALLBACK_ERROR_MSG")
+          this.translate.instant("SAVE_FALLBACK_ERROR_MSG")
           
         );
       }

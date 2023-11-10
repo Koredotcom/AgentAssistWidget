@@ -2136,5 +2136,9 @@
     "CHECKLIST.STEPUPDATEFAILURE": "Failed to update step",
     "UNIFIED_SIDENAV_AGENT_ASSIST": "AgentAssist",
     "CHECKLIST.PRIMARY": "Primary",
-    "CHECKLIST.DYNAMIC": "Dynamic"
+    "CHECKLIST.DYNAMIC": "Dynamic",
+    "MAX_FILE_SIZE_PERMITED_MB": "Maximum file size Permited 2MB",
+    "AGENTASSIST_SETTINGS_SAVED": "Agent Assist setting saved Successfully",
+    "FALLBACK_ERROR_MSG" : "Falied to get the AgentAssist settings",
+    "SAVE_FALLBACK_ERROR_MSG" : "Failed to save the AgentAssist Settings"
 }
