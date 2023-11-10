@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
 import { forkJoin } from 'rxjs';
@@ -12,6 +12,7 @@ import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { TemplateRenderClassService } from 'src/app/services/template-render-class.service';
 import { chatWindow } from '@koredev/kore-web-sdk';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-assist',
@@ -22,6 +23,8 @@ export class AssistComponent implements OnInit, OnDestroy {
 
   @Output() maxButtonClick = new EventEmitter();
   @Input() maxButton: boolean;
+
+  @ViewChild('content', {static: false}) private content: ElementRef<HTMLDivElement>
 
   connectionDetails: any = {};
   loader: boolean = false;
@@ -50,10 +53,15 @@ export class AssistComponent implements OnInit, OnDestroy {
 
   showRestart : boolean = false;
 
+  summaryText: string = '';
+  showSummaryPopup: boolean = false;
+
+
   constructor(private rootService: RootService, private serviceInvoker: ServiceInvokerService,
     private websocketService: WebSocketService, private localStorageService: LocalStorageService,
     private koreGenerateuuidPipe: KoreGenerateuuidPipe, private randomUUIDPipe: RandomUuidPipe,
-    private handleSubjectService: HandleSubjectService, private templateRenderClassService: TemplateRenderClassService) {
+    private handleSubjectService: HandleSubjectService, private templateRenderClassService: TemplateRenderClassService,
+    public modalService : NgbModal) {
 
   }
 
@@ -129,6 +137,10 @@ export class AssistComponent implements OnInit, OnDestroy {
       // this.viewCustomTempAttachment();
       }
     });
+
+    this.subs.sink = this.handleSubjectService.summaryPopupSubject.subscribe((data)=> {
+      this.handlePopupEvent({ status: true, type: this.projConstants.SUMMARY, summaryText: data });
+    })
   }
 
   getInterruptDialogList(){
@@ -635,7 +647,7 @@ export class AssistComponent implements OnInit, OnDestroy {
           submitForm: feedbackData?.feedback ? true : false,
           feedback: feedbackData?.feedback ? feedbackData.feedback : '',
           feedbackDetails: feedbackData?.feedbackDetails?.length ? feedbackData.feedbackDetails : [],
-          comment : feedbackData.comment ? feedbackData.comment : ''
+          comment : feedbackData?.comment ? feedbackData?.comment : ''
         }
         this.assistResponseArray.push(renderResponse);
         this.assistResponseArray = [...this.assistResponseArray];
@@ -686,11 +698,33 @@ export class AssistComponent implements OnInit, OnDestroy {
       }
     } else if(popupObject.type == this.projConstants.LISTVIEW){
        this.showListView = popupObject.status;
+    } else if (popupObject.type == this.projConstants.SUMMARY) {
+      this.rootService.activeTab == this.projConstants.ASSIST;
+      this.summaryText = popupObject.summaryText || '';
+      this.showSummaryPopup = popupObject.status;
+      if (popupObject.summary) {
+        let message = {
+          name: "agentAssist.conversation_summary",
+          conversationId: this.connectionDetails.conversationId,
+          payload: {
+            "summary" : [
+              {
+                'summary_text': popupObject.editedSummary || '',
+              }
+            ]
+          }
+        };
+        console.log(message, "message****");
+        
+        window.parent.postMessage(message, '*');
+      }
     }
   }
 
   restartClickEvent(){
+    this.showSummaryPopup = true;
     this.showRestart = true;
+    this.modalService.open(this.content);
   }
 
   getAssistData(params) {

@@ -12,6 +12,7 @@ export class HandleSubjectService {
   public proactiveModeSubject = new Subject<boolean>();
   public callConversationSuggestions$ = new Subject<object>();
   public processAgentOrTranscriptResponseSubject = new BehaviorSubject<object>(null);
+  public summaryPopupSubject = new Subject<object>();
 
   constructor() { }
 
@@ -33,6 +34,10 @@ export class HandleSubjectService {
 
   setAgentOrTranscriptResponse(data){
     this.processAgentOrTranscriptResponseSubject.next(data);
+  }
+
+  setSummaryPopup(data){
+    this.summaryPopupSubject.next(data);
   }
 
 }

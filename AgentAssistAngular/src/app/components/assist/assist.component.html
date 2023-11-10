@@ -134,4 +134,7 @@
     <app-feedback></app-feedback>
 </ng-template>
 
-
+<ng-template #content let-modal>
+	<app-summary-popup *ngIf="showSummaryPopup" (handlePopupEvent)="handlePopupEvent($event)"
+            [summaryText]="summaryText"></app-summary-popup>
+</ng-template>

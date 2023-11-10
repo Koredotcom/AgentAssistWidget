@@ -49,6 +49,7 @@ import { TaskProgressComponent } from './components/task-progress/task-progress.
 import { AskCustomerComponent } from './ask-customer/ask-customer.component';
 import { TellCustomerComponent } from './tell-customer/tell-customer.component';
 import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
+import { SummaryPopupComponent } from './components/summary-popup/summary-popup.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -94,7 +95,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     TaskProgressComponent,
     AskCustomerComponent,
     TellCustomerComponent,
-    KoreGenerateuuidPipe
+    KoreGenerateuuidPipe,
+    SummaryPopupComponent
   ],
   imports: [
     TranslateModule.forRoot({
