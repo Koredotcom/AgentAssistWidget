@@ -1,6 +1,6 @@
 <meta name="viewport" content="width=device-width, user-scalable=no">
 <div *ngIf="!loading && !isFullScreen">
-    <app-header></app-header>
+    <app-header *ngIf="!isUnifiedPlatform"></app-header>
     <div [ngClass]="showIframe ? '':'d-none'">
         <!-- <div class="spin-wait" [hidden]="!isBufferIFrame">
             <mat-spinner diameter="18"></mat-spinner>

@@ -8,13 +8,13 @@
 			<div class="xop-innerpage-menu-list-container" [ngClass]="{'xop-innerpage-menu-list-childs-show': SelectedSideMenu === item.name }">
 			  <div class="xop-innerpage-menu-list-parent" (click)="showSubMenuUnified(item.name)">
 			  <span class="xop-innerpage-menu-list-parent-icon">
-				<img [src]="item.icon">
+				<img [src]="assetURLProc(item.icon)">
 			  </span>
 			  <span class="xop-innerpage-menu-list-parent-title"> {{item.name | uppercase | translate}} </span>
 			  </div>
 			  <div class="xop-innerpage-menu-list-childs">
 				  <ng-container *ngFor="let subMenuItem of item.subModules; let j = index">
-					  <div class="xop-innerpage-menu-list-child" routerLink="{{subMenuItem?.meta?.moduleRoute}}" routerLinkActive="active" [ngClass]="{'active': selectedSideNavItem === subMenuItem?.id}" (click)="menuSelected(subMenuItem)" >
+					  <div class="xop-innerpage-menu-list-child" routerLink="{{'./'+subMenuItem?.meta?.moduleRoute}}"  [skipLocationChange]="true" routerLinkActive="active" [ngClass]="{'active': selectedSideNavItem === subMenuItem?.id}" (click)="menuSelected(subMenuItem)" >
 						  {{subMenuItem.name | translate}}
 					</div>
 			</ng-container>

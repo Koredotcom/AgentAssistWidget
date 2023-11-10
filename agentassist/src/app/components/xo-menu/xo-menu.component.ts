@@ -1,4 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from "@angular/core";
+import { assetUrl } from "src/single-spa/asset-url";
+import { singleSpaPropsSubject } from "src/single-spa/single-spa-props";
 import { SubSink } from 'subsink';
 declare const $;
 @Component({
@@ -14,8 +16,14 @@ export class XoMenuComponent implements OnInit {
   @Output() menuItemSelected = new EventEmitter();
   SelectedSideMenu = "";
   subs = new SubSink();
-
-  ngOnInit(): void {}
+  assetURLProc = assetUrl;
+  sspaSubscriptionRef;
+  ngOnInit(): void {
+    this.sspaSubscriptionRef =  singleSpaPropsSubject.subscribe((res:any)=>{
+      console.log(res);
+      this.x = res.module;
+    });
+  }
   x = {
     subModules: [
       {
@@ -90,6 +98,7 @@ export class XoMenuComponent implements OnInit {
       }
     ],
   };
+
   blurFrame: any;
 
   toggleLeftNav(){
@@ -123,6 +132,7 @@ export class XoMenuComponent implements OnInit {
 
 
   ngOnDestroy() {
-    this.subs.unsubscribe();
+    this.subs?.unsubscribe();
+    this.sspaSubscriptionRef?.unsubscribe();
   }
 }

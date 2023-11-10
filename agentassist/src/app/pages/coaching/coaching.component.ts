@@ -16,6 +16,7 @@ import { SubSink } from 'subsink';
 import { Router } from '@angular/router';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { IframeService } from '@kore.services/iframe.service';
+import { IMAGE_PATHS } from '../guided-checklist/checklist.const';
 @Component({
   selector: 'app-coaching',
   templateUrl: './coaching.component.html',
@@ -54,6 +55,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   showNoneIntent = false;
   configFeatures : any;
   isUnifiedPlatform = false;
+  emptyCoachingImg = IMAGE_PATHS.EMPTY_COACHING_IMAGE;
   @ViewChild('noneIntent', { static: true }) noneIntent: SliderComponentComponent;
 
   constructor(
@@ -80,7 +82,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.isCoachingDisable = isEnabled;
     });
     if (!this.isCoachingDisable) {
-      this.router.navigate(['/config/usecases']);
+      this.router.navigate(['/config/usecases'], { skipLocationChange: true });
     } else {
       this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
         if (ele) {
@@ -95,7 +97,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
           this.isCoachingDisable = isEnabled;
         });
         if (!this.isCoachingDisable) {
-          this.router.navigate(['/config/usecases']);
+          this.router.navigate(['/config/usecases'], { skipLocationChange: true });
         } else {
           this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
             if (ele) {

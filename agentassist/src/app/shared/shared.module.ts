@@ -58,6 +58,7 @@ import { AceEditorModule } from 'ng2-ace-editor';
 import { PlaceHolderDirective } from '../helpers/directives/placeholder.directive';
 import { LookupPipe } from '../helpers/filters/lookup.pipe';
 import { UbEmptyScreensComponent } from '../pages/usecases/uc-main/uc-table-main/uc-table-view/ub-empty-screens/ub-empty-screens.component';
+import { assetUrl } from 'src/single-spa/asset-url';
 
 const COMPONENTS = [
   SliderComponentComponent,
@@ -81,7 +82,7 @@ const DIRECTIVES = [
 ]
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new TranslateHttpLoader(http, assetUrl('/i18n/'), '.json');
 }
 
 @NgModule({

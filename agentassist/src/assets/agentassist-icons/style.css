@@ -26,6 +26,7 @@
 }
 
 .icon-sa-play-book:before {
+  background-color: red;
   content: "\e98f";
 }
 .icon-ast_thumbsup:before {
