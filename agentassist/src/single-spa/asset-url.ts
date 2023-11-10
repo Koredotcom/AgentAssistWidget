@@ -11,7 +11,7 @@ export function assetUrl(url: string): string {
   
   if (environment.tag !== 'dev') {
     environment.API_SERVER_URL = window.location.protocol + '//' + window.location.host;
-    __webpack_public_path__ = window.location.protocol + '//' + window.location.host + '/smartassist-xo-frame/';
+    __webpack_public_path__ = window.location.protocol + '//' + window.location.host + '/koreagentassist/';
   } else {
     __webpack_public_path__ = 'http://localhost:4200/';
   }
