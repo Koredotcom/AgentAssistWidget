@@ -4579,4 +4579,13 @@ $numbers: 1000;
     #toast-container{
         top: 65px !important;
     }
+    .checklist-creation-wrapper-container {
+        .heading-actions-block {
+            .btn-actions {
+                .settings-actions{
+                    height: 40px !important;
+                }
+            }
+        }
+    }
 }
