@@ -276,13 +276,13 @@ export class MainmenuComponent implements OnInit, OnDestroy {
 
   redirectTo(uri: string) {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-      this.router.navigate([uri]));
+      this.router.navigate([uri], { skipLocationChange: true }));
   }
 
   navigateToLiveBoard() {
-    this.router.navigate(['/config/defaults']);
+    this.router.navigate(['/config/defaults'],{ skipLocationChange: true });
     setTimeout(() => {
-      this.router.navigate(['/config/liveboard']);
+      this.router.navigate(['/config/liveboard'], { skipLocationChange: true });
     });
   }
 

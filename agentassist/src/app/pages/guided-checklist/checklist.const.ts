@@ -1,3 +1,5 @@
+import { assetUrl } from "src/single-spa/asset-url";
+
 export const CHECKLISTCNST = {
     COLORS: {
         '#0BA5EC': '#F0F9FF',
@@ -41,4 +43,10 @@ export const CHECKLISTCNST = {
             }
         }
     }
+};
+
+export const IMAGE_PATHS = {
+    EMPTY_COACHING_IMAGE: assetUrl('images/coaching/empty-coaching.png'),
+    EMPTY_CHECKLIST_IMAGE: assetUrl('images/coaching/empty-checklist.svg'),
+    COACHING_ASSIGN_IMG: assetUrl('icons/coaching/coaching-assign-this.svg')
 }

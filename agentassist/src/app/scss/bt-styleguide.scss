@@ -3723,8 +3723,8 @@ $numbers: 1000;
 
 
 
-.if-load-in-unified-agentassist{
-
+.if-load-in-unified-agentassist, app-agentassist-root{
+    position: relative;
     // Buttons
     ._btn {
         border-radius: 8px;

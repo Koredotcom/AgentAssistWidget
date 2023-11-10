@@ -14,10 +14,11 @@ import { AppService } from '@kore.services/app.service';
 import { ScriptLoaderService } from '@kore.services/scriptloader.service';
 import { MixPanelService } from './helpers/mixPanel.service';
 import { IframeService } from '@kore.services/iframe.service';
+import { singleSpaPropsSubject } from 'src/single-spa/single-spa-props';
 
 declare const $: any;
 @Component({
-  selector: 'app-root',
+  selector: 'app-agentassist-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -27,6 +28,7 @@ export class AppComponent implements OnDestroy {
   appsData: any;
   showIframe = false;
   url: string;
+  sspaSubscriptionRef:any;
   iframeEl: any;
   messageButton: any;
   results: any;
@@ -60,12 +62,13 @@ export class AppComponent implements OnDestroy {
     translate.setDefaultLang('en');
 
     router.events.subscribe((event: RouterEvent) => {
-      this.navigationInterceptor(event)
+      // this.navigationInterceptor(event)
     })
     // this.authInfo = localstore.getAuthInfo();
   }
 
   ngOnInit() {
+    this.isUnifiedPlatform = this.workflowService.isUnifiedPlatform();
     if(window.location.href.includes('smartassist')){
       document.getElementsByTagName('html')[0].classList.add('init-smartassist');
     }
@@ -94,7 +97,7 @@ export class AppComponent implements OnDestroy {
               this.isBufferIFrame = false;
               this.bindEvent(window, 'message', (e) => {
                 if (e.data.loadDg) {
-                  this.router.navigate(['/config/usecases']);
+                  this.router.navigate(['/config/usecases'], { skipLocationChange: true });
                   this.workflowService.doOpenInstallTemps = false;
                   setTimeout(() => {
                     this.showIframe = false;
@@ -149,6 +152,27 @@ export class AppComponent implements OnDestroy {
 
     this.scriptLoader.loadScripts();
     this.setMixPanel();
+    let _self = this;
+    let landingRoute = _self.isUnifiedPlatform ? 'config/coaching' : 'onboarding';
+    this.authService.deflectApps.subscribe(function (res) {
+      if (!res) return;
+      _self.appsData = res;
+      _self.loading = false;
+      if(_self.isUnifiedPlatform){
+        return;
+      }
+      if (!_self.authService.smartAssistBots) {
+        _self.router.navigate([landingRoute], {skipLocationChange:true});
+      }
+  
+      if (_self.workflowService.doOpenInstallTemps || _self.authService.hasToken) {
+        _self.router.navigate([landingRoute], {skipLocationChange:true});
+      }
+    });
+    if(this.isUnifiedPlatform){
+      this.router.navigate([landingRoute],{skipLocationChange:true});
+      }
+    
   }
 
   bindEvent(element, eventName, eventHandler) {
@@ -156,7 +180,7 @@ export class AppComponent implements OnDestroy {
   }
 
   navigationInterceptor(event: RouterEvent): void {
-    this.isUnifiedPlatform = this.workflowService.isUnifiedPlatform();
+ 
     let element = this._activatedRoute.snapshot.queryParams;
 
     if(this.isUnifiedPlatform){
@@ -201,7 +225,7 @@ export class AppComponent implements OnDestroy {
         // }
         if (!_self.authService.smartAssistBots) {
           const route = _self.getAuthorizedRoute(_self.url);
-          _self.router.navigate([(route || 'onboarding')]);
+          _self.router.navigate([(route || 'onboarding')], { skipLocationChange: true });
         }
 
         //  if (_self.appService.instanceApps.length === 0) {
@@ -212,7 +236,7 @@ export class AppComponent implements OnDestroy {
 
         if (_self.workflowService.doOpenInstallTemps || _self.authService.hasToken) {
           const route = _self.getAuthorizedRoute(_self.url);
-          _self.router.navigate([(route || '/onboarding')]);
+          _self.router.navigate([(route || '/onboarding')], { skipLocationChange: true });
         }
       })
 
@@ -235,7 +259,8 @@ export class AppComponent implements OnDestroy {
 
 
   ngOnDestroy() {
-    this.ldBtStore.unsubscribe();
+    this.ldBtStore?.unsubscribe();
+    this.sspaSubscriptionRef?.unsubscribe();
   }
 
   removeParam(key, sourceURL) {

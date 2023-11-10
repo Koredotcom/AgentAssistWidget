@@ -244,7 +244,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   navigateToCurrent() {
     const path = this.router.url;
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate([path]);
+      this.router.navigate([path], { skipLocationChange: true });
     });
   }
 
@@ -496,7 +496,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   navigateToHome() {
     this.appService.hideHomePage$.next(false);
-    this.router.navigate(['home']);
+    this.router.navigate(['home'], { skipLocationChange: true });
   }
 
   ngOnDestroy() {
