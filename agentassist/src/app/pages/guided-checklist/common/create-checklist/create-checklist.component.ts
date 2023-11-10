@@ -11,6 +11,7 @@ import { workflowService } from '@kore.services/workflow.service';
 import { TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs/operators';
 import { TriggerByComponent } from '../trigger-by/trigger-by.component';
+import { ChecklistService } from '../../checklist.service';
 
 @Component({
   selector: 'app-create-checklist',
@@ -27,6 +28,7 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
     private workflowService: workflowService,
     private notificationService: NotificationService,
     private translate: TranslateService,
+    private clS: ChecklistService
   ) { }
   
   ngAfterViewInit(): void {
@@ -190,6 +192,7 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
       }))
       .subscribe((data) => {
         // this.currentCheckList = data;
+        // this.checkListType = data.type
         this.closeChecklist.emit(data);
         this.notificationService.notify(this.translate.instant('CHECKLIST.CLUPDATE_SUCCESS'), 'success');
 
@@ -266,5 +269,17 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
     });    
     console.log(this.filteredTagsDisplay, 'filtered tags display');
     
-  } 
+  }
+
+  selectedChecklistType(type) {
+    (this.checkListForm.controls['type']).patchValue(type?.toLowerCase());
+    if(type === 'primary'){
+      (this.checkListForm as FormGroup).removeControl('adherence');
+    }else{
+      (this.checkListForm as FormGroup).addControl('adherence', this.fb.group(
+        this.clS.getUtteranceForm('', true)
+      ));
+    };
+    this.checkListType = type;
+  }
 }

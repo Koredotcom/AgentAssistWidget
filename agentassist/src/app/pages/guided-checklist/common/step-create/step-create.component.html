@@ -1,13 +1,5 @@
 
-<div class="step-creation-slider-data" >
-    <div class="left-tabs">
-        <button class="tab-btn" [ngClass]="{'active-btn': basic}" (click)="basic = true">
-            <i class="icon-coaching--settings"></i>
-        </button>
-        <button class="tab-btn" [ngClass]="{'active-btn': !basic}" (click)="basic = false">
-            <i class="icon-coaching--adherence-set"></i>
-        </button>
-    </div>
+<div class="step-creation-slider-data">
     <div class="tab-content-data">
         <div class="header-sec">
             <div class="title">Step Configuration</div>
@@ -15,10 +7,14 @@
                 <i class="icon-sa-close"></i>
             </div>
         </div>
+        <div class="tabs-info">
+            <button class="tab-btn" [ngClass]="{'active-btn': basic}" (click)="basic = true">Configurations</button>
+            <button class="tab-btn" [ngClass]="{'active-btn': !basic}" (click)="basic = false">Adherence</button>
+        </div>
         <div class="body-data">
             <perfect-scrollbar>
                 <div class="inner-content-data" [formGroup]="stepForm">
-                    <div [ngClass]="{'d-none': !basic}" class="p-22">
+                    <div [ngClass]="{'d-none': !basic}" class="p-24">
                         <div class="kr-sg-input-text m-b-12">
                             <div class="label-text">Step Title</div>
                             <input type="text" formControlName="name" maxlength="48" placeholder="Step Title" class="input-text">

@@ -125,7 +125,7 @@ export class StagesListComponent implements OnInit {
   }
 
   patchSettings(obj) {
-    this.checkListForm = this.fb.group(this.clS.setCheckListForm(obj));
+    this.checkListForm = this.fb.group(this.clS.setCheckListForm(obj));    
   }
 
   openCheckList() {
@@ -306,6 +306,7 @@ export class StagesListComponent implements OnInit {
       .invoke("get.checklistbyid", { botId: this.botId, clId: event._id })
       .subscribe((data) => {
         this.currentCheckList = { ...data[0] };
+        this.checkListType = this.currentCheckList?.type;
         // if (event.type === "primary") {
         // }
         this.stages = data[0]?.stages;
@@ -373,6 +374,7 @@ export class StagesListComponent implements OnInit {
   dismisCheckList(data?) {
     if (data) {
       this.currentCheckList = data;
+      this.checkListType = this.currentCheckList?.type;
     }
     this.isCheckListOpen = false;
     this.checklistCreateSlider.closeSlider("#checklistCreate");
