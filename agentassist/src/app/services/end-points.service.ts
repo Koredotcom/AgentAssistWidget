@@ -1799,5 +1799,25 @@ export class EndPointsService {
       endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots?instanceBotId=:instanceBotId&includeInstanceBot=:includeInstanceBot&skipLinkCheck:skipLinkCheck',
       method: 'get'
     }
+
+    this.serviceList['put.agentAssistSettings'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/organizations/:orgId/agentAssistSettings/:aasId?isAgentAssist=true',
+      method: 'put'
+    }
+
+    this.serviceList['get.agentAssistSettings'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/organizations/:orgId/agentAssistSettings?isAgentAssist=true',
+      method: 'get'
+    }
+
+    this.serviceList['post.fileUpload'] = {
+      endpoint: this.API_SERVER_URL + '/users/:userId/file?isAgentAssist=true',
+      method: 'post'
+    }
+
+    this.serviceList['get.uploadedLogo'] = {
+      endpoint: this.API_SERVER_URL + '/attachment/file/:fileId/url?isAgentAssist=true',
+      method: 'get'
+    }
   }
 }
