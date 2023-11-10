@@ -70,10 +70,10 @@
             <div class="list-datachecked" [ngStyle]="{ background: item.color }">
               <div class="check-list-title-block" [ngClass]="{ 'edit-mode-title': item.edit || item.isNew }">
                 <div class="title">{{ item.name }}</div>
-                <div class="kr-sg-checkbox">
+                <!-- <div class="kr-sg-checkbox">
                   <input id="checkbox-42" class="checkbox-custom" type="checkbox">
                   <label for="checkbox-42" class="checkbox-custom-label">Set as close stage</label>
-                </div>    
+                </div>     -->
                 <input type="text" [(ngModel)]="item.runTimeName" (keyup.enter)="saveStage(item)" class="add-title-input" placeholder="New group" />
                 <div class="hover-actions">
                   <!-- <div class="choose-bg-color-dropdown" ngbDropdown>
