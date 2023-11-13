@@ -29,8 +29,18 @@ export class WebSocketService {
   realtimeSentimeResponse$ = new Subject<any>();
   sendCheckListOpened$ = new Subject<any>();
   isWelcomeResonse = false;
+  LoaderTimeout: number = 10000;
+  loaderEvents = {
+    'welcome_message_request' : true,
+    'agent_assist_request' : true,
+    'agent_menu_request': true,
+    'agent_feedback_request' : true,
+    'agent_assist_agent_request' : true,
+    'request_resolution_comments' : true,
+  }
 
-  constructor(private rootService : RootService, private localStorageService : LocalStorageService) {
+  constructor(private rootService : RootService, private localStorageService : LocalStorageService,
+    private handleSubjectService : HandleSubjectService) {
   }
 
   socketConnection(){    
@@ -93,9 +103,9 @@ export class WebSocketService {
       requestParams.experience = (isCall && isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
     }
 
-    // if(this.loaderEvents[eventName]) {
-    //   this.loaderOnTimer()
-    // }
+    if(this.loaderEvents[eventName]) {
+      this.loaderOnTimer()
+    }
 
     this._agentAsisstSocket.emit(eventName, requestParams);
   }
@@ -127,26 +137,32 @@ export class WebSocketService {
         this.sendCheckListOpened$.next(true);
       }
       this.agentAssistResponse$.next(data);
+      this.addOrRemoveLoader(false);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_menu_response, (data : any) => {
       this.agentMenuResponse$.next(data);
+      this.addOrRemoveLoader(false);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_coaching_response, (data : any)=>{
       this.agentCoachingResponse$.next(data);
+      this.addOrRemoveLoader(false);
     });
 
     this._agentAsisstSocket.on(EVENTS.checklist_step_response, (data : any)=>{
       this.checkListStepResponse$.next(data);
+      this.addOrRemoveLoader(false);
     });
 
     this._agentAsisstSocket.on(EVENTS.checklist_response, (data : any)=>{
       this.checkListResponse$.next(data);
+      this.addOrRemoveLoader(false);
     });
 
     this._agentAsisstSocket.on(EVENTS.realtime_sentiment_response, (data : any) => {
       this.realtimeSentimeResponse$.next(data);
+      this.addOrRemoveLoader(false);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_agent_response, (data : any)=>{
@@ -155,6 +171,7 @@ export class WebSocketService {
         this.rootService.myBotTabSessionId = data?.sessionId;
       }
       this.agentAssistAgentResponse$.next(data);
+      this.addOrRemoveLoader(false);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_endoftask, (data : any) =>{
@@ -176,11 +193,39 @@ export class WebSocketService {
 
     this._agentAsisstSocket.on(EVENTS.agent_feedback_response, (data : any) =>{
       this.agentFeedbackResponse$.next(data);
+      this.addOrRemoveLoader(false);
     });
 
     this._agentAsisstSocket.on(EVENTS.response_resolution_comments, (data : any) =>{
       this.responseResolutionCommentsResponse$.next(data);
+      this.addOrRemoveLoader(false);
     })
+  }
+
+  handleOverrideMode(toggleOverride, dialogId){
+    let connectionDetails = this.rootService.connectionDetails;
+    let overRideObj: any = {
+      "agentId": "",
+      "botId": connectionDetails.botId,
+      "conversationId": connectionDetails.conversationId,
+      "query": "",
+      "enable_override_userinput": toggleOverride,
+      'experience': connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+      "positionId": dialogId
+    }
+    this.emitEvents(EVENTS.enable_override_userinput, overRideObj);
+    this.rootService.OverRideMode = toggleOverride;
+  }
+
+  loaderOnTimer() {
+    this.addOrRemoveLoader(true)
+    setTimeout(() => {
+      this.addOrRemoveLoader(false)
+    }, this.LoaderTimeout);
+  }
+
+  addOrRemoveLoader(falg: boolean) {
+    this.handleSubjectService.setLoader(falg)
   }
 
 }

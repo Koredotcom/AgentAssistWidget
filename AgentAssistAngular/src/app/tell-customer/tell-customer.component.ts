@@ -9,6 +9,7 @@ import { RootService } from '../services/root.service';
 })
 export class TellCustomerComponent {
   @Input() automation : any;
+  @Input() isWelcomeMsg;
   
   projConstants : any = ProjConstants;
 
@@ -18,7 +19,7 @@ export class TellCustomerComponent {
 
 
   handleSendCopyButton(method,automation){
-    let sendData =  automation.sendData;
+    let sendData = this.isWelcomeMsg ? automation.value : automation.sendData;
     this.rootService.handleSendCopyButtonForNodes(method,sendData);
   }
 

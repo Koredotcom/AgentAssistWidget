@@ -142,7 +142,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
   eventListenerFromParent(e) {
     if (e.data.name === EVENTS.response_resolution_comments && e.data.conversationId == this.connectionDetails.conversationId) {
-      // this.handleResponseResoultionComments(e.data);
+      this.handleSubjectService.setSummaryPopup(e.data);
     }
     if (e.data.name == 'initial_data') {
       e.data?.data?.forEach((ele) => {

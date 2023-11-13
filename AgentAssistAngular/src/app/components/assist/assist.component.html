@@ -44,11 +44,11 @@
                 </div>
             </div>
         </div>
-        <div class="collapse-tab">
+        <div class="collapse-tab" #collapseTab>
           <div class="card-body">
                 <div class="card_body_acc_content">
                     <!-- <ng-container [ngTemplateOutlet]="dialogStarted"></ng-container>   -->
-                    <app-ask-customer [automation]="welcomeMsgResponse" [isWelcomeMsg]="true"></app-ask-customer>
+                    <app-tell-customer [automation]="welcomeMsgResponse" [isWelcomeMsg]="true"></app-tell-customer>
                     <!-- <ng-container [ngTemplateOutlet]="listingTriggers"></ng-container>                    
                     <ng-container [ngTemplateOutlet]="feedback"></ng-container>
                     <ng-container [ngTemplateOutlet]="dialogEnded"></ng-container>                     -->
@@ -134,4 +134,7 @@
     <app-feedback></app-feedback>
 </ng-template>
 
-
+<ng-template #content let-modal>
+	<app-summary-popup *ngIf="showSummaryPopup" (handlePopupEvent)="handlePopupEvent($event)"
+            [summaryText]="summaryText"></app-summary-popup>
+</ng-template>

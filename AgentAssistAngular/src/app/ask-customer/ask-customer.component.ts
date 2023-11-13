@@ -9,88 +9,70 @@ import { WebSocketService } from '../services/web-socket.service';
   templateUrl: './ask-customer.component.html',
   styleUrls: ['./ask-customer.component.scss']
 })
-export class AskCustomerComponent{
+export class AskCustomerComponent {
 
-    @Input() automation : any;
-    @Input() isWelcomeMsg;
+  @Input() automation: any;
 
-    projConstants : any = ProjConstants;
-    renderResponseType : any = RenderResponseType;
-    inputName : string = ProjConstants.AWAITING;
+  projConstants: any = ProjConstants;
+  renderResponseType: any = RenderResponseType;
+  inputName: string = ProjConstants.AWAITING;
 
-    constructor(public rootService : RootService, private websocketService : WebSocketService){
+  constructor(public rootService: RootService, private websocketService: WebSocketService) {
 
+  }
+
+
+  ngOnChanges() {
+    if (this.automation?.toggleOverride) {
+      this.inputName = this.projConstants.OVERRIDE;
     }
+  }
 
-
-    ngOnChanges(){
-      if(this.automation?.toggleOverride){
-        this.inputName = this.projConstants.OVERRIDE;
-      }
-    }
-
-    confirmOverride(){
-      if(!this.automation.toggleOverride && this.rootService.activeTab != this.projConstants.MYBOT){
-        this.inputName = this.projConstants.OVERRIDE;
-        this.automation.toggleOverride = true;
-        if(!this.rootService.OverRideMode){
-          this.rootService.OverRideMode = true;
-          this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
-        }
-      }
-    }
-
-    cancelOverride(){
-      if(this.rootService.activeTab != this.projConstants.MYBOT){
-        this.inputName = this.projConstants.AWAITING;
-        this.automation.toggleOverride = false;
-        this.rootService.OverRideMode = false;
-        this.automation.entityValue = '';
+  confirmOverride() {
+    if (!this.automation.toggleOverride && this.rootService.activeTab != this.projConstants.MYBOT) {
+      this.inputName = this.projConstants.OVERRIDE;
+      this.automation.toggleOverride = true;
+      if (!this.rootService.OverRideMode) {
         this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
       }
     }
+  }
 
-    handleOverridBtnClick(connectionDetails, dialogId, toggleOverride) {
-      let overRideObj: any = {
-        "agentId": "",
-        "botId": connectionDetails.botId,
-        "conversationId": connectionDetails.conversationId,
-        "query": "",
-        "enable_override_userinput": toggleOverride,
-        'experience': this.rootService.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
-        "positionId": dialogId
-      }
-      this.websocketService.emitEvents(EVENTS.enable_override_userinput, overRideObj);
-      this.rootService.OverRideMode = toggleOverride;
+  cancelOverride() {
+    if (this.rootService.activeTab != this.projConstants.MYBOT) {
+      this.inputName = this.projConstants.AWAITING;
+      this.automation.toggleOverride = false;
+      this.automation.entityValue = '';
+      this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
     }
+  }
 
-    handleAgentInput(){
-      this.automation.hideOverrideDiv = true;
-      this.automation.userInput = this.projConstants.NO;
-      if(this.rootService.activeTab == this.projConstants.ASSIST){
-        this.assistInputValue(this.automation.entityValue);
-      }else if(this.rootService.activeTab == this.projConstants.MYBOT){
-         this.mybotInputValue(this.automation.entityValue)
-      }
-    }
-    
-    assistInputValue(inputValue) {
-      let connectionDetails = Object.assign({}, this.automation.connectionDetails);
-      connectionDetails.value = inputValue;
-      connectionDetails.positionId = this.automation.dialogId;
-      // connectionDetails.entities = this.commonService.isRestore ? JSON.parse(this.commonService.previousEntitiesValue) : this.commonService.entitiestValueArray
-      connectionDetails.childBotId = this.automation.data.childBotId;
-      connectionDetails.childBotName = this.automation.data.childBotName;
-      let assistRequestParams = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
-      this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
-    }
+  handleOverridBtnClick(connectionDetails, dialogId, toggleOverride) {
+    this.websocketService.handleOverrideMode(toggleOverride, dialogId);
+  }
 
-    handleSendCopyButton(method,automation){
-      let sendData = this.isWelcomeMsg ? automation.value : automation.sendData;
-      this.rootService.handleSendCopyButtonForNodes(method,sendData);
+  handleAgentInput() {
+    this.automation.hideOverrideDiv = true;
+    this.automation.userInput = this.projConstants.NO;
+    if (this.rootService.activeTab == this.projConstants.ASSIST) {
+      this.assistInputValue(this.automation.entityValue);
+    } else if (this.rootService.activeTab == this.projConstants.MYBOT) {
+      this.mybotInputValue(this.automation.entityValue)
     }
+  }
 
-   mybotInputValue(inputValue) {
+  assistInputValue(inputValue) {
+    let connectionDetails = Object.assign({}, this.automation.connectionDetails);
+    connectionDetails.value = inputValue;
+    connectionDetails.positionId = this.automation.dialogId;
+    // connectionDetails.entities = this.commonService.isRestore ? JSON.parse(this.commonService.previousEntitiesValue) : this.commonService.entitiestValueArray
+    connectionDetails.childBotId = this.automation.data.childBotId;
+    connectionDetails.childBotName = this.automation.data.childBotName;
+    let assistRequestParams = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
+    this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
+  }
+
+  mybotInputValue(inputValue) {
     let connectionDetails: any = Object.assign({}, this.automation.connectionDetails);
     connectionDetails.value = inputValue;
     connectionDetails.isSearch = false;
@@ -101,5 +83,10 @@ export class AskCustomerComponent{
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
   }
 
-   
+  handleSendCopyButton(method, automation) {
+    let sendData = automation.sendData;
+    this.rootService.handleSendCopyButtonForNodes(method, sendData);
+  }
+
+
 }

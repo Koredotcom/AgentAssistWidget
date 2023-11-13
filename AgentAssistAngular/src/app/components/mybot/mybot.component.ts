@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
 import { forkJoin } from 'rxjs';
@@ -11,6 +11,7 @@ import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { EVENTS } from 'src/app/helpers/events';
+import { finalize} from 'rxjs/operators';
 
 @Component({
   selector: 'app-mybot',
@@ -20,9 +21,10 @@ import { EVENTS } from 'src/app/helpers/events';
 export class MybotComponent {
 
   @Output() maxMinButtonClick = new EventEmitter();
+  @ViewChild('collapseTab', {static: false}) private collapseTab: ElementRef;
+
   
   connectionDetails: any = {};
-  loader: boolean = false;
   subs = new SubSink();
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
@@ -32,6 +34,7 @@ export class MybotComponent {
   dialogName: string;
   myBotDialogPositionId: string;
   currentRunningStep: string;
+  smallTalkUuids : any;
 
   myBotDropdownHeaderUuids: any;
   mybotResponseArray: any = [];
@@ -63,6 +66,15 @@ export class MybotComponent {
   ngOnDestroy(){
     this.subs.unsubscribe();
   }
+
+  scrollToBottom = () => {
+    setTimeout(() => {
+      try {
+        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
+      } catch (err) {}
+    }, 1000);
+  }
+
 
   subscribeEvents(){
     
@@ -127,37 +139,6 @@ export class MybotComponent {
     this.rootService.currentPositionIdOfMyBot = this.myBotDialogPositionId;
     let myBotuuids = this.koreGenerateuuidPipe.transform();
     if (this.rootService.isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited') && (this.myBotDialogPositionId && !data.positionId || (data.positionId == this.myBotDialogPositionId))) {
-      
-      // if (this.rootService.isMybotInputResponseClick) {
-      //   let entityDisplayName = this.myBotDataResponse.entityDisplayName ? this.myBotDataResponse.entityDisplayName : this.myBotDataResponse.entityName;
-      //   let renderResponse = {
-      //     uuid: this.randomUUIDPipe.transform(),
-      //     data: data,
-      //     type: this.renderResponseType.AUTOMATION,
-      //     connectionDetails: this.connectionDetails,
-      //     proactiveModeStatus: false,
-      //     responseType: this.renderResponseType.USERMSG,
-      //     titleText: 'YouEntered -',
-      //     entityDisplayName: entityDisplayName,
-      //     noTemplateRender: true,
-      //     hideOverrideDiv: true
-      //   }
-
-      //   this.mybotResponseArray.map(arrEle => {
-
-      //     if (arrEle.uuid && arrEle.uuid == this.myBotDropdownHeaderUuids) {
-
-      //       arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
-      //       if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
-      //         arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
-      //         arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
-      //       }
-      //       arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
-      //     }
-      //   });
-      //   this.mybotResponseArray = structuredClone(this.mybotResponseArray)
-      //   this.rootService.isMybotInputResponseClick = false;
-      // }
 
       this.myBotDataResponse = {};
       if (data.entityName) {
@@ -200,47 +181,7 @@ export class MybotComponent {
         }
       });
 
-      this.mybotResponseArray = structuredClone(this.mybotResponseArray);
-
-      console.log(this.mybotResponseArray, 'mybot response array');
-      
-
-
-      // if (this.rootService.isMyBotAgentSentRequestOnClick && !this.myBotDropdownHeaderUuids) {
-      //   let renderResponse: any = {
-      //     data: data,
-      //     type: this.renderResponseType.SMALLTALK,
-      //     uuid: myBotuuids,
-      //     result: results,
-      //     temp: newTemp,
-      //     connectionDetails: this.connectionDetails,
-      //     proactiveModeStatus: false,
-      //     title: data.isPrompt ? ProjConstants.ASK_CUSTOMER : ProjConstants.TELL_CUSTOMER,
-      //     isTemplateRender: this.smallTalkTemplateRenderCheck(data, results),
-      //     value: data?.buttons[0]?.value,
-      //     sendData: results?.parsedPayload ? newTemp : data?.buttons[0]?.value,
-      //     dialogId: this.myBotDialogPositionId,
-      //     responseType: this.renderResponseType.ASSISTRESPONSE,
-      //     hideOverrideDiv: true,
-      //     toggleOverride: data.isPrompt ? true : false,
-      //   }
-      //   renderResponse.template = this.rootService.getTemplateHtml(renderResponse.isTemplateRender, results);
-
-      //   if (this.mybotResponseArray?.length > 1 && this.mybotResponseArray[this.mybotResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
-      //     && this.mybotResponseArray[this.mybotResponseArray.length - 1]?.data?.isPrompt) {
-      //     this.mybotResponseArray[this.mybotResponseArray.length - 1].toggleOverride = false;
-      //   }
-
-      //   this.mybotResponseArray.push(renderResponse);
-      //   this.mybotResponseArray = [...this.mybotResponseArray];
-      //   this.rootService.isMyBotAgentSentRequestOnClick = false;
-      //   setTimeout(() => {
-      //     if (data.entityName) {
-      //       this.myBotDataResponse = {};
-      //       this.myBotDataResponse = Object.assign({}, data);
-      //     }
-      //   }, 10);
-      // }
+      this.mybotResponseArray = structuredClone(this.mybotResponseArray);    
     }
 
     if (!this.rootService.isMyBotAutomationOnGoing && this.myBotDropdownHeaderUuids && data.buttons && (this.myBotDialogPositionId && !data.positionId || data.positionId == this.myBotDialogPositionId)) {
@@ -279,11 +220,13 @@ export class MybotComponent {
         }
       }, 10);
     }
+    this.scrollToBottom();
   }
 
   runDialogFormyBotTab(data) {
     this.mybotEmptyState = false;
     this.myBotDialogPositionId = data.positionId;
+    this.rootService.currentPositionIdOfMyBot = this.myBotDialogPositionId;
     this.rootService.isMyBotAutomationOnGoing = true;
     let agentBotuuids = this.randomUUIDPipe.transform();
     this.myBotDropdownHeaderUuids = agentBotuuids;
@@ -410,8 +353,13 @@ export class MybotComponent {
   getmybotData(params) {
     let feedback = this.mybotFeedback(params);
     let history = this.mybotHistory(params);
-    forkJoin([feedback, history]).subscribe(res => {
+    this.handleSubjectService.setLoader(true);
+    forkJoin([feedback, history]).pipe(finalize(()=> {this.handleSubjectService.setLoader(false)})).subscribe(res => {
       console.log(res, "feedback");
+      let feedbackData = res[0]?.results || [];
+      let historyData = res[1] || [];
+      // let historyData = this.rootService.getMockData();
+      this.renderHistoryMessages(historyData, feedbackData);
     });
   }
 
@@ -434,4 +382,240 @@ export class MybotComponent {
   updateFeedbackProperties(data, index) {
     this.mybotResponseArray[index] = data;
   }
+
+  renderHistoryMessages(response, feedBackResult) {
+
+    let previousId;
+    let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
+    let resp = response.length > 0 ? response : undefined;
+    let renderResponse: any = {};
+
+    resp = this.rootService.formatHistoryResponseForFAQ(resp);
+    resp?.forEach((res, index) => {
+
+      res = this.rootService.confirmationNodeRenderForHistoryDataTransform(res);
+      res = this.rootService.formatHistoryResonseToNormalRender(res);
+      // this.removeOrAddOverRideDivForPreviousResponse(true);
+
+
+      if ((!res.suggestions && !res.ambiguityList && !res.ambiguity) && res.type == 'outgoing') {
+
+        currentTaskPositionId = res.positionId ? res.positionId :  ((res.intentName != currentTaskName) ? null : currentTaskPositionId);
+        currentTaskName = (res.intentName) ? res.intentName : currentTaskName;
+        this.myBotDialogPositionId = currentTaskPositionId;
+        this.rootService.currentPositionId = this.myBotDialogPositionId;
+        this.dialogName = currentTaskName
+        let uuids = this.koreGenerateuuidPipe.transform();
+        
+        if(res.endOfTask && previousId){                  
+          let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
+          
+          this.filterAutomationByPositionId();
+          this.prepareFeedbackData(previousIdFeedBackDetails);
+          this.automationFlagUpdate(previousId,false);
+          this.automationFlagUpdateForSmallTalk(previousId, false);
+
+          this.updateOverrideStatusOfAutomation(previousId);
+          previousId = undefined;
+          previousTaskName = currentTaskName;
+          previousTaskPositionId = currentTaskPositionId;
+          currentTaskName = null;
+          currentTaskPositionId = null;
+        }else if (res.intentName && !previousId && previousTaskPositionId !== currentTaskPositionId && !res.endOfTask) {
+          // update postionids and dialogue start
+          
+          let automationUUIDCheck = this.mybotResponseArray.findIndex((automation) => {
+            if (automation.uuid == res._id) {
+              return true;
+            }
+            return false;
+          });
+          // previousTaskPositionId = currentTaskPositionId;
+          // previousTaskName = currentTaskName;
+
+          if (automationUUIDCheck == -1) {
+            previousId = res._id;
+            this.automationFlagUpdate(previousId,true);
+            previousTaskPositionId = currentTaskPositionId;
+            previousTaskName = currentTaskName;
+            let renderResponse = {
+              data: res,
+              type: this.renderResponseType.AUTOMATION,
+              uuid: previousId,
+              dialogId: currentTaskPositionId,
+              dialogName: currentTaskName,
+              connectionDetails: this.connectionDetails,
+              showAutomation: true,
+              value : res?.components[0]?.data?.text
+            }
+            this.mybotResponseArray.push(renderResponse);
+            this.mybotResponseArray = [...this.mybotResponseArray];
+
+            if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
+              this.myBotDialogPositionId = previousTaskPositionId;
+              this.rootService.currentPositionId = this.myBotDialogPositionId;
+            }
+            
+          }
+        }
+        
+
+        //process user messages
+        if (res.entityName && res.entityResponse && (res.entityValue || res.userInput)) {
+             res.userInput = res.userInput ? res.userInput : res.entityValue;
+             this.processUserMessagesForHistory(res,resp.length - 1, index);
+        }
+       
+        if (res.entityName) {
+          this.myBotDataResponse = Object.assign({}, res);
+        }
+        
+        let result: any = this.templateRenderClassService.getResponseUsingTemplateForHistory(res);
+        
+        this.rootService.currentPositionId = currentTaskPositionId;
+        let msgStringify = JSON.stringify(result);
+        let newTemp = encodeURI(msgStringify);
+        
+        if (result.message.length > 0) {
+          // automation
+          
+          if (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
+          
+            renderResponse = {
+              data: res,
+              type: this.renderResponseType.AUTOMATION,
+              uuid: res.components && res.components[0]?._id ? (res.components && res.components[0]?._id) : uuids,
+              result: result,
+              temp: newTemp,
+              connectionDetails: this.connectionDetails,
+              toggleOverride: false,
+              responseType: this.renderResponseType.ASSISTRESPONSE,
+              value : res?.components[0]?.data?.text,
+            }
+
+            if (res.isPrompt) {
+              renderResponse.toggleOverride = false;
+              renderResponse.hideOverrideDiv = false;
+            }
+
+            this.mybotResponseArray.map(arrEle => {
+              if (arrEle.uuid && arrEle.uuid == previousId) {
+                arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
+                if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
+                  arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
+                  arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
+                }
+                arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
+              }
+            });
+
+            this.mybotResponseArray = structuredClone(this.mybotResponseArray);
+
+          }else if((previousTaskName != currentTaskName)){
+          //small talk after dialogue terminate
+            this.automationFlagUpdateForSmallTalk(previousId, true);
+            renderResponse = {
+              data: res,
+              type: this.renderResponseType.SMALLTALK,
+              uuid: uuids,
+              result: result,
+              temp: newTemp,
+              connectionDetails: this.connectionDetails,
+              toggleOverride: false,
+              title: res.isPrompt ? ProjConstants.ASK_CUSTOMER : ProjConstants.TELL_CUSTOMER,
+              isTemplateRender: this.smallTalkTemplateRenderCheck(res, result),
+              value: res?.components[0]?.data?.text,
+              sendData: result?.parsedPayload ? newTemp : res?.components[0]?.data?.text,
+              responseType: this.renderResponseType.ASSISTRESPONSE
+            }
+            renderResponse.template = this.rootService.getTemplateHtml(renderResponse.isTemplateRender, result);
+
+            this.mybotResponseArray.push(renderResponse);
+            this.mybotResponseArray = [...this.mybotResponseArray];
+          }
+        }
+      }      
+
+      // feedback, for tellcustomer as end of node
+      if ((resp.length - 1 == index && (!res.entityRequest && !res.entityResponse) && previousTaskPositionId && currentTaskPositionId == previousTaskPositionId)) {
+        let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
+        this.filterAutomationByPositionId();
+        this.prepareFeedbackData(previousIdFeedBackDetails);
+        this.automationFlagUpdate(previousId,false)
+        this.updateOverrideStatusOfAutomation(previousId);
+        previousId = undefined;
+        previousTaskName = currentTaskName;
+        previousTaskPositionId = currentTaskPositionId;
+        currentTaskName = null;
+        currentTaskPositionId = null;
+      }
+
+    });
+    this.scrollToBottom();
+  }
+
+  processUserMessagesForHistory(data, respIndex, index) {     
+    if (this.mybotResponseArray?.length >= 1 && this.mybotResponseArray[this.mybotResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
+      && this.mybotResponseArray[this.mybotResponseArray.length - 1]?.data?.isPrompt) {
+        if(data.userInput){
+          this.mybotResponseArray[this.mybotResponseArray.length - 1].entityValue = data.userInput;
+          this.mybotResponseArray[this.mybotResponseArray.length - 1].disableInput = (respIndex == index) ? false : true;
+        }
+    } else if (this.mybotResponseArray?.length >= 1) {
+      this.mybotResponseArray.map(arrEle => {
+        if (arrEle.uuid && arrEle.uuid == this.myBotDropdownHeaderUuids) {
+          arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
+          if (data.userInput && arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
+            arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
+            arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
+            if (data.userInput) {
+              let userInput = arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput;
+              arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = data.userInput;
+              arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput = ProjConstants.YES;
+              arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = (respIndex == index) ? false : true;
+
+            }
+          }
+          arrEle.automationsArray = [...arrEle.automationsArray];
+        }
+      });
+    }
+    this.mybotResponseArray = structuredClone(this.mybotResponseArray);
+    if(respIndex == index){
+      console.log(this.mybotResponseArray, "this.mybotResponseArray");
+    }
+    
+    
+  }
+
+  automationFlagUpdateForSmallTalk(previousId, flag){
+    this.smallTalkUuids = flag ? previousId : null;
+  }
+
+
+  automationFlagUpdate(previousId, flag) {
+    if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
+      this.rootService.isMyBotAutomationOnGoing = flag;
+      this.myBotDropdownHeaderUuids = previousId;
+      let storageObject: any = {
+        [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.rootService.isMyBotAutomationOnGoing
+      }
+      this.localStorageService.setLocalStorageItem(storageObject);
+    }
+  }
+
+  updateOverrideStatusOfAutomation(previousId) {
+    this.mybotResponseArray.map(arrEle => {
+      if (arrEle.uuid && arrEle.uuid == previousId) {
+        arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
+        if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
+          arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
+          arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
+        }
+      }
+    });
+    this.mybotResponseArray = structuredClone(this.mybotResponseArray);
+  }
+
+
 }
