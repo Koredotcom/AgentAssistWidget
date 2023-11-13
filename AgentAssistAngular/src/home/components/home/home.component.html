@@ -58,7 +58,7 @@
                             id="checkProActive"
                             [checked]="proactiveModeEnabled"
                             (change)="proactiveToggle(proactiveMode.checked)"
-                            [disabled]="connectionDetails.source === projConstants.SMARTASSIST_SOURCE && connectionDetails.isProactiveAgentAssistEnabled === false"
+                            [disabled]="!aaSettings?.isProactiveEnabled"
                         >
                         <div class="slider"
                             [ngClass]="{'cursor-notallowed' : connectionDetails.source === projConstants.SMARTASSIST_SOURCE && connectionDetails.isProactiveAgentAssistEnabled === false}">
