@@ -346,7 +346,7 @@ export class HomeComponent implements OnInit {
     if (appState[_convId] && !appState[_convId][storageConst.CURRENT_TAB]) {
       let storageObject: any = {};
       
-      if(this.aaSettings.isWidgetLandingEnabled ) {
+      if(this.aaSettings.isWidgetLandingEnabled?.isEnabled ) {
         if(this.aaSettings.isWidgetLandingEnabled[isChatOrCall].isEnabled) {
           storageObject[storageConst.CURRENT_TAB] = (this.titlecasePipe.transform(this.aaSettings.isWidgetLandingEnabled[isChatOrCall].tab) || this.projConstants.ASSIST);
           activeTab = storageObject[storageConst.CURRENT_TAB];
