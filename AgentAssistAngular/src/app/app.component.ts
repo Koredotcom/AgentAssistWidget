@@ -206,7 +206,7 @@ export class AppComponent implements OnDestroy {
       connectionObj['userId'] = params.userId || '';
       connectionObj['orgId']= params.orgId || '';
       connectionObj['fromSAT'] = params.fromSAT || false;
-      this.getAgentAssistSettings(connectionObj);
+      this.getAgentAssistSettings(params);
     }
   }
 
