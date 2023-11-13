@@ -15,10 +15,10 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
 
   @Input() agentassistArrayIndex : number;
   @Output() faqAnswerToggle = new EventEmitter();
+  @Input() searchResponse : any;
 
   subs = new SubSink();
   projConstants: any = ProjConstants;
-  searchResponse : any = {};
   searchedFAQList : any = [];
 
   constructor(private handleSubjectService : HandleSubjectService, public rootService : RootService,
@@ -27,17 +27,18 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.subscribeEvents();
+   
+  }
+
+  ngOnChanges(){
+    this.handleSearchResponse(this.searchResponse);
   }
   
-  subscribeEvents(){
-
-    this.subs.sink = this.handleSubjectService.searchResponse$.subscribe((searchResponse)=> {
-      this.searchedFAQList = [];
-      if(searchResponse && searchResponse.faqs){
-        this.searchedFAQList = searchResponse.faqs;
-      }
-    });
+  handleSearchResponse(searchResponse){
+    this.searchedFAQList = [];
+    if(searchResponse && searchResponse.faqs){
+      this.searchedFAQList = searchResponse.faqs;
+    }
   }
 
   handleSendCopyButton(actionType, faq, selectType){    

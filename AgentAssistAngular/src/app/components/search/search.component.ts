@@ -137,7 +137,7 @@ export class SearchComponent implements OnInit {
       this.typeAHead(this.searchText, this.rootService.connectionDetails);
     } else {
       this.searchResponse = {};
-      this.handleSubjectService.setSearchResponse(null);
+      this.handleSubjectService.setSearchResponse(this.searchResponse);
     }
     // else {
     //   this.filterSet = [];

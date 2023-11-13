@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { RemoveTagFromStringPipe } from 'src/app/pipes/remove-tag-from-string.pipe';
 import { ReplaceTextWithTagPipe } from 'src/app/pipes/replace-text-with-tag.pipe';
 import { ProjConstants } from 'src/app/proj.const';
@@ -13,6 +13,8 @@ import { SubSink } from 'subsink';
 })
 export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
 
+  @Input() searchResponse : any;
+  
   subs = new SubSink();
   projConstants: any = ProjConstants;
   articlesList : any = [];
@@ -22,18 +24,19 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
 
   }
 
-  ngOnInit(): void {
-    this.subscribeEvents();
+  ngOnChanges(){
+    this.handleSearchResponse(this.searchResponse);
   }
 
-  subscribeEvents(){
-    this.subs.sink = this.handleSubjectService.searchResponse$.subscribe((searchResponse)=> {
-      console.log(searchResponse, 'searchResponse');
-      this.articlesList = [];
-      if(searchResponse && searchResponse.articles){
-        this.articlesList = searchResponse.articles;
-      }
-    });
+  ngOnInit(): void {
+   
+  }
+
+  handleSearchResponse(searchResponse){
+    this.articlesList = [];
+    if(searchResponse && searchResponse.articles){
+      this.articlesList = searchResponse.articles;
+    }
   }
 
   handleSendCopyButton(actionType, faq_or_article_obj, selectType){

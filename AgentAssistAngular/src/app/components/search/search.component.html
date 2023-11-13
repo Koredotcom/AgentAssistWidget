@@ -10,7 +10,7 @@
                     <span class="count-text">{{searchResponse?.dialogs?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
-                    <app-dialog-suggestion></app-dialog-suggestion>
+                    <app-dialog-suggestion [searchResponse]="searchResponse"></app-dialog-suggestion>
                 </div>
             </div>
             <div class="sugestions-block" *ngIf="searchResponse?.faqs?.length">
@@ -22,7 +22,7 @@
                     <span class="count-text">{{searchResponse?.faqs?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
-                    <app-faq-suggestions (faqAnswerToggle)="checkAnswerAndToggle($event)"></app-faq-suggestions>
+                    <app-faq-suggestions (faqAnswerToggle)="checkAnswerAndToggle($event)" [searchResponse]="searchResponse"></app-faq-suggestions>
                 </div>
             </div>
             <div class="sugestions-block" *ngIf="searchResponse?.articles?.length">
@@ -34,7 +34,7 @@
                     <span class="count-text">{{searchResponse?.articles?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
-                    <app-article-suggestions></app-article-suggestions>
+                    <app-article-suggestions [searchResponse]="searchResponse"></app-article-suggestions>
                 </div>
             </div>
             <div class="sugestions-block" *ngIf="searchResponse?.snippets?.length">
@@ -46,7 +46,7 @@
                     <span class="count-text">{{searchResponse?.snippets?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
-                    <app-snippet-suggestions></app-snippet-suggestions>
+                    <app-snippet-suggestions [searchResponse]="searchResponse"></app-snippet-suggestions>
                 </div>
             </div>
         </ng-container>

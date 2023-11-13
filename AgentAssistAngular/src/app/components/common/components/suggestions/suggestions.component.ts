@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
+import { ProjConstants } from 'src/app/proj.const';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
@@ -86,6 +87,9 @@ export class SuggestionsComponent {
     this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request_params);
   }
 
+  openSearch(){
+    this.rootService.setActiveTab(ProjConstants.SEARCH);
+  }
 
 
 }

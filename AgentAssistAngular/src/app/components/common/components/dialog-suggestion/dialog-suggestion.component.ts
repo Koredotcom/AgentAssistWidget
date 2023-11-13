@@ -14,6 +14,8 @@ import { SubSink } from 'subsink';
 })
 export class DialogSuggestionComponent implements OnInit, OnDestroy{
 
+  @Input() searchResponse : any;
+
   subs = new SubSink();
   menuResponse: any = {};
   projConstants: any = ProjConstants;
@@ -30,6 +32,10 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
     this.subscribeEvents();
   }
 
+  ngOnChanges(){
+    this.handleSearchResponse(this.searchResponse);
+  }
+
   subscribeEvents(){
     this.subs.sink = this.websocketService.agentMenuResponse$.subscribe((menuResponse: any) => {
       if (menuResponse && menuResponse.usecases) {
@@ -37,14 +43,14 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
         this.suggestionCount = this.menuResponse.length || 0;
       }
     });
+  }
 
-    this.subs.sink = this.handleSubjectService.searchResponse$.subscribe((searchResponse)=> {
-      this.searchedDialogList = [];
+  handleSearchResponse(searchResponse){
+    this.searchedDialogList = [];
       if(searchResponse && searchResponse.dialogs){
         this.searchedDialogList = searchResponse.dialogs;
         this.suggestionCount = this.searchedDialogList.length || 0;
       }
-    });
   }
 
   formatMenuResponse(menuResponse){
