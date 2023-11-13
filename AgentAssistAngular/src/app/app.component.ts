@@ -213,6 +213,7 @@ export class AppComponent implements OnDestroy {
 
   getAgentAssistSettings(params) {
     // api call
+    let paramsCopy = {...params};
     let headersVal : any = {};
     if(!this.service.configObj.fromSAT) {
         headersVal = {
@@ -221,16 +222,16 @@ export class AppComponent implements OnDestroy {
             'accountId': this.service.grantResponseObj?.userInfo?.accountId,
             'iid' : this.service.configObj.botid ? this.service.configObj.botid : ''
         }
-        params.instanceBotId = this.service.configObj.botid;
+        paramsCopy.instanceBotId = this.service.configObj.botid;
     } else {
         headersVal = {
-            'accountId': params?.accountId,
-            'Authorization': 'bearer' + ' ' + params.token,
-            'iid' : params.instanceBotId || ''
+            'accountId': paramsCopy?.accountId,
+            'Authorization': 'bearer' + ' ' + paramsCopy.token,
+            'iid' : paramsCopy.instanceBotId || ''
         }
     }
     $.ajax({
-      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${params.instanceBotId}/agentassistsetting`,
+      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${paramsCopy.instanceBotId}/agentassistsetting`,
       type: 'get',
       headers: headersVal,
       dataType: 'json',
@@ -239,7 +240,7 @@ export class AppComponent implements OnDestroy {
         this.service.configObj = {...this.service.configObj, ...this.aaSettings};
         this.iswidgetEnabled = this.aaSettings['agentAssistWidgetEnabled'];
         if(data.agentAssistSettings?.agentAssistWidgetEnabled) { 
-        this.initiateSocketConnection(params);
+        this.initiateSocketConnection(paramsCopy);
         this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
         } else {
           this.iswidgetEnabled = data?.agentAssistSettings?.agentAssistWidgetEnabled;

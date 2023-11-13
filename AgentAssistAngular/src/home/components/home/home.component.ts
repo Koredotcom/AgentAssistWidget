@@ -225,7 +225,7 @@ export class HomeComponent implements OnInit {
       this.aaSettings = settings;
       this.localStorageService.initializeLocalStorageState();
       console.log(this.commonService.configObj);
-      this.updateUIState(this.commonService.configObj.conversationid, this.commonService.configObj.isCallConversation);
+      this.updateUIState(this.connectionDetails.conversationId, this.connectionDetails.isCall);
       this.btnInit();
     })
 
