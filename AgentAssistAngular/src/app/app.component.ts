@@ -22,7 +22,7 @@ import { Subscription } from 'rxjs';
 export class AppComponent implements OnDestroy {
   title = 'AgentAssistWidget';
   isGrantSuccess = false;
-  errorMsg : string = '';
+  errorMsg : string = 'Loading...';
   subsciption = new Subscription();
   wordTimeStamps: any = {};
   aaSettings = {};
@@ -99,7 +99,7 @@ export class AppComponent implements OnDestroy {
       if (err.status === 500) {
         this.errorMsg = "Issue identified with the backend services! Please reach out to AgentAssist Admin.";
       } else {
-        this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin.";
+        // this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin.";
       }
       this.isGrantSuccess = false;
     });
