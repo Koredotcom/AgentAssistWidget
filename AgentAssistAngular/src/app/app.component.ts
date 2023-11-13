@@ -221,6 +221,7 @@ export class AppComponent implements OnDestroy {
             'accountId': this.service.grantResponseObj?.userInfo?.accountId,
             'iid' : this.service.configObj.botid ? this.service.configObj.botid : ''
         }
+        params.instanceBotId = this.service.configObj.botid;
     } else {
         headersVal = {
             'accountId': params?.accountId,
@@ -229,7 +230,7 @@ export class AppComponent implements OnDestroy {
         }
     }
     $.ajax({
-      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${this.service.configObj.botid}/agentassistsetting`,
+      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${params.instanceBotId}/agentassistsetting`,
       type: 'get',
       headers: headersVal,
       dataType: 'json',
