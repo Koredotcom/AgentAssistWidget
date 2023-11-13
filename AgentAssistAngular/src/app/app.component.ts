@@ -223,7 +223,7 @@ export class AppComponent implements OnDestroy {
     } else {
         headersVal = {
             'accountId': params?.accountId,
-            'Authorization': this.service.grantResponseObj?.authorization.token_type + ' ' + params.jwtToken,
+            'Authorization': 'bearer' + ' ' + params.token,
             'iid' : params.botid || ''
         }
     }
