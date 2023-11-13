@@ -13,6 +13,7 @@ import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { TemplateRenderClassService } from 'src/app/services/template-render-class.service';
 import { chatWindow } from '@koredev/kore-web-sdk';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { finalize} from 'rxjs/operators';
 
 @Component({
   selector: 'app-assist',
@@ -25,9 +26,9 @@ export class AssistComponent implements OnInit, OnDestroy {
   @Input() maxButton: boolean;
 
   @ViewChild('content', {static: false}) private content: ElementRef<HTMLDivElement>
+  @ViewChild('collapseTab', {static: false}) private collapseTab: ElementRef;
 
   connectionDetails: any = {};
-  loader: boolean = false;
   subs = new SubSink();
   proactiveModeStatus: boolean;
   projConstants: any = ProjConstants;
@@ -72,6 +73,14 @@ export class AssistComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  scrollToBottom = () => {
+    setTimeout(() => {
+      try {
+        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
+      } catch (err) {}
+    }, 1000);
   }
 
 
@@ -431,6 +440,8 @@ export class AssistComponent implements OnInit, OnDestroy {
     if (data.buttons?.length > 1 && data.sendMenuRequest) {
       this.welcomeMsgResponse = data;
     }
+
+    this.scrollToBottom();
   }
 
 
@@ -713,11 +724,10 @@ export class AssistComponent implements OnInit, OnDestroy {
   }
 
   getAssistData(params) {
-    this.loader = true;
     let feedback = this.assistFeedback(params);
     let history = this.assistHistory(params);
-    forkJoin([feedback, history]).subscribe(res => {
-      this.loader = false;
+    this.handleSubjectService.setLoader(true);
+    forkJoin([feedback, history]).pipe(finalize(()=> {this.handleSubjectService.setLoader(false)})).subscribe(res => {
       let feedbackData = res[0]?.results || [];
       let historyData = res[1] || [];
       // let historyData = this.rootService.getMockData();
@@ -959,6 +969,7 @@ export class AssistComponent implements OnInit, OnDestroy {
 
     });
 
+    this.scrollToBottom();
   }
 
   updateOverrideStatusOfAutomation(previousId){
