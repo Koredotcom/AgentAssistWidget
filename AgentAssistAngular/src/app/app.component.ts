@@ -222,9 +222,9 @@ export class AppComponent implements OnDestroy {
         }
     } else {
         headersVal = {
-            'accountId': this.service.grantResponseObj?.userInfo?.accountId,
-            'Authorization': this.service.grantResponseObj?.authorization.token_type + ' ' + this.service.getAccessToken(),
-            'iid' : this.service.configObj.botid ? this.service.configObj.botid : ''
+            'accountId': params?.accountId,
+            'Authorization': this.service.grantResponseObj?.authorization.token_type + ' ' + params.jwtToken,
+            'iid' : params.botid || ''
         }
     }
     $.ajax({
