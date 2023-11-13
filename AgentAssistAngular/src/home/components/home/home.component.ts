@@ -343,12 +343,34 @@ export class HomeComponent implements OnInit {
     }
     if (appState[_convId] && !appState[_convId][storageConst.CURRENT_TAB]) {
       let storageObject: any = {};
-      if (_isCallConv == 'true') {
-        storageObject[storageConst.CURRENT_TAB] = (this.titlecasePipe.transform(this.aaSettings.isWidgetLandingEnabled.call.tab)) || this.projConstants.TRANSCRIPT;
-        activeTab = storageObject[storageConst.CURRENT_TAB];
+      
+      if(this.aaSettings.isWidgetLandingEnabled ) {
+        if (_isCallConv == 'true') {
+          if(this.aaSettings.isWidgetLandingEnabled.call.isEnabled) {
+            storageObject[storageConst.CURRENT_TAB] = (this.titlecasePipe.transform(this.aaSettings.isWidgetLandingEnabled.call.tab));
+            activeTab = storageObject[storageConst.CURRENT_TAB];
+          }else {
+            storageObject[storageConst.CURRENT_TAB] = this.projConstants.TRANSCRIPT;
+            activeTab = storageObject[storageConst.CURRENT_TAB];
+          }
+        } else {
+          if(this.aaSettings.isWidgetLandingEnabled.chat.isEnabled) {
+            storageObject[storageConst.CURRENT_TAB] = (this.titlecasePipe.transform(this.aaSettings.isWidgetLandingEnabled.chat.tab));
+            activeTab = storageObject[storageConst.CURRENT_TAB];
+          } else{
+            storageObject[storageConst.CURRENT_TAB] = this.projConstants.ASSIST;
+          activeTab = storageObject[storageConst.CURRENT_TAB];
+          }
+        } 
       } else {
-        storageObject[storageConst.CURRENT_TAB] = (this.titlecasePipe.transform(this.aaSettings.isWidgetLandingEnabled.chat.tab)) ||this.projConstants.ASSIST;
-        activeTab = storageObject[storageConst.CURRENT_TAB];
+        if (_isCallConv == 'true') {
+          storageObject[storageConst.CURRENT_TAB] = this.projConstants.TRANSCRIPT;
+          activeTab = storageObject[storageConst.CURRENT_TAB];
+        } else {
+          storageObject[storageConst.CURRENT_TAB] = this.projConstants.ASSIST;
+          activeTab = storageObject[storageConst.CURRENT_TAB];
+        }
+          
       }
       this.localStorageService.setLocalStorageItem(storageObject, activeTab);
     } else if (appState[_convId] && appState[_convId][storageConst.CURRENT_TAB]) {
