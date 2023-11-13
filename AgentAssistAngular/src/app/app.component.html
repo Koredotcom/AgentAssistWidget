@@ -2,7 +2,7 @@
 <router-outlet></router-outlet> -->
 <app-home *ngIf="iswidgetEnabled && isGrantSuccess; else elseIf" [aaSettings]="aaSettings"></app-home>
 <ng-template #elseIf>
- <div>
+ <div *ngIf="isErrorMsg">
     {{errorMsg}}
  </div>
 </ng-template>

@@ -27,6 +27,7 @@ export class AppComponent implements OnDestroy {
   wordTimeStamps: any = {};
   aaSettings = {};
   iswidgetEnabled = false;
+  isErrorMsg = false;
   constructor(private webSocketService: WebSocketService,
               private service: CommonService,
               private route: ActivatedRoute,
@@ -246,6 +247,7 @@ export class AppComponent implements OnDestroy {
           this.iswidgetEnabled = data?.agentAssistSettings?.agentAssistWidgetEnabled;
         this.errorMsg = "AgentAssist Settings configuration are Disabled! Please reach out to AgentAssist Admin.";
         }
+        this.isErrorMsg = true;
     },
       error:  (err)=> {
           console.error("Unable to fetch the details with the provided data", err);
