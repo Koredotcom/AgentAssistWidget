@@ -1,27 +1,5 @@
 <!-- Ask Customer Message Node v3 -->
-<div class="ask-cust-node" *ngIf="isWelcomeMsg && automation">
-    <div class="top-section">
-        <div class="svg_img">
-            <img src="assets/images/icons/askcust.svg" alt="Image">
-        </div>
-        <p>{{projConstants.WELCOME_MSG}}</p>
-    </div>
-    <ng-container *ngFor="let item of automation.buttons">
-        <ng-container [ngTemplateOutlet]="askCustMsg" [ngTemplateOutletContext]="{smallTalkData: item}"></ng-container> 
-    </ng-container>
-</div>
-
-<div class="ask-cust-node" *ngIf="!isWelcomeMsg && automation && automation.type == renderResponseType.SMALLTALK">
-    <div class="top-section">
-        <div class="svg_img">
-            <img src="assets/images/icons/askcust.svg" alt="Image">
-        </div>
-        <p>{{projConstants.ASK_CUSTOMER}}</p>
-    </div>
-    <ng-container [ngTemplateOutlet]="askCustMsg" [ngTemplateOutletContext]="{smallTalkData: automation}"></ng-container> 
-</div>
-
-<div class="ask-cust-node" *ngIf="!isWelcomeMsg && automation && automation.type == renderResponseType.AUTOMATION">
+<div class="ask-cust-node" *ngIf="automation">
     <div class="top-section">
         <div class="svg_img">
             <img src="assets/images/icons/askcust.svg" alt="Image">
@@ -46,20 +24,8 @@
     </div>
 </ng-template>
 
-<ng-template #askCustMsg let-smallTalk="smallTalkData">
-    <div class="msg-node-cust">
-        <div class="send-copy-actions">
-            <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, smallTalk)">
-                <i class="krIocnsFont-copy"></i>
-            </button>
-            <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, smallTalk)">Send</button>
-        </div>
-        <!-- <div class="sent-msg-text">Sent</div> -->
-        <p>{{smallTalk.value}}</p>
-    </div>
-</ng-template>
 
-<div class="entity-mesage-data" *ngIf="!isWelcomeMsg" [ngClass]="{'error-no-reponse' : automation.errorCount}">
+<div class="entity-mesage-data" [ngClass]="{'error-no-reponse' : automation.errorCount}">
     <div class="input-block-entity">
         <p>{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}} </p>
         <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride()" [disabled]="automation.disableInput" (keyup.enter)="handleAgentInput()">

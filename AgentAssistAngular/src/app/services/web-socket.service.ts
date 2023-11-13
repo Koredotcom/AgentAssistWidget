@@ -183,4 +183,19 @@ export class WebSocketService {
     })
   }
 
+  handleOverrideMode(toggleOverride, dialogId){
+    let connectionDetails = this.rootService.connectionDetails;
+    let overRideObj: any = {
+      "agentId": "",
+      "botId": connectionDetails.botId,
+      "conversationId": connectionDetails.conversationId,
+      "query": "",
+      "enable_override_userinput": toggleOverride,
+      'experience': connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+      "positionId": dialogId
+    }
+    this.emitEvents(EVENTS.enable_override_userinput, overRideObj);
+    this.rootService.OverRideMode = toggleOverride;
+  }
+
 }

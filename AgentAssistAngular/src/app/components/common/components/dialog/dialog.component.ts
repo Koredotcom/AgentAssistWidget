@@ -21,6 +21,8 @@ export class DialogComponent {
 
 
   ngOnChanges(changes: any) {
+    console.log(this.automationData, "automation data");
+    
     if (this.automationData && changes?.automationData?.currentValue && changes.automationData.currentValue?.automationsArray) {
       this.automationData = changes.automationData.currentValue;
       this.formatAssistAutomation(changes.automationData.currentValue.automationsArray);

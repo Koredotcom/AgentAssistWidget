@@ -47,7 +47,6 @@ export class ListviewComponent{
       this.inputName = this.projConstants.OVERRIDE;
       automation.toggleOverride = true;
       if(!this.rootService.OverRideMode){
-        this.rootService.OverRideMode = true;
         this.handleOverridBtnClick(automation.connectionDetails, automation.dialogId, automation.toggleOverride);
       }
     }
@@ -58,7 +57,6 @@ export class ListviewComponent{
     if(this.rootService.activeTab != this.projConstants.MYBOT){
       this.inputName = this.projConstants.AWAITING;
       automation.toggleOverride = false;
-      this.rootService.OverRideMode = false;
       automation.entityValue = '';
       this.handleOverridBtnClick(automation.connectionDetails, automation.dialogId, automation.toggleOverride);
     }
@@ -81,17 +79,7 @@ export class ListviewComponent{
   }
 
   handleOverridBtnClick(connectionDetails, dialogId, toggleOverride) {
-    let overRideObj: any = {
-      "agentId": "",
-      "botId": connectionDetails.botId,
-      "conversationId": connectionDetails.conversationId,
-      "query": "",
-      "enable_override_userinput": toggleOverride,
-      'experience': this.rootService.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
-      "positionId": dialogId
-    }
-    this.websocketService.emitEvents(EVENTS.enable_override_userinput, overRideObj);
-    this.rootService.OverRideMode = toggleOverride;
+    this.websocketService.handleOverrideMode(toggleOverride, dialogId);
   }
 
   assistInputValue(automation) {

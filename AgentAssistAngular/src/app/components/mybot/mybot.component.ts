@@ -284,6 +284,7 @@ export class MybotComponent {
   runDialogFormyBotTab(data) {
     this.mybotEmptyState = false;
     this.myBotDialogPositionId = data.positionId;
+    this.rootService.currentPositionIdOfMyBot = this.myBotDialogPositionId;
     this.rootService.isMyBotAutomationOnGoing = true;
     let agentBotuuids = this.randomUUIDPipe.transform();
     this.myBotDropdownHeaderUuids = agentBotuuids;
