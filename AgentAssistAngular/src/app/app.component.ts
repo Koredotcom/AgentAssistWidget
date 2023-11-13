@@ -218,13 +218,13 @@ export class AppComponent implements OnDestroy {
             'Authorization': 'bearer' + ' ' + this.service.grantResponseObj?.authorization?.accessToken,
             'eAD': false,
             'accountId': this.service.grantResponseObj?.userInfo?.accountId,
-            'iid' : this.service.configObj.botid ? this.service.configObj.botid : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
+            'iid' : this.service.configObj.botid ? this.service.configObj.botid : ''
         }
     } else {
         headersVal = {
             'accountId': this.service.grantResponseObj?.userInfo?.accountId,
             'Authorization': this.service.grantResponseObj?.authorization.token_type + ' ' + this.service.getAccessToken(),
-            'iid' : this.service.configObj.botid ? this.service.configObj.botid : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
+            'iid' : this.service.configObj.botid ? this.service.configObj.botid : ''
         }
     }
     $.ajax({
