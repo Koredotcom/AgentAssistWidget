@@ -681,8 +681,8 @@ export class AssistComponent implements OnInit, OnDestroy {
       this.showInterruptPopup = popupObject.status;
       if (this.showInterruptPopup) {
         this.showInterruptPopup = false;
+        // this.dialogTerminatedOrIntruppted();
         this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
-        this.dialogTerminatedOrIntruppted();
         this.runDialogForAssistTab(this.interruptDialog);
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
