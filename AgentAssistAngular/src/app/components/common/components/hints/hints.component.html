@@ -1,88 +1,21 @@
-<div class="hints-template-data">
-    <!-- <ng-container [ngTemplateOutlet]="DangerHint"></ng-container>
-    <ng-container [ngTemplateOutlet]="warningHint"></ng-container> -->
-    <ng-container [ngTemplateOutlet]="infoHint"></ng-container>
-    <ng-container [ngTemplateOutlet]="PositiveHint"></ng-container>
+<div class="hints-template-data" #overlayhint>
+    <ng-container *ngFor="let item of coachingHints; let i = index">
+        <div class="hint-card"  [ngStyle]="{'border' : '1px solid' + coachingConst.HINT_DATA[item?.expression]?.color}" *ngIf="item" [ngClass]="coachingConst.HINT_DATA[item?.expression]?.className">
+            <div class="top-card-info">
+                <div class="icon_block" *ngIf="coachingConst.HINT_DATA[item?.expression]?.icon">
+                    <i [ngClass]="coachingConst.HINT_DATA[item?.expression]?.icon"></i>
+                </div>
+                <h1>{{item?.message?.title}}</h1>
+                <button class="close-hint" (click)="closeHint(item.actionId)">
+                    <i class="krIocnsFont-close-md"></i>
+                </button>
+            </div>
+            <div class="body-hint">
+                <p>{{item?.message?.body}}</p>
+            </div>
+            <div class="footer-hint">
+                <button (click)="hintAckPressed(item);closeHint(item.actionId)" *ngIf="item?.adherence?.adType === 'ack'">{{item?.adherence?.ackText}}</button>
+            </div>
+        </div>
+    </ng-container>
 </div>
-
-<ng-template #PositiveHint>
-    <div class="hint-card">
-        <div class="top-card-info">
-            <div class="icon_block">
-                <i class="krIocnsFont-thumbs-up"></i>
-            </div>
-            <h1>Great Job!</h1>
-            <button class="close-hint">
-                <i class="krIocnsFont-close-md"></i>
-            </button>
-        </div>
-        <div class="body-hint">
-            <p>You did a fantastic job providing the customer with the latest discounts.</p>
-        </div>
-        <div class="footer-hint">
-            <button>OK, Great!</button>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #infoHint>
-    <div class="hint-card info-hint">
-        <div class="top-card-info">
-            <div class="icon_block">
-                <i class="krIocnsFont-exclamation"></i>
-            </div>
-            <h1>Great Job!</h1>
-            <button class="close-hint">
-                <i class="krIocnsFont-close-md"></i>
-            </button>
-        </div>
-        <div class="body-hint">
-            <p>You did a fantastic job providing the customer with the latest discounts.</p>
-        </div>
-        <div class="footer-hint">
-            <button>OK, Great!</button>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #warningHint>
-    <div class="hint-card warning-hint">
-        <div class="top-card-info">
-            <div class="icon_block">
-                <i class="krIocnsFont-alert-triangle"></i>
-            </div>
-            <h1>Great Job!</h1>
-            <button class="close-hint">
-                <i class="krIocnsFont-close-md"></i>
-            </button>
-        </div>
-        <div class="body-hint">
-            <p>You did a fantastic job providing the customer with the latest discounts.</p>
-        </div>
-        <div class="footer-hint">
-            <button>OK, Great!</button>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #DangerHint>
-    <div class="hint-card danger-hint">
-        <div class="top-card-info">
-            <div class="icon_block">
-                <i class="krIocnsFont-hand"></i>
-            </div>
-            <h1>Great Job!</h1>
-            <button class="close-hint">
-                <i class="krIocnsFont-close-md"></i>
-            </button>
-        </div>
-        <div class="body-hint">
-            <p>You did a fantastic job providing the customer with the latest discounts.</p>
-        </div>
-        <div class="footer-hint">
-            <button>OK, Great!</button>
-        </div>
-    </div>
-</ng-template>
-
-

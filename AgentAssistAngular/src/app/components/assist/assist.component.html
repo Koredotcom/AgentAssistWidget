@@ -91,6 +91,10 @@
         <ng-container *ngIf="(showListView || showRestart) && dialogName">
             <app-listview [listView]="showListView" [restart]="showRestart" [assistResponseArray]="assistResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
         </ng-container>
+        <ng-container *ngIf="showSummaryPopup">
+            <app-summary-popup (handlePopupEvent)="handlePopupEvent($event)"
+            [summaryText]="summaryText"></app-summary-popup>
+        </ng-container>
     </div>
 </div>
 
@@ -132,9 +136,4 @@
 
 <ng-template #feedback>
     <app-feedback></app-feedback>
-</ng-template>
-
-<ng-template #content let-modal>
-	<app-summary-popup *ngIf="showSummaryPopup" (handlePopupEvent)="handlePopupEvent($event)"
-            [summaryText]="summaryText"></app-summary-popup>
 </ng-template>
