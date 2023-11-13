@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { connectionObj, ProjConstants } from 'src/common/constants/proj.cnts';
+import { connectionObj, ProjConstants, storageConst } from 'src/common/constants/proj.cnts';
 import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { CommonService } from 'src/common/services/common.service';
@@ -25,6 +25,8 @@ export class AppComponent implements OnDestroy {
   errorMsg : string = '';
   subsciption = new Subscription();
   wordTimeStamps: any = {};
+  aaSettings = {};
+  iswidgetEnabled = false;
   constructor(private webSocketService: WebSocketService,
               private service: CommonService,
               private route: ActivatedRoute,
@@ -91,7 +93,7 @@ export class AppComponent implements OnDestroy {
       console.log(res, "sucess")
       // this.isGrantSuccess = true;
       this.service.grantResponseObj = res;
-     this.initiateSocketConnection(params);
+      this.getAgentAssistSettings(params);
     }).catch((err) => {
       this.handleSubjectService.setLoader(false);
       if (err.status === 500) {
@@ -206,8 +208,46 @@ export class AppComponent implements OnDestroy {
       connectionObj['fromSAT'] = params.fromSAT || false;
       this.initiateSocketConnection(params);
     }
+  }
 
-
+  getAgentAssistSettings(params) {
+    // api call
+    let headersVal : any = {};
+    if(!this.service.configObj.fromSAT) {
+        headersVal = {
+            'Authorization': 'bearer' + ' ' + this.service.grantResponseObj?.authorization?.accessToken,
+            'eAD': false,
+            'accountId': this.service.grantResponseObj?.userInfo?.accountId,
+            'iid' : this.service.configObj.botid ? this.service.configObj.botid : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
+        }
+    } else {
+        headersVal = {
+            'accountId': this.service.grantResponseObj?.userInfo?.accountId,
+            'Authorization': this.service.grantResponseObj?.authorization.token_type + ' ' + this.service.getAccessToken(),
+            'iid' : this.service.configObj.botid ? this.service.configObj.botid : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
+        }
+    }
+    $.ajax({
+      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${this.service.configObj.botid}/agentassistsetting`,
+      type: 'get',
+      headers: headersVal,
+      dataType: 'json',
+      success:  (data) => {
+        this.aaSettings = data.agentAssistSettings;
+        this.service.configObj = {...this.service.configObj, ...this.aaSettings};
+        this.iswidgetEnabled = this.aaSettings['agentAssistWidgetEnabled'];
+        if(data.agentAssistSettings?.agentAssistWidgetEnabled) { 
+        this.initiateSocketConnection(params);
+        this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
+        } else {
+          this.iswidgetEnabled = data?.agentAssistSettings?.agentAssistWidgetEnabled;
+        this.errorMsg = "AgentAssist Settings configuration are Disabled! Please reach out to AgentAssist Admin.";
+        }
+    },
+      error:  (err)=> {
+          console.error("Unable to fetch the details with the provided data", err);
+      }
+    });
   }
 
 }

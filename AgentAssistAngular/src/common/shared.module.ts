@@ -29,7 +29,28 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
 
 @NgModule({
-  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe, FormatAMPMPipe, LoaderComponent, TypeaheadComponent, RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent, ConverTimestampToDatePipe, SafeHtmlPipe],
+  declarations: [OverlaysearchComponent, 
+    InterruptPopupComponent, 
+    RestorePopupComponent, 
+    SummaryPopupComponent, 
+    TerminateComponent, 
+    RandomUUIDPipe, 
+    RemoveSpecialCharPipe, 
+    ReplaceQuotStringWithDoubleQuotPipe, 
+    SanitizeHtmlPipe, 
+    RawHtmlPipe, 
+    KoreGenerateuuidPipe, 
+    HtmlEntityPipe, 
+    EmptyObjectCheckPipe, 
+    FormatAMPMPipe, 
+    LoaderComponent, 
+    TypeaheadComponent, 
+    RemoveTagFromStringPipe, 
+    ReplaceTextWithTagPipe, 
+    UserBotHistoryComponent, 
+    ConverTimestampToDatePipe, 
+    SafeHtmlPipe
+  ],
   imports: [
     CommonModule,
     FormsModule,

@@ -15,7 +15,7 @@ export const ImageFilePath = "assets/images/"
 
 export const ProjConstants = {
     ASSIST : 'Assist',
-    MYBOT : 'My Bot',
+    MYBOT : 'Mybot',
     TRANSCRIPT : "Transcript",
     LIBRARY : 'Library',
     VOICE : 'voice',

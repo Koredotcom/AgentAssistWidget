@@ -1,6 +1,6 @@
 <!-- <h1>Welcome to Agent Assist</h1>
 <router-outlet></router-outlet> -->
-<app-home *ngIf="isGrantSuccess; else elseIf"></app-home>
+<app-home *ngIf="iswidgetEnabled && isGrantSuccess; else elseIf" [aaSettings]="aaSettings"></app-home>
 <ng-template #elseIf>
  <div>
     {{errorMsg}}
