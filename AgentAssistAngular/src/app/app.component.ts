@@ -200,6 +200,7 @@ export class AppComponent implements OnDestroy {
     }
     // Smartassist
     else {
+      console.log(params);
       connectionObj['agentassisturl'] = connectionObj.envinormentUrl;
       connectionObj['jwtToken'] = params.token;
       connectionObj['accountId'] = params.accountId || '';
@@ -224,7 +225,7 @@ export class AppComponent implements OnDestroy {
         headersVal = {
             'accountId': params?.accountId,
             'Authorization': 'bearer' + ' ' + params.token,
-            'iid' : params.botid || ''
+            'iid' : params.instanceBotId || ''
         }
     }
     $.ajax({
