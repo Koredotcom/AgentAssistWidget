@@ -7,9 +7,9 @@
             </div>
         </div>
         <div class="tabs-info">
-            <button class="tab-btn" [ngClass]="{'active-btn': tab === 'basic'}" (click)="tab = 'basic'; basic=true">General Settings</button>
-            <button class="tab-btn" [ngClass]="{'active-btn': tab === 'assignment'}" (click)="tab = 'assignment'; basic=true">Assignments</button>
-            <button class="tab-btn" *ngIf="checkListType !== 'primary'" [ngClass]="{'active-btn': tab === 'trigger'}" (click)="tab = 'trigger'; loadtrigger= true; basic=false">Triggers</button>
+            <button class="tab-btn" [ngClass]="{'active-btn': tab === 'basic'}" (click)="tab = 'basic'; basic=true" title="General Settings">General Settings</button>
+            <button class="tab-btn" [ngClass]="{'active-btn': tab === 'assignment'}" (click)="tab = 'assignment'; basic=true" title="Assignments">Assignments</button>
+            <button class="tab-btn" *ngIf="checkListType !== 'primary'" [ngClass]="{'active-btn': tab === 'trigger'}" (click)="tab = 'trigger'; loadtrigger= true; basic=false" title="Triggers">Triggers</button>
         </div>
         <div class="body-data" [formGroup]="checkListForm">
             <perfect-scrollbar>
@@ -31,7 +31,7 @@
                             <div class="label-text">Type</div>
                             <div class="kr-sg-dropdowns m-b-12" ngbDropdown placement="bottom">
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{checkListForm.value?.type | titlecase}}</button>
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle [disabled]="createOrUpdate !== 'create'" [ngClass]="{'disabled': createOrUpdate !== 'create'}">{{checkListForm.value?.type | titlecase}}</button>
                                     <ul class="dropdown-menu content-menu header_in_development_drpdown p-0" ngbDropdownMenu>
                                         <!-- <ng-container *ngFor="let listType of checklistType;">
                                             <li ngbDropdownItem class="p-0" (click)="selectedChecklistType(listType)">

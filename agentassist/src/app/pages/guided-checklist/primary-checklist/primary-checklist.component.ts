@@ -67,16 +67,16 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes?.checkListType?.currentValue === 'primary'){
+    // if(changes?.checkListType?.currentValue){
       this.getPrimaryList(true);
-    }
+    // }
   }
 
   getPrimaryList(empty = false){
     if(empty){
       this.primaryCheckList = [...[]];
       this.page = 1;
-      this.limit = 10;
+      this.limit = 15;
       this.hasMore = false;
     }
     this.loading = true;
@@ -114,7 +114,7 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
     let payload : any = {
       "isActive" : currentCheckList.isActive,
       botId,
-      type: CHECKLISTCNST.primary,
+      type: currentCheckList.type,
     };
     this.loading = true;
     this.service.invoke('put.acchecklists', {botId, clId}, payload) .pipe(finalize(() => {
