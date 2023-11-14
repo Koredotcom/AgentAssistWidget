@@ -2247,7 +2247,7 @@
 
             chatWindow.prototype.renderMessage = function (msgData,elementID, runInfoContent) {
                 console.log("came inside render message function with id", msgData);
-                $(".kore-chat-window").addClass('customBranding-theme');
+                $(".kore-chat-window").addClass('liteTheme-one');
                 var me = this, messageHtml = '', extension = '', _extractedFileName = '';
                 var helpers=me.helpers;
                 msgData.createdOnTimemillis=new Date(msgData.createdOn).valueOf();
@@ -3999,7 +3999,7 @@
                         break;
                     }
                    }
-                    $(".kore-chat-window").addClass('customBranding-theme');
+                    $(".kore-chat-window").addClass('liteTheme-one');
                 }
             };
             this.applySDKBranding = function (res) {

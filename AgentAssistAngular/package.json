@@ -18,7 +18,6 @@
     "@angular/platform-browser": "^15.2.0",
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
-    "@koredev/kore-web-sdk": "10.1.9-rc.fcbcf7e",
     "@ng-bootstrap/ng-bootstrap": "^14.2.0",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",

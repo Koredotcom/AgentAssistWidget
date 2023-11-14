@@ -1,4 +1,4 @@
-<div class="assist-wrapper kore-chat-window" id="accordion">
+<div class="assist-wrapper" id="accordion">
     <div class="card-assist">
         <div class="assist-header">
             <div class="assist-header-content">
@@ -34,9 +34,12 @@
                     <button class="solid-action" aria-label="button" [ngClass]="{'disabled-msg' : !dialogName}" (click)="restartClickEvent()">
                         <i class="krIocnsFont-refresh"></i>
                     </button>
-                    <button class="solid-action stop-assist" aria-label="button" (click)="terminateDialog()" [ngClass]="{'disabled-msg' : !dialogName}">
+                    <button class="solid-action stop-assist" aria-label="button" (click)="terminateDialog(terminateCanvas)" [ngClass]="{'disabled-msg' : !dialogName}">
                         <span></span>
                     </button>
+                    <!-- <button class="solid-action stop-assist" aria-label="button" (click)="summeryModalpopup(summeryModalpopupContent)" [ngClass]="{'disabled-msg' : !dialogName}">
+                        <span></span>
+                    </button> -->
                     <button class="solid-action minimize-btn" aria-label="button" (click)="minimizeToggle()">
                         <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
                         <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
@@ -46,57 +49,72 @@
         </div>
         <div class="collapse-tab" #collapseTab>
           <div class="card-body">
-                <div class="card_body_acc_content">
-                    <!-- <ng-container [ngTemplateOutlet]="dialogStarted"></ng-container>   -->
-                    <app-tell-customer [automation]="welcomeMsgResponse" [isWelcomeMsg]="true"></app-tell-customer>
-                    <!-- <ng-container [ngTemplateOutlet]="listingTriggers"></ng-container>                    
-                    <ng-container [ngTemplateOutlet]="feedback"></ng-container>
-                    <ng-container [ngTemplateOutlet]="dialogEnded"></ng-container>                     -->
-                    <ng-container *ngFor="let res of assistResponseArray; let i = index">
-                        <ng-container *ngIf="res.type == renderResponseType.SUGGESTIONS">
-                            <!-- <div class="agent-utt-info" attr.id="agentUttInfo-{{res.uuid}}">
-                                <div class="user-img">
-                                    <img src="assets/images/userIcon.svg">
-                                </div>
-                                <div class="text-user">{{res.data.userInput}}</div>
-                            </div> -->
-                            <app-suggestions [suggestionResponse]="res" [agentassistArrayIndex]="i"
-                                [agentassistResponseArrayLength]="assistResponseArray.length"
-                                ></app-suggestions>
-                        </ng-container>
-                        <ng-container *ngIf="res.type == renderResponseType.SMALLTALK">
-                            <app-smalltalk [smallTalkData]="res" [agentassistArrayIndex]="i"
-                                [agentassistResponseArrayLength]="assistResponseArray.length"
-                                ></app-smalltalk>
-                        </ng-container>
-                        <ng-container *ngIf="res.type == renderResponseType.AUTOMATION">
-                            <app-dialog [automationData]="res" [agentassistArrayIndex]="i"
-                                [agentassistResponseArrayLength]="assistResponseArray.length"></app-dialog>
-                        </ng-container>
-                        <ng-container *ngIf="res.type == renderResponseType.FEEDBACK">
-                            <app-feedback [feedbackData]="res" (updateFeedbackProperties)="updateFeedbackProperties($event,i)"
-                                [agentassistArrayIndex]="i" [agentassistResponseArrayLength]="assistResponseArray.length">
-                            </app-feedback>
-                        </ng-container>
+            <div class="card_body_acc_content kore-chat-window">
+                <!-- <ng-container [ngTemplateOutlet]="dialogStarted"></ng-container>   -->
+                <app-tell-customer [automation]="welcomeMsgResponse" [isWelcomeMsg]="true"></app-tell-customer>
+                <!-- <ng-container [ngTemplateOutlet]="listingTriggers"></ng-container>                    
+                <ng-container [ngTemplateOutlet]="feedback"></ng-container>
+                <ng-container [ngTemplateOutlet]="dialogEnded"></ng-container>                     -->
+                <ng-container *ngFor="let res of assistResponseArray; let i = index">
+                    <ng-container *ngIf="res.type == renderResponseType.SUGGESTIONS">
+                        <!-- <div class="agent-utt-info" attr.id="agentUttInfo-{{res.uuid}}">
+                            <div class="user-img">
+                                <img src="assets/images/userIcon.svg">
+                            </div>
+                            <div class="text-user">{{res.data.userInput}}</div>
+                        </div> -->
+                        <app-suggestions [suggestionResponse]="res" [agentassistArrayIndex]="i"
+                            [agentassistResponseArrayLength]="assistResponseArray.length"
+                            ></app-suggestions>
                     </ng-container>
-                </div>
+                    <ng-container *ngIf="res.type == renderResponseType.SMALLTALK">
+                        <app-smalltalk [smallTalkData]="res" [agentassistArrayIndex]="i"
+                            [agentassistResponseArrayLength]="assistResponseArray.length"
+                            ></app-smalltalk>
+                    </ng-container>
+                    <ng-container *ngIf="res.type == renderResponseType.AUTOMATION">
+                        <app-dialog [automationData]="res" [agentassistArrayIndex]="i"
+                            [agentassistResponseArrayLength]="assistResponseArray.length"></app-dialog>
+                    </ng-container>
+                    <ng-container *ngIf="res.type == renderResponseType.FEEDBACK">
+                        <app-feedback [feedbackData]="res" (updateFeedbackProperties)="updateFeedbackProperties($event,i)"
+                            [agentassistArrayIndex]="i" [agentassistResponseArrayLength]="assistResponseArray.length">
+                        </app-feedback>
+                    </ng-container>
+                </ng-container>
+            </div>
           </div>
         </div>
-        <ng-container *ngIf="terminateClick">
-            <app-terminate (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
-        </ng-container>
-        <ng-container *ngIf="showInterruptPopup">
+        <!-- <ng-container *ngIf="showInterruptPopup">
             <app-interrupt (handlePopupEvent)="handlePopupEvent($event)" [currentDialog]="dialogName"></app-interrupt>
         </ng-container>
         <ng-container *ngIf="(showListView || showRestart) && dialogName">
             <app-listview [listView]="showListView" [restart]="showRestart" [assistResponseArray]="assistResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
         </ng-container>
         <ng-container *ngIf="showSummaryPopup">
-            <app-summary-popup (handlePopupEvent)="handlePopupEvent($event)"
-            [summaryText]="summaryText"></app-summary-popup>
-        </ng-container>
+            <app-summary-popup (handlePopupEvent)="handlePopupEvent($event)" [summaryText]="summaryText"></app-summary-popup>
+        </ng-container> -->
     </div>
 </div>
+
+<ng-template #terminateCanvas let-offcanvas>
+    <ng-container *ngIf="terminateClick">
+        <app-terminate (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
+    </ng-container>
+    <ng-container *ngIf="showInterruptPopup">
+        <app-interrupt (handlePopupEvent)="handlePopupEvent($event)" [currentDialog]="dialogName"></app-interrupt>
+    </ng-container>
+    <ng-container *ngIf="(showListView || showRestart) && dialogName">
+        <app-listview [listView]="showListView" [restart]="showRestart" [assistResponseArray]="assistResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
+    </ng-container>
+</ng-template>
+
+<ng-template #summeryModalpopupContent let-modal>
+    <ng-container>
+        <app-summary-popup></app-summary-popup>
+    </ng-container>
+</ng-template>
+
 
 <!-- Templates -->
 <ng-template #listingTriggers>

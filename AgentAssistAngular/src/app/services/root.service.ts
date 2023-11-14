@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { chatWindow } from '@koredev/kore-web-sdk';
 import { BehaviorSubject } from 'rxjs';
 import { ProjConstants } from '../proj.const';
 import { TemplateRenderClassService } from './template-render-class.service';
@@ -45,7 +44,7 @@ export class RootService {
   isUpdateFeedBackDetailsFlag: boolean = false;
 
   constructor(private templateRenderClassService: TemplateRenderClassService) {
-    this.chatWindowInstance = new chatWindow();
+    // this.chatWindowInstance = new chatWindow();
   }
 
   getConnectionDetails() {

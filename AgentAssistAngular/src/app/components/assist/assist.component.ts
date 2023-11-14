@@ -11,9 +11,9 @@ import { KoreGenerateuuidPipe } from 'src/app/pipes/kore-generateuuid.pipe';
 import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { TemplateRenderClassService } from 'src/app/services/template-render-class.service';
-import { chatWindow } from '@koredev/kore-web-sdk';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { finalize } from 'rxjs/operators';
+import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-assist',
@@ -54,6 +54,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   showListView: boolean = false;
 
   showRestart: boolean = false;
+  terminateDailogTemp:any;
 
   summaryText: string = '';
   showSummaryPopup: boolean = false;
@@ -63,7 +64,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     private websocketService: WebSocketService, private localStorageService: LocalStorageService,
     private koreGenerateuuidPipe: KoreGenerateuuidPipe, private randomUUIDPipe: RandomUuidPipe,
     private handleSubjectService: HandleSubjectService, private templateRenderClassService: TemplateRenderClassService,
-    public modalService: NgbModal) {
+    public modalService: NgbModal, private offcanvasService: NgbOffcanvas) {
 
   }
 
@@ -678,11 +679,15 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.maxButtonClick.emit(this.maxButton);
   }
 
-  terminateDialog() {
+  terminateDialog(terminateCanvas) {
+		this.offcanvasService.open(terminateCanvas, { position: 'bottom', keyboard:false, backdropClass: 'backdrop-off-canvas-terminate', panelClass: 'termincateOffCanvas', backdrop:'static' });
     this.terminateClick = true;
+	}
+
+
+  summeryModalpopup(summeryModalpopupContent){
+    this.modalService.open(summeryModalpopupContent ,{});
   }
-
-
   handlePopupEvent(popupObject) {
     if (popupObject.type == this.projConstants.TERMINATE) {
       this.terminateClick = popupObject.status;
