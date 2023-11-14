@@ -22,6 +22,7 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
   @Input() dynamicChecklist = [];
   @Input() selectedPlayBook = '';
   @Input() clObjs: any;
+  @Input() shouldShowCL = false;
   triggeredDynCheckLists = [];
   isProceedToClose = true;
   primaryObj:any = {};

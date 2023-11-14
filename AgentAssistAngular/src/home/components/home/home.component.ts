@@ -72,6 +72,7 @@ export class HomeComponent implements OnInit {
   avgHeight = 400;
   isGrab = false;
   @Input() aaSettings:any = {}
+  shouldShowCL = false;
   constructor(
     public handleSubjectService: HandleSubjectService, 
     public websocketService: WebSocketService,
@@ -1209,6 +1210,7 @@ setProactiveMode(){
     if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
       let channel = this.commonService.isCallConversation ? 'voice' : 'chat'
       if(this.commonService.primaryChecklist[0]?.channels?.includes(channel)){
+        this.shouldShowCL = true;
         this.sendChecklistEvent();
       }
     }
