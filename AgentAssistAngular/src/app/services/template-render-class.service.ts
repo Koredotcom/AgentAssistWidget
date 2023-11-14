@@ -1,11 +1,33 @@
 import { Injectable } from '@angular/core';
+declare const agentAssistChat: any;
+declare const agentAssistCustomTemplate: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class TemplateRenderClassService {
 
-  constructor() { }
+  botOptions = {};
+  AgentChatInitialize;
+  chatConfig = {
+    "chatTitle": "Kore.ai Bot Chat",
+    "container": "body",
+    botOptions: this.botOptions,
+    agentAssistUrl: "https://dev-smartassist.kore.ai",
+    urls: ['smartassist.kore.ai', 'smartassist-jp.kore.ai', 'smartassist.korebots.com', 'smartassist-de.kore.ai', 'smartassist-korevg-np.kore.ai'],
+    agentAssist: true,
+
+  };
+  constructor() {
+    this.botOptions['botInfo'] = { name: "sample Bot", "_id": 'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d' }; // bot name is case sensitive
+    this.botOptions['clientId'] = "";
+    this.botOptions['clientSecret'] = "";
+    this.chatConfig.botOptions = this.botOptions;
+    let agentAssistv2 = agentAssistChat();
+    this.AgentChatInitialize = new agentAssistv2.chatWindow(this.chatConfig);
+    this.AgentChatInitialize.customTemplateObj = new agentAssistCustomTemplate(this.chatConfig, this.AgentChatInitialize);
+    window['AgentChatInitializes'] = this.AgentChatInitialize;
+  }
 
   formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse){
 
@@ -128,7 +150,7 @@ export class TemplateRenderClassService {
       "message": [
 
       ],
-      "messageId": res?.uniqueTaskId + "-" + (new Date()).getTime(),
+      "messageId": res?.id + "-" + (new Date()).getTime(),
       "botInfo": {
         "chatBot": 'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d',
         "taskBotId": 'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d'

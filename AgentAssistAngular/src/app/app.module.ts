@@ -51,6 +51,7 @@ import { TellCustomerComponent } from './tell-customer/tell-customer.component';
 import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
 import { SummaryPopupComponent } from './components/summary-popup/summary-popup.component';
 import { LoaderComponent } from './components/common/components/loader/loader.component';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -98,7 +99,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     TellCustomerComponent,
     KoreGenerateuuidPipe,
     SummaryPopupComponent,
-    LoaderComponent
+    LoaderComponent,
+    SafeHtmlPipe
   ],
   imports: [
     TranslateModule.forRoot({
@@ -122,7 +124,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       useClass: I1,
       multi: true
   },FormatAmpmPipe,RandomUuidPipe,RemoveTagFromStringPipe, ReplaceTextWithTagPipe, ConverTimestampToDatePipe,
-   KoreGenerateuuidPipe, NgbActiveModal],
+   KoreGenerateuuidPipe, NgbActiveModal, SafeHtmlPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -63,7 +63,7 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
       hisRes = this.rootService.confirmationNodeRenderForHistoryDataTransform(hisRes);
       let result : any = this.templateRenderClassService.getResponseUsingTemplateForHistory(hisRes);
       hisRes.isTemplateRender = this.templateRenderCheck(hisRes,result);
-      hisRes.template = this.getTemplateHtml(hisRes.isTemplateRender, result);
+      hisRes.template = this.rootService.getTemplateHtml(hisRes.isTemplateRender, result);
     }
     console.log(this.historyResponse, "history respjne**********");
     
@@ -78,10 +78,6 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
           return temp_hisRes;
         }
 
-  }
-
-  getTemplateHtml(isTemplateRender, result){
-    return `<p>template</p>`;
   }
 
   templateRenderCheck(data,result){

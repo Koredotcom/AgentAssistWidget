@@ -392,7 +392,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         dialogId: this.dialogPositionId,
         responseType: this.renderResponseType.ASSISTRESPONSE
       }
-      // renderResponse.template = this.commonService.getTemplateHtml(renderResponse.isTemplateRender, result);
+      renderResponse.template = this.rootService.getTemplateHtml(renderResponse.isTemplateRender, result);
 
       if (data.isPrompt && !this.proactiveModeStatus) {
         renderResponse.toggleOverride = true;
@@ -437,7 +437,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         sendData: result?.parsedPayload ? newTemp : data?.buttons[0]?.value,
         responseType: this.renderResponseType.ASSISTRESPONSE
       }
-      // renderResponse.template = this.commonService.getTemplateHtml(renderResponse.isTemplateRender, result);
+      renderResponse.template = this.rootService.getTemplateHtml(renderResponse.isTemplateRender, result);
 
       if (data.isPrompt && !this.proactiveModeStatus) {
         renderResponse.toggleOverride = true;

@@ -35,6 +35,9 @@
                 (click)="handleSendCopyButton(projConstants.SEND, automation)">Send</button>
         </div>
         <p *ngIf="!automation.templateRender">{{automation.value}}</p>
-        <div *ngIf="automation.templateRender && automation.template" [innerHTML]="automation.template"></div>
+        <ng-container *ngIf="automation.templateRender && automation.template">
+            <ul class="chat-container" attr.id="{{automation.uuid}}"
+                                        [innerHTML]="automation.template | safeHtml"></ul>
+        </ng-container>
     </div>
 </ng-template>
