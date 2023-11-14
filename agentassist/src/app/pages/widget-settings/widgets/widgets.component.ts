@@ -32,6 +32,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   uploadInprogress: boolean = false;
   selAcc = this.localstorage.getSelectedAccount();
   imgPreview: any;
+  isLoading = true;
   iId = this.authService?.isLoadingOnSm && this.selAcc && this.selAcc?.instanceBots?.length ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
 
   landingPageTabs = {
@@ -76,20 +77,20 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.isUnifiedPlatform = this.workflowService.isUnifiedPlatform();
+    this.isUnifiedPlatform = this.workflowService?.isUnifiedPlatform();
     this.getAgentAssistSettings();
   }
 
   getAgentAssistSettings() {
     this.disableButtons = true;
-    let botId = this.workflowService.getCurrentBtSmt(true)._id
+    let botId = this.workflowService?.getCurrentBtSmt(true)._id
     let params = {
-      orgId: this.authService.getOrgId(),
+      orgId: this.authService?.getOrgId(),
     };
     let body = {
       botId
     }
-    // this.agentAssistSettings = { 
+    // this.agentAssistSettings? = { 
     //   agentAssistWidgetEnabled: true,
     //   isProactiveEnabled: true,
     //   isAgentCoachingEnabled: true,
@@ -117,9 +118,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.service.invoke("get.agentAssistSettings", params, body).subscribe(
       (res) => {
         if (res) {
+          this.isLoading = false;
           this.disableButtons = false;
           this.clonedWidgetSettings = clone(res);
-          this.agentAssistSettings ={...res.agentAssistSettings};
+          this.agentAssistSettings = {...res.agentAssistSettings};
           this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
         }
       },
@@ -135,42 +137,42 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   saveAgentAssistSettings() {
     this.disableButtons = true;
     let params = {
-      orgId: this.authService.getOrgId(),
-      aasId: this.clonedWidgetSettings.id
+      orgId: this.authService?.getOrgId(),
+      aasId: this.clonedWidgetSettings?.id
     };
     const payload = {
-      "orgId": this.authService.getOrgId(),
-      "accountId": this.localstorage.getSelectedAccount()?.accountId,
+      "orgId": this.authService?.getOrgId(),
+      "accountId": this.localstorage?.getSelectedAccount()?.accountId,
       "iId": this.iId,
       // "updatedByAId": this.clonedWidgetSettings.updatedByAId,
       // "createdByAId": this.clonedWidgetSettings.createdByAId,
       "agentAssistSettings": {
-          agentAssistWidgetEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.agentAssistWidgetEnabled : false,
-          isProactiveEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isProactiveEnabled : false,
-          isAgentCoachingEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isAgentCoachingEnabled : false,
-          isAgentResponseEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isAgentResponseEnabled :false,
-          isAgentPlaybookEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isAgentPlaybookEnabled: false,
-          isSearchAssistEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isSearchAssistEnabled : false,
+          agentAssistWidgetEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.agentAssistWidgetEnabled : false,
+          isProactiveEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isProactiveEnabled : false,
+          isAgentCoachingEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isAgentCoachingEnabled : false,
+          isAgentResponseEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isAgentResponseEnabled :false,
+          isAgentPlaybookEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isAgentPlaybookEnabled: false,
+          isSearchAssistEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isSearchAssistEnabled : false,
           isWidgetLandingEnabled : {
-            isEnabled :  this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.isEnabled : false, 
+            isEnabled :  this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.isEnabled : false, 
               chat: {
-                    isEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled : false, 
-                    tab: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.chat.tab : 'Assist'  
+                    isEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.chat.isEnabled : false, 
+                    tab: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.chat.tab : 'Assist'  
                   },
               voice: {
-                    isEnabled:  this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled : false,
-                    tab: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isWidgetLandingEnabled.voice.tab : "Transcript" 
+                    isEnabled:  this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.voice.isEnabled : false,
+                    tab: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.voice.tab : "Transcript" 
                   }
             },
             isCustomisedLogoEnabled: {
-              isEnabled: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isCustomisedLogoEnabled.isEnabled : false, 
-              fileId : this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isCustomisedLogoEnabled.fileId : '',
-            hash :  this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isCustomisedLogoEnabled.hash : '',
-            fileName: this.agentAssistSettings.agentAssistWidgetEnabled ? this.agentAssistSettings.isCustomisedLogoEnabled.fileName : ''
+              isEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isCustomisedLogoEnabled.isEnabled : false, 
+              fileId : this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isCustomisedLogoEnabled.fileId : '',
+            hash :  this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isCustomisedLogoEnabled.hash : '',
+            fileName: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isCustomisedLogoEnabled.fileName : ''
             }
       },
-      "id": this.clonedWidgetSettings.id,
-      updatedByAId: this.clonedWidgetSettings.updatedByAId
+      "id": this.clonedWidgetSettings?.id,
+      updatedByAId: this.clonedWidgetSettings?.updatedByAId
     } 
 
     this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
@@ -203,9 +205,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   selectedOption(selectedVal) {
     if (selectedVal === 'voice') {
-      this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled = !this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled;
+      this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled = !this.agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled;
     } else {
-      this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled = !this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled;
+      this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled = !this.agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled;
     }
   }
 
