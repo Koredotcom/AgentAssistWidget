@@ -92,17 +92,20 @@ export class HomeComponent implements OnInit {
     //   this.activeTab = this.aaSettings?.isWidgetLandingEnabled[this.connectionDetails.isCall]?.tab?.toUpperCase();
     // }
     this.subscribeEvents();
-    this.websocketService.sendCheckListOpened$.subscribe((data)=>{
-      if(data){
-        this.guidedListAPICall(
-          this.commonService.configObj.agentassisturl,
-          this.commonService.configObj.fromSAT ?
-            this.commonService.configObj.instanceBotId :
-            this.commonService.configObj.botid,
-          this.commonService.configObj.accessToken,
-          this.commonService.configObj.accountId)
-      }
-    })
+    if(this.aaSettings?.isAgentPlaybookEnabled) {
+      this.websocketService.sendCheckListOpened$.subscribe((data)=>{
+        if(data){
+          this.guidedListAPICall(
+            this.commonService.configObj.agentassisturl,
+            this.commonService.configObj.fromSAT ?
+              this.commonService.configObj.instanceBotId :
+              this.commonService.configObj.botid,
+            this.commonService.configObj.accessToken,
+            this.commonService.configObj.accountId)
+        }
+      })
+    }
+    
   }
 
   ngOnDestroy() {
@@ -336,8 +339,10 @@ export class HomeComponent implements OnInit {
 
   // update state based on local storage.
   updateUIState(_convId, _isCallConv) {
-    const isChatOrCall = _isCallConv === 'true' ? 'call' : 'chat';
-
+    const isChatOrCall = _isCallConv === 'true' ? 'voice' : 'chat';
+    if(this.aaSettings?.isWidgetLandingEnabled[isChatOrCall]?.tab === "mybot") {
+      this.aaSettings.isWidgetLandingEnabled[isChatOrCall].tab = "my Bot"
+    }
     $('#dynamicBlock .empty-data-no-agents').addClass('hide');
     let appState = this.localStorageService.getLocalStorageState();
     let activeTab: any;
@@ -353,7 +358,7 @@ export class HomeComponent implements OnInit {
           activeTab = storageObject[storageConst.CURRENT_TAB];
         }
       }else{
-        storageObject[storageConst.CURRENT_TAB] = isChatOrCall === 'call' ? this.projConstants.TRANSCRIPT : this.projConstants.ASSIST;
+        storageObject[storageConst.CURRENT_TAB] = isChatOrCall === 'voice' ? this.projConstants.TRANSCRIPT : this.projConstants.ASSIST;
         activeTab = storageObject[storageConst.CURRENT_TAB];
       }
       this.localStorageService.setLocalStorageItem(storageObject, activeTab);

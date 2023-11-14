@@ -22,7 +22,7 @@ import { Subscription } from 'rxjs';
 export class AppComponent implements OnDestroy {
   title = 'AgentAssistWidget';
   isGrantSuccess = false;
-  errorMsg : string = 'Loading...';
+  errorMsg : string = '';
   subsciption = new Subscription();
   wordTimeStamps: any = {};
   aaSettings = {};

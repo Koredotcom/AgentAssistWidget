@@ -6,3 +6,15 @@
     {{errorMsg}}
  </div>
 </ng-template>
+
+<div  class="notification-widget-disabled" *ngIf="!iswidgetEnabled && isErrorMsg">
+   <div class="widget-disabled-wrapper">
+       <div class="icon_block">
+           <i class="ast-warning-nudge"></i>
+       </div>
+       <div class="content-block">
+           <div class="title">Widget Disabled</div>
+           <div class="desc_info">AgentAssist Settings configuration are Disabled! Please reach out to AgentAssist Admin.</div>
+       </div>
+   </div>
+</div>
