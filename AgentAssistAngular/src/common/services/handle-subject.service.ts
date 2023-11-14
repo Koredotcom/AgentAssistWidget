@@ -24,6 +24,7 @@ export class HandleSubjectService {
   public userHistoryDataSubject$ = new BehaviorSubject<object>(null);
   public userAgentTranscriptionConversationHistory$ = new BehaviorSubject<object>(null);
   public userBotConversationDetails;
+  public agentAssistSettingsSubject = new BehaviorSubject<object>(null);
 
   assistTabSessionId = '';
   myBotTabSessionId = '';
@@ -83,6 +84,10 @@ export class HandleSubjectService {
     }
     console.log("-----------parmasObj-----------", parmasObj)
     this.connectDetailsSubject.next(parmasObj);
+  }
+
+  setAgentAssistSettings(obj) {
+    this.agentAssistSettingsSubject.next(obj);
   }
 
   setAutoBotIdFromAgentResponse(obj){
