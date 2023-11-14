@@ -32,7 +32,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   uploadInprogress: boolean = false;
   selAcc = this.localstorage.getSelectedAccount();
   imgPreview: any;
-  isLoading = false;
+  isLoading = true;
   iId = this.authService?.isLoadingOnSm && this.selAcc && this.selAcc?.instanceBots?.length ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
 
   landingPageTabs = {
@@ -118,7 +118,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.service.invoke("get.agentAssistSettings", params, body).subscribe(
       (res) => {
         if (res) {
-          this.isLoading = true;
+          this.isLoading = false;
           this.disableButtons = false;
           this.clonedWidgetSettings = clone(res);
           this.agentAssistSettings = {...res.agentAssistSettings};

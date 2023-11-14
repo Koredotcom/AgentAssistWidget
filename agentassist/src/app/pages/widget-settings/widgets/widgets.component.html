@@ -1,4 +1,7 @@
-<div *ngIf="isLoading" class="widgets-settinggs-wrapper" [ngClass]="{'agent-assist-settings-wrapper-isunified' : isUnifiedPlatform}">
+<div class='init-loading' *ngIf="isLoading">
+    <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+</div>
+<div *ngIf="!isLoading" class="widgets-settinggs-wrapper" [ngClass]="{'agent-assist-settings-wrapper-isunified' : isUnifiedPlatform}">
     <div class="header-data">
         <div class="title">
             <p>AgentAssist Settings</p>
