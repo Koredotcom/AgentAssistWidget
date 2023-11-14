@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --project kore-sales",
+    "build-app": "ng build --project kore-sales",
     "build": "ng build agentassist-sspa",
     "test": "ng test",
     "lint": "ng lint",
