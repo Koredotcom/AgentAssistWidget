@@ -20,9 +20,7 @@ export class DialogComponent {
   }
 
 
-  ngOnChanges(changes: any) {
-    console.log(this.automationData, "automation data");
-    
+  ngOnChanges(changes: any) {    
     if (this.automationData && changes?.automationData?.currentValue && changes.automationData.currentValue?.automationsArray) {
       this.automationData = changes.automationData.currentValue;
       this.formatAssistAutomation(changes.automationData.currentValue.automationsArray);
@@ -51,9 +49,7 @@ export class DialogComponent {
       }
       i++;
 
-    }
-    console.log(automationsArray, 'automations array');
-    
+    }    
   }
 
   updateSendCopyParams(automation) {

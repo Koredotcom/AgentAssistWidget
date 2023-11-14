@@ -13,7 +13,7 @@ import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { TemplateRenderClassService } from 'src/app/services/template-render-class.service';
 import { chatWindow } from '@koredev/kore-web-sdk';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { finalize} from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-assist',
@@ -25,8 +25,8 @@ export class AssistComponent implements OnInit, OnDestroy {
   @Output() maxButtonClick = new EventEmitter();
   @Input() maxButton: boolean;
 
-  @ViewChild('content', {static: false}) private content: ElementRef<HTMLDivElement>
-  @ViewChild('collapseTab', {static: false}) private collapseTab: ElementRef;
+  @ViewChild('content', { static: false }) private content: ElementRef<HTMLDivElement>
+  @ViewChild('collapseTab', { static: false }) private collapseTab: ElementRef;
 
   connectionDetails: any = {};
   subs = new SubSink();
@@ -44,15 +44,16 @@ export class AssistComponent implements OnInit, OnDestroy {
   agentAssistResponse: any = {};
   currentRunningStep: string;
   terminateClick: boolean = false;
-  smallTalkUuids : any;
+  smallTalkUuids: any;
 
   interruptDialog: any;
   showInterruptPopup: boolean = false;
-  interruptDialogList : any = [];
+  interruptDialogList: any = [];
+  interruptRun: boolean = false
 
-  showListView : boolean = false;
+  showListView: boolean = false;
 
-  showRestart : boolean = false;
+  showRestart: boolean = false;
 
   summaryText: string = '';
   showSummaryPopup: boolean = false;
@@ -62,7 +63,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     private websocketService: WebSocketService, private localStorageService: LocalStorageService,
     private koreGenerateuuidPipe: KoreGenerateuuidPipe, private randomUUIDPipe: RandomUuidPipe,
     private handleSubjectService: HandleSubjectService, private templateRenderClassService: TemplateRenderClassService,
-    public modalService : NgbModal) {
+    public modalService: NgbModal) {
 
   }
 
@@ -79,7 +80,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       try {
         this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
-      } catch (err) {}
+      } catch (err) { }
     }, 1000);
   }
 
@@ -119,14 +120,14 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.subs.sink = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
       if (runEventObj) {
         if (runEventObj && !runEventObj?.agentRunButton && !this.rootService.isAutomationOnGoing) {
-          if(runEventObj.from == this.projConstants.INTERRUPT){
+          if (runEventObj.from == this.projConstants.INTERRUPT) {
             this.interruptDialogList.splice(runEventObj.index, 1);
             this.updateInterruptDialogList();
           }
           this.runDialogForAssistTab(runEventObj);
         } else if (runEventObj && !runEventObj?.agentRunButton && this.rootService.isAutomationOnGoing) {
           this.showInterruptPopup = true;
-          this.interruptDialog = runEventObj;          
+          this.interruptDialog = runEventObj;
           // this.handlePopupEvent.emit({ status: true, type: this.projConstants.INTERRUPT });
         }
       }
@@ -142,27 +143,31 @@ export class AssistComponent implements OnInit, OnDestroy {
 
     this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
       if (endoftaskresponse && (endoftaskresponse.intType == 'assist' || endoftaskresponse.positionId === this.dialogPositionId || !endoftaskresponse.positionId)) {
-      this.dialogTerminatedOrIntruppted();
-      // this.viewCustomTempAttachment();
+        this.dialogTerminatedOrIntruppted();
+        // this.viewCustomTempAttachment();
+        if (this.interruptRun) {
+          this.interruptRun = false;
+          this.runDialogForAssistTab(this.interruptDialog);
+        }
       }
     });
 
-    this.subs.sink = this.handleSubjectService.summaryPopupSubject.subscribe((data)=> {
+    this.subs.sink = this.handleSubjectService.summaryPopupSubject.subscribe((data) => {
       this.handlePopupEvent({ status: true, type: this.projConstants.SUMMARY, summaryText: data });
     })
   }
 
-  getInterruptDialogList(){
-    let appState = this.localStorageService.getLocalStorageState();    
+  getInterruptDialogList() {
+    let appState = this.localStorageService.getLocalStorageState();
     this.interruptDialogList = appState[this.connectionDetails.conversationId][storageConst.INTERRUPT_DIALOG_LIST]
-    
+
   }
 
-  updateInterruptDialogList(){
+  updateInterruptDialogList() {
     let storageObject: any = {
       [storageConst.INTERRUPT_DIALOG_LIST]: this.interruptDialogList
     }
-    this.localStorageService.setLocalStorageItem(storageObject);    
+    this.localStorageService.setLocalStorageItem(storageObject);
   }
 
   handleProactiveDisableEvent(dialogId) {
@@ -180,7 +185,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     }
   }
 
-  processUserMessages(data) {    
+  processUserMessages(data) {
     this.assistResponseArray.map(arrEle => {
       if (arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids) {
         arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
@@ -198,13 +203,14 @@ export class AssistComponent implements OnInit, OnDestroy {
     });
   }
 
-  processUserMessagesForHistory(data, respIndex, index) {     
+  processUserMessagesForHistory(data) {
+    console.log(data, this.assistResponseArray, this.dropdownHeaderUuids, "dropdown header uuids in user message");
+    
     if (this.assistResponseArray?.length >= 1 && this.assistResponseArray[this.assistResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
       && this.assistResponseArray[this.assistResponseArray.length - 1]?.data?.isPrompt) {
-        if(data.userInput){
-          this.assistResponseArray[this.assistResponseArray.length - 1].entityValue = data.userInput;
-          this.assistResponseArray[this.assistResponseArray.length - 1].disableInput = (respIndex == index) ? false : true;
-        }
+      if (data.userInput) {
+        this.assistResponseArray[this.assistResponseArray.length - 1].entityValue = data.userInput;
+      }
     } else if (this.assistResponseArray?.length >= 1) {
       this.assistResponseArray.map(arrEle => {
         if (arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids) {
@@ -213,11 +219,8 @@ export class AssistComponent implements OnInit, OnDestroy {
             arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
             arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
             if (data.userInput) {
-              let userInput = arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput;
               arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = data.userInput;
               arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput = ProjConstants.YES;
-              arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = (respIndex == index) ? false : true;
-
             }
           }
           arrEle.automationsArray = [...arrEle.automationsArray];
@@ -225,14 +228,26 @@ export class AssistComponent implements OnInit, OnDestroy {
       });
     }
     this.assistResponseArray = structuredClone(this.assistResponseArray);
-    if(respIndex == index){
-      console.log(this.assistResponseArray, "this.assistResponseArray");
-    }
-    
-    
   }
 
-
+  processLastEntityNodeForHistory(data){
+    if (this.assistResponseArray.length >=1) {
+      this.assistResponseArray.map((arrEle, actualarrayIndex) => {
+        if (arrEle.uuid && arrEle?.automationsArray?.length) {
+            arrEle?.automationsArray.forEach((element, index) => {
+              if((index !== arrEle.automationsArray.length - 1) || (actualarrayIndex > 0 && actualarrayIndex != this.assistResponseArray.length -1)){
+                element.disableInput = true;
+              }
+            });
+          arrEle.automationsArray = [...arrEle.automationsArray];
+        }else if(arrEle.type == this.projConstants.SMALLTALK && actualarrayIndex != this.assistResponseArray.length){
+          arrEle.disableInput = true;
+        }
+      });
+    }
+    this.assistResponseArray = structuredClone(this.assistResponseArray);
+  }
+  
 
   processAgentAssistResponse(data, botId) {
     let renderResponse: any = {};
@@ -248,7 +263,10 @@ export class AssistComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.removeOrAddOverRideDivForPreviousResponse(true);
+    if (!data.sendMenuRequest) {
+      this.removeOrAddOverRideDivForPreviousResponse(true);
+    }
+
 
     if (!data.suggestions || (data.suggestions && Object.keys(data.suggestions).length == 0)) {
       data.suggestions = false;
@@ -315,7 +333,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         toggleOverride: false,
         responseType: this.renderResponseType.ASSISTRESPONSE,
         errorCount: 0,
-        value : data?.buttons[0]?.value
+        value: data?.buttons[0]?.value
       }
 
       if (data.isPrompt && !this.proactiveModeStatus) {
@@ -583,7 +601,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     }
   }
 
-  filterAutomationByPositionId() {
+  filterAutomationByPositionId() {    
     this.assistResponseArray.map(arrEle => {
       if (arrEle.dialogId && arrEle.dialogId == this.dialogPositionId) {
         arrEle.endAutomation = true;
@@ -593,6 +611,8 @@ export class AssistComponent implements OnInit, OnDestroy {
   }
 
   removeOrAddOverRideDivForPreviousResponse(flag) {
+    console.log("remove override div for previous response ***********", flag, this.assistResponseArray);
+    
     if (flag) {
       if (this.assistResponseArray?.length > 1 && this.assistResponseArray[this.assistResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
         && this.assistResponseArray[this.assistResponseArray.length - 1]?.data?.isPrompt) {
@@ -629,11 +649,9 @@ export class AssistComponent implements OnInit, OnDestroy {
   }
 
   prepareFeedbackData(feedbackData?) {
-    if(this.assistResponseArray){
-      let type = this.assistResponseArray[this.assistResponseArray.length -1]?.type;
-      console.log(type, "type *********",this.dialogPositionId);
-      
-      if(type == this.renderResponseType.AUTOMATION){
+    if (this.assistResponseArray) {
+      let type = this.assistResponseArray[this.assistResponseArray.length - 1]?.type;
+      if (type == this.renderResponseType.AUTOMATION) {
         this.rootService.manualAssistOverrideMode = false;
         let renderResponse: any = {
           type: this.renderResponseType.FEEDBACK,
@@ -644,7 +662,7 @@ export class AssistComponent implements OnInit, OnDestroy {
           submitForm: feedbackData?.feedback ? true : false,
           feedback: feedbackData?.feedback ? feedbackData.feedback : '',
           feedbackDetails: feedbackData?.feedbackDetails?.length ? feedbackData.feedbackDetails : [],
-          comment : feedbackData?.comment ? feedbackData?.comment : ''
+          comment: feedbackData?.comment ? feedbackData?.comment : ''
         }
         this.assistResponseArray.push(renderResponse);
         this.assistResponseArray = [...this.assistResponseArray];
@@ -682,18 +700,18 @@ export class AssistComponent implements OnInit, OnDestroy {
       if (this.showInterruptPopup) {
         this.showInterruptPopup = false;
         // this.dialogTerminatedOrIntruppted();
+        this.interruptRun = true;
         this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
-        this.runDialogForAssistTab(this.interruptDialog);
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
         let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
-        if(index < 0){
+        if (index < 0) {
           this.interruptDialogList.push(this.interruptDialog);
           this.updateInterruptDialogList();
         }
       }
-    } else if(popupObject.type == this.projConstants.LISTVIEW){
-       this.showListView = popupObject.status;
+    } else if (popupObject.type == this.projConstants.LISTVIEW) {
+      this.showListView = popupObject.status;
     } else if (popupObject.type == this.projConstants.SUMMARY) {
       this.rootService.activeTab == this.projConstants.ASSIST;
       this.summaryText = popupObject.summaryText || '';
@@ -703,21 +721,19 @@ export class AssistComponent implements OnInit, OnDestroy {
           name: "agentAssist.conversation_summary",
           conversationId: this.connectionDetails.conversationId,
           payload: {
-            "summary" : [
+            "summary": [
               {
                 'summary_text': popupObject.editedSummary || '',
               }
             ]
           }
         };
-        console.log(message, "message****");
-        
         window.parent.postMessage(message, '*');
       }
     }
   }
 
-  restartClickEvent(){
+  restartClickEvent() {
     this.showSummaryPopup = true;
     this.showRestart = true;
     this.modalService.open(this.content);
@@ -727,7 +743,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     let feedback = this.assistFeedback(params);
     let history = this.assistHistory(params);
     this.handleSubjectService.setLoader(true);
-    forkJoin([feedback, history]).pipe(finalize(()=> {this.handleSubjectService.setLoader(false)})).subscribe(res => {
+    forkJoin([feedback, history]).pipe(finalize(() => { this.handleSubjectService.setLoader(false) })).subscribe(res => {
       let feedbackData = res[0]?.results || [];
       let historyData = res[1] || [];
       // let historyData = this.rootService.getMockData();
@@ -758,11 +774,13 @@ export class AssistComponent implements OnInit, OnDestroy {
 
     resp = this.rootService.formatHistoryResponseForFAQ(resp);
     resp?.forEach((res, index) => {
+      console.log(index, "index*****");
+      
 
       res = this.rootService.confirmationNodeRenderForHistoryDataTransform(res);
       res = this.rootService.formatHistoryResonseToNormalRender(res);
       // this.removeOrAddOverRideDivForPreviousResponse(true);
-      
+
       if ((res.suggestions || res.ambiguityList) && res.type == 'outgoing' && res.faqResponse) {
 
         res.suggestions.faqs.forEach(faq => {
@@ -815,19 +833,13 @@ export class AssistComponent implements OnInit, OnDestroy {
 
       if ((!res.suggestions && !res.ambiguityList && !res.ambiguity) && res.type == 'outgoing') {
 
-        currentTaskPositionId = res.positionId ? res.positionId :  ((res.intentName != currentTaskName) ? null : currentTaskPositionId);
-        currentTaskName = (res.intentName) ? res.intentName : currentTaskName;
-        this.dialogPositionId = currentTaskPositionId;
-        this.rootService.currentPositionId = this.dialogPositionId;
-        this.dialogName = currentTaskName
-        let uuids = this.koreGenerateuuidPipe.transform();
-        
-        if(res.endOfTask && previousId){                  
+
+        if (res.endOfTask && previousId) {
           let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
-          
+
           this.filterAutomationByPositionId();
           this.prepareFeedbackData(previousIdFeedBackDetails);
-          this.automationFlagUpdate(previousId,false);
+          this.automationFlagUpdate(previousId, false);
           this.automationFlagUpdateForSmallTalk(previousId, false);
 
           this.updateOverrideStatusOfAutomation(previousId);
@@ -836,9 +848,18 @@ export class AssistComponent implements OnInit, OnDestroy {
           previousTaskPositionId = currentTaskPositionId;
           currentTaskName = null;
           currentTaskPositionId = null;
-        }else if (res.intentName && !previousId && previousTaskPositionId !== currentTaskPositionId && !res.endOfTask) {
+        } 
+
+        currentTaskPositionId = res.positionId ? res.positionId : ((res.intentName != currentTaskName) ? null : currentTaskPositionId);
+        currentTaskName = (res.intentName) ? res.intentName : currentTaskName;
+        this.dialogPositionId = currentTaskPositionId;
+        this.rootService.currentPositionId = this.dialogPositionId;
+        this.dialogName = currentTaskName
+        let uuids = this.koreGenerateuuidPipe.transform();
+        
+        if (res.intentName && !previousId && previousTaskPositionId !== currentTaskPositionId && !res.endOfTask) {
           // update postionids and dialogue start
-          
+
           let automationUUIDCheck = this.assistResponseArray.findIndex((automation) => {
             if (automation.uuid == res._id) {
               return true;
@@ -850,7 +871,7 @@ export class AssistComponent implements OnInit, OnDestroy {
 
           if (automationUUIDCheck == -1) {
             previousId = res._id;
-            this.automationFlagUpdate(previousId,true);
+            this.automationFlagUpdate(previousId, true);
             previousTaskPositionId = currentTaskPositionId;
             previousTaskName = currentTaskName;
             let renderResponse = {
@@ -861,7 +882,7 @@ export class AssistComponent implements OnInit, OnDestroy {
               dialogName: currentTaskName,
               connectionDetails: this.connectionDetails,
               showAutomation: true,
-              value : res?.components[0]?.data?.text
+              value: res?.components[0]?.data?.text
             }
             this.assistResponseArray.push(renderResponse);
             this.assistResponseArray = [...this.assistResponseArray];
@@ -870,32 +891,32 @@ export class AssistComponent implements OnInit, OnDestroy {
               this.dialogPositionId = previousTaskPositionId;
               this.rootService.currentPositionId = this.dialogPositionId;
             }
-            
+
           }
         }
-        
+
 
         //process user messages
         if (res.entityName && res.entityResponse && (res.entityValue || res.userInput)) {
-             res.userInput = res.userInput ? res.userInput : res.entityValue;
-             this.processUserMessagesForHistory(res,resp.length - 1, index);
+          res.userInput = res.userInput ? res.userInput : res.entityValue;
+          this.processUserMessagesForHistory(res);
         }
-       
+
         if (res.entityName) {
           this.agentAssistResponse = Object.assign({}, res);
         }
-        
+
         let result: any = this.templateRenderClassService.getResponseUsingTemplateForHistory(res);
-        
+
         this.rootService.currentPositionId = currentTaskPositionId;
         let msgStringify = JSON.stringify(result);
         let newTemp = encodeURI(msgStringify);
-        
+
         if (result.message.length > 0) {
           // automation
-          
+
           if (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
-          
+
             renderResponse = {
               data: res,
               type: this.renderResponseType.AUTOMATION,
@@ -906,7 +927,7 @@ export class AssistComponent implements OnInit, OnDestroy {
               proactiveModeStatus: this.proactiveModeStatus,
               toggleOverride: false,
               responseType: this.renderResponseType.ASSISTRESPONSE,
-              value : res?.components[0]?.data?.text
+              value: res?.components[0]?.data?.text
             }
 
             if (res.isPrompt && !this.proactiveModeStatus) {
@@ -927,8 +948,8 @@ export class AssistComponent implements OnInit, OnDestroy {
 
             this.assistResponseArray = structuredClone(this.assistResponseArray);
 
-          }else if((previousTaskName != currentTaskName)){
-          //small talk after dialogue terminate
+          } else if ((previousTaskName != currentTaskName)) {
+            //small talk after dialogue terminate
             this.automationFlagUpdateForSmallTalk(previousId, true);
             renderResponse = {
               data: res,
@@ -951,14 +972,15 @@ export class AssistComponent implements OnInit, OnDestroy {
             this.assistResponseArray = [...this.assistResponseArray];
           }
         }
-      }      
+      }
+      this.processLastEntityNodeForHistory(res);
 
       // feedback, for tellcustomer as end of node
       if ((resp.length - 1 == index && (!res.entityRequest && !res.entityResponse) && previousTaskPositionId && currentTaskPositionId == previousTaskPositionId)) {
         let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
         this.filterAutomationByPositionId();
         this.prepareFeedbackData(previousIdFeedBackDetails);
-        this.automationFlagUpdate(previousId,false)
+        this.automationFlagUpdate(previousId, false)
         this.updateOverrideStatusOfAutomation(previousId);
         previousId = undefined;
         previousTaskName = currentTaskName;
@@ -972,7 +994,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.scrollToBottom();
   }
 
-  updateOverrideStatusOfAutomation(previousId){
+  updateOverrideStatusOfAutomation(previousId) {
     this.assistResponseArray.map(arrEle => {
       if (arrEle.uuid && arrEle.uuid == previousId) {
         arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
@@ -985,11 +1007,11 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.assistResponseArray = structuredClone(this.assistResponseArray);
   }
 
-  automationFlagUpdateForSmallTalk(previousId, flag){
+  automationFlagUpdateForSmallTalk(previousId, flag) {
     this.smallTalkUuids = flag ? previousId : null;
   }
 
-  automationFlagUpdate(previousId,flag){
+  automationFlagUpdate(previousId, flag) {
     if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
       this.rootService.isAutomationOnGoing = flag;
       this.dropdownHeaderUuids = previousId;
@@ -999,7 +1021,6 @@ export class AssistComponent implements OnInit, OnDestroy {
       this.localStorageService.setLocalStorageItem(storageObject);
     }
   }
-
 
   //interrupt run click
 

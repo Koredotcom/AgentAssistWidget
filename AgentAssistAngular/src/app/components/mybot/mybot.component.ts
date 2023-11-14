@@ -44,6 +44,7 @@ export class MybotComponent {
   interruptDialog: any;
   showInterruptPopup: boolean = false;
   interruptDialogList : any = [];
+  interruptRun : boolean = false;
 
   showListView : boolean = false;
 
@@ -98,6 +99,10 @@ export class MybotComponent {
       
       if (runEventObj) {
         if (runEventObj.agentRunButton && !this.rootService.isMyBotAutomationOnGoing) {
+          if(runEventObj.from == this.projConstants.INTERRUPT){
+            this.interruptDialogList.splice(runEventObj.index, 1);
+            this.updateInterruptDialogList();
+          }
           this.runDialogFormyBotTab(runEventObj);
         } else if (runEventObj.agentRunButton && this.rootService.isMyBotAutomationOnGoing) {
           this.interruptDialog = runEventObj;
@@ -110,6 +115,10 @@ export class MybotComponent {
       if (endoftaskresponse && (endoftaskresponse.intType == 'myBot' || endoftaskresponse.positionId === this.myBotDialogPositionId)) {
         this.dialogTerminatedOrIntrupptedInMyBot();
         // this.viewCustomTempAttachment();
+        if (this.interruptRun) {
+          this.interruptRun = false;
+          this.runDialogFormyBotTab(this.interruptDialog);
+        }
       }
     })
 
@@ -262,11 +271,14 @@ export class MybotComponent {
         this.showInterruptPopup = false;
         this.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, true)
         this.dialogTerminatedOrIntrupptedInMyBot();
-        this.runDialogFormyBotTab(this.interruptDialog);
+        // this.runDialogFormyBotTab(this.interruptDialog);
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
-        this.interruptDialogList.push({name : this.interruptDialog});
-        this.updateInterruptDialogList();
+        let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
+        if(index < 0){
+          this.interruptDialogList.push(this.interruptDialog);
+          this.updateInterruptDialogList();
+        }
       }
     } else if(popupObject.type == this.projConstants.LISTVIEW){
        this.showListView = popupObject.status;
@@ -399,13 +411,6 @@ export class MybotComponent {
 
 
       if ((!res.suggestions && !res.ambiguityList && !res.ambiguity) && res.type == 'outgoing') {
-
-        currentTaskPositionId = res.positionId ? res.positionId :  ((res.intentName != currentTaskName) ? null : currentTaskPositionId);
-        currentTaskName = (res.intentName) ? res.intentName : currentTaskName;
-        this.myBotDialogPositionId = currentTaskPositionId;
-        this.rootService.currentPositionId = this.myBotDialogPositionId;
-        this.dialogName = currentTaskName
-        let uuids = this.koreGenerateuuidPipe.transform();
         
         if(res.endOfTask && previousId){                  
           let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
@@ -421,7 +426,16 @@ export class MybotComponent {
           previousTaskPositionId = currentTaskPositionId;
           currentTaskName = null;
           currentTaskPositionId = null;
-        }else if (res.intentName && !previousId && previousTaskPositionId !== currentTaskPositionId && !res.endOfTask) {
+        }
+
+        currentTaskPositionId = res.positionId ? res.positionId :  ((res.intentName != currentTaskName) ? null : currentTaskPositionId);
+        currentTaskName = (res.intentName) ? res.intentName : currentTaskName;
+        this.myBotDialogPositionId = currentTaskPositionId;
+        this.rootService.currentPositionId = this.myBotDialogPositionId;
+        this.dialogName = currentTaskName
+        let uuids = this.koreGenerateuuidPipe.transform();
+        
+        if (res.intentName && !previousId && previousTaskPositionId !== currentTaskPositionId && !res.endOfTask) {
           // update postionids and dialogue start
           
           let automationUUIDCheck = this.mybotResponseArray.findIndex((automation) => {
@@ -463,7 +477,7 @@ export class MybotComponent {
         //process user messages
         if (res.entityName && res.entityResponse && (res.entityValue || res.userInput)) {
              res.userInput = res.userInput ? res.userInput : res.entityValue;
-             this.processUserMessagesForHistory(res,resp.length - 1, index);
+             this.processUserMessagesForHistory(res);
         }
        
         if (res.entityName) {
@@ -534,7 +548,9 @@ export class MybotComponent {
             this.mybotResponseArray = [...this.mybotResponseArray];
           }
         }
-      }      
+      } 
+      
+      this.processLastEntityNodeForHistory();
 
       // feedback, for tellcustomer as end of node
       if ((resp.length - 1 == index && (!res.entityRequest && !res.entityResponse) && previousTaskPositionId && currentTaskPositionId == previousTaskPositionId)) {
@@ -554,13 +570,12 @@ export class MybotComponent {
     this.scrollToBottom();
   }
 
-  processUserMessagesForHistory(data, respIndex, index) {     
+  processUserMessagesForHistory(data) {    
     if (this.mybotResponseArray?.length >= 1 && this.mybotResponseArray[this.mybotResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
       && this.mybotResponseArray[this.mybotResponseArray.length - 1]?.data?.isPrompt) {
-        if(data.userInput){
-          this.mybotResponseArray[this.mybotResponseArray.length - 1].entityValue = data.userInput;
-          this.mybotResponseArray[this.mybotResponseArray.length - 1].disableInput = (respIndex == index) ? false : true;
-        }
+      if (data.userInput) {
+        this.mybotResponseArray[this.mybotResponseArray.length - 1].entityValue = data.userInput;
+      }
     } else if (this.mybotResponseArray?.length >= 1) {
       this.mybotResponseArray.map(arrEle => {
         if (arrEle.uuid && arrEle.uuid == this.myBotDropdownHeaderUuids) {
@@ -569,11 +584,8 @@ export class MybotComponent {
             arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
             arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
             if (data.userInput) {
-              let userInput = arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput;
               arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = data.userInput;
               arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput = ProjConstants.YES;
-              arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = (respIndex == index) ? false : true;
-
             }
           }
           arrEle.automationsArray = [...arrEle.automationsArray];
@@ -581,12 +593,26 @@ export class MybotComponent {
       });
     }
     this.mybotResponseArray = structuredClone(this.mybotResponseArray);
-    if(respIndex == index){
-      console.log(this.mybotResponseArray, "this.mybotResponseArray");
-    }
-    
-    
   }
+
+  processLastEntityNodeForHistory(){
+    if (this.mybotResponseArray.length >=1) {
+      this.mybotResponseArray.map((arrEle, actualarrayIndex) => {
+        if (arrEle.uuid && arrEle?.automationsArray?.length) {
+            arrEle?.automationsArray.forEach((element, index) => {
+              if((index !== arrEle.automationsArray.length - 1) || (actualarrayIndex > 0 && actualarrayIndex != this.mybotResponseArray.length -1)){
+                element.disableInput = true;
+              }
+            });
+          arrEle.automationsArray = [...arrEle.automationsArray];
+        }else if(arrEle.type == this.projConstants.SMALLTALK && actualarrayIndex != this.mybotResponseArray.length){
+          arrEle.disableInput = true;
+        }
+      });
+    }
+    this.mybotResponseArray = structuredClone(this.mybotResponseArray);
+  }
+  
 
   automationFlagUpdateForSmallTalk(previousId, flag){
     this.smallTalkUuids = flag ? previousId : null;
@@ -615,6 +641,18 @@ export class MybotComponent {
       }
     });
     this.mybotResponseArray = structuredClone(this.mybotResponseArray);
+  }
+
+   //interrupt run click
+
+   dialogueRunClick(dialog, index) {
+    dialog.positionId = this.randomUUIDPipe.transform('positionId');
+    dialog.intentName = dialog.name;
+    dialog.userInput = dialog.name;
+    dialog.agentRunButton = false;
+    dialog.from = this.projConstants.INTERRUPT;
+    dialog.index = index
+    this.handleSubjectService.setRunButtonClickEvent(dialog);
   }
 
 

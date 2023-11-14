@@ -5,7 +5,7 @@
                 <div class="left-title-info">
                     <h1>Assist</h1>
                     
-                    <div ngbDropdown class="dropdown playbook-drp" #interruptDropdown="ngbDropdown">
+                    <div ngbDropdown class="dropdown playbook-drp" #interruptDropdown="ngbDropdown" *ngIf="interruptDialogList?.length">
                         <button type="button" id="playbookDrp" ngbDropdownToggle>
                             <!-- <span>Open</span> -->
                             <i class="krIocnsFont-chevron-down arrow-icon"></i>
