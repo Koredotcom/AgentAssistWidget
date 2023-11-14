@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { connectionObj, ProjConstants } from 'src/common/constants/proj.cnts';
+import { connectionObj, ProjConstants, storageConst } from 'src/common/constants/proj.cnts';
 import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { CommonService } from 'src/common/services/common.service';
@@ -25,6 +25,9 @@ export class AppComponent implements OnDestroy {
   errorMsg : string = '';
   subsciption = new Subscription();
   wordTimeStamps: any = {};
+  aaSettings = {};
+  iswidgetEnabled = false;
+  isErrorMsg = false;
   constructor(private webSocketService: WebSocketService,
               private service: CommonService,
               private route: ActivatedRoute,
@@ -91,13 +94,13 @@ export class AppComponent implements OnDestroy {
       console.log(res, "sucess")
       // this.isGrantSuccess = true;
       this.service.grantResponseObj = res;
-     this.initiateSocketConnection(params);
+      this.getAgentAssistSettings(params);
     }).catch((err) => {
       this.handleSubjectService.setLoader(false);
       if (err.status === 500) {
         this.errorMsg = "Issue identified with the backend services! Please reach out to AgentAssist Admin.";
       } else {
-        this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin.";
+        // this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin.";
       }
       this.isGrantSuccess = false;
     });
@@ -198,16 +201,58 @@ export class AppComponent implements OnDestroy {
     }
     // Smartassist
     else {
+      console.log(params);
       connectionObj['agentassisturl'] = connectionObj.envinormentUrl;
       connectionObj['jwtToken'] = params.token;
       connectionObj['accountId'] = params.accountId || '';
       connectionObj['userId'] = params.userId || '';
       connectionObj['orgId']= params.orgId || '';
       connectionObj['fromSAT'] = params.fromSAT || false;
-      this.initiateSocketConnection(params);
+      this.getAgentAssistSettings(params);
     }
+  }
 
-
+  getAgentAssistSettings(params) {
+    // api call
+    let paramsCopy = {...params};
+    let headersVal : any = {};
+    if(!this.service.configObj.fromSAT) {
+        headersVal = {
+            'Authorization': 'bearer' + ' ' + this.service.grantResponseObj?.authorization?.accessToken,
+            'eAD': false,
+            'accountId': this.service.grantResponseObj?.userInfo?.accountId,
+            'iid' : this.service.configObj.botid ? this.service.configObj.botid : ''
+        }
+        paramsCopy.instanceBotId = this.service.configObj.botid;
+    } else {
+        headersVal = {
+            'accountId': paramsCopy?.accountId,
+            'Authorization': 'bearer' + ' ' + paramsCopy.token,
+            'iid' : paramsCopy.instanceBotId || ''
+        }
+    }
+    $.ajax({
+      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${paramsCopy.instanceBotId}/agentassistsetting`,
+      type: 'get',
+      headers: headersVal,
+      dataType: 'json',
+      success:  (data) => {
+        this.aaSettings = data.agentAssistSettings;
+        this.service.configObj = {...this.service.configObj, ...this.aaSettings};
+        this.iswidgetEnabled = this.aaSettings['agentAssistWidgetEnabled'];
+        if(data.agentAssistSettings?.agentAssistWidgetEnabled) { 
+        this.initiateSocketConnection(paramsCopy);
+        this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
+        } else {
+          this.iswidgetEnabled = data?.agentAssistSettings?.agentAssistWidgetEnabled;
+        this.errorMsg = "AgentAssist Settings configuration are Disabled! Please reach out to AgentAssist Admin.";
+        }
+        this.isErrorMsg = true;
+    },
+      error:  (err)=> {
+          console.error("Unable to fetch the details with the provided data", err);
+      }
+    });
   }
 
 }

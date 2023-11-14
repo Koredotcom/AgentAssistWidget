@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EVENTS } from 'src/common/helper/events';
 import { WebSocketService } from 'src/common/services/web-socket.service';
@@ -15,7 +15,8 @@ import { CoachingActionStoreService } from 'src/app/coaching-action-store.servic
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { EChartsOption } from 'echarts';
 import { ChecklistsComponent } from 'src/assist-tab/components/checklists/checklists.component';
-// import { ServiceInvokerService } from 'src/common/services/service-invoker.service';
+import { TitleCasePipe } from '@angular/common';
+  // import { ServiceInvokerService } from 'src/common/services/service-invoker.service';
 declare const $: any;
 @Component({
   selector: 'app-home',
@@ -70,6 +71,7 @@ export class HomeComponent implements OnInit {
   selectedPlayBook = '';
   avgHeight = 400;
   isGrab = false;
+  @Input() aaSettings:any = {}
   shouldShowCL = false;
   constructor(
     public handleSubjectService: HandleSubjectService, 
@@ -80,23 +82,30 @@ export class HomeComponent implements OnInit {
     private designAlterService: DesignAlterService, 
     private localStorageService: LocalStorageService,
     private cdRef : ChangeDetectorRef,
-    private randomUUIDPipe : RandomUUIDPipe 
+    private randomUUIDPipe : RandomUUIDPipe,
+    private titlecasePipe:TitleCasePipe
   ) {}
     
 
   ngOnInit(): void {
+    // if(this.aaSettings?.isWidgetLandingEnabled[this.connectionDetails.isCall]?.isEnabled){
+    //   this.activeTab = this.aaSettings?.isWidgetLandingEnabled[this.connectionDetails.isCall]?.tab?.toUpperCase();
+    // }
     this.subscribeEvents();
-    this.websocketService.sendCheckListOpened$.subscribe((data)=>{
-      if(data){
-        this.guidedListAPICall(
-          this.commonService.configObj.agentassisturl,
-          this.commonService.configObj.fromSAT ?
-            this.commonService.configObj.instanceBotId :
-            this.commonService.configObj.botid,
-          this.commonService.configObj.accessToken,
-          this.commonService.configObj.accountId)
-      }
-    })
+    if(this.aaSettings?.isAgentPlaybookEnabled) {
+      this.websocketService.sendCheckListOpened$.subscribe((data)=>{
+        if(data){
+          this.guidedListAPICall(
+            this.commonService.configObj.agentassisturl,
+            this.commonService.configObj.fromSAT ?
+              this.commonService.configObj.instanceBotId :
+              this.commonService.configObj.botid,
+            this.commonService.configObj.accessToken,
+            this.commonService.configObj.accountId)
+        }
+      })
+    }
+    
   }
 
   ngOnDestroy() {
@@ -171,11 +180,9 @@ export class HomeComponent implements OnInit {
     let subscription2 = this.handleSubjectService.connectDetailsSubject.subscribe((urlParams: any) => {
       if (urlParams && urlParams?.token) {
         this.commonService.isCallConversation = (urlParams.isCall && urlParams.isCall == "true") ? true : false;
-        this.localStorageService.initializeLocalStorageState();
+        
         this.connectionDetails = urlParams;
         this.eventListenerFromParent();
-        this.updateUIState(this.connectionDetails.conversationId, urlParams.isCall);
-        this.btnInit();
       }
     });
 
@@ -218,6 +225,14 @@ export class HomeComponent implements OnInit {
       }
     });
 
+    let subscription9 = this.handleSubjectService.agentAssistSettingsSubject.subscribe((settings: any) => {
+      this.aaSettings = settings;
+      this.localStorageService.initializeLocalStorageState();
+      console.log(this.commonService.configObj);
+      this.updateUIState(this.connectionDetails.conversationId, this.connectionDetails.isCall);
+      this.btnInit();
+    })
+
 
 
     this.subscriptionsList.push(subscription1);
@@ -228,6 +243,7 @@ export class HomeComponent implements OnInit {
     this.subscriptionsList.push(subscription6);
     this.subscriptionsList.push(subscription7);
     this.subscriptionsList.push(subscription8);
+    this.subscriptionsList.push(subscription9);
   }
 
   handleRealtimeSentiResponse(data){
@@ -323,6 +339,10 @@ export class HomeComponent implements OnInit {
 
   // update state based on local storage.
   updateUIState(_convId, _isCallConv) {
+    const isChatOrCall = _isCallConv === 'true' ? 'voice' : 'chat';
+    if(this.aaSettings?.isWidgetLandingEnabled[isChatOrCall]?.tab === "mybot") {
+      this.aaSettings.isWidgetLandingEnabled[isChatOrCall].tab = "my Bot"
+    }
     $('#dynamicBlock .empty-data-no-agents').addClass('hide');
     let appState = this.localStorageService.getLocalStorageState();
     let activeTab: any;
@@ -331,12 +351,15 @@ export class HomeComponent implements OnInit {
     }
     if (appState[_convId] && !appState[_convId][storageConst.CURRENT_TAB]) {
       let storageObject: any = {};
-      if (_isCallConv == 'true') {
-        storageObject[storageConst.CURRENT_TAB] = this.projConstants.TRANSCRIPT;
-        activeTab = this.projConstants.TRANSCRIPT;
-      } else {
-        storageObject[storageConst.CURRENT_TAB] = this.projConstants.ASSIST;
-        activeTab = this.projConstants.ASSIST;
+      
+      if(this.aaSettings.isWidgetLandingEnabled?.isEnabled ) {
+        if(this.aaSettings.isWidgetLandingEnabled[isChatOrCall].isEnabled) {
+          storageObject[storageConst.CURRENT_TAB] = (this.titlecasePipe.transform(this.aaSettings.isWidgetLandingEnabled[isChatOrCall].tab) || this.projConstants.ASSIST);
+          activeTab = storageObject[storageConst.CURRENT_TAB];
+        }
+      }else{
+        storageObject[storageConst.CURRENT_TAB] = isChatOrCall === 'voice' ? this.projConstants.TRANSCRIPT : this.projConstants.ASSIST;
+        activeTab = storageObject[storageConst.CURRENT_TAB];
       }
       this.localStorageService.setLocalStorageItem(storageObject, activeTab);
     } else if (appState[_convId] && appState[_convId][storageConst.CURRENT_TAB]) {
@@ -509,9 +532,9 @@ setProactiveMode(){
   let appState : any = this.localStorageService.getLocalStorageState();
   let convState = appState[this.connectionDetails.conversationId];
   if(this.connectionDetails.source == this.projConstants.SMARTASSIST_SOURCE && typeof convState[storageConst.PROACTIVE_MODE] != 'boolean'){
-    convState[storageConst.PROACTIVE_MODE] = this.connectionDetails.isProactiveAgentAssistEnabled;
+    convState[storageConst.PROACTIVE_MODE] =  this.aaSettings?.isProactiveEnabled || true;
   }
-  let proactiveModeStatus = (typeof convState[storageConst.PROACTIVE_MODE] === 'boolean') ? convState[storageConst.PROACTIVE_MODE] : true;
+  let proactiveModeStatus = (typeof convState[storageConst.PROACTIVE_MODE] === 'boolean') ? this.aaSettings?.isProactiveEnabled : true;
   this.proactiveToggle(proactiveModeStatus);
 }
 

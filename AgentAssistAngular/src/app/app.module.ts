@@ -7,9 +7,10 @@ import { SharedModule } from 'src/common/shared.module';
 import { HomeModule } from 'src/home/home.module';
 import { FormsModule } from '@angular/forms';
 import { WebSocketService } from '../common/services/web-socket.service';
+import { TitleCasePipe } from '@angular/common';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -18,7 +19,8 @@ import { WebSocketService } from '../common/services/web-socket.service';
     SharedModule,
     HomeModule
   ],
-  providers: [WebSocketService],
-  bootstrap: [AppComponent]
+  providers: [WebSocketService, TitleCasePipe],
+  bootstrap: [AppComponent],
+  exports: []
 })
 export class AppModule { }
