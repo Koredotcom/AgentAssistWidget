@@ -1,4 +1,4 @@
-<div class="widgets-settinggs-wrapper" [ngClass]="{'agent-assist-settings-wrapper-isunified' : isUnifiedPlatform}">
+<div *ngIf="isLoading" class="widgets-settinggs-wrapper" [ngClass]="{'agent-assist-settings-wrapper-isunified' : isUnifiedPlatform}">
     <div class="header-data">
         <div class="title">
             <p>AgentAssist Settings</p>
