@@ -895,7 +895,7 @@ input[type=number]::-webkit-outer-spin-button {
                                                 -moz-osx-font-smoothing: grayscale;
                                                 border-color: #039855;
                                                 background: #039855;
-                                                font-size: 9px;
+                                                font-size: 10px;
                                                 color: #fff;
                                                 display: flex;
                                                 align-items: center;
@@ -972,6 +972,7 @@ input[type=number]::-webkit-outer-spin-button {
     .mat-input-element{
         margin: 0 !important;
         height: 31px;
+        padding-left: 10px;
     }
     .mat-form-field-label-wrapper{
         top: -13px;
@@ -987,6 +988,7 @@ input[type=number]::-webkit-outer-spin-button {
     .mat-chip-list-wrapper{
         gap: 4px;
         margin: 0 !important;
+        border: 0 !important;
         .mat-chip{
             display: flex;
             align-items: center;
