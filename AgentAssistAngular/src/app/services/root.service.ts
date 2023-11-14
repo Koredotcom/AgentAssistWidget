@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { chatWindow } from '@koredev/kore-web-sdk';
 import { BehaviorSubject } from 'rxjs';
 import { ProjConstants } from '../proj.const';
+import { TemplateRenderClassService } from './template-render-class.service';
+import * as $ from 'jquery';
 
+declare var $: any;
 @Injectable({
   providedIn: 'root'
 })
@@ -41,8 +43,8 @@ export class RootService {
 
   isUpdateFeedBackDetailsFlag: boolean = false;
 
-  constructor() {
-    this.chatWindowInstance = new chatWindow();
+  constructor(private templateRenderClassService: TemplateRenderClassService) {
+    // this.chatWindowInstance = new chatWindow();
   }
 
   getConnectionDetails() {
@@ -453,10 +455,20 @@ export class RootService {
     return agent_assist_request;
   }
 
-  getTemplateHtml(isTemplateRender, result) {
-    let renderMessage = isTemplateRender ? this.chatWindowInstance.generateMessageDOM(result) : '';
-    if (renderMessage) {
-      let obj = renderMessage.outerHTML
+  // getTemplateHtml(isTemplateRender, result) {
+  //   let renderMessage = isTemplateRender ? this.chatWindowInstance.generateMessageDOM(result) : '';
+  //   if (renderMessage) {
+  //     let obj = renderMessage.outerHTML
+  //     return (obj);
+  //   }
+  //   return null;
+  // }
+
+
+  getTemplateHtml(isTemplateRender, result){
+    let renderedMessage = isTemplateRender ? this.templateRenderClassService?.AgentChatInitialize?.renderMessage(result) : '';
+    if (renderedMessage && renderedMessage[0]) {
+      let obj =  $(this.templateRenderClassService.AgentChatInitialize.renderMessage(result))[0].outerHTML
       return (obj);
     }
     return null;

@@ -212,7 +212,7 @@ export class MybotComponent {
         hideOverrideDiv: true,
         toggleOverride: data.isPrompt ? true : false
       }
-      // renderResponse.template = this.rootService.getTemplateHtml(renderResponse.isTemplateRender, results);
+      renderResponse.template = this.rootService.getTemplateHtml(renderResponse.isTemplateRender, results);
 
       if (this.mybotResponseArray?.length > 1 && this.mybotResponseArray[this.mybotResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
         && this.mybotResponseArray[this.mybotResponseArray.length - 1]?.data?.isPrompt) {

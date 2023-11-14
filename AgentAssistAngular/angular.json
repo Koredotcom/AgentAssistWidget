@@ -31,11 +31,35 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/css/jquery-ui.min.css",
+              "src/assets/css/daterangepicker.css",
+              "src/assets/css/jquery-clockpicker.css",
+              "src/assets/css/kore-pickers.css",
+              "src/assets/css/chatWindow.css",
+              "src/assets/css/emojione.sprites.css",
+              "src/assets/css/purejscarousel.css",
+              "src/assets/css/customTemplate.css",
+              "src/assets/css/adaptivecards.css"
             ],
             "scripts": [
               "node_modules/@popperjs/core/dist/umd/popper.js",
-              "src/assets/bootstrap/dist/js/bootstrap.bundle.min.js"
+              "src/assets/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "src/agent-assistv2/jquery-ui.min.js",
+              "src/agent-assistv2/jquery.tmpl.min.js",
+              "src/agent-assistv2/kore-bot-sdk-client.js",
+              "src/agent-assistv2/emoji.js",
+              "src/agent-assistv2/d3.v4.min.js",
+              "src/agent-assistv2/purejscarousel.js",
+              "src/agent-assistv2/adaptivecards.js",
+              "src/agent-assistv2/kore-adaptive-cards-plugin.js",
+              "src/agent-assistv2/agentAssistChatWindow.js",
+              "src/agent-assistv2/converterHelper.js",
+              "src/agent-assistv2/agentAssistHelpers.js",
+              "src/agent-assistv2/agentAssistCustomTemplate.js",
+              "src/agent-assistv2/KoreGraphAdapter.js",
+              "src/agent-assistv2/socketConnection.js"
             ]
           },
           "configurations": {

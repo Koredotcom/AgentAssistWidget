@@ -20,7 +20,10 @@
         <!-- <div class="sent-msg-text">Sent</div> -->
         <!-- <p>{{automation.data.buttons[0].value}}</p> -->
         <p *ngIf="!automation.templateRender">{{automation.value}}</p>
-        <div *ngIf="automation.templateRender && automation.template" [innerHTML]="automation.template"></div>
+        <ng-container *ngIf="automation.templateRender && automation.template">
+            <ul class="chat-container" attr.id="{{automation.uuid}}"
+                                        [innerHTML]="automation.template | safeHtml"></ul>
+        </ng-container>
     </div>
 </ng-template>
 
