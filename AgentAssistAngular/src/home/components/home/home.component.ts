@@ -534,7 +534,7 @@ setProactiveMode(){
   if(this.connectionDetails.source == this.projConstants.SMARTASSIST_SOURCE && typeof convState[storageConst.PROACTIVE_MODE] != 'boolean'){
     convState[storageConst.PROACTIVE_MODE] =  this.aaSettings?.isProactiveEnabled || true;
   }
-  let proactiveModeStatus = (typeof convState[storageConst.PROACTIVE_MODE] === 'boolean') ? this.aaSettings?.isProactiveEnabled : true;
+  let proactiveModeStatus = (typeof convState[storageConst.PROACTIVE_MODE] === 'boolean') ? convState[storageConst.PROACTIVE_MODE] : this.aaSettings?.isProactiveEnabled;
   this.proactiveToggle(proactiveModeStatus);
 }
 
