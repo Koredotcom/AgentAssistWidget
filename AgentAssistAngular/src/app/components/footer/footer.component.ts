@@ -42,6 +42,8 @@ export class FooterComponent implements OnInit, OnDestroy{
     this.rootService.socketConnection$.subscribe(res => {
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();
+        console.log(this.connectionDetails, 'connectionDetilas');
+        
         this.updateActiveTab();
       }
     });

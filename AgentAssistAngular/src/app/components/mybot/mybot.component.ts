@@ -119,7 +119,10 @@ export class MybotComponent {
         this.dialogTerminatedOrIntrupptedInMyBot();
         if (this.interruptRun) {
           this.interruptRun = false;
-          this.runDialogFormyBotTab(this.interruptDialog);
+          let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
+          console.log(index, "index");
+          index = index < 0 ? 0 : index;
+          this.dialogueRunClick(this.interruptDialog,index)
         }
         this.viewCustomTempAttachment();
       }

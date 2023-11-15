@@ -2349,6 +2349,7 @@
                         });
                     }
                     else if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "quick_replies") {
+                        console.log(msgData, "msgData*******");
                         messageHtml = $(me.getChatTemplate("templatequickreply")).tmpl({
                             'msgData': msgData,
                             'helpers': helpers,
@@ -2559,7 +2560,7 @@
                                     var _piechartObj = { 'id': 'piechart' + msgData.messageId, 'data': data, 'options': options, 'type': 'piechart' };
                                     available_charts.push(_piechartObj);
                                     var container = document.getElementById('piechart' + msgData.messageId);
-                                    console.log(container, "container ******");
+                                    // console.log(container, "container ******");
                                     var chart = new google.visualization.PieChart(container);
                                     chart.draw(data, options);
                                     //window.PieChartCount = window.PieChartCount + 1;
@@ -2577,7 +2578,7 @@
                                 dimens.height = 200;
                                 dimens.legendRectSize = 10;
                                 dimens.legendSpacing = 2.4;
-                                console.log(msgData.message[0].component.payload.pie_type, "pie chart type *******8");
+                                // console.log(msgData.message[0].component.payload.pie_type, "pie chart type *******8");
                                 if (msgData.message[0].component.payload.pie_type === "regular") {
                                     setTimeout(function () {
                                         var _piechartObj = { 'id': 'piechart' + msgData.messageId, 'data': msgData, 'type': 'regular' };

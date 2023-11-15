@@ -140,6 +140,8 @@ export class TemplateRenderClassService {
         "buttons": list
       }
     }
+    console.log(_msgsResponse, "msgs response");
+    
     return _msgsResponse;
   }
 
@@ -221,7 +223,10 @@ export class TemplateRenderClassService {
       _msgsResponse.parsedPayload = parsedPayload;
 
     });
+    console.log(res.srcChannel, "src channel");
+    
     if (res.srcChannel && res.srcChannel !== 'msteams') {
+      console.log(res.entityType, "entity type ********");
       if (res.componentType === 'dialogAct') {
         let actualStringFromBE = '';
         if (res && res?.buttons && res?.buttons[0]?.value?.includes('text')) {
@@ -235,13 +240,19 @@ export class TemplateRenderClassService {
         }
         _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
 
-      } else if (res.entityType === "list_of_values" && !res.buttons[0].value.includes('payload')) {
+      } else if (res.entityType === "list_of_values" && !res.buttons[0].value.includes('payload')) {;
+      
+        
         let arr = [];
         if (res.buttons[0]?.value?.includes('text')) {
+          console.log("inside if **********");
+          
           let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
           let str1 = JSON.parse(str);
           arr = str1.text.split('\n');
         } else {
+          console.log("inside else *********");
+          
           arr = res.buttons[0].value.split('\n');
         }
         _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);

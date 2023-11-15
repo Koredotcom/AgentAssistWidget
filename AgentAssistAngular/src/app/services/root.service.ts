@@ -72,6 +72,11 @@ export class RootService {
           parmasObj['autoBotId'] = '';
         }
       }
+      else if (key == "isCall"){
+        if (parmasObj[key] && (parmasObj[key] !== "undefined" && parmasObj[key] !== null)) {
+          parmasObj['isCallConversation'] = (parmasObj[key] == "true") ? true : false
+        }
+      }
     }
     this.connectionDetails = parmasObj;
   }
@@ -86,7 +91,7 @@ export class RootService {
       'positionId': data?.positionId,
       'childBotId': data?.childBotId || '',
       'childBotName': data?.childBotName || '',
-      'intType': 'mybot'
+      'intType': 'myBot'
     }
     if (data.intentName) {
       agent_assist_agent_request_params.intentName = data.intentName;
@@ -199,7 +204,9 @@ export class RootService {
     }
     if (suggestions?.searchassist?.snippets?.length > 0) {
       for (let snippet of snippersArray) {
-        searchResponse.snippets.push(snippet);
+        if(snippet.title){
+          searchResponse.snippets.push(snippet);
+        }
       }
       for (let snippet of searchResponse.snippets) {
         snippet.showMoreButton = true;
@@ -471,6 +478,8 @@ export class RootService {
 
 
   getTemplateHtml(isTemplateRender, result){
+    console.log(isTemplateRender, "is template render", result);
+    
     let renderedMessage = isTemplateRender ? this.templateRenderClassService?.AgentChatInitialize?.renderMessage(result) : '';
     if (renderedMessage && renderedMessage[0]) {
       let obj =  $(this.templateRenderClassService.AgentChatInitialize.renderMessage(result))[0].outerHTML

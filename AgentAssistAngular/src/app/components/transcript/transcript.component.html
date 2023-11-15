@@ -15,57 +15,64 @@
             </div> -->
           <!-- </ng-container> -->
 
-        <div class="transcipt-content-data">
-            <ng-container *ngIf="userBotConversationShow">
-                <app-user-bot-history></app-user-bot-history>
-            </ng-container>
-            <div>
-                <span #transcriptTabHistoryText>{{transcriptScrollTopText}}</span>
-            </div>
-            <!-- <ng-container [ngTemplateOutlet]="summeryTranscipt"></ng-container> -->
-            <app-transcript-history></app-transcript-history>
-            <ng-container *ngFor="let trans of transcriptArray">
-                <div class="transcipt-bot-bubble-comp" *ngIf="trans.type == projConstants.INCOMING">
-                    <div class="bot-bubble-content hover-show-copy">
-                        <div class="top-info">
-                            <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName + this.parsedCustomData?.lName) ||
-                                'Customer'}}</div>
-                            <div class="time-tamp"><time>{{trans.timeStr}}</time></div>
-                        </div>
-                        <div class="bubble-msg-with-img">
-                            <div class="bubble-msg">{{trans.data.value}}</div>
-                            <div class="intent-suggestion-buld" ngbTooltip="trans.data.value" *ngIf="trans.data.count" (click)="buldClick(trans)">
-                                <sub *ngIf="!trans.data.bulbClick">{{trans.data.count}}</sub>
-                                <sub *ngIf="!trans.data.bulbClick">&#10003;</sub>
-                                <i class="krIocnsFont-light-bulb"></i>
+          <ng-container *ngIf="connectionDetails?.isCallConversation">
+            <div class="transcipt-content-data">
+                <ng-container *ngIf="userBotConversationShow">
+                    <app-user-bot-history></app-user-bot-history>
+                </ng-container>
+                <div>
+                    <!-- <span #transcriptTabHistoryText>{{transcriptScrollTopText}}</span> -->
+                </div>
+                <!-- <ng-container [ngTemplateOutlet]="summeryTranscipt"></ng-container> -->
+                <app-transcript-history></app-transcript-history>
+                <ng-container *ngFor="let trans of transcriptArray">
+                    <div class="transcipt-bot-bubble-comp" *ngIf="trans.type == projConstants.INCOMING">
+                        <div class="bot-bubble-content hover-show-copy">
+                            <div class="top-info">
+                                <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName + this.parsedCustomData?.lName) ||
+                                    'Customer'}}</div>
+                                <div class="time-tamp"><time>{{trans.timeStr}}</time></div>
                             </div>
-                            <!-- <div class="copy-bubble">
-                               <i class="krIocnsFont-copy"></i>
-                            </div> -->
+                            <div class="bubble-msg-with-img">
+                                <div class="bubble-msg">{{trans.data.value}}</div>
+                                <div class="intent-suggestion-buld" ngbTooltip="{{trans.data.value}}" *ngIf="trans.count" (click)="buldClick(trans)">
+                                    <sub *ngIf="!trans.data.bulbClick">{{trans.count}}</sub>
+                                    <sub *ngIf="trans.data.bulbClick">&#10003;</sub>
+                                    <i class="krIocnsFont-light-bulb"></i>
+                                </div>
+                                <!-- <div class="copy-bubble">
+                                   <i class="krIocnsFont-copy"></i>
+                                </div> -->
+                            </div>
                         </div>
                     </div>
-                </div>
-               
-                <div class="transcipt-agent-bubble-comp" *ngIf="trans.type == projConstants.OUTGOING">
-                    <div class="agent-bubble-content hover-show-copy">
-                        <div class="top-info">
-                            <div class="time-tamp"><time>{{trans.timeStr}}</time></div>
-                            <div class="you-text">You</div>
-                        </div>
-                        <div class="bubble-msg-with-img">
-                            <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
-                                <sub>1</sub>
-                                <i class="krIocnsFont-light-bulb"></i>
-                            </div> -->
-                            <div class="bubble-msg">{{trans.data.value}}</div>
-                            <!-- <div class="copy-bubble">
-                                <i class="krIocnsFont-copy"></i>
-                            </div> -->
+                   
+                    <div class="transcipt-agent-bubble-comp" *ngIf="trans.type == projConstants.OUTGOING">
+                        <div class="agent-bubble-content hover-show-copy">
+                            <div class="top-info">
+                                <div class="time-tamp"><time>{{trans.timeStr}}</time></div>
+                                <div class="you-text">You</div>
+                            </div>
+                            <div class="bubble-msg-with-img">
+                                <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
+                                    <sub>1</sub>
+                                    <i class="krIocnsFont-light-bulb"></i>
+                                </div> -->
+                                <div class="bubble-msg">{{trans.data.value}}</div>
+                                <!-- <div class="copy-bubble">
+                                    <i class="krIocnsFont-copy"></i>
+                                </div> -->
+                            </div>
                         </div>
                     </div>
-                </div>
-            </ng-container>            
-        </div>
+                </ng-container>            
+            </div>
+
+          </ng-container>
+          <ng-container *ngIf="!connectionDetails?.isCallConversation && sourceDesktop != projConstants.SMARTASSIST_SOURCE">
+            <app-user-bot-history></app-user-bot-history>
+          </ng-container>
+       
     </div>
 </div>
 

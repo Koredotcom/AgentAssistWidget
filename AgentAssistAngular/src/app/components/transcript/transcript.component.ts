@@ -42,7 +42,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.subscribeEvents();
-    this.sampleMessages();
+    // this.sampleMessages();
   }
 
   sampleMessages(){
@@ -152,7 +152,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     });
 
     this.subs.sink = this.handleSubjectService.callConversationSuggestions$.subscribe((response: any) => {
-      console.log("------------resposne of agent request")
+      console.log("------------resposne of agent request", response)
       if (response?.data && Object.keys(response?.data).length > 0) {
         this.processAssistResponse(response);
       }
@@ -214,7 +214,8 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
   processAssistResponse(response){
 
-    let data = this.rootService.confirmationNodeRenderDataTransform(response.data);
+    // let data = this.rootService.confirmationNodeRenderDataTransform(response.data);
+    let data = response?.data;;
   
     if (this.connectionDetails.isCallConversation === true && data.suggestions) {
 

@@ -26,6 +26,18 @@ export class AskCustomerComponent {
     if (this.automation?.toggleOverride) {
       this.inputName = this.projConstants.OVERRIDE;
     }
+    this.hideSendAndCopy();
+  }
+
+  hideSendAndCopy(){
+    // Both send and copy
+    this.automation.hideActionButtons = ((this.automation.connectionDetails.isCallConversation) ||
+       (this.automation.templateRender && this.automation.template && this.automation.connectionDetails.source != this.projConstants.SMARTASSIST_SOURCE)) ? true : false;
+
+    // only copy button
+    if(this.automation.templateRender && this.automation.template && this.automation.connectionDetails.source == this.projConstants.SMARTASSIST_SOURCE){
+      this.automation.hideCopyButton = true; 
+    }
   }
 
   confirmOverride() {

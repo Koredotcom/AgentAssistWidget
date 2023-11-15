@@ -4,12 +4,15 @@
             <div class="assist-header-content">
                 <div class="left-title-info">
                     <h1>My Bot</h1>
-                    <div ngbDropdown class="dropdown playbook-drp" #interruptDropdown="ngbDropdown" *ngIf="interruptDialogList?.length">
+                    <span class="dialogs-number" *ngIf="interruptDialogList?.length">{{interruptDialogList?.length}}</span>
+
+                    
+                    <div ngbDropdown class="dropdown" #interruptDropdown="ngbDropdown" *ngIf="interruptDialogList?.length">
                         <button type="button" id="playbookDrp" ngbDropdownToggle>
-                            <!-- <span>Open</span> -->
                             <i class="krIocnsFont-chevron-down arrow-icon"></i>
                         </button>
                         <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
+                            <div class="heading-text-scripts">INTERUPTED  DIALOG TASK</div>
                             <div class="dialog-task-wrapper" *ngFor="let dialog of interruptDialogList; let i = index">
                                 <div class="title-paragraph">
                                     <p>{{dialog.name}}</p>
@@ -20,6 +23,7 @@
                             </div>
                         </div>
                     </div>
+                
                     <div class="bottom-titles">
                         <p *ngIf="dialogName">{{dialogName}}</p>
                         <span *ngIf="dialogName && currentRunningStep">Step: <b>{{currentRunningStep}}</b></span>
