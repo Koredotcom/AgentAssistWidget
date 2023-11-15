@@ -34,6 +34,10 @@ export class FooterComponent implements OnInit, OnDestroy{
     this.subscribeEvents();
   }
 
+  ngAfterViewInit(){
+    this.minMaxButtonClick(true);
+  }
+
   subscribeEvents(){
     this.rootService.socketConnection$.subscribe(res => {
       if(res){
@@ -62,8 +66,8 @@ export class FooterComponent implements OnInit, OnDestroy{
     if(!this.canvas){
       this.openCanvas(canvas);
     }
-    let className = 'if-maximized-canvas';
-    this.renderer.removeClass(this.document.body, className);
+    // let className = 'if-maximized-canvas';
+    // this.renderer.removeClass(this.document.body, className);
   }
 
   updateActiveTab(){
@@ -81,7 +85,6 @@ export class FooterComponent implements OnInit, OnDestroy{
 	}
 
   minMaxButtonClick(event){
-    console.log("parent class ****");
     let className = 'if-maximized-canvas';
     if(this.document.body.classList.contains(className)){
       this.renderer.removeClass(this.document.body, className);

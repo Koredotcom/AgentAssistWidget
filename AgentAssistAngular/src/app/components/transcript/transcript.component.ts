@@ -56,7 +56,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     this.subs.sink = this.rootService.socketConnection$.subscribe(res => {
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();
-        this.getTranscriptData(this.connectionDetails);
+        // this.getTranscriptData(this.connectionDetails);
         if (this.connectionDetails.customdata) {
           let decodedCustomData = decodeURI(this.connectionDetails.customdata);
           if (decodedCustomData) {
@@ -151,23 +151,31 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
       }
     });
 
+    this.subs.sink = this.handleSubjectService.callConversationSuggestions$.subscribe((response: any) => {
+      console.log("------------resposne of agent request")
+      if (response?.data && Object.keys(response?.data).length > 0) {
+        this.processAssistResponse(response);
+      }
+    });
+
+
   }
 
-  getTranscriptData(params){
-    this.getUserBotHistory(params);
-  }
+  // getTranscriptData(params){
+  //   this.getUserBotHistory(params);
+  // }
 
-  getUserBotHistory(params){
-    let userBotConversationDetails = this.rootService.getUserBotConvosDataDetails();
-    let botId = userBotConversationDetails?.botId || params?.botId;
-    let userId = userBotConversationDetails?.userId;
-    let sessionId = userBotConversationDetails?.sessionId;  
-    if((userBotConversationDetails?.botId || this.rootService.connectionDetails?.botId) && userBotConversationDetails?.userId && userBotConversationDetails?.sessionId) {
-      this.serviceInvoker.invoke('get.userBotHistory', { botId: botId, convId: params.conversationId, userId, sessionId }, {}, { transcriptHistory: 'true', botId : botId }, params.agentassisturl).subscribe((res)=> {
+  // getUserBotHistory(params){
+  //   let userBotConversationDetails = this.rootService.getUserBotConvosDataDetails();
+  //   let botId = userBotConversationDetails?.botId || params?.botId;
+  //   let userId = userBotConversationDetails?.userId;
+  //   let sessionId = userBotConversationDetails?.sessionId;  
+  //   if((userBotConversationDetails?.botId || this.rootService.connectionDetails?.botId) && userBotConversationDetails?.userId && userBotConversationDetails?.sessionId) {
+  //     this.serviceInvoker.invoke('get.userBotHistory', { botId: botId, convId: params.conversationId, userId, sessionId }, {}, { transcriptHistory: 'true', botId : botId }, params.agentassisturl).subscribe((res)=> {
         
-      });
-    }
-  }
+  //     });
+  //   }
+  // }
 
   processUserMessage(response) {
     this.rootService.connectionDetails.isCallConversation === true ? this.processTranscriptData(response) : '';
@@ -202,6 +210,27 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     
     // this.scrollToBottom();
     // this.updateNewMessageUUIDList(uuid, IdReferenceConst.CURRENTUSER_BUBBLE);
+  }
+
+  processAssistResponse(response){
+
+    let data = this.rootService.confirmationNodeRenderDataTransform(response.data);
+  
+    if (this.connectionDetails.isCallConversation === true && data.suggestions) {
+
+      let bulbCount = (data.suggestions.dialogs?.length || 0) + (data.suggestions.faqs?.length || 0) + (data.suggestions.searchassist?.snippets?.length || 0) + (this.rootService.formatSearchResponse(data)?.articles?.length || 0);
+
+      let userBubbleIndex = this.transcriptArray.findLastIndex((data) => data.type == ProjConstants.INCOMING);
+
+      this.transcriptArray[userBubbleIndex].count = bulbCount;
+      this.transcriptArray[userBubbleIndex].suggestionUUID = response.uuid;
+    }
+  }
+
+  buldClick(trans){
+    trans.data.bulbClick = true;
+    this.rootService.setActiveTab(this.projConstants.ASSIST);
+    // this.designAlterService.scrollToEle(`automationSuggestions-${trans.data.suggestionUUID}`)
   }
 
   minMaxButtonClick(){

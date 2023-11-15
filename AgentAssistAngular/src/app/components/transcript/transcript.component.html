@@ -19,10 +19,10 @@
             <ng-container *ngIf="userBotConversationShow">
                 <app-user-bot-history></app-user-bot-history>
             </ng-container>
-            <!-- <div>
+            <div>
                 <span #transcriptTabHistoryText>{{transcriptScrollTopText}}</span>
-            </div> -->
-            <ng-container [ngTemplateOutlet]="summeryTranscipt"></ng-container>
+            </div>
+            <!-- <ng-container [ngTemplateOutlet]="summeryTranscipt"></ng-container> -->
             <app-transcript-history></app-transcript-history>
             <ng-container *ngFor="let trans of transcriptArray">
                 <div class="transcipt-bot-bubble-comp" *ngIf="trans.type == projConstants.INCOMING">
@@ -34,8 +34,9 @@
                         </div>
                         <div class="bubble-msg-with-img">
                             <div class="bubble-msg">{{trans.data.value}}</div>
-                            <div class="intent-suggestion-buld" ngbTooltip="bala">
-                                <sub>1</sub>
+                            <div class="intent-suggestion-buld" ngbTooltip="trans.data.value" *ngIf="trans.data.count" (click)="buldClick(trans)">
+                                <sub *ngIf="!trans.data.bulbClick">{{trans.data.count}}</sub>
+                                <sub *ngIf="!trans.data.bulbClick">&#10003;</sub>
                                 <i class="krIocnsFont-light-bulb"></i>
                             </div>
                             <!-- <div class="copy-bubble">

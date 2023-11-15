@@ -12,6 +12,7 @@ import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { EVENTS } from 'src/app/helpers/events';
 import { finalize} from 'rxjs/operators';
+import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-mybot',
@@ -22,6 +23,7 @@ export class MybotComponent {
 
   @Output() maxMinButtonClick = new EventEmitter();
   @ViewChild('collapseTab', {static: false}) private collapseTab: ElementRef;
+  @ViewChild('terminateCanvas', {static : false}) private canvas : ElementRef<HTMLDivElement>
 
   
   connectionDetails: any = {};
@@ -55,12 +57,12 @@ export class MybotComponent {
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
     private websocketService : WebSocketService, private templateRenderClassService : TemplateRenderClassService,
     private koreGenerateuuidPipe : KoreGenerateuuidPipe, private randomUUIDPipe : RandomUuidPipe,
-    private handleSubjectService : HandleSubjectService, private localStorageService : LocalStorageService){
+    private handleSubjectService : HandleSubjectService, private localStorageService : LocalStorageService,
+    private offcanvasService: NgbOffcanvas){
 
   }
 
   ngOnInit(): void {
-    
     this.subscribeEvents();
   }
 
@@ -90,7 +92,7 @@ export class MybotComponent {
     this.subs.sink = this.websocketService.agentAssistAgentResponse$.subscribe((response: any) => {
       if (response && !response.isSearch) {
         this.processMybotDataResponse(response);
-        // this.viewCustomTempAttachment();
+        this.viewCustomTempAttachment();
       }
     });
 
@@ -107,6 +109,7 @@ export class MybotComponent {
         } else if (runEventObj.agentRunButton && this.rootService.isMyBotAutomationOnGoing) {
           this.interruptDialog = runEventObj;
           this.showInterruptPopup = true;
+          this.openOffCanvas();
         }
       }
     });
@@ -114,11 +117,11 @@ export class MybotComponent {
     this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
       if (endoftaskresponse && (endoftaskresponse.intType == 'myBot' || endoftaskresponse.positionId === this.myBotDialogPositionId)) {
         this.dialogTerminatedOrIntrupptedInMyBot();
-        // this.viewCustomTempAttachment();
         if (this.interruptRun) {
           this.interruptRun = false;
           this.runDialogFormyBotTab(this.interruptDialog);
         }
+        this.viewCustomTempAttachment();
       }
     })
 
@@ -258,6 +261,17 @@ export class MybotComponent {
     this.mybot_run_click(data, true)
   }
 
+  openOffCanvas(){
+    console.log("open off canvas");
+    
+		this.offcanvasService.open(this.canvas, { position: 'bottom', keyboard:false, backdropClass: 'backdrop-off-canvas-terminate', panelClass: 'termincateOffCanvas', backdrop:'static' });
+  }
+
+  closeOffCanvas(){
+    this.offcanvasService.dismiss();
+  }
+
+
   handlePopupEvent(popupObject) {
     if (popupObject.type == this.projConstants.TERMINATE) {
       this.terminateClick = popupObject.status;
@@ -265,23 +279,34 @@ export class MybotComponent {
         this.terminateClick = false;
         this.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, true)
       } 
+      if(!this.terminateClick){
+        this.closeOffCanvas();
+      }
     } else if (popupObject.type == this.projConstants.INTERRUPT) {
       this.showInterruptPopup = popupObject.status;
       if (this.showInterruptPopup) {
         this.showInterruptPopup = false;
-        this.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, true)
-        this.dialogTerminatedOrIntrupptedInMyBot();
-        // this.runDialogFormyBotTab(this.interruptDialog);
+        // this.dialogTerminatedOrIntruppted();
+        this.interruptRun = true;
+        this.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId)
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
         let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
-        if(index < 0){
+        if (index < 0) {
           this.interruptDialogList.push(this.interruptDialog);
           this.updateInterruptDialogList();
         }
       }
-    } else if(popupObject.type == this.projConstants.LISTVIEW){
-       this.showListView = popupObject.status;
+      if(!this.showInterruptPopup){
+        this.closeOffCanvas();
+      }
+    } else if (popupObject.type == this.projConstants.LISTVIEW) {
+      this.showListView = popupObject.status;
+      if(!this.showListView){
+        this.closeOffCanvas();
+      }else{
+        this.openOffCanvas();
+      }
     }
   }
 
@@ -359,6 +384,7 @@ export class MybotComponent {
   }
 
   terminateDialog() {
+    this.openOffCanvas();
     this.terminateClick = true;
   }
 
@@ -654,6 +680,12 @@ export class MybotComponent {
     dialog.index = index
     this.handleSubjectService.setRunButtonClickEvent(dialog);
   }
+
+  viewCustomTempAttachment(){
+    this.websocketService.CustomTempClickEvents(this.projConstants.MYBOT, this.connectionDetails)
+  }
+
+
 
 
 }

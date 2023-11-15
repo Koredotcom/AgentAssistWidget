@@ -9,7 +9,7 @@ import { SubSink } from 'subsink';
 })
 export class BodyComponent implements OnInit{
 
-  assistMaxButtonClick : boolean = false;
+  assistMaxButtonClick : boolean = true;
   checkListMaxButtonClick : boolean = false;
   isLoader : boolean = false;
 

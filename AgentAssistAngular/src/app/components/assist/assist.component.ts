@@ -27,6 +27,7 @@ export class AssistComponent implements OnInit, OnDestroy {
 
   @ViewChild('content', { static: false }) private content: ElementRef<HTMLDivElement>
   @ViewChild('collapseTab', { static: false }) private collapseTab: ElementRef;
+  @ViewChild('terminateCanvas', {static : false}) private canvas : ElementRef<HTMLDivElement>
 
   connectionDetails: any = {};
   subs = new SubSink();
@@ -38,7 +39,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   dialogName: string;
   dialogPositionId: string;
 
-  welcomeMsgResponse: any;
+  welcomeMsgResponse: any = {};
   dropdownHeaderUuids: any;
   assistResponseArray: any = [];
   agentAssistResponse: any = {};
@@ -58,6 +59,7 @@ export class AssistComponent implements OnInit, OnDestroy {
 
   summaryText: string = '';
   showSummaryPopup: boolean = false;
+  showErrorPrompt : boolean = false;
 
 
   constructor(private rootService: RootService, private serviceInvoker: ServiceInvokerService,
@@ -103,7 +105,7 @@ export class AssistComponent implements OnInit, OnDestroy {
           this.connectionDetails['autoBotId'] = response?.autoBotId ? response.autoBotId : undefined;
         }
         this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
-        // this.viewCustomTempAttachment()
+        this.viewCustomTempAttachment();
       }
     });
 
@@ -113,13 +115,14 @@ export class AssistComponent implements OnInit, OnDestroy {
           return;
         } else {
           this.processUserMessages(response);
+          this.viewCustomTempAttachment();
         }
 
       }
     });
 
     this.subs.sink = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
-      if (runEventObj) {
+      if (runEventObj) {        
         if (runEventObj && !runEventObj?.agentRunButton && !this.rootService.isAutomationOnGoing) {
           if (runEventObj.from == this.projConstants.INTERRUPT) {
             this.interruptDialogList.splice(runEventObj.index, 1);
@@ -129,7 +132,8 @@ export class AssistComponent implements OnInit, OnDestroy {
         } else if (runEventObj && !runEventObj?.agentRunButton && this.rootService.isAutomationOnGoing) {
           this.showInterruptPopup = true;
           this.interruptDialog = runEventObj;
-          // this.handlePopupEvent.emit({ status: true, type: this.projConstants.INTERRUPT });
+          this.openOffCanvas();
+          // this.handlePopupEvent({ status: true, type: this.projConstants.INTERRUPT });
         }
       }
     });
@@ -144,12 +148,15 @@ export class AssistComponent implements OnInit, OnDestroy {
 
     this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
       if (endoftaskresponse && (endoftaskresponse.intType == 'assist' || endoftaskresponse.positionId === this.dialogPositionId || !endoftaskresponse.positionId)) {
+        if(this.showListView){
+          this.handlePopupEvent({type : this.projConstants.LISTVIEW, status : false});
+        }
         this.dialogTerminatedOrIntruppted();
-        // this.viewCustomTempAttachment();
         if (this.interruptRun) {
           this.interruptRun = false;
           this.runDialogForAssistTab(this.interruptDialog);
         }
+        this.viewCustomTempAttachment();
       }
     });
 
@@ -186,27 +193,39 @@ export class AssistComponent implements OnInit, OnDestroy {
     }
   }
 
-  processUserMessages(data) {
-    this.assistResponseArray.map(arrEle => {
-      if (arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids) {
-        arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
-        if (data.userInput && arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
-          arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
-          arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
-          if (data.userInput) {
-            let userInput = arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput;
-            arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = data.userInput;
-            arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput = userInput ? userInput : ProjConstants.YES;
-          }
+  processUserMessages(data) {    
+    if(this.assistResponseArray?.length && this.assistResponseArray[this.assistResponseArray.length -1]?.type == this.renderResponseType.SMALLTALK &&
+      this.assistResponseArray[this.assistResponseArray.length -1]?.data?.isPrompt){
+        if (data.userInput) {          
+          this.assistResponseArray[this.assistResponseArray.length - 1].entityValue = data.userInput;
+          this.assistResponseArray[this.assistResponseArray.length - 1].hideOverrideDiv = true;
+          this.assistResponseArray[this.assistResponseArray.length - 1].toggleOverride = false;
+          this.assistResponseArray[this.assistResponseArray.length - 1].userInput = data.userInput ? data.userInput : ProjConstants.YES;
         }
-        arrEle.automationsArray = [...arrEle.automationsArray];
-      }
-    });
+    }else if(this.assistResponseArray.length){
+      this.showErrorPrompt = data.isErrorPrompt ? true : false;
+      this.assistResponseArray.map(arrEle => {
+        if (arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids) {
+          arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
+          if (data.userInput && arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
+            arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
+            arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
+            if (data.userInput) {
+              let userInput = arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput;
+              arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = data.userInput;
+              arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput = userInput ? userInput : ProjConstants.YES;
+            }
+            if(!this.showErrorPrompt){
+              arrEle.automationsArray[arrEle.automationsArray.length - 1].errorCount = 0;
+            }
+          }
+          arrEle.automationsArray = [...arrEle.automationsArray];
+        }
+      });
+    }
   }
 
-  processUserMessagesForHistory(data) {
-    console.log(data, this.assistResponseArray, this.dropdownHeaderUuids, "dropdown header uuids in user message");
-    
+  processUserMessagesForHistory(data) {    
     if (this.assistResponseArray?.length >= 1 && this.assistResponseArray[this.assistResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
       && this.assistResponseArray[this.assistResponseArray.length - 1]?.data?.isPrompt) {
       if (data.userInput) {
@@ -350,8 +369,8 @@ export class AssistComponent implements OnInit, OnDestroy {
           if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
             arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
             arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = this.rootService.manualAssistOverrideMode;
-            arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = data.isErrorPrompt ? false : true;
-            if (data.isErrorPrompt) {
+            arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = (data.isErrorPrompt || this.showErrorPrompt) ? false : true;
+            if (data.isErrorPrompt || this.showErrorPrompt) {
               arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = false;
               arrEle.automationsArray[arrEle.automationsArray.length - 1].errorCount += 1;
             } else {
@@ -611,9 +630,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.assistResponseArray = structuredClone(this.assistResponseArray);
   }
 
-  removeOrAddOverRideDivForPreviousResponse(flag) {
-    console.log("remove override div for previous response ***********", flag, this.assistResponseArray);
-    
+  removeOrAddOverRideDivForPreviousResponse(flag) {    
     if (flag) {
       if (this.assistResponseArray?.length > 1 && this.assistResponseArray[this.assistResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
         && this.assistResponseArray[this.assistResponseArray.length - 1]?.data?.isPrompt) {
@@ -679,10 +696,20 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.maxButtonClick.emit(this.maxButton);
   }
 
-  terminateDialog(terminateCanvas) {
-		this.offcanvasService.open(terminateCanvas, { position: 'bottom', keyboard:false, backdropClass: 'backdrop-off-canvas-terminate', panelClass: 'termincateOffCanvas', backdrop:'static' });
+  terminateDialog() {
+    this.openOffCanvas();
     this.terminateClick = true;
 	}
+
+  openOffCanvas(){
+    console.log("open off canvas");
+    
+		this.offcanvasService.open(this.canvas, { position: 'bottom', keyboard:false, backdropClass: 'backdrop-off-canvas-terminate', panelClass: 'termincateOffCanvas', backdrop:'static' });
+  }
+
+  closeOffCanvas(){
+    this.offcanvasService.dismiss();
+  }
 
 
   summeryModalpopup(summeryModalpopupContent){
@@ -700,6 +727,9 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.rootService.manualAssistOverrideMode = true;
         this.removeOrAddOverRideDivForPreviousResponse(false);
       }
+      if(!this.terminateClick){
+        this.closeOffCanvas();
+      }
     } else if (popupObject.type == this.projConstants.INTERRUPT) {
       this.showInterruptPopup = popupObject.status;
       if (this.showInterruptPopup) {
@@ -715,8 +745,16 @@ export class AssistComponent implements OnInit, OnDestroy {
           this.updateInterruptDialogList();
         }
       }
+      if(!this.showInterruptPopup){
+        this.closeOffCanvas();
+      }
     } else if (popupObject.type == this.projConstants.LISTVIEW) {
       this.showListView = popupObject.status;
+      if(!this.showListView){
+        this.closeOffCanvas();
+      }else{
+        this.openOffCanvas();
+      }
     } else if (popupObject.type == this.projConstants.SUMMARY) {
       this.rootService.activeTab == this.projConstants.ASSIST;
       this.summaryText = popupObject.summaryText || '';
@@ -778,10 +816,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     let renderResponse: any = {};
 
     resp = this.rootService.formatHistoryResponseForFAQ(resp);
-    resp?.forEach((res, index) => {
-      console.log(index, "index*****");
-      
-
+    resp?.forEach((res, index) => {      
       res = this.rootService.confirmationNodeRenderForHistoryDataTransform(res);
       res = this.rootService.formatHistoryResonseToNormalRender(res);
       // this.removeOrAddOverRideDivForPreviousResponse(true);
@@ -932,7 +967,8 @@ export class AssistComponent implements OnInit, OnDestroy {
               proactiveModeStatus: this.proactiveModeStatus,
               toggleOverride: false,
               responseType: this.renderResponseType.ASSISTRESPONSE,
-              value: res?.components[0]?.data?.text
+              value: res?.components[0]?.data?.text,
+              errorCount: 0
             }
 
             if (res.isPrompt && !this.proactiveModeStatus) {
@@ -1037,6 +1073,10 @@ export class AssistComponent implements OnInit, OnDestroy {
     dialog.from = this.projConstants.INTERRUPT;
     dialog.index = index
     this.handleSubjectService.setRunButtonClickEvent(dialog);
+  }
+
+  viewCustomTempAttachment(){
+    this.websocketService.CustomTempClickEvents(this.projConstants.ASSIST, this.connectionDetails)
   }
 
 }

@@ -36,7 +36,7 @@ export class DialogComponent {
       // if(automation?.result?.parsedPayload && automation?.templateRender)
       if (automation?.templateRender) {
         automation.template = this.rootService.getTemplateHtml(automation.templateRender, automation.result);
-        console.log(automation.template, "template *************88888");
+        // console.log(automation.template, "template *************88888");
         
       }
       // automation.agentInputId = this.randomUUIDPipe.transform();

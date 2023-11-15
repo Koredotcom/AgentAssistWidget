@@ -6,6 +6,8 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { RootService } from './root.service';
 import { LocalStorageService } from './local-storage.service';
 import { HandleSubjectService } from './handle-subject.service';
+import * as $ from 'jquery';
+import { TemplateRenderClassService } from './template-render-class.service';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +42,7 @@ export class WebSocketService {
   }
 
   constructor(private rootService : RootService, private localStorageService : LocalStorageService,
-    private handleSubjectService : HandleSubjectService) {
+    private handleSubjectService : HandleSubjectService, private templateRenderClassService : TemplateRenderClassService) {
   }
 
   socketConnection(){    
@@ -227,5 +229,118 @@ export class WebSocketService {
   addOrRemoveLoader(falg: boolean) {
     this.handleSubjectService.setLoader(falg)
   }
+
+  CustomTempClickEvents(tab, connectionObj) {
+    let mythis = this;
+    $('.card_body_acc_content.kore-chat-window').on('click', '.botResponseAttachments', function (event) {
+      window.open($(this).attr('fileid'), '_blank');
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
+
+      mythis.templateRenderClassService.AgentChatInitialize.bindEvents(true, e);
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e);
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .callendar-tabs .month-tab').on('click', '.advanced-list-wrapper .callendar-tabs .month-tab', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option').on('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option .option-input').on('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option .option-input', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-header-top').on('click', '.advanced-list-wrapper .multiple-accor-rows .accor-header-top', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .search-block .search_icon').on('click', '.advanced-list-wrapper .main-title-text-block .search-block .search_icon', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .search-block .close_icon').on('click', '.advanced-list-wrapper .main-title-text-block .search-block .close_icon', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .search-block .input_text').on("keyup", '.advanced-list-wrapper .main-title-text-block .search-block .input_text', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .filter-sort-block .sort-icon').on("click", '.advanced-list-wrapper .main-title-text-block .filter-sort-block .sort-icon', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .see-more-data').on("click", '.advanced-list-wrapper .see-more-data', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .close-btn').on("click", '.advanced-list-wrapper .close-btn', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-btn').on("click", '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-btn', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-button-info .close_btn,.filter-icon .close_btn').on("click", '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-button-info .close_btn,.filter-icon .close_btn', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-header-top .btn_block.dropdown,.filter-icon').on("click", '.advanced-list-wrapper .multiple-accor-rows .accor-header-top .btn_block.dropdown,.filter-icon', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', ".advancelisttemplate .TaskPickerContainer .close-button").on('click', ".advancelisttemplate .TaskPickerContainer .close-button", function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .inner-acc-table-sec .table-sec .column-table-more').on("click", '.advanced-list-wrapper .multiple-accor-rows .inner-acc-table-sec .table-sec .column-table-more', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+
+    $('.card_body_acc_content.kore-chat-window').off('click', '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_').on("click", '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+  }
+
+  HandleClickAndSendRequest(tab, connectionObj, e) {
+    if (JSON.parse(localStorage.getItem('innerTextValue'))) {
+      if (this.rootService.activeTab == ProjConstants.ASSIST) {
+
+        let assistRequestParams =
+        {
+          "conversationId": connectionObj.conversationId,
+          "query": JSON.parse(localStorage.getItem('innerTextValue')),
+          "botId": connectionObj.botId,
+          "agentId": "",
+          "experience": connectionObj.isCallConversation === true ? 'voice' : 'chat',
+          "positionId": this.rootService.currentPositionId,
+          "entities": [],
+          "check": true,
+          "autoBotId": connectionObj.autoBotId
+      }
+        this.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
+        this.rootService.isAgentSentRequestOnClick = true;
+        localStorage.setItem('innerTextValue', null);
+        this.rootService.currentPositionId = "";
+      } else if (this.rootService.activeTab == ProjConstants.MYBOT) {
+
+        let agent_assist_agent_request_params =
+        {
+          "isSearch": false,
+          "conversationId": connectionObj.conversationId,
+          "query": JSON.parse(localStorage.getItem('innerTextValue')),
+          "botId": connectionObj.botId,
+          "experience": connectionObj.isCallConversation === true ? 'voice' : 'chat',
+          "positionId": this.rootService.currentPositionIdOfMyBot,
+          "autoBotId": connectionObj.autoBotId
+      }
+      if(connectionObj.userInput && connectionObj.intentName) {
+        agent_assist_agent_request_params['query'] = connectionObj.userInput;
+      }
+        this.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
+        this.rootService.isMyBotAgentSentRequestOnClick = true;
+        localStorage.setItem('innerTextValue', null);
+        this.rootService.currentPositionIdOfMyBot = "";
+      }
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      e.stopPropagation();
+    } else {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }
+
 
 }

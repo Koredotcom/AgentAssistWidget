@@ -61,26 +61,31 @@
                             </app-feedback>
                         </ng-container>
                     </ng-container>
+                    <ng-container [ngTemplateOutlet]="listingTriggers" *ngIf="!mybotResponseArray.length"></ng-container>                    
+
                 </div>
           </div>
         </div>
-        <ng-container *ngIf="terminateClick">
-            <app-terminate (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
-        </ng-container>
-        <ng-container *ngIf="showInterruptPopup">
-            <app-interrupt (handlePopupEvent)="handlePopupEvent($event)" [currentDialog]="dialogName"></app-interrupt>
-        </ng-container>
-        <ng-container *ngIf="showListView || showRestart">
-            <app-listview [listView]="showListView" [restart]="showRestart" [assistResponseArray]="mybotResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
-        </ng-container>
     </div>
 </div>
 
+<ng-template #terminateCanvas let-offcanvas>
+    <ng-container *ngIf="terminateClick">
+        <app-terminate (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
+    </ng-container>
+    <ng-container *ngIf="showInterruptPopup">
+        <app-interrupt (handlePopupEvent)="handlePopupEvent($event)" [currentDialog]="dialogName"></app-interrupt>
+    </ng-container>
+    <ng-container *ngIf="showListView || showRestart">
+        <app-listview [listView]="showListView" [restart]="showRestart" [assistResponseArray]="mybotResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
+    </ng-container>
+</ng-template>
+
 <!-- Templates -->
 <ng-template #listingTriggers>
-    <div class="empty-listing-triggers">
-        <h1>Listening for triggers</h1>
-        <p>AgentAssist is actively listing to your conversation and ready to assist automatically when triggered.</p>
+    <div class="empty-listing-triggers disabled-msg">
+        <h1>No active MyBot tasks presently</h1>
+        <p>To start a task on mybot, go to the search tab and select the "Run with agent inputs" option for your desired task.</p>
     </div>
 </ng-template>
 
