@@ -678,7 +678,7 @@ export class MybotComponent {
     dialog.positionId = this.randomUUIDPipe.transform('positionId');
     dialog.intentName = dialog.name;
     dialog.userInput = dialog.name;
-    dialog.agentRunButton = false;
+    dialog.agentRunButton = true;
     dialog.from = this.projConstants.INTERRUPT;
     dialog.index = index
     this.handleSubjectService.setRunButtonClickEvent(dialog);
