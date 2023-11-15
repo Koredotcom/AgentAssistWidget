@@ -27,7 +27,12 @@ export class TranscriptHistoryComponent {
 
   ngOnInit(): void {
     // this.subscribeEvents();
-    this.userAgentConversationHistoryAPICall()
+    this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
+      console.log(response);
+      if(response && response.isCall !== 'false') {
+        this.userAgentConversationHistoryAPICall();
+      }
+    })
   }
 
   userAgentConversationHistoryAPICall() {
@@ -36,8 +41,6 @@ export class TranscriptHistoryComponent {
       this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
         if (response) {
           connectionDetails = response;
-          console.log('testing',connectionDetails)
-          console.log(this.commonService.configObj.accountId)
           headersVal = {
             'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
             'accountId': this.commonService.grantResponseObj?.userInfo?.accountId,
