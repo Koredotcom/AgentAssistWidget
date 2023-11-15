@@ -319,6 +319,7 @@
     .mat-chip-list-wrapper{
         gap: 4px;
         margin: 0 !important;
+        border: 0 !important;
         .mat-chip{
             display: flex;
             align-items: center;
@@ -642,6 +643,7 @@
     .mat-chip-list-wrapper{
         gap: 10px;
         margin: 0 !important;
+        border: 0 !important;
         .mat-chip{
             margin: 0;
             border-radius: 16px;
@@ -687,7 +689,7 @@
             line-height: normal;
             height: 40px;
             &::before{
-                top: 0;
+                top: auto;
             }
         }
     }

@@ -120,7 +120,7 @@
                               [ngClass]="!agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled ? 'disableDropdown' : ''">{{agentAssistSettings?.isWidgetLandingEnabled?.chat?.tab}}</button>
                               <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                 <ng-container *ngFor="let tab of landingPageTabs.chat;">
-                                    <li ngbDropdownItem class="p-0" (click)="selectTab('chat' ,tab)">
+                                    <li ngbDropdownItem (click)="selectTab('chat' ,tab)">
                                         <a>{{tab}}</a>
                                     </li>
                                 </ng-container>
@@ -143,7 +143,7 @@
                               [ngClass]="!agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled ? 'disableDropdown' : ''">{{agentAssistSettings?.isWidgetLandingEnabled?.voice?.tab}}</button>
                               <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                 <ng-container *ngFor="let tab of landingPageTabs.voice;">
-                                    <li ngbDropdownItem class="p-0" (click)="selectTab('voice', tab)">
+                                    <li ngbDropdownItem (click)="selectTab('voice', tab)">
                                         <a>{{tab}}</a>
                                     </li>
                                 </ng-container>
