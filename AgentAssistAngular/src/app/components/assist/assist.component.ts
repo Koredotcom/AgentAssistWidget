@@ -122,9 +122,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     });
 
     this.subs.sink = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
-      if (runEventObj) {   
-        console.log(runEventObj, 'run event object ********');
-             
+      if (runEventObj) {                
         if (runEventObj && !runEventObj?.agentRunButton && !this.rootService.isAutomationOnGoing) {
           if (runEventObj.from == this.projConstants.INTERRUPT) {
             this.interruptDialogList.splice(runEventObj.index, 1);
@@ -148,20 +146,15 @@ export class AssistComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
-      console.log(endoftaskresponse, 'end of task response');
-      
+    this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {      
       if (endoftaskresponse && (endoftaskresponse.intType == 'assist' || endoftaskresponse.positionId === this.dialogPositionId || !endoftaskresponse.positionId)) {
         if(this.showListView){
           this.handlePopupEvent({type : this.projConstants.LISTVIEW, status : false});
         }
-        this.dialogTerminatedOrIntruppted();
-        console.log(this.interruptRun, 'interrupt run', this.interruptDialogList);
-        
+        this.dialogTerminatedOrIntruppted();        
         if (this.interruptRun) {
           this.interruptRun = false;
           let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
-          console.log(index, "index");
           index = index < 0 ? 0 : index;
           this.dialogueRunClick(this.interruptDialog,index)
         }
@@ -710,9 +703,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.terminateClick = true;
 	}
 
-  openOffCanvas(){
-    console.log("open off canvas");
-    
+  openOffCanvas(){    
 		this.offcanvasService.open(this.canvas, { position: 'bottom', keyboard:false, backdropClass: 'backdrop-off-canvas-terminate', panelClass: 'termincateOffCanvas', backdrop:'static' });
   }
 
@@ -732,6 +723,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
       } else if (popupObject.override) {
         this.terminateClick = false;
+        this.rootService.OverRideMode = true;
         this.makeOverrideEvent(this.connectionDetails.botId, this.connectionDetails.conversationId, true);
         this.rootService.manualAssistOverrideMode = true;
         this.removeOrAddOverRideDivForPreviousResponse(false);

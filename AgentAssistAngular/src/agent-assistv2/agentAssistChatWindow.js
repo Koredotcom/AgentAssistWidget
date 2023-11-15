@@ -2349,7 +2349,6 @@
                         });
                     }
                     else if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "quick_replies") {
-                        console.log(msgData, "msgData*******");
                         messageHtml = $(me.getChatTemplate("templatequickreply")).tmpl({
                             'msgData': msgData,
                             'helpers': helpers,

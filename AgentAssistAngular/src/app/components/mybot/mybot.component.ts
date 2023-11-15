@@ -96,9 +96,7 @@ export class MybotComponent {
       }
     });
 
-    this.subs.sink = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
-      console.log(runEventObj, 'run event obj **********', this.rootService.isMyBotAutomationOnGoing);
-      
+    this.subs.sink = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {      
       if (runEventObj) {
         if (runEventObj.agentRunButton && !this.rootService.isMyBotAutomationOnGoing) {
           if(runEventObj.from == this.projConstants.INTERRUPT){
@@ -120,7 +118,6 @@ export class MybotComponent {
         if (this.interruptRun) {
           this.interruptRun = false;
           let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
-          console.log(index, "index");
           index = index < 0 ? 0 : index;
           this.dialogueRunClick(this.interruptDialog,index)
         }
@@ -265,8 +262,6 @@ export class MybotComponent {
   }
 
   openOffCanvas(){
-    console.log("open off canvas");
-    
 		this.offcanvasService.open(this.canvas, { position: 'bottom', keyboard:false, backdropClass: 'backdrop-off-canvas-terminate', panelClass: 'termincateOffCanvas', backdrop:'static' });
   }
 
@@ -396,7 +391,6 @@ export class MybotComponent {
     let history = this.mybotHistory(params);
     this.handleSubjectService.setLoader(true);
     forkJoin([feedback, history]).pipe(finalize(()=> {this.handleSubjectService.setLoader(false)})).subscribe(res => {
-      console.log(res, "feedback");
       let feedbackData = res[0]?.results || [];
       let historyData = res[1] || [];
       // let historyData = this.rootService.getMockData();
@@ -415,7 +409,6 @@ export class MybotComponent {
   }
 
   minMaxButtonClick(){
-    console.log("min max button click");
     this.maxButton = !this.maxButton;
     this.maxMinButtonClick.emit(true);
   }
