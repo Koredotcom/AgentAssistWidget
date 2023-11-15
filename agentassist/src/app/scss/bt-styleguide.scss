@@ -4832,4 +4832,19 @@ $numbers: 1000;
             }
         }
     }
+    .example-chip-list{
+        &.mat-focused {
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    .mat-form-field-infix {
+                        .mat-chip-list {
+                            .mat-chip-list-wrapper{
+                                border: 0 !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
