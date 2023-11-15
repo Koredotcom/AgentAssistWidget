@@ -539,6 +539,8 @@
             "outputPath": "dist/src",
             "index": "src/index.html",
             "main": "src/main.single-spa.ts",
+            "outputHashing": "none",
+            "commonChunk": false,
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.sspa.json",
             "assets": [
@@ -648,7 +650,7 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": false,
+              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -893,7 +895,7 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": false,
+              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
