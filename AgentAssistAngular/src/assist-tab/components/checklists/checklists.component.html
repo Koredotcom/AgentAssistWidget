@@ -28,12 +28,14 @@
                         </div>
                     </div>
                 </div>
-                <button *ngIf="shouldShowCL && isProceedToClose && checklists?.length && !openAck" class="proceed-toclise-btn" (click)="proceedToClose()">
-                    <div class="circle">
-                        <i class="ast-tick-solid"></i>
-                    </div>
-                    <span>Proceed to close</span>
-                </button>
+                <ng-container *ngIf="shouldShowCL">
+                    <button *ngIf="isProceedToClose && checklists?.length && !openAck" class="proceed-toclise-btn" (click)="proceedToClose()">
+                        <div class="circle">
+                            <i class="ast-tick-solid"></i>
+                        </div>
+                        <span>Proceed to close</span>
+                    </button>
+                </ng-container>
             </div>
 
             <div [ngClass]="{'d-none': isCloseCompleted}">
