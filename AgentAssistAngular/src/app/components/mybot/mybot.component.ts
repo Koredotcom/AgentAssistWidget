@@ -75,7 +75,7 @@ export class MybotComponent {
       try {
         this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
       } catch (err) {}
-    }, 1000);
+    }, 10);
   }
 
 
@@ -123,9 +123,13 @@ export class MybotComponent {
         }
         this.viewCustomTempAttachment();
       }
-    })
+    });
 
-
+    this.subs.sink = this.rootService.activeTab$.subscribe(tab => {
+      if(tab == ProjConstants.MYBOT){
+        this.scrollToBottom();
+      }
+    });
 
   }
 

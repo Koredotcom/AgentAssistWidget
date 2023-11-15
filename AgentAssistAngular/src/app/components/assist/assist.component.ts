@@ -84,7 +84,7 @@ export class AssistComponent implements OnInit, OnDestroy {
       try {
         this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
       } catch (err) { }
-    }, 1000);
+    }, 10);
   }
 
 
@@ -164,7 +164,13 @@ export class AssistComponent implements OnInit, OnDestroy {
 
     this.subs.sink = this.handleSubjectService.summaryPopupSubject.subscribe((data) => {
       this.handlePopupEvent({ status: true, type: this.projConstants.SUMMARY, summaryText: data });
-    })
+    });
+
+    this.subs.sink = this.rootService.activeTab$.subscribe(tab => {
+      if(tab == ProjConstants.ASSIST){
+        this.scrollToBottom();
+      }
+    });
   }
 
   getInterruptDialogList() {

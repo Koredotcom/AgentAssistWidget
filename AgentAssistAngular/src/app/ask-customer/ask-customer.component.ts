@@ -55,7 +55,9 @@ export class AskCustomerComponent {
       this.inputName = this.projConstants.AWAITING;
       this.automation.toggleOverride = false;
       this.automation.entityValue = '';
-      this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
+      if(!this.rootService.OverRideMode){
+        this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
+      }
     }
   }
 
