@@ -29,6 +29,19 @@
                 gap: 5px;
                 width: 100%;
                 overflow: hidden;
+                position: relative;
+                .maximize-btn{
+                    position: relative;
+                    width: 16px;
+                    height: 16px;
+                    border: 0;
+                    padding: 0;
+                    background: transparent;
+                    cursor: pointer;
+                    position: absolute;
+                    right: 10px;
+                    top: auto;
+                }
                 .icon_block{
                     flex-shrink: 0;
                 }

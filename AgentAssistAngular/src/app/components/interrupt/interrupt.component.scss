@@ -56,3 +56,14 @@
         }
     }
 }
+
+::ng-deep [dir="rtl"]{
+    .interputions-botttom-info {
+        .interputions-canvas-wrapper {
+            .btn_link{
+                right: auto !important;
+                left: 8px;
+            }
+        }
+    }
+}

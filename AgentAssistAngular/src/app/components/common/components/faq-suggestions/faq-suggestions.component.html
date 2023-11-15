@@ -3,13 +3,10 @@
     <div class="faq-s-header">
         <div class="titles-info-heading">
             <h1 class="text-truncate">{{faq.displayName ? faq.displayName : faq.question}} </h1>
-            <span
-                *ngIf="faq.answer && faq.answer.length > 1 && ((!faq.seeMoreWrapper && faq.answerRender) || (faq.toggle && !faq.answerRender && !faq.seeMoreWrapper))">1/{{faq.answer.length}}</span>
-            <span *ngIf="faq.childBotName">({{faq.childBotName}}) </span>
-        
-            <i class="krIocnsFont-thumbs-up-solid" *ngIf="!faq.answerRender && !faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
-            <i class="krIocnsFont-chevron-down" *ngIf="!faq.answerRender && faq.toggle"
-                (click)="getFaqAnswerAndtoggle(faq)"></i>
+            <span *ngIf="faq.answer && faq.answer.length > 1 && ((!faq.seeMoreWrapper && faq.answerRender) || (faq.toggle && !faq.answerRender && !faq.seeMoreWrapper))">1/{{faq.answer.length}}</span>
+            <span *ngIf="faq.childBotName">({{faq.childBotName}})</span>
+            <i class="krIocnsFont-chevron-up" *ngIf="!faq.answerRender && !faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
+            <i class="krIocnsFont-chevron-down" *ngIf="!faq.answerRender && faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
         </div>
 
         <div class="faq-actions" *ngIf="!faq.seeMoreWrapper && faq.answer && faq.answer?.length > 0">

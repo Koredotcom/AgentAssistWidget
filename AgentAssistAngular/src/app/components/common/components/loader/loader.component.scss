@@ -1,0 +1,31 @@
+
+@-webkit-keyframes kr-spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes kr-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loader-progress{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999999;
+    background: rgba(255, 255, 255, 0.7);
+    .loading-border{
+        border: 4px solid #f8f9fa;
+        border-radius: 50%;
+        border-top: 4px solid #155EEF;
+        width: 40px;
+        height: 40px;
+        -webkit-animation: kr-spin 2s linear infinite;
+        animation: kr-spin 2s linear infinite;
+    }
+}

@@ -713,7 +713,7 @@ export class AssistComponent implements OnInit, OnDestroy {
 
 
   summeryModalpopup(summeryModalpopupContent){
-    this.modalService.open(summeryModalpopupContent ,{});
+    this.modalService.open(summeryModalpopupContent ,{windowClass: 'modal-full-window-popup', centered: true, backdrop:'static', keyboard:false});
   }
   handlePopupEvent(popupObject) {
     if (popupObject.type == this.projConstants.TERMINATE) {

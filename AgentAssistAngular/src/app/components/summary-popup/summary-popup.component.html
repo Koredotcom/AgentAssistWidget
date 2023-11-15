@@ -7,18 +7,26 @@
             <textarea class="input-text" id="summaryText" rows="4" cols="50" [(ngModel)]="editedSummaryText"></textarea>
         </div>
         <button class="submit-btn" id="summarySubmit" (click)="summaryButtonClick(true)">Submit</button>
-        <button class="btn-secondary-button" id="summaryCopy"
-        (click)="handleCopyButton(editedSummaryText)" [disabled]="(tooltipText === projCnst.COPIED)">{{tooltipText}}</button>
+        <button class="btn-secondary-button" id="summaryCopy" (click)="handleCopyButton(editedSummaryText)" [disabled]="(tooltipText === projCnst.COPIED)">{{tooltipText}}</button>
     </div>
 </div> -->
 
-<div class="modal-header">
-    <h4 class="modal-title">Modal title</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-</div>
-<div class="modal-body">
-    <p>One fine body&hellip;</p>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Close click')">Close</button>
+<div class="summery-popup-data" id="summary">
+    <div class="title-block">
+        <h1>Summary</h1>
+        <div class="ai-block">
+            <i class="krIocnsFont-Aimark"></i>
+            <span>Suggested</span>
+        </div>
+    </div>
+    <div class="input-block">
+        <button class="close-summery" (click)="closeSummary()">
+            <i class="krIocnsFont-close-md"></i>
+        </button>
+        <textarea class="form-control" id="summaryText" placeholder="Summary" rows="4" cols="50" [(ngModel)]="editedSummaryText"></textarea>
+    </div>
+    <div class="actions-footer">
+        <button class="_btn primaryBtn" id="summarySubmit" (click)="summaryButtonClick(true)">Submit</button>
+        <button class="_btn solidBtn" id="summaryCopy" (click)="handleCopyButton(editedSummaryText)" [disabled]="(tooltipText === projCnst.COPIED)">{{tooltipText}}</button>
+    </div>
 </div>

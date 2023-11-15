@@ -2,19 +2,3 @@
 
 /* Importing Bootstrap SCSS file. */
 @import './assets/bootstrap/scss/bootstrap.scss';
-
-#loader{
-    position: absolute;
-    z-index: 1;
-    display: block;
-    top: 40%;
-    left: 45%;
-    margin: auto;
-    outline: 1px solid transparent;
-    -webkit-animation:spin 1s linear infinite;
-    -moz-animation:spin 1s linear infinite;
-    animation:spin 1s linear infinite;
-    -webkit-animation-direction: normal;
-    -moz-animation-direction: normal;
-    animation-direction: normal;
-}

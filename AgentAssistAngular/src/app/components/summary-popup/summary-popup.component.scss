@@ -1,0 +1,75 @@
+
+
+.summery-popup-data{
+    background: var(--gray-modern-50, #F8FAFC);
+    border-radius: 6px;
+    .title-block{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        h1{
+            color: var(--gray-modern-700, #364152);
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 16px;
+            width: 100%;
+        }
+        .ai-block{
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            color: var(--gray-modern-400, #9AA4B2);
+            font-family: Inter;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 18px;
+            gap: 10px;
+            i{
+                font-size: 16px;
+            }
+        }
+    }
+    .input-block{
+        padding: 8px;
+        position: relative;
+        .close-summery{
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            background: transparent;
+            border: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            width: 16px;
+            height: 16px;
+            font-size: 16px;
+            color: #667085;
+            cursor: pointer;
+        }
+        textarea{
+            min-height: 150px;
+            resize: none;
+        }
+    }
+    .actions-footer{
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+}
+
+::ng-deep [dir="rtl"]{
+    .summery-popup-data {
+        .input-block {
+            .close-summery{
+                right: auto !important;
+                left: 16px;
+            }
+        }
+    }
+}

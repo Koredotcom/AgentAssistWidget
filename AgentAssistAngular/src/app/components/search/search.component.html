@@ -8,6 +8,9 @@
                     </div>
                     <h1 class="text-truncate">Dialog Task</h1>
                     <span class="count-text">{{searchResponse?.dialogs?.length}}</span>
+                    <button class="maximize-btn">
+                        <i class="krIocnsFont-minimize"></i>
+                    </button>
                 </div>
                 <div class="suggestion-body-search">
                     <app-dialog-suggestion [searchResponse]="searchResponse"></app-dialog-suggestion>
@@ -20,6 +23,9 @@
                     </div>
                     <h1 class="text-truncate">FAQ</h1>
                     <span class="count-text">{{searchResponse?.faqs?.length}}</span>
+                    <button class="maximize-btn">
+                        <i class="krIocnsFont-minimize"></i>
+                    </button>
                 </div>
                 <div class="suggestion-body-search">
                     <app-faq-suggestions (faqAnswerToggle)="checkAnswerAndToggle($event)" [searchResponse]="searchResponse"></app-faq-suggestions>
@@ -32,6 +38,9 @@
                     </div>
                     <h1 class="text-truncate">Article</h1>
                     <span class="count-text">{{searchResponse?.articles?.length}}</span>
+                    <button class="maximize-btn">
+                        <i class="krIocnsFont-minimize"></i>
+                    </button>
                 </div>
                 <div class="suggestion-body-search">
                     <app-article-suggestions [searchResponse]="searchResponse"></app-article-suggestions>
@@ -44,6 +53,9 @@
                     </div>
                     <h1 class="text-truncate">Snippet</h1>
                     <span class="count-text">{{searchResponse?.snippets?.length}}</span>
+                    <button class="maximize-btn">
+                        <i class="krIocnsFont-minimize"></i>
+                    </button>
                 </div>
                 <div class="suggestion-body-search">
                     <app-snippet-suggestions [searchResponse]="searchResponse"></app-snippet-suggestions>
@@ -58,6 +70,9 @@
                     </div>
                     <h1 class="text-truncate">All Dialog Tasks</h1>
                     <!-- <span class="count-text">2</span> -->
+                    <button class="maximize-btn">
+                        <i class="krIocnsFont-minimize"></i>
+                    </button>
                 </div>
                 <div class="suggestion-body-search">
                     <app-dialog-suggestion></app-dialog-suggestion>

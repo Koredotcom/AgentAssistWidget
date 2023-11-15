@@ -21,12 +21,43 @@
             gap: 10px;
             .left-title-info{
                 width: 100%;
-                h1{
-                    color: var(--gray-500, #667085);
-                    font-size: 14px;
-                    font-weight: 600;
-                    line-height: 20px;
-                    margin: 0 0 2px 0;
+                .text-dropdown-info{
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    h1{
+                        color: var(--gray-500, #667085);
+                        font-size: 14px;
+                        font-weight: 600;
+                        line-height: 20px;
+                        margin: 0 0 2px 0;
+                    }
+                    .dialogs-number{
+                        border-radius: 3px;
+                        background: var(--primary-600, #155EEF);
+                        flex-shrink: 0;
+                        padding: 0px 4px;
+                        color: var(--base-white, #FFF);
+                        font-size: 12px;
+                        font-weight: 500;
+                        line-height: 18px;
+                        min-width: 16px;
+                        text-align: center;
+                    }
+                    .dropdown {
+                        flex-shrink: 0;
+                        .dropdown-toggle{
+                            padding: 0;
+                            border: 0;
+                            background: transparent;
+                            width: 16px;
+                            height: 16px;
+                            font-size: 16px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
                 }
                 .bottom-titles{
                     display: flex;

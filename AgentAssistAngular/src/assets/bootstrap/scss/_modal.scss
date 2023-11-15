@@ -43,12 +43,19 @@
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  // Prevent Chrome on Windows from adding a focus outline. For details, see
-  // https://github.com/twbs/bootstrap/pull/10951.
   outline: 0;
-  // We deliberately don't use `-webkit-overflow-scrolling: touch;` due to a
-  // gnarly iOS Safari bug: https://bugs.webkit.org/show_bug.cgi?id=158342
-  // See also https://github.com/twbs/bootstrap/issues/17695
+  &.modal-full-window-popup{
+    .modal-dialog{
+      max-width: 500px;
+      margin: 0 auto;
+      .modal-content{
+        border-radius: 6px;
+        border: 1px solid var(--gray-modern-300, #CDD5DF);
+        background: var(--generic-white, #FFF);
+        box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08);
+      }
+    }
+  }
 }
 
 // Shell div to position the modal with bottom padding
@@ -175,65 +182,3 @@
   }
 }
 
-// Scale up the modal
-@include media-breakpoint-up(sm) {
-  .modal {
-    --#{$prefix}modal-margin: #{$modal-dialog-margin-y-sm-up};
-    --#{$prefix}modal-box-shadow: #{$modal-content-box-shadow-sm-up};
-  }
-
-  // Automatically set modal's width for larger viewports
-  .modal-dialog {
-    max-width: var(--#{$prefix}modal-width);
-    margin-right: auto;
-    margin-left: auto;
-  }
-
-  .modal-sm {
-    --#{$prefix}modal-width: #{$modal-sm};
-  }
-}
-
-@include media-breakpoint-up(lg) {
-  .modal-lg,
-  .modal-xl {
-    --#{$prefix}modal-width: #{$modal-lg};
-  }
-}
-
-@include media-breakpoint-up(xl) {
-  .modal-xl {
-    --#{$prefix}modal-width: #{$modal-xl};
-  }
-}
-
-// scss-docs-start modal-fullscreen-loop
-@each $breakpoint in map-keys($grid-breakpoints) {
-  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
-  $postfix: if($infix != "", $infix + "-down", "");
-
-  @include media-breakpoint-down($breakpoint) {
-    .modal-fullscreen#{$postfix} {
-      width: 100vw;
-      max-width: none;
-      height: 100%;
-      margin: 0;
-
-      .modal-content {
-        height: 100%;
-        border: 0;
-        @include border-radius(0);
-      }
-
-      .modal-header,
-      .modal-footer {
-        @include border-radius(0);
-      }
-
-      .modal-body {
-        overflow-y: auto;
-      }
-    }
-  }
-}
-// scss-docs-end modal-fullscreen-loop
