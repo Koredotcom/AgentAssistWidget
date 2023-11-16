@@ -2136,5 +2136,11 @@
     "CHECKLIST.STEPUPDATEFAILURE": "Failed to update step",
     "UNIFIED_SIDENAV_AGENT_ASSIST": "AgentAssist",
     "CHECKLIST.PRIMARY": "Primary",
-    "CHECKLIST.DYNAMIC": "Dynamic"
+    "CHECKLIST.DYNAMIC": "Dynamic",
+    "LBL_AGENT_EXPERIENCE" : "Agent Experience",
+    "lbl_agent_coaching": "Agent Coaching",
+    "lbl_agent_exp_playbook": "Agent Playbook",
+    "LBL_CONFIGURATIONS" : "Configuration",
+    "lbl_welcome_events" : "Welcome Events",
+    "lbl_widgets" : "Widget Settings"
 }
