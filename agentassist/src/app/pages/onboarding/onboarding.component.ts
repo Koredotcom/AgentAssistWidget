@@ -32,7 +32,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    if(this.appService.selectedInstanceApp$.value) {
+    if(Object.keys(this.appService.selectedInstanceApp$.value)?.length) {
         if(this.authService.agentAssistAutomationBots.length > 0) {
           this.router.navigate(['/config/usecases']);
         } else {
@@ -40,7 +40,8 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         }
       // this.showWarningMessage();
     }
-    if (this.appService.instanceApps.length && !this.appService.isMigrated) {
+    
+    if (this.appService.instanceApps.length > 0 && !this.appService.isMigrated) {
       this.router.navigate(['home']);
     } else {
       this.initDialog();
@@ -97,7 +98,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      //
+      dialogRef.close();
     });
   }
 
