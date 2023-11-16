@@ -46,6 +46,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   botRoles: any;
   sharedToList: any;
   isInvite = true;
+  isCoachingDisable = true;
   isSharedDeveloper = false;
   appStates: { id: string, label: string }[] = [{
     id: 'configured',
@@ -106,6 +107,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.selectedApp = this.workflowService.getCurrentBt(true)._id;
     // this.selectedApp = this.authService.smartAssistBots.map(x=>x._id);
     // this.initCalls();
+    this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+      this.isCoachingDisable = isEnabled;
+    });
     this.getWidget();
     this.subs.sink = this.authService.isAgentDesktopEnabled$.subscribe(isEnabled => {
       this.isAgentDesktopEnabled = isEnabled;
