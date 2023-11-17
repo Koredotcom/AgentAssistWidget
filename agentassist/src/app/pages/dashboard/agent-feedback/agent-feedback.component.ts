@@ -85,7 +85,7 @@ export class AgentFeedbackComponent implements OnInit {
       this.cdRef.detectChanges();
       if(empty){
         this.skip = 0;
-        this.limit = 14;
+        this.limit = 30;
         this.fetched = this.fetched;
       }
       let botId = this.dashboardService.getSelectedBotDetails()._id;
