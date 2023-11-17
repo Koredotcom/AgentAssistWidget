@@ -48,7 +48,7 @@ export class CustomerAspectComponent implements OnInit {
   isLoading: boolean = false;
   hasMore: boolean = false;
   skip = 0
-  limit = 14;
+  limit = 30;
   fetched = 0;
 
   subs = new SubSink();
@@ -99,7 +99,7 @@ export class CustomerAspectComponent implements OnInit {
       this.cdRef.detectChanges();
       if(empty){
         this.skip = 0;
-        this.limit = 14;
+        this.limit = 30;
         this.fetched = this.fetched;
       }
       let botId = this.dashboardService.getSelectedBotDetails()._id;

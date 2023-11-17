@@ -41,7 +41,7 @@ export class AgentFeedbackComponent implements OnInit {
   isLoading: boolean = false;
   hasMore: boolean = false;
   skip = 0
-  limit = 14;
+  limit = 30;
   fetched = 0;
 
   constructor(private dashboardService: DashboardService,
