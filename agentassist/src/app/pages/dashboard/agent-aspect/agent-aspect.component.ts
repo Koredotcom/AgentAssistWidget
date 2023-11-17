@@ -49,7 +49,7 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
   isLoading: boolean = false;
   hasMore: boolean = false;
   skip = 0
-  limit = 14;
+  limit = 30;
   fetched = 0;
 
 
@@ -92,7 +92,7 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.wordCloudChart.resize();
+    this.wordCloudChart?.resize();
   }
 
   initializeDefaultValues(){
