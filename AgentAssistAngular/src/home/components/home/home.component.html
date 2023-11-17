@@ -163,7 +163,7 @@
             <i class="ast-close close-search" id="cancelAgentSearch" (click)="clearSearchText()"></i>
         </div>
         <div class="overlay-suggestions" style="bottom:0"
-            *ngIf="showSearchSuggestions && (activeTab == projConstants.ASSIST || activeTab == projConstants.MYBOT)"
+            *ngIf="showSearchSuggestions && (activeTab == projConstants.ASSIST || activeTab == projConstants.MYBOT || activeTab == projConstants.TRANSCRIPT)"
             id="overLaySuggestions">
             <div class="suggestion-content" id="overLaySearch">
                 <perfect-scrollbar class="overlaysearch-scroll-bar" #overlayps id="overlaySearchScroll">
