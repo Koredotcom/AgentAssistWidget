@@ -88,10 +88,10 @@ export class LocalStorageService {
 
   initializeLocalStorageState(){
     let appState = this.getLocalStorageState();    
-    if(!appState || !appState[this.rootService.getConnectionDetails().conversationId]){
-      if(this.rootService.getConnectionDetails() && this.rootService.getConnectionDetails().conversationId){
+    let conversationId = this.rootService?.getConnectionDetails()?.conversationId;
+    if(!appState || !appState[conversationId]){
+      if(this.rootService.getConnectionDetails() && conversationId){
         let appState : any =  this.getLocalStorageState();
-        let conversationId = this.rootService.getConnectionDetails().conversationId;
         appState[conversationId]= {};
         appState[conversationId][ProjConstants.ASSIST] = {};
         appState[conversationId][ProjConstants.MYBOT] = {};
@@ -110,8 +110,15 @@ export class LocalStorageService {
         appState[conversationId][storageConst.LANGUAGE] = storageConst.ENGLISH;
         appState[conversationId][storageConst.THEME] = storageConst.AUTO;
         appState[conversationId][storageConst.ACTIVE_TAB] = ProjConstants.ASSIST;
+
+        if(this.rootService.connectionDetails.source == ProjConstants.SMARTASSIST_SOURCE){
+          appState[conversationId][storageConst.PROACTIVE_MODE] = this.rootService.connectionDetails.isProactiveAgentAssistEnabled;
+        }
+        this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];
         localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
       }
+    }else if(appState && appState[conversationId]){
+      this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];
     }
   }
 

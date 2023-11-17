@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
 import { forkJoin } from 'rxjs';
@@ -21,16 +21,16 @@ import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 })
 export class MybotComponent {
 
+  @Input() maxButton;
   @Output() maxMinButtonClick = new EventEmitter();
   @ViewChild('collapseTab', {static: false}) private collapseTab: ElementRef;
-  @ViewChild('terminateCanvas', {static : false}) private canvas : ElementRef<HTMLDivElement>
+  @ViewChild('terminateCanvas', {static : false}) private canvas : ElementRef<HTMLDivElement>;
 
   
   connectionDetails: any = {};
   subs = new SubSink();
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
-  maxButton : boolean = false;
 
 
   dialogName: string;
@@ -413,7 +413,7 @@ export class MybotComponent {
   }
 
   minMaxButtonClick(){
-    this.maxButton = !this.maxButton;
+    // this.maxButton = !this.maxButton;
     this.maxMinButtonClick.emit(true);
   }
 
@@ -631,7 +631,7 @@ export class MybotComponent {
               }
             });
           arrEle.automationsArray = [...arrEle.automationsArray];
-        }else if(arrEle.type == this.projConstants.SMALLTALK && actualarrayIndex != this.mybotResponseArray.length){
+        }else if(arrEle.type == this.renderResponseType.SMALLTALK && actualarrayIndex != this.mybotResponseArray.length){
           arrEle.disableInput = true;
         }
       });

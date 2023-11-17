@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
@@ -12,6 +12,9 @@ import { SubSink } from 'subsink';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
+
+  @Input() maxButton;
+  @Output() maxMinButtonClick = new EventEmitter();
 
   subs = new SubSink();
   searchText: string = '';
@@ -30,6 +33,8 @@ export class SearchComponent implements OnInit {
   searchResultText: string;
   querySuggestions: any = [];
 
+  searched : boolean = false;
+
 
   constructor(private rootService: RootService, private serviceInvoker: ServiceInvokerService,
     private websocketService: WebSocketService, private handleSubjectService: HandleSubjectService) {
@@ -43,7 +48,7 @@ export class SearchComponent implements OnInit {
   subscribeEvents() {
     this.subs.sink = this.websocketService.agentAssistAgentResponse$.subscribe((agentResponse: any) => {
       if (agentResponse && (agentResponse.isSearch || this.answerPlaceableIDs.length)) {
-        this.searchedResultData = agentResponse
+        this.searchedResultData = agentResponse;
         this.handleSearchResponse(agentResponse);
       }
     });
@@ -54,6 +59,7 @@ export class SearchComponent implements OnInit {
     if (this.searchText?.length > 0) {
       this.typeAHead(this.searchText, this.rootService.connectionDetails);
     } else {
+      this.searched = false;
       this.searchResponse = {};
       this.handleSubjectService.setSearchResponse(this.searchResponse);
     }
@@ -134,14 +140,15 @@ export class SearchComponent implements OnInit {
 
   }
 
-  handleSearchResponse(response) {
-    console.log(response, "response*********");
-    
+  handleSearchResponse(response) { 
+    this.searched = true;   
     if (response && response.suggestions) {
       if (this.answerPlaceableIDs?.length == 0) {
         this.searchResponse = {};
         // response.suggestions.faqs = [
         //   {question : "How does COVID -19 spread?", answer : ["Covid spreads through tiny virus particles that get inside the body. The most common way for covid to enter the body is by being breathed in from infected air. This can happen when people stand close togethe When a person breaths out, it’s not just air that leaves their nose or mouth. Tiny water droplets are also breathed out, and these can be infected with viruses like colds or covid. These water droplets can be breathed in by other people, or if they land on a surface that someone touches later, that person could catch coronavirus."]},
+        //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']},
+        //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']},
         //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
         // ]
         this.searchResponse = this.rootService.formatSearchResponse(response);
@@ -154,12 +161,9 @@ export class SearchComponent implements OnInit {
         this.snippetAllView = this.searchResponse.snippets && this.searchResponse.snippets?.length > 2 ? true : false;
         this.searchResultText = this.searchResponse.totalSearchResults == 1 ? "Search result for" : "Search results for";
         this.checkFaqAnswerNotRenderCountAndRequest()
-      } else if (this.answerPlaceableIDs?.length > 0) {
-        console.log(response.suggestions, "response suggestions*****");
-        
+      } else if (this.answerPlaceableIDs?.length > 0) {        
         response.suggestions.faqs = this.rootService.formatFAQResponse(response.suggestions.faqs);
         let faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.input == response.suggestions?.faqs[0].question);
-        console.log(faqAnswerIdsPlace, this.answerPlaceableIDs, response.suggestions.faq, 'answer placable ids');
         
         if (faqAnswerIdsPlace) {
           let accumulator = response.suggestions.faqs.reduce((acc, faq) => {
@@ -168,7 +172,6 @@ export class SearchComponent implements OnInit {
               return acc;
             }
           }, {});
-          console.log(accumulator, 'accumaltor');
           
           this.searchResponse.faqs.forEach(faq => {
             if (accumulator[faq.question] && accumulator[faq.question].answer) {
@@ -191,7 +194,6 @@ export class SearchComponent implements OnInit {
     let answerNotRenderendElements = (this.searchResponse.faqs || []).filter(faq => {
       return !faq.answer;
     });
-    console.log(answerNotRenderendElements, 'answer not rendered elements');
     
     if (answerNotRenderendElements?.length == 1) {
       this.getFaqAnswerAndtoggle(answerNotRenderendElements[0]);
@@ -204,12 +206,8 @@ export class SearchComponent implements OnInit {
     this.checkAnswerAndToggle(faq);
   }
 
-  checkAnswerAndToggle(faq){
-    console.log(faq, 'inside faq');
-    
-    if (!faq.answer && faq.toggle) {
-      console.log("inside check answer and toggle");
-      
+  checkAnswerAndToggle(faq){    
+    if (!faq.answer && faq.toggle) {      
       this.answerPlaceableIDs.push({ input: faq.question });
       let searchObj: any = {};
       searchObj.value = faq.displayName;
@@ -217,5 +215,10 @@ export class SearchComponent implements OnInit {
       // searchObj.searchFrom = this.commonService.activeTab;
       this.emitSearchRequest(searchObj.value, false);
     }
+  }
+
+  minMaxButtonClick(){
+    // this.maxButton = !this.maxButton;
+    this.maxMinButtonClick.emit(true);
   }
 }

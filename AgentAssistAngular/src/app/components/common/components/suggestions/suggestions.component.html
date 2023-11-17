@@ -6,11 +6,8 @@
                     <div class="icon_block">
                         <img src="assets/images/icons/dialog.svg" alt="Top Dialog Suggestion">
                     </div>
-                    <h1 class="text-truncate">Dialog Task <span [ngbTooltip]="tipContent" *ngIf="suggestionResponse?.data?.userInput"> : {{suggestionResponse?.data?.userInput?.slice(0,10)}}</span></h1>
+                    <h1 class="text-truncate">Dialog Task <span [ngbTooltip]="suggestionResponse?.data?.userInput" *ngIf="suggestionResponse?.data?.userInput"> : ({{suggestionResponse?.data?.userInput?.slice(0,10) + '...'}})</span></h1>
                     <span class="count-text">{{suggestionResponse.searchResponse?.dialogs?.length}}</span>
-                    <button class="maximize-btn">
-                        <i class="krIocnsFont-minimize"></i>
-                    </button>
                 </div>
                 <div class="suggestion-body-search">
                     <app-dialog-suggestion [searchResponse]="suggestionResponse.searchResponse"></app-dialog-suggestion>
@@ -24,29 +21,11 @@
                     <div class="icon_block">
                         <img src="assets/images/icons/custchoice.svg" alt="FAQ">
                     </div>
-                    <h1 class="text-truncate">FAQ</h1>
+                    <h1 class="text-truncate">FAQ <span [ngbTooltip]="suggestionResponse?.data?.userInput" *ngIf="suggestionResponse?.data?.userInput"> : ({{suggestionResponse?.data?.userInput?.slice(0,10) + '...'}})</span></h1>
                     <span class="count-text">{{suggestionResponse.searchResponse?.faqs?.length}}</span>
-                    <button class="maximize-btn">
-                        <i class="krIocnsFont-minimize"></i>
-                    </button>
                 </div>
                 <div class="suggestion-body-search">
                     <app-faq-suggestions (faqAnswerToggle)="checkAnswerAndToggle($event)" [searchResponse]="suggestionResponse.searchResponse"></app-faq-suggestions>
-                </div>
-            </div>
-            <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.articles?.length">
-                <div class="suggestion-header">
-                    <div class="icon_block">
-                        <img src="assets/images/icons/custchoice.svg" alt="Article">
-                    </div>
-                    <h1 class="text-truncate">Article</h1>
-                    <span class="count-text">{{suggestionResponse.searchResponse?.articles?.length}}</span>
-                    <button class="maximize-btn">
-                        <i class="krIocnsFont-minimize"></i>
-                    </button>
-                </div>
-                <div class="suggestion-body-search">
-                    <app-article-suggestions [searchResponse]="suggestionResponse.searchResponse"></app-article-suggestions>
                 </div>
             </div>
             <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.snippets?.length">
@@ -54,14 +33,23 @@
                     <div class="icon_block">
                         <img src="assets/images/icons/custchoice.svg" alt="Snippet">
                     </div>
-                    <h1 class="text-truncate">Snippet</h1>
+                    <h1 class="text-truncate">Snippet <span [ngbTooltip]="suggestionResponse?.data?.userInput" *ngIf="suggestionResponse?.data?.userInput"> : ({{suggestionResponse?.data?.userInput?.slice(0,10) + '...'}})</span></h1>
                     <span class="count-text">{{suggestionResponse.searchResponse?.snippets?.length}}</span>
-                    <button class="maximize-btn">
-                        <i class="krIocnsFont-minimize"></i>
-                    </button>
                 </div>
                 <div class="suggestion-body-search">
                     <app-snippet-suggestions [searchResponse]="suggestionResponse.searchResponse"></app-snippet-suggestions>
+                </div>
+            </div>
+            <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.articles?.length">
+                <div class="suggestion-header">
+                    <div class="icon_block">
+                        <img src="assets/images/icons/custchoice.svg" alt="Article">
+                    </div>
+                    <h1 class="text-truncate">Article <span [ngbTooltip]="suggestionResponse?.data?.userInput" *ngIf="suggestionResponse?.data?.userInput"> : ({{suggestionResponse?.data?.userInput?.slice(0,10) + '...'}})</span></h1>
+                    <span class="count-text">{{suggestionResponse.searchResponse?.articles?.length}}</span>
+                </div>
+                <div class="suggestion-body-search">
+                    <app-article-suggestions [searchResponse]="suggestionResponse.searchResponse"></app-article-suggestions>
                 </div>
             </div>
         </ng-container>
@@ -80,7 +68,7 @@
         </div>
         <app-dialog></app-dialog>
         <div class="btn-more-solid">
-            <button class="btn_link" aria-label="button">Not what you are looking for</button>
+            <button class="btn_link" aria-label="button">Not what you are looking for ?</button>
         </div>
     </div>
 </ng-template>

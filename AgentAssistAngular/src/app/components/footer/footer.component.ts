@@ -20,6 +20,7 @@ export class FooterComponent implements OnInit, OnDestroy{
   projConstants : any = ProjConstants;
   connectionDetails : any;
   subs = new SubSink();
+  maxButton = true;
 
 
 
@@ -41,9 +42,7 @@ export class FooterComponent implements OnInit, OnDestroy{
   subscribeEvents(){
     this.rootService.socketConnection$.subscribe(res => {
       if(res){
-        this.connectionDetails  = this.rootService.getConnectionDetails();
-        console.log(this.connectionDetails, 'connectionDetilas');
-        
+        this.connectionDetails  = this.rootService.getConnectionDetails();        
         this.updateActiveTab();
       }
     });
@@ -68,6 +67,17 @@ export class FooterComponent implements OnInit, OnDestroy{
     if(!this.canvas){
       this.openCanvas(canvas);
     }
+
+    let className = 'if-maximized-canvas';
+    if(this.selectedTab == ProjConstants.SETTINGS){
+      if(this.document.body.classList.contains(className)){
+        this.renderer.removeClass(this.document.body, className);
+      }
+      this.maxButton = false;
+    }else{
+      this.renderer.addClass(this.document.body, className);
+      this.maxButton = true;
+    }
     // let className = 'if-maximized-canvas';
     // this.renderer.removeClass(this.document.body, className);
   }
@@ -90,8 +100,10 @@ export class FooterComponent implements OnInit, OnDestroy{
     let className = 'if-maximized-canvas';
     if(this.document.body.classList.contains(className)){
       this.renderer.removeClass(this.document.body, className);
+      this.maxButton = false;
     }else{
       this.renderer.addClass(this.document.body, className);
+      this.maxButton = true;
     }
   }
 

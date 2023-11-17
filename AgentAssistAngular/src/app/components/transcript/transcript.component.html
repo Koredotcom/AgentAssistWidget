@@ -2,7 +2,8 @@
     <div class="offcanvas-header">
         <p class="paragraph semibold">Transcript</p>
         <button class="maximize-btn" (click)="minMaxButtonClick()">
-            <i class="krIocnsFont-minimize"></i>
+            <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
+            <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
         </button>
     </div>
     <div class="body-canvas-wrapper">

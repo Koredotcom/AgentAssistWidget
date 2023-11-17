@@ -1,5 +1,5 @@
 
-<div class="faq-suggestions-wrapper" *ngFor="let faq of searchedFAQList">
+<div class="faq-suggestions-wrapper" *ngFor="let faq of searchedFAQList | slice : 0 : viewCount;">
     <div class="faq-s-header">
         <div class="titles-info-heading">
             <h1 class="text-truncate">{{faq.displayName ? faq.displayName : faq.question}} </h1>
@@ -30,7 +30,7 @@
             </div>
             <a class="moreText">
                 <!-- <span class="more-text" (click)="toggleShowMoreLess(faq)" *ngIf="faq.showMoreButton && faq.answer.length > 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))">Expand / </span> -->
-                <span class="more-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && ansObj['showMoreButton']">More</span>
+                <span class="more-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && ansObj['showMoreButton'] && (faq.answer.length == 1 || faq.seeMoreWrapper)" >More</span>
                 <span class="less-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && !ansObj['showMoreButton']">Less</span>
             </a>
         </div>
@@ -38,3 +38,7 @@
         <button class="close-expand btn_link" (click)="toggleExpandAndClose(faq)" *ngIf="faq?.answer?.length > 1 && faq.seeMoreWrapper">Close</button>
     </ng-container>
 </div>
+<a class="moreText" *ngIf="searchedFAQList?.length > 2">
+    <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">View More</span>
+    <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">View Less</span>
+</a>

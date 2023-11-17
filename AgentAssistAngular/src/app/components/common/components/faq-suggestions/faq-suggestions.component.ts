@@ -19,7 +19,9 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
 
   subs = new SubSink();
   projConstants: any = ProjConstants;
-  searchedFAQList : any = [];
+  searchedFAQList : any[] = [];
+  viewCount = 2;
+  moreClick = false;
 
   constructor(private handleSubjectService : HandleSubjectService, public rootService : RootService,
     private websocketService : WebSocketService){
@@ -38,6 +40,7 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
     this.searchedFAQList = [];
     if(searchResponse && searchResponse.faqs){
       this.searchedFAQList = searchResponse.faqs;
+      this.viewLessClick();
     }
   }
 
@@ -87,6 +90,15 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
     faq.answerCount = faq.seeMoreWrapper ? faq.answer.length : 1;
   }
 
+  viewMoreClick(){
+    this.moreClick = true;
+    this.viewCount = this.searchedFAQList?.length;
+  }
+
+  viewLessClick(){
+    this.moreClick = false;
+    this.viewCount = (this.searchedFAQList && this.searchedFAQList?.length <= 2) ? this.searchedFAQList?.length : 2;
+  }
 
   ngOnDestroy(){
     this.subs.unsubscribe();

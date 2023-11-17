@@ -141,8 +141,10 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.subs.sink = this.handleSubjectService.proactiveModeSubject.subscribe((response: any) => {
       if (response != null && response != undefined) {
         this.proactiveModeStatus = response;
-        this.handleProactiveDisableEvent(this.dialogPositionId);
-        this.handleAutomationSmallTalkOverrideMode();
+        if(!this.rootService.manualAssistOverrideMode || !response){
+          this.handleProactiveDisableEvent(this.dialogPositionId);
+        }
+        this.handleAutomationSmallTalkOverrideMode(this.proactiveModeStatus);
       }
     });
 
@@ -199,6 +201,10 @@ export class AssistComponent implements OnInit, OnDestroy {
     if (this.rootService.OverRideMode && this.proactiveModeStatus && !this.rootService.manualAssistOverrideMode) {
       this.websocketService.handleOverrideMode(flag, null);
     }
+  }
+
+  overModeContinue(flag){
+    this.websocketService.handleOverrideMode(flag, null);
   }
 
   processUserMessages(data) {    
@@ -261,18 +267,18 @@ export class AssistComponent implements OnInit, OnDestroy {
   processLastEntityNodeForHistory(data){
     if (this.assistResponseArray.length >=1) {
       this.assistResponseArray.map((arrEle, actualarrayIndex) => {
-        if (arrEle.uuid && arrEle?.automationsArray?.length) {
+        if (arrEle?.uuid && arrEle?.automationsArray?.length) {
             arrEle?.automationsArray.forEach((element, index) => {
               if((index !== arrEle.automationsArray.length - 1) || (actualarrayIndex > 0 && actualarrayIndex != this.assistResponseArray.length -1)){
                 element.disableInput = true;
               }
             });
           arrEle.automationsArray = [...arrEle.automationsArray];
-        }else if(arrEle.type == this.projConstants.SMALLTALK && actualarrayIndex != this.assistResponseArray.length){
+        }else if(arrEle?.type == this.renderResponseType.SMALLTALK && actualarrayIndex < this.assistResponseArray.length){
           arrEle.disableInput = true;
         }
       });
-    }
+    }    
     this.assistResponseArray = structuredClone(this.assistResponseArray);
   }
   
@@ -364,7 +370,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         value: data?.buttons[0]?.value
       }
 
-      if (data.isPrompt && !this.proactiveModeStatus) {
+      if (data.isPrompt && (!this.proactiveModeStatus || this.rootService.manualAssistOverrideMode)) {
         renderResponse.toggleOverride = true;
         renderResponse.hideOverrideDiv = true;
       }
@@ -593,17 +599,19 @@ export class AssistComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  handleAutomationSmallTalkOverrideMode() {
+  handleAutomationSmallTalkOverrideMode(flag) {
+    let proactiveMode = this.rootService.proactiveModeStatus;
+    let manualOverride = this.rootService.manualAssistOverrideMode;
     let assistResponse = this.assistResponseArray[this.assistResponseArray.length - 1];
     if (assistResponse) {
       if (assistResponse.type == this.renderResponseType.SMALLTALK) {
 
       } else if (assistResponse.type == this.renderResponseType.AUTOMATION) {
         let assistResponseArray = assistResponse.automationsArray;
-        if (!this.proactiveModeStatus && assistResponseArray?.length > 0 && assistResponseArray[assistResponseArray.length - 1]?.data?.isPrompt) {
+        if ((!proactiveMode || manualOverride) && assistResponseArray?.length > 0 && assistResponseArray[assistResponseArray.length - 1]?.data?.isPrompt) {
           assistResponseArray[assistResponseArray.length - 1].toggleOverride = true;
           assistResponseArray[assistResponseArray.length - 1].hideOverrideDiv = true;
-        } else if (this.proactiveModeStatus && assistResponseArray?.length > 0 && assistResponseArray[assistResponseArray.length - 1]?.data?.isPrompt) {
+        } else if (proactiveMode && manualOverride && assistResponseArray?.length > 0 && assistResponseArray[assistResponseArray.length - 1]?.data?.isPrompt) {
           assistResponseArray[assistResponseArray.length - 1].toggleOverride = false;
           assistResponseArray[assistResponseArray.length - 1].hideOverrideDiv = false;
         }
@@ -616,7 +624,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   dialogTerminatedOrIntruppted() {
     this.rootService.isAutomationOnGoing = false;
     this.rootService.isInitialDialogOnGoing = true;
-    this.rootService.OverRideMode = false;
+    // this.rootService.OverRideMode = false;
     let storageObject: any = {
       // [storageConst.AUTOMATION_GOING_ON]: this.commonService.isAutomationOnGoing,
       [storageConst.INITIALTASK_GOING_ON]: this.rootService.isInitialDialogOnGoing,
@@ -729,10 +737,10 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
       } else if (popupObject.override) {
         this.terminateClick = false;
-        this.rootService.OverRideMode = true;
-        this.makeOverrideEvent(this.connectionDetails.botId, this.connectionDetails.conversationId, true);
+        this.overModeContinue(true);
         this.rootService.manualAssistOverrideMode = true;
         this.removeOrAddOverRideDivForPreviousResponse(false);
+        this.handleAutomationSmallTalkOverrideMode(false)
       }
       if(!this.terminateClick){
         this.closeOffCanvas();

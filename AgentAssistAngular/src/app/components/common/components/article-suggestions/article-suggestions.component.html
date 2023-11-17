@@ -1,5 +1,5 @@
 
-<ng-container *ngFor="let article of articlesList">
+<ng-container *ngFor="let article of articlesList | slice : 0 : viewCount;">
   <div class="faq-suggestions-wrapper">
     <div class="faq-s-header">
         <div class="titles-info-heading">
@@ -29,3 +29,7 @@
     </div>
   </div>
 </ng-container>
+<a class="moreText" *ngIf="articlesList?.length > 2">
+    <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">View More</span>
+    <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">View Less</span>
+</a>

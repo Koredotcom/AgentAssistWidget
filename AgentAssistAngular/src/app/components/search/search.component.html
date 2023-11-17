@@ -1,6 +1,10 @@
 <div class="search-block-data-suggestions">
     <div class="suggestionslist-conntent-search">
-        <ng-container *ngIf="(searchResponse | json) != '{}'">
+        <button class="solid-action maximize-btn" (click)="minMaxButtonClick()">
+            <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
+            <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
+        </button>
+        <ng-container *ngIf="(searchResponse | json) != '{}' || searched">
             <div class="sugestions-block" *ngIf="searchResponse?.dialogs?.length">
                 <div class="suggestion-header">
                     <div class="icon_block">
@@ -8,17 +12,10 @@
                     </div>
                     <h1 class="text-truncate">Dialog Task</h1>
                     <span class="count-text">{{searchResponse?.dialogs?.length}}</span>
-                    <button class="maximize-btn">
-                        <i class="krIocnsFont-minimize"></i>
-                    </button>
                 </div>
                 <div class="suggestion-body-search">
                     <app-dialog-suggestion [searchResponse]="searchResponse"></app-dialog-suggestion>
                 </div>
-                <a class="moreText">
-                    <span class="more-text">More</span>
-                    <!-- <span class="less-text">Less</span> -->
-                </a>
             </div>
             <div class="sugestions-block" *ngIf="searchResponse?.faqs?.length">
                 <div class="suggestion-header">
@@ -27,31 +24,9 @@
                     </div>
                     <h1 class="text-truncate">FAQ</h1>
                     <span class="count-text">{{searchResponse?.faqs?.length}}</span>
-                    <button class="maximize-btn">
-                        <i class="krIocnsFont-minimize"></i>
-                    </button>
                 </div>
                 <div class="suggestion-body-search">
                     <app-faq-suggestions (faqAnswerToggle)="checkAnswerAndToggle($event)" [searchResponse]="searchResponse"></app-faq-suggestions>
-                </div>
-                <a class="moreText">
-                    <span class="more-text">More</span>
-                    <!-- <span class="less-text">Less</span> -->
-                </a>
-            </div>
-            <div class="sugestions-block" *ngIf="searchResponse?.articles?.length">
-                <div class="suggestion-header">
-                    <div class="icon_block">
-                        <img src="assets/images/icons/custchoice.svg" alt="Article">
-                    </div>
-                    <h1 class="text-truncate">Article</h1>
-                    <span class="count-text">{{searchResponse?.articles?.length}}</span>
-                    <button class="maximize-btn">
-                        <i class="krIocnsFont-minimize"></i>
-                    </button>
-                </div>
-                <div class="suggestion-body-search">
-                    <app-article-suggestions [searchResponse]="searchResponse"></app-article-suggestions>
                 </div>
             </div>
             <div class="sugestions-block" *ngIf="searchResponse?.snippets?.length">
@@ -61,16 +36,25 @@
                     </div>
                     <h1 class="text-truncate">Snippet</h1>
                     <span class="count-text">{{searchResponse?.snippets?.length}}</span>
-                    <button class="maximize-btn">
-                        <i class="krIocnsFont-minimize"></i>
-                    </button>
                 </div>
                 <div class="suggestion-body-search">
                     <app-snippet-suggestions [searchResponse]="searchResponse"></app-snippet-suggestions>
                 </div>
             </div>
+            <div class="sugestions-block" *ngIf="searchResponse?.articles?.length">
+                <div class="suggestion-header">
+                    <div class="icon_block">
+                        <img src="assets/images/icons/custchoice.svg" alt="Article">
+                    </div>
+                    <h1 class="text-truncate">Article</h1>
+                    <span class="count-text">{{searchResponse?.articles?.length}}</span>
+                </div>
+                <div class="suggestion-body-search">
+                    <app-article-suggestions [searchResponse]="searchResponse"></app-article-suggestions>
+                </div>
+            </div>
         </ng-container>
-        <ng-container *ngIf="(searchResponse | json) == '{}'">
+        <ng-container *ngIf="(searchResponse | json) == '{}' && !searched">
             <div class="sugestions-block">
                 <div class="suggestion-header">
                     <div class="icon_block">
@@ -78,9 +62,6 @@
                     </div>
                     <h1 class="text-truncate">All Dialog Tasks</h1>
                     <!-- <span class="count-text">2</span> -->
-                    <button class="maximize-btn">
-                        <i class="krIocnsFont-minimize"></i>
-                    </button>
                 </div>
                 <div class="suggestion-body-search">
                     <app-dialog-suggestion></app-dialog-suggestion>

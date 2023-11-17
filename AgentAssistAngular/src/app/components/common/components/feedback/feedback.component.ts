@@ -54,7 +54,7 @@ export class FeedbackComponent {
     );
     
     if(this.rootService.isUpdateFeedBackDetailsFlag && this.feedbackData?.feedbackResponse){
-      this.updateFeedbackForm(this.feedbackData?.feedbackResponse);
+      this.updateFeedbackForm(this.feedbackData);
     }
     setTimeout(() => {
       this.subscribeValChanges();
@@ -62,8 +62,8 @@ export class FeedbackComponent {
   }
 
   updateFeedbackForm(feedbackResponse){        
-    (this.feedbackForm?.controls?.['feedbackDetails']).setValue(this.feedbackData.feedbackDetails);
-    (this.feedbackForm?.controls?.['comment']).setValue(this.feedbackData.comment);
+    (this.feedbackForm?.controls?.['feedbackDetails']).setValue(feedbackResponse.feedbackDetails);
+    (this.feedbackForm?.controls?.['comment']).setValue(feedbackResponse.comment);
     this.cdRef.detectChanges();
   }
 
@@ -92,8 +92,9 @@ export class FeedbackComponent {
     }else{
       this.feedbackData.feedbackDetails.push(suggestion);
     }
+    this.feedbackData.comment = this.feedbackForm.get('comment').value;
     this.feedbackData = structuredClone(this.feedbackData);
-    (this.feedbackForm.controls?.['feedbackDetails']).setValue(this.feedbackData.feedbackDetails);
+    this.submitFeedback();
   }
 
   AgentAssist_feedBack_Update_Request() {

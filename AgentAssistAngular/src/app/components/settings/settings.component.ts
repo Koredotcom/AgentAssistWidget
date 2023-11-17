@@ -26,7 +26,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   selectedTheme = 'automatic';
   projConstants : any = ProjConstants;
   connectionDetails : any;
-  proactiveModeEnabled: boolean = false;
+  proactiveModeEnabled: boolean = this.rootService.proactiveModeStatus;
 
 
   ngOnInit(): void {
@@ -51,7 +51,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.defLanguage = convState[storageConst.LANGUAGE] || storageConst.ENGLISH;
     this.selectedTheme = convState[storageConst.THEME] || storageConst.AUTO;
 
-    this.setProactiveMode(convState);
+    // this.setProactiveMode(convState);
   }
 
   selectedLang(_event: any){
@@ -81,7 +81,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   //proactive tab toggle click
   proactiveToggle(proactiveModeEnabled) {
-    this.proactiveModeEnabled = (proactiveModeEnabled == ProjConstants.PROACTIVE_INITIAL_MODE) ? true : proactiveModeEnabled;
+    this.proactiveModeEnabled = proactiveModeEnabled;
+    this.rootService.proactiveModeStatus = proactiveModeEnabled;
     this.handleSubjectService.setProactiveModeStatus(proactiveModeEnabled);
     this.updateProactiveModeState(this.proactiveModeEnabled);
   }
@@ -93,13 +94,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.localStorageService.setLocalStorageItem(storageObject);
   }
 
-  setProactiveMode(convState){
-    if(this.connectionDetails.source == this.projConstants.SMARTASSIST_SOURCE && typeof convState[storageConst.PROACTIVE_MODE] != 'boolean'){
-      convState[storageConst.PROACTIVE_MODE] = this.connectionDetails.isProactiveAgentAssistEnabled;
-    }
-    let proactiveModeStatus = (typeof convState[storageConst.PROACTIVE_MODE] === 'boolean') ? convState[storageConst.PROACTIVE_MODE] : true;
-    this.proactiveToggle(proactiveModeStatus);
-  }
+  // setProactiveMode(convState){
+  //   if(this.connectionDetails.source == this.projConstants.SMARTASSIST_SOURCE && typeof convState[storageConst.PROACTIVE_MODE] != 'boolean'){
+  //     convState[storageConst.PROACTIVE_MODE] = this.connectionDetails.isProactiveAgentAssistEnabled;
+  //   }
+  //   let proactiveModeStatus = (typeof convState[storageConst.PROACTIVE_MODE] === 'boolean') ? convState[storageConst.PROACTIVE_MODE] : true;
+  //   this.proactiveToggle(proactiveModeStatus);
+  // }
 
   ngOnDestroy(){
     this.subs.unsubscribe();

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { FormatAmpmPipe } from 'src/app/pipes/format-ampm.pipe';
 import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
@@ -16,6 +16,7 @@ import { SubSink } from 'subsink';
 })
 export class TranscriptComponent  implements OnInit, OnDestroy{
 
+  @Input() maxButton;
   @Output() maxMinButtonClick = new EventEmitter();
   @ViewChild('transcriptTabHistoryText', {static: false}) private transcriptTabHistoryText: ElementRef<HTMLDivElement>
   
@@ -134,7 +135,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
         // this.prepareConversation();
         if (userInputData.author.type === 'USER') {
           this.processTranscriptData(userInputData);
-          if (this.rootService.OverRideMode) {
+          if (!this.rootService.OverRideMode) {
             userAgentMessage['type'] = 'user';
             userAgentMessage.author['type'] = 'user';
             this.websocketService.emitEvents(EVENTS.user_sent_message, userAgentMessage)

@@ -25,7 +25,7 @@
                 <button class="improve-lable-text" aria-label="Button">Other</button> -->
             </div>
             <div class="input-improve-text">
-                <textarea placeholder="Add additional comments here" class="form-control" formControlName="comment"></textarea>
+                <textarea placeholder="Add additional comments here" class="form-control" formControlName="comment" (keyup.enter)="submitFeedback()"></textarea>
                 <button class="send-btn-feedback" aria-label="Button" [disabled]="!formTouched" (click)="submitFeedback()">
                     <i class="krIocnsFont-check-circle"></i>
                 </button>

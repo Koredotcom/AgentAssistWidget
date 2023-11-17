@@ -38,9 +38,9 @@
 
 <ng-template #content let-offcanvas>
     <div class="canvas-auto-height">
-        <app-search [ngClass]="{'dis-none' : selectedTab !== projConstants.SEARCH}" class="h-100" ></app-search>
-        <app-mybot [ngClass]="{'dis-none' : selectedTab !== projConstants.MYBOT}" class="h-100" (maxMinButtonClick)="minMaxButtonClick($event)"></app-mybot>
-        <app-transcript [ngClass]="{'dis-none' : selectedTab !== projConstants.TRANSCRIPT}" class="h-100" (maxMinButtonClick)="minMaxButtonClick($event)"></app-transcript>
+        <app-search [ngClass]="{'dis-none' : selectedTab !== projConstants.SEARCH}" class="h-100" (maxMinButtonClick)="minMaxButtonClick($event)" [maxButton]="maxButton"></app-search>
+        <app-mybot [ngClass]="{'dis-none' : selectedTab !== projConstants.MYBOT}" class="h-100" (maxMinButtonClick)="minMaxButtonClick($event)" [maxButton]="maxButton"></app-mybot>
+        <app-transcript [ngClass]="{'dis-none' : selectedTab !== projConstants.TRANSCRIPT}" class="h-100" (maxMinButtonClick)="minMaxButtonClick($event)" [maxButton]="maxButton"></app-transcript>
         <app-settings [ngClass]="{'dis-none' : selectedTab !== projConstants.SETTINGS}" class="h-100"></app-settings>
     </div>
 </ng-template>

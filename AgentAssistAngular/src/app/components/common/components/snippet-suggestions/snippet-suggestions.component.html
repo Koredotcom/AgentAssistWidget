@@ -1,5 +1,5 @@
 
-<ng-container *ngFor="let snippet of searchedSnippetList;let i = index">
+<ng-container *ngFor="let snippet of searchedSnippetList | slice : 0 : viewCount;let i = index">
   <div class="faq-suggestions-wrapper">
     <div class="faq-s-header">
       <div class="titles-info-heading">
@@ -24,3 +24,7 @@
     </div>
   </div>
 </ng-container>
+<a class="moreText" *ngIf="searchedSnippetList?.length > 2">
+  <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">View More</span>
+  <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">View Less</span>
+</a>

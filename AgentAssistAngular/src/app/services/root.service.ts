@@ -25,6 +25,7 @@ export class RootService {
   grantResponseObj: any = {};
 
   OverRideMode: boolean = false;
+  proactiveModeStatus : boolean = false;
   isAutomationOnGoing: boolean = false;
   isMyBotAutomationOnGoing: boolean = false;
   isInitialDialogOnGoing: boolean = false;

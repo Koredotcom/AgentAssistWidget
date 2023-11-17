@@ -58,7 +58,9 @@ export class ListviewComponent{
       this.inputName = this.projConstants.AWAITING;
       automation.toggleOverride = false;
       automation.entityValue = '';
-      this.handleOverridBtnClick(automation.connectionDetails, automation.dialogId, automation.toggleOverride);
+      if(this.rootService.OverRideMode && this.rootService.proactiveModeStatus && !this.rootService.manualAssistOverrideMode){
+        this.handleOverridBtnClick(automation.connectionDetails, automation.dialogId, automation.toggleOverride);
+      }
     }
   }
 
