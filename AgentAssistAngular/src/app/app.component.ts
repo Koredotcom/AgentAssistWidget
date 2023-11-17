@@ -271,8 +271,8 @@ export class AppComponent implements OnDestroy {
         this.isErrorMsg = true;
     },
       error: (err)=> {
-        const proAct = connectionObj['isProactiveAgentAssistEnabled'];
         if(Object.keys(connectionObj)){
+          const proAct = connectionObj['isProactiveAgentAssistEnabled'];
           this.aaSettings.isProactiveEnabled = (proAct === undefined || proAct === 'undefined') ? true : proAct;
         };
         this.aaSettings = this.sampleSettings;

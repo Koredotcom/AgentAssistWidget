@@ -532,7 +532,7 @@ setProactiveMode(){
   let appState : any = this.localStorageService.getLocalStorageState();
   let convState = appState[this.connectionDetails.conversationId];
   if(this.connectionDetails.source == this.projConstants.SMARTASSIST_SOURCE && typeof convState[storageConst.PROACTIVE_MODE] != 'boolean'){
-    convState[storageConst.PROACTIVE_MODE] =  this.aaSettings?.isProactiveEnabled || true;
+    convState[storageConst.PROACTIVE_MODE] =  this.aaSettings?.isProactiveEnabled === undefined || this.aaSettings?.isProactiveEnabled === 'undefined' ? true: this.aaSettings?.isProactiveEnabled;
   }
   let proactiveModeStatus = (typeof convState[storageConst.PROACTIVE_MODE] === 'boolean') ? convState[storageConst.PROACTIVE_MODE] : this.aaSettings?.isProactiveEnabled;
   this.proactiveToggle(proactiveModeStatus);
