@@ -36,9 +36,15 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   iId = this.authService?.isLoadingOnSm && this.selAcc && this.selAcc?.instanceBots?.length ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
 
   landingPageTabs = {
-    voice: [ 'Transcript', 'Assist Tab', 'library', 'MyBot'],
-    chat: [ 'Assist',  'library', 'MyBot' ]
+    transcript: 'Transcript',
+    assist: 'Assist',
+    library: 'Library',
+    mybot: 'My bot'
+    // voice: [ 'transcript', 'assist', 'library', 'myBot'],
+    // chat: [ 'assist',  'library', 'myBot' ]
   }
+
+
 
   agentAssistSettings = { 
     agentAssistWidgetEnabled: true,
