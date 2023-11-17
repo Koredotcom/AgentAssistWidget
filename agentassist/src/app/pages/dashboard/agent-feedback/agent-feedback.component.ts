@@ -85,8 +85,7 @@ export class AgentFeedbackComponent implements OnInit {
       this.cdRef.detectChanges();
       if(empty){
         this.skip = 0;
-        this.limit = 30;
-        this.fetched = this.fetched;
+        this.fetched = 0;
       }
       let botId = this.dashboardService.getSelectedBotDetails()._id;
       let params: any = {
@@ -103,8 +102,6 @@ export class AgentFeedbackComponent implements OnInit {
         this.cdRef.detectChanges();
       })).subscribe(data => {
         if (data) {
-          if(empty){
-          }
           this.skip = this.skip+1;
           this.hasMore = data.hasMore;
           this.updateViewData(data);
