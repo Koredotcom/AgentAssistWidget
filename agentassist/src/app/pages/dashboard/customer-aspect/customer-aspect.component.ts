@@ -48,7 +48,7 @@ export class CustomerAspectComponent implements OnInit {
   isLoading: boolean = false;
   hasMore: boolean = false;
   skip = 0
-  limit = 14;
+  limit = 30;
   fetched = 0;
 
   subs = new SubSink();
@@ -61,7 +61,7 @@ export class CustomerAspectComponent implements OnInit {
   ngOnInit(): void {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
     if(this.params.streamId !== '') {
-      this.updateCustomerAspectData();
+      // this.updateCustomerAspectData();
     }
 
 
@@ -99,8 +99,7 @@ export class CustomerAspectComponent implements OnInit {
       this.cdRef.detectChanges();
       if(empty){
         this.skip = 0;
-        this.limit = 14;
-        this.fetched = this.fetched;
+        this.fetched = 0;
       }
       let botId = this.dashboardService.getSelectedBotDetails()._id;
       let params: any = {
@@ -117,8 +116,6 @@ export class CustomerAspectComponent implements OnInit {
         this.cdRef.detectChanges();
       })).subscribe(data => {
         if (data) {
-          if(empty){
-          }
           this.skip = this.skip+1;
           this.hasMore = data.hasMore;
           this.updateViewData(data);
