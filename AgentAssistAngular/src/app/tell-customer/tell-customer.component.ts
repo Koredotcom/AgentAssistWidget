@@ -30,6 +30,10 @@ export class TellCustomerComponent {
     if(this.automation?.templateRender && this.automation?.template && this.automation?.connectionDetails?.source == this.projConstants.SMARTASSIST_SOURCE){
       this.automation.hideCopyButton = true; 
     }
+
+    if(!this.rootService.settingsData?.isAgentResponseEnabled){
+      this.automation.hideSendButton = true;
+    }
   }
 
   handleSendCopyButton(method,automation){

@@ -3,7 +3,7 @@
 
 
 
-<section class="agent-widget-wrapper-data">
+<section class="agent-widget-wrapper-data" *ngIf="widgetSettings?.agentAssistWidgetEnabled">
   <header>
     <app-header></app-header>
   </header>
@@ -15,7 +15,10 @@
   </footer>
 </section>
 
-<ng-container>
+<app-loader *ngIf="widgetLoader"></app-loader>
+
+
+<ng-container *ngIf="widgetSettings?.agentAssistWidgetEnabled">
   <div class="hints-wrapper-fixed">
     <app-hints></app-hints>
   </div>

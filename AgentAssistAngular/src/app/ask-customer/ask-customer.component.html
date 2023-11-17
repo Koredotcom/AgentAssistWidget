@@ -15,7 +15,7 @@
             <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, automation)" *ngIf="!automation.hideCopyButton">
                 <i class="krIocnsFont-copy"></i>
             </button>
-            <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, automation)">Send</button>
+            <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, automation)" *ngIf="!automation.hideSendButton">Send</button>
         </div>
         <!-- <div class="sent-msg-text">Sent</div> -->
         <!-- <p>{{automation.data.buttons[0].value}}</p> -->

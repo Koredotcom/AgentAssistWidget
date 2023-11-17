@@ -79,6 +79,12 @@ export class EndPointsService {
       method : 'post',
       defaultEndPoint : false
     }
+
+    this.serviceList['get.settings'] = {
+      endpoint : '/agentassist/api/v1/agentassist/:instanceBotId/agentassistsetting',
+      method : 'get',
+      defaultEndPoint : false
+    }
   }
 
 }

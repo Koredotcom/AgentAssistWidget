@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EmptyObjectCheckPipe } from '../pipes/empty-object-check.pipe';
 import { SubSink } from "subsink";
-import { ProjConstants, storageConst } from '../proj.const';
+import { ProjConstants, storageConst, WidgetConst } from '../proj.const';
 import { RootService } from './root.service';
 
 @Injectable({
@@ -86,9 +86,10 @@ export class LocalStorageService {
    return appState;
   }
 
-  initializeLocalStorageState(){
-    let appState = this.getLocalStorageState();    
-    let conversationId = this.rootService?.getConnectionDetails()?.conversationId;
+  initializeLocalStorageState(widgetSettings){
+    let appState = this.getLocalStorageState();   
+    let connectionDetails =  this.rootService?.getConnectionDetails();
+    let conversationId = connectionDetails?.conversationId;
     if(!appState || !appState[conversationId]){
       if(this.rootService.getConnectionDetails() && conversationId){
         let appState : any =  this.getLocalStorageState();
@@ -110,11 +111,30 @@ export class LocalStorageService {
         appState[conversationId][storageConst.LANGUAGE] = storageConst.ENGLISH;
         appState[conversationId][storageConst.THEME] = storageConst.AUTO;
         appState[conversationId][storageConst.ACTIVE_TAB] = ProjConstants.ASSIST;
+        appState[conversationId][storageConst.SHOWSEND] = true;
+        appState[conversationId][storageConst.ENABLEWIDGET] = true;
 
-        if(this.rootService.connectionDetails.source == ProjConstants.SMARTASSIST_SOURCE){
-          appState[conversationId][storageConst.PROACTIVE_MODE] = this.rootService.connectionDetails.isProactiveAgentAssistEnabled;
+        if(widgetSettings && typeof widgetSettings?.isProactiveEnabled == 'boolean'){
+          appState[conversationId][storageConst.PROACTIVE_MODE] = widgetSettings?.isProactiveEnabled;
         }
+
+        if(widgetSettings && typeof widgetSettings?.isAgentResponseEnabled == 'boolean'){
+          appState[conversationId][storageConst.SHOWSEND] = widgetSettings?.isAgentResponseEnabled;
+        }
+
+        if(widgetSettings && typeof widgetSettings?.agentAssistWidgetEnabled == 'boolean'){
+          appState[conversationId][storageConst.ENABLEWIDGET] = widgetSettings?.agentAssistWidgetEnabled;
+        }
+
+        let experience = connectionDetails.isCallConversation ? 'voice' : 'chat';
+
+        if(widgetSettings && widgetSettings?.isWidgetLandingEnabled && widgetSettings?.isWidgetLandingEnabled[experience] && widgetSettings?.isWidgetLandingEnabled[experience]?.tab){
+          appState[conversationId][storageConst.ACTIVE_TAB] = WidgetConst[widgetSettings?.isWidgetLandingEnabled[experience]?.tab];
+        }
+
         this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];
+        this.rootService.setActiveTab(appState[conversationId][storageConst.ACTIVE_TAB]);
+
         localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
       }
     }else if(appState && appState[conversationId]){

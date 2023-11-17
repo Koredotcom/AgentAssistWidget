@@ -4,7 +4,7 @@
     </div>
     <div class="resize-divider"></div>
     <div class="widgets-list-card" #bottom [ngClass]="{'minimized-card' : checkListMaxButtonClick}">
-        <app-loader *ngIf="isLoader"></app-loader>
+        <!-- <app-loader *ngIf="isLoader"></app-loader> -->
         <app-assist (maxButtonClick)="assistMaxButtonClickEvent($event)" [maxButton]="checkListMaxButtonClick"></app-assist>
     </div>
 </div>

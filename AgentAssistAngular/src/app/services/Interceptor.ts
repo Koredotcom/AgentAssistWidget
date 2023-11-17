@@ -29,6 +29,15 @@ export class I1 implements HttpInterceptor {
             headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
             headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
             headerObj.eAD = 'true';
+        }else if(headers.indexOf('settings') >= 0){
+            if(fromSAT && token){
+                headerObj.accountId = accountId
+                headerObj.Authorization = 'bearer' + ' ' + token;
+                headerObj.eAD = 'false';
+            }else{
+                headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
+                headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
+            }
         }
         const modified = req.clone({setHeaders: headerObj});        
         return next.handle(modified);

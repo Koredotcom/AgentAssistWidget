@@ -32,7 +32,7 @@
                 <i class="krIocnsFont-copy"></i>
             </button>
             <button class="solidbtn" aria-label="button"
-                (click)="handleSendCopyButton(projConstants.SEND, automation)">Send</button>
+                (click)="handleSendCopyButton(projConstants.SEND, automation)" *ngIf="!automation.hideSendButton">Send</button>
         </div>
         <p *ngIf="!automation.templateRender">{{automation.value}}</p>
         <ng-container *ngIf="automation.templateRender && automation.template">

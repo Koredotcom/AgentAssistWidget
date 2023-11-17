@@ -20,6 +20,8 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
   articlesList : any[] = [];
   viewCount = 2;
   moreClick = false;
+  hideActionButtons : boolean = false;
+  hideSendButton : boolean = false;
 
   constructor(private handleSubjectService : HandleSubjectService,
      private rootService : RootService){
@@ -28,6 +30,18 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
 
   ngOnChanges(){
     this.handleSearchResponse(this.searchResponse);
+    this.hideSendAndCopy();
+  }
+
+
+  hideSendAndCopy(){
+    // Both send and copy
+    this.hideActionButtons = (this.rootService.connectionDetails.isCallConversation) ? true : false;
+
+    //send Button
+    if(!this.rootService.settingsData?.isAgentResponseEnabled){
+      this.hideSendButton = true;
+    }
   }
 
   ngOnInit(): void {

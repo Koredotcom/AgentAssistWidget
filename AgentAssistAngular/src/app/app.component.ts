@@ -11,6 +11,7 @@ import { DirService } from './services/dir.service';
 import { ServiceInvokerService } from './services/service-invoker.service';
 import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
 import { HandleSubjectService } from './services/handle-subject.service';
+import { finalize } from 'rxjs';
 
 
 @Component({
@@ -24,6 +25,8 @@ export class AppComponent implements OnInit, OnDestroy{
   subs = new SubSink();
   // urls = ['smartassist.kore.ai', 'smartassist-jp.kore.ai', 'smartassist.korebots.com', 'smartassist-de.kore.ai', 'smartassist-korevg-np.kore.ai'];
   connectionDetails: any = {};
+  widgetSettings : any;
+  widgetLoader : boolean = true;
 
   constructor(
     private webSocketService: WebSocketService,
@@ -77,7 +80,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
 
   initiateSocketConnection(params: any) {
-    this.localStorageService.initializeLocalStorageState();
+    this.localStorageService.initializeLocalStorageState(this.widgetSettings);
     this.isGrantSuccess = true;
     setTimeout(() => {
       this.webSocketService.socketConnection();
@@ -96,7 +99,8 @@ export class AppComponent implements OnInit, OnDestroy{
     }
     this.serviceInvoker.invoke('post.grant',{}, payload,{},params.agentassisturl).subscribe((res)=> {
       this.rootService.grantResponseObj = res;
-      this.initiateSocketConnection(params);
+      // this.initiateSocketConnection(params);
+      this.getAgentAssistSettings(params);
     },(err)=> {
       if (err.status === 500) {
         this.errorMsg = "Issue identified with the backend services! Please reach out to AgentAssist Admin.";
@@ -114,7 +118,7 @@ export class AppComponent implements OnInit, OnDestroy{
       // this.service.configObj = urlParams;
       this.rootService.formatConnectionDetails(urlParams);
       this.connectionDetails = this.rootService.getConnectionDetails();
-      this.initAgentAssist(urlParams);
+      this.initAgentAssist(this.connectionDetails);
     } else if (e.data.name === 'userBotConvos') {
       console.log(e.data);
       if (e.data && e.data.sessionId && e.data.userId) {
@@ -245,12 +249,26 @@ export class AppComponent implements OnInit, OnDestroy{
     ) {
       if (this.connectionDetails.fromSAT) {
         this.connectionDetails = this.rootService.getConnectionDetails();
-        this.initiateSocketConnection(this.connectionDetails);
+        // this.initiateSocketConnection(this.connectionDetails);
+        this.getAgentAssistSettings(params);
       } else {
         this.grantCall(params);
       }
     }
   }
 
+
+  getAgentAssistSettings(params){
+    let instanceBotId = params.fromSAT ? params.instanceBotId : params.botId;
+    this.serviceInvoker.invoke('get.settings', {instanceBotId : instanceBotId}, {},{ settings: 'true', botId : params.botId },params.agentassisturl).pipe(finalize(() => {this.widgetLoader = false})).subscribe((res)=> {
+      console.log(res, 'res ************');
+      if(res && res.agentAssistSettings){
+        this.rootService.settingsData = res.agentAssistSettings;
+        this.widgetSettings = res.agentAssistSettings;
+      }
+      this.initiateSocketConnection(params);
+    });
+
+  }
 
 }
