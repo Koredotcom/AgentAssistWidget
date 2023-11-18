@@ -14,6 +14,7 @@ import { TemplateRenderClassService } from 'src/app/services/template-render-cla
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { finalize } from 'rxjs/operators';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-assist',
@@ -41,11 +42,11 @@ export class AssistComponent implements OnInit, OnDestroy {
 
   welcomeMsgResponse: any = {};
   dropdownHeaderUuids: any;
+
   assistResponseArray: any = [];
-  agentAssistResponse: any = {};
+  // agentAssistResponse: any = {};
   currentRunningStep: string;
   terminateClick: boolean = false;
-  smallTalkUuids: any;
 
   interruptDialog: any;
   showInterruptPopup: boolean = false;
@@ -66,27 +67,18 @@ export class AssistComponent implements OnInit, OnDestroy {
     private websocketService: WebSocketService, private localStorageService: LocalStorageService,
     private koreGenerateuuidPipe: KoreGenerateuuidPipe, private randomUUIDPipe: RandomUuidPipe,
     private handleSubjectService: HandleSubjectService, private templateRenderClassService: TemplateRenderClassService,
-    public modalService: NgbModal, private offcanvasService: NgbOffcanvas) {
+    public modalService: NgbModal, private offcanvasService: NgbOffcanvas,
+    private commonService : CommonService) {
 
   }
 
   ngOnInit(): void {
-
     this.subscribeEvents();
   }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
-
-  scrollToBottom = () => {
-    setTimeout(() => {
-      try {
-        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
-      } catch (err) { }
-    }, 10);
-  }
-
 
   subscribeEvents() {
     this.subs.sink = this.rootService.socketConnection$.subscribe(res => {
@@ -117,7 +109,6 @@ export class AssistComponent implements OnInit, OnDestroy {
           this.processUserMessages(response);
           this.viewCustomTempAttachment();
         }
-
       }
     });
 
@@ -126,7 +117,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         if (runEventObj && !runEventObj?.agentRunButton && !this.rootService.isAutomationOnGoing) {
           if (runEventObj.from == this.projConstants.INTERRUPT) {
             this.interruptDialogList.splice(runEventObj.index, 1);
-            this.updateInterruptDialogList();
+            this.commonService.updateInterruptDialogList(this.interruptDialogList, this.projConstants.ASSIST);
           }
           this.runDialogForAssistTab(runEventObj);
         } else if (runEventObj && !runEventObj?.agentRunButton && this.rootService.isAutomationOnGoing) {
@@ -144,7 +135,6 @@ export class AssistComponent implements OnInit, OnDestroy {
         if(!this.rootService.manualAssistOverrideMode || !response){
           this.handleProactiveDisableEvent(this.dialogPositionId);
         }
-        this.handleAutomationSmallTalkOverrideMode(this.proactiveModeStatus);
       }
     });
 
@@ -158,7 +148,7 @@ export class AssistComponent implements OnInit, OnDestroy {
           this.interruptRun = false;
           let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
           index = index < 0 ? 0 : index;
-          this.dialogueRunClick(this.interruptDialog,index)
+          this.commonService.dialogueRunClick(this.interruptDialog,index, false)
         }
         this.viewCustomTempAttachment();
       }
@@ -175,17 +165,21 @@ export class AssistComponent implements OnInit, OnDestroy {
     });
   }
 
+  getAssistData(params) {
+    let feedback = this.commonService.assistFeedback(params);
+    let history = this.commonService.assistHistory(params);
+    this.handleSubjectService.setLoader(true);
+    forkJoin([feedback, history]).pipe(finalize(() => { this.handleSubjectService.setLoader(false) })).subscribe(res => {
+      let feedbackData = res[0]?.results || [];
+      let historyData = res[1] || [];
+      this.renderHistoryMessages(historyData, feedbackData);
+    });
+  }
+
+
   getInterruptDialogList() {
     let appState = this.localStorageService.getLocalStorageState();
     this.interruptDialogList = appState[this.connectionDetails.conversationId][storageConst.INTERRUPT_DIALOG_LIST]
-
-  }
-
-  updateInterruptDialogList() {
-    let storageObject: any = {
-      [storageConst.INTERRUPT_DIALOG_LIST]: this.interruptDialogList
-    }
-    this.localStorageService.setLocalStorageItem(storageObject);
   }
 
   handleProactiveDisableEvent(dialogId) {
@@ -210,86 +204,33 @@ export class AssistComponent implements OnInit, OnDestroy {
   processUserMessages(data) {    
     if(this.assistResponseArray?.length && this.assistResponseArray[this.assistResponseArray.length -1]?.type == this.renderResponseType.SMALLTALK &&
       this.assistResponseArray[this.assistResponseArray.length -1]?.data?.isPrompt){
-        if (data.userInput) {          
-          this.assistResponseArray[this.assistResponseArray.length - 1].entityValue = data.userInput;
-          this.assistResponseArray[this.assistResponseArray.length - 1].hideOverrideDiv = true;
-          this.assistResponseArray[this.assistResponseArray.length - 1].toggleOverride = false;
-          this.assistResponseArray[this.assistResponseArray.length - 1].userInput = data.userInput ? data.userInput : ProjConstants.YES;
-        }
+      this.assistResponseArray = this.commonService.processUserMessagesForSmalltalk(data, this.assistResponseArray, true, false);
     }else if(this.assistResponseArray.length){
       this.showErrorPrompt = data.isErrorPrompt ? true : false;
-      this.assistResponseArray.map(arrEle => {
-        if (arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids) {
-          arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
-          if (data.userInput && arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
-            arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
-            arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
-            if (data.userInput) {
-              let userInput = arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput;
-              arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = data.userInput;
-              arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput = userInput ? userInput : ProjConstants.YES;
-            }
-            if(!this.showErrorPrompt){
-              arrEle.automationsArray[arrEle.automationsArray.length - 1].errorCount = 0;
-            }
-          }
-          arrEle.automationsArray = [...arrEle.automationsArray];
-        }
-      });
-    }
-  }
-
-  processUserMessagesForHistory(data) {    
-    if (this.assistResponseArray?.length >= 1 && this.assistResponseArray[this.assistResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
-      && this.assistResponseArray[this.assistResponseArray.length - 1]?.data?.isPrompt) {
-      if (data.userInput) {
-        this.assistResponseArray[this.assistResponseArray.length - 1].entityValue = data.userInput;
-      }
-    } else if (this.assistResponseArray?.length >= 1) {
-      this.assistResponseArray.map(arrEle => {
-        if (arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids) {
-          arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
-          if (data.userInput && arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
-            arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
-            arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
-            if (data.userInput) {
-              arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = data.userInput;
-              arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput = ProjConstants.YES;
-            }
-          }
-          arrEle.automationsArray = [...arrEle.automationsArray];
-        }
-      });
-    }
-    this.assistResponseArray = structuredClone(this.assistResponseArray);
-  }
-
-  processLastEntityNodeForHistory(data){
-    if (this.assistResponseArray.length >=1) {
-      this.assistResponseArray.map((arrEle, actualarrayIndex) => {
-        if (arrEle?.uuid && arrEle?.automationsArray?.length) {
-            arrEle?.automationsArray.forEach((element, index) => {
-              if((index !== arrEle.automationsArray.length - 1) || (actualarrayIndex > 0 && actualarrayIndex != this.assistResponseArray.length -1)){
-                element.disableInput = true;
-              }
-            });
-          arrEle.automationsArray = [...arrEle.automationsArray];
-        }else if(arrEle?.type == this.renderResponseType.SMALLTALK && actualarrayIndex < this.assistResponseArray.length){
-          arrEle.disableInput = true;
-        }
-      });
+      this.assistResponseArray = this.commonService.processUserMessagesForAutomation(data, this.assistResponseArray, true, false, this.showErrorPrompt, this.rootService.dropdownHeaderUuids)
     }    
     this.assistResponseArray = structuredClone(this.assistResponseArray);
   }
-  
+
+  processUserMessagesForHistory(data) {        
+    if (this.assistResponseArray?.length >= 1 && this.assistResponseArray[this.assistResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
+      && this.assistResponseArray[this.assistResponseArray.length - 1]?.data?.isPrompt) {
+      this.assistResponseArray = this.commonService.processUserMessagesForSmalltalk(data, this.assistResponseArray, false, false, 'history');
+    } else if (this.assistResponseArray?.length >= 1) {
+      this.showErrorPrompt = data.isErrorPrompt ? true : false;
+      this.assistResponseArray = this.commonService.processUserMessagesForAutomation(data, this.assistResponseArray, true, false, this.showErrorPrompt, this.rootService.dropdownHeaderUuids);
+      this.assistResponseArray = structuredClone(this.assistResponseArray);
+    }
+    this.assistResponseArray = structuredClone(this.assistResponseArray);
+  }
 
   processAgentAssistResponse(data, botId) {
     let renderResponse: any = {};
-    let isTemplateRender = false;
+    // let isTemplateRender = false;
 
     data = this.rootService.confirmationNodeRenderDataTransform(data);
 
-    if (this.rootService.isAutomationOnGoing && this.dropdownHeaderUuids && data.suggestions?.dialogs?.length > 0) {
+    if (this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.suggestions?.dialogs?.length > 0) {
       this.dialogTerminatedOrIntruppted();
     }
 
@@ -298,9 +239,9 @@ export class AssistComponent implements OnInit, OnDestroy {
     }
 
     if (!data.sendMenuRequest) {
-      this.removeOrAddOverRideDivForPreviousResponse(true);
+      this.assistResponseArray = this.commonService.removeOrAddOverRideDivForPreviousResponse(this.assistResponseArray,true);
+      this.assistResponseArray = [...this.assistResponseArray];
     }
-
 
     if (!data.suggestions || (data.suggestions && Object.keys(data.suggestions).length == 0)) {
       data.suggestions = false;
@@ -325,168 +266,55 @@ export class AssistComponent implements OnInit, OnDestroy {
     }
 
     if (!this.rootService.isAutomationOnGoing && data.suggestions) {
-
       if (this.rootService.suggestionsAnswerPlaceableIDs.length == 0) {
-
-        renderResponse = {
-          data: data,
-          type: this.renderResponseType.SUGGESTIONS,
-          uuid: responseId,
-          searchResponse: this.rootService.formatSearchResponse(data),
-          connectionDetails: this.connectionDetails
-        }
+        renderResponse = this.commonService.formatSuggestionRenderResponse(data, responseId);
         this.assistResponseArray.push(renderResponse);
         this.assistResponseArray = structuredClone(this.assistResponseArray);
       } else {
         let faqAnswerIdsPlace = this.rootService.suggestionsAnswerPlaceableIDs.find(ele => ele.input == data.suggestions?.faqs[0].question);
-
         if (faqAnswerIdsPlace) {
-          this.updateSearchResponse(data, faqAnswerIdsPlace);
+          this.assistResponseArray = this.commonService.updateSearchResponse(this.assistResponseArray, data, faqAnswerIdsPlace)
+          this.assistResponseArray = structuredClone(this.assistResponseArray);
         }
       }
     }
 
-
-
-    let result: any = this.templateRenderClassService.getResponseUsingTemplate(data, this.connectionDetails);
+    let result: any = this.templateRenderClassService.getResponseUsingTemplate(data);
     this.rootService.currentPositionId = this.dialogPositionId;
-    if (this.rootService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
+    let msgStringify = JSON.stringify(result);
+    let newTemp = encodeURI(msgStringify);    
 
-
-      let msgStringify = JSON.stringify(result);
-      let newTemp = encodeURI(msgStringify);
-
-      renderResponse = {
-        data: data,
-        type: this.renderResponseType.AUTOMATION,
-        uuid: responseId,
-        result: result,
-        temp: newTemp,
-        connectionDetails: this.connectionDetails,
-        proactiveModeStatus: this.proactiveModeStatus,
-        toggleOverride: false,
-        responseType: this.renderResponseType.ASSISTRESPONSE,
-        errorCount: 0,
-        value: data?.buttons[0]?.value
-      }
-
+    if (this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
+      renderResponse = this.commonService.formatAutomationRenderResponse(data,responseId, result, newTemp)
       if (data.isPrompt && (!this.proactiveModeStatus || this.rootService.manualAssistOverrideMode)) {
         renderResponse.toggleOverride = true;
         renderResponse.hideOverrideDiv = true;
       }
-
       this.currentRunningStep = data.entityDisplayName ? data.entityDisplayName : data.entityName;
-
-      this.assistResponseArray.map(arrEle => {
-        if (arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids) {
-          arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
-          if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
-            arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
-            arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = this.rootService.manualAssistOverrideMode;
-            arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = (data.isErrorPrompt || this.showErrorPrompt) ? false : true;
-            if (data.isErrorPrompt || this.showErrorPrompt) {
-              arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = false;
-              arrEle.automationsArray[arrEle.automationsArray.length - 1].errorCount += 1;
-            } else {
-              arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
-            }
-          } else {
-            arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
-          }
-
-        }
-      });
-
-      this.assistResponseArray = structuredClone(this.assistResponseArray)
-      setTimeout(() => {
-        if (data.entityName) {
-          this.agentAssistResponse = {};
-          this.agentAssistResponse = Object.assign({}, data);
-        }
-      }, 10);
+      this.assistResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.assistResponseArray, data, this.showErrorPrompt, renderResponse, this.rootService.dropdownHeaderUuids, this.projConstants.ASSIST);
+      this.assistResponseArray = structuredClone(this.assistResponseArray);      
     }
 
     // small talk with templates
-    if (!this.rootService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
-      let msgStringify = JSON.stringify(result);
-      let newTemp = encodeURI(msgStringify);
-      renderResponse = {
-        data: data,
-        type: this.renderResponseType.SMALLTALK,
-        uuid: responseId,
-        result: result,
-        temp: newTemp,
-        connectionDetails: this.connectionDetails,
-        proactiveModeStatus: this.proactiveModeStatus,
-        toggleOverride: false,
-        title: data.isPrompt ? ProjConstants.ASK_CUSTOMER : ProjConstants.TELL_CUSTOMER,
-        isTemplateRender: this.smallTalkTemplateRenderCheck(data, result),
-        value: data?.buttons[0]?.value,
-        sendData: result?.parsedPayload ? newTemp : data?.buttons[0]?.value,
-        dialogId: this.dialogPositionId,
-        responseType: this.renderResponseType.ASSISTRESPONSE
-      }
-      renderResponse.template = this.rootService.getTemplateHtml(renderResponse.isTemplateRender, result);
-
+    if (!this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
+      renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId)
       if (data.isPrompt && !this.proactiveModeStatus) {
         renderResponse.toggleOverride = true;
         renderResponse.hideOverrideDiv = true;
       }
-
-      if (this.assistResponseArray?.length > 1 && this.assistResponseArray[this.assistResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
-        && this.assistResponseArray[this.assistResponseArray.length - 1]?.data?.isPrompt) {
-        this.assistResponseArray[this.assistResponseArray.length - 1].toggleOverride = false;
-        this.assistResponseArray[this.assistResponseArray.length - 1].disableInput = true;
-      }
-
-      setTimeout(() => {
-        if (data.entityName) {
-          this.agentAssistResponse = {};
-          this.agentAssistResponse = Object.assign({}, data);
-        }
-      }, 10);
-
-      this.assistResponseArray.push(renderResponse);
+      this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);
       this.assistResponseArray = [...this.assistResponseArray];
     }
-    // small talk with templates end
 
     // small talk without templates
-    if (!this.rootService.isAutomationOnGoing && !this.dropdownHeaderUuids && !data.suggestions && !result.parsePayLoad && !data.sendMenuRequest) {
-
-      let msgStringify = JSON.stringify(result);
-      let newTemp = encodeURI(msgStringify);
-      renderResponse = {
-        data: data,
-        type: this.renderResponseType.SMALLTALK,
-        uuid: responseId,
-        result: result,
-        temp: newTemp,
-        connectionDetails: this.connectionDetails,
-        proactiveModeStatus: this.proactiveModeStatus,
-        toggleOverride: false,
-        title: data.isPrompt ? ProjConstants.ASK_CUSTOMER : ProjConstants.TELL_CUSTOMER,
-        isTemplateRender: this.smallTalkTemplateRenderCheck(data, result),
-        value: data?.buttons[0]?.value,
-        sendData: result?.parsedPayload ? newTemp : data?.buttons[0]?.value,
-        responseType: this.renderResponseType.ASSISTRESPONSE
-      }
-      renderResponse.template = this.rootService.getTemplateHtml(renderResponse.isTemplateRender, result);
-
+    if (!this.rootService.isAutomationOnGoing && !this.rootService.dropdownHeaderUuids && !data.suggestions && !result.parsePayLoad && !data.sendMenuRequest) {
+      renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId)
       if (data.isPrompt && !this.proactiveModeStatus) {
         renderResponse.toggleOverride = true;
         renderResponse.hideOverrideDiv = true;
       }
-
-      if (this.assistResponseArray?.length > 1 && this.assistResponseArray[this.assistResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
-        && this.assistResponseArray[this.assistResponseArray.length - 1]?.data?.isPrompt) {
-        this.assistResponseArray[this.assistResponseArray.length - 1].toggleOverride = false;
-        this.assistResponseArray[this.assistResponseArray.length - 1].disableInput = true
-      }
-
-      this.assistResponseArray.push(renderResponse);
+      this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);
       this.assistResponseArray = [...this.assistResponseArray];
-
     }
 
     if (data.buttons?.length > 1 && data.sendMenuRequest) {
@@ -499,138 +327,26 @@ export class AssistComponent implements OnInit, OnDestroy {
 
   runDialogForAssistTab(data, runInitent?) {
     let uuids = this.koreGenerateuuidPipe.transform();
-    this.dropdownHeaderUuids = uuids;
-    this.rootService.isAutomationOnGoing = true;
-    let storageObject: any = {
-      [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.rootService.isAutomationOnGoing
-    }
-    this.localStorageService.setLocalStorageItem(storageObject);
+    this.rootService.dropdownHeaderUuids = uuids;
+    this.commonService.updateLocalStorageForAssist(true);
     let dialogId = this.randomUUIDPipe.transform('positionId');
     this.dialogPositionId = dialogId;
     if (runInitent) {
       this.dialogPositionId = data?.positionId;
     }
     this.dialogName = data.intentName;
-
-    let renderResponse = {
-      data: data,
-      type: this.renderResponseType.AUTOMATION,
-      uuid: uuids,
-      dialogId: this.dialogPositionId,
-      dialogName: this.dialogName,
-      connectionDetails: this.connectionDetails,
-      showAutomation: true
-    }
+    let renderResponse = this.commonService.formatDialogRunRenderResponse(data, uuids, this.dialogPositionId, this.dialogName);
     this.assistResponseArray.push(renderResponse);
     this.assistResponseArray = [...this.assistResponseArray];
     this.rootService.currentPositionId = this.dialogPositionId;
     if (!runInitent) {
-      this.AgentAssist_run_click(data, this.dialogPositionId, this.projConstants.INTENT);
-    }
-  }
-
-  //dialogue click and agent response handling code.
-  AgentAssist_run_click(dialog, dialogPositionId, intent?) {
-    this.assistTabDialogforDashboard(dialog, intent);
-    let connectionDetails: any = Object.assign({}, this.connectionDetails);
-    connectionDetails.value = dialog.intentName;
-    if (dialog.intentName && intent) {
-      connectionDetails.intentName = dialog.intentName;
-    }
-    connectionDetails.positionId = dialogPositionId;
-    // connectionDetails.entities = this.rootService.isRestore ? JSON.parse(this.rootService.previousEntitiesValue) : this.rootService.entitiestValueArray
-    connectionDetails.entities = this.rootService.entitiestValueArray
-    connectionDetails.childBotId = dialog.childBotId;
-    connectionDetails.childBotName = dialog.childBotName;
-    if (dialog.userInput) {
-      connectionDetails.userInput = dialog.userInput;
-    }
-    let assistRequestParams = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
-    this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
-  }
-
-  assistTabDialogforDashboard(dialog, intent?) {
-    let payloadForBE: any = Object.assign({}, this.connectionDetails);
-    if (dialog.intentName && intent) {
-      payloadForBE.intentName = dialog.intentName;
-      payloadForBE.title = dialog.intentName;
-    }
-    payloadForBE.type = 'dialog';
-    payloadForBE.input = dialog.userInput;
-    payloadForBE.sessionId = this.rootService.assistTabSessionId;
-    this.websocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE)
-  }
-
-
-  updateSearchResponse(response, faqAnswerIdsPlace) {
-    response.suggestions.faqs = this.rootService.formatFAQResponse(response.suggestions.faqs);
-    let index = this.rootService.suggestionsAnswerPlaceableIDs.findIndex(suggestion => {
-      return suggestion.input == faqAnswerIdsPlace.input
-    });
-
-
-    let accumulator = response.suggestions.faqs.reduce((acc, faq) => {
-      if (faq.question == faqAnswerIdsPlace.input) {
-        acc[faq.question] = faq;
-        return acc;
-      }
-    }, {});
-
-    if (index >= 0) {
-      this.rootService.suggestionsAnswerPlaceableIDs.splice(index, 1);
-      this.assistResponseArray[faqAnswerIdsPlace.assistSuggestion].searchResponse.faqs?.forEach(faq => {
-        if (accumulator[faq.question] && accumulator[faq.question].answer) {
-          faq.answer = accumulator[faq.question].answer;
-          faq.toggle = true;
-          faq.showMoreButton = false,
-            faq.showLessButton = false
-        }
-      });
-      this.assistResponseArray[faqAnswerIdsPlace.assistSuggestion].faqArrowClickResponse = true;
-      this.assistResponseArray = structuredClone(this.assistResponseArray);
-    }
-
-  }
-
-  smallTalkTemplateRenderCheck(data, result) {
-    if (result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))) {
-      return true;
-    }
-    return false;
-  }
-
-  handleAutomationSmallTalkOverrideMode(flag) {
-    let proactiveMode = this.rootService.proactiveModeStatus;
-    let manualOverride = this.rootService.manualAssistOverrideMode;
-    let assistResponse = this.assistResponseArray[this.assistResponseArray.length - 1];
-    if (assistResponse) {
-      if (assistResponse.type == this.renderResponseType.SMALLTALK) {
-
-      } else if (assistResponse.type == this.renderResponseType.AUTOMATION) {
-        let assistResponseArray = assistResponse.automationsArray;
-        if ((!proactiveMode || manualOverride) && assistResponseArray?.length > 0 && assistResponseArray[assistResponseArray.length - 1]?.data?.isPrompt) {
-          assistResponseArray[assistResponseArray.length - 1].toggleOverride = true;
-          assistResponseArray[assistResponseArray.length - 1].hideOverrideDiv = true;
-        } else if (proactiveMode && manualOverride && assistResponseArray?.length > 0 && assistResponseArray[assistResponseArray.length - 1]?.data?.isPrompt) {
-          assistResponseArray[assistResponseArray.length - 1].toggleOverride = false;
-          assistResponseArray[assistResponseArray.length - 1].hideOverrideDiv = false;
-        }
-      }
-      this.assistResponseArray = structuredClone(this.assistResponseArray);
+      this.commonService.AgentAssist_run_click(data, this.dialogPositionId, this.projConstants.INTENT);
     }
   }
 
   //dialog terminate code
   dialogTerminatedOrIntruppted() {
-    this.rootService.isAutomationOnGoing = false;
-    this.rootService.isInitialDialogOnGoing = true;
-    // this.rootService.OverRideMode = false;
-    let storageObject: any = {
-      // [storageConst.AUTOMATION_GOING_ON]: this.commonService.isAutomationOnGoing,
-      [storageConst.INITIALTASK_GOING_ON]: this.rootService.isInitialDialogOnGoing,
-      [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.rootService.isAutomationOnGoing
-    }
-    this.localStorageService.setLocalStorageItem(storageObject);
+    this.commonService.updateLocalStorageForAssist(false, true);
     if (this.dialogPositionId) {
       this.filterAutomationByPositionId();
       this.prepareFeedbackData();
@@ -646,66 +362,19 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.assistResponseArray = structuredClone(this.assistResponseArray);
   }
 
-  removeOrAddOverRideDivForPreviousResponse(flag) {    
-    if (flag) {
-      if (this.assistResponseArray?.length > 1 && this.assistResponseArray[this.assistResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
-        && this.assistResponseArray[this.assistResponseArray.length - 1]?.data?.isPrompt) {
-        this.assistResponseArray[this.assistResponseArray.length - 1].toggleOverride = false;
-        this.assistResponseArray[this.assistResponseArray.length - 1].hideOverrideDiv = true;
-        this.assistResponseArray[this.assistResponseArray.length - 1].disableInput = true;
-        this.assistResponseArray = structuredClone(this.assistResponseArray);
-      } else if (this.assistResponseArray?.length > 1) {
-        this.assistResponseArray.map(arrEle => {
-          if (arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids && arrEle.type == this.renderResponseType.AUTOMATION) {
-            arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
-            if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
-              arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
-              arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
-              arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = true;
-            }
-            arrEle.automationsArray = [...arrEle.automationsArray];
-          }
-        });
-      }
-    } else {
-      this.assistResponseArray.map(arrEle => {
-        if (arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids && arrEle.type == this.renderResponseType.AUTOMATION) {
-          arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
-          if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
-            arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = false;
-            //  arrEle.automationsArray[arrEle.automationsArray.length -1].toggleOverride = true; 
-            arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = false;
-          }
-          arrEle.automationsArray = [...arrEle.automationsArray];
-        }
-      });
-    }
-  }
-
   prepareFeedbackData(feedbackData?) {
     if (this.assistResponseArray) {
-      let type = this.assistResponseArray[this.assistResponseArray.length - 1]?.type;
-      if (type == this.renderResponseType.AUTOMATION) {
-        this.rootService.manualAssistOverrideMode = false;
-        let renderResponse: any = {
-          type: this.renderResponseType.FEEDBACK,
-          uuid: this.dropdownHeaderUuids,
-          connectionDetails: this.connectionDetails,
-          dialogName: this.dialogName,
-          dialogPositionId: this.dialogPositionId,
-          submitForm: feedbackData?.feedback ? true : false,
-          feedback: feedbackData?.feedback ? feedbackData.feedback : '',
-          feedbackDetails: feedbackData?.feedbackDetails?.length ? feedbackData.feedbackDetails : [],
-          comment: feedbackData?.comment ? feedbackData?.comment : ''
-        }
-        this.assistResponseArray.push(renderResponse);
-        this.assistResponseArray = [...this.assistResponseArray];
-        this.dialogName = null;
-        this.currentRunningStep = null;
+      let automation = {
+        dropdownHeaderUuids : this.rootService.dropdownHeaderUuids,
+        dialogName : this.dialogName,
+        dialogPositionId : this.dialogPositionId
       }
+      this.assistResponseArray = this.commonService.prepareFeedbackData(this.assistResponseArray, automation, feedbackData);
+      this.assistResponseArray = [...this.assistResponseArray];
+      this.dialogName = null;
+      this.currentRunningStep = null;
     }
   }
-
 
   minimizeToggle() {
     this.maxButton = !this.maxButton;
@@ -725,22 +394,22 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.offcanvasService.dismiss();
   }
 
-
   summeryModalpopup(summeryModalpopupContent){
     this.modalService.open(summeryModalpopupContent ,{windowClass: 'modal-full-window-popup', centered: true, backdrop:'static', keyboard:false});
   }
+
   handlePopupEvent(popupObject) {
     if (popupObject.type == this.projConstants.TERMINATE) {
       this.terminateClick = popupObject.status;
       if (this.terminateClick) {
         this.terminateClick = false;
-        this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
+        this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
       } else if (popupObject.override) {
         this.terminateClick = false;
         this.overModeContinue(true);
         this.rootService.manualAssistOverrideMode = true;
-        this.removeOrAddOverRideDivForPreviousResponse(false);
-        this.handleAutomationSmallTalkOverrideMode(false)
+        this.assistResponseArray = this.commonService.removeOrAddOverRideDivForPreviousResponse(this.assistResponseArray,false);
+        this.assistResponseArray = [...this.assistResponseArray];
       }
       if(!this.terminateClick){
         this.closeOffCanvas();
@@ -751,14 +420,14 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.showInterruptPopup = false;
         // this.dialogTerminatedOrIntruppted();
         this.interruptRun = true;
-        this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
+        this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
         let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
         if (index < 0) {
           this.interruptDialog.from = this.projConstants.INTERRUPT;
           this.interruptDialogList.push(this.interruptDialog);
-          this.updateInterruptDialogList();
+          this.commonService.updateInterruptDialogList(this.interruptDialogList, this.projConstants.ASSIST);
         }
       }
       if(!this.showInterruptPopup){
@@ -772,7 +441,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.openOffCanvas();
       }
     } else if (popupObject.type == this.projConstants.SUMMARY) {
-      this.rootService.activeTab == this.projConstants.ASSIST;
+      this.rootService.activeTab = this.projConstants.ASSIST;
       this.summaryText = popupObject.summaryText || '';
       this.showSummaryPopup = popupObject.status;
       if (popupObject.summary) {
@@ -798,301 +467,191 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.modalService.open(this.content);
   }
 
-  getAssistData(params) {
-    let feedback = this.assistFeedback(params);
-    let history = this.assistHistory(params);
-    this.handleSubjectService.setLoader(true);
-    forkJoin([feedback, history]).pipe(finalize(() => { this.handleSubjectService.setLoader(false) })).subscribe(res => {
-      let feedbackData = res[0]?.results || [];
-      let historyData = res[1] || [];
-      // let historyData = this.rootService.getMockData();
-      this.renderHistoryMessages(historyData, feedbackData);
-    });
-  }
-
-  assistHistory(params) {
-    let serviceMethod = params.fromSAT ? 'get.assistHistorySA' : 'get.assistHistoryTP';
-    let botId = this.rootService.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
-    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { historyAPiCall: 'true', botId: botId }, params.agentassisturl);
-  }
-
-  assistFeedback(params) {
-    return this.serviceInvoker.invoke('get.assistFeedback', { tab: 'assist', conversationId: params.conversationId }, {}, { botId: params.botId }, params.agentassisturl);
-  }
-
   updateFeedbackProperties(data, index) {
     this.assistResponseArray[index] = data;
   }
 
   renderHistoryMessages(response, feedBackResult) {
-
     let previousId;
     let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
     let resp = response.length > 0 ? response : undefined;
     let renderResponse: any = {};
-
     resp = this.rootService.formatHistoryResponseForFAQ(resp);
-    resp?.forEach((res, index) => {      
-      res = this.rootService.confirmationNodeRenderForHistoryDataTransform(res);
-      res = this.rootService.formatHistoryResonseToNormalRender(res);
-      // this.removeOrAddOverRideDivForPreviousResponse(true);
 
-      if ((res.suggestions || res.ambiguityList) && res.type == 'outgoing' && res.faqResponse) {
+    resp?.forEach((res, index) => {     
+      if(res.type == 'outgoing'){
+        res = this.rootService.formatHistoryResonseToNormalRender(res);
+        res = this.rootService.confirmationNodeRenderForHistoryDataTransform(res);
 
-        res.suggestions.faqs.forEach(faq => {
-          faq.answer = res?.components[0]?.data?.text
-        });
-
-        res.suggestions.faqs = this.rootService.formatFAQResponse(res.suggestions.faqs);
-
-        let faqQuestionList = res?.suggestions?.faqs?.reduce((acc, faq) => {
-          acc[faq.question] = faq;
-          return acc;
-        }, {});
-
-        let inx = null;
-        this.assistResponseArray.forEach((assistResp, index) => {
-          if (assistResp.type == this.renderResponseType.SUGGESTIONS && assistResp?.searchResponse?.faqs) {
-            assistResp.searchResponse.faqs.forEach(faq => {
-
-              if (faqQuestionList[faq.question]) {
-                if (!faq.answer) {
-                  faq.answer = faqQuestionList[faq.question].answer;
-                  faq.toggle = true;
-                  faq.showMoreButton = false,
-                    faq.showLessButton = false,
-                    inx = index;
+        if ((res.suggestions || res.ambiguityList) && res.faqResponse) {
+  
+          res.suggestions.faqs.forEach(faq => {
+            faq.answer = res?.buttons[0]?.value
+          });
+  
+          res.suggestions.faqs = this.rootService.formatFAQResponse(res.suggestions.faqs);
+  
+          let faqQuestionList = res?.suggestions?.faqs?.reduce((acc, faq) => {
+            acc[faq.question] = faq;
+            return acc;
+          }, {});
+  
+          let inx = null;
+          this.assistResponseArray.forEach((assistResp, index) => {
+            if (assistResp.type == this.renderResponseType.SUGGESTIONS && assistResp?.searchResponse?.faqs) {
+              assistResp.searchResponse.faqs.forEach(faq => {
+                if (faqQuestionList[faq.question]) {
+                  if (!faq.answer) {
+                    faq.answer = faqQuestionList[faq.question].answer;
+                    faq.toggle = true;
+                    faq.showMoreButton = false,
+                      faq.showLessButton = false,
+                      inx = index;
+                  }
                 }
-              }
-            });
+              });
+            }
+          });
+  
+          if (typeof inx == 'number') {
+            this.assistResponseArray[inx].faqArrowClickResponse = true;
           }
-        });
-
-        if (typeof inx == 'number') {
-          this.assistResponseArray[inx].faqArrowClickResponse = true;
+          this.assistResponseArray = structuredClone(this.assistResponseArray);
         }
-        this.assistResponseArray = structuredClone(this.assistResponseArray);
-      }
-
-      if ((res.suggestions || res.ambiguityList) && res.type == 'outgoing' && !res.faqResponse) {
-        renderResponse = {
-          data: res,
-          type: this.renderResponseType.SUGGESTIONS,
-          uuid: res._id,
-          searchResponse: this.rootService.formatSearchResponse(res),
-          connectionDetails: this.connectionDetails
+  
+        if ((res.suggestions || res.ambiguityList) && !res.faqResponse) {
+          renderResponse = this.commonService.formatSuggestionRenderResponse(res, res._id);
+          this.assistResponseArray.push(renderResponse);
+          this.assistResponseArray = structuredClone(this.assistResponseArray);
         }
-        this.assistResponseArray.push(renderResponse);
+  
+        if ((!res.suggestions && !res.ambiguityList && !res.ambiguity)) {
+          if (res.endOfTask && previousId) {
+            let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
+  
+            this.filterAutomationByPositionId();
+            this.prepareFeedbackData(previousIdFeedBackDetails);
+            this.commonService.automationFlagUpdateForAssist(previousId, false);
+
+            this.commonService.updateOverrideStatusOfAutomation(this.assistResponseArray,previousId);
+            previousId = undefined;
+            previousTaskName = currentTaskName;
+            previousTaskPositionId = currentTaskPositionId;
+            currentTaskName = null;
+            currentTaskPositionId = null;
+          } 
+
+          currentTaskPositionId = res.positionId ? res.positionId : previousTaskPositionId;
+
+          // if(res.positionId){
+          //   currentTaskPositionId = res.positionId
+          // }else if((res.entityName && res.entityResponse && (res.entityValue || res.userInput)) || res.endOfTask){
+          //   // condition is for endoftask small talk should be part of dialogue only.
+          //   currentTaskPositionId = previousTaskPositionId;
+          // }else if(res.intentName != currentTaskName){
+          //   currentTaskPositionId = null;
+          // }
+  
+          // currentTaskPositionId = res.positionId ? res.positionId : ((res.intentName != currentTaskName) ? null : currentTaskPositionId);
+          currentTaskName = (res.intentName) ? res.intentName : currentTaskName;
+          this.dialogPositionId = currentTaskPositionId;
+          this.rootService.currentPositionId = this.dialogPositionId;
+          this.dialogName = currentTaskName
+          let uuids = this.koreGenerateuuidPipe.transform();          
+          
+          if (res.intentName && !previousId && previousTaskPositionId !== currentTaskPositionId && !res.endOfTask) {
+            // update postionids and dialogue start
+  
+            let automationUUIDCheck = this.assistResponseArray.findIndex((automation) => {
+              if (automation.uuid == res._id) {
+                return true;
+              }
+              return false;
+            });
+  
+            if (automationUUIDCheck == -1) {
+              previousId = res._id;
+              this.commonService.automationFlagUpdateForAssist(previousId, true);
+              previousTaskPositionId = currentTaskPositionId;
+              previousTaskName = currentTaskName;
+
+              let renderResponse =  this.commonService.formatDialogRunRenderResponse(res, previousId, currentTaskPositionId, currentTaskName);
+
+              this.assistResponseArray.push(renderResponse);
+              this.assistResponseArray = [...this.assistResponseArray];
+              if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
+                this.dialogPositionId = previousTaskPositionId;
+                this.rootService.currentPositionId = this.dialogPositionId;
+              }
+            }
+          }
+          //process user messages
+          // if (res.entityName && res.entityResponse && (res.entityValue || res.userInput)) {
+          if(res.entityValue || res.userInput){
+            res.userInput = res.userInput ? res.userInput : res.entityValue;
+            this.processUserMessagesForHistory(res);
+          }
+        
+          let result: any = this.templateRenderClassService.getResponseUsingTemplate(res,true);
+          this.rootService.currentPositionId = currentTaskPositionId;
+          let msgStringify = JSON.stringify(result);
+          let newTemp = encodeURI(msgStringify);
+  
+          if (result.message.length > 0) {
+            // automation
+            if (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
+              let responseId = res?.buttons && res?.buttons[0]?._id ? (res?.buttons && res?.buttons[0]?._id) : uuids;
+              renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp);
+              if (res.isPrompt && !this.proactiveModeStatus) {
+                renderResponse.toggleOverride = true;
+                renderResponse.hideOverrideDiv = true;
+              }
+              this.assistResponseArray = this.commonService.updateOverrideStatusOfAutomation(this.assistResponseArray, previousId, renderResponse);
+              this.assistResponseArray = structuredClone(this.assistResponseArray);
+            } else if ((previousTaskName != currentTaskName)) {
+              //small talk after dialogue terminate              
+              renderResponse = this.commonService.formatSmallTalkRenderResponse(res, uuids, result, newTemp, previousId)
+              this.assistResponseArray.push(renderResponse);
+              this.assistResponseArray = [...this.assistResponseArray];
+            }
+          }
+        }
+        this.assistResponseArray = this.commonService.processLastEntityNodeForHistory(this.assistResponseArray);
         this.assistResponseArray = structuredClone(this.assistResponseArray);
-      }
-
-
-      if ((!res.suggestions && !res.ambiguityList && !res.ambiguity) && res.type == 'outgoing') {
-
-
-        if (res.endOfTask && previousId) {
+        // feedback, for tellcustomer as end of node
+        if ((resp.length - 1 == index && (!res.entityRequest && !res.entityResponse) && previousTaskPositionId && currentTaskPositionId == previousTaskPositionId)) {
           let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
-
           this.filterAutomationByPositionId();
           this.prepareFeedbackData(previousIdFeedBackDetails);
-          this.automationFlagUpdate(previousId, false);
-          this.automationFlagUpdateForSmallTalk(previousId, false);
-
-          this.updateOverrideStatusOfAutomation(previousId);
+          this.commonService.automationFlagUpdateForAssist(previousId, false)
+          this.commonService.updateOverrideStatusOfAutomation(this.assistResponseArray,previousId);
           previousId = undefined;
           previousTaskName = currentTaskName;
           previousTaskPositionId = currentTaskPositionId;
           currentTaskName = null;
           currentTaskPositionId = null;
-        } 
-
-        currentTaskPositionId = res.positionId ? res.positionId : ((res.intentName != currentTaskName) ? null : currentTaskPositionId);
-        currentTaskName = (res.intentName) ? res.intentName : currentTaskName;
-        this.dialogPositionId = currentTaskPositionId;
-        this.rootService.currentPositionId = this.dialogPositionId;
-        this.dialogName = currentTaskName
-        let uuids = this.koreGenerateuuidPipe.transform();
-        
-        if (res.intentName && !previousId && previousTaskPositionId !== currentTaskPositionId && !res.endOfTask) {
-          // update postionids and dialogue start
-
-          let automationUUIDCheck = this.assistResponseArray.findIndex((automation) => {
-            if (automation.uuid == res._id) {
-              return true;
-            }
-            return false;
-          });
-          // previousTaskPositionId = currentTaskPositionId;
-          // previousTaskName = currentTaskName;
-
-          if (automationUUIDCheck == -1) {
-            previousId = res._id;
-            this.automationFlagUpdate(previousId, true);
-            previousTaskPositionId = currentTaskPositionId;
-            previousTaskName = currentTaskName;
-            let renderResponse = {
-              data: res,
-              type: this.renderResponseType.AUTOMATION,
-              uuid: previousId,
-              dialogId: currentTaskPositionId,
-              dialogName: currentTaskName,
-              connectionDetails: this.connectionDetails,
-              showAutomation: true,
-              value: res?.components[0]?.data?.text
-            }
-            this.assistResponseArray.push(renderResponse);
-            this.assistResponseArray = [...this.assistResponseArray];
-
-            if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
-              this.dialogPositionId = previousTaskPositionId;
-              this.rootService.currentPositionId = this.dialogPositionId;
-            }
-
-          }
         }
-
-
-        //process user messages
-        if (res.entityName && res.entityResponse && (res.entityValue || res.userInput)) {
-          res.userInput = res.userInput ? res.userInput : res.entityValue;
-          this.processUserMessagesForHistory(res);
-        }
-
-        if (res.entityName) {
-          this.agentAssistResponse = Object.assign({}, res);
-        }
-
-        let result: any = this.templateRenderClassService.getResponseUsingTemplateForHistory(res);
-
-        this.rootService.currentPositionId = currentTaskPositionId;
-        let msgStringify = JSON.stringify(result);
-        let newTemp = encodeURI(msgStringify);
-
-        if (result.message.length > 0) {
-          // automation
-
-          if (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
-
-            renderResponse = {
-              data: res,
-              type: this.renderResponseType.AUTOMATION,
-              uuid: res.components && res.components[0]?._id ? (res.components && res.components[0]?._id) : uuids,
-              result: result,
-              temp: newTemp,
-              connectionDetails: this.connectionDetails,
-              proactiveModeStatus: this.proactiveModeStatus,
-              toggleOverride: false,
-              responseType: this.renderResponseType.ASSISTRESPONSE,
-              value: res?.components[0]?.data?.text,
-              errorCount: 0
-            }
-
-            if (res.isPrompt && !this.proactiveModeStatus) {
-              renderResponse.toggleOverride = true;
-              renderResponse.hideOverrideDiv = true;
-            }
-
-            this.assistResponseArray.map(arrEle => {
-              if (arrEle.uuid && arrEle.uuid == previousId) {
-                arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
-                if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
-                  arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
-                  arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
-                }
-                arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
-              }
-            });
-
-            this.assistResponseArray = structuredClone(this.assistResponseArray);
-
-          } else if ((previousTaskName != currentTaskName)) {
-            //small talk after dialogue terminate
-            this.automationFlagUpdateForSmallTalk(previousId, true);
-            renderResponse = {
-              data: res,
-              type: this.renderResponseType.SMALLTALK,
-              uuid: uuids,
-              result: result,
-              temp: newTemp,
-              connectionDetails: this.connectionDetails,
-              proactiveModeStatus: this.proactiveModeStatus,
-              toggleOverride: false,
-              title: res.isPrompt ? ProjConstants.ASK_CUSTOMER : ProjConstants.TELL_CUSTOMER,
-              isTemplateRender: this.smallTalkTemplateRenderCheck(res, result),
-              value: res?.components[0]?.data?.text,
-              sendData: result?.parsedPayload ? newTemp : res?.components[0]?.data?.text,
-              responseType: this.renderResponseType.ASSISTRESPONSE
-            }
-            renderResponse.template = this.rootService.getTemplateHtml(renderResponse.isTemplateRender, result);
-
-            this.assistResponseArray.push(renderResponse);
-            this.assistResponseArray = [...this.assistResponseArray];
-          }
-        }
-      }
-      this.processLastEntityNodeForHistory(res);
-
-      // feedback, for tellcustomer as end of node
-      if ((resp.length - 1 == index && (!res.entityRequest && !res.entityResponse) && previousTaskPositionId && currentTaskPositionId == previousTaskPositionId)) {
-        let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
-        this.filterAutomationByPositionId();
-        this.prepareFeedbackData(previousIdFeedBackDetails);
-        this.automationFlagUpdate(previousId, false)
-        this.updateOverrideStatusOfAutomation(previousId);
-        previousId = undefined;
-        previousTaskName = currentTaskName;
-        previousTaskPositionId = currentTaskPositionId;
-        currentTaskName = null;
-        currentTaskPositionId = null;
-      }
-
+      } 
     });
-
+    console.log(this.assistResponseArray, "assist response array");
+    
     this.scrollToBottom();
   }
 
-  updateOverrideStatusOfAutomation(previousId) {
-    this.assistResponseArray.map(arrEle => {
-      if (arrEle.uuid && arrEle.uuid == previousId) {
-        arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
-        if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
-          arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
-          arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
-        }
-      }
-    });
-    this.assistResponseArray = structuredClone(this.assistResponseArray);
-  }
-
-  automationFlagUpdateForSmallTalk(previousId, flag) {
-    this.smallTalkUuids = flag ? previousId : null;
-  }
-
-  automationFlagUpdate(previousId, flag) {
-    if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
-      this.rootService.isAutomationOnGoing = flag;
-      this.dropdownHeaderUuids = previousId;
-      let storageObject: any = {
-        [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.rootService.isAutomationOnGoing
-      }
-      this.localStorageService.setLocalStorageItem(storageObject);
-    }
-  }
-
-  //interrupt run click
-
-  dialogueRunClick(dialog, index) {
-    dialog.positionId = this.randomUUIDPipe.transform('positionId');
-    dialog.intentName = dialog.name;
-    dialog.userInput = dialog.name;
-    dialog.agentRunButton = false;
-    dialog.from = this.projConstants.INTERRUPT;
-    dialog.index = index
-    this.handleSubjectService.setRunButtonClickEvent(dialog);
-  }
 
   viewCustomTempAttachment(){
     this.websocketService.CustomTempClickEvents(this.projConstants.ASSIST, this.connectionDetails)
   }
 
+  dialogueRunClick(dialog, i, flag){
+    this.commonService.dialogueRunClick(dialog, i, flag);
+  }
+
+  scrollToBottom = () => {
+    setTimeout(() => {
+      try {
+        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
+      } catch (err) { }
+    }, 10);
+  }
 }

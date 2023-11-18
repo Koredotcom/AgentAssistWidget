@@ -2246,7 +2246,7 @@
             };
 
             chatWindow.prototype.renderMessage = function (msgData,elementID, runInfoContent) {
-                console.log("came inside render message function with id", msgData);
+                // console.log("came inside render message function with id", msgData);
                 $(".kore-chat-window").addClass('liteTheme-one');
                 var me = this, messageHtml = '', extension = '', _extractedFileName = '';
                 var helpers=me.helpers;
@@ -3056,7 +3056,7 @@
                         socketSendTTSMessage(_txtToSpeak);
                     }
                 }
-                console.log("xxxxxxxxxxxxx line no 3014", messageHtml)
+                // console.log("xxxxxxxxxxxxx line no 3014", messageHtml)
                 return messageHtml;
             };
 

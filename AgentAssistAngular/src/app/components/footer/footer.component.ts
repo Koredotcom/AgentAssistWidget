@@ -50,8 +50,17 @@ export class FooterComponent implements OnInit, OnDestroy{
     this.rootService.activeTab$.subscribe(tab => {
       if(tab){
         this.actionOnButton(tab);
+        this.updateLocalStorageForTabSwitch(tab);
       }
     });
+  }
+  
+  updateLocalStorageForTabSwitch(tab){
+    let storageObject: any = {};
+    storageObject = {
+      [storageConst.ACTIVE_TAB]: tab
+    }
+    this.localStorageService.setLocalStorageItem(storageObject);
   }
  
   actionOnButton(selectedTab: string){

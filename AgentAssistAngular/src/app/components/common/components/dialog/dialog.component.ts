@@ -29,7 +29,7 @@ export class DialogComponent {
 
   formatAssistAutomation(automationsArray) {
     let i = 0;
-    for (let automation of automationsArray) {
+    for (let automation of automationsArray) {      
       let templateRender = (!automation?.result?.parsedPayload || automation?.noTemplateRender || (automation?.componentType == 'dialogAct' && (automation?.srcChannel != 'msteams' && automation?.srcChannel != 'rtm'))) ? false : true
       automation.templateRender = templateRender;
 
@@ -60,9 +60,10 @@ export class DialogComponent {
     let sendData = null;
     if ((automation.data?.buttons && automation.data?.buttons[0]?.value)) {
       sendData = automation.data?.buttons[0].value
-    } else if ((automation.data?.components && automation.data?.components[0] && automation.data?.components[0]?.data?.text)) {
-      sendData = automation.data?.components[0].data.text;
-    }
+    } 
+    // else if ((automation.data?.components && automation.data?.components[0] && automation.data?.components[0]?.data?.text)) {
+    //   sendData = automation.data?.components[0].data.text;
+    // }
     automation.sendData = automation.result?.parsedPayload ? automation.temp : sendData;
   }
 

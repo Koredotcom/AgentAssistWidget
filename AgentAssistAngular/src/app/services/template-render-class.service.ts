@@ -139,20 +139,93 @@ export class TemplateRenderClassService {
         "text": `${arr[0]}`,
         "buttons": list
       }
-    }
-    console.log(_msgsResponse, "msgs response");
-    
+    }    
     return _msgsResponse;
   }
 
-  getResponseUsingTemplate(res,configObj) {
+  prepareTemplateBodyForHistory(elem, parsedPayload){
+    let body = {};
+    body['type'] = elem.cT;
+    // console.log(parsedPayload, 'parsed payload **');
+    
+    if (!parsedPayload) {
+      body['component'] = {
+        "type": elem.cT,
+        "payload": {
+          "type": elem.cT,
+          "text": elem.value
+        }
+      };
+      body['cInfo'] = {
+        "body": elem.value
+      };
+
+    } else {
+      body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+      if (parsedPayload?.type === 'message') {
+        body['cInfo'] = {
+          "body": ''
+        };
+      } else if (parsedPayload?.text) {
+        body['cInfo'] = {
+          "body": parsedPayload.text
+        };
+      } else {
+        body['cInfo'] = {
+          "body": parsedPayload
+        };
+      }
+    }
+    return body;
+  }
+  
+  prepareTemplateBody(elem, parsedPayload){
+    let body = {};
+    body['type'] = elem.type;
+    if (!parsedPayload) {
+      body['component'] = {
+        "type": elem.type,
+        "payload": {
+          "type": elem.type,
+          "text": elem.value
+        }
+      };
+      body['cInfo'] = {
+        "body": elem.value
+      };
+      elem['copyFlag'] = true;
+
+    } else {
+      body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+      if (parsedPayload?.type === 'message') {
+        body['cInfo'] = {
+          "body": ''
+        };
+        elem['copyFlag'] = false;
+      } else if (parsedPayload?.text) {
+        body['cInfo'] = {
+          "body": parsedPayload.text
+        };
+        elem['copyFlag'] = true;
+      } else {
+        body['cInfo'] = {
+          "body": parsedPayload
+        };
+        elem['copyFlag'] = false;
+      }
+    }
+    return body;
+  }
+
+  getResponseUsingTemplate(res, history?) {
+    let messageId = history ? res._id : res?.id + "-" + (new Date()).getTime()
     let _msgsResponse = {
       "type": "bot_response",
       "from": "bot",
       "message": [
 
       ],
-      "messageId": res?.id + "-" + (new Date()).getTime(),
+      "messageId": messageId,
       "botInfo": {
         "chatBot": 'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d',
         "taskBotId": 'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d'
@@ -163,12 +236,13 @@ export class TemplateRenderClassService {
       parsedPayload: null
     }
     res?.buttons?.forEach((elem) => {
+      // console.log(elem, "element *********");
+      
       let parsedPayload;
       if(elem.value){
         elem.value = elem.value.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
       }
-      let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
-
+      let payloadType = (elem.value)?.replace(/(&quot\;)/g, "\"");
 
       try {
         if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
@@ -176,57 +250,20 @@ export class TemplateRenderClassService {
           parsedPayload = JSON.parse(withoutSpecials);
         }
       } catch (error) {
-        if (payloadType.text) {
+        if (payloadType?.text) {
           let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
           parsedPayload = withoutSpecials;
         }
       }
 
+      let body = history ? this.prepareTemplateBodyForHistory(elem, parsedPayload) : this.prepareTemplateBody(elem, parsedPayload)
 
-
-      let body = {};
-      body['type'] = elem.type;
-      if (!parsedPayload) {
-        body['component'] = {
-          "type": elem.type,
-          "payload": {
-            "type": elem.type,
-            "text": elem.value
-          }
-        };
-        body['cInfo'] = {
-          "body": elem.value
-        };
-        elem['copyFlag'] = true;
-
-      } else {
-        body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
-        if (parsedPayload?.type === 'message') {
-          body['cInfo'] = {
-            "body": ''
-          };
-          elem['copyFlag'] = false;
-        } else if (parsedPayload?.text) {
-          body['cInfo'] = {
-            "body": parsedPayload.text
-          };
-          elem['copyFlag'] = true;
-        } else {
-          body['cInfo'] = {
-            "body": parsedPayload
-          };
-          elem['copyFlag'] = false;
-        }
-
-      }
       _msgsResponse.message[0] = body;
       _msgsResponse.parsedPayload = parsedPayload;
 
     });
-    console.log(res.srcChannel, "src channel");
     
     if (res.srcChannel && res.srcChannel !== 'msteams') {
-      console.log(res.entityType, "entity type ********");
       if (res.componentType === 'dialogAct') {
         let actualStringFromBE = '';
         if (res && res?.buttons && res?.buttons[0]?.value?.includes('text')) {
@@ -244,15 +281,11 @@ export class TemplateRenderClassService {
       
         
         let arr = [];
-        if (res.buttons[0]?.value?.includes('text')) {
-          console.log("inside if **********");
-          
+        if (res.buttons[0]?.value?.includes('text')) {          
           let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
           let str1 = JSON.parse(str);
           arr = str1.text.split('\n');
-        } else {
-          console.log("inside else *********");
-          
+        } else {          
           arr = res.buttons[0].value.split('\n');
         }
         _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);

@@ -24,6 +24,9 @@ export class RootService {
   myBotTabSessionId = '';
   grantResponseObj: any = {};
 
+  dropdownHeaderUuids : any;
+  myBotDropdownHeaderUuids : any;
+
   OverRideMode: boolean = false;
   proactiveModeStatus : boolean = false;
   isAutomationOnGoing: boolean = false;
@@ -41,6 +44,7 @@ export class RootService {
     childBotId: ''
   }
   public chatWindowInstance: any;
+
   manualAssistOverrideMode: boolean = false;
 
   isUpdateFeedBackDetailsFlag: boolean = false;
@@ -298,12 +302,10 @@ export class RootService {
 
   formatHistoryResonseToNormalRender(res) {
     let result: any = {};
-
     result = Object.assign({}, res.agentAssistDetails);
-
     result.type = res.type;
-    result.components = res.components;
-    // result.buttons = res.components;
+    // result.components = res.components;
+    result.buttons = JSON.parse(JSON.stringify(res.components));
     result.intentName = res.tN;
     result._id = res._id;
     result.entityDisplayName = result.newEntityDisplayName ? result.newEntityDisplayName : result.newEntityName;
@@ -311,6 +313,10 @@ export class RootService {
       result.suggestions = (result.suggestions) ? (result.suggestions) : (result.ambiguityList);
       result.faqResponse = res.agentAssistDetails.faqResponse;
     }
+    //format buttons
+    result.buttons.forEach((element, index) => {
+      element.value = res.components[index]?.data?.text
+    });
 
     return result;
   }
@@ -368,12 +374,10 @@ export class RootService {
   }
 
   confirmationNodeRenderForHistoryDataTransform(res) {
-    if (res && res.agentAssistDetails && (res.agentAssistDetails.componentType == 'dialogAct' || res.agentAssistDetails.entityType == 'list_of_values' || res.agentAssistDetails.newEntityType == 'list_of_values') && res.components && res.components.length > 0 && res.components[0].data && res.components[0].data.text) {
-
-      if (!res.agentAssistDetails.applyDefaultTemplate) {
-
-        res.agentAssistDetails.componentType = '';
-        res.agentAssistDetails.newEntityType = '';
+    if (res && (res.componentType == 'dialogAct' || res.entityType == 'list_of_values' || res.newEntityType == 'list_of_values') && res.buttons && res.buttons.length > 0 && res.buttons[0].data && res.buttons[0].value) {
+      if (!res?.applyDefaultTemplate) {
+        res.componentType = '';
+        res.newEntityType = '';
       }
     }
     return res;
@@ -480,9 +484,7 @@ export class RootService {
   // }
 
 
-  getTemplateHtml(isTemplateRender, result){
-    console.log(isTemplateRender, "is template render", result);
-    
+  getTemplateHtml(isTemplateRender, result){    
     let renderedMessage = isTemplateRender ? this.templateRenderClassService?.AgentChatInitialize?.renderMessage(result) : '';
     if (renderedMessage && renderedMessage[0]) {
       let obj =  $(this.templateRenderClassService.AgentChatInitialize.renderMessage(result))[0].outerHTML
