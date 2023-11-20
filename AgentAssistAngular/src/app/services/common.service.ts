@@ -83,6 +83,7 @@ export class CommonService {
       connectionDetails.value = dialog.intentName;
       connectionDetails.isSearch = false;
       connectionDetails.positionId = myBotDialogPositionId;
+      connectionDetails.entities = this.rootService.mybotEntitiestValueArray
       connectionDetails.childBotName = this.rootService?.childBotDetails.childBotName;
       connectionDetails.childBotId = this.rootService?.childBotDetails.childBotId;
       if (this.rootService.connectionDetails?.interactiveLanguage && typeof this.rootService.connectionDetails?.interactiveLanguage == 'string' && this.rootService.connectionDetails?.interactiveLanguage != "''") {
@@ -95,6 +96,7 @@ export class CommonService {
       }
       let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
+      this.rootService.mybotEntitiestValueArray = [];
     }
   }
 

@@ -34,7 +34,8 @@ export class RootService {
   isInitialDialogOnGoing: boolean = false;
   isRestore: boolean = false;
 
-  entitiestValueArray: any;
+  entitiestValueArray: any = [];
+  mybotEntitiestValueArray : any = [];
   suggestionsAnswerPlaceableIDs: any = [];
 
   currentPositionId;

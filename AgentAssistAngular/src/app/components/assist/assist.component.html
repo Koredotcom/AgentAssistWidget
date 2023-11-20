@@ -53,19 +53,10 @@
         <div class="collapse-tab" #collapseTab>
           <div class="card-body">
                 <div class="card_body_acc_content kore-chat-window">
-                    <!-- <ng-container [ngTemplateOutlet]="dialogStarted"></ng-container>   -->
                     <app-tell-customer [automation]="welcomeMsgResponse" [isWelcomeMsg]="true" *ngIf="(welcomeMsgResponse | json) != '{}'"></app-tell-customer>
                     <ng-container [ngTemplateOutlet]="listingTriggers" *ngIf="!assistResponseArray.length && (welcomeMsgResponse | json) == '{}'"></ng-container>                    
-                  <!-- <ng-container [ngTemplateOutlet]="feedback"></ng-container>
-                    <ng-container [ngTemplateOutlet]="dialogEnded"></ng-container>                     -->
                     <ng-container *ngFor="let res of assistResponseArray; let i = index">
                         <ng-container *ngIf="res.type == renderResponseType.SUGGESTIONS">
-                            <!-- <div class="agent-utt-info" attr.id="agentUttInfo-{{res.uuid}}">
-                                                    <div class="user-img">
-                                                        <img src="assets/images/userIcon.svg">
-                                                    </div>
-                                                    <div class="text-user">{{res.data.userInput}}</div>
-                                                </div> -->
                             <app-suggestions [suggestionResponse]="res" [agentassistArrayIndex]="i"
                                 [agentassistResponseArrayLength]="assistResponseArray.length"></app-suggestions>
                         </ng-container>
@@ -86,15 +77,6 @@
             </div>
           </div>
         </div>
-        <!-- <ng-container *ngIf="showInterruptPopup">
-            <app-interrupt (handlePopupEvent)="handlePopupEvent($event)" [currentDialog]="dialogName"></app-interrupt>
-        </ng-container>
-        <ng-container *ngIf="(showListView || showRestart) && dialogName">
-            <app-listview [listView]="showListView" [restart]="showRestart" [assistResponseArray]="assistResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
-        </ng-container>
-        <ng-container *ngIf="showSummaryPopup">
-            <app-summary-popup (handlePopupEvent)="handlePopupEvent($event)" [summaryText]="summaryText"></app-summary-popup>
-        </ng-container> -->
     </div>
 </div>
 
@@ -125,34 +107,6 @@
     <div class="empty-listing-triggers disabled-msg">
         <h1>Listening for triggers</h1>
         <p>AgentAssist is actively listing to your conversation and ready to assist automatically when triggered.</p>
-    </div>
-</ng-template>
-
-<!-- Entity Message -->
-<ng-template #entityMessage>
-    <!-- error-no-reponse class add it when error-->
-    <div class="entity-mesage-data">
-        <div class="input-block-entity">
-            <p>PizzaBase: </p>
-            <input type="text" aria-label="Input">
-            <div class="border-outline"></div>
-            <div class="actions-inputs">
-                <button class="remove-input" aria-label="Button">
-                    <i class="krIocnsFont-close"></i>
-                </button>
-                <button class="check-input" aria-label="button">
-                    <i class="krIocnsFont-check"></i>
-                </button>
-                <button class="success-check-input" aria-label="button">
-                    <i class="krIocnsFont-check-circle"></i>
-                </button>
-                <button class="wrong-res-info" aria-label="button">
-                    <i class="krIocnsFont-warning-solid"></i>
-                    <span>3</span>
-                </button>
-            </div>
-        </div>
-        <p class="info-entity-text">Awaiting Response  |  Type to override</p>
     </div>
 </ng-template>
 

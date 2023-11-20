@@ -23,7 +23,7 @@
                 <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, ansObj, projConstants.FAQ)">
                     <i class="krIocnsFont-copy"></i>
                 </button>
-                <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, ansObj, projConstants.FAQ)">Send {{faqcontent.scrollHeight}}</button>
+                <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, ansObj, projConstants.FAQ)">Send</button>
             </div>
             <div class="data-faq-paragraph">            
                 <p #faqcontent [ngClass]="{'show-full-text' : !ansObj['showMoreButton']}"  [innerHtml]="rootService.handleEmptyLine(ansObj['ans'])"></p>
