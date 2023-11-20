@@ -12,10 +12,10 @@
             <div class="main-heading">Playbook</div>
             <ul class="nav nav-tabs d-none">
                 <li class="nav-item">
-                  <a class="nav-link active" data-toggle="tab" href="#static" (click)="checkListType = 'primary'">STATIC</a>
+                  <a class="nav-link " data-toggle="tab" [ngClass]="{'active':checkListType == 'primary'}"  (click)="checkListType = 'primary'">STATIC</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" data-toggle="tab" href="#dynamicintent" (click)="checkListType = 'dynamic'">DYNAMIC</a>
+                  <a class="nav-link" data-toggle="tab"  [ngClass]="{'active':checkListType == 'dynamic'}"   (click)="checkListType = 'dynamic'">DYNAMIC</a>
                 </li>
             </ul>
         </div>
@@ -25,10 +25,10 @@
         </div>
     </div>
     <div class="tab-content tab-content-details">
-        <div class="tab-pane active" id="static">
+        <div class="tab-pane" id="static" [ngClass]="{'active':checkListType == 'primary'}" *ngIf="checkListType == 'primary'">
             <app-primary-checklist #checkList1 (createCl)="createFCl($event)" (update)="updatePrimaryChecklist($event)" [checkListType]="checkListType"></app-primary-checklist>
         </div>
-        <div class="tab-pane fade" id="dynamicintent">
+        <div class="tab-pane" [ngClass]="{'active':checkListType == 'dynamic'}" id="dynamicintent" *ngIf="checkListType == 'dynamic'">
             <app-dynamic-checklist #checkList2 (createCl)="createFCl($event)" (update)="updatePrimaryChecklist($event)" [checkListType]="checkListType"></app-dynamic-checklist>
         </div>
     </div>

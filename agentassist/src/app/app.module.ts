@@ -103,7 +103,7 @@ import { AutomationIntentvsEntityStringPipe } from './helpers/filters/automation
 import { ConvsHistoryLogsComponent } from './pages/conversational-logs/convs-history-logs/convs-history-logs.component';
 import { AccWarningDialogComponent } from './helpers/components/acc-warning-dialog/acc-warning-dialog.component';
 import { XoMenuComponent } from './components/xo-menu/xo-menu.component';
-
+import { EmptyRouteComponent } from './empty-route/empty-route.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -179,7 +179,8 @@ import { XoMenuComponent } from './components/xo-menu/xo-menu.component';
     // AutomationIntentvsEntityStringPipe,
     ConvsHistoryLogsComponent,
     AccWarningDialogComponent,
-    XoMenuComponent
+    XoMenuComponent,
+    EmptyRouteComponent
   ],
   imports: [
     CommonModule,

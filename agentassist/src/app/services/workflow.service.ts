@@ -7,6 +7,7 @@ import { environment } from '@kore.environment';
 import { AppService } from './app.service';
 import { LocalStoreService } from './localstore.service';
 import { ActivatedRoute } from '@angular/router';
+declare const window;
 
 @Injectable({
   providedIn: 'root'
@@ -293,9 +294,9 @@ export class workflowService {
 
   isUnifiedPlatform(){
     if(!this.UnifiedPlatform){
-    let element = this.route.snapshot.queryParams;
-    this.UnifiedPlatform = (element?.isUnifiedPlatform === 'true' || element?.isUnifiedPlatform === true) 
-    ? true : false;
+    // let element = this.route.snapshot.queryParams;
+    this.UnifiedPlatform =  window.isUnifiedPlatform;// (element?.isUnifiedPlatform === 'true' || element?.isUnifiedPlatform === true) 
+    // ? true : false;
       return this.UnifiedPlatform;
     }else{
       return this.UnifiedPlatform;

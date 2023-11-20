@@ -1703,7 +1703,7 @@ and open the template in the editor.
         }
         li{
             &.dropdown-item{
-                padding: 0 !important;
+                padding: 0;
                 &:active{
                     background-color:$primaryHoverColor;
                 }
@@ -3720,11 +3720,209 @@ $numbers: 1000;
 
 
 
+// Dropdowns
+
+@mixin kr-sg-dropdowns {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+
+    .label-text {
+        color: var(--gray-700, #344054);
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        margin-bottom: 4px;
+    }
+
+    .error-msg {
+        color: var(--error-500, #F04438);
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+    }
+    .dropdown-toggle {
+        position: relative;
+        height: 40px;
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid var(--gray-300, #D0D5DD);
+        background: var(--base-white, #FFF);
+        box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+        padding: 0 35px 0 10px;
+        text-align: left;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        color: var(--gray-900, #101828);
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+
+        &.btn-lg {
+            height: 44px;
+        }
+        &::before {
+            content: "\e927";
+            position: absolute;
+            font-size: 14px;
+            height: auto;
+            right: 10px;
+            margin-top: 3px;
+            color: #667085;
+            transition: all 0.3s ease-in;
+            z-index: 0;
+            top: auto;
+            font-family: 'icomoon' !important;
+            speak: never;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+
+            /* Better Font Rendering =========== */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-image: none;
+        }
+
+        &:focus {
+            border: 1px solid var(--primary-300, #84ADFF);
+            box-shadow: 0px 0px 0px 4px #EFF4FF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+        }
+
+        &:active {
+            border: 1px solid var(--primary-300, #84ADFF);
+            box-shadow: 0px 0px 0px 4px #EFF4FF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+        }
+
+        &:disabled {
+            border: 1px solid var(--gray-300, #D0D5DD);
+            background: var(--gray-50, #F9FAFB);
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        &.error {
+            border: 1px solid var(--error-300, #FDA29B);
+            background: var(--base-white, #FFF);
+
+            &:focus {
+                box-shadow: 0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+            }
+        }
+
+        &::after {
+            display: none !important;
+        }
+    }
+    .dropdown-open {
+        .dropdown-input{
+            @extend .dropdown-toggle;
+        }
+    }
+
+    .dropdown-menu {
+        width: 100%;
+        margin: 0;
+        z-index: 999;
+        border-radius: 8px;
+        border: 1px solid var(--gray-200, #EAECF0);
+        background: var(--base-white, #FFF);
+        box-shadow: 0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px -12px 16px -4px rgba(16, 24, 40, 0.08);
+        line-height: normal;
+        width: 100%;
+        max-width: 100%;
+        padding: 4px 0;
+
+        .dropdown-item {
+            &:hover {
+                background: var(--xop-table-header-bg-color) !important;
+            }
+
+            &:active {
+                background: var(--xop-table-header-bg-color) !important;
+            }
+
+            &:focus {
+                background: var(--xop-table-header-bg-color) !important;
+            }
+        }
+
+        li {
+            padding: 10px 14px !important;
+            cursor: pointer;
+            &.search-box{
+                padding: 0 10px !important;
+            }
+            &:hover {
+                background-color: var(--xop-table-header-bg-color);
+            }
+            &.selected {
+                position: relative;
+                background-color: var(--xop-table-header-bg-color);
+                padding-right: 30px;
+
+                &::before {
+                    content: "\e98d";
+                    position: absolute;
+                    right: 10px;
+                    top: 14px;
+                    transition: all 0.3s ease-in;
+                    z-index: 1;
+                    height: auto;
+                    font-family: 'icomoon' !important;
+                    speak: never;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-variant: normal;
+                    text-transform: none;
+                    line-height: 1;
+
+                    /* Better Font Rendering =========== */
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    font-size: 12px;
+                    color: #2B75E4;
+                }
+            }
+            &.disabled {
+                background-color: var(--xop-table-header-bg-color);
+                color: var(--primaryColor);
+                font-weight: bold;
+            }
+            a {
+                color: var(--gray-900, #101828);
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 20px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                max-width: 100%;
+                display: block;
+                align-items: center;
+                transition: 0.2s all ease;
+                text-decoration: none;
+                padding: 0px;
+                background: transparent !important;
+
+                i {
+                    margin-right: 6px;
+                    font-weight: 400;
+                    font-size: $font-s-14;
+                    color: var(--primaryColor);
+                }
+            }
+        }
+    }
+}
 
 
-
-.if-load-in-unified-agentassist{
-
+.if-load-in-unified-agentassist, app-agentassist-root, .modal-ngb-wrapper-window, .flow-creation-full-modal{
+    // position: relative;
     // Buttons
     ._btn {
         border-radius: 8px;
@@ -3807,6 +4005,7 @@ $numbers: 1000;
             border: 1px solid var(--primary-200, #B2CCFF);
             background: var(--primary-200, #B2CCFF);
             box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+            color: var(--base-white, #FFF);
         }
     }
     %buttonSolid{
@@ -3829,10 +4028,12 @@ $numbers: 1000;
     
         &:hover {
             background: #F9FAFB;
+            color: #344054;
         }
     
         &:active {
             background: #F9FAFB;
+            color: #344054;
         }
     
         &:focus {
@@ -4254,6 +4455,23 @@ $numbers: 1000;
                     border: 1px solid var(--primary-600, #155EEF);
                     background: var(--primary-50, #EFF4FF);
                 }
+                &::after{
+                    content: '';
+                    display: inline-block;
+                    vertical-align: middle;
+                    width: 16px;
+                    height: 16px;
+                    top: 0;
+                    padding: 0;               
+                    text-align: center;               
+                    position: absolute;
+                    left: 0;
+                    top: 1px;
+                    margin: 0;
+                    border-radius: 4px;
+                    border: 1px solid var(--primary-600, #155EEF);
+                    background: var(--primary-50, #EFF4FF);
+                }
             }
             &:hover{
                 &:not([disabled]):checked{
@@ -4276,10 +4494,31 @@ $numbers: 1000;
             &:checked{
                 + .checkbox-custom-label{
                     &::before{
-                        content: "\e95e";
-                        border: 1px solid var(--primary-600, #155EEF);
-                        background: var(--primary-50, #EFF4FF);
-                        font-size: 8px;
+                        content: "\e981" !important;
+                        border: 1px solid var(--primary-600, #155EEF) !important;
+                        background: var(--primary-50, #EFF4FF) !important;
+                        font-size: 16px !important;
+                        color: #155EEF;
+                        font-family: 'icomoon' !important;
+                        speak: never;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-variant: normal;
+                        text-transform: none;
+                        line-height: 1;
+
+                        /* Better Font Rendering =========== */
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    &::after{
+                        content: "\e981" !important;
+                        border: 1px solid var(--primary-600, #155EEF) !important;
+                        background: var(--primary-50, #EFF4FF) !important;
+                        font-size: 16px !important;
                         color: #155EEF;
                         font-family: 'icomoon' !important;
                         speak: never;
@@ -4538,6 +4777,11 @@ $numbers: 1000;
                 background: rgba(255, 255, 255, 0.50);
                 backdrop-filter: blur(4px);
             }
+            .sliderDialogComponent {
+                .sliderContent{
+                    height: 100vh !important;
+                }
+            }
         }
     }
     .slider-sec-data {
@@ -4584,6 +4828,21 @@ $numbers: 1000;
             .btn-actions {
                 .settings-actions{
                     height: 40px !important;
+                }
+            }
+        }
+    }
+    .example-chip-list{
+        &.mat-focused {
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    .mat-form-field-infix {
+                        .mat-chip-list {
+                            .mat-chip-list-wrapper{
+                                border: 0 !important;
+                            }
+                        }
+                    }
                 }
             }
         }

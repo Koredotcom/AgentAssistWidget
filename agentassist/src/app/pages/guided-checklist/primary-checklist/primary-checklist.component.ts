@@ -7,7 +7,7 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { TranslateService } from '@ngx-translate/core';
 import { finalize, debounceTime, tap } from 'rxjs/operators';
-import { CHECKLISTCNST } from '../checklist.const';
+import { CHECKLISTCNST, IMAGE_PATHS } from '../checklist.const';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteComponent } from '../common/delete/delete.component';
 import { IframeService } from '@kore.services/iframe.service';
@@ -42,6 +42,7 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
   hasMore : boolean = false;
   limit = 10;
   page = 1;
+  emptyCheckingImg = IMAGE_PATHS.EMPTY_CHECKLIST_IMAGE;
 
   ngOnInit(): void {
     this.subscribeEvents();

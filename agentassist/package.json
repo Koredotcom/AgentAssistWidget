@@ -3,11 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --project kore-sales",
+    "build-app": "ng build --project kore-sales",
+    "build": "ng build agentassist-sspa",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:single-spa:agentassist": "ng build agentassist-sspa --deploy-url http://localhost:4200/",
+    "serve:single-spa:agentassist": "ng s --project agentassist-sspa --disable-host-check --port 4200 --deploy-url http://localhost:4200/ --live-reload false"
   },
   "private": true,
   "dependencies": {
@@ -67,6 +70,8 @@
     "rete-lifecycle-plugin": "^0.2.1",
     "rete-minimap-plugin": "^0.3.1",
     "rxjs": "^6.6.3",
+    "single-spa": ">=4.0.0",
+    "single-spa-angular": "^4.9.2",
     "subsink": "^1.0.2",
     "sweetalert2": "^10.14.0",
     "tslib": "^2.0.0",
@@ -76,6 +81,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "11.1.2-beta.0",
     "@angular-devkit/build-angular": "~0.1102.17",
     "@angular/cli": "~11.2.17",
     "@angular/compiler-cli": "~11.2.14",

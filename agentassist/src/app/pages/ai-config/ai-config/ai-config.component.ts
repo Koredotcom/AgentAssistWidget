@@ -108,7 +108,7 @@ export class AiConfigComponent implements OnInit, OnDestroy {
       this.isCoachingDisable = isEnabled;
     });
     if(!this.isCoachingDisable){
-      this.router.navigate(['/config/usecases']); 
+      this.router.navigate(['/config/usecases'], { skipLocationChange: true }); 
     }else{
       this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
         if(ele){

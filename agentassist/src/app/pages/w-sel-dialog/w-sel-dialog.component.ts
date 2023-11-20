@@ -568,7 +568,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
 
   navigateToUc() {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(['/config/usecases']);
+      this.router.navigate(['/config/usecases'], { skipLocationChange: true });
     });
   }
 
@@ -652,7 +652,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     if(this.workflowService.deflectApps() && this.workflowService.deflectApps().length) {
       this.workflowService.switchBt$.next(_.findWhere(this.workflowService.deflectApps(), {_id: this.importedBtStreamId}));
       this.wSel.emit();
-      this.router.navigate(['/config/usecases']);
+      this.router.navigate(['/config/usecases'], { skipLocationChange: true });
     } else {
       this.notificationService.notify(this.translate.instant('ONBOARDING.PLEASE_WAIT_LOADING'), 'warning');
       return;
@@ -934,7 +934,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
         this.notificationService.notify(this.translate.instant("ONBOARDING.BT_CREATION_SUCCESS"), 'success');
         setTimeout(() => {
              this.workflowService.switchBt$.next(res);
-             this.router.navigate(['/config/usecases']);
+             this.router.navigate(['/config/usecases'], { skipLocationChange: true });
              this.wSel.emit();
              this.isNewBot = false;
         }, 500);

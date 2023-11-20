@@ -103,7 +103,7 @@ export class OnboardingDialogComponent implements OnInit, AfterViewInit, OnDestr
         this.appService.appendNewInstaceBot(res);
         this.authService.deflectApps.next(null);
         this.closeDialog(takeTour);
-        this.router.navigate(['home']);
+        this.router.navigate(['home'], { skipLocationChange: true });
         // setTimeout(() => { this.router.navigate(['home']) })
       }, err => this.notificationService.showError(err));
   }
@@ -120,7 +120,7 @@ export class OnboardingDialogComponent implements OnInit, AfterViewInit, OnDestr
     if (isMigrated) {
       this.appService.isMigrated = false;
       sessionStorage.removeItem('isMigrated');
-      this.router.navigate(['home']);
+      this.router.navigate(['home'], { skipLocationChange: true });
     }
   }
 

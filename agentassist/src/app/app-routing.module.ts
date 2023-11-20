@@ -14,6 +14,9 @@ import { UserManagementComponent } from './pages/agent-settings/user-management/
 import { LanguagesSpeechComponent } from './pages/languages-speech/languages-speech.component';
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
+import { APP_BASE_HREF } from '@angular/common';
+import { EmptyRouteComponent } from './empty-route/empty-route.component';
+import { environment } from '@kore.environment';
 
 let isSmartassist = false;
 if(window.location.href.includes('smartassist')){
@@ -28,9 +31,12 @@ const routes: Routes = [
       appData: AppDataResolver
     },
     children: [
-      { path: '', redirectTo: 'config', pathMatch: 'full' },
+      { path: '', redirectTo: 'config',  pathMatch: 'full' },
       {
-        path: 'config', component: ConfigurationsComponent, children: [
+        path: 'config', component: ConfigurationsComponent, canActivate: [AuthGuard],
+        resolve: {
+          appData: AppDataResolver
+        }, children: [
           { path: '', redirectTo: (isSmartassist ? 'coaching' : 'usecases'), pathMatch: 'full' },
           { path: 'agents', component: AgentsComponent },
           { path: 'roleManagement', component: UserManagementComponent },
@@ -63,11 +69,13 @@ const routes: Routes = [
   },
 
   { path: 'chathistory', loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule) },
+  { path: '**', component: EmptyRouteComponent }
 
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, relativeLinkResolution: 'legacy' })],
+  providers:[{ provide: APP_BASE_HREF, useValue: (environment.tag==='dev'?'/':'/platform/bot') }],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

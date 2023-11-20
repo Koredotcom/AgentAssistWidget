@@ -83,6 +83,7 @@
                     min-width: 444px;
                     width: 444px;
                     margin-top: 25px;
+                    max-width: 100%;
                     .list-item-li{
                         padding: 10px;
                         font-weight: 400;
@@ -344,6 +345,7 @@
                             font-size: 14px;
                             transform: none !important;
                             position: relative !important;
+                            box-shadow: none !important;
                         }
                     }                    
                     .add-triggers{

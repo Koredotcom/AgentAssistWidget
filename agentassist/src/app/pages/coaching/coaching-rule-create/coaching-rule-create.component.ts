@@ -16,6 +16,7 @@ import { SliderComponentComponent } from 'src/app/shared/slider-component/slider
 import { MatChipInputEvent } from '@angular/material/chips';
 import { CreateRuleComponent } from './create-rule/create-rule.component';
 import { IframeService } from '@kore.services/iframe.service';
+import { IMAGE_PATHS } from '../../guided-checklist/checklist.const';
 @Component({
   selector: 'app-coaching-rule-create',
   templateUrl: './coaching-rule-create.component.html',
@@ -50,7 +51,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   settingsList : any = ['name', 'description', 'tags', 'channels', 'botId'];
   settingsChange : boolean = false;
 
-
+  coachingAssignImg = IMAGE_PATHS.COACHING_ASSIGN_IMG
 
   // triggerFormControlsArray : any = [];
 

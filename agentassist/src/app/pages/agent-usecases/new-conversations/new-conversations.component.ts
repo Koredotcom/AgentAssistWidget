@@ -540,7 +540,7 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
 
   launchPlatform() {
     this.workflowService.setEditInBotPlatform();
-    this.router.navigate(['/bt']);
+    this.router.navigate(['/bt'], { skipLocationChange: true });
     this.performBTNavigation('build',"dialogtask");
     // const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
     //   width: '446px',
