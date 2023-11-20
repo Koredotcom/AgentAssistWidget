@@ -632,9 +632,7 @@ export class AssistComponent implements OnInit, OnDestroy {
           currentTaskPositionId = null;
         }
       } 
-    });
-    console.log(this.assistResponseArray, "assist response array");
-    
+    });    
     this.scrollToBottom();
   }
 

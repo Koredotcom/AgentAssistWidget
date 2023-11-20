@@ -34,6 +34,18 @@ export class TellCustomerComponent {
     if(!this.rootService.settingsData?.isAgentResponseEnabled){
       this.automation.hideSendButton = true;
     }
+
+    if(this.automation.hideSendButton && this.automation.hideCopyButton){
+      this.automation.hideActionButtons = true;
+    }
+
+    if(this.isWelcomeMsg){
+      this.automation.buttons.forEach(element => {
+        element.hideActionButtons = this.automation.hideActionButtons;
+        element.hideSendButton = this.automation.hideSendButton;
+      });
+    }
+    
   }
 
   handleSendCopyButton(method,automation){

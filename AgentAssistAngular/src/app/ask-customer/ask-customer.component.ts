@@ -12,6 +12,7 @@ import { WebSocketService } from '../services/web-socket.service';
 export class AskCustomerComponent {
 
   @Input() automation: any;
+  @Input() listView : boolean;
 
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
@@ -42,6 +43,10 @@ export class AskCustomerComponent {
     if(!this.rootService.settingsData?.isAgentResponseEnabled){
       this.automation.hideSendButton = true;
     }
+
+    if(this.automation.hideSendButton && this.automation.hideCopyButton){
+      this.automation.hideActionButtons = true;
+    }    
   }
 
   confirmOverride() {

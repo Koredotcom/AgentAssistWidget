@@ -35,7 +35,7 @@ export class ListviewComponent{
          automation.entityName = automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation.data.entityName;
         if(automation.entityName){
           automation.entityValue = automation.entityValue ? automation.entityValue : '';
-          automation.disableInput = automation.entityValue ? true : false;
+          // automation.disableInput = automation.entityValue ? true : false;
           this.entityList.push(automation);
         }
       }
