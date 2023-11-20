@@ -61,6 +61,9 @@ export const ProjConstants = {
     ACCEPT_RESPONSE : 'Response Accepted',
     AGENT_ENTERED : 'Agent Entered',
     LOGO_PATH : 'assets/images/logo/koreLogo.svg',
+    DOCUMENTATION_LINK : 'https://docs.kore.ai/agentassist/',
+    FAQ_LINK : 'https://docs.kore.ai/agentassist/frequently-asked-questions/faq/',
+    KOREACADEMY_LINK : 'https://academy.kore.ai/',
     jToken : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjUzODYxNzgyMjMsImV4cCI6MTY2NTM4NjE3OTEyMywiYXVkIjoiIiwiaXNzIjoiY3MtZTRhMmI0YjYtM2RiZC01NWQwLWIwMjUtNDY2ZTVkMDRjOTgxIiwic3ViIjoiYy00NzJhNjYyLTQ5ZDYtNDM5Ny1hMjY1LTViNzE4ZDQ0MWNiNCIsImlzQW5vbnltb3VzIjpmYWxzZX0.1SN5BIEaQ4Rr6XpyKXR1AerNcIEmyDcnK6P0cpPkQzM"
 }
 

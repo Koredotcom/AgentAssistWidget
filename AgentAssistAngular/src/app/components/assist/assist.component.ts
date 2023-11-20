@@ -606,7 +606,9 @@ export class AssistComponent implements OnInit, OnDestroy {
                 renderResponse.toggleOverride = true;
                 renderResponse.hideOverrideDiv = true;
               }
-              this.assistResponseArray = this.commonService.updateOverrideStatusOfAutomation(this.assistResponseArray, previousId, renderResponse);
+              this.currentRunningStep = res.newEntityDisplayName ? res.newEntityDisplayName : res.newEntityName;
+              this.assistResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.assistResponseArray, res, this.showErrorPrompt, renderResponse, this.rootService.dropdownHeaderUuids, this.projConstants.ASSIST);
+              // this.assistResponseArray = this.commonService.updateOverrideStatusOfAutomation(this.assistResponseArray, previousId, renderResponse);
               this.assistResponseArray = structuredClone(this.assistResponseArray);
             } else if ((previousTaskName != currentTaskName)) {
               //small talk after dialogue terminate              

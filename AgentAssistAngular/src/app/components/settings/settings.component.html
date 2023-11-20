@@ -91,48 +91,54 @@
         </ng-container>
         <ng-container *ngIf="setting === 'help'">
             <div class="card-group-help">
-                <div class="card help-cards">
-                    <div class="card-icon">
-                        <i class="krIocnsFont-image-01"></i>
+                <a [attr.href]="projConstants.DOCUMENTATION_LINK" target="_blank">
+                    <div class="card help-cards">
+                        <div class="card-icon">
+                            <i class="krIocnsFont-image-01"></i>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">{{'DOCUMENTATION' | translate}}</div>
+                            <div class="card-desc">{{'DOC_DESC' | translate}}</div>
+                        </div>
+                        <div class="card-right-data">
+                            <button class="arrow-right">
+                                <i class="krIocnsFont-link-external-02"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="card-content">
-                        <div class="card-title">{{'DOCUMENTATION' | translate}}</div>
-                        <div class="card-desc">{{'DOC_DESC' | translate}}</div>
+                </a>
+                <a [attr.href]="projConstants.FAQ_LINK" target="_blank">
+                    <div class="card help-cards">
+                        <div class="card-icon">
+                            <i class="krIocnsFont-image-01"></i>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">{{'FAQ_U' | translate}}</div>
+                            <div class="card-desc">{{'FAQ_DESC' | translate}}</div>
+                        </div>
+                        <div class="card-right-data">
+                            <button class="arrow-right">
+                                <i class="krIocnsFont-link-external-02"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="card-right-data">
-                        <button class="arrow-right">
-                            <i class="krIocnsFont-link-external-02"></i>
-                        </button>
+                </a>
+                <a [attr.href]="projConstants.KOREACADEMY_LINK" target="_blank">
+                    <div class="card help-cards">
+                        <div class="card-icon">
+                            <i class="krIocnsFont-image-01"></i>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">{{'KORE_ACADEMY' | translate}}</div>
+                            <div class="card-desc">{{'KORE_ACA_DESC' | translate}}</div>
+                        </div>
+                        <div class="card-right-data">
+                            <button class="arrow-right">
+                                <i class="krIocnsFont-link-external-02"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="card help-cards">
-                    <div class="card-icon">
-                        <i class="krIocnsFont-image-01"></i>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-title">{{'FAQ_U' | translate}}</div>
-                        <div class="card-desc">{{'FAQ_DESC' | translate}}</div>
-                    </div>
-                    <div class="card-right-data">
-                        <button class="arrow-right">
-                            <i class="krIocnsFont-link-external-02"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card help-cards">
-                    <div class="card-icon">
-                        <i class="krIocnsFont-image-01"></i>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-title">{{'KORE_ACADEMY' | translate}}</div>
-                        <div class="card-desc">{{'KORE_ACA_DESC' | translate}}</div>
-                    </div>
-                    <div class="card-right-data">
-                        <button class="arrow-right">
-                            <i class="krIocnsFont-link-external-02"></i>
-                        </button>
-                    </div>
-                </div>
+                </a>
             </div>
         </ng-container>
         <ng-container *ngIf="setting === 'language'">
