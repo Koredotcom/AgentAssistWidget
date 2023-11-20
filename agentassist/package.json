@@ -70,7 +70,7 @@
     "rete-lifecycle-plugin": "0.2.1",
     "rete-minimap-plugin": "0.3.1",
     "rxjs": "6.6.3",
-    "single-spa": ">=4.0.0",
+    "single-spa": "4.0.0",
     "single-spa-angular": "4.9.2",
     "subsink": "1.0.2",
     "sweetalert2": "10.14.0",
