@@ -1,42 +1,64 @@
-<ng-container *ngFor="let conv of historyResponse">
-    <div class="transcipt-bot-bubble-comp"
-        *ngIf="conv.type == 'incoming' && conv.components && conv.components[0]?.data.text">
-        <div class="bot-bubble-content hover-show-copy">
-            <div class="top-info">
-                <!-- <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName +
-                    this.parsedCustomData?.lName) ||
-                    'Customer'}}</div> -->
-                <div class="time-tamp"><time>{{conv.timestampValue | converTimestampToDate}}</time></div>
-            </div>
-            <div class="bubble-msg-with-img">
-                <div class="bubble-msg" *ngIf="!conv.isTemplateRender && conv?.components[0]?.data?.text">{{conv?.components[0]?.data?.text}}
+<ng-container *ngIf="connectionDetails.isCallConversation">
+    <ng-container [ngTemplateOutlet]="userBotHistory"></ng-container>
+</ng-container>
+
+<ng-container *ngIf="!connectionDetails.isCallConversation">
+    <div class="transcipt-wrapper-info">
+        <div class="offcanvas-header">
+            <p class="paragraph semibold">History</p>
+            <button class="maximize-btn" (click)="minMaxButtonClick()">
+                <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
+                <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
+            </button>
+        </div>
+        <div class="body-canvas-wrapper kore-chat-window">
+            <ng-container [ngTemplateOutlet]="userBotHistory"></ng-container>
+         </div>
+    </div> 
+</ng-container>
+
+
+<ng-template  #userBotHistory>
+    <ng-container *ngFor="let conv of historyResponse">
+        <div class="transcipt-bot-bubble-comp"
+            *ngIf="conv.type == 'incoming' && conv.buttons && conv.buttons[0]?.value">
+            <div class="bot-bubble-content hover-show-copy">
+                <div class="top-info">
+                    <!-- <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName +
+                        this.parsedCustomData?.lName) ||
+                        'Customer'}}</div> -->
+                    <div class="time-tamp"><time>{{conv.timestampValue | converTimestampToDate}}</time></div>
                 </div>
-                <div class="bubble-msg" *ngIf="conv.isTemplateRender">
-                    <ul class="chat-container" [id]="'displayData-' + conv._id"
-                        [innerHTML]="renderHTMLPrompt(conv.template) | safeHtml">
-                    </ul>
-                    <!-- <div class="template-list-content-html" [id]="'displayData-' + conv._id" [innerHTML]="conv.template"></div> -->
+                <div class="bubble-msg-with-img">
+                    <div class="bubble-msg" *ngIf="!conv.isTemplateRender && conv?.buttons[0]?.value">{{conv?.buttons[0]?.value}}
+                    </div>
+                    <div class="bubble-msg" *ngIf="conv.isTemplateRender">
+                        <ul class="chat-container" [id]="'displayData-' + conv._id"
+                            [innerHTML]="renderHTMLPrompt(conv.template) | safeHtml">
+                        </ul>
+                        <!-- <div class="template-list-content-html" [id]="'displayData-' + conv._id" [innerHTML]="conv.template"></div> -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-   
-    <div class="transcipt-agent-bubble-comp"
-        *ngIf="conv.type == 'outgoing' && conv.components && conv.components[0]?.data.text">
-        <div class="agent-bubble-content hover-show-copy">
-            <div class="top-info">
-                <div class="time-tamp"><time>{{conv.timestampValue | converTimestampToDate}}</time></div>
-                <div class="you-text">Bot</div>
-            </div>
-            <div class="bubble-msg-with-img">
-                <div class="bubble-msg" *ngIf="!conv.isTemplateRender && conv?.components[0]?.data?.text">{{conv?.components[0]?.data?.text}}</div>
-                <div class="bubble-msg" *ngIf="conv.isTemplateRender">
-                    <ul class="chat-container" [id]="'displayData-' + conv._id"
-                        [innerHTML]="renderHTMLPrompt(conv.template) | safeHtml">
-                    </ul>
-                    <!-- <div class="template-list-content-html" [id]="'displayData-' + conv._id" [innerHTML]="conv.template"></div> -->
+       
+        <div class="transcipt-agent-bubble-comp"
+            *ngIf="conv.type == 'outgoing' && conv.buttons && conv.buttons[0]?.value">
+            <div class="agent-bubble-content hover-show-copy">
+                <div class="top-info">
+                    <div class="time-tamp"><time>{{conv.timestampValue | converTimestampToDate}}</time></div>
+                    <div class="you-text">Bot</div>
+                </div>
+                <div class="bubble-msg-with-img">
+                    <div class="bubble-msg" *ngIf="!conv.isTemplateRender && conv?.buttons[0]?.value">{{conv?.buttons[0]?.value}}</div>
+                    <div class="bubble-msg" *ngIf="conv.isTemplateRender">
+                        <ul class="chat-container" [id]="'displayData-' + conv._id"
+                            [innerHTML]="renderHTMLPrompt(conv.template) | safeHtml">
+                        </ul>
+                        <!-- <div class="template-list-content-html" [id]="'displayData-' + conv._id" [innerHTML]="conv.template"></div> -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</ng-container>  
+    </ng-container>  
+</ng-template>

@@ -321,6 +321,18 @@ export class RootService {
     return result;
   }
 
+  formatUserBotHistoryResponse(res){
+    let result: any = JSON.parse(JSON.stringify(res));
+    result = Object.assign(result, res.agentAssistDetails);
+    result.buttons = JSON.parse(JSON.stringify(res.components));
+    result.intentName = res.tN;
+    result._id = res._id;
+    result.buttons.forEach((element, index) => {
+      element.value = res.components[index]?.data?.text
+    });
+    return result;
+  }
+
   handleSendCopyButtonForNodes(actionType, sendData) {
     let message = {};
     if (actionType == ProjConstants.SEND) {

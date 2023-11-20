@@ -3,7 +3,7 @@
         <button class="btn_link" (click)="closeListView(false)">
             <i class="krIocnsFont-close-md"></i>
         </button>
-        <ng-container *ngIf="listView">
+        <ng-container>
             <h1>Input Values</h1>
                 <ng-container [ngTemplateOutlet]="listView"></ng-container>
         </ng-container>

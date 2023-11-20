@@ -5,7 +5,7 @@
         <div class="svg_img">
             <img src="assets/images/icons/askcust.svg" alt="Image">
         </div>
-        <p>{{projConstants.WELCOME_MSG}}</p>
+        <p>{{'WELCOME_MSG' | translate}}</p>
     </div>
     <ng-container *ngFor="let item of automation.buttons">
         <ng-container [ngTemplateOutlet]="askCustMsg" [ngTemplateOutletContext]="{smallTalkData: item}"></ng-container>
@@ -18,7 +18,7 @@
         <div class="svg_img">
             <img src="assets/images/icons/askcust.svg" alt="Image">
         </div>
-        <p>{{projConstants.TELL_CUSTOMER}}</p>
+        <p>{{'TELLCUSTOMER' | translate}}</p>
     </div>
     <ng-container [ngTemplateOutlet]="askCustMsg" [ngTemplateOutletContext]="{smallTalkData: automation}"></ng-container>
 </div>
@@ -32,7 +32,7 @@
                 <i class="krIocnsFont-copy"></i>
             </button>
             <button class="solidbtn" aria-label="button"
-                (click)="handleSendCopyButton(projConstants.SEND, automation)" *ngIf="!automation.hideSendButton">Send</button>
+                (click)="handleSendCopyButton(projConstants.SEND, automation)" *ngIf="!automation.hideSendButton">{{ 'SEND'  | translate }}</button>
         </div>
         <p *ngIf="!automation.templateRender">{{automation.value}}</p>
         <ng-container *ngIf="automation.templateRender && automation.template">

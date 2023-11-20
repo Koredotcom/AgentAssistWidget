@@ -12,8 +12,6 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
 export class ListviewComponent{
   projConstants : any = ProjConstants;
 
-  @Input() listView : boolean;
-  @Input() restart : boolean;
   @Input() assistResponseArray : any;
   @Output() handlePopupEvent = new EventEmitter();
 
@@ -25,9 +23,7 @@ export class ListviewComponent{
 
   }
 
-  ngOnChanges(){
-    console.log(this.assistResponseArray, 'assist response array', this.listView);
-    
+  ngOnChanges(){    
     if(this.assistResponseArray.length){
       this.entityList  = [];
       this.automationData = this.assistResponseArray[this.assistResponseArray.length-1];

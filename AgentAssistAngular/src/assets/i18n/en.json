@@ -18,5 +18,22 @@
     "SEARCH": "Search",
     "MY_BOT": "My Bot",
     "ASSIST": "Assist",
-    "TRANSCRIPT": "Transcript"
+    "TRANSCRIPT": "Transcript",
+    "HISTORY" : "History",
+    "STARTOVER" : "Start over",
+    "RESTART_INPUTS" : "Restart with captured inputs",
+    "ASKCUSTOMER" : "Ask Customer",
+    "TELLCUSTOMER" : "Tell Customer",
+    "WELCOME_MSG" : "Welcome Message",
+    "SEND" : "Send",
+    "AWAITING" : "Awaiting Response  |  Type to override",
+    "OVERRIDE" : "Type to override",
+    "ACCEPT_RESPONSE" : "Response Accepted",
+    "AGENT_ENTERED" : "Agent Entered",
+    "EXPECTED_FORMAT" : "Expected Format", 
+    "INPUT_VALUES" : "Input Values", 
+    "RESTART" : "Restart",
+    "START_OVER" : "Start over",
+    "RESTART_CAPTURE" : "Restart with captured inputs",
+    "CANCEL" : "Cancel"
 }

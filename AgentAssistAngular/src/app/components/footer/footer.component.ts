@@ -21,6 +21,7 @@ export class FooterComponent implements OnInit, OnDestroy{
   connectionDetails : any;
   subs = new SubSink();
   maxButton = true;
+  sourceDesktop : string = this.rootService.connectionDetails.source;
 
 
 

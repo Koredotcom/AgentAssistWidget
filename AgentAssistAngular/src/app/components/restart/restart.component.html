@@ -1,54 +1,58 @@
 <div class="restart-experience-wrpaaer">
     <div class="restart-experience-canvas-wrapper">
-        <button class="btn_link">
+        <button class="btn_link" (click)="cancel()">
             <i class="krIocnsFont-close-md"></i>
         </button>
         <h1>Restart</h1>
         <div class="form-check sm">
-            <input class="form-check-input" type="radio" id="startover" name="staroverradio" checked>
+            <input class="form-check-input" type="radio" id="startover" name="staroverradio" [checked]="restartCheck == projConstants.STARTOVER" (change)="changeRestartType(projConstants.STARTOVER)">
             <label class="form-check-label" for="startover">Start over</label>
         </div>
         <div class="form-check sm">
-            <input class="form-check-input" type="radio" id="restart" name="staroverradio">
+            <input class="form-check-input" type="radio" id="restart" name="staroverradio" [checked]="restartCheck == projConstants.RESTART_INPUTS" (change)="changeRestartType(projConstants.RESTART_INPUTS)">
             <label class="form-check-label" for="restart">Restart with captured inputs</label>
         </div>
-        <ng-container [ngTemplateOutlet]="entityMessageRestart"></ng-container>
-        <ng-container [ngTemplateOutlet]="entityMessageRestart"></ng-container>
+        <ng-container *ngIf="restartCheck == projConstants.RESTART_INPUTS">
+            <div class="entity-mesage-data" *ngFor="let automation of entityList; let i = index">
+                <ng-container [ngTemplateOutlet]="entityMessageRestart"  [ngTemplateOutletContext]="{automationData: automation}"></ng-container>
+            </div>
+        </ng-container>
         <div class="btn-actions">
             <button class="_btn primaryBtn" (click)="restart()">Restart</button>
-            <button class="_btn solidBtn">Cancel</button>
+            <button class="_btn solidBtn" (click)="cancel()">Cancel</button>
         </div>
     </div>  
 </div>
 
 
 <!-- Entity Message -->
-<ng-template #entityMessageRestart>
-    <!-- error-no-reponse class add it when error-->
-    <div class="entity-mesage-data">
-        <div class="input-block-entity">
-            <p>PizzaBase: </p>
-            <input type="text" aria-label="Input" value="Multigrain">
-            <div class="border-outline"></div>
-            <div class="actions-inputs">                
-                <button class="remove-input" aria-label="Button">
-                    <i class="krIocnsFont-keyboard"></i>
-                </button>
-                <button class="remove-input" aria-label="Button">
-                    <i class="krIocnsFont-close"></i>
-                </button>
-                <button class="check-input" aria-label="button">
-                    <i class="krIocnsFont-check"></i>
-                </button>
-                <button class="success-check-input" aria-label="button">
-                    <i class="krIocnsFont-check-circle"></i>
-                </button>
-                <button class="wrong-res-info" aria-label="button">
-                    <i class="krIocnsFont-warning-solid"></i>
-                    <span>3</span>
-                </button>
-            </div>
+<ng-template #entityMessageRestart let-automation="automationData">
+    <div class="input-block-entity">
+        <p>{{automation.entityName}} : </p>
+        <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue">
+        <div class="border-outline"></div>
+        <div class="actions-inputs">                
+            <button class="remove-input" aria-label="Button">
+                <i class="krIocnsFont-keyboard"></i>
+            </button>
+            <!-- <button class="success-check-input" aria-label="button" *ngIf="automation.userInput == projConstants.YES && !automation.errorCount">
+                <i class="krIocnsFont-check-circle"></i>
+            </button> -->
+            <!-- <button class="remove-input" aria-label="Button" (click)="cancelOverride()" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">
+                <i class="krIocnsFont-close"></i>
+            </button> -->
+            <!-- <button class="check-input" [ngClass]="{'disabled-msg' : !automation.entityValue}" aria-label="button" (click)="handleAgentInput()" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">
+                <i class="krIocnsFont-check"></i>
+            </button> -->
+            <!-- <button class="wrong-res-info" aria-label="button" *ngIf="automation.errorCount">
+                <i class="krIocnsFont-warning-solid"></i>
+                <span>{{automation.errorCount}}</span>
+            </button> -->
         </div>
-        <p class="info-entity-text">Awaiting Response  |  Type to override</p>
     </div>
+
+    <!-- <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.NO">{{projConstants.AGENT_ENTERED}}</p>
+    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.YES">{{projConstants.ACCEPT_RESPONSE}}</p>
+    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p> -->
+    <p class="info-entity-text">{{projConstants.OVERRIDE}}</p>
 </ng-template>

@@ -5,7 +5,7 @@
             <div class="svg_img">
                 <img src="assets/images/icons/askcust.svg" alt="Image">
             </div>
-            <p>{{projConstants.ASK_CUSTOMER}}</p>
+            <p>{{'ASKCUSTOMER' | translate}}</p>
         </div>
         <ng-container [ngTemplateOutlet]="askCustMsgForAutomation" [ngTemplateOutletContext]="{automationData: automation}"></ng-container> 
     </div>
@@ -16,7 +16,7 @@
                 <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, automation)" *ngIf="!automation.hideCopyButton">
                     <i class="krIocnsFont-copy"></i>
                 </button>
-                <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, automation)" *ngIf="!automation.hideSendButton">Send</button>
+                <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, automation)" *ngIf="!automation.hideSendButton">{{ 'SEND'  | translate }}</button>
             </div>
             <!-- <div class="sent-msg-text">Sent</div> -->
             <!-- <p>{{automation.data.buttons[0].value}}</p> -->

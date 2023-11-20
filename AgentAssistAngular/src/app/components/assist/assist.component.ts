@@ -51,7 +51,9 @@ export class AssistComponent implements OnInit, OnDestroy {
   interruptDialog: any;
   showInterruptPopup: boolean = false;
   interruptDialogList: any = [];
-  interruptRun: boolean = false
+  interruptRun: boolean = false;
+  restartDialogName : any;
+  restartEntityList : any;
 
   showListView: boolean = false;
 
@@ -150,6 +152,13 @@ export class AssistComponent implements OnInit, OnDestroy {
           index = index < 0 ? 0 : index;
           this.commonService.dialogueRunClick(this.interruptDialog,index, false)
         }
+        if(this.showRestart){
+          this.handlePopupEvent({type : this.projConstants.RESTART, status : false});
+          this.commonService.restartDialogueRunClick(this.restartDialogName, false);
+          this.restartDialogName = null;
+          this.showRestart = false;
+          this.makeOverrideEvent(false)
+        }
         this.viewCustomTempAttachment();
       }
     });
@@ -187,11 +196,11 @@ export class AssistComponent implements OnInit, OnDestroy {
   }
 
   updateAgentAssistResponse(data, botId, conversationId) {
-    this.makeOverrideEvent(botId, conversationId, false)
+    this.makeOverrideEvent(false)
     this.processAgentAssistResponse(data, botId);
   }
 
-  makeOverrideEvent(botId, conversationId, flag) {
+  makeOverrideEvent(flag) {
     if (this.rootService.OverRideMode && this.proactiveModeStatus && !this.rootService.manualAssistOverrideMode) {
       this.websocketService.handleOverrideMode(flag, null);
     }
@@ -440,6 +449,21 @@ export class AssistComponent implements OnInit, OnDestroy {
       }else{
         this.openOffCanvas();
       }
+    } else if (popupObject.type == this.projConstants.RESTART) {
+      this.showRestart = popupObject.status;
+      if(!this.showRestart){
+        this.makeOverrideEvent(false)
+        this.closeOffCanvas();
+      }else{
+        this.restartDialogName = this.dialogName;
+        this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
+        // if(popupObject.inputType == this.projConstants.STARTOVER){
+        // }else if(popupObject.inputType == this.projConstants.RESTART_INPUTS){
+        // }
+        if(popupObject.entityList.length){
+          this.rootService.entitiestValueArray = popupObject.entityList
+        }
+      }
     } else if (popupObject.type == this.projConstants.SUMMARY) {
       this.rootService.activeTab = this.projConstants.ASSIST;
       this.summaryText = popupObject.summaryText || '';
@@ -462,9 +486,11 @@ export class AssistComponent implements OnInit, OnDestroy {
   }
 
   restartClickEvent() {
-    this.showSummaryPopup = true;
+    this.openOffCanvas();
     this.showRestart = true;
-    this.modalService.open(this.content);
+    this.overModeContinue(true);
+    // this.showSummaryPopup = true;
+    // this.modalService.open(this.content);
   }
 
   updateFeedbackProperties(data, index) {

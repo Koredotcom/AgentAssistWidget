@@ -52,6 +52,7 @@ import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
 import { SummaryPopupComponent } from './components/summary-popup/summary-popup.component';
 import { LoaderComponent } from './components/common/components/loader/loader.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -100,7 +101,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     KoreGenerateuuidPipe,
     SummaryPopupComponent,
     LoaderComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    SanitizeHtmlPipe
   ],
   imports: [
     TranslateModule.forRoot({
@@ -124,7 +126,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       useClass: I1,
       multi: true
   },FormatAmpmPipe,RandomUuidPipe,RemoveTagFromStringPipe, ReplaceTextWithTagPipe, ConverTimestampToDatePipe,
-   KoreGenerateuuidPipe, NgbActiveModal, SafeHtmlPipe],
+   KoreGenerateuuidPipe, NgbActiveModal, SafeHtmlPipe, SanitizeHtmlPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

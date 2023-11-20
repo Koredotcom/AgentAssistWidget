@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ProjConstants } from 'src/app/proj.const';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
@@ -11,6 +11,9 @@ import { SubSink } from 'subsink';
   styleUrls: ['./user-bot-history.component.scss']
 })
 export class UserBotHistoryComponent implements OnInit, OnDestroy{
+
+  @Input() maxButton;
+  @Output() maxMinButtonClick = new EventEmitter();
 
   subs = new SubSink();
   connectionDetails : any;
@@ -59,14 +62,14 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
   }
 
   formatHistoryResponse(){
-    for(let hisRes of this.historyResponse){
+    this.historyResponse.forEach((element, index, theArray) => {
+      theArray[index] = this.rootService.formatUserBotHistoryResponse(element);
+      let hisRes = theArray[index];
       hisRes = this.rootService.confirmationNodeRenderForHistoryDataTransform(hisRes);
-      let result : any = this.templateRenderClassService.getResponseUsingTemplateForHistory(hisRes);
+      let result : any = this.templateRenderClassService.getResponseUsingTemplate(hisRes, true);
       hisRes.isTemplateRender = this.templateRenderCheck(hisRes,result);
       hisRes.template = this.rootService.getTemplateHtml(hisRes.isTemplateRender, result);
-    }
-    console.log(this.historyResponse, "history respjne**********");
-    
+    });
   }
 
   renderHTMLPrompt(value) {
@@ -91,4 +94,8 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
     this.subs.unsubscribe();
   }
 
+  minMaxButtonClick(){
+    console.log("min max button click");
+    this.maxMinButtonClick.emit(true);
+  }
 }

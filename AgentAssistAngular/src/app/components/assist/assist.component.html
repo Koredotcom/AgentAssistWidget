@@ -105,8 +105,11 @@
     <ng-container *ngIf="showInterruptPopup">
         <app-interrupt (handlePopupEvent)="handlePopupEvent($event)" [currentDialog]="dialogName"></app-interrupt>
     </ng-container>
-    <ng-container *ngIf="(showListView || showRestart) && dialogName">
-        <app-listview [listView]="showListView" [restart]="showRestart" [assistResponseArray]="assistResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
+    <ng-container *ngIf="(showListView) && dialogName">
+        <app-listview [assistResponseArray]="assistResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
+    </ng-container>
+    <ng-container *ngIf="showRestart && dialogName">
+        <app-restart [assistResponseArray]="assistResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-restart>
     </ng-container>
 </ng-template>
 

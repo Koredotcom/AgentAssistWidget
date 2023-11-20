@@ -33,8 +33,6 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
   userBotConversationShow: boolean = false;
   transcriptScrollTopText: string = 'Scroll up for Bot Conversation History';
 
-  sourceDesktop: any = this.rootService.connectionDetails.source;
-
 
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
     private websocketService : WebSocketService, private formatAMPMPipe : FormatAmpmPipe,

@@ -83,8 +83,8 @@
     <ng-container *ngIf="showInterruptPopup">
         <app-interrupt (handlePopupEvent)="handlePopupEvent($event)" [currentDialog]="dialogName"></app-interrupt>
     </ng-container>
-    <ng-container *ngIf="showListView || showRestart">
-        <app-listview [listView]="showListView" [restart]="showRestart" [assistResponseArray]="mybotResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
+    <ng-container *ngIf="showListView">
+        <app-listview [assistResponseArray]="mybotResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
     </ng-container>
 </ng-template>
 

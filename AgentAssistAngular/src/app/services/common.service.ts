@@ -61,6 +61,7 @@ export class CommonService {
     }
     let assistRequestParams = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
+    this.rootService.entitiestValueArray = [];
   }
 
   assistTabDialogforDashboard(dialog, intent?) {
@@ -148,6 +149,15 @@ export class CommonService {
     dialog.from = this.projConstants.INTERRUPT;
     dialog.index = index
     this.handleSubjectService.setRunButtonClickEvent(dialog);
+  }
+
+  restartDialogueRunClick(dialogName, agentRun){
+    let dialog : any = {};
+    dialog.positionId = this.randomUUIDPipe.transform('positionId');
+    dialog.intentName = dialogName;
+    dialog.userInput = dialogName;
+    dialog.agentRunButton = agentRun
+    this.handleSubjectService.setRunButtonClickEvent(dialog);  
   }
 
 
