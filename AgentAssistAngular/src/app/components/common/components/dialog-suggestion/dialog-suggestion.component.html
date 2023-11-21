@@ -22,12 +22,12 @@
     </ng-container>
 </ng-container>
 
-<ng-container *ngIf="searchedDialogList.length">
-    <ng-container *ngFor="let dialog of searchedDialogList;let i = index">
-        <div class="dialog-task-wrapper">
+<div *ngIf="searchedDialogList.length" class="dialogSuggestions">
+    <ng-container *ngFor="let dialog of searchedDialogList | slice : 0 : viewCount;let i = index">
+        <div class="dialog-task-wrapper" *ngIf="dialog">
             <div class="title-paragraph">
-                <p>{{dialog.name}}</p>
-                <span *ngIf="dialog.childBotName">({{dialog.childBotName}})</span>
+                <p>{{dialog?.name}}</p>
+                <span *ngIf="dialog?.childBotName">({{dialog?.childBotName}})</span>
             </div>
             <div class="dialog-actions">
                 <button class="primary-btn" (click)="dialogueRunClick(dialog,projConstants.ASSIST)">RUN</button>
@@ -43,7 +43,11 @@
             </div>
         </div>
     </ng-container>
-</ng-container>
+    <a class="moreText" *ngIf="searchedDialogList?.length > 2">
+        <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">View More</span>
+        <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">View Less</span>
+    </a>
+</div>
 
 
 <!-- <ng-container [ngTemplateOutlet]="dialogSuggestion"></ng-container> -->

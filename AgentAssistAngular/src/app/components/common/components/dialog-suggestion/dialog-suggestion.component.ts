@@ -19,8 +19,10 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
   subs = new SubSink();
   menuResponse: any = {};
   projConstants: any = ProjConstants;
-  searchedDialogList : any = [];
+  searchedDialogList : any[] = [];
   suggestionCount : number = 0;
+  viewCount = 2;
+  moreClick = false;
 
 
   constructor(private websocketService : WebSocketService, private handleSubjectService : HandleSubjectService,
@@ -50,6 +52,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
       if(searchResponse && searchResponse.dialogs){
         this.searchedDialogList = searchResponse.dialogs;
         this.suggestionCount = this.searchedDialogList.length || 0;
+        this.viewLessClick();
       }
   }
 
@@ -99,6 +102,17 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
   //   dialog.value = dialog.name;
   //   this.emitSearchRequest(dialog, false);
   // }
+
+  viewMoreClick(){
+    this.moreClick = true;
+    this.viewCount = this.searchedDialogList?.length;
+  }
+
+  viewLessClick(){
+    this.moreClick = false;
+    this.viewCount = (this.searchedDialogList && this.searchedDialogList?.length <= 2) ? this.searchedDialogList?.length : 2;
+  }
+
 
   ngOnDestroy(){
     this.subs.unsubscribe();

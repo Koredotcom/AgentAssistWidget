@@ -5,12 +5,17 @@
       <div class="titles-info-heading">
         <h1 class="text-truncate">{{snippet.title}}</h1>
       </div>
-      <div class="faq-actions">
-        <button class="solidbtn" *ngIf="snippet.page_url"><a [href]="snippet.page_url" target="_blank">Know More</a></button>
-        <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.SNIPPET)">
-          <i class="krIocnsFont-copy"></i>
-        </button>
-        <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, snippet , projConstants.SNIPPET)">{{ 'SEND'  | translate }}</button>
+      <button class="solidbtn" *ngIf="snippet.page_url"><a [href]="snippet.page_url" target="_blank">Know More</a></button>
+      <div class="faq-actions" *ngIf="!hideActionButtons">
+        <ng-container *ngIf="!snippet.send">
+          <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.SNIPPET)">
+            <i class="krIocnsFont-copy"></i>
+          </button>
+          <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, snippet , projConstants.SNIPPET)" *ngIf="!hideSendButton">{{ 'SEND'  | translate }}</button>
+        </ng-container>
+        <ng-container *ngIf="snippet.send">
+          <button class="solidbtn">{{ 'SENT'  | translate }}</button>
+        </ng-container>
       </div>
     </div>
     <div class="faq-body-content">

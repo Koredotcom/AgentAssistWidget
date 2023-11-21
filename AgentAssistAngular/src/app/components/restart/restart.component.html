@@ -29,30 +29,21 @@
 <ng-template #entityMessageRestart let-automation="automationData">
     <div class="input-block-entity">
         <p>{{automation.entityName}} : </p>
-        <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue">
+        <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (focus)="focusOutClick(automation, true)" (focusout)="focusOutClick(automation, false)">
         <div class="border-outline"></div>
         <div class="actions-inputs">                
-            <button class="remove-input" aria-label="Button">
+            <button class="remove-input" aria-label="Button" *ngIf="automation.entityValue && !automation.toggleOverride">
                 <i class="krIocnsFont-keyboard"></i>
             </button>
-            <!-- <button class="success-check-input" aria-label="button" *ngIf="automation.userInput == projConstants.YES && !automation.errorCount">
-                <i class="krIocnsFont-check-circle"></i>
-            </button> -->
-            <!-- <button class="remove-input" aria-label="Button" (click)="cancelOverride()" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">
-                <i class="krIocnsFont-close"></i>
-            </button> -->
-            <!-- <button class="check-input" [ngClass]="{'disabled-msg' : !automation.entityValue}" aria-label="button" (click)="handleAgentInput()" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">
-                <i class="krIocnsFont-check"></i>
-            </button> -->
-            <!-- <button class="wrong-res-info" aria-label="button" *ngIf="automation.errorCount">
-                <i class="krIocnsFont-warning-solid"></i>
-                <span>{{automation.errorCount}}</span>
-            </button> -->
+            <ng-container *ngIf="automation.toggleOverride">
+                <button class="remove-input" aria-label="Button" (click)="removeEntityvalue(automation)">
+                   <i class="krIocnsFont-close"></i>
+               </button>
+               <button class="check-input" [ngClass]="{'disabled-msg' : !automation.entityValue}" aria-label="button" (click)="focusOutClick(automation, false)"> 
+                   <i class="krIocnsFont-check"></i>
+               </button>
+            </ng-container>
         </div>
     </div>
-
-    <!-- <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.NO">{{projConstants.AGENT_ENTERED}}</p>
-    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.YES">{{projConstants.ACCEPT_RESPONSE}}</p>
-    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p> -->
     <p class="info-entity-text">{{projConstants.OVERRIDE}}</p>
 </ng-template>

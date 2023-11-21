@@ -57,7 +57,8 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
     }
   }
 
-  handleSendCopyButton(actionType, faq, selectType){    
+  handleSendCopyButton(actionType, faq, selectType){   
+    faq.send = true; 
     this.rootService.handleSendCopyButton(actionType, faq, selectType)
   }
 

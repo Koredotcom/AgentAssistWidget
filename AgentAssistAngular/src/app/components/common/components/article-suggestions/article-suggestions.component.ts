@@ -56,8 +56,9 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
     }
   }
 
-  handleSendCopyButton(actionType, faq_or_article_obj, selectType){
-    this.rootService.handleSendCopyButton(actionType, faq_or_article_obj, selectType)
+  handleSendCopyButton(actionType, articleObj, selectType){
+    articleObj.send = true;
+    this.rootService.handleSendCopyButton(actionType, articleObj, selectType)
   }
 
   toggleShowMoreLess(article){

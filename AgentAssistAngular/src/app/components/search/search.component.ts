@@ -32,8 +32,10 @@ export class SearchComponent implements OnInit {
 
   searchResultText: string;
   querySuggestions: any = [];
+  typeAHeads : any = [];
 
   searched : boolean = false;
+  autocompleteText : string = '';
 
 
   constructor(private rootService: RootService, private serviceInvoker: ServiceInvokerService,
@@ -57,8 +59,13 @@ export class SearchComponent implements OnInit {
   typeAHead = this.typeAHeadDeBounce((val, connectionDetails) => this.getAutoSearchApiResult(val, connectionDetails));
   onSearch(event: any) {
     if (this.searchText?.length > 0) {
+      if(this.typeAHeads?.length){
+        let autoText = this.typeAHeads.find(ele => ele.includes(this.searchText));
+        this.autocompleteText = autoText ? autoText : '';
+      }
       this.typeAHead(this.searchText, this.rootService.connectionDetails);
     } else {
+      this.autocompleteText = '';
       this.searched = false;
       this.searchResponse = {};
       this.handleSubjectService.setSearchResponse(this.searchResponse);
@@ -90,7 +97,7 @@ export class SearchComponent implements OnInit {
       "lang": "en"
     }
     this.serviceInvoker.invoke('post.autoSearch', { botId: botId, convId: conversationId }, payload, { autoSearch: 'true', botId: botId }, params.agentassisturl).subscribe((res) => {
-      console.log(res, 'res********from autho search');
+      // console.log(res, 'res********from autho search');
       // res = {
       //   "originalQuery": "book",
       //   "querySuggestions": [
@@ -106,10 +113,14 @@ export class SearchComponent implements OnInit {
       // }
 
       this.querySuggestions = res?.querySuggestions;
+      this.typeAHeads = res?.typeAheads;
 
     })
   }
 
+  onTabClick(event){
+    this.searchText = this.autocompleteText;
+  }
 
   emitSearchRequest(value, isSearch) {
     let connectionDetails: any = Object.assign({}, this.rootService.connectionDetails);

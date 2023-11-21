@@ -26,7 +26,7 @@ export class RestartComponent {
     if(this.assistResponseArray.length){
       this.entityList  = [];
       this.automationData = this.assistResponseArray[this.assistResponseArray.length-1];
-      for(let automation of this.automationData.automationsArray){
+      for(let automation of this.automationData?.automationsArray){
          automation.entityName = automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation.data.entityName;
         if(automation.entityName){
           automation.entityValue = automation.entityValue ? automation.entityValue : '';
@@ -60,5 +60,13 @@ export class RestartComponent {
 
   cancel(){
     this.handlePopupEvent.emit({ status: false,  type: this.projConstants.RESTART });
+  }
+
+  removeEntityvalue(automation){
+    automation.entityValue = '';
+  }
+
+  focusOutClick(automation, flag){
+    automation.toggleOverride = flag;
   }
 }
