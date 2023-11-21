@@ -16,9 +16,9 @@
 <ng-template #dialogStarted>
     <div class="dialog-ended-wrapper">
         <div class="middle-info">
-            <p>Dialog</p>
+            <p>{{'DIALOG_TEXT' | translate}}</p>
             <button class="btn_link">{{automationData.data.intentName}}</button>
-            <p>Started</p>
+            <p>{{'STARTED' | translate}}</p>
         </div>
         <div class="line_bar"></div>
         <i class="krIocnsFont-check-circle"></i>
@@ -29,9 +29,9 @@
     <div class="dialog-ended-wrapper">
         <div class="line_bar"></div>
         <div class="middle-info">
-            <p>Dialog</p>
+            <p>{{'DIALOG_TEXT' | translate}}</p>
             <button class="btn_link">{{automationData.data.intentName}}</button>
-            <p>ended</p>
+            <p>{{'ENDED' | translate}}</p>
         </div>
         <i class="krIocnsFont-check-circle"></i>
     </div>

@@ -5,7 +5,7 @@
       <div class="titles-info-heading">
         <h1 class="text-truncate">{{snippet.title}}</h1>
       </div>
-      <button class="solidbtn" *ngIf="snippet.page_url"><a [href]="snippet.page_url" target="_blank">Know More</a></button>
+      <button class="solidbtn" *ngIf="snippet.page_url"><a [href]="snippet.page_url" target="_blank">{{'KNOW_MORE' | translate}}</a></button>
       <div class="faq-actions" *ngIf="!hideActionButtons">
         <ng-container *ngIf="!snippet.send">
           <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.SNIPPET)">
@@ -23,13 +23,13 @@
         <p [ngClass]="{'show-full-text' : !snippet.showMoreButton}" #snippetContent>{{snippet.content}}</p>
       </div>
       <a class="moreText" role="button" aria-expanded="false" *ngIf="snippetContent.scrollHeight > 36">
-        <span class="more-text" *ngIf="snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">More</span>
-        <span class="less-text" *ngIf="!snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">Less</span>
+        <span class="more-text" *ngIf="snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">{{'MORE_TEXT' | translate}}</span>
+        <span class="less-text" *ngIf="!snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">{{'LESS_TEXT' | translate}}</span>
       </a>
     </div>
   </div>
 </ng-container>
 <a class="moreText" *ngIf="searchedSnippetList?.length > 2">
-  <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">View More</span>
-  <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">View Less</span>
+  <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">{{'SHOW_MORE_SNIPPET' | translate}}</span>
+  <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">{{'SHOW_LESS_SNIPPET' | translate}}</span>
 </a>

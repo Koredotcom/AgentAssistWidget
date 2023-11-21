@@ -13,7 +13,7 @@ export class TellCustomerComponent {
   
   projConstants : any = ProjConstants;
 
-  constructor(private rootService : RootService){
+  constructor(public rootService : RootService){
     
   }
 

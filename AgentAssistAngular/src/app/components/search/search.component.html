@@ -10,7 +10,7 @@
                     <div class="icon_block">
                         <img src="assets/images/icons/dialog.svg" alt="Top Dialog Suggestion">
                     </div>
-                    <h1 class="text-truncate">Dialog Task</h1>
+                    <h1 class="text-truncate">{{'DIALOG_TASK' | translate}}</h1>
                     <span class="count-text">{{searchResponse?.dialogs?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
@@ -22,7 +22,7 @@
                     <div class="icon_block">
                         <img src="assets/images/icons/custchoice.svg" alt="FAQ">
                     </div>
-                    <h1 class="text-truncate">FAQ</h1>
+                    <h1 class="text-truncate">{{'FAQ' | translate}}</h1>
                     <span class="count-text">{{searchResponse?.faqs?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
@@ -34,7 +34,7 @@
                     <div class="icon_block">
                         <img src="assets/images/icons/custchoice.svg" alt="Snippet">
                     </div>
-                    <h1 class="text-truncate">Snippet</h1>
+                    <h1 class="text-truncate">{{'SNIPPET' | translate}}</h1>
                     <span class="count-text">{{searchResponse?.snippets?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
@@ -46,7 +46,7 @@
                     <div class="icon_block">
                         <img src="assets/images/icons/custchoice.svg" alt="Article">
                     </div>
-                    <h1 class="text-truncate">Article</h1>
+                    <h1 class="text-truncate">{{'ARTICLE' | translate}}</h1>
                     <span class="count-text">{{searchResponse?.articles?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
@@ -60,7 +60,7 @@
                     <div class="icon_block">
                         <img src="assets/images/icons/dialog.svg" alt="Top Dialog Suggestion">
                     </div>
-                    <h1 class="text-truncate">All Dialog Tasks</h1>
+                    <h1 class="text-truncate">{{'ALL_DIALOG' | translate}}</h1>
                     <!-- <span class="count-text">2</span> -->
                 </div>
                 <div class="suggestion-body-search">
@@ -74,7 +74,7 @@
     <div class="search-block-input">
         <div class="suggestions-info" *ngIf="searchText && querySuggestions?.length">
             <button *ngFor="let suggestion of querySuggestions">{{suggestion}}</button>
-            <p>Suggested</p>
+            <p>{{'SUGGESTED' | translate}}</p>
         </div>
         <div class="input-block">
             <input type="text" class="form-control" aria-describedby="search" placeholder="Search" value="Edit" [(ngModel)]="searchText"

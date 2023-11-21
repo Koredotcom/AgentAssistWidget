@@ -25,7 +25,7 @@
             </div>
             <!-- <div class="sent-msg-text">Sent</div> -->
             <!-- <p>{{automation.data.buttons[0].value}}</p> -->
-            <p *ngIf="!automation.templateRender">{{automation.value}}</p>
+            <p *ngIf="!automation.templateRender" [innerHTML]="rootService.handleEmptyLine(automation.value)"></p>
             <ng-container *ngIf="automation.templateRender && automation.template">
                 <ul class="chat-container" attr.id="{{automation.uuid}}"
                                             [innerHTML]="automation.template | safeHtml"></ul>
@@ -59,12 +59,12 @@
             </div>
         </div>
         <ng-container *ngIf="!automation.errorCount; else errCount">
-            <p class="info-entity-text" *ngIf="automation.userInput == projConstants.NO">{{projConstants.AGENT_ENTERED}}</p>
-            <p class="info-entity-text" *ngIf="automation.userInput == projConstants.YES">{{projConstants.ACCEPT_RESPONSE}}</p>
+            <p class="info-entity-text" *ngIf="automation.userInput == projConstants.NO">{{'AGENT_ENTERED' | translate}}</p>
+            <p class="info-entity-text" *ngIf="automation.userInput == projConstants.YES">{{'ACCEPT_RESPONSE' | translate}}</p>
             <p class="info-entity-text" *ngIf="automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p>
         </ng-container>
         <ng-template #errCount>
-            <p class="info-entity-text">Expected Format: {{automation.data.entityType}}  |  Type to override</p>
+            <p class="info-entity-text">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.entityType}}  |  {{'OVERRIDE' | translate}}</p>
         </ng-template>
     
     </div>
@@ -94,9 +94,9 @@
             </button>
         </div>
     </div>
-    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.NO">{{projConstants.AGENT_ENTERED}}</p>
-    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.YES">{{projConstants.ACCEPT_RESPONSE}}</p>
+    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.NO">{{'AGENT_ENTERED' | translate}}</p>
+    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.YES">{{'ACCEPT_RESPONSE' | translate}}</p>
     <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p>
-    <p class="info-entity-text" *ngIf="automation.errorCount">Expected Format: {{automation.data.entityType}}  |  Type to override</p>
+    <p class="info-entity-text" *ngIf="automation.errorCount">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.entityType}}  |  {{'OVERRIDE' | translate}}</p>
 </ng-container>
 

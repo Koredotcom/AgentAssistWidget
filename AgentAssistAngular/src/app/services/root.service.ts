@@ -6,6 +6,7 @@ import * as $ from 'jquery';
 import { EVENTS } from '../helpers/events';
 
 declare var $: any;
+declare const agentAssistHelpers: any;
 @Injectable({
   providedIn: 'root'
 })
@@ -55,9 +56,11 @@ export class RootService {
 
   settingsData : any = {};
   bulbClick : boolean = false;
+  aaHelpers = null;
 
   constructor(private templateRenderClassService: TemplateRenderClassService) {
     // this.chatWindowInstance = new chatWindow();
+    this.aaHelpers = new agentAssistHelpers();
   }
 
   getConnectionDetails() {
@@ -402,7 +405,7 @@ export class RootService {
     if (typeof answer === 'string') {
       eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
       eleanswer = this.replaceLtGt(eleanswer, quotflag)
-      // eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
+      eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
       if (quotflag) {
         eleanswer = this.replaceLtGt(eleanswer, quotflag)
       }

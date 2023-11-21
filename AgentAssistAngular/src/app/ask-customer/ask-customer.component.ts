@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { EVENTS } from '../helpers/events';
 import { ProjConstants, RenderResponseType } from '../proj.const';
 import { RootService } from '../services/root.service';
@@ -16,16 +17,16 @@ export class AskCustomerComponent {
 
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
-  inputName: string = ProjConstants.AWAITING;
+  inputName: string = this.translateService.instant("AWAITING");
 
-  constructor(public rootService: RootService, private websocketService: WebSocketService) {
+  constructor(public rootService: RootService, private websocketService: WebSocketService, private translateService : TranslateService) {
 
   }
 
 
   ngOnChanges() {
     if (this.automation?.toggleOverride) {
-      this.inputName = this.projConstants.OVERRIDE;
+      this.inputName = this.translateService.instant("OVERRIDE");
     }
     this.hideSendAndCopy();
   }
@@ -51,7 +52,7 @@ export class AskCustomerComponent {
 
   confirmOverride() {
     if (!this.automation.toggleOverride && this.rootService.activeTab != this.projConstants.MYBOT) {
-      this.inputName = this.projConstants.OVERRIDE;
+      this.inputName = this.translateService.instant("OVERRIDE");
       this.automation.toggleOverride = true;
       if (!this.rootService.OverRideMode) {
         this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
@@ -61,7 +62,7 @@ export class AskCustomerComponent {
 
   cancelOverride() {
     if (this.rootService.activeTab != this.projConstants.MYBOT) {
-      this.inputName = this.projConstants.AWAITING;
+      this.inputName = this.translateService.instant("AWAITING");
       this.automation.toggleOverride = false;
       this.automation.entityValue = '';
       if(this.rootService.OverRideMode && this.rootService.proactiveModeStatus && !this.rootService.manualAssistOverrideMode){

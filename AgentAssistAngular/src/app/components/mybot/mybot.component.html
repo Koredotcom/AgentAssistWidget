@@ -4,7 +4,7 @@
             <div class="assist-header-content">
                 <div class="left-title-info">
                     <div class="text-dropdown-info">
-                        <h1>My Bot</h1>
+                        <h1>{{'MY_BOT' | translate}}</h1>
                         <span class="dialogs-number" *ngIf="interruptDialogList?.length">{{interruptDialogList?.length}}</span>
                     
                     
@@ -13,14 +13,14 @@
                                 <i class="krIocnsFont-chevron-down arrow-icon"></i>
                             </button>
                             <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
-                                <div class="heading-text-scripts">INTERUPTED DIALOG TASK</div>
+                                <div class="heading-text-scripts">{{'INTERRUPT_DIALOG' | translate}}</div>
                                 <div class="dialog-task-wrapper" *ngFor="let dialog of interruptDialogList; let i = index">
                                     <div class="title-paragraph">
                                         <p>{{dialog.name}}</p>
                                     </div>
                                     <div class="dialog-actions">
                                         <button class="primary-btn"
-                                            (click)="dialogueRunClick(dialog, i, true);interruptDropdown.close()">RUN</button>
+                                            (click)="dialogueRunClick(dialog, i, true);interruptDropdown.close()">{{'RUN' | translate}}</button>
                                     </div>
                                 </div>
                             </div>
@@ -29,7 +29,7 @@
                 
                     <div class="bottom-titles">
                         <p *ngIf="dialogName">{{dialogName}}</p>
-                        <span *ngIf="dialogName && currentRunningStep">Step: <b>{{currentRunningStep}}</b></span>
+                        <span *ngIf="dialogName && currentRunningStep">{{'STEP' | translate}}: <b>{{currentRunningStep}}</b></span>
                     </div>
                 </div>
                 <div class="actions-assist-header">
@@ -91,8 +91,8 @@
 <!-- Templates -->
 <ng-template #listingTriggers>
     <div class="empty-listing-triggers disabled-msg">
-        <h1>No active MyBot tasks presently</h1>
-        <p>To start a task on mybot, go to the search tab and select the "Run with agent inputs" option for your desired task.</p>
+        <h1>{{'MYBOT_TRIGGET_LISTEN' | translate}}</h1>
+        <p>{{'MYBOT_EMTPY_MSG' | translate}}</p>
     </div>
 </ng-template>
 

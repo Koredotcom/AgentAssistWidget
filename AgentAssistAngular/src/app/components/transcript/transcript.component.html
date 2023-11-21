@@ -22,7 +22,7 @@
                         <div class="bot-bubble-content hover-show-copy">
                             <div class="top-info">
                                 <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName + this.parsedCustomData?.lName) ||
-                                    'Customer'}}</div>
+                                    ('Customer' | translate)}}</div>
                                 <div class="time-tamp"><time>{{trans.timeStr}}</time></div>
                             </div>
                             <div class="bubble-msg-with-img">
@@ -43,7 +43,7 @@
                         <div class="agent-bubble-content hover-show-copy">
                             <div class="top-info">
                                 <div class="time-tamp"><time>{{trans?.timeStr}}</time></div>
-                                <div class="you-text">You</div>
+                                <div class="you-text">{{'YOU' | translate}}</div>
                             </div>
                             <div class="bubble-msg-with-img">
                                 <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">

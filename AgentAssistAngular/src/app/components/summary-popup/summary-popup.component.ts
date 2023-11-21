@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { ProjConstants } from 'src/app/proj.const';
 
 @Component({
@@ -14,9 +15,9 @@ export class SummaryPopupComponent {
 
   editedSummaryText : any;
   projCnst : any = ProjConstants;
-  tooltipText : string = ProjConstants.COPY;
+  tooltipText : string = this.translate.instant("COPY");;
 
-  constructor(public modal : NgbActiveModal) { }
+  constructor(public modal : NgbActiveModal, private translate : TranslateService) { }
 
   ngOnInit(): void {
     this.editedSummaryText = this.summaryText?.summary ? this.summaryText?.summary[0]: '';
@@ -39,9 +40,9 @@ export class SummaryPopupComponent {
     dummy.select();
     document.execCommand("copy");
     document.body.removeChild(dummy);
-    this.tooltipText = this.projCnst.COPIED;
+    this.tooltipText = this.translate.instant("COPIED");
     setTimeout(() => {
-      this.tooltipText = this.projCnst.COPY;
+      this.tooltipText = this.translate.instant("COPY");;
     }, 3000);
   }
 

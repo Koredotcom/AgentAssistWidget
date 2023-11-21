@@ -5,7 +5,7 @@
                 <div class="icon_block">
                     <img src="assets/images/icons/help-hand.svg" alt="Image">
                 </div>
-                <h1>Helpful?</h1>
+                <h1>{{'HELP_FULL' | translate}}</h1>
                 <button class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn' : feedbackData?.feedback == feedbackConst.LIKE}" (click)="addFeedback(feedbackConst.LIKE)" aria-label="Button" [attr.href]="'#thankyou' + feedbackData.dialogPositionId" data-bs-toggle="collapse">
                     <i class="krIocnsFont-thumbs-up-solid"></i>
                 </button>
@@ -13,12 +13,12 @@
                     <i class="krIocnsFont-thumbs-down"></i>
                 </button>
             </div>
-            <p class="thankyou-text" [attr.id]="'thankyou' + feedbackData.dialogPositionId" *ngIf="feedbackData?.feedback == feedbackConst.LIKE">Thank you!</p>
+            <p class="thankyou-text" [attr.id]="'thankyou' + feedbackData.dialogPositionId" *ngIf="feedbackData?.feedback == feedbackConst.LIKE">{{'THANKYOU' | translate}}</p>
         </div>
         <div class="improve-feedback-block" [attr.id]="'helpImprove' + feedbackData.dialogPositionId" *ngIf="feedbackData?.feedback == feedbackConst.DISLIKE">
             <div class="improve-options-text">
                 <button class="improve-lable-text" [ngClass]="{'active-improve-btn' : feedbackData.feedbackDetails.includes(suggestion)}"
-                 aria-label="Button" (click)="addDislikeSuggestion(suggestion)"  *ngFor="let suggestion of feedbackConst.DISLIKE_LIST">{{suggestion}}</button>
+                 aria-label="Button" (click)="addDislikeSuggestion(suggestion)"  *ngFor="let suggestion of dislikeList">{{suggestion}}</button>
                 <!-- <button class="improve-lable-text" aria-label="Button">Content error</button>
                 <button class="improve-lable-text" aria-label="Button">Time taking</button>
                 <button class="improve-lable-text" aria-label="Button">Incorrect intent</button>

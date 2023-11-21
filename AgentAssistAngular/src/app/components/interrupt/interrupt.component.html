@@ -3,11 +3,11 @@
         <button class="btn_link" (click)="interruptClick(false)">
             <i class="krIocnsFont-close-md"></i>
         </button>
-        <h1>Interruption Occured</h1>
-        <p>Identified intent <span>{{currentDialog}}</span>. Running this would terminate your existing conversation.</p>
+        <h1>{{'INTERRUPT_OCCURED' | translate}}</h1>
+        <p>{{'IDENTIFIED_INTENT' | translate}} <span>{{currentDialog}}</span>. {{'INTERRUPT_DESC' | translate}}</p>
         <!-- <h2>“I am so sorry but it looks like I have to get to someplace urgently. Would it be possible to cancel the order I just placed?”</h2> -->
-        <button class="_btn primaryBtn w-100" (click)="interruptClick(true)">Accept and Run</button>
-        <button class="_btn secondaryBtn w-100" (click)="interruptClick(false, true)">Run Later</button>
-        <button class="_btn solidBtn w-100" (click)="interruptClick(false)">Cancel</button>
+        <button class="_btn primaryBtn w-100" (click)="interruptClick(true)">{{'ACCEPT_RUN' | translate}}</button>
+        <button class="_btn secondaryBtn w-100" (click)="interruptClick(false, true)">{{'RUN_LATER' | translate}}</button>
+        <button class="_btn solidBtn w-100" (click)="interruptClick(false)">{{'CANCEL' | translate}}</button>
     </div>  
 </div>

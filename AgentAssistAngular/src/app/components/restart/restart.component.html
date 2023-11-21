@@ -3,14 +3,14 @@
         <button class="btn_link" (click)="cancel()">
             <i class="krIocnsFont-close-md"></i>
         </button>
-        <h1>Restart</h1>
+        <h1>{{'RESTART' | translate}}</h1>
         <div class="form-check sm">
             <input class="form-check-input" type="radio" id="startover" name="staroverradio" [checked]="restartCheck == projConstants.STARTOVER" (change)="changeRestartType(projConstants.STARTOVER)">
-            <label class="form-check-label" for="startover">Start over</label>
+            <label class="form-check-label" for="startover">{{'START_OVER' | translate}}</label>
         </div>
         <div class="form-check sm">
             <input class="form-check-input" type="radio" id="restart" name="staroverradio" [checked]="restartCheck == projConstants.RESTART_INPUTS" (change)="changeRestartType(projConstants.RESTART_INPUTS)">
-            <label class="form-check-label" for="restart">Restart with captured inputs</label>
+            <label class="form-check-label" for="restart">{{'RESTART_CAPTURE' | translate}}</label>
         </div>
         <ng-container *ngIf="restartCheck == projConstants.RESTART_INPUTS">
             <div class="entity-mesage-data" *ngFor="let automation of entityList; let i = index">
@@ -18,8 +18,8 @@
             </div>
         </ng-container>
         <div class="btn-actions">
-            <button class="_btn primaryBtn" (click)="restart()">Restart</button>
-            <button class="_btn solidBtn" (click)="cancel()">Cancel</button>
+            <button class="_btn primaryBtn" (click)="restart()">{{'RESTART' | translate}}</button>
+            <button class="_btn solidBtn" (click)="cancel()">{{'CANCEL' | translate}}</button>
         </div>
     </div>  
 </div>
@@ -45,5 +45,5 @@
             </ng-container>
         </div>
     </div>
-    <p class="info-entity-text">{{projConstants.OVERRIDE}}</p>
+    <p class="info-entity-text">{{'OVERRIDE' | translate}}</p>
 </ng-template>

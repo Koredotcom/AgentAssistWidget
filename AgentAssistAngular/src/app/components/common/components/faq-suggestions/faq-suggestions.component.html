@@ -29,7 +29,7 @@
                     <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, ansObj, projConstants.FAQ)">
                         <i class="krIocnsFont-copy"></i>
                     </button>
-                    <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, ansObj, projConstants.FAQ)" *ngIf="!hideSendButton">Send</button>
+                    <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, ansObj, projConstants.FAQ)" *ngIf="!hideSendButton">{{'SEND' | translate}}</button>
                 </ng-container>
                 <ng-container *ngIf="ansObj['send']">
                     <button class="solidbtn">{{ 'SENT'  | translate }}</button>
@@ -40,15 +40,15 @@
             </div>
             <a class="moreText">
                 <!-- <span class="more-text" (click)="toggleShowMoreLess(faq)" *ngIf="faq.showMoreButton && faq.answer.length > 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))">Expand / </span> -->
-                <span class="more-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && ansObj['showMoreButton'] && (faq.answer.length == 1 || faq.seeMoreWrapper)" >More</span>
-                <span class="less-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && !ansObj['showMoreButton']">Less</span>
+                <span class="more-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && ansObj['showMoreButton'] && (faq.answer.length == 1 || faq.seeMoreWrapper)" >{{'MORE_TEXT' | translate}}</span>
+                <span class="less-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && !ansObj['showMoreButton']">{{'LESS_TEXT' | translate}}</span>
             </a>
         </div>
-        <button class="close-expand btn_link" (click)="toggleExpandAndClose(faq)" *ngIf="faq?.answer?.length > 1 && !faq.seeMoreWrapper">Expand / More</button>
-        <button class="close-expand btn_link" (click)="toggleExpandAndClose(faq)" *ngIf="faq?.answer?.length > 1 && faq.seeMoreWrapper">Close</button>
+        <button class="close-expand btn_link" (click)="toggleExpandAndClose(faq)" *ngIf="faq?.answer?.length > 1 && !faq.seeMoreWrapper">{{'EXPAND_MORE' | translate}}</button>
+        <button class="close-expand btn_link" (click)="toggleExpandAndClose(faq)" *ngIf="faq?.answer?.length > 1 && faq.seeMoreWrapper">{{'CLOSE_TEXT' | translate}}</button>
     </ng-container>
 </div>
 <a class="moreText" *ngIf="searchedFAQList?.length > 2">
-    <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">View More</span>
-    <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">View Less</span>
+    <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">{{'SHOW_MORE_FAQ' | translate}}</span>
+    <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">{{'SHOW_LESS_FAQ' | translate}}</span>
 </a>

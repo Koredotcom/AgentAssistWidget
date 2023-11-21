@@ -3,10 +3,10 @@
         <button class="btn_link" (click)="terminateClick(false)"> 
             <i class="krIocnsFont-close-md"></i>
         </button>
-        <h1>Terminate Conversation</h1>
-        <p>Are you sure you want to terminate the dialog task? AgentAsssit will no longer be able to make suggestions. </p>        
-        <button class="_btn dangerBtn w-100" (click)="terminateClick(true)">Yes Terminate</button>
-        <button class="_btn solidBtn w-100" (click)="terminateClick(false)">No, Cancel</button>
-        <button class="_btn solidBtn w-100" (click)="terminateClick(false, true)" *ngIf="rootService.activeTab != projConstants.MYBOT">Continue with override mode</button>
+        <h1>{{'TERMINATE_CONV' | translate}}</h1>
+        <p>{{'TERMINATE_CONV_DESC' | translate}} </p>        
+        <button class="_btn dangerBtn w-100" (click)="terminateClick(true)">{{'YES_TERMINATE' | translate}}</button>
+        <button class="_btn solidBtn w-100" (click)="terminateClick(false)">{{'NO_CANCEL' | translate}}</button>
+        <button class="_btn solidBtn w-100" (click)="terminateClick(false, true)" *ngIf="rootService.activeTab != projConstants.MYBOT">{{'OVERRIDE_CONTINUE' | translate}}</button>
     </div>  
 </div>

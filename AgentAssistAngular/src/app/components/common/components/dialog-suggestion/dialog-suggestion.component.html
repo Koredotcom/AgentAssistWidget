@@ -8,13 +8,13 @@
                 <!-- <span>(buy_bot)</span> -->
             </div>
             <div class="dialog-actions">
-                <button class="primary-btn" (click)="dialogueRunClick(dialogue.value,projConstants.ASSIST)">RUN</button>
+                <button class="primary-btn" (click)="dialogueRunClick(dialogue.value,projConstants.ASSIST)">{{'RUN' | translate}}</button>
                 <div ngbDropdown class="elipse-ngbdropdown" container="body">
                     <button type="button" id="elipseDrp" ngbDropdownToggle>
                         <i class="krIocnsFont-outlined"></i>
                     </button>
                     <div ngbDropdownMenu class="elipse-ngbdropdown-content" aria-labelledby="elipseDrp">
-                        <button ngbDropdownItem aria-disabled="true" (click)="dialogueRunClick(dialogue.value,projConstants.MYBOT)">Run with Agent’s input</button>
+                        <button ngbDropdownItem aria-disabled="true" (click)="dialogueRunClick(dialogue.value,projConstants.MYBOT)">{{'RUN_AGENT' | translate}}</button>
                     </div>
                 </div>
             </div>
@@ -30,22 +30,22 @@
                 <span *ngIf="dialog?.childBotName">({{dialog?.childBotName}})</span>
             </div>
             <div class="dialog-actions">
-                <button class="primary-btn" (click)="dialogueRunClick(dialog,projConstants.ASSIST)">RUN</button>
+                <button class="primary-btn" (click)="dialogueRunClick(dialog,projConstants.ASSIST)">{{'RUN' | translate}}</button>
                 <div ngbDropdown class="elipse-ngbdropdown" container="body">
                     <button type="button" id="elipseDrp" ngbDropdownToggle>
                         <i class="krIocnsFont-outlined"></i>
                     </button>
                     <div ngbDropdownMenu class="elipse-ngbdropdown-content" aria-labelledby="elipseDrp">
                         <button ngbDropdownItem aria-disabled="true"
-                            (click)="dialogueRunClick(dialog,projConstants.MYBOT)">Run with Agent’s input</button>
+                            (click)="dialogueRunClick(dialog,projConstants.MYBOT)">{{'RUN_AGENT' | translate}}</button>
                     </div>
                 </div>
             </div>
         </div>
     </ng-container>
     <a class="moreText" *ngIf="searchedDialogList?.length > 2">
-        <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">View More</span>
-        <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">View Less</span>
+        <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">{{'VIEW_ALL_DIALOG' | translate}}</span>
+        <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">{{'VIEW_FEW_DIALOG' | translate}}</span>
     </a>
 </div>
 

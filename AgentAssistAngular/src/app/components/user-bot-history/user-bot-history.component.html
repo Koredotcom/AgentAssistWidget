@@ -5,7 +5,7 @@
 <ng-container *ngIf="!connectionDetails.isCallConversation">
     <div class="transcipt-wrapper-info">
         <div class="offcanvas-header">
-            <p class="paragraph semibold">History</p>
+            <p class="paragraph semibold">{{'HISTORY' | translate}}</p>
             <button class="maximize-btn" (click)="minMaxButtonClick()">
                 <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
                 <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
@@ -47,7 +47,7 @@
             <div class="agent-bubble-content hover-show-copy">
                 <div class="top-info">
                     <div class="time-tamp"><time>{{conv.timestampValue | converTimestampToDate}}</time></div>
-                    <div class="you-text">Bot</div>
+                    <div class="you-text">{{'BOT' | translate}}</div>
                 </div>
                 <div class="bubble-msg-with-img">
                     <div class="bubble-msg" *ngIf="!conv.isTemplateRender && conv?.buttons[0]?.value">{{conv?.buttons[0]?.value}}</div>

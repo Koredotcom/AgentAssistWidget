@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, 
 import { EVENTS } from 'src/app/helpers/events';
 import { FormatAmpmPipe } from 'src/app/pipes/format-ampm.pipe';
 import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
+import { SanitizeHtmlPipe } from 'src/app/pipes/sanitize-html.pipe';
 import { ProjConstants, RenderResponseType } from 'src/app/proj.const';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
@@ -36,7 +37,8 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
     private websocketService : WebSocketService, private formatAMPMPipe : FormatAmpmPipe,
-    private randomUUidPipe : RandomUuidPipe,private handleSubjectService: HandleSubjectService){
+    private randomUUidPipe : RandomUuidPipe,private handleSubjectService: HandleSubjectService,
+    private sanitizeHTMLPipe : SanitizeHtmlPipe){
   }
 
   ngOnInit(): void {
@@ -89,13 +91,13 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
           'botId': this.connectionDetails.botId,
           'conversationId': userInputData.conversationid,
           'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
-          'query': userInputData.value,
+          'query': this.sanitizeHTMLPipe.transform(userInputData.value),
         }
         let user_messsage = {
           "botId": this.connectionDetails.botId,
           "type": "text",
           "conversationId": userInputData.conversationid,
-          "value": userInputData.value,
+          "value": this.sanitizeHTMLPipe.transform(userInputData.value),
           "author": {
             "firstName": userInputData.author?.firstName,
             "lastName": userInputData.author?.lastName,
@@ -119,7 +121,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
           "accountId": '',
           "orgId": '',
           "userId": '',
-          "message": userInputData.value, // user or agent sent message
+          "message": this.sanitizeHTMLPipe.transform(userInputData.value), // user or agent sent message
           "isTemplate": false,
           "isAttachement": false,
           "attachmentDetails": [{
@@ -133,13 +135,13 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
         // this.prepareConversation();
         if (userInputData.author.type === 'USER') {
           this.processTranscriptData(userInputData);
-          if (!this.rootService.OverRideMode) {
+          if (this.rootService.OverRideMode) {
+            this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+          } else {
             userAgentMessage['type'] = 'user';
             userAgentMessage.author['type'] = 'user';
             this.websocketService.emitEvents(EVENTS.user_sent_message, userAgentMessage)
             this.websocketService.emitEvents(EVENTS.user_message, user_messsage);
-          } else {
-            this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
           }
         } else {
           this.processAgentMessages(userInputData);

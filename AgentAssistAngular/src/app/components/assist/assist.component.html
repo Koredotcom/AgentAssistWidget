@@ -4,7 +4,7 @@
             <div class="assist-header-content">
                 <div class="left-title-info">
                     <div class="text-dropdown-info">
-                        <h1>Assist</h1>
+                        <h1>{{'ASSIST' | translate}}</h1>
                         <span class="dialogs-number" *ngIf="interruptDialogList?.length">{{interruptDialogList?.length}}</span>
                        
                         <div ngbDropdown class="dropdown" #interruptDropdown="ngbDropdown" *ngIf="interruptDialogList?.length">
@@ -12,13 +12,13 @@
                                 <i class="krIocnsFont-chevron-down arrow-icon"></i>
                             </button>
                             <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
-                                <div class="heading-text-scripts">INTERUPTED  DIALOG TASK</div>
+                                <div class="heading-text-scripts">{{'INTERRUPT_DIALOG' | translate}}</div>
                                 <div class="dialog-task-wrapper" *ngFor="let dialog of interruptDialogList; let i = index">
                                     <div class="title-paragraph">
                                         <p>{{dialog.name}}</p>
                                     </div>
                                     <div class="dialog-actions">
-                                        <button class="primary-btn" (click)="dialogueRunClick(dialog, i, false);interruptDropdown.close()">RUN</button>
+                                        <button class="primary-btn" (click)="dialogueRunClick(dialog, i, false);interruptDropdown.close()">{{'RUN' | translate}}</button>
                                     </div>
                                 </div>
                             </div>
@@ -27,7 +27,7 @@
 
                     <div class="bottom-titles">
                         <p *ngIf="dialogName">{{dialogName}}</p>
-                        <span *ngIf="dialogName && currentRunningStep">Step: <b>{{currentRunningStep}}</b></span>
+                        <span *ngIf="dialogName && currentRunningStep">{{'STEP' | translate}}: <b>{{currentRunningStep}}</b></span>
                     </div>
                 </div>
                 <div class="actions-assist-header">
@@ -105,8 +105,8 @@
 <!-- Templates -->
 <ng-template #listingTriggers>
     <div class="empty-listing-triggers disabled-msg">
-        <h1>Listening for triggers</h1>
-        <p>AgentAssist is actively listing to your conversation and ready to assist automatically when triggered.</p>
+        <h1>{{'TRIGGER_LISTEN' | translate}}</h1>
+        <p>{{'ASSIST_EMPTY_MSG' | translate}}</p>
     </div>
 </ng-template>
 

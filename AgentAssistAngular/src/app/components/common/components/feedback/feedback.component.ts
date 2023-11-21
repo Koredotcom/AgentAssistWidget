@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { FeebackConst, ProjConstants } from 'src/app/proj.const';
 import { RootService } from 'src/app/services/root.service';
@@ -20,10 +21,18 @@ export class FeedbackComponent {
   feedbackConst : any = FeebackConst;
   feedbackComment : string;
   formTouched : boolean = false;
+  dislikeList : any = [
+    this.translate.instant("WRONG_SUGGESTION"),
+    this.translate.instant("INCORRECT_INTENT"),
+    this.translate.instant("ACCIDENTAL_CLICK"),
+    this.translate.instant("TIME_TAKING"),
+    this.translate.instant("OTHER"),
+  ]
 
   constructor(private rootService : RootService,
     private websocketService : WebSocketService,
-    private cdRef : ChangeDetectorRef){
+    private cdRef : ChangeDetectorRef,
+    private translate : TranslateService){
 
   }
 
