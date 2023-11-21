@@ -9,6 +9,19 @@
         </figure>
     </div>
     <div class="right-chart-data">
-
+        <div echarts [options]="initChartOption" class="chart-container-small" (click)="toggleSentiChart()" [merge]="mergeSentiOptions"></div>
+        <span class="title-info" [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity]?.className">
+            <i [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity]?.icon"></i>
+            <span>{{currentPolarity}}</span>
+        </span>
+        <div class="tooltip-analysis" *ngIf="showFullSentiChart">
+            <div class="header-title-close">
+                <div class="title-text">Sentiment Analysis</div>
+                <div class="close-sentiment-anly" (click)="showFullSentiChart = false">
+                    <i class="krIocnsFont-close-md"></i>
+                </div>
+            </div>
+            <div echarts [options]="chartOption" class="chart-container" [merge]="mergeSentiOptions"></div>
+        </div>
     </div>
 </div>

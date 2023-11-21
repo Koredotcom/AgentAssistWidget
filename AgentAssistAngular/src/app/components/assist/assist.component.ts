@@ -29,6 +29,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   @ViewChild('content', { static: false }) private content: ElementRef<HTMLDivElement>
   @ViewChild('collapseTab', { static: false }) private collapseTab: ElementRef;
   @ViewChild('terminateCanvas', {static : false}) private canvas : ElementRef<HTMLDivElement>
+  @ViewChild('summeryModalpopupContent', {static : false}) private summaryPopupContent : ElementRef<HTMLDivElement>
 
   connectionDetails: any = {};
   subs = new SubSink();
@@ -63,6 +64,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   summaryText: string = '';
   showSummaryPopup: boolean = false;
   showErrorPrompt : boolean = false;
+  summaryPopupModal : any;
 
 
   constructor(private rootService: RootService, private serviceInvoker: ServiceInvokerService,
@@ -164,12 +166,19 @@ export class AssistComponent implements OnInit, OnDestroy {
     });
 
     this.subs.sink = this.handleSubjectService.summaryPopupSubject.subscribe((data) => {
-      this.handlePopupEvent({ status: true, type: this.projConstants.SUMMARY, summaryText: data });
+      this.summeryModalpopup(data);
     });
 
     this.subs.sink = this.rootService.activeTab$.subscribe(tab => {
-      if(tab == ProjConstants.ASSIST){
+      if(tab == ProjConstants.ASSIST && !this.rootService.bulbClick){
         this.scrollToBottom();
+      }
+      this.rootService.bulbClick = false;
+    });
+
+    this.websocketService.responseResolutionCommentsResponse$.subscribe((data: any) => {
+      if (data) {
+        this.handleSubjectService.setSummaryPopup(data);
       }
     });
   }
@@ -403,8 +412,13 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.offcanvasService.dismiss();
   }
 
-  summeryModalpopup(summeryModalpopupContent){
-    this.modalService.open(summeryModalpopupContent ,{windowClass: 'modal-full-window-popup', centered: true, backdrop:'static', keyboard:false});
+  summeryModalpopup(data){
+    this.summaryText = data;
+    this.summaryPopupModal = this.modalService.open(this.summaryPopupContent ,{windowClass: 'modal-full-window-popup', centered: true, backdrop:'static', keyboard:false});
+  }
+
+  closeSummaryPopup(){
+    this.summaryPopupModal.close();
   }
 
   handlePopupEvent(popupObject) {
@@ -465,23 +479,26 @@ export class AssistComponent implements OnInit, OnDestroy {
         }
       }
     } else if (popupObject.type == this.projConstants.SUMMARY) {
-      this.rootService.activeTab = this.projConstants.ASSIST;
-      this.summaryText = popupObject.summaryText || '';
-      this.showSummaryPopup = popupObject.status;
-      if (popupObject.summary) {
-        let message = {
-          name: "agentAssist.conversation_summary",
-          conversationId: this.connectionDetails.conversationId,
-          payload: {
-            "summary": [
-              {
-                'summary_text': popupObject.editedSummary || '',
-              }
-            ]
-          }
-        };
-        window.parent.postMessage(message, '*');
+      if(popupObject.status){
+        this.rootService.activeTab = this.projConstants.ASSIST;
+        this.summaryText = popupObject.summaryText || '';
+        this.showSummaryPopup = popupObject.status;
+        if (popupObject.summary) {
+          let message = {
+            name: "agentAssist.conversation_summary",
+            conversationId: this.connectionDetails.conversationId,
+            payload: {
+              "summary": [
+                {
+                  'summary_text': popupObject.editedSummary || '',
+                }
+              ]
+            }
+          };
+          window.parent.postMessage(message, '*');
+        }
       }
+      this.closeSummaryPopup();
     }
   }
 

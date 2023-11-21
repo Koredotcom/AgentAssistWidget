@@ -30,6 +30,7 @@
     "TELLCUSTOMER" : "Tell Customer",
     "WELCOME_MSG" : "Welcome Message",
     "SEND" : "Send",
+    "SENT" : "Sent",
     "AWAITING" : "Awaiting Response  |  Type to override",
     "OVERRIDE" : "Type to override",
     "ACCEPT_RESPONSE" : "Response Accepted",

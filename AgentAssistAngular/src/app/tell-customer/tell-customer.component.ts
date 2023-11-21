@@ -49,6 +49,7 @@ export class TellCustomerComponent {
   }
 
   handleSendCopyButton(method,automation){
+    automation.send = true;
     let sendData = this.isWelcomeMsg ? automation.value : automation.sendData;
     this.rootService.handleSendCopyButtonForNodes(method,sendData);
   }

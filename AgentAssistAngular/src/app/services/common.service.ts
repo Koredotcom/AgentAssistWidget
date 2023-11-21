@@ -9,6 +9,7 @@ import { RootService } from './root.service';
 import { ServiceInvokerService } from './service-invoker.service';
 import { TemplateRenderClassService } from './template-render-class.service';
 import { WebSocketService } from './web-socket.service';
+import { EChartsOption } from 'echarts';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ import { WebSocketService } from './web-socket.service';
 export class CommonService {
 
   renderResponseType: any = RenderResponseType;
-  projConstants: any = ProjConstants
+  projConstants: any = ProjConstants;
+  realtimeSentiData : any = {};
 
   constructor(private rootService: RootService, private randomUUIDPipe: RandomUuidPipe,
     private handleSubjectService: HandleSubjectService, private localStorageService: LocalStorageService,
@@ -312,7 +314,7 @@ export class CommonService {
         }
       }
     });
-    console.log(assistResponseArray, "assist response arry *******", data);
+    // console.log(assistResponseArray, "assist response arry *******", data);
     
     return assistResponseArray;
   }
@@ -418,6 +420,125 @@ export class CommonService {
       });
     }  
     return responseArray;  
+  }
+
+  getInitialSentiChartOptions(object): EChartsOption | any {
+    return {
+      legend: {
+        show : false
+      },
+      tooltip: {
+        show : false
+        // formatter : function (param){
+        //   console.log(param, "param");
+        //   return 'poloarity : ' + param.value;
+        // }
+      },
+      xAxis: {
+        name: '',
+        show : false,
+        data : []
+        // axisLine: { onZero: true },
+        // splitLine: { show: false },
+        // splitArea: { show: false },
+        // nameGap : 0
+      },
+      
+      yAxis: {
+        show : false
+      },
+      grid: {
+        show : false,
+        bottom: 10,
+        top : 10
+        // bottom: 100
+      },
+      series: [
+        {
+          name: 'bar',
+          type: 'bar',
+          emphasis: {
+            shadowBlur: 10,
+            shadowColor: 'rgba(0,0,0,0.3)'
+          },
+          barWidth: 2,
+          barCategoryGap : '0%',
+          data: [],
+          itemStyle: {
+            color: (param)  => {
+              let color = 'green';
+              // console.log(param.value, "value", param)
+              if(param.value < -0.25){
+                color = 'red';
+              }else if(param.value >= -0.25 && param.value <= 0){
+                color = 'gray';
+              }else if(param.value > 0){
+                color = 'green'
+              }
+              return color;
+            }
+          }
+        }
+      ]
+    }
+  }
+
+  getSentiAnalysisChartOptions(object): EChartsOption | any {
+    return {
+      legend: {
+        show : false
+      },
+      tooltip: {
+        formatter : function (param){
+          return 'poloarity : ' + param.value;
+        }
+      },
+      xAxis: {
+        name: '',
+        show : false,
+        data : []
+        // axisLine: { onZero: true },
+        // splitLine: { show: false },
+        // splitArea: { show: false },
+        // nameGap : 0
+      },
+      
+      yAxis: {
+        show : false
+      },
+      grid: {
+        show : false,
+        bottom: 10,
+        top : 10
+      },
+      series: [
+        {
+          name: 'bar',
+          type: 'bar',
+          emphasis: {
+            shadowBlur: 10,
+            shadowColor: 'rgba(0,0,0,0.3)'
+          },
+          barWidth: 2,
+          barCategoryGap : '0%',
+          data: [],
+          itemStyle: {
+            color: (param)  => {
+              let color = 'green';
+              // console.log(param.value, "value", param)
+              if(param.value < -0.25){
+                color = 'red';
+              }else if(param.value >= -0.25 && param.value < 0){
+                color = 'gray';
+              }else if(param.value > 0){
+                color = 'green'
+              }
+              return color;
+            }
+          }
+        }
+      ]
+    }
   }
 
 }

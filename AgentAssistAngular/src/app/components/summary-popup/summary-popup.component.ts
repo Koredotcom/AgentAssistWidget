@@ -29,9 +29,7 @@ export class SummaryPopupComponent {
   }
 
   summaryButtonClick(flag){
-    if(flag){
-      this.handlePopupEvent.emit({status : false, summary : true, type : ProjConstants.SUMMARY, summaryText : this.summaryText, editedSummary : this.editedSummaryText})
-    }
+    this.handlePopupEvent.emit({status : flag, summary : true, type : ProjConstants.SUMMARY, summaryText : this.summaryText, editedSummary : this.editedSummaryText})
   }
 
   handleCopyButton(copyText){    

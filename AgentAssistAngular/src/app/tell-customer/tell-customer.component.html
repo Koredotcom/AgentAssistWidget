@@ -27,12 +27,17 @@
 <ng-template #askCustMsg let-automation="smallTalkData">
     <div class="msg-node-cust">
         <div class="send-copy-actions" *ngIf="!automation.hideActionButtons">
-            <button class="solidbtn" aria-label="button"
-                (click)="handleSendCopyButton(projConstants.COPY, automation)" *ngIf="!automation.hideCopyButton">
-                <i class="krIocnsFont-copy"></i>
-            </button>
-            <button class="solidbtn" aria-label="button"
-                (click)="handleSendCopyButton(projConstants.SEND, automation)" *ngIf="!automation.hideSendButton">{{ 'SEND'  | translate }}</button>
+            <ng-container *ngIf="!automation.send">
+                <button class="solidbtn" aria-label="button"
+                    (click)="handleSendCopyButton(projConstants.COPY, automation)" *ngIf="!automation.hideCopyButton">
+                    <i class="krIocnsFont-copy"></i>
+                </button>
+                <button class="solidbtn" aria-label="button"
+                    (click)="handleSendCopyButton(projConstants.SEND, automation)" *ngIf="!automation.hideSendButton">{{ 'SEND'  | translate }}</button>
+            </ng-container>
+            <ng-container *ngIf="automation.send">
+                <button class="solidbtn" aria-label="button">{{ 'SENT'  | translate }}</button>
+            </ng-container>
         </div>
         <p *ngIf="!automation.templateRender">{{automation.value}}</p>
         <ng-container *ngIf="automation.templateRender && automation.template">

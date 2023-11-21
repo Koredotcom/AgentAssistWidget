@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
-import { ProjConstants } from 'src/app/proj.const';
+import { ProjConstants, RenderResponseType } from 'src/app/proj.const';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
@@ -21,6 +21,7 @@ export class SuggestionsComponent {
   searchResultText: string;
 
   subs = new SubSink();
+  renderResponseType : any = RenderResponseType;
 
   constructor(private rootService: RootService, private websocketService: WebSocketService, private handleSubjectService: HandleSubjectService) {
 

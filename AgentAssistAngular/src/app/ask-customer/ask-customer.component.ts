@@ -107,6 +107,7 @@ export class AskCustomerComponent {
   }
 
   handleSendCopyButton(method, automation) {
+    automation.send = true;
     let sendData = automation.sendData;
     this.rootService.handleSendCopyButtonForNodes(method, sendData);
   }

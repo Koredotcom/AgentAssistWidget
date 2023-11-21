@@ -54,6 +54,7 @@ export class RootService {
   isMyBotAgentSentRequestOnClick: boolean = false;
 
   settingsData : any = {};
+  bulbClick : boolean = false;
 
   constructor(private templateRenderClassService: TemplateRenderClassService) {
     // this.chatWindowInstance = new chatWindow();

@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, 
 import { EVENTS } from 'src/app/helpers/events';
 import { FormatAmpmPipe } from 'src/app/pipes/format-ampm.pipe';
 import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
-import { ProjConstants } from 'src/app/proj.const';
+import { ProjConstants, RenderResponseType } from 'src/app/proj.const';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
@@ -229,7 +229,11 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
   buldClick(trans){
     trans.data.bulbClick = true;
+    this.rootService.bulbClick = true;
     this.rootService.setActiveTab(this.projConstants.ASSIST);
+    if(document.getElementById(RenderResponseType.SUGGESTIONS + '-' + trans.suggestionUUID)){
+      document.getElementById(RenderResponseType.SUGGESTIONS + '-' + trans.suggestionUUID).scrollIntoView();
+    }
     // this.designAlterService.scrollToEle(`automationSuggestions-${trans.data.suggestionUUID}`)
   }
 

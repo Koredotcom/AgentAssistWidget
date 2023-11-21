@@ -53,6 +53,8 @@ import { SummaryPopupComponent } from './components/summary-popup/summary-popup.
 import { LoaderComponent } from './components/common/components/loader/loader.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
+import { NgxEchartsModule } from 'ngx-echarts';
+import * as echarts from 'echarts';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -118,7 +120,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     HttpClientModule,
     NgbTooltipModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxEchartsModule.forRoot({ echarts })
   ],
   providers: [EmptyObjectCheckPipe,
     {

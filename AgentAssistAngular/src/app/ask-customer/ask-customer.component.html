@@ -13,10 +13,15 @@
     <ng-template #askCustMsgForAutomation let-automation="automationData">
         <div class="msg-node-cust">
             <div class="send-copy-actions" *ngIf="!automation.hideActionButtons">
-                <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, automation)" *ngIf="!automation.hideCopyButton">
-                    <i class="krIocnsFont-copy"></i>
-                </button>
-                <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, automation)" *ngIf="!automation.hideSendButton">{{ 'SEND'  | translate }}</button>
+                <ng-container *ngIf="!automation.send">
+                    <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, automation)" *ngIf="!automation.hideCopyButton">
+                        <i class="krIocnsFont-copy"></i>
+                    </button>
+                    <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, automation)" *ngIf="!automation.hideSendButton">{{ 'SEND'  | translate }}</button>
+                </ng-container>
+                <ng-container *ngIf="automation.send">
+                    <button class="solidbtn" aria-label="button">{{ 'SENT'  | translate }}</button>
+                </ng-container>
             </div>
             <!-- <div class="sent-msg-text">Sent</div> -->
             <!-- <p>{{automation.data.buttons[0].value}}</p> -->

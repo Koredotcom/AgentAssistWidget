@@ -40,7 +40,7 @@
                     <button class="solid-action stop-assist" aria-label="button" (click)="terminateDialog()" [ngClass]="{'disabled-msg' : !dialogName}">
                         <span></span>
                     </button>
-                    <!-- <button class="solid-action stop-assist" aria-label="button" (click)="summeryModalpopup(summeryModalpopupContent)" [ngClass]="{'disabled-msg' : !dialogName}">
+                    <!-- <button class="solid-action stop-assist" aria-label="button" (click)="summeryModalpopup({summary : ['this is summary']})">
                         <span></span>
                     </button> -->
                     <button class="solid-action minimize-btn" aria-label="button" (click)="minimizeToggle()">
@@ -97,7 +97,7 @@
 
 <ng-template #summeryModalpopupContent let-modal>
     <ng-container>
-        <app-summary-popup></app-summary-popup>
+        <app-summary-popup (handlePopupEvent)="handlePopupEvent($event)" [summaryText]="summaryText"></app-summary-popup>
     </ng-container>
 </ng-template>
 
