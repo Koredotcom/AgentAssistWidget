@@ -14,7 +14,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-Run   `npm run-script ng build` to build the project. The build artifacts will be stored in the `dist/` directory. 
+Run  `npm run-script ng build` to build the project. The build artifacts will be stored in the `dist/` directory. 
 
     Use the `--prod` flag for a production build.
     Use the `--c` flag for environment
