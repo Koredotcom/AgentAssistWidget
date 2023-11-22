@@ -2140,5 +2140,11 @@
     "MAX_FILE_SIZE_PERMITED_MB": "Maximum file size Permited 2MB",
     "AGENTASSIST_SETTINGS_SAVED": "Agent Assist setting saved Successfully",
     "FALLBACK_ERROR_MSG" : "Falied to get the AgentAssist settings",
-    "SAVE_FALLBACK_ERROR_MSG" : "Failed to save the AgentAssist Settings"
+    "SAVE_FALLBACK_ERROR_MSG" : "Failed to save the AgentAssist Settings",
+    "LBL_AGENT_EXPERIENCE" : "Experience",
+    "lbl_agent_coaching": "Agent Coaching",
+    "lbl_agent_exp_playbook": "Agent Playbook",
+    "LBL_CONFIGURATIONS": "Configuration",
+    "lbl_welcome_events" : "Welcome Events",
+    "lbl_widgets" : "Widget Settings"
 }
