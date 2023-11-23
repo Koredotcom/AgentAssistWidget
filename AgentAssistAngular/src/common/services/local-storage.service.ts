@@ -76,10 +76,8 @@ export class LocalStorageService {
    return appState;
   }
 
-  initializeLocalStorageState(){
+  initializeLocalStorageState(aaSettings?){
     let appState = this.getLocalStorageState();
-    console.log(appState, "app state inside local storage &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", this.connectionDetails.conversationId);
-    
     if(!appState || !appState[this.connectionDetails.conversationId]){
       if(this.connectionDetails && this.connectionDetails.conversationId){
         let appState : any =  this.getLocalStorageState();
@@ -97,7 +95,7 @@ export class LocalStorageService {
         appState[conversationId][storageConst.INITIALTASK_GOING_ON] = false;
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH] = false;
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] = false;
-        // appState[conversationId][storageConst.PROACTIVE_MODE] = true;
+        appState[conversationId][storageConst.PROACTIVE_MODE] = aaSettings?.isProactiveEnabled;
         localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
         console.log("initialize local storage");
       }

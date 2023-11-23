@@ -25,9 +25,31 @@ export class AppComponent implements OnDestroy {
   errorMsg : string = '';
   subsciption = new Subscription();
   wordTimeStamps: any = {};
-  aaSettings = {};
+  aaSettings:any = {};
   iswidgetEnabled = false;
   isErrorMsg = false;
+  sampleSettings = {
+    "isWidgetLandingEnabled": {
+        "chat": {
+            "isEnabled": true,
+            "tab": "assist"
+        },
+        "voice": {
+            "isEnabled": true,
+            "tab": "assist"
+        },
+        "isEnabled": true
+    },
+    "isCustomisedLogoEnabled": {
+        "isEnabled": false
+    },
+    "agentAssistWidgetEnabled": true,
+    "isProactiveEnabled": true,
+    "isAgentCoachingEnabled": false,
+    "isAgentResponseEnabled": true,
+    "isAgentPlaybookEnabled": false,
+    "isSearchAssistEnabled": true
+  };
   constructor(private webSocketService: WebSocketService,
               private service: CommonService,
               private route: ActivatedRoute,
@@ -201,7 +223,6 @@ export class AppComponent implements OnDestroy {
     }
     // Smartassist
     else {
-      console.log(params);
       connectionObj['agentassisturl'] = connectionObj.envinormentUrl;
       connectionObj['jwtToken'] = params.token;
       connectionObj['accountId'] = params.accountId || '';
@@ -245,12 +266,21 @@ export class AppComponent implements OnDestroy {
         this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
         } else {
           this.iswidgetEnabled = data?.agentAssistSettings?.agentAssistWidgetEnabled;
-        this.errorMsg = "AgentAssist Settings configuration are Disabled! Please reach out to AgentAssist Admin.";
-        }
+          this.errorMsg = "AgentAssist Settings configuration are Disabled! Please reach out to AgentAssist Admin.";
+        };
         this.isErrorMsg = true;
     },
-      error:  (err)=> {
-          console.error("Unable to fetch the details with the provided data", err);
+      error: (err)=> {
+        if(Object.keys(connectionObj)){
+          const proAct = connectionObj['isProactiveAgentAssistEnabled'];
+          this.aaSettings.isProactiveEnabled = (proAct === undefined || proAct === 'undefined') ? true : proAct;
+        };
+        this.aaSettings = this.sampleSettings;
+        this.service.configObj = {...this.service.configObj, ...this.aaSettings};
+        this.iswidgetEnabled = true;
+        this.initiateSocketConnection(paramsCopy);
+        this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
+        this.isErrorMsg = true;
       }
     });
   }
