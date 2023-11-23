@@ -534,8 +534,8 @@
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "aot": true,
-            "baseHref": "/koreagentassist/",
-            "deployUrl": "/koreagentassist/",
+            "baseHref": "/koreagentassist-xo-frame/",
+            "deployUrl": "/koreagentassist-xo-frame/",
             "outputPath": "dist/src",
             "index": "src/index.html",
             "main": "src/main.single-spa.ts",

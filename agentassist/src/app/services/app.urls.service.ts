@@ -23,7 +23,7 @@ export class AppUrlsService {
   public getLoginRedirectURL(redirectToHome?):string{
     var redirectedUrl = "";
     if (redirectToHome) {
-      redirectedUrl = this.WINDOW.location.protocol + "//" + this.WINDOW.location.host + "/koreagentassist";
+      redirectedUrl = this.WINDOW.location.protocol + "//" + this.WINDOW.location.host + "/koreagentassist-xo-frame";
     } else {
       redirectedUrl = this.completeAppPath();
       // redirectedUrl = this.completeAppPath();
