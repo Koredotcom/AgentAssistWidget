@@ -496,7 +496,7 @@ export class CommonService {
       xAxis: {
         name: '',
         show : false,
-        data : [1,2,3,4,5,6,7,8,9,10]
+        data : [].constructor(100).map((item)=> item)
         // axisLine: { onZero: true },
         // splitLine: { show: false },
         // splitArea: { show: false },
