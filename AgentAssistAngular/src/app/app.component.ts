@@ -45,9 +45,9 @@ export class AppComponent implements OnDestroy {
     },
     "agentAssistWidgetEnabled": true,
     "isProactiveEnabled": true,
-    "isAgentCoachingEnabled": true,
-    "isAgentResponseEnabled": false,
-    "isAgentPlaybookEnabled": true,
+    "isAgentCoachingEnabled": false,
+    "isAgentResponseEnabled": true,
+    "isAgentPlaybookEnabled": false,
     "isSearchAssistEnabled": true
   };
   constructor(private webSocketService: WebSocketService,
