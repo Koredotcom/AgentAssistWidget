@@ -227,7 +227,7 @@ export class HomeComponent implements OnInit {
 
     let subscription9 = this.handleSubjectService.agentAssistSettingsSubject.subscribe((settings: any) => {
       this.aaSettings = settings;
-      this.localStorageService.initializeLocalStorageState();
+      this.localStorageService.initializeLocalStorageState(this.aaSettings);
       console.log(this.commonService.configObj);
       this.updateUIState(this.connectionDetails.conversationId, this.connectionDetails.isCall);
       this.btnInit();
@@ -532,7 +532,7 @@ setProactiveMode(){
   let appState : any = this.localStorageService.getLocalStorageState();
   let convState = appState[this.connectionDetails.conversationId];
   this.proactiveToggle(convState[storageConst.PROACTIVE_MODE]);
-  
+
   // convState[storageConst.PROACTIVE_MODE] =  this.aaSettings?.isProactiveEnabled === undefined || this.aaSettings?.isProactiveEnabled === 'undefined' ? true: this.aaSettings?.isProactiveEnabled;
   // if(this.connectionDetails.source == this.projConstants.SMARTASSIST_SOURCE && typeof convState[storageConst.PROACTIVE_MODE] != 'boolean'){
   // };
