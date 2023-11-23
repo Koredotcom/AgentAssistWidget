@@ -59,6 +59,8 @@ export const ProjConstants = {
     NO : 'no',
     SENDMSG : 'agentAssist.SendMessage',
     COPYMSG : 'agentAssist.CopyMessage',
+    SEND_METHOD : 'send',
+    COPY_METHOD : 'copy',
     AWAITING : 'Awaiting Response  |  Type to override',
     OVERRIDE : 'Type to override',
     ACCEPT_RESPONSE : 'Response Accepted',

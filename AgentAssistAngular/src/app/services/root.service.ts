@@ -380,6 +380,21 @@ export class RootService {
     }
   }
 
+  sendAndCopyForPlaybook(eventName, conversationId, payload){
+    let message : any = {
+      method: (eventName == ProjConstants.SEND_METHOD) ? ProjConstants.SEND_METHOD : ProjConstants.COPY_METHOD,
+      name: (eventName == ProjConstants.SEND_METHOD) ? ProjConstants.SENDMSG : ProjConstants.COPYMSG,
+      conversationId,
+      payload,
+    };
+
+    if (eventName == ProjConstants.SEND_METHOD) {
+      window.parent.postMessage(message, '*');
+    } else if (eventName == ProjConstants.COPY_METHOD) {
+      parent.postMessage(message, '*');
+    }
+  }
+
   confirmationNodeRenderDataTransform(data) {
     if ((data.componentType == 'dialogAct' || data.entityType == 'list_of_values') && data.buttons && data.buttons.length > 0) {
       if (!data.applyDefaultTemplate) {

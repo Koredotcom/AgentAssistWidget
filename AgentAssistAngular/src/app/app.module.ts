@@ -19,8 +19,6 @@ import { SmalltalkComponent } from './components/common/components/smalltalk/sma
 import { SuggestionsComponent } from './components/common/components/suggestions/suggestions.component';
 import { ChecklistComponent } from './components/checklist/checklist.component';
 import { DialogSuggestionComponent } from './components/common/components/dialog-suggestion/dialog-suggestion.component';
-import { RestartDialogComponent } from './components/common/components/restart-dialog/restart-dialog.component';
-import { InterruptionComponent } from './components/common/components/interruption/interruption.component';
 import { SentimentScoreComponent } from './components/common/components/sentiment-score/sentiment-score.component';
 import { NudgesComponent } from './components/common/components/nudges/nudges.component';
 import { HintsComponent } from './components/common/components/hints/hints.component';
@@ -77,8 +75,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     SuggestionsComponent,
     ChecklistComponent,
     DialogSuggestionComponent,
-    RestartDialogComponent,
-    InterruptionComponent,
     SentimentScoreComponent,
     NudgesComponent,
     HintsComponent,
