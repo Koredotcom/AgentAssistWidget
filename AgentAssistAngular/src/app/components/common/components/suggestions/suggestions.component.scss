@@ -53,6 +53,12 @@
                     margin: 0;
                     max-width: 100%;
                 }
+                .help-tip-icon{
+                    flex-shrink: 0;
+                    cursor: pointer;
+                    color: #98A2B3;
+                    font-size: 12px;
+                }
                 .count-text{
                     flex-shrink: 0;
                     border-radius: 16px;
@@ -76,4 +82,10 @@
             }
         }
     }
+}
+
+.btn-more-solid{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }

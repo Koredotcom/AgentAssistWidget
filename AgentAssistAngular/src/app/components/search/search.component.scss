@@ -5,6 +5,18 @@
     flex-direction: column;
     border-radius: 12px 12px 0px 0px;
     background: var(--gray-modern-50, #F8FAFC);
+    .maximize-btn{
+        width: 16px;
+        height: 16px;
+        border: 0;
+        padding: 0;
+        background: transparent;
+        cursor: pointer;
+        position: absolute;
+        right: 30px;
+        top: 20px;
+        z-index: 2;
+    }
     .suggestionslist-conntent-search{
         padding: 8px 12px 0px 12px;
         flex: 1 1 auto;
@@ -30,18 +42,6 @@
                 width: 100%;
                 overflow: hidden;
                 position: relative;
-                .maximize-btn{
-                    position: relative;
-                    width: 16px;
-                    height: 16px;
-                    border: 0;
-                    padding: 0;
-                    background: transparent;
-                    cursor: pointer;
-                    position: absolute;
-                    right: 10px;
-                    top: auto;
-                }
                 .icon_block{
                     flex-shrink: 0;
                 }

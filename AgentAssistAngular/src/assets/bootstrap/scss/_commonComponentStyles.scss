@@ -88,3 +88,53 @@
         }
     }
 }
+
+.componentSlideUPAnimation{
+    -webkit-animation-name: slideInUpComp;
+    animation-name: slideInUpComp;
+    -webkit-animation-duration: 0.8s;
+    animation-duration: 0.8s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    display: inline-block;
+    width: 100%;
+}
+app-ask-customer, app-tell-customer{
+    @extend .componentSlideUPAnimation;
+}
+
+@-webkit-keyframes slideInUpComp {
+    0% {
+        -webkit-transform: translateY(30px);
+        transform: translateY(30px);
+        visibility: visible;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUpComp {
+    0% {
+        -webkit-transform: translateY(30px);
+        transform: translateY(30px);
+        visibility: visible;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+
+
+.widget-body-wrapper {
+    .widgets-list-card{
+        &.minimized-card{
+            app-checklist{
+                
+            }
+        }
+    }
+}

@@ -35,20 +35,22 @@
                     <button class="solidbtn">{{ 'SENT'  | translate }}</button>
                 </ng-container>
             </div>
-            <div class="data-faq-paragraph">            
-                <p #faqcontent [ngClass]="{'show-full-text' : !ansObj['showMoreButton']}"  [innerHtml]="rootService.handleEmptyLine(ansObj['ans'])"></p>
+            <div class="data-faq-paragraph">   
+                <div class="text-info-more-data-link">
+                    <p #faqcontent [ngClass]="{'show-full-text' : !ansObj['showMoreButton']}"  [innerHtml]="rootService.handleEmptyLine(ansObj['ans'])"></p>
+                    <a class="moreText">
+                        <!-- <span class="more-text" (click)="toggleShowMoreLess(faq)" *ngIf="faq.showMoreButton && faq.answer.length > 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))">Expand / </span> -->
+                        <span class="more-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && ansObj['showMoreButton'] && (faq.answer.length == 1 || faq.seeMoreWrapper)" >...{{'MORE_TEXT' | translate}}</span>
+                        <span class="less-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && !ansObj['showMoreButton']">{{'LESS_TEXT' | translate}}</span>
+                    </a>
+                </div>                         
             </div>
-            <a class="moreText">
-                <!-- <span class="more-text" (click)="toggleShowMoreLess(faq)" *ngIf="faq.showMoreButton && faq.answer.length > 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))">Expand / </span> -->
-                <span class="more-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && ansObj['showMoreButton'] && (faq.answer.length == 1 || faq.seeMoreWrapper)" >{{'MORE_TEXT' | translate}}</span>
-                <span class="less-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && !ansObj['showMoreButton']">{{'LESS_TEXT' | translate}}</span>
-            </a>
         </div>
         <button class="close-expand btn_link" (click)="toggleExpandAndClose(faq)" *ngIf="faq?.answer?.length > 1 && !faq.seeMoreWrapper">{{'EXPAND_MORE' | translate}}</button>
         <button class="close-expand btn_link" (click)="toggleExpandAndClose(faq)" *ngIf="faq?.answer?.length > 1 && faq.seeMoreWrapper">{{'CLOSE_TEXT' | translate}}</button>
     </ng-container>
 </div>
-<a class="moreText" *ngIf="searchedFAQList?.length > 2">
+<a class="moreText-bottom" *ngIf="searchedFAQList?.length > 2">
     <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">{{'SHOW_MORE_FAQ' | translate}}</span>
     <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">{{'SHOW_LESS_FAQ' | translate}}</span>
 </a>
