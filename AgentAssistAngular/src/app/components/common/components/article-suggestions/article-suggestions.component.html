@@ -19,22 +19,21 @@
     </div>
     <div class="faq-body-content">
         <div class="data-faq-paragraph">            
-            <p [ngClass]="{'show-full-text' : !article.showMoreButton}" [innerHTML]="article?.content | removeTagFromString | replaceTextWithTag : article.userInput" #articleContent></p>
-            
+            <div class="text-info-more-data-link">
+                <p [ngClass]="{'show-full-text' : !article.showMoreButton}" [innerHTML]="article?.content | removeTagFromString | replaceTextWithTag : article.userInput" #articleContent></p>
+                <a class="moreText" role="button" aria-expanded="false" *ngIf="articleContent.scrollHeight > 36">
+                    <span class="more-text" *ngIf="article?.showMoreButton" (click)="toggleShowMoreLess(article)">...{{'MORE_TEXT' | translate}}</span>
+                    <span class="less-text" *ngIf="!article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'LESS_TEXT' | translate}}</span>
+                </a>
+            </div>                       
             <div class="btn-more-solid">
-                <a class="btn_link" aria-label="button"
-                    [href]="article.link" target="_blank">{{'VIEW_FULL_ARTICLE' | translate}}</a>
+                <a class="btn_link" aria-label="button" [href]="article.link" target="_blank">{{'VIEW_FULL_ARTICLE' | translate}}</a>
             </div>
-           
         </div>
-        <a class="moreText" role="button" aria-expanded="false" *ngIf="articleContent.scrollHeight > 36">
-            <span class="more-text" *ngIf="article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'MORE_TEXT' | translate}}</span>
-            <span class="less-text" *ngIf="!article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'LESS_TEXT' | translate}}</span>
-        </a>
     </div>
   </div>
 </ng-container>
-<a class="moreText" *ngIf="articlesList?.length > 2">
+<a class="moreText-bottom" *ngIf="articlesList?.length > 2">
     <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">{{'SHOW_MORE_ARTICLE' | translate}}</span>
     <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">{{'SHOW_LESS_ARTICLE' | translate}}</span>
 </a>

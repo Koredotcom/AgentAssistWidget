@@ -2423,7 +2423,7 @@
     stroke-width: 1.5px;
 }
 
-.kore-chat-window .tooltip,
+/* .kore-chat-window .tooltip,
 .kore-chat-window .tooltipDonut,
 .kore-chat-window .tooltipVSB,
 .kore-chat-window .tooltipHBC,
@@ -2440,12 +2440,12 @@
     width: 80px;
     z-index: 10;
     opacity: 1 !important;
-}
+} */
 
-.kore-chat-window .tooltip,
+/* .kore-chat-window .tooltip,
 .kore-chat-window .tooltipDonut {
     display: none;
-}
+} */
 
 .kore-chat-window .tooltipVSB {
     display: block;

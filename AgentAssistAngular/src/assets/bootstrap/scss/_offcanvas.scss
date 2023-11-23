@@ -49,7 +49,8 @@
         bottom: 64px;
       }
       &.termincateOffCanvas{
-        bottom: 64px;
+        // bottom: 64px;
+        z-index: 999999;
       }
       &.offcanvas-start {
         top: 0;
@@ -132,6 +133,9 @@
 
 .offcanvas-backdrop {
   @include overlay-backdrop($zindex-offcanvas-backdrop, $offcanvas-backdrop-bg, $offcanvas-backdrop-opacity);
+  &.backdrop-off-canvas-terminate{
+    z-index: 9991;
+  }
 }
 
 .offcanvas-header {

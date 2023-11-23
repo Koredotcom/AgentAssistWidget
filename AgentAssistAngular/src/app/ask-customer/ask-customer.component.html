@@ -36,7 +36,8 @@
     
     <div class="entity-mesage-data" [ngClass]="{'error-no-reponse' : automation.errorCount}">
         <div class="input-block-entity">
-            <p>{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}} : </p>
+            <p container="body" ngbTooltip="{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}">{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}</p>
+            <p>:</p>
             <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride()" [disabled]="automation.disableInput" (keyup.enter)="handleAgentInput()">
             <div class="border-outline"></div>
             <div class="actions-inputs">

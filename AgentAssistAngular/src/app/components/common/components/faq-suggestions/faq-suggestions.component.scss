@@ -7,35 +7,48 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    position: relative;
+    &:hover{
+        .faq-actions{
+            display: flex;
+        }
+    }
+    .solidbtn{
+        position: relative;
+        border-radius: 4px;
+        border: 1px solid var(--neutral-200, #E5E5E5);
+        background: var(--generic-white, #FFF);
+        padding: 2px 8px;
+        min-height: 24px;
+        color: var(--neutral-800, #262626);
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 16px;
+        cursor: pointer;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        i{
+            font-size: 12px;
+        }
+    }
     .faq-actions{
         flex-shrink: 0;
         gap: 5px;
-        display: flex;
+        display: none;
         align-items: center;
-        .solidbtn{
-            position: relative;
-            border-radius: 4px;
-            border: 1px solid var(--neutral-200, #E5E5E5);
-            background: var(--generic-white, #FFF);
-            padding: 2px 8px;
-            min-height: 24px;
-            color: var(--neutral-800, #262626);
-            font-size: 11px;
-            font-weight: 500;
-            line-height: 16px;
-            cursor: pointer;
-            justify-content: center;
-            display: flex;
-            align-items: center;
-            i{
-                font-size: 12px;
-            }
-        }
+        position: absolute;
+        right: 0;
+        top: auto;
+        background: #fff;
+        z-index: 2;
     }
     .faq-s-header{
         display: flex;
         align-items: center;
         gap: 10px;
+        position: relative;
         .titles-info-heading{
             width: 100%;
             display: flex;
@@ -59,10 +72,10 @@
     }
     .faq-body-content{
         display: flex;
-        align-items: flex-end;
-        gap: 10px;
+        flex-direction: column;
+        // gap: 10px;
         position: relative;
-        transition: 0.2 all ease;
+        transition: 0.2s all ease;
         &:hover{
             .faq-actions{
                 display: flex;
@@ -76,6 +89,9 @@
             display: none;
         }
         .data-faq-paragraph{
+            .text-info-more-data-link{
+                position: relative;
+            }
             p{
                 color: var(--gray-modern-600, #4B5565);
                 font-size: 12px;
@@ -102,6 +118,11 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #FFF;
+            z-index: 2;
             // .less-text{
             //     display: none;
             // }
@@ -120,9 +141,21 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
+        margin-top: 8px;
     }
 }
-
+.moreText-bottom{
+    color: var(--primary-500, #2970FF);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    text-decoration: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
 ::ng-deep [dir="rtl"]{
     .faq-suggestions-wrapper {
         .faq-body-content {

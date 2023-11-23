@@ -86,38 +86,52 @@ export class SentimentScoreComponent {
 
   toggleSentiChart(){
     this.showFullSentiChart = !this.showFullSentiChart;
+    this.setSentimentAnalysisOption(true)
   }
 
-  setSentimentAnalysisOption() {
-    let chartData = this.chartOption?.series[0]?.data;
-    let xAxisData = this.chartOption?.xAxis['data'];
-    let previousData  = this.commonService.realtimeSentiData[this.connectionDetails.conversationId]
-    if(previousData?.length > 0){
-      let polaritySum = 0;
-      previousData.forEach(ele =>{
-        polaritySum += ele;
-      });
-      let average = 0;
-      if(previousData?.length){
-        average = parseFloat((polaritySum/previousData?.length).toFixed(2));
+  setSentimentAnalysisOption(flag = false) {
+    let chartData =  this.initChartOption?.series[0]?.data ;
+    let xAxisData =  this.initChartOption?.xAxis['data'];
+
+    let fullChartData = this.chartOption?.series[0]?.data;
+    let fullxAxisData = this.chartOption?.xAxis['data'];
+    
+    if(!flag){
+      let previousData  = this.commonService.realtimeSentiData[this.connectionDetails.conversationId]
+      if(previousData?.length > 0){
+        let polaritySum = 0;
+        previousData.forEach(ele =>{
+          polaritySum += ele;
+        });
+        let average = 0;
+        if(previousData?.length){
+          average = parseFloat((polaritySum/previousData?.length).toFixed(2));
+        }
+        if(average == 0){
+          chartData.push(-0.1);
+          fullChartData.push(-0.1);
+        }else{
+          chartData.push(average);
+          fullChartData.push(average);
+        }
+
+        if(chartData.length > 10){
+          xAxisData.push(chartData.length);
+        } 
+        if(fullChartData.length > 100){
+          fullxAxisData.push(chartData.length);
+        }
+        this.updatePolarity(average);
       }
-      if(average == 0){
-        chartData.push(-0.1);
-      }else{
-        chartData.push(average);
-      }
-      if(chartData.length > 10){
-        xAxisData.push(chartData.length);
-      }
-      this.updatePolarity(average);
     }
+
     this.mergeSentiOptions = {
       xAxis : {
-        data : xAxisData
+        data : this.showFullSentiChart ? fullxAxisData : xAxisData
       },
       series: [
         {
-          data: chartData,
+          data: this.showFullSentiChart ? fullChartData : chartData,
           type: 'bar',
           smooth: true,
           showSymbol: false,
