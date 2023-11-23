@@ -85,6 +85,12 @@ export class EndPointsService {
       method : 'get',
       defaultEndPoint : false
     }
+
+    this.serviceList['get.checklist'] = {
+      endpoint : '/agentassist/api/v1/agentcoachingconfiguration/checklist/:botId/activeChecklists',
+      method : 'get',
+      defaultEndPoint : false
+    }
   }
 
 }

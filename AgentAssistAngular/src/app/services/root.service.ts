@@ -58,6 +58,9 @@ export class RootService {
   bulbClick : boolean = false;
   aaHelpers = null;
 
+  primaryChecklist: any = [];
+  dynamicChecklist: any = [];
+
   constructor(private templateRenderClassService: TemplateRenderClassService) {
     // this.chatWindowInstance = new chatWindow();
     this.aaHelpers = new agentAssistHelpers();

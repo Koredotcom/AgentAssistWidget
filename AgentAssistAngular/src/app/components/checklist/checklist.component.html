@@ -3,101 +3,66 @@
         <div class="playbook-header-data">
             <div class="left-sec-data">
                 <div ngbDropdown class="dropdown playbook-drp" container="body">
-                    <button type="button" id="playbookDrp" ngbDropdownToggle class="playbook-suggestion">
-                        <sub>1</sub>
+                    <button type="button" id="playbookDrp" ngbDropdownToggle class="playbook-suggestion" *ngIf="triggeredDynCheckLists.length">
+                        <sub>{{triggeredDynCheckLists.length}}</sub>
                         <i class="krIocnsFont-light-bulb"></i>
                     </button>
+                    <!-- <ng-container [ngTemplateOutlet]="recomendedMenu"></ng-container> -->
                     <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
                         <div class="heading-text-scripts">RECOMENDED  PLAYBOOK</div>
-                        <button ngbDropdownItem aria-disabled="true">
-                            <p>Update Policy</p>
-                            <span>5 steps</span>
-                            <!-- <i class="krIocnsFont-check"></i> -->
-                        </button>
-                        <button ngbDropdownItem aria-disabled="true">
-                            <p>General Support</p>
-                            <span>5 steps</span>
-                        </button>
+                        <ng-container *ngFor="let clT of triggeredDynCheckLists; let int = index">
+                            <button ngbDropdownItem aria-disabled="true" (click)="selectDynCl(clT, int)">
+                                <p>{{clT.name}}</p>
+                                <span>{{clT.stages?.length}} steps</span>
+                            </button>
+                        </ng-container>
                     </div>
                 </div>
                 <div class="dropdowns-text-info">
                     <div ngbDropdown class="dropdown playbook-drp" container="body">
                         <button type="button" id="playbookDrp" ngbDropdownToggle>
-                            <span>Insurance Policy</span>
-                            <i class="krIocnsFont-chevron-down arrow-icon"></i>
+                            <span>{{checklists[selcLinx]?.name}}</span>
+                            <i class="krIocnsFont-chevron-down arrow-icon" *ngIf="checklists.length"></i>
                         </button>
                         <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
-                            <div class="heading-text-scripts">PRIMARY SCRIPTS</div>
-                            <button ngbDropdownItem aria-disabled="true" class="selected">
-                                <p>Insurance Policy</p>
-                                <i class="krIocnsFont-check"></i>
-                            </button>
-                            <button ngbDropdownItem aria-disabled="true">
-                                <p>General Support</p>
-                                <span>5 steps</span>
-                            </button>
-                            <button ngbDropdownItem aria-disabled="true">
-                                <p>Onboarding Customer</p>
-                                <button class="_btn primaryBtn">Resume</button>
-                                <span>5 steps</span>
-                            </button>
-                            <div class="heading-text-scripts">CONDITIONAL SCRIPTS</div>
-                            <button ngbDropdownItem aria-disabled="true">
-                                <p>Service Upgrade</p>
-                                <i class="krIocnsFont-check"></i>
-                            </button>
-                            <button ngbDropdownItem aria-disabled="true">
-                                <p>Price Objection</p>
-                                <span>5 steps</span>
-                            </button>
-                            <button ngbDropdownItem aria-disabled="true">
-                                <p>Refund Requested</p>
-                                <span>5 steps</span>
-                            </button>
-                            <button ngbDropdownItem aria-disabled="true">
-                                <p>Connection Issue</p>
-                                <span>5 steps</span>
-                            </button>
-                            <button ngbDropdownItem aria-disabled="true">
-                                <p>Router Reset</p>
-                                <span>5 steps</span>
-                            </button>
-                            <button ngbDropdownItem aria-disabled="true">
-                                <p>Internet Issues</p>
-                                <span>5 steps</span>
-                            </button>
-                            <button ngbDropdownItem aria-disabled="true">
-                                <p>TV Connection Issues</p>
-                                <span>5 steps</span>
-                            </button>
+                            <ng-container *ngFor="let cl of checklists; let i = index">
+                                <button ngbDropdownItem aria-disabled="true" class="selected" (click)="cl.name != checklists[selcLinx]?.name && updateCheckList(i)">
+                                    <p>{{cl.name}}</p>
+                                    <i [ngClass]="{'krIocnsFont-check' : cl.name == checklists[selcLinx]?.name}"></i>
+                                </button>
+                            </ng-container>
                         </div>
                     </div>
-                    <div class="bottom-titles-info">
+                    <div class="bottom-titles-info" *ngIf="checklists[selcLinx]?.stages[selsTinx]?.name">
                         <h6>Stage: </h6>
                         <div ngbDropdown class="dropdown playbook-drp">
                             <button type="button" id="playbookDrp" ngbDropdownToggle>
-                                <span>Open</span>
-                                <i class="krIocnsFont-chevron-down arrow-icon"></i>
+                                <span>{{checklists[selcLinx]?.stages[selsTinx]?.name}}</span>
+                                <i class="krIocnsFont-chevron-down arrow-icon" *ngIf="checklists[selcLinx]?.stages?.length > 1"></i>
                             </button>
-                            <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
-                                <button ngbDropdownItem aria-disabled="true" class="selected">
-                                    <p>Open</p>
-                                    <i class="krIocnsFont-check"></i>
-                                </button>
-                                <button ngbDropdownItem aria-disabled="true">
-                                    <p>Resolve</p>
-                                </button>
-                                <button ngbDropdownItem aria-disabled="true">
-                                    <p>Close</p>
-                                </button>
-                            </div>
+                            <ng-container *ngIf="checklists[selcLinx]?.stages.length > 1">
+                                <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
+                                    <button ngbDropdownItem aria-disabled="true" class="selected" *ngFor="let stage of checklists[selcLinx]?.stages; let i = index" (click)="selectStage(i)">
+                                        <p>{{stage.name}}</p>
+                                        <i class="krIocnsFont-check" [ngClass]="{'krIocnsFont-check' : (checklists[selcLinx]?.stages[selsTinx]?.name == stage.name)}"></i>
+                                    </button>
+                                </div>
+                            </ng-container>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="actions-checklist-header">
                 <button class="solid-action" aria-label="button">
-
+                    <!-- <div class="progress yellow">
+                        <span class="progress-left">
+                                        <span class="progress-bar"></span>
+                        </span>
+                        <span class="progress-right">
+                                        <span class="progress-bar"></span>
+                        </span>
+                        <div class="progress-value">37.5%</div>
+                      </div> -->
                 </button>
                 <button class="solid-action" aria-label="button">
                     <i class="krIocnsFont-pause"></i>
@@ -114,99 +79,39 @@
         </div>
    </div>
    <div class="playbook-wrapper-body">
-        <div class="static-play-book-suggestions" *ngIf="false">
-            <div class="heading-text">
-                <img src="assets/images/icons/list.svg">
-                <p>Playbook Suggestion</p>
-            </div>
-            <ng-container>
-                <div class="dialog-task-wrapper">
-                    <div class="title-paragraph">
-                        <p>New Customer</p>
-                    </div>
-                    <div class="dialog-actions">
-                        <button class="primary-btn">RUN</button>
-                    </div>
-                </div>
-                <div class="dialog-task-wrapper">
-                    <div class="title-paragraph">
-                        <p>General Support</p>
-                    </div>
-                    <div class="dialog-actions">
-                        <button class="primary-btn">RUN</button>
-                    </div>
-                </div>
-                <div class="dialog-task-wrapper">
-                    <div class="title-paragraph">
-                        <p>Insurance Policy</p>
-                    </div>
-                    <div class="dialog-actions">
-                        <button class="primary-btn">RUN</button>
-                    </div>
-                </div>
-            </ng-container>
-        </div>
         <div class="playbook-steps-info">
-            <button class="playbook-step playbook-step-ongoing">
-                <div class="heading-step">
-                    <h1>Warm Greetings</h1>
-                    <button class="check-btn">
-                        <i class="krIocnsFont-check"></i>
-                    </button>
-                </div>
-                <div class="step-text-send-block">
-                    <div class="step-actions-send-copy">
-                        <button class="solidbtn">
-                            <i class="krIocnsFont-copy"></i>
+            <ng-container *ngFor="let step of checklists[selcLinx]?.stages[selsTinx]?.steps; let ii = index">
+                <button class="playbook-step" [ngClass]="{'playbook-step-ongoing' : step.ongoing && !step.complete}" (click)="!step.complete && clickStep(ii)">
+                    <div class="heading-step">
+                        <h1 [ngClass]="{'strike-text' : step.complete}">{{step.name}}</h1>
+                        <button class="check-btn" (click)="!step.complete && stepComplete(selcLinx, selsTinx, ii)">
+                            <i class="krIocnsFont-check"></i>
                         </button>
-                        <button class="solidbtn">{{ 'SEND'  | translate }}</button>
                     </div>
-                    <p>Hello Customer Name Thank you for calling ShieldSure Insurance This is Agent Name. How may i assist you today? </p>
-                    <div class="border-bottom-pad">
-                        <div class="bottom-data-info">
-                            <h1>Authenticate</h1>
-                            <div class="right-info-data">
-                                <button class="_btn primaryBtn">Run</button>
-                                <h2>3/3 count</h2>
-                            </div>
+                    <div class="step-text-send-block">
+                        <div class="step-actions-send-copy">
+                            <button class="solidbtn" (click)="sendOrCopy(projConstants.COPY_METHOD,step.description)">
+                                <i class="krIocnsFont-copy"></i>
+                            </button>
+                            <button class="solidbtn" (click)="sendOrCopy(projConstants.SEND_METHOD,step.description)">{{ 'SEND'  | translate }}</button>
                         </div>
+                        <p>{{step.description}} </p>
+                        
                     </div>
-                </div>
-            </button>
-            <button class="playbook-step">
-                <div class="heading-step">
-                    <h1 class="strike-text">Authenticate Customer</h1>
-                    <button class="check-btn">
-                        <i class="krIocnsFont-check"></i>
-                    </button>
-                </div>
-                <div class="step-text-send-block">
-                    <div class="step-actions-send-copy">
-                        <button class="solidbtn">
-                            <i class="krIocnsFont-copy"></i>
-                        </button>
-                        <button class="solidbtn">{{ 'SEND'  | translate }}</button>
-                    </div>
-                    <p>Hello Customer Name Thank you for calling ShieldSure Insurance This is Agent Name. How may i assist you today? </p>
-                </div>
-            </button>
-            <button class="playbook-step">
-                <div class="heading-step">
-                    <h1>Information about Issue</h1>
-                    <button class="check-btn">
-                        <i class="krIocnsFont-check"></i>
-                    </button>
-                </div>
-                <div class="step-text-send-block">
-                    <div class="step-actions-send-copy">
-                        <button class="solidbtn">
-                            <i class="krIocnsFont-copy"></i>
-                        </button>
-                        <button class="solidbtn">{{ 'SEND'  | translate }}</button>
-                    </div>
-                    <p>Hello Customer Name Thank you for calling ShieldSure Insurance This is Agent Name. How may i assist you today? </p>
-                </div>
-            </button>
+                </button>
+            </ng-container>
         </div>
    </div>
 </div>
+
+<ng-template #recomendedMenu>
+    <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
+        <div class="heading-text-scripts">RECOMENDED  PLAYBOOK</div>
+        <ng-container *ngFor="let clT of triggeredDynCheckLists; let int = index">
+            <button ngbDropdownItem aria-disabled="true" (click)="selectDynCl(clT, int)">
+                <p>{{clT.name}}</p>
+                <span>{{clT.stages?.length}} steps</span>
+            </button>
+        </ng-container>
+    </div>
+</ng-template>

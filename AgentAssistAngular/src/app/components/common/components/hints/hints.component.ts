@@ -23,6 +23,32 @@ export class HintsComponent implements OnInit{
 
   ngOnInit(): void {
     this.subscribeEvents();
+
+    // setInterval(()=> {
+    //   let nudge_data : any = {
+    //     action : 'nudge',
+    //     message : {
+    //       postAction : 'auto_close',
+    //       title : 'sample Nudge',
+    //       body : 'sample Body',
+    //       time : 10000
+    //     },
+    //     expression : 'critical'
+    //   }
+    //   let hint_data : any = {
+    //     action : 'hint',
+    //     message : {
+    //       postAction : 'auto_close',
+    //       title : 'sample',
+    //       body : 'sample Body',
+    //       time : 10000
+    //     },
+    //     expression : 'positive'
+    //   }
+    //   this.webSocketService.agentCoachingResponse$.next(hint_data);
+    //   this.webSocketService.agentCoachingResponse$.next(nudge_data);
+
+    //   },5000)
   }
 
   ngOnDestroy(){

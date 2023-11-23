@@ -25,6 +25,31 @@ export class CommonService {
     private koreGenerateuuidPipe: KoreGenerateuuidPipe, private templateRenderClassService: TemplateRenderClassService,
     private serviceInvoker: ServiceInvokerService, private websocketService: WebSocketService) { }
 
+  prepareChecklistPayload(connectionDetails, event,checkListData, checklistObj, step = false){
+    let payload : any = {
+      "payload": {
+          "event": event,
+          "conversationId": connectionDetails.conversationId,
+          "ccVersion": checkListData?.ccVersion,
+          "accountId": checkListData?.accountId,
+          "botId": (connectionDetails?.fromSAT) ?  connectionDetails?.instanceBotId : connectionDetails?.botId,
+          "agentInfo": {
+              "agentId": "", // mendatory field
+              //any other fields
+          },
+          "timestamp": 0,
+          "context": {}
+      }
+    }
+
+    if(step){
+      payload.payload.checklistStep = checklistObj
+    }else{
+      payload.payload.checklist = checklistObj
+    }
+    return payload
+  }
+
   assistHistory(params) {
     let serviceMethod = params.fromSAT ? 'get.assistHistorySA' : 'get.assistHistoryTP';
     let botId = this.rootService.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
