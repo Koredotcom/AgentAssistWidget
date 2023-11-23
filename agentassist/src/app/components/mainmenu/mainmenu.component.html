@@ -97,7 +97,7 @@
 					<i class="icon-sa-settings"></i><span class="link-name">Advanced NLU</span>
 				</div>
 			</ng-container>
-			<ng-container>
+			<ng-container *ngIf="isCoachingDisable">
 				<div class="link-router" [routerLink]="['widget-settings']" routerLinkActive="active"
 					*hasPermission="['admin']">
 					<i class="icon-sa-settings"></i><span class="link-name">widget Settings</span>
