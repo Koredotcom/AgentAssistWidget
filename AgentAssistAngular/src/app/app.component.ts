@@ -253,7 +253,7 @@ export class AppComponent implements OnDestroy {
         }
     }
     $.ajax({
-      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${paramsCopy.instanceBotId}/agentassistsetting`,
+      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${paramsCopy.instanceBotId}/agentassistsettingss`,
       type: 'get',
       headers: headersVal,
       dataType: 'json',
