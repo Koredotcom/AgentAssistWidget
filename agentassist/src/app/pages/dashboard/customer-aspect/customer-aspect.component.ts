@@ -28,6 +28,7 @@ export class CustomerAspectComponent implements OnInit {
 
   customerTabSelection : string = "all";
   customerAspectData : any = [];
+  previousTab = 'all'
   customerAspectAcutalData : any;
   onChangeCall: boolean = false;
   botId:any;
@@ -44,6 +45,8 @@ export class CustomerAspectComponent implements OnInit {
     "limit":3, // number of record to be fetched
     "fetched":0  // count of previously fetched responses (default 0)
   }
+
+  exhaustiveAspectData: any = [];
 
   isLoading: boolean = false;
   hasMore: boolean = false;
@@ -91,27 +94,28 @@ export class CustomerAspectComponent implements OnInit {
   }
 
   updateCustomerAspectData(empty =false) {
+    let streamId = this.dashboardService.getSelectedBotDetails()._id;
+    let params = {
+      streamId,
+    };
     if (this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData) {
-      this.updateViewData(this.widgetData);
       this.payload.dataType = this.customerTabSelection;
       this.payload.sessionType = this.customerDropdownSelection;
       this.isLoading = true;
       this.cdRef.detectChanges();
-      if(empty){
+      if(this.previousTab !== this.customerTabSelection) {
+        this.exhaustiveAspectData = [];
+        this.previousTab = this.customerTabSelection;
         this.skip = 0;
         this.fetched = 0;
       }
-      let botId = this.dashboardService.getSelectedBotDetails()._id;
-      let params: any = {
-        botId,
-      };
-      let body: any = {
-        limit: this.limit,
-        skip: this.skip,
-        fetched: this.fetched
+      let body = {
+        skip : this.skip,
+        fetched : this.fetched,
+        limit : this.limit,
       }
-      body = {...body, ... this.payload}
-      this.service.invoke('customersLookingfor', this.params, body).pipe(finalize(() => {
+      body = {...this.payload, ...body}
+      this.service.invoke('customersLookingfor', params, body).pipe(finalize(() => {
         this.isLoading = false;
         this.cdRef.detectChanges();
       })).subscribe(data => {
@@ -119,19 +123,13 @@ export class CustomerAspectComponent implements OnInit {
           this.skip = this.skip+1;
           this.hasMore = data.hasMore;
           this.updateViewData(data);
-          // this.agentAspectTableData.push(...data.actualData);
           this.cdRef.detectChanges();
         }
     });
     } else {
-      // this.dashboardService.getCustomerAspectData(this.customerDropdownSelection, this.customerTabSelection).subscribe(resp => {
-      //   if (resp) {
-      //     this.updateViewData(resp);
-      //   }
-      // });
         this.payload.dataType = this.customerTabSelection;
         this.payload.sessionType = this.customerDropdownSelection;
-        this.service.invoke('customersLookingfor', this.params, this.payload).subscribe((data : any) => {
+        this.service.invoke('customersLookingfor', params, this.payload).subscribe((data : any) => {
           this.updateViewData(data);
         });
 
@@ -140,13 +138,12 @@ export class CustomerAspectComponent implements OnInit {
 
   updateViewData(resp){
     this.customerAspectAcutalData = Object.assign({}, resp);
-    this.customerAspectData = [];
     if(resp && Object.keys(resp).length > 0 && resp[this.customerDropdownSelection]){
       let data = resp[this.customerDropdownSelection];
       if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
         this.customerAspectData = data.length <=4 ? data : data.slice(0,4);
       }else {
-        this.customerAspectData.push(...data);
+        this.exhaustiveAspectData.push(...data);
       }
     }
   }
@@ -157,6 +154,7 @@ export class CustomerAspectComponent implements OnInit {
   }
 
   openSlider(componentName){
+    this.exhaustiveAspectData = [];
     this.openSliderChild.emit({componentName : componentName, data : this.customerAspectAcutalData});
   }
 
