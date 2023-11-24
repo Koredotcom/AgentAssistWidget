@@ -131,6 +131,18 @@ export class ChecklistComponent {
     }
   }
 
+  terminateChecklist(){
+    let selectedCheckList = this.checklists[this.selcLinx];
+    this.checklists[this.selcLinx].stages.forEach(stage => {
+      stage.steps.forEach(step => {
+        step.complete = true;
+        step.ongoing = false;
+      });
+    });
+    this.checklists[this.selcLinx].completed = true;
+    this.sendCheckListCompleteEvent(selectedCheckList._id);
+  }
+
   sendCheckListCompleteEvent(id) {
     let checklistParams: any = this.commonService.prepareChecklistPayload(this.connectionDetails, 'checklist_closed', this.checkListData, {"id": id});
     this.websocketService.emitEvents(EVENTS.checklist_closed, checklistParams);
@@ -144,6 +156,7 @@ export class ChecklistComponent {
         .every(item => item.complete);
       if (completed) {
         // this.checklists[i].stages[0].opened = false;
+        this.checklists[i].completed = true;
         this.sendCheckListCompleteEvent(id);
       }
     } else {
@@ -165,6 +178,7 @@ export class ChecklistComponent {
         }
       }
       if (open && close) {
+        this.checklists[i].completed = true;
         completed = true;
       }
       if (completed) {
@@ -180,11 +194,12 @@ export class ChecklistComponent {
   }
 
 
-  checkListResume(event, cl, i, si) {
+  checkListResume(i) {
+    let cl = this.checklists[i];
     this.isProceedToClose = true;
-    event.stopPropagation();
-    this.closeAllCheckLists();
-    this.checklists[i].stages[si].opened = true;
+    // event.stopPropagation();
+    // this.closeAllCheckLists();
+    // this.checklists[i].stages[si].opened = true;
     let checklistParams: any = this.commonService.prepareChecklistPayload(this.connectionDetails, 'checklist_resume', this.checkListData, {"id": cl._id});
     this.websocketService.emitEvents(EVENTS.checklist_resume, checklistParams);
   }
