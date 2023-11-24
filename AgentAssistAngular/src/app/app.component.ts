@@ -12,6 +12,7 @@ import { ServiceInvokerService } from './services/service-invoker.service';
 import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
 import { HandleSubjectService } from './services/handle-subject.service';
 import { finalize } from 'rxjs';
+import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
 
 
 @Component({
@@ -37,7 +38,8 @@ export class AppComponent implements OnInit, OnDestroy{
     private dirService: DirService,
     private serviceInvoker : ServiceInvokerService,
     private koregenerateUUIDPipe : KoreGenerateuuidPipe,
-    private handleSubjectService: HandleSubjectService
+    private handleSubjectService: HandleSubjectService,
+    private sanitizeHTMLPipe : SanitizeHtmlPipe
   ) {
     this.translate.setDefaultLang('en');
   }
@@ -152,7 +154,7 @@ export class AppComponent implements OnInit, OnDestroy{
       e.data?.data?.forEach((ele) => {
         let agent_assist_request = {
           'conversationId': ele.conversationId,
-          'query': ele.value,
+          'query': this.sanitizeHTMLPipe.transform(ele.value),
           'botId': ele.botId,
           'agentId': '',
           'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
@@ -199,14 +201,14 @@ export class AppComponent implements OnInit, OnDestroy{
         'botId': this.connectionDetails.botId,
         'conversationId': userInputData.conversationid,
         'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
-        'query': userInputData.value,
+        'query': this.sanitizeHTMLPipe.transform(userInputData.value),
         'positionId' : this.rootService.isAutomationOnGoing ? this.rootService.currentPositionId : null
       }
       let user_messsage = {
         "botId": this.connectionDetails.botId,
         "type": "text",
         "conversationId": userInputData.conversationid,
-        "value": userInputData.value,
+        "value": this.sanitizeHTMLPipe.transform(userInputData.value),
         "author": {
           "firstName": userInputData.author?.firstName,
           "lastName": userInputData.author?.lastName,
