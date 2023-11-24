@@ -9,6 +9,7 @@ import { HandleSubjectService } from './handle-subject.service';
 import * as $ from 'jquery';
 import { TemplateRenderClassService } from './template-render-class.service';
 
+declare var $: any;
 @Injectable({
   providedIn: 'root'
 })
