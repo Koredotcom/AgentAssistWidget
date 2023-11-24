@@ -38,6 +38,14 @@ export class I1 implements HttpInterceptor {
                 headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
                 headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
             }
+        }else if(headers.indexOf('checklist') >= 0){
+            if(fromSAT && token){
+                headerObj.accountId = accountId
+                headerObj.Authorization = 'bearer' + ' ' + token;
+            }else{
+                headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
+                headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
+            }
         }
         const modified = req.clone({setHeaders: headerObj});        
         return next.handle(modified);

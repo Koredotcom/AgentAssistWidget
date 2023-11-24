@@ -58,6 +58,9 @@ export class RootService {
   bulbClick : boolean = false;
   aaHelpers = null;
 
+  primaryChecklist: any = [];
+  dynamicChecklist: any = [];
+
   constructor(private templateRenderClassService: TemplateRenderClassService) {
     // this.chatWindowInstance = new chatWindow();
     this.aaHelpers = new agentAssistHelpers();
@@ -376,6 +379,21 @@ export class RootService {
         conversationId: this.connectionDetails.conversationId,
         payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
       };
+      parent.postMessage(message, '*');
+    }
+  }
+
+  sendAndCopyForPlaybook(eventName, conversationId, payload){
+    let message : any = {
+      method: (eventName == ProjConstants.SEND_METHOD) ? ProjConstants.SEND_METHOD : ProjConstants.COPY_METHOD,
+      name: (eventName == ProjConstants.SEND_METHOD) ? ProjConstants.SENDMSG : ProjConstants.COPYMSG,
+      conversationId,
+      payload,
+    };
+
+    if (eventName == ProjConstants.SEND_METHOD) {
+      window.parent.postMessage(message, '*');
+    } else if (eventName == ProjConstants.COPY_METHOD) {
       parent.postMessage(message, '*');
     }
   }
