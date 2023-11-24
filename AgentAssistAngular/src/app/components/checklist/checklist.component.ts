@@ -273,6 +273,8 @@ export class ChecklistComponent {
     if (this.checklists[this.selcLinx]?.stages[this.selsTinx]?.steps[0]) {
       this.checklists[this.selcLinx].stages[this.selsTinx].steps[0].ongoing = true;
       this.selsPinx = 0;
+      let stepId = this.checklists[this.selcLinx].stages[this.selsTinx].steps[0]._id;
+      this.scrollView(stepId);
     }
   }
 
@@ -337,6 +339,7 @@ export class ChecklistComponent {
         step.ongoing = true;
         allStepsComplete = false;
         this.selsPinx = index;
+        this.scrollView(step._id);
         break;
       }
       index++;
@@ -349,6 +352,14 @@ export class ChecklistComponent {
     this.selsTinx = stInx;
     this.selsPinx = stepInx;
     this.checklists[this.selcLinx].stages[this.selsTinx].steps[this.selsPinx].ongoing = true;
+    let stepId = this.checklists[this.selcLinx].stages[this.selsTinx].steps[this.selsPinx]._id;
+    this.scrollView(stepId);
+  }
+
+  scrollView(stepId){
+    if(document.getElementById(stepId)){
+      document.getElementById(stepId).scrollIntoView();
+    }
   }
 
   closeAllStepsInStage(stInx) {
