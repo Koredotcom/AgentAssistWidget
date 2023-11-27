@@ -13,40 +13,50 @@ export class I1 implements HttpInterceptor {
         const {fromSAT, token, accountId} = this.rootService.getConnectionDetails(); 
         let botId = req.headers.get('botId');        
         let headerObj : any = {"content-type": 'application/json', 'iid' : botId ? botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'};
-        let headers : any = req.headers.keys();        
-        if(headers.indexOf("historyAPiCall") >= 0){
-            if(fromSAT && token){
-                headerObj.Authorization = 'bearer' + ' ' + token;
-                headerObj.eAD = 'false';
-                headerObj.accountId = accountId
-            }else{
-                headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
-            }
-        }else if(headers.indexOf("transcriptHistory") >= 0){
+        let headers : any = req.headers.keys();  
+
+        if(fromSAT && token){
+            headerObj.Authorization = 'bearer' + ' ' + token;
+            headerObj.eAD = 'false';
+            headerObj.accountId = accountId
+        }else {
             headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken,
             headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
-        }else if(headers.indexOf("autoSearch") >= 0){
-            headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
-            headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
-            headerObj.eAD = 'true';
-        }else if(headers.indexOf('settings') >= 0){
-            if(fromSAT && token){
-                headerObj.accountId = accountId
-                headerObj.Authorization = 'bearer' + ' ' + token;
-                headerObj.eAD = 'false';
-            }else{
-                headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
-                headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
-            }
-        }else if(headers.indexOf('checklist') >= 0){
-            if(fromSAT && token){
-                headerObj.accountId = accountId
-                headerObj.Authorization = 'bearer' + ' ' + token;
-            }else{
-                headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
-                headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
-            }
         }
+            
+        // if(headers.indexOf("historyAPiCall") >= 0){
+        //     if(fromSAT && token){
+        //         headerObj.Authorization = 'bearer' + ' ' + token;
+        //         headerObj.eAD = 'false';
+        //         headerObj.accountId = accountId
+        //     }else{
+        //         headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
+        //     }
+        // }else if(headers.indexOf("transcriptHistory") >= 0){
+        //     headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken,
+        //     headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
+        // }else if(headers.indexOf("autoSearch") >= 0){
+        //     headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
+        //     headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
+        //     headerObj.eAD = 'true';
+        // }else if(headers.indexOf('settings') >= 0){
+        //     if(fromSAT && token){
+        //         headerObj.accountId = accountId
+        //         headerObj.Authorization = 'bearer' + ' ' + token;
+        //         headerObj.eAD = 'false';
+        //     }else{
+        //         headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
+        //         headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
+        //     }
+        // }else if(headers.indexOf('checklist') >= 0){
+        //     if(fromSAT && token){
+        //         headerObj.accountId = accountId
+        //         headerObj.Authorization = 'bearer' + ' ' + token;
+        //     }else{
+        //         headerObj.Authorization = this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
+        //         headerObj.accountId = this.rootService.grantResponseObj?.userInfo?.accountId
+        //     }
+        // }
         const modified = req.clone({setHeaders: headerObj});        
         return next.handle(modified);
     }

@@ -59,10 +59,6 @@ export class SearchComponent implements OnInit {
   typeAHead = this.typeAHeadDeBounce((val, connectionDetails) => this.getAutoSearchApiResult(val, connectionDetails));
   onSearch(event: any) {
     if (this.searchText?.length > 0) {
-      if(this.typeAHeads?.length){
-        let autoText = this.typeAHeads.find(ele => ele.includes(this.searchText));
-        this.autocompleteText = autoText ? autoText : '';
-      }
       this.typeAHead(this.searchText, this.rootService.connectionDetails);
     } else {
       this.autocompleteText = '';
@@ -70,11 +66,6 @@ export class SearchComponent implements OnInit {
       this.searchResponse = {};
       this.handleSubjectService.setSearchResponse(this.searchResponse);
     }
-    // else {
-    //   this.filterSet = [];
-    //   this.typeahead.emit('');
-    // }
-
   }
 
   typeAHeadDeBounce(func, timeout = 300) {
@@ -114,7 +105,13 @@ export class SearchComponent implements OnInit {
 
       this.querySuggestions = res?.querySuggestions;
       this.typeAHeads = res?.typeAheads;
-
+      if(this.typeAHeads?.length){
+        let searchText = this.searchText?.trim()?.split(' ')?.pop();
+        let autoText = this.typeAHeads[0];
+        this.autocompleteText = autoText ? this.searchText.trim() + autoText.replace(searchText, '') : this.searchText;
+      }else{
+        this.autocompleteText = this.searchText;
+      }
     })
   }
 

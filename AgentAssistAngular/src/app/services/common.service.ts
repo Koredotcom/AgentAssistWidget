@@ -317,7 +317,7 @@ export class CommonService {
     return false;
   }
 
-  formatRunningLastAutomationEntityNode(assistResponseArray, data, showErrorPrompt, renderResponse, dropdownHeaderUuids, tab) {
+  formatRunningLastAutomationEntityNode(assistResponseArray, data, showErrorPrompt, renderResponse, dropdownHeaderUuids, tab, previousEntityNodes?) {
     assistResponseArray.map(arrEle => {
       if (arrEle.uuid && arrEle.uuid == dropdownHeaderUuids) {
         arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
@@ -337,11 +337,38 @@ export class CommonService {
         } else {
           arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
         }
+        if(previousEntityNodes?.length >= 1){
+          arrEle.automationsArray = arrEle.automationsArray.concat(previousEntityNodes);
+        }
       }
     });
     // console.log(assistResponseArray, "assist response arry *******", data);
     
     return assistResponseArray;
+  }
+
+  getPreviousEntityNodesAndValues(assistResponseArray, data){
+    let entityNodes : any = [];
+    if(data.entities.length >= 1){
+      let entityNameList = data.entities.reduce((acc, automation) => {
+        acc[automation.name] = 'true';
+        return acc;
+      }, {});      
+      assistResponseArray.map(arrEle => {
+        if(arrEle.restart){
+          arrEle.restart = false;
+          if (arrEle?.automationsArray?.length >= 1) {
+            arrEle.automationsArray.forEach(automation => {
+              let entityName = automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation.data.entityName;
+              if(automation.data.isPrompt && entityNameList[entityName]){
+                entityNodes.push(automation);
+              }
+            });
+          }
+        }
+      });
+    }    
+    return entityNodes;
   }
 
   formatRunningLastSmallTalkEntityNode(assistResponseArray, renderResponse) {

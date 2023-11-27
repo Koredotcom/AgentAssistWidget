@@ -165,7 +165,8 @@ export class MybotComponent {
       renderResponse.toggleOverride = data.isPrompt ? true : false;
       renderResponse.hideOverrideDiv =  true;
       this.currentRunningStep = data.entityDisplayName ? data.entityDisplayName : data.entityName;
-      this.mybotResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.mybotResponseArray, data, this.showErrorPrompt, renderResponse, this.rootService.myBotDropdownHeaderUuids, this.projConstants.MYBOT)
+      let previousEntityNodes = this.commonService.getPreviousEntityNodesAndValues(this.mybotResponseArray,data);
+      this.mybotResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.mybotResponseArray, data, this.showErrorPrompt, renderResponse, this.rootService.myBotDropdownHeaderUuids, this.projConstants.MYBOT, previousEntityNodes)
       this.mybotResponseArray = structuredClone(this.mybotResponseArray);
     }
 
@@ -256,6 +257,7 @@ export class MybotComponent {
       if(!this.showRestart){
         this.closeOffCanvas();
       }else{
+        this.mybotResponseArray[this.mybotResponseArray.length - 1].restart = true;
         this.restartDialogName = this.dialogName;
         this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId)
         // if(popupObject.inputType == this.projConstants.STARTOVER){

@@ -309,7 +309,8 @@ export class AssistComponent implements OnInit, OnDestroy {
         renderResponse.hideOverrideDiv = true;
       }
       this.currentRunningStep = data.entityDisplayName ? data.entityDisplayName : data.entityName;
-      this.assistResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.assistResponseArray, data, this.showErrorPrompt, renderResponse, this.rootService.dropdownHeaderUuids, this.projConstants.ASSIST);
+      let previousEntityNodes = this.commonService.getPreviousEntityNodesAndValues(this.assistResponseArray,data);
+      this.assistResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.assistResponseArray, data, this.showErrorPrompt, renderResponse, this.rootService.dropdownHeaderUuids, this.projConstants.ASSIST, previousEntityNodes);
       this.assistResponseArray = structuredClone(this.assistResponseArray);      
     }
 
@@ -470,6 +471,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.closeOffCanvas();
       }else{
         this.restartDialogName = this.dialogName;
+        this.assistResponseArray[this.assistResponseArray.length - 1].restart = true;
         this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
         // if(popupObject.inputType == this.projConstants.STARTOVER){
         // }else if(popupObject.inputType == this.projConstants.RESTART_INPUTS){
