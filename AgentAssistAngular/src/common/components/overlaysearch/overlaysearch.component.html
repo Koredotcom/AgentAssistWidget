@@ -49,7 +49,7 @@
                         <div class="left-content">
                             <div class="title-text" [id]="'automation-' + i">
                                 <div class="desc-text-bot" title="{{dialog.name}}">{{dialog.name}}</div>                                
-                                <span class="bot-name-text" *ngIf="dialog.childBotName" title="{{dialog.childBotName}}">({{dialog.childBotName}})</span>
+                                <span class="bot-name-text" *ngIf="dialog?.childBotName" title="{{dialog?.childBotName}}">({{dialog?.childBotName}})</span>
                             </div>
                         </div>
                         <div class="action-links">
@@ -78,7 +78,7 @@
                             <div class="title-text" [id]="'titleLib-' + i"
                                 >
                                 <div class="desc-text-bot" title="{{faq.displayName ? faq.displayName : faq.question}}">{{faq.displayName ? faq.displayName : faq.question}}</div>
-                                <span *ngIf="faq.childBotName" class="bot-name-text" title="{{faq.childBotName}}">({{faq.childBotName}})</span>
+                                <span *ngIf="faq?.childBotName" class="bot-name-text" title="{{faq?.childBotName}}">({{faq?.childBotName}})</span>
                                 <span *ngIf="faq.answer && faq.answer.length > 1 && ((!faq.seeMoreWrapper && faq.answerRender) || (faq.toggle && !faq.answerRender && !faq.seeMoreWrapper))"> 1/{{faq.answer.length}}</span>
                                 <i class="ast-carrotup" [id]="'checkLib-' + i" *ngIf="!faq.answerRender && !faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
                                 <i class="ast-carrotup rotate-carrot" [id]="'checkLib-' + i" *ngIf="!faq.answerRender && faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>

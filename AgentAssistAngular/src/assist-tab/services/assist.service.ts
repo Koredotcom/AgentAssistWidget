@@ -340,14 +340,14 @@ export class AssistService {
             </div>
         </div>
         <div class="action-links">
-            <button class="send-run-btn" id="run-${uuids + index}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
+            <button class="send-run-btn" id="run-${uuids + index}" data-child-bot-id="${ele?.childBotId}" data-child-bot-name="${ele?.childBotName}"
             data-dialog-run='${JSON.stringify(ele)}'>RUN</button>
             <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids + index}">
                 <div class="elipse-icon" id="elipseIcon-${uuids + index}">
                     <i class="ast-overflow" id="overflowIcon-${uuids + index}"></i>
                 </div>
                 <div class="dropdown-content-elipse" id="runAgtBtn-${uuids + index}" data-dialog-run='${JSON.stringify(ele)}'>
-                    <div class="list-option" id="agentSelect-${uuids + index}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
+                    <div class="list-option" id="agentSelect-${uuids + index}" data-child-bot-id="${ele?.childBotId}" data-child-bot-name="${ele?.childBotName}"
                     data-dialog-run='${JSON.stringify(ele)}'>Run with Agent Inputs</div>
                 </div>
         </div>

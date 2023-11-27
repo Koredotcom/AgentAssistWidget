@@ -314,8 +314,8 @@ export class AssistComponent implements OnInit {
     }
     connectionDetails.positionId = dialogPositionId;
     connectionDetails.entities = this.commonService.isRestore ? JSON.parse(this.commonService.previousEntitiesValue) : this.commonService.entitiestValueArray
-    connectionDetails.childBotId = dialog.childBotId;
-    connectionDetails.childBotName = dialog.childBotName;
+    connectionDetails.childBotId = dialog?.childBotId || '';
+    connectionDetails.childBotName = dialog?.childBotName || '';
     if(dialog.userInput){
      connectionDetails.userInput = dialog.userInput;
     }
@@ -611,7 +611,7 @@ export class AssistComponent implements OnInit {
           let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
           let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, index, ele);
           dialogSuggestions.innerHTML += dialogsHtml;
-          if(ele.childBotName){
+          if(ele?.childBotName){
             let dialogHeader = document.getElementById(`automation-${uuids + index}`);
             dialogHeader.innerHTML += `<span class="bot-name-text" title="${ele.childBotName}"> (${ele.childBotName}) </span>`;
             
@@ -673,7 +673,7 @@ export class AssistComponent implements OnInit {
 
           faqsSuggestions.innerHTML += faqHtml;
 
-          if(ele.childBotName){
+          if(ele?.childBotName){
             let faqHeader = document.getElementById(`title-${uuids + index}`);
             faqHeader.innerHTML += `<span class="bot-name-text" title="${ele.childBotName}"> (${ele.childBotName}) </span>`;
           }
@@ -1383,8 +1383,8 @@ export class AssistComponent implements OnInit {
       intentName: data.name,
       searchFrom: this.projConstants.ASSIST,
       positionId: this.randomUUIDPipe.transform(IdReferenceConst.positionId),
-      childBotId : data.childBotId,
-      childBotName : data.childBotName
+      childBotId : data?.childBotId || '',
+      childBotName : data?.childBotName || ''
     }
     document.getElementById(IdReferenceConst.AGENT_RUN_BTN + '-' + uuid)?.addEventListener('click', (event) => {
       this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
@@ -1478,8 +1478,8 @@ export class AssistComponent implements OnInit {
       let runEventObj: any = {
         agentRunButton: false,
         intentName: data.name,
-        childBotId : data.childBotId,
-        childBotName : data.childBotName
+        childBotId : data?.childBotId || '',
+        childBotName : data?.childBotName || ''
       }
       this.handleSubjectService.setRunButtonClickEvent(runEventObj);
     });
@@ -1715,7 +1715,7 @@ export class AssistComponent implements OnInit {
                     <div class="action-links">
                         <button class="send-run-btn" data-conv-id="${this.commonService.configObj.conversationid}"
                         data-bot-id="${res.botId}" data-intent-name="${ele.name}"
-                        data-history-run="true" id="run-${uniqueID + index}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
+                        data-history-run="true" id="run-${uniqueID + index}" data-child-bot-id="${ele?.childBotId}" data-child-bot-name="${ele?.childBotName}"
                         data-dialog-run='${JSON.stringify(ele)}'>RUN</button>
                         <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uniqueID + index}">
                             <div class="elipse-icon" id="elipseIcon-${uniqueID + index}">
@@ -1723,14 +1723,14 @@ export class AssistComponent implements OnInit {
                             </div>
                             <div class="dropdown-content-elipse" id="runAgtBtn-${uniqueID + index}" data-dialog-run='${JSON.stringify(ele)}'>
                                 <div class="list-option" data-conv-id="${this.commonService.configObj.conversationid}"
-                                data-bot-id="${res.botId}" data-intent-name="${ele.name}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
+                                data-bot-id="${res.botId}" data-intent-name="${ele.name}" data-child-bot-id="${ele?.childBotId}" data-child-bot-name="${ele?.childBotName}"
                                  id="agentSelect-${uniqueID + index}"
                                 data-exhaustivelist-run="true" data-dialog-run='${JSON.stringify(ele)}'>Run with Agent Inputs</div>
                             </div>
                     </div>
                 </div>`;
           dialogSuggestions.innerHTML += dialogsHtml;
-          if(ele.childBotName){
+          if(ele?.childBotName){
             let dialogHeader = document.getElementById(`automation-${uniqueID + index}`);
             dialogHeader.innerHTML += `<span class="bot-name-text" title="${ele.childBotName}"> (${ele.childBotName}) </span>`;
           }
@@ -1755,7 +1755,7 @@ export class AssistComponent implements OnInit {
 
           faqsSuggestions.innerHTML += faqHtml;
 
-          if(ele.childBotName){
+          if(ele?.childBotName){
             let faqHeader = document.getElementById(`title-${uniqueID + index}`);
             faqHeader.innerHTML += `<span class="bot-name-text" title="${ele.childBotName}"> (${ele.childBotName}) </span>`;
           }
