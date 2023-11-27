@@ -93,9 +93,9 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   emitSearchRequest(searchObj, isSearchFlag, faqToggle = false) {
-    if(searchObj.childBotId !== '') {
-      this.commonService.childBotDetails.childBotId = searchObj.childBotId;
-      this.commonService.childBotDetails.childBotName = searchObj.childBotName;
+    if(searchObj?.childBotId !== '' || searchObj?.childBotName !== '') {
+      this.commonService.childBotDetails.childBotId = searchObj?.childBotId || '';
+      this.commonService.childBotDetails.childBotName = searchObj?.childBotName || '';
     }
     this.handleSubjectService.setLoader(true);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
@@ -108,8 +108,8 @@ export class OverlaysearchComponent implements OnInit {
     if(!isSearchFlag && !faqToggle){
       connectionDetails.intentName = searchObj.value;
     }
-    connectionDetails.childBotId = searchObj.childBotId;
-    connectionDetails.childBotName = searchObj.childBotName;
+    connectionDetails.childBotId = searchObj?.childBotId || '';
+    connectionDetails.childBotName = searchObj?.childBotName || '';
     let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
   }

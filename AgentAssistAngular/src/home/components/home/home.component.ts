@@ -1010,8 +1010,8 @@ setProactiveMode(){
         let runEventObj: any = {
           agentRunButton: false,
           intentName: data.name,
-          childBotId : data.childBotId,
-          childBotName : data.childBotName,
+          childBotId : data?.childBotId || '',
+          childBotName : data?.childBotName || '',
           userInput : data.userInput
         }
         this.handleSubjectService.setRunButtonClickEvent(runEventObj);
@@ -1026,8 +1026,8 @@ setProactiveMode(){
           intentName: data.name,
           searchFrom: this.projConstants.ASSIST,
           positionId: this.randomUUIDPipe.transform(IdReferenceConst.positionId),
-          childBotId : data?.childBotId,
-          childBotName : data?.childBotName,
+          childBotId : data?.childBotId || '',
+          childBotName : data?.childBotName || '',
           botId : this.connectionDetails?.botId,
           userInput : data.userInput
         }

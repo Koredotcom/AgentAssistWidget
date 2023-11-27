@@ -184,8 +184,10 @@ export class CommonService {
     } else {
       agent_assist_request['entities'] = [];
     }
-    if(data.childBotId) {
-      agent_assist_request['childBotId'] = data.childBotId;
+    if(data?.childBotId) {
+      agent_assist_request['childBotId'] = data?.childBotId;
+    }
+    if(data?.childBotName) {
       agent_assist_request['childBotName'] = data.childBotName;
     }
     if(this.configObj?.autoBotId && this.configObj?.autoBotId !== 'undefined') {
@@ -694,8 +696,8 @@ export class CommonService {
         showMoreButton: false,
         showLessButton: false,
         answerRender : faq.answer || false,
-        childBotId : faq.childBotId,
-        childBotName : faq.childBotName
+        childBotId : faq?.childBotId || '',
+        childBotName : faq?.childBotName || ''
       }
       if(faq.answer && faq.answer.length > 0){
         for(let ans of faq.answer){
@@ -721,8 +723,8 @@ export class CommonService {
     }
 
     for (let dialog of dialoguesArray) {
-      searchResponse.dialogs.push({ name: dialog.name, agentRunButton: false, childBotId : dialog.childBotId,
-        childBotName : dialog.childBotName });
+      searchResponse.dialogs.push({ name: dialog.name, agentRunButton: false, childBotId : dialog?.childBotId || '',
+        childBotName : dialog?.childBotName || '' });
     }
     console.log(searchResponse, "searchresponse");
 
@@ -1191,8 +1193,8 @@ export class CommonService {
         connectionDetails.value = dialog.intentName;
       }
       connectionDetails.positionId = dialog.positionId;
-      connectionDetails.childBotId = dialog.childBotId;
-      connectionDetails.childBotName = dialog.childBotName;
+      connectionDetails.childBotId = dialog?.childBotId || '';
+      connectionDetails.childBotName = dialog?.childBotName || '';
 
       let agent_assist_agent_request_params = this.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.webSocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
