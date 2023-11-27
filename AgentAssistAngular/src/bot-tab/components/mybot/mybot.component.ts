@@ -414,15 +414,15 @@ export class MybotComponent implements OnInit {
       connectionDetails.value = value;
       connectionDetails.isSearch = false;
       connectionDetails.positionId = this.myBotDialogPositionId;
-      connectionDetails.childBotName = this.commonService?.childBotDetails.childBotName;
-      connectionDetails.childBotId = this.commonService?.childBotDetails.childBotId;
+      connectionDetails.childBotName = this.commonService?.childBotDetails?.childBotName || '';
+      connectionDetails.childBotId = this.commonService?.childBotDetails?.childBotId || '';
       if (this.connectionDetails?.interactiveLanguage && typeof this.connectionDetails?.interactiveLanguage == 'string' && this.connectionDetails?.interactiveLanguage != "''") {
         connectionDetails['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
       }
       if (intent) {
         connectionDetails.intentName = value;
-        connectionDetails.childBotName = this.commonService.childBotDetails.childBotName;
-      connectionDetails.childBotId = this.commonService.childBotDetails.childBotId;
+        connectionDetails.childBotName = this.commonService.childBotDetails?.childBotName || '';
+      connectionDetails.childBotId = this.commonService.childBotDetails?.childBotId || '';
       }
       let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);

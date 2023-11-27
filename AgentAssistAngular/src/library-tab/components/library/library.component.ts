@@ -224,15 +224,15 @@ export class LibraryComponent implements OnInit {
         connectionDetails.value = dialog.userInput;
       }
       connectionDetails.positionId = dialog.positionId;
-      connectionDetails.childBotId = dialog.childBotId;
-      connectionDetails.childBotName = dialog.childBotName;
+      connectionDetails.childBotId = dialog?.childBotId || '';
+      connectionDetails.childBotName = dialog?.childBotName || '';
       let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
     }
     if (this.commonService.isMyBotAutomationOnGoing) {
       let connectionDetails: any = Object.assign({}, this.connectionDetails);
-      this.commonService.childBotDetails.childBotId = dialog.childBotId;
-      this.commonService.childBotDetails.childBotName = dialog.childBotName;
+      this.commonService.childBotDetails.childBotId = dialog?.childBotId || '';
+      this.commonService.childBotDetails.childBotName = dialog?.childBotName || '';
     }
   }
 
