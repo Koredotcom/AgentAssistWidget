@@ -1,6 +1,5 @@
-    <div class="echart-container">
-        <div echarts [options]="initChartOption" class="chart-container-small" (click)="toggleSentiChart()"
-            [merge]="mergeSentiOptions"></div>
+    <!-- <div class="echart-container">
+        <div echarts [options]="initChartOption" class="chart-container-small" (click)="toggleSentiChart()" [merge]="mergeSentiOptions"></div>
         <span class="title-info" [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity]?.className">
             <i [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity]?.icon"></i>
             <span>{{currentPolarity}}</span>
@@ -13,5 +12,18 @@
                 </div>
             </div>
             <div echarts [options]="chartOption" class="chart-container" [merge]="mergeSentiOptions"></div>
+        </div>
+    </div> -->
+
+    <div class="sentiment-data-analysis" ngbDropdown container="body">
+        <button class="btn-sentiment-graph" ngbDropdownToggle>
+            <div class="chart-data-s" echarts [options]="initChartOption" [merge]="mergeSentiOptions"></div>
+            <div class="indication-chart">{{currentPolarity}}</div>
+        </button>
+        <div ngbDropdownMenu class="sentiment-drpdown">
+            <h1>{{'SENTI_ANALY' | translate}} <i class="krIocnsFont-info-circle"></i></h1>
+            <h2>+Pos</h2>
+            <div echarts [options]="chartOption" class="chart-data-content" [merge]="mergeSentiOptions"></div>
+            <h2>-Neg</h2>
         </div>
     </div>

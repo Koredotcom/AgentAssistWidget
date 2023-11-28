@@ -53,6 +53,7 @@
             font-weight: 400;
             line-height: 18px;
             min-height: 36px;
+            background: transparent;
             &:focus{
                 + .border-outline{
                     border-radius: 8px;

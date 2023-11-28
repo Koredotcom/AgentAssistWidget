@@ -33,18 +33,18 @@ export class SentimentScoreComponent {
 
   ngOnInit(){
 
-    // setInterval(() => {
-    //   let object: any = {
-    //     "botId": "st-6e32a4bb-3b5f-558d-9a88-a824a39a0334",
-    //     "event": "realtime_sentiment_response",
-    //     "conversationId": "CH10de3ef1dcc14b66b0f65e56be9aa740",
-    //     "sentiment": { "label": "dissatisfied", "coarse": "negative", "polarity": 3, "text": "fuckoff", "timestamp": 1687876568281 },
-    //     "messageId": "1687876568271",
-    //     "isPrompt": false
-    //   }
-    //   object.sentiment.polarity = Math.floor(Math.random() * (10 - 1 + 1) + 1);
-    //   this.handleRealtimeSentiResponse(object.sentiment);
-    // }, 5000)
+    setInterval(() => {
+      let object: any = {
+        "botId": "st-6e32a4bb-3b5f-558d-9a88-a824a39a0334",
+        "event": "realtime_sentiment_response",
+        "conversationId": "CH10de3ef1dcc14b66b0f65e56be9aa740",
+        "sentiment": { "label": "dissatisfied", "coarse": "negative", "polarity": 3, "text": "fuckoff", "timestamp": 1687876568281 },
+        "messageId": "1687876568271",
+        "isPrompt": false
+      }
+      object.sentiment.polarity = Math.floor(Math.random() * (10 - 1 + 1) + 1);
+      this.handleRealtimeSentiResponse(object.sentiment);
+    }, 1000)
 
     this.subscribeEvents();
   }

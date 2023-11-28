@@ -1,15 +1,16 @@
 
-
-<div class="nudges-template-data">
-    <ng-container *ngFor="let item of coachingNudges; let i = index">
-        <div class="nudges-card" *ngIf="item" [ngClass]="coachingConst.NUDGE_DATA[item?.expression]?.className">
-            <div class="icon_block" *ngIf="coachingConst.NUDGE_DATA[item?.expression]?.icon">
-                <i [ngClass]="coachingConst.NUDGE_DATA[item?.expression]?.icon"></i>
+<div class="nudges-wrapper-fixed" *ngIf="coachingNudges.length >=1">
+    <div class="nudges-template-data">
+        <ng-container *ngFor="let item of coachingNudges; let i = index">
+            <div class="nudges-card" *ngIf="item" [ngClass]="coachingConst.NUDGE_DATA[item?.expression]?.className">
+                <div class="icon_block" *ngIf="coachingConst.NUDGE_DATA[item?.expression]?.icon">
+                    <i [ngClass]="coachingConst.NUDGE_DATA[item?.expression]?.icon"></i>
+                </div>
+                <p>{{item?.message?.title}}</p>
+                <button class="close-nudge" (click)="closeNudge(item.actionId)">
+                    <i class="krIocnsFont-close-md"></i>
+                </button>
             </div>
-            <p>{{item?.message?.title}}</p>
-            <button class="close-nudge" (click)="closeNudge(item.actionId)">
-                <i class="krIocnsFont-close-md"></i>
-            </button>
-        </div>
-    </ng-container>
+        </ng-container>
+    </div>
 </div>

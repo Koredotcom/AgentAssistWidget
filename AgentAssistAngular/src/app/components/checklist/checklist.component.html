@@ -38,7 +38,7 @@
                     </div>
                     <div class="bottom-titles-info" *ngIf="checklists[selcLinx]?.stages[selsTinx]?.name">
                         <h6>Stage: </h6>
-                        <div ngbDropdown class="dropdown playbook-drp">
+                        <div ngbDropdown class="dropdown playbook-drp" container="body">
                             <button type="button" id="playbookDrp" ngbDropdownToggle>
                                 <span>{{checklists[selcLinx]?.stages[selsTinx]?.name}}</span>
                                 <i class="krIocnsFont-chevron-down arrow-icon"

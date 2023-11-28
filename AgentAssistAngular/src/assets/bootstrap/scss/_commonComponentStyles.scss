@@ -133,7 +133,30 @@ app-ask-customer, app-tell-customer{
     .widgets-list-card{
         &.minimized-card{
             app-checklist{
-                
+                .playbook-wrapper {
+                    overflow: hidden;
+                    justify-content: center;
+                    .playbook-header-padding{
+                        padding: 0 10px;
+                        .playbook-header-data{
+                            border: 0;
+                        }
+                    }
+                    .playbook-wrapper-body{
+                        display: none;
+                    }
+                }
+            }
+            app-assist{
+                .card-assist {
+                    justify-content: center;
+                    .assist-header{
+                        padding: 0 10px;
+                    }
+                    .collapse-tab{
+                        display: none;
+                    }
+                }
             }
         }
     }
@@ -145,4 +168,97 @@ app-ask-customer, app-tell-customer{
     opacity: 0.5;
     background: var(--gray-modern-50, #F8FAFC);
     pointer-events: none;
+}
+
+.hints-wrapper-fixed{
+    position: fixed;
+    width: 100%;
+    height: auto;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    bottom: 72px;
+    padding: 10px 16px;
+    -webkit-animation-name: slideInUp;
+    animation-name: slideInUp;
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    app-hints{
+        width: 100%;
+        // max-width: 420px;
+    }
+}
+
+.nudges-wrapper-fixed{
+    position: fixed;
+    width: 100%;
+    height: auto;
+    z-index: 2;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    top: 40px;
+    padding: 10px 16px;
+    -webkit-animation-name: slideInDown;
+    animation-name: slideInDown;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    app-hints{
+        width: auto;
+        // max-width: 420px;
+    }
+}
+
+
+@-webkit-keyframes slideInUp {
+    0% {
+        -webkit-transform: translateY(100%);
+        transform: translateY(100%);
+        visibility: visible;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    0% {
+        -webkit-transform: translateY(100%);
+        transform: translateY(100%);
+        visibility: visible;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+@-webkit-keyframes slideInDown {
+    0% {
+        -webkit-transform: translateY(-100%);
+        transform: translateY(-100%);
+        visibility: visible;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInDown {
+    0% {
+        -webkit-transform: translateY(-100%);
+        transform: translateY(-100%);
+        visibility: visible;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
 }

@@ -131,3 +131,67 @@
     }
   }
 }
+
+.sentiment-data-analysis{
+  .btn-sentiment-graph{
+    display: flex;
+    align-items: center;
+    white-space: normal;
+    border: 0;
+    border-radius: 6px;
+    background: #FCFCFD;
+    padding: 4px;
+    gap: 10px;
+    .chart-data-s{
+      width: 30px;
+      height: 28px;
+    }
+    .indication-chart{
+      border-radius: 16px;
+      background: var(--warning-50, #FFFAEB);
+      display: flex;
+      padding: 2px 8px;
+      justify-content: center;
+      align-items: center;
+      color: var(--warning-700, #B54708);
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 18px;
+    }
+  }
+}
+
+.sentiment-drpdown{
+  padding: 10px;
+  border-radius: 8px;
+  background: #FFF;
+  box-shadow: 0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.10);
+  min-width: 200px;
+  h1{
+    color: var(--kore-grey-kore-grey-dark-4, #44474C);
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    i{
+      cursor: pointer;
+      font-size: 12px;
+      color: #5F6368;
+    }
+  }
+  h2{
+    color: var(--neutral-600, #4B5563);
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 14px;
+    padding-left: 5px;
+  }
+  .chart-data-content{
+    height: 100px;
+    width: 200px;
+    margin: 10px 0;
+  }
+}

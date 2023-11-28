@@ -1,21 +1,24 @@
-<div class="hints-template-data" #overlayhint>
-    <ng-container *ngFor="let item of coachingHints; let i = index">
-        <div class="hint-card"  [ngStyle]="{'border' : '1px solid' + coachingConst.HINT_DATA[item?.expression]?.color}" *ngIf="item" [ngClass]="coachingConst.HINT_DATA[item?.expression]?.className">
-            <div class="top-card-info">
-                <div class="icon_block" *ngIf="coachingConst.HINT_DATA[item?.expression]?.icon">
-                    <i [ngClass]="coachingConst.HINT_DATA[item?.expression]?.icon"></i>
+
+<div class="hints-wrapper-fixed" *ngIf="coachingHints.length >=1">
+    <div class="hints-template-data" #overlayhint>
+        <ng-container *ngFor="let item of coachingHints; let i = index">
+            <div class="hint-card"  [ngStyle]="{'border' : '1px solid' + coachingConst.HINT_DATA[item?.expression]?.color}" *ngIf="item" [ngClass]="coachingConst.HINT_DATA[item?.expression]?.className">
+                <div class="top-card-info">
+                    <div class="icon_block" *ngIf="coachingConst.HINT_DATA[item?.expression]?.icon">
+                        <i [ngClass]="coachingConst.HINT_DATA[item?.expression]?.icon"></i>
+                    </div>
+                    <h1>{{item?.message?.title}}</h1>
+                    <button class="close-hint" (click)="closeHint(item.actionId)">
+                        <i class="krIocnsFont-close-md"></i>
+                    </button>
                 </div>
-                <h1>{{item?.message?.title}}</h1>
-                <button class="close-hint" (click)="closeHint(item.actionId)">
-                    <i class="krIocnsFont-close-md"></i>
-                </button>
+                <div class="body-hint">
+                    <p>{{item?.message?.body}}</p>
+                </div>
+                <div class="footer-hint">
+                    <button (click)="hintAckPressed(item);closeHint(item.actionId)" *ngIf="item?.adherence?.adType === 'ack'">{{item?.adherence?.ackText}}</button>
+                </div>
             </div>
-            <div class="body-hint">
-                <p>{{item?.message?.body}}</p>
-            </div>
-            <div class="footer-hint">
-                <button (click)="hintAckPressed(item);closeHint(item.actionId)" *ngIf="item?.adherence?.adType === 'ack'">{{item?.adherence?.ackText}}</button>
-            </div>
-        </div>
-    </ng-container>
+        </ng-container>
+    </div>
 </div>
