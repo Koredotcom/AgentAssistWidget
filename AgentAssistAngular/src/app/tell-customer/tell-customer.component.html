@@ -35,10 +35,11 @@
                 <button class="solidbtn" aria-label="button"
                     (click)="handleSendCopyButton(projConstants.SEND, automation)" *ngIf="!automation.hideSendButton">{{ 'SEND'  | translate }}</button>
             </ng-container>
-            <ng-container *ngIf="automation.send">
+            <!-- <ng-container *ngIf="automation.send">
                 <button class="solidbtn" aria-label="button">{{ 'SENT'  | translate }}</button>
-            </ng-container>
+            </ng-container> -->
         </div>
+        <div class="sent-msg-text" *ngIf="automation.send">{{ 'SENT'  | translate }}</div>
         <p *ngIf="!automation.templateRender" [innerHTML]="rootService.handleEmptyLine(automation.value)"></p>
         <ng-container *ngIf="automation.templateRender && automation.template">
             <ul class="chat-container" attr.id="{{automation.uuid}}"

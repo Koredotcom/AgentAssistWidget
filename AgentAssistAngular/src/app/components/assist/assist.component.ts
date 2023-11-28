@@ -65,6 +65,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   showSummaryPopup: boolean = false;
   showErrorPrompt : boolean = false;
   summaryPopupModal : any;
+  showSpinner : boolean = true;
 
 
   constructor(private rootService: RootService, private serviceInvoker: ServiceInvokerService,
@@ -117,7 +118,8 @@ export class AssistComponent implements OnInit, OnDestroy {
     });
 
     this.subs.sink = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
-      if (runEventObj) {                
+      if (runEventObj) {
+        this.showSpinner = true;                
         if (runEventObj && !runEventObj?.agentRunButton && !this.rootService.isAutomationOnGoing) {
           if (runEventObj.from == this.projConstants.INTERRUPT) {
             this.interruptDialogList.splice(runEventObj.index, 1);
@@ -187,7 +189,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     let feedback = this.commonService.assistFeedback(params);
     let history = this.commonService.assistHistory(params);
     this.handleSubjectService.setLoader(true);
-    forkJoin([feedback, history]).pipe(finalize(() => { this.handleSubjectService.setLoader(false) })).subscribe(res => {
+    forkJoin([feedback, history]).pipe(finalize(() => { this.showSpinner = false; })).subscribe(res => {
       let feedbackData = res[0]?.results || [];
       let historyData = res[1] || [];
       this.renderHistoryMessages(historyData, feedbackData);
@@ -303,6 +305,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     let newTemp = encodeURI(msgStringify);    
 
     if (this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
+      this.showSpinner = false;
       renderResponse = this.commonService.formatAutomationRenderResponse(data,responseId, result, newTemp)
       if (data.isPrompt && (!this.proactiveModeStatus || this.rootService.manualAssistOverrideMode)) {
         renderResponse.toggleOverride = true;

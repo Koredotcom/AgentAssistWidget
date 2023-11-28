@@ -138,3 +138,11 @@ app-ask-customer, app-tell-customer{
         }
     }
 }
+
+
+
+.grayout-msgs-node{
+    opacity: 0.5;
+    background: var(--gray-modern-50, #F8FAFC);
+    pointer-events: none;
+}

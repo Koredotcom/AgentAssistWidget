@@ -65,7 +65,10 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
   getFaqAnswerAndtoggle(faq){
     faq.toggle = !faq.toggle;
     faq.seeMoreWrapper = false;
-    this.faqAnswerToggle.emit(faq);
+    if(!faq.answer){
+      faq.showSpinner = true;
+      this.faqAnswerToggle.emit(faq);
+    }
     // if(!faq.answer && faq.toggle){
     //   this.rootService.suggestionsAnswerPlaceableIDs.push({input : faq.question, assistSuggestion : this.agentassistArrayIndex});
     //   let searchObj : any = {};

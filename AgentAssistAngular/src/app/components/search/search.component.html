@@ -4,6 +4,7 @@
             <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
             <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
         </button>
+        <app-loader [type]="'widget'" *ngIf="showSpinner"></app-loader>
         <ng-container *ngIf="(searchResponse | json) != '{}' || searched">
             <div class="sugestions-block" *ngIf="searchResponse?.dialogs?.length">
                 <div class="suggestion-header">
@@ -64,16 +65,14 @@
                     <!-- <span class="count-text">2</span> -->
                 </div>
                 <div class="suggestion-body-search">
-                    <app-dialog-suggestion></app-dialog-suggestion>
+                    <app-dialog-suggestion (updateMenuResponseLoader)="updateMenuResponseLoader($event)"></app-dialog-suggestion>
                 </div>
             </div>
         </ng-container>
     </div>
-
-
     <div class="search-block-input">
         <div class="suggestions-info" *ngIf="searchText && querySuggestions?.length">
-            <button *ngFor="let suggestion of querySuggestions">{{suggestion}}</button>
+            <button *ngFor="let suggestion of querySuggestions" title="{{suggestion}}" (click)="selectSuggestion(suggestion)">{{suggestion}}</button>
             <p>{{'SUGGESTED' | translate}}</p>
         </div>
         <div class="input-block">

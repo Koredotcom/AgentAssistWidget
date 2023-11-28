@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
 import { ProjConstants } from 'src/app/proj.const';
@@ -15,6 +15,7 @@ import { SubSink } from 'subsink';
 export class DialogSuggestionComponent implements OnInit, OnDestroy{
 
   @Input() searchResponse : any;
+  @Output() updateMenuResponseLoader = new EventEmitter();
 
   subs = new SubSink();
   menuResponse: any = {};
@@ -43,6 +44,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
       if (menuResponse && menuResponse.usecases) {
         this.menuResponse = this.formatMenuResponse(menuResponse.usecases);
         this.suggestionCount = this.menuResponse.length || 0;
+        this.updateMenuResponseLoader.emit(false);
       }
     });
   }

@@ -114,8 +114,11 @@ export class ChecklistComponent {
     if ((this.checklists[this.selcLinx]?.stages)[stInx]?.steps[stepInx]?.complete || (this.checklists[this.selcLinx]?.stages)[stInx]?.steps[stepInx]?.ongoing) {
       return;
     } else if (cl.order === "random") {
-      this.checklists[this.selcLinx].stages[this.selsTinx].steps[this.selsPinx].ongoing = false;
-      this.selectStepForRandom(stInx, stepInx);
+      // let close = this.checkCloseStage(this.selcLinx, stInx);
+      // if(close){
+        this.checklists[this.selcLinx].stages[this.selsTinx].steps[this.selsPinx].ongoing = false;
+        this.selectStepForRandom(stInx, stepInx);
+      // }
     } else {
       return;
     }

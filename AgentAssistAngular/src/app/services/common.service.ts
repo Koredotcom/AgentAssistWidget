@@ -222,7 +222,7 @@ export class CommonService {
 
   updateSearchResponse(assistResponseArray,response, faqAnswerIdsPlace) {
     response.suggestions.faqs = this.rootService.formatFAQResponse(response.suggestions.faqs);
-    let index = this.rootService.suggestionsAnswerPlaceableIDs.findIndex(suggestion => {
+    let index = this.rootService.suggestionsAnswerPlaceableIDs?.findIndex(suggestion => {
       return suggestion.input == faqAnswerIdsPlace.input
     });
 
@@ -235,12 +235,16 @@ export class CommonService {
 
     if (index >= 0) {
       this.rootService.suggestionsAnswerPlaceableIDs.splice(index, 1);
-      assistResponseArray[faqAnswerIdsPlace.assistSuggestion].searchResponse.faqs?.forEach(faq => {
-        if (accumulator[faq.question] && accumulator[faq.question].answer) {
-          faq.answer = accumulator[faq.question].answer;
+      assistResponseArray[faqAnswerIdsPlace.assistSuggestion]?.searchResponse?.faqs?.forEach(faq => {
+        if (accumulator[faq.question] && accumulator[faq.question]?.answer) {
+          faq.answer = accumulator[faq.question]?.answer;
           faq.toggle = true;
-          faq.showMoreButton = false,
-            faq.showLessButton = false
+          faq.showMoreButton = false;
+          faq.showLessButton = false;
+          faq.showSpinner = false;
+        }
+        if(accumulator[faq.question]){
+          faq.showSpinner = false;
         }
       });
      assistResponseArray[faqAnswerIdsPlace.assistSuggestion].faqArrowClickResponse = true;
@@ -322,6 +326,7 @@ export class CommonService {
       if (arrEle.uuid && arrEle.uuid == dropdownHeaderUuids) {
         arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
         if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
+          arrEle.automationsArray[arrEle.automationsArray.length - 1].showSpinner = false;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = (tab == this.projConstants.MYBOT) ? false : this.rootService.manualAssistOverrideMode;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = (data.isErrorPrompt || showErrorPrompt) ? false : true;
@@ -349,7 +354,7 @@ export class CommonService {
 
   getPreviousEntityNodesAndValues(assistResponseArray, data){
     let entityNodes : any = [];
-    if(data.entities.length >= 1){
+    if(data?.entities?.length >= 1){
       let entityNameList = data.entities.reduce((acc, automation) => {
         acc[automation.name] = 'true';
         return acc;
@@ -360,7 +365,9 @@ export class CommonService {
           if (arrEle?.automationsArray?.length >= 1) {
             arrEle.automationsArray.forEach(automation => {
               let entityName = automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation.data.entityName;
-              if(automation.data.isPrompt && entityNameList[entityName]){
+              if(automation?.data?.isPrompt && entityNameList[entityName]){
+                automation.showSpinner = false;
+                automation.errorCount = 0;
                 entityNodes.push(automation);
               }
             });
@@ -404,6 +411,7 @@ export class CommonService {
       if (arrEle.uuid && arrEle.uuid == uuids && arrEle.type == this.renderResponseType.AUTOMATION) {
         arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
         if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
+          arrEle.automationsArray[arrEle.automationsArray.length - 1].showSpinner = false;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = hideOverrideDiv;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = disableInput;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = toggleOverride;
@@ -418,6 +426,7 @@ export class CommonService {
   }
 
   formatAssistResponseSmallTalk(assistResponseArray, hideOverrideDiv, disableInput, toggleOverride) {
+    assistResponseArray[assistResponseArray.length - 1].showSpinner = false;
     assistResponseArray[assistResponseArray.length - 1].toggleOverride = toggleOverride;
     assistResponseArray[assistResponseArray.length - 1].hideOverrideDiv = hideOverrideDiv;
     assistResponseArray[assistResponseArray.length - 1].disableInput = disableInput;
@@ -425,7 +434,8 @@ export class CommonService {
   }
 
   processUserMessagesForSmalltalk(data, assistResponseArray, hideOverrideDiv, toggleOverride, history?){    
-    if (data.userInput) {          
+    if (data.userInput) {     
+      assistResponseArray[assistResponseArray.length - 1].showSpinner = false;     
       assistResponseArray[assistResponseArray.length - 1].entityValue = data.userInput;
       assistResponseArray[assistResponseArray.length - 1].hideOverrideDiv = hideOverrideDiv;
       assistResponseArray[assistResponseArray.length - 1].toggleOverride = toggleOverride;
@@ -439,6 +449,7 @@ export class CommonService {
       if (arrEle.uuid && arrEle.uuid == dropdownHeaderUuids) {
         arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
         if (data.userInput && arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
+          arrEle.automationsArray[arrEle.automationsArray.length - 1].showSpinner = false;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = hideOverrideDiv;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = toggleOverride;
           if (data.userInput) {

@@ -36,6 +36,7 @@ export class SearchComponent implements OnInit {
 
   searched : boolean = false;
   autocompleteText : string = '';
+  showSpinner : boolean = true;
 
 
   constructor(private rootService: RootService, private serviceInvoker: ServiceInvokerService,
@@ -52,8 +53,13 @@ export class SearchComponent implements OnInit {
       if (agentResponse && (agentResponse.isSearch || this.answerPlaceableIDs.length)) {
         this.searchedResultData = agentResponse;
         this.handleSearchResponse(agentResponse);
+        this.showSpinner = false;
       }
     });
+  }
+
+  updateMenuResponseLoader(event){
+    this.showSpinner = event;
   }
 
   typeAHead = this.typeAHeadDeBounce((val, connectionDetails) => this.getAutoSearchApiResult(val, connectionDetails));
@@ -119,7 +125,14 @@ export class SearchComponent implements OnInit {
     this.searchText = this.autocompleteText;
   }
 
+  selectSuggestion(suggestion){
+    this.searchText = suggestion;
+    this.autocompleteText = suggestion;
+    this.getSearchResults({target : { value : suggestion}});
+  }
+
   emitSearchRequest(value, isSearch) {
+    // this.showSpinner = true;
     let connectionDetails: any = Object.assign({}, this.rootService.connectionDetails);
     connectionDetails.value = value;
     connectionDetails.isSearch = isSearch;
@@ -133,6 +146,7 @@ export class SearchComponent implements OnInit {
 
 
   getSearchResults(event) {
+    this.showSpinner = true;
     this.setValue(event.target.value, true)
   }
 
@@ -185,6 +199,9 @@ export class SearchComponent implements OnInit {
             if (accumulator[faq.question] && accumulator[faq.question].answer) {
               faq.answer = accumulator[faq.question].answer;
               // this.updateFaqAmbiguity.emit(faq);
+            } 
+            if(accumulator[faq.question]){
+              faq.showSpinner = false;
             }
           });
           let index = this.answerPlaceableIDs.indexOf(faqAnswerIdsPlace);

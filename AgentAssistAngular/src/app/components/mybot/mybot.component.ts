@@ -56,6 +56,7 @@ export class MybotComponent {
 
   mybotEmptyState : boolean = true;
   showErrorPrompt : boolean = false;
+  showSpinner : boolean = true;
 
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
     private websocketService : WebSocketService, private templateRenderClassService : TemplateRenderClassService,
@@ -101,6 +102,7 @@ export class MybotComponent {
 
     this.subs.sink = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {      
       if (runEventObj) {
+        this.showSpinner = true;
         if (runEventObj.agentRunButton && !this.rootService.isMyBotAutomationOnGoing) {
           if(runEventObj.from == this.projConstants.INTERRUPT){
             this.interruptDialogList.splice(runEventObj.index, 1);
@@ -156,7 +158,9 @@ export class MybotComponent {
 
     this.rootService.currentPositionIdOfMyBot = this.myBotDialogPositionId;
     let myBotuuids = this.koreGenerateuuidPipe.transform();
+    //automation
     if (this.rootService.isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited') && (this.myBotDialogPositionId && !data.positionId || (data.positionId == this.myBotDialogPositionId))) {
+      this.showSpinner = false;
       this.myBotDataResponse = {};
       if (data.entityName) {
         this.myBotDataResponse = Object.assign({}, data);
@@ -170,6 +174,7 @@ export class MybotComponent {
       this.mybotResponseArray = structuredClone(this.mybotResponseArray);
     }
 
+    //small talk
     if (!this.rootService.isMyBotAutomationOnGoing && this.rootService.myBotDropdownHeaderUuids && data.buttons && (this.myBotDialogPositionId && !data.positionId || data.positionId == this.myBotDialogPositionId)) {
       let renderResponse = this.commonService.formatSmallTalkRenderResponse(data, myBotuuids, results, newTemp, this.myBotDialogPositionId);
       renderResponse.hideOverrideDiv = true;
@@ -259,7 +264,7 @@ export class MybotComponent {
       }else{
         this.mybotResponseArray[this.mybotResponseArray.length - 1].restart = true;
         this.restartDialogName = this.dialogName;
-        this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId)
+        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId, true)
         // if(popupObject.inputType == this.projConstants.STARTOVER){
         // }else if(popupObject.inputType == this.projConstants.RESTART_INPUTS){
         // }
@@ -323,7 +328,7 @@ export class MybotComponent {
     let feedback = this.commonService.mybotFeedback(params);
     let history = this.commonService.mybotHistory(params);
     this.handleSubjectService.setLoader(true);
-    forkJoin([feedback, history]).pipe(finalize(()=> {this.handleSubjectService.setLoader(false)})).subscribe(res => {
+    forkJoin([feedback, history]).pipe(finalize(()=> {this.showSpinner = false})).subscribe(res => {
       let feedbackData = res[0]?.results || [];
       let historyData = res[1] || [];
       // let historyData = this.rootService.getMockData();

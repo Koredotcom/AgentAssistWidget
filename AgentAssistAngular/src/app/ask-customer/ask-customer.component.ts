@@ -94,6 +94,7 @@ export class AskCustomerComponent {
     connectionDetails.childBotName = this.automation.data.childBotName;
     let assistRequestParams = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
+    this.automation.showSpinner = true;
   }
 
   mybotInputValue(inputValue) {
@@ -105,6 +106,7 @@ export class AskCustomerComponent {
     connectionDetails.childBotId = this.rootService?.childBotDetails.childBotId;
     let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
+    this.automation.showSpinner = true;
   }
 
   handleSendCopyButton(method, automation) {

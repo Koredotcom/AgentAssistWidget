@@ -43,6 +43,16 @@
         top: auto;
         background: #fff;
         z-index: 2;
+        &.sent-cliked-msg{
+            display: flex !important;
+            position: relative !important;
+        }
+        .sent-msg-text{
+            color: var(--primary-500-main, #2B75E4);
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 20px;
+        }
     }
     .faq-s-header{
         display: flex;
@@ -162,6 +172,19 @@
             .faq-actions{
                 right: auto !important;
                 left: 0 !important;
+            }
+        }
+    }
+}
+
+::ng-deep .faq-suggestions-wrapper {
+    .faq-s-header {
+        .titles-info-heading{
+            app-loader{
+                position: relative;
+                .loader-progress-individual{
+                    position: relative !important;
+                }
             }
         }
     }

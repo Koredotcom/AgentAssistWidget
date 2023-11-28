@@ -94,11 +94,11 @@
     <div class="playbook-wrapper-body">
         <div class="playbook-steps-info">
             <ng-container *ngFor="let stage of checklists[selcLinx]?.stages; let i = index">
-                <button type="button"><span>{{stage?.name}}</span></button>
+                <button type="button" class="stage-btn">{{stage?.name}}</button>
                 <ng-container *ngFor="let step of stage?.steps; let ii=index">
                     <button class="playbook-step" [ngClass]="{'playbook-step-ongoing' : step.ongoing && !step.complete}"
                         (click)="!step.complete && clickStep(i,ii)" [attr.id]="step._id">
-                        <div class="heading-step">
+                        <div class="heading-step" [ngClass]="{'disabled-msg' : !step.ongoing}">
                             <h1 [ngClass]="{'strike-text' : step.complete}">{{step.name}}</h1>
                             <button class="check-btn" (click)="!step.complete && stepComplete(selcLinx, i, ii)">
                                 <i class="krIocnsFont-check"></i>

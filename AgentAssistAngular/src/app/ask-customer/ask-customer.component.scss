@@ -28,7 +28,7 @@
     .msg-node-cust{
         border-radius: 10px;
         background: var(--primary-50, #EFF4FF);
-        padding: 6px 10px;
+        padding: 10px;
         color: var(--gray-modern-900, #121926);
         font-size: 13px;
         font-weight: 400;
@@ -82,9 +82,9 @@
             box-shadow: 0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.10);
             position: absolute;
             display: none;
-            padding: 6px;
+            padding: 4px;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
             right: 4px;
             top: 4px;
             z-index: 1;
@@ -111,12 +111,16 @@
         }
         .sent-msg-text{
             position: absolute;
-            top: 4px;
+            top: 0;
             right: 4px;
             color: var(--primary-500-main, #2B75E4);
             font-size: 12px;
             font-weight: 400;
             line-height: 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
 }
