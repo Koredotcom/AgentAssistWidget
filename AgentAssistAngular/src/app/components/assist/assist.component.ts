@@ -14,6 +14,7 @@ import { TemplateRenderClassService } from 'src/app/services/template-render-cla
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { finalize } from 'rxjs/operators';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { chatWindow } from '@koredev/kore-web-sdk';
 
 @Component({
   selector: 'app-assist',
@@ -28,6 +29,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   @ViewChild('content', { static: false }) private content: ElementRef<HTMLDivElement>
   @ViewChild('collapseTab', { static: false }) private collapseTab: ElementRef;
   @ViewChild('terminateCanvas', {static : false}) private canvas : ElementRef<HTMLDivElement>
+  @ViewChild('temp') d1: ElementRef;
 
   connectionDetails: any = {};
   subs = new SubSink();
@@ -61,6 +63,8 @@ export class AssistComponent implements OnInit, OnDestroy {
   showSummaryPopup: boolean = false;
   showErrorPrompt : boolean = false;
 
+  chatWindowInstance: any;
+
 
   constructor(private rootService: RootService, private serviceInvoker: ServiceInvokerService,
     private websocketService: WebSocketService, private localStorageService: LocalStorageService,
@@ -73,6 +77,15 @@ export class AssistComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.subscribeEvents();
+    
+  }
+
+  ngAfterViewInit(): void {
+    this.chatWindowInstance = new chatWindow();
+    this.chatWindowInstance.on('beforeWSSendMessage', event => {
+      console.log('data: ', event);
+    })
+    this.chatWindowInstance.setBranding(); 
   }
 
   ngOnDestroy() {
@@ -343,6 +356,11 @@ export class AssistComponent implements OnInit, OnDestroy {
 
 
     let result: any = this.templateRenderClassService.getResponseUsingTemplate(data, this.connectionDetails);
+    console.log("🚀 ~ file: assist.component.ts:356 ~ AssistComponent ~ processAgentAssistResponse ~ this.templateRenderClassService.getResponseUsingTemplate(data, this.connectionDetails):", this.templateRenderClassService.getResponseUsingTemplate(data, this.connectionDetails))
+    let results: any = this.templateRenderClassService.getResponseUsingTemplate(data, this.connectionDetails);
+    console.log(this.chatWindowInstance.generateMessageDOM(results));
+    let v3Template = this.chatWindowInstance.generateMessageDOM(results);
+    this.d1.nativeElement.appendChild(v3Template)
     this.rootService.currentPositionId = this.dialogPositionId;
     if (this.rootService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
 
