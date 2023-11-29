@@ -54,17 +54,17 @@
                 <div class="card_body_acc_content kore-chat-window">          
                     <ng-container *ngFor="let res of mybotResponseArray; let i = index">
                         <ng-container *ngIf="res.type == renderResponseType.SMALLTALK">
-                            <app-smalltalk [smallTalkData]="res" [agentassistArrayIndex]="i"
-                                [agentassistResponseArrayLength]="mybotResponseArray.length"
+                            <app-smalltalk [smallTalkData]="res" [agentassistArrayIndex]="i+1"
+                                [agentassistResponseArray]="mybotResponseArray"
                                 ></app-smalltalk>
                         </ng-container>
                         <ng-container *ngIf="res.type == renderResponseType.AUTOMATION">
-                            <app-dialog [automationData]="res" [agentassistArrayIndex]="i"
-                                [agentassistResponseArrayLength]="mybotResponseArray.length"></app-dialog>
+                            <app-dialog [automationData]="res" [agentassistArrayIndex]="i+1"
+                                [agentassistResponseArray]="mybotResponseArray"></app-dialog>
                         </ng-container>
                         <ng-container *ngIf="res.type == renderResponseType.FEEDBACK">
                             <app-feedback [feedbackData]="res" (updateFeedbackProperties)="updateFeedbackProperties($event,i)"
-                                [agentassistArrayIndex]="i" [agentassistResponseArrayLength]="mybotResponseArray.length">
+                                [agentassistArrayIndex]="i+1" [agentassistResponseArray]="mybotResponseArray">
                             </app-feedback>
                         </ng-container>
                     </ng-container>

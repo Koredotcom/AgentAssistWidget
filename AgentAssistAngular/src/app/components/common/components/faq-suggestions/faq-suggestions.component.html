@@ -7,7 +7,7 @@
             <span *ngIf="faq.childBotName">({{faq.childBotName}})</span>
             <i class="krIocnsFont-chevron-down" *ngIf="!faq.answerRender && !faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
             <i class="krIocnsFont-chevron-up" *ngIf="!faq.answerRender && faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
-            <app-loader *ngIf="faq.showSpinner" [type]="'individual'"></app-loader>
+            <app-loader *ngIf="faq.showSpinner" [type]="projConstants.INDIVIDUAL_LOADER"></app-loader>
         </div>
 
         <div class="faq-actions" [ngClass]="{'sent-cliked-msg' : faq.answer[0]?.send}" *ngIf="!faq.seeMoreWrapper && faq.answer && faq.answer?.length > 0 && !hideActionButtons">

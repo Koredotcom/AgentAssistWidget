@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { ProjConstants } from '../proj.const';
+import { ProjConstants, RenderResponseType } from '../proj.const';
+import { CommonService } from '../services/common.service';
 import { RootService } from '../services/root.service';
 
 @Component({
@@ -10,10 +11,15 @@ import { RootService } from '../services/root.service';
 export class TellCustomerComponent {
   @Input() automation : any;
   @Input() isWelcomeMsg;
-  
-  projConstants : any = ProjConstants;
+  @Input() automationArrayLength;
+  @Input() automationIndex;
+  @Input() responseArray;
+  @Input() responseArrayIndex;
 
-  constructor(public rootService : RootService){
+  projConstants : any = ProjConstants;
+  renderResponseType: any = RenderResponseType;
+
+  constructor(public rootService : RootService, private commonService : CommonService){
     
   }
 
@@ -52,6 +58,8 @@ export class TellCustomerComponent {
     automation.send = true;
     let sendData = this.isWelcomeMsg ? automation.value : automation.sendData;
     this.rootService.handleSendCopyButtonForNodes(method,sendData);
+    this.responseArray = this.commonService.grayOutPreviousAutomation(this.responseArray, this.automationIndex, this.responseArrayIndex);
+    this.responseArray = structuredClone(this.responseArray);
   }
 
 }

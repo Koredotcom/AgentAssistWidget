@@ -4,7 +4,7 @@
             <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
             <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
         </button>
-        <app-loader [type]="'widget'" *ngIf="showSpinner"></app-loader>
+        <app-loader [type]="projConstants.WIDGET_LOADER" *ngIf="showSpinner"></app-loader>
         <ng-container *ngIf="(searchResponse | json) != '{}' || searched">
             <div class="sugestions-block" *ngIf="searchResponse?.dialogs?.length">
                 <div class="suggestion-header">

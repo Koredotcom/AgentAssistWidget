@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
+import { ProjConstants } from 'src/app/proj.const';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
@@ -15,6 +16,8 @@ export class SearchComponent implements OnInit {
 
   @Input() maxButton;
   @Output() maxMinButtonClick = new EventEmitter();
+
+  projConstants : any = ProjConstants;
 
   subs = new SubSink();
   searchText: string = '';

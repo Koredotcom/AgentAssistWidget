@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { EVENTS } from '../helpers/events';
 import { ProjConstants, RenderResponseType } from '../proj.const';
+import { CommonService } from '../services/common.service';
 import { RootService } from '../services/root.service';
 import { WebSocketService } from '../services/web-socket.service';
 
@@ -14,12 +15,18 @@ export class AskCustomerComponent {
 
   @Input() automation: any;
   @Input() listView : boolean;
+  @Input() automationArrayLength;
+  @Input() automationIndex;
+  @Input() responseArray;
+  @Input() responseArrayIndex;
+  @Input() assistAutomationData;
 
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
   inputName: string = this.translateService.instant("AWAITING");
 
-  constructor(public rootService: RootService, private websocketService: WebSocketService, private translateService : TranslateService) {
+  constructor(public rootService: RootService, private websocketService: WebSocketService, private translateService : TranslateService,
+    private commonService : CommonService) {
 
   }
 
@@ -83,6 +90,7 @@ export class AskCustomerComponent {
     } else if (this.rootService.activeTab == this.projConstants.MYBOT) {
       this.mybotInputValue(this.automation.entityValue)
     }
+    this.grayOutCurrentAutomation();
   }
 
   assistInputValue(inputValue) {
@@ -113,7 +121,11 @@ export class AskCustomerComponent {
     automation.send = true;
     let sendData = automation.sendData;
     this.rootService.handleSendCopyButtonForNodes(method, sendData);
+    this.responseArray = this.commonService.grayOutPreviousAutomation(this.responseArray, this.automationIndex, this.responseArrayIndex);
+    this.responseArray = structuredClone(this.responseArray);
   }
 
-
+  grayOutCurrentAutomation(){
+    this.automation.grayOut = true;
+  }
 }

@@ -14,7 +14,7 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
 export class FeedbackComponent {
   @Input() feedbackData : any;
   @Input() agentassistArrayIndex : number;
-  @Input() agentassistResponseArrayLength : number;
+  @Input() agentassistResponseArray : number;
   @Output() updateFeedbackProperties = new EventEmitter();
 
   feedbackForm : FormGroup;

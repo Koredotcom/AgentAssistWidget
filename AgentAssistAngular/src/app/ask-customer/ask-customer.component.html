@@ -1,6 +1,6 @@
 <!-- Ask Customer Message Node v3 -->
 <ng-container *ngIf="(!listView && automation) && (automation.value || automation.template)">
-    <div class="ask-cust-node">
+    <div class="ask-cust-node" [ngClass]="{'grayout-msgs-node' : automation.grayOut || automation.send}">
         <div class="top-section">
             <div class="svg_img">
                 <img src="assets/images/icons/askcust.svg" alt="Image">
@@ -34,7 +34,7 @@
     </ng-template>
     
     
-    <div class="entity-mesage-data" [ngClass]="{'error-no-reponse' : automation.errorCount}">
+    <div class="entity-mesage-data" [ngClass]="{'error-no-reponse' : automation.errorCount, 'grayout-msgs-node' : automation.grayOut}">
         <div class="input-block-entity">
             <p container="body" ngbTooltip="{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}">{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}</p>
             <p>:</p>
@@ -67,7 +67,7 @@
         <ng-template #errCount>
             <p class="info-entity-text">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.entityType}}  |  {{'OVERRIDE' | translate}}</p>
         </ng-template>
-        <app-loader [type]="'individual'" *ngIf="automation.showSpinner"></app-loader>
+        <app-loader [type]="projConstants.INDIVIDUAL_LOADER" *ngIf="automation.showSpinner"></app-loader>
     
     </div>
 </ng-container>
@@ -100,6 +100,6 @@
     <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.YES">{{'ACCEPT_RESPONSE' | translate}}</p>
     <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p>
     <p class="info-entity-text" *ngIf="automation.errorCount">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.entityType}}  |  {{'OVERRIDE' | translate}}</p>
-    <app-loader [type]="'individual'" *ngIf="automation.showSpinner"></app-loader>
+    <app-loader [type]="projConstants.INDIVIDUAL_LOADER" *ngIf="automation.showSpinner"></app-loader>
 </ng-container>
 

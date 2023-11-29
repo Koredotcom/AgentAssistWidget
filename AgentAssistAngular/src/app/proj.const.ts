@@ -65,6 +65,8 @@ export const ProjConstants = {
     OVERRIDE : 'Type to override',
     ACCEPT_RESPONSE : 'Response Accepted',
     AGENT_ENTERED : 'Agent Entered',
+    WIDGET_LOADER : 'widget',
+    INDIVIDUAL_LOADER : 'individual',
     LOGO_PATH : 'assets/images/logo/koreLogo.svg',
     DOCUMENTATION_LINK : 'https://docs.kore.ai/agentassist/',
     FAQ_LINK : 'https://docs.kore.ai/agentassist/frequently-asked-questions/faq/',

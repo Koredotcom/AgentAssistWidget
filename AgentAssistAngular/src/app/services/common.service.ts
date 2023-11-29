@@ -322,7 +322,7 @@ export class CommonService {
   }
 
   formatRunningLastAutomationEntityNode(assistResponseArray, data, showErrorPrompt, renderResponse, dropdownHeaderUuids, tab, previousEntityNodes?) {
-    assistResponseArray.map(arrEle => {
+    assistResponseArray.map((arrEle, index) => {
       if (arrEle.uuid && arrEle.uuid == dropdownHeaderUuids) {
         arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
         if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
@@ -332,10 +332,13 @@ export class CommonService {
           arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = (data.isErrorPrompt || showErrorPrompt) ? false : true;
           if(tab == this.projConstants.MYBOT && data.userInput){
             arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = data.userInput;
+            arrEle.automationsArray[arrEle.automationsArray.length - 1].grayOut = true;
+            this.grayOutPreviousAutomation(assistResponseArray, arrEle.automationsArray.length, index);
           }
           if (data.isErrorPrompt || showErrorPrompt) {
             arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = false;
             arrEle.automationsArray[arrEle.automationsArray.length - 1].errorCount += 1;
+            arrEle.automationsArray[arrEle.automationsArray.length - 1].grayOut = false;
           } else {
             arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
           }
@@ -437,15 +440,17 @@ export class CommonService {
     if (data.userInput) {     
       assistResponseArray[assistResponseArray.length - 1].showSpinner = false;     
       assistResponseArray[assistResponseArray.length - 1].entityValue = data.userInput;
+      assistResponseArray[assistResponseArray.length - 1].grayOut = true;
       assistResponseArray[assistResponseArray.length - 1].hideOverrideDiv = hideOverrideDiv;
       assistResponseArray[assistResponseArray.length - 1].toggleOverride = toggleOverride;
       assistResponseArray[assistResponseArray.length - 1].userInput = data.userInput && (!history) ? data.userInput : ProjConstants.YES;
+      this.grayOutPreviousAutomation(assistResponseArray, undefined, assistResponseArray.length - 1)
     }
     return assistResponseArray
   }
 
   processUserMessagesForAutomation(data, assistResponseArray, hideOverrideDiv, toggleOverride, showErrorPrompt,dropdownHeaderUuids){
-    assistResponseArray.map(arrEle => {
+    assistResponseArray.map((arrEle, index) => {
       if (arrEle.uuid && arrEle.uuid == dropdownHeaderUuids) {
         arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
         if (data.userInput && arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
@@ -456,9 +461,13 @@ export class CommonService {
             let userInput = arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput;
             arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = data.userInput;
             arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput = userInput ? userInput : ProjConstants.YES;
+            this.grayOutPreviousAutomation(assistResponseArray, arrEle.automationsArray.length, index);
           }
           if(!showErrorPrompt){
             arrEle.automationsArray[arrEle.automationsArray.length - 1].errorCount = 0;
+            arrEle.automationsArray[arrEle.automationsArray.length - 1].grayOut = true;
+          }else{
+            arrEle.automationsArray[arrEle.automationsArray.length - 1].grayOut = false;
           }
         }
         arrEle.automationsArray = [...arrEle.automationsArray];
@@ -471,18 +480,38 @@ export class CommonService {
     if (responseArray.length >=1) {
       responseArray.map((arrEle, actualarrayIndex) => {        
         if (arrEle?.uuid && arrEle?.automationsArray?.length) {
-            arrEle?.automationsArray.forEach((element, index) => {
+            arrEle?.automationsArray.forEach((element, index) => {              
               if((index !== arrEle.automationsArray.length - 1) || (actualarrayIndex > 0 && actualarrayIndex != responseArray.length -1)){
                 element.disableInput = true;
               }
+              element.grayOut = (actualarrayIndex == responseArray?.length - 1 && index == arrEle?.automationsArray?.length -1) ? false : true
             });
           arrEle.automationsArray = [...arrEle.automationsArray];
         }else if(arrEle?.type == this.renderResponseType.SMALLTALK && actualarrayIndex != responseArray.length -1){
           arrEle.disableInput = true;
+          arrEle.grayOut = (actualarrayIndex == responseArray?.length - 1) ? false : true;
         }
       });
     }  
     return responseArray;  
+  }
+
+  grayOutPreviousAutomation(responseArray, automationIndex, responseArrayIndex){    
+    let responseArrayLength = responseArray.length;
+    if(responseArrayLength > 0){      
+      for(let i = responseArrayLength - 1; i >= 0; i--){
+        if(responseArray[i].type == this.renderResponseType.AUTOMATION){
+          let automationArray = responseArray[i].automationsArray;
+          let automationIndexNum = typeof (automationIndex) == 'number' ? automationIndex - 1 : automationArray.length - 1; 
+          for(let j = automationIndexNum; j >= 0; j--){
+            automationArray[j].grayOut = true;
+          }
+        }else if(responseArray[i].type == this.renderResponseType.SMALLTALK && i != responseArrayIndex - 1){
+          responseArray[i].grayOut = true;
+        }
+      }
+    }
+    return responseArray;
   }
 
   getInitialSentiChartOptions(object): EChartsOption | any {

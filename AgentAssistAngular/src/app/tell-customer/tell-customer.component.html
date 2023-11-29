@@ -13,7 +13,8 @@
 </div>
 
 
-<div class="ask-cust-node" *ngIf="!isWelcomeMsg && automation && (automation.value || automation.template)">
+<div class="ask-cust-node" *ngIf="!isWelcomeMsg && automation && (automation.value || automation.template)"
+    [ngClass]="{'grayout-msgs-node' : automation.grayOut || automation.send}">
     <div class="top-section">
         <div class="svg_img">
             <img src="assets/images/icons/askcust.svg" alt="Image">
@@ -24,26 +25,26 @@
 </div>
 
 
-<ng-template #askCustMsg let-automation="smallTalkData">
-    <div class="msg-node-cust">
-        <div class="send-copy-actions" *ngIf="!automation.hideActionButtons">
-            <ng-container *ngIf="!automation.send">
+<ng-template #askCustMsg let-automationData="smallTalkData">
+    <div class="msg-node-cust"  [ngClass]="{'grayout-msgs-node' : isWelcomeMsg && (automation.grayOut || automationData.send)}">
+        <div class="send-copy-actions" *ngIf="!automationData.hideActionButtons">
+            <ng-container *ngIf="!automationData.send">
                 <button class="solidbtn" aria-label="button"
-                    (click)="handleSendCopyButton(projConstants.COPY, automation)" *ngIf="!automation.hideCopyButton">
+                    (click)="handleSendCopyButton(projConstants.COPY, automationData)" *ngIf="!automationData.hideCopyButton">
                     <i class="krIocnsFont-copy"></i>
                 </button>
                 <button class="solidbtn" aria-label="button"
-                    (click)="handleSendCopyButton(projConstants.SEND, automation)" *ngIf="!automation.hideSendButton">{{ 'SEND'  | translate }}</button>
+                    (click)="handleSendCopyButton(projConstants.SEND, automationData)" *ngIf="!automationData.hideSendButton">{{ 'SEND'  | translate }}</button>
             </ng-container>
-            <!-- <ng-container *ngIf="automation.send">
+            <!-- <ng-container *ngIf="automationData.send">
                 <button class="solidbtn" aria-label="button">{{ 'SENT'  | translate }}</button>
             </ng-container> -->
         </div>
-        <div class="sent-msg-text" *ngIf="automation.send">{{ 'SENT'  | translate }}</div>
-        <p *ngIf="!automation.templateRender" [innerHTML]="rootService.handleEmptyLine(automation.value)"></p>
-        <ng-container *ngIf="automation.templateRender && automation.template">
-            <ul class="chat-container" attr.id="{{automation.uuid}}"
-                                        [innerHTML]="automation.template | safeHtml"></ul>
+        <div class="sent-msg-text" *ngIf="automationData.send">{{ 'SENT'  | translate }}</div>
+        <p *ngIf="!automationData.templateRender" [innerHTML]="rootService.handleEmptyLine(automationData.value)"></p>
+        <ng-container *ngIf="automationData.templateRender && automationData.template">
+            <ul class="chat-container" attr.id="{{automationData.uuid}}"
+                                        [innerHTML]="automationData.template | safeHtml"></ul>
         </ng-container>
     </div>
 </ng-template>

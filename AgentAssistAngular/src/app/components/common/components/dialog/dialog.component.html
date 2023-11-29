@@ -1,17 +1,22 @@
-
-
 <ng-container [ngTemplateOutlet]="dialogStarted" *ngIf="automationData?.automationsArray?.length"></ng-container>
 <ng-container *ngFor="let automation of automationData.automationsArray; let i = index">
     <ng-container *ngIf="automation.responseType == renderResponseType.ASSISTRESPONSE">
         <ng-container *ngIf="automation.data.isPrompt">
-            <app-ask-customer [automation]="automation"></app-ask-customer>
+            <app-ask-customer [automation]="automation" [automationArrayLength]="automationData.automationsArray.length"
+                [automationIndex]="i" [responseArray]="agentassistResponseArray"
+                [responseArrayIndex]="agentassistArrayIndex" [assistAutomationData]="automationData"></app-ask-customer>
         </ng-container>
         <ng-container *ngIf="!automation.data.isPrompt">
-            <app-tell-customer [automation]="automation"></app-tell-customer>
+            <app-tell-customer [automation]="automation"
+                [automationArrayLength]="automationData.automationsArray.length" [automationIndex]="i"
+                [responseArray]="agentassistResponseArray" [responseArrayIndex]="agentassistArrayIndex">
+            </app-tell-customer>
         </ng-container>
     </ng-container>
 </ng-container>
-<ng-container [ngTemplateOutlet]="dialogEnded" *ngIf="automationData.endAutomation && automationData?.automationsArray?.length"></ng-container>
+<ng-container [ngTemplateOutlet]="dialogEnded"
+    *ngIf="automationData.endAutomation && automationData?.automationsArray?.length"></ng-container>
+
 
 <ng-template #dialogStarted>
     <div class="dialog-ended-wrapper">

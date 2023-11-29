@@ -46,13 +46,6 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     // this.sampleMessages();
   }
 
-  sampleMessages(){
-    setTimeout(() => {
-      this.processTranscriptData(this.rootService.getUserMessage());
-      this.processAgentMessages(this.rootService.getAgentMessage());
-    }, 1000);
-  }
-
   subscribeEvents(){
     this.subs.sink = this.rootService.socketConnection$.subscribe(res => {
       if(res){

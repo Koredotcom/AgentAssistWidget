@@ -15,7 +15,7 @@ export class SuggestionsComponent {
 
   @Input() suggestionResponse: any;
   @Input() agentassistArrayIndex: number;
-  @Input() agentassistResponseArrayLength: number;
+  @Input() agentassistResponseArray: number;
 
   connectionDetails: any = {};
   searchResultText: string;
