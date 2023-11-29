@@ -46,7 +46,7 @@
                             </button>
                             <ng-container *ngIf="checklists[selcLinx]?.stages.length > 1">
                                 <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
-                                    <button ngbDropdownItem aria-disabled="true" class="selected"
+                                    <button ngbDropdownItem aria-disabled="true" [ngClass]="{'selected' : i == selsTinx}"
                                         *ngFor="let stage of checklists[selcLinx]?.stages; let i = index"
                                         (click)="selectStage(i)">
                                         <p>{{stage.name}}</p>
@@ -61,23 +61,16 @@
             </div>
             <div class="actions-checklist-header">
                 <ng-container *ngIf="checklists && checklists[selcLinx]">
-                    <button class="solid-action" aria-label="button"
-                        [ngClass]="{'disabled-msg' : checklists[selcLinx].completed}">
-                        <!-- <div class="progress yellow">
-                            <span class="progress-left">
-                                            <span class="progress-bar"></span>
-                            </span>
-                            <span class="progress-right">
-                                            <span class="progress-bar"></span>
-                            </span>
-                            <div class="progress-value">37.5%</div>
-                          </div> -->
+                    <button class="solid-action step-complete" aria-label="button"
+                        [ngClass]="{'disabled-msg' : checklists[selcLinx].completed}"
+                        *ngIf="checklists[selcLinx]?.stages[selsTinx]?.steps?.length > 0">
+                        {{getNumberstepCompInStage()}}/{{checklists[selcLinx].stages[selsTinx].steps.length}}
                     </button>
-                    <button class="solid-action" aria-label="button"
+                    <!-- <button class="solid-action" aria-label="button"
                         [ngClass]="{'disabled-msg' : checklists[selcLinx].completed}">
                         <i class="krIocnsFont-pause"></i>
-                        <!-- <i class="krIocnsFont-play"></i> -->
-                    </button>
+                        <i class="krIocnsFont-play"></i> 
+                    </button> -->
                     <button class="solid-action stop-assist" aria-label="button" *ngIf="showProceedToClose && !isProceedToClose"
                         (click)="proceedToCloseButtonClick()"
                         [ngClass]="{'disabled-msg' : checklists[selcLinx].completed}">
@@ -85,8 +78,8 @@
                     </button>
                 </ng-container>
                 <button class="solid-action minimize-btn" aria-label="button" (click)="minimizeToggle()">
-                    <i class="krIocnsFont-minimize" *ngIf="!maxButton"></i>
-                    <i class="krIocnsFont-maximize" *ngIf="maxButton"></i>
+                    <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
+                    <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
                 </button>
             </div>
         </div>

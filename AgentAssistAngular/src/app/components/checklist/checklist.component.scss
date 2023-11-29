@@ -144,6 +144,10 @@
                     color: #101828;
                     font-size: 16px;
                     cursor: pointer;
+                    &.step-complete{
+                        font-size: 9px;
+                        font-weight: 600;
+                    }
                     &:hover{
                         border: 1px solid var(--primary-300, #84ADFF);
                         color: #155EEF;

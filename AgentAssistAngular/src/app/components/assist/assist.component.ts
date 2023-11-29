@@ -399,7 +399,6 @@ export class AssistComponent implements OnInit, OnDestroy {
   }
 
   minimizeToggle() {
-    this.maxButton = !this.maxButton;
     this.maxButtonClick.emit(this.maxButton);
   }
 

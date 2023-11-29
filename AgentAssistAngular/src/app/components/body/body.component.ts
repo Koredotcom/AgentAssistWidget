@@ -35,21 +35,21 @@ export class BodyComponent implements OnInit{
   }
 
   checkListMaxButtonClickEvent(event){
-    this.checkListMaxButtonClick = !this.checkListMaxButtonClick;
-    if(this.assistMaxButtonClick && this.checkListMaxButtonClick){
+    if(this.assistMaxButtonClick && !this.checkListMaxButtonClick){
       this.assistMaxButtonClick = false;
       this.checkListMaxButtonClick = false; 
+    }else{
+      this.checkListMaxButtonClick = !this.checkListMaxButtonClick;
     }
   }
 
   assistMaxButtonClickEvent(event){
-    this.assistMaxButtonClick = !this.assistMaxButtonClick;
-    if(this.assistMaxButtonClick && this.checkListMaxButtonClick){
+    if(!this.assistMaxButtonClick && this.checkListMaxButtonClick){
       this.assistMaxButtonClick = false;
       this.checkListMaxButtonClick = false; 
+    }else{
+      this.assistMaxButtonClick = !this.assistMaxButtonClick;
     }
-    console.log(this.assistMaxButtonClick, this.checkListMaxButtonClick, 'assist and checklist');
-    
   }
 
 }

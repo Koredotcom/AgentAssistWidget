@@ -105,7 +105,6 @@ export class ChecklistComponent {
   }
 
   minimizeToggle() {
-    this.maxButton = !this.maxButton;
     this.maxButtonClick.emit(this.maxButton);
   }
 
@@ -282,6 +281,9 @@ export class ChecklistComponent {
   }
 
   selectStage(index) {
+    if(!this.maxButton){
+      this.minimizeToggle();
+    }
     this.selsTinx = index;
     this.selectNextStep();
   }
@@ -371,6 +373,16 @@ export class ChecklistComponent {
         step.ongoing = false;
       });
     });
+  }
+
+  getNumberstepCompInStage(){
+    let stepNum = 0;
+    for(let step of this.checklists[this.selcLinx]?.stages[this.selsTinx]?.steps){
+      if(step.complete){
+        stepNum += 1;
+      }
+    }
+    return stepNum;
   }
 
 }
