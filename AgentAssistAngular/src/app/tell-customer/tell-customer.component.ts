@@ -1,14 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { ProjConstants, RenderResponseType } from '../proj.const';
 import { CommonService } from '../services/common.service';
 import { RootService } from '../services/root.service';
+import { chatWindow } from '@koredev/kore-web-sdk';
 
 @Component({
   selector: 'app-tell-customer',
   templateUrl: './tell-customer.component.html',
   styleUrls: ['./tell-customer.component.scss']
 })
-export class TellCustomerComponent {
+export class TellCustomerComponent implements AfterViewInit {
   @Input() automation : any;
   @Input() isWelcomeMsg;
   @Input() automationArrayLength;
@@ -18,13 +19,33 @@ export class TellCustomerComponent {
 
   projConstants : any = ProjConstants;
   renderResponseType: any = RenderResponseType;
+  chatWindowInstance = new chatWindow();
+  v_Template: any;
 
-  constructor(public rootService : RootService, private commonService : CommonService){
-    
+  constructor(public rootService : RootService, private commonService : CommonService){ 
+  }
+
+  ngOninit() {
+  }
+
+  ngAfterViewInit(): void {
+    // v3 templates
+    this.chatWindowInstance.on('beforeWSSendMessage', event => {
+      console.log('data: ', event);
+    })
+    this.chatWindowInstance.setBranding();   
   }
 
   ngOnChanges() {
     this.hideSendAndCopy();
+    this.checkTemplateOrNot();
+  }
+
+  checkTemplateOrNot() {
+    if(this.automation?.templateRender && this.automation?.template) {
+    let template = (this.chatWindowInstance.generateMessageDOM(this.automation?.result));
+    this.v_Template = template.innerHTML;
+    }
   }
 
   hideSendAndCopy(){
@@ -34,7 +55,7 @@ export class TellCustomerComponent {
 
     // only copy button
     if(this.automation?.templateRender && this.automation?.template && this.automation?.connectionDetails?.source == this.projConstants.SMARTASSIST_SOURCE){
-      this.automation.hideCopyButton = true; 
+      this.automation.hideCopyButton = true;  
     }
 
     if(!this.rootService.settingsData?.isAgentResponseEnabled){
