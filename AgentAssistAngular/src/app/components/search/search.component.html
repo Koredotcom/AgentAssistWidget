@@ -69,6 +69,9 @@
                 </div>
             </div>
         </ng-container>
+        <ng-container *ngIf="(searchResponse | json) == '{}' && searched">
+            <div class="empty-search">No search result found</div>
+        </ng-container>
     </div>
     <div class="search-block-input">
         <div class="suggestions-info" *ngIf="searchText && querySuggestions?.length">

@@ -167,7 +167,7 @@ export class SearchComponent implements OnInit {
 
   handleSearchResponse(response) { 
     this.searched = true;   
-    if (response && response.suggestions) {
+    if (response && response?.suggestions) {
       if (this.answerPlaceableIDs?.length == 0) {
         this.searchResponse = {};
         // response.suggestions.faqs = [
@@ -177,15 +177,17 @@ export class SearchComponent implements OnInit {
         //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
         // ]
         this.searchResponse = this.rootService.formatSearchResponse(response);
-        this.searchResponse.totalSearchResults = (this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse?.articles?.length + this.searchResponse?.snippets?.length || 0);
-        this.faqViewCount = (this.searchResponse.faqs && this.searchResponse.faqs?.length <= 2) ? this.searchResponse.faqs?.length : 2;
-        this.articleViewCount = (this.searchResponse.articles && this.searchResponse.articles?.length <= 2) ? this.searchResponse.articles?.length : 2;
-        this.snippetViewCount = (this.searchResponse.snippets && this.searchResponse.snippets?.length <= 2) ? this.searchResponse.snippets?.length : 2;
-        this.faqAllView = this.searchResponse.faqs && this.searchResponse.faqs?.length > 2 ? true : false;
-        this.articleAllView = this.searchResponse.articles && this.searchResponse.articles?.length > 2 ? true : false;
-        this.snippetAllView = this.searchResponse.snippets && this.searchResponse.snippets?.length > 2 ? true : false;
-        this.searchResultText = this.searchResponse.totalSearchResults == 1 ? "Search result for" : "Search results for";
-        this.checkFaqAnswerNotRenderCountAndRequest()
+        if(Object.keys(this.searchResponse)?.length > 0){
+          this.searchResponse.totalSearchResults = (this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse?.articles?.length + this.searchResponse?.snippets?.length || 0);
+          this.faqViewCount = (this.searchResponse.faqs && this.searchResponse.faqs?.length <= 2) ? this.searchResponse.faqs?.length : 2;
+          this.articleViewCount = (this.searchResponse.articles && this.searchResponse.articles?.length <= 2) ? this.searchResponse.articles?.length : 2;
+          this.snippetViewCount = (this.searchResponse.snippets && this.searchResponse.snippets?.length <= 2) ? this.searchResponse.snippets?.length : 2;
+          this.faqAllView = this.searchResponse.faqs && this.searchResponse.faqs?.length > 2 ? true : false;
+          this.articleAllView = this.searchResponse.articles && this.searchResponse.articles?.length > 2 ? true : false;
+          this.snippetAllView = this.searchResponse.snippets && this.searchResponse.snippets?.length > 2 ? true : false;
+          this.searchResultText = this.searchResponse.totalSearchResults == 1 ? "Search result for" : "Search results for";
+          this.checkFaqAnswerNotRenderCountAndRequest()
+        }
       } else if (this.answerPlaceableIDs?.length > 0) {        
         response.suggestions.faqs = this.rootService.formatFAQResponse(response.suggestions.faqs);
         let faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.input == response.suggestions?.faqs[0].question);

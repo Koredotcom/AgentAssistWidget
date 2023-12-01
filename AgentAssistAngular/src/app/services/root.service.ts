@@ -166,79 +166,81 @@ export class RootService {
 
   formatSearchResponse(response) {
     let suggestions = response.suggestions
-    let searchResponse: any = {};
-    searchResponse.dialogs = [];
-    searchResponse.faqs = [];
-    searchResponse.articles = [];
-    searchResponse.snippets = [];
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
-    let snippersArray = suggestions?.searchassist?.snippets || []
-    if (suggestions.searchassist && Object.keys(suggestions.searchassist).length > 0) {
-      for (let source in suggestions.searchassist) {
-        if (source != "snippets") {
-          suggestions.searchassist[source] = this.checkEmptyObjectsInArray(suggestions.searchassist[source]);
-          if (Object.keys(suggestions.searchassist[source]).length > 0) {
-            searchResponse.articles.push.apply(searchResponse.articles, suggestions.searchassist[source]);
+    let snippersArray = suggestions?.searchassist?.snippets || [];
+    let searchResponse: any = {};
+    if(dialoguesArray.length || faqArray.length || snippersArray.length){
+      searchResponse.dialogs = [];
+      searchResponse.faqs = [];
+      searchResponse.articles = [];
+      searchResponse.snippets = [];
+      if (suggestions.searchassist && Object.keys(suggestions.searchassist).length > 0) {
+        for (let source in suggestions.searchassist) {
+          if (source != "snippets") {
+            suggestions.searchassist[source] = this.checkEmptyObjectsInArray(suggestions.searchassist[source]);
+            if (Object.keys(suggestions.searchassist[source]).length > 0) {
+              searchResponse.articles.push.apply(searchResponse.articles, suggestions.searchassist[source]);
+            }
           }
         }
+        for (let article of searchResponse.articles) {
+          article.showMoreButton = true;
+          article.showLessButton = false;
+          article.content = article.content ? article.content : '';
+          article.contentId = article.contentId;
+          article.userInput = response.userInput;
+        }
       }
-      for (let article of searchResponse.articles) {
-        article.showMoreButton = true;
-        article.showLessButton = false;
-        article.content = article.content ? article.content : '';
-        article.contentId = article.contentId;
-        article.userInput = response.userInput;
-      }
-    }
-    for (let faq of faqArray) {
-      let faqObject: any = {
-        question: faq.question,
-        displayName: faq.displayName,
-        taskRefId: faq?.taskRefId,
-        answer: (faq.answer && faq.answer.length > 0) ? [] : false,
-        showMoreButton: true,
-        showLessButton: false,
-        answerRender: faq.answer || false,
-        childBotId: faq.childBotId,
-        childBotName: faq.childBotName,
-        answerCount: 1
-      }
-      if (faq.answer && faq.answer.length > 0) {
-        for (let ans of faq.answer) {
-          let object: any = {
-            ans: ans,
-            taskRefId: faq.taskRefId,
-            showMoreButton: true,
-            showLessButton: false,
+      for (let faq of faqArray) {
+        let faqObject: any = {
+          question: faq.question,
+          displayName: faq.displayName,
+          taskRefId: faq?.taskRefId,
+          answer: (faq.answer && faq.answer.length > 0) ? [] : false,
+          showMoreButton: true,
+          showLessButton: false,
+          answerRender: faq.answer || false,
+          childBotId: faq.childBotId,
+          childBotName: faq.childBotName,
+          answerCount: 1
+        }
+        if (faq.answer && faq.answer.length > 0) {
+          for (let ans of faq.answer) {
+            let object: any = {
+              ans: ans,
+              taskRefId: faq.taskRefId,
+              showMoreButton: true,
+              showLessButton: false,
+            }
+            faqObject.answer.push(object);
           }
-          faqObject.answer.push(object);
+        }
+        searchResponse.faqs.push(faqObject);
+      }
+      if (suggestions?.searchassist?.snippets?.length > 0) {
+        for (let snippet of snippersArray) {
+          if(snippet.title){
+            searchResponse.snippets.push(snippet);
+          }
+        }
+        for (let snippet of searchResponse.snippets) {
+          snippet.showMoreButton = true;
+          snippet.showLessButton = false;
         }
       }
-      searchResponse.faqs.push(faqObject);
-    }
-    if (suggestions?.searchassist?.snippets?.length > 0) {
-      for (let snippet of snippersArray) {
-        if(snippet.title){
-          searchResponse.snippets.push(snippet);
+  
+      for (let dialog of dialoguesArray) {
+        if (dialog.entities && dialog.entities?.length > 0) {
+          dialog.entities.forEach(entity => {
+            entity.editMode = false;
+          });
         }
-      }
-      for (let snippet of searchResponse.snippets) {
-        snippet.showMoreButton = true;
-        snippet.showLessButton = false;
-      }
-    }
-
-    for (let dialog of dialoguesArray) {
-      if (dialog.entities && dialog.entities?.length > 0) {
-        dialog.entities.forEach(entity => {
-          entity.editMode = false;
+        searchResponse.dialogs.push({
+          name: dialog.name, agentRunButton: false, childBotId: dialog.childBotId,
+          childBotName: dialog.childBotName, entities: dialog.entities, userInput: dialog.userInput
         });
       }
-      searchResponse.dialogs.push({
-        name: dialog.name, agentRunButton: false, childBotId: dialog.childBotId,
-        childBotName: dialog.childBotName, entities: dialog.entities, userInput: dialog.userInput
-      });
     }
     return searchResponse;
   }
