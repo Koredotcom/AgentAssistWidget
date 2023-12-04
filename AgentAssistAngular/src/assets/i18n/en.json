@@ -95,5 +95,7 @@
     "INCORRECT_INTENT" : "Incorrect intent",
     "ACCIDENTAL_CLICK" : "Accidental click",
     "TIME_TAKING" : "Time taking",
-    "OTHER" : "Other"
+    "OTHER" : "Other",
+    "PLAYBOOK_EMPTY_MSG" : "Select Playbook",
+    "PLAYBOOK_EMPTY_DESC" : "AgentAssist is unable to load the playbook due to all available playbooks being dynamic. Click 'Select Playbook' to access the playbook"
 }

@@ -57,7 +57,7 @@ export class ChecklistComponent {
   constructor(
     private commonService: CommonService,
     private websocketService: WebSocketService,
-    private rootService: RootService,
+    public rootService: RootService,
     private serviceInvoker: ServiceInvokerService
   ) { };
 
@@ -120,6 +120,9 @@ export class ChecklistComponent {
       // }
     } else {
       return;
+    }
+    if(!(this.checklists[this.selcLinx]?.type == 'primary' && this.checklists[this.selcLinx].stages[this.selsTinx].name == 'Close')){
+      this.isProceedToClose = false;
     }
   }
 

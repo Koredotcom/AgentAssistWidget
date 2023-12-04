@@ -22,7 +22,7 @@
                 <div class="dropdowns-text-info">
                     <div ngbDropdown class="dropdown playbook-drp" container="body">
                         <button type="button" id="playbookDrp" ngbDropdownToggle>
-                            <span>{{checklists[selcLinx]?.name}}</span>
+                            <span>{{(checklists[selcLinx]?.name) ? checklists[selcLinx]?.name : ((checklists.length || triggeredDynCheckLists.length) ? ('PLAYBOOK_EMPTY_MSG' | translate) : '')}}</span>
                             <i class="krIocnsFont-chevron-down arrow-icon" *ngIf="checklists.length"></i>
                         </button>
                         <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
@@ -73,7 +73,7 @@
                     </button> -->
                     <button class="solid-action stop-assist" aria-label="button" *ngIf="showProceedToClose && !isProceedToClose"
                         (click)="proceedToCloseButtonClick()"
-                        [ngClass]="{'disabled-msg' : checklists[selcLinx].completed}">
+                        [ngClass]="{'disabled-msg' : checklists[selcLinx].completed}" title="Proceed to close">
                         <i class="krIocnsFont-terminate-playbook"></i>
                     </button>
                 </ng-container>
@@ -85,6 +85,8 @@
         </div>
     </div>
     <div class="playbook-wrapper-body">
+        <ng-container [ngTemplateOutlet]="listingTriggers" *ngIf="!this.rootService?.primaryChecklist.length && !checklists[selcLinx]?.name && (checklists.length || triggeredDynCheckLists.length)"></ng-container>                    
+
         <div class="playbook-steps-info">
             <ng-container *ngFor="let stage of checklists[selcLinx]?.stages; let i = index">
                 <button type="button" class="stage-btn">{{stage?.name}}</button>
@@ -137,3 +139,11 @@
         </ng-container>
     </div>
 </ng-template>
+
+<ng-template #listingTriggers>
+    <div class="empty-listing-triggers disabled-msg">
+        <h1>{{'PLAYBOOK_EMPTY_MSG' | translate}}</h1>
+        <p>{{'PLAYBOOK_EMPTY_DESC' | translate}}</p>
+    </div>
+</ng-template>
+
