@@ -127,20 +127,22 @@ export class WebSocketService {
     }
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_response, (data : any) => {
-      this.rootService.assistTabSessionId = '';
-      if(data.sessionId) {
-        this.rootService.assistTabSessionId = data?.sessionId;
-      }
-      if (this.rootService.getConnectionDetails()?.interactiveLanguage && typeof this.rootService.getConnectionDetails()?.interactiveLanguage == 'string' && this.rootService.getConnectionDetails()?.interactiveLanguage != "''") {
-        menu_request_params['language'] = this.rootService.getConnectionDetails()?.interactiveLanguage; // Return the default value for null, undefined, or "''"
-      }
-      if(data.sendMenuRequest && !this.isWelcomeResonse){
-        this.isWelcomeResonse = true;
-        this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
-        this.sendCheckListOpened$.next(true);
-      }
-      this.agentAssistResponse$.next(data);
-      this.addOrRemoveLoader(false);
+      setTimeout(() => {
+        this.rootService.assistTabSessionId = '';
+        if(data.sessionId) {
+          this.rootService.assistTabSessionId = data?.sessionId;
+        }
+        if (this.rootService.getConnectionDetails()?.interactiveLanguage && typeof this.rootService.getConnectionDetails()?.interactiveLanguage == 'string' && this.rootService.getConnectionDetails()?.interactiveLanguage != "''") {
+          menu_request_params['language'] = this.rootService.getConnectionDetails()?.interactiveLanguage; // Return the default value for null, undefined, or "''"
+        }
+        if(data.sendMenuRequest && !this.isWelcomeResonse){
+          this.isWelcomeResonse = true;
+          this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
+          this.sendCheckListOpened$.next(true);
+        }
+        this.agentAssistResponse$.next(data);
+        this.addOrRemoveLoader(false);
+      }, 10);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_menu_response, (data : any) => {
@@ -169,16 +171,20 @@ export class WebSocketService {
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_agent_response, (data : any)=>{
-      this.rootService.myBotTabSessionId = '';
-      if(data.sessionId) {
-        this.rootService.myBotTabSessionId = data?.sessionId;
-      }
-      this.agentAssistAgentResponse$.next(data);
-      this.addOrRemoveLoader(false);
+      setTimeout(() => {
+        this.rootService.myBotTabSessionId = '';
+        if(data.sessionId) {
+          this.rootService.myBotTabSessionId = data?.sessionId;
+        }
+        this.agentAssistAgentResponse$.next(data);
+        this.addOrRemoveLoader(false);
+      },10);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_endoftask, (data : any) =>{
-      this.endOfTaskResponse$.next(data);
+      setTimeout(() => {
+        this.endOfTaskResponse$.next(data);
+      },10);
     });
 
     this._agentAsisstSocket.on(EVENTS.user_message, (data : any) =>{
@@ -190,8 +196,9 @@ export class WebSocketService {
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_user_message, (data : any) => {
-      this.agentAssistUserMessageResponse$.next(data);
-
+      setTimeout(() => {
+        this.agentAssistUserMessageResponse$.next(data);
+      },10);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_feedback_response, (data : any) =>{

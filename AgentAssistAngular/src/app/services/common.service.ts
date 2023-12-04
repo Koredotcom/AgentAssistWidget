@@ -340,6 +340,7 @@ export class CommonService {
             arrEle.automationsArray[arrEle.automationsArray.length - 1].errorCount += 1;
             arrEle.automationsArray[arrEle.automationsArray.length - 1].grayOut = false;
           } else {
+            arrEle.automationsArray[arrEle.automationsArray.length - 1].errorCount = 0;
             arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
           }
         } else {

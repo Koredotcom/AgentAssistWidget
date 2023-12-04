@@ -170,6 +170,7 @@ export class MybotComponent {
       renderResponse.hideOverrideDiv =  true;
       this.currentRunningStep = data.entityDisplayName ? data.entityDisplayName : data.entityName;
       let previousEntityNodes = this.commonService.getPreviousEntityNodesAndValues(this.mybotResponseArray,data);
+      this.showErrorPrompt = data.isErrorPrompt ? true : false;
       this.mybotResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.mybotResponseArray, data, this.showErrorPrompt, renderResponse, this.rootService.myBotDropdownHeaderUuids, this.projConstants.MYBOT, previousEntityNodes)
       this.mybotResponseArray = structuredClone(this.mybotResponseArray);
     }
