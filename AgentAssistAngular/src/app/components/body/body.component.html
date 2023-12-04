@@ -1,8 +1,8 @@
-<div class="widget-body-wrapper">
+<div class="widget-body-wrapper" #bodyWrapper>
     <div class="widgets-list-card" #top [ngClass]="{'minimized-card' : assistMaxButtonClick}">
         <app-checklist (maxButtonClick)="checkListMaxButtonClickEvent($event)" [maxButton]="checkListMaxButtonClick"></app-checklist>
     </div>
-    <div class="resize-divider"></div>
+    <div class="resize-divider" appWidgetDrag [(isGrabbing)]="isGrab" [topele]="top" [bottomele]="bottom" [mainele]="bodyWrapper"></div>
     <div class="widgets-list-card" #bottom [ngClass]="{'minimized-card' : checkListMaxButtonClick}">
         <!-- <app-loader *ngIf="isLoader"></app-loader> -->
         <app-assist (maxButtonClick)="assistMaxButtonClickEvent($event)" [maxButton]="assistMaxButtonClick"></app-assist>

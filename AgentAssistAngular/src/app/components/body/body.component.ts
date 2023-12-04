@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { ChangeDetectorRef, Component, HostListener, Inject, OnInit } from '@angular/core';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { SubSink } from 'subsink';
 
@@ -12,11 +13,17 @@ export class BodyComponent implements OnInit{
   assistMaxButtonClick : boolean = false;
   checkListMaxButtonClick : boolean = false;
   isLoader : boolean = false;
+  isGrab : boolean = false;
 
   subs = new SubSink();
 
   constructor(private handleSubjectService : HandleSubjectService){
 
+  }
+
+  @HostListener('mouseup', ['$event'])
+  onMouseUp(event: MouseEvent) {
+    this.isGrab = false;
   }
 
   ngOnInit(): void {
