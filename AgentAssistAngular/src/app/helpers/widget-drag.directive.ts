@@ -24,12 +24,15 @@ export class WidgetDragDirective {
     }
 
     let containerOffsetTop = this.mainele.offsetTop;
-    let containerOffsetBottom = this.mainele.offsetHeight;
+    // let containerOffsetBottom = this.mainele.offsetTop - this.mainele.offsetHeight;    
     let pointerRelativeXpos = event.clientY - containerOffsetTop;
-    let pointerRelativeXpos2 = event.clientY - containerOffsetTop + containerOffsetBottom;
+    let pointerRelativeXpos2 = this.mainele.offsetHeight - pointerRelativeXpos;
 
-    this.topele.style.minHeight = pointerRelativeXpos + 'px';
-    this.bottomele.style.minHeight = pointerRelativeXpos2 + 'px';
+    
+    if(pointerRelativeXpos > 55 && pointerRelativeXpos2 > 85){
+      this.topele.style.minHeight = pointerRelativeXpos + 'px';
+      this.bottomele.style.minHeight = pointerRelativeXpos2 + 'px';
+    }
   }
 
   @HostListener('mouseup', ['$event'])
