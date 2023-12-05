@@ -13,7 +13,7 @@
             <label class="form-check-label" for="restart">{{'RESTART_CAPTURE' | translate}}</label>
         </div>
         <ng-container *ngIf="restartCheck == projConstants.RESTART_INPUTS">
-            <div class="entity-mesage-data" *ngFor="let automation of entityList; let i = index">
+            <div class="entity-mesage-data" [ngClass]="{'error-no-reponse' : automation.errorCount}" *ngFor="let automation of entityList; let i = index">
                 <ng-container [ngTemplateOutlet]="entityMessageRestart"  [ngTemplateOutletContext]="{automationData: automation}"></ng-container>
             </div>
         </ng-container>
@@ -45,5 +45,7 @@
             </ng-container>
         </div>
     </div>
-    <p class="info-entity-text">{{'OVERRIDE' | translate}}</p>
+    <p class="info-entity-text" *ngIf="!automation.errorCount">{{'OVERRIDE' | translate}}</p>
+    <p class="info-entity-text" *ngIf="automation.errorCount">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.entityType}}  |  {{'OVERRIDE' | translate}}</p>
+
 </ng-template>
