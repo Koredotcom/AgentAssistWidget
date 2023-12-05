@@ -269,6 +269,33 @@ export class AppComponent implements OnInit, OnDestroy{
         this.widgetSettings = res.agentAssistSettings;
       }
       this.initiateSocketConnection(params);
+    },(err)=> {
+      let res: any = {
+        agentAssistSettings: {
+          "isWidgetLandingEnabled": {
+            "chat": {
+              "isEnabled": true,
+              "tab": "assist"
+            },
+            "voice": {
+              "isEnabled": true,
+              "tab": "assist"
+            },
+            "isEnabled": true
+          },
+          "isCustomisedLogoEnabled": {
+            "isEnabled": false
+          },
+          "agentAssistWidgetEnabled": true,
+          "isProactiveEnabled": true,
+          "isAgentCoachingEnabled": true,
+          "isAgentResponseEnabled": true,
+          "isAgentPlaybookEnabled": true,
+          "isSearchAssistEnabled": true
+        }
+      }
+      this.widgetSettings = res.agentAssistSettings;
+      this.initiateSocketConnection(params);
     });
 
   }
