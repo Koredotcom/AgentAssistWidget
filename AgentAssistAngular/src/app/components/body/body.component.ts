@@ -14,6 +14,7 @@ export class BodyComponent implements OnInit{
   checkListMaxButtonClick : boolean = false;
   isLoader : boolean = false;
   isGrab : boolean = false;
+  resized : boolean = false;
 
   subs = new SubSink();
 
@@ -24,6 +25,7 @@ export class BodyComponent implements OnInit{
   @HostListener('mouseup', ['$event'])
   onMouseUp(event: MouseEvent) {
     this.isGrab = false;
+    this.resizeEvent(event);
   }
 
   ngOnInit(): void {
@@ -32,6 +34,10 @@ export class BodyComponent implements OnInit{
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  resizeEvent(event){
+    this.resized = !this.resized;
   }
 
 

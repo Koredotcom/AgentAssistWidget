@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { number } from 'echarts';
 import { EVENTS } from 'src/app/helpers/events';
 import { ProjConstants } from 'src/app/proj.const';
@@ -17,6 +17,7 @@ export class ChecklistComponent {
 
   @Output() maxButtonClick = new EventEmitter();
   @Input() maxButton: boolean;
+  @Input() resize;
 
   projConstants: any = ProjConstants;
   subs = new SubSink();
@@ -61,9 +62,28 @@ export class ChecklistComponent {
     private serviceInvoker: ServiceInvokerService
   ) { };
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.scrollToStep();
+  }
+
+  onResized() {
+   this.scrollToStep();
+  }
+
+  scrollToStep(){
+    let stepId = this.checklists[this.selcLinx]?.stages[this.selsTinx]?.steps[this.selsPinx]?._id;
+    if(stepId){
+      this.scrollView(stepId);
+    }
+  }
 
   ngOnInit() {
     this.subscribeEvents();
+  }
+
+  ngOnChanges(){
+    this.onResized();
   }
 
   ngOnDestroy() {
@@ -366,7 +386,7 @@ export class ChecklistComponent {
 
   scrollView(stepId){
     if(document.getElementById(stepId)){
-      document.getElementById(stepId).scrollIntoView();
+      document.getElementById(stepId).scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
     }
   }
 

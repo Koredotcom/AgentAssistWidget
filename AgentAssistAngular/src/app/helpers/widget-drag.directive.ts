@@ -8,6 +8,7 @@ export class WidgetDragDirective {
   oldY = 0;
 
   @Output() isGrabbingChange = new EventEmitter<boolean>();
+  @Output() resizeEvent = new EventEmitter();
   // @Output() heightChange = new EventEmitter<number>();
 
   // @Input() height: number;
@@ -39,6 +40,7 @@ export class WidgetDragDirective {
   onMouseUp(event: MouseEvent) {
     this.isGrabbing = false;
     this.isGrabbingChange.emit(this.isGrabbing);
+    this.resizeEvent.emit(false);
   }
 
   @HostListener('mousedown', ['$event'])
@@ -46,5 +48,6 @@ export class WidgetDragDirective {
     this.isGrabbing = true;
     this.oldY = event.clientY;
     this.isGrabbingChange.emit(this.isGrabbing);
+    this.resizeEvent.emit(true);
   }
 }
