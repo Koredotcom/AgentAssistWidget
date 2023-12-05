@@ -102,7 +102,7 @@ export class AskCustomerComponent {
     connectionDetails.childBotName = this.automation.data.childBotName;
     let assistRequestParams = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
-    this.automation.showSpinner = true;
+    this.spinnerUpdate();
   }
 
   mybotInputValue(inputValue) {
@@ -114,7 +114,7 @@ export class AskCustomerComponent {
     connectionDetails.childBotId = this.rootService?.childBotDetails.childBotId;
     let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
-    this.automation.showSpinner = true;
+    this.spinnerUpdate();
   }
 
   handleSendCopyButton(method, automation) {
@@ -127,5 +127,16 @@ export class AskCustomerComponent {
 
   grayOutCurrentAutomation(){
     this.automation.grayOut = true;
+  }
+
+  spinnerUpdate(){
+    this.automation.showSpinner = true;
+    setTimeout(() => {
+      if(this.automation.showSpinner){
+        this.automation.showSpinner = false;
+        this.automation.grayOut = false;
+        this.automation.disableInput = false;
+      }
+    }, 10000);
   }
 }
