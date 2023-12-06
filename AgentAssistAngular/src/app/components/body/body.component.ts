@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectorRef, Component, HostListener, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Inject, OnInit, ViewChild } from '@angular/core';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { SubSink } from 'subsink';
 
@@ -9,6 +9,9 @@ import { SubSink } from 'subsink';
   styleUrls: ['./body.component.scss']
 })
 export class BodyComponent implements OnInit{
+
+  @ViewChild('top', { static: false }) private checklistDiv: ElementRef<HTMLDivElement>
+  @ViewChild('bottom', { static: false }) private assistDiv: ElementRef<HTMLDivElement>
 
   assistMaxButtonClick : boolean = false;
   checkListMaxButtonClick : boolean = false;
@@ -54,6 +57,8 @@ export class BodyComponent implements OnInit{
     }else{
       this.checkListMaxButtonClick = !this.checkListMaxButtonClick;
     }
+    this.assistDiv.nativeElement.style.minHeight = 0 + 'px';
+    this.checklistDiv.nativeElement.style.minHeight = 0 + 'px';
   }
 
   assistMaxButtonClickEvent(event){
@@ -63,6 +68,8 @@ export class BodyComponent implements OnInit{
     }else{
       this.assistMaxButtonClick = !this.assistMaxButtonClick;
     }
+    this.checklistDiv.nativeElement.style.minHeight = 0 + 'px';
+    this.assistDiv.nativeElement.style.minHeight = 0 + 'px';
   }
 
 }
