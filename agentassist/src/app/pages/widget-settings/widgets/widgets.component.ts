@@ -52,7 +52,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     isAgentCoachingEnabled: true,
     isAgentResponseEnabled: true,
     isAgentPlaybookEnabled: true,
-    isSearchAssistEnabled: true,
+    isSearchAssistEnabled:{
+      isEnabled : true,
+      xoResultIsEnabled : true
+    } ,
     isWidgetLandingEnabled: {
       isEnabled :  true, 
        chat: {
@@ -96,31 +99,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     let body = {
       botId
     }
-    // this.agentAssistSettings? = { 
-    //   agentAssistWidgetEnabled: true,
-    //   isProactiveEnabled: true,
-    //   isAgentCoachingEnabled: true,
-    //   isAgentResponseEnabled: true,
-    //   isAgentPlaybookEnabled: true,
-    //   isSearchAssistEnabled: true,
-    //   isWidgetLandingEnabled: {
-    //     isEnabled :  true, 
-    //      chat: {
-    //            isEnabled: true, 
-    //             tab: "Assist"  
-    //          },
-    //     voice: {
-    //           isEnabled:  true,
-    //           tab: "Transcription" 
-    //          }
-    //   },
-    //   isCustomisedLogoEnabled: {
-    //     isEnabled: true, 
-    //     fileId : '',
-    //    hash : '',
-    //   fileName: ''
-    //   }
-    // }
     this.service.invoke("get.agentAssistSettings", params, body).subscribe(
       (res) => {
         if (res) {
@@ -129,6 +107,34 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           this.clonedWidgetSettings = clone(res);
           this.agentAssistSettings = {...res.agentAssistSettings};
           this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
+          this.agentAssistSettings = {
+              agentAssistWidgetEnabled: true,
+              isProactiveEnabled: true,
+              isAgentCoachingEnabled: true,
+              isAgentResponseEnabled: true,
+              isAgentPlaybookEnabled: true,
+              isSearchAssistEnabled : {
+                isEnabled : false,
+                xoResultIsEnabled : false
+              },
+              isWidgetLandingEnabled: {
+                isEnabled :  true, 
+                 chat: {
+                       isEnabled: true, 
+                        tab: "Assist"  
+                     },
+                voice: {
+                      isEnabled:  true,
+                      tab: "Transcription" 
+                     }
+              },
+              isCustomisedLogoEnabled: {
+                isEnabled: true, 
+                fileId : '',
+               hash : '',
+              fileName: ''
+              }
+            }
         }
       },
       (err) => {
@@ -158,7 +164,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           isAgentCoachingEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isAgentCoachingEnabled : false,
           isAgentResponseEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isAgentResponseEnabled :false,
           isAgentPlaybookEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isAgentPlaybookEnabled: false,
-          isSearchAssistEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isSearchAssistEnabled : false,
+          isSearchAssistEnabled: {
+            isEnabled : this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isSearchAssistEnabled.isEnabled : false,
+            xoResultIsEnabled : this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isSearchAssistEnabled.xoResultIsEnabled : false
+          },
           isWidgetLandingEnabled : {
             isEnabled :  this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.isEnabled : false, 
               chat: {
@@ -212,8 +221,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   selectedOption(selectedVal) {
     if (selectedVal === 'voice') {
       this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled = !this.agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled;
-    } else {
+    } else if(selectedVal === 'chat') {
       this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled = !this.agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled;
+    } else if(selectedVal === 'xoSearch') {
+      this.agentAssistSettings.isSearchAssistEnabled.xoResultIsEnabled = !this.agentAssistSettings?.isSearchAssistEnabled?.xoResultIsEnabled;
     }
   }
 
