@@ -116,6 +116,9 @@ export class WebSocketService {
       if (this.connectionDetails?.interactiveLanguage && typeof this.connectionDetails?.interactiveLanguage == 'string' && this.connectionDetails?.interactiveLanguage != "''") {
         menu_request_params['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
       }
+      if(data.isResend){
+        this.emitEvents('user_sent_message', data);
+      }
       if(data.sendMenuRequest && !this.isWelcomeResonse){
         this.isWelcomeResonse = true;
         this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
