@@ -54,7 +54,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     isAgentPlaybookEnabled: false,
     isSearchAssistEnabled: true,
     searchAssistConfig : {
-      isIntentMatchEnabled: false, 
+      isXODependant: false, 
       showAutoSuggestions: true
     },
     isWidgetLandingEnabled: {
@@ -149,7 +149,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
                   }
             },
             searchAssistConfig : {
-              isIntentMatchEnabled: (this.agentAssistSettings?.agentAssistWidgetEnabled && this.agentAssistSettings?.isSearchAssistEnabled ) ? this.agentAssistSettings.searchAssistConfig?.isIntentMatchEnabled : false, 
+              isXODependant: (this.agentAssistSettings?.agentAssistWidgetEnabled && this.agentAssistSettings?.isSearchAssistEnabled ) ? this.agentAssistSettings.searchAssistConfig?.isXODependant : false, 
               showAutoSuggestions: (this.agentAssistSettings?.agentAssistWidgetEnabled && this.agentAssistSettings?.isSearchAssistEnabled ) ? this.agentAssistSettings.searchAssistConfig?.showAutoSuggestions : false
             },
             isCustomisedLogoEnabled: {
@@ -202,7 +202,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   selectedSearchAssistOption(selectedVal) {
     if (selectedVal === 'xoSearch') {
-      this.agentAssistSettings.searchAssistConfig.isIntentMatchEnabled = !this.agentAssistSettings?.searchAssistConfig?.isIntentMatchEnabled;
+      this.agentAssistSettings.searchAssistConfig.isXODependant = !this.agentAssistSettings?.searchAssistConfig?.isXODependant;
     } else {
       this.agentAssistSettings.searchAssistConfig.showAutoSuggestions = !this.agentAssistSettings?.searchAssistConfig?.showAutoSuggestions;
     }
