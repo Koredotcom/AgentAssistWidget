@@ -112,6 +112,24 @@
                 }
             }
         }
+        .search-tab-info {
+            display: flex;
+            align-items: center;
+            gap: 34px;
+            padding: 15px 0 0 40px;
+            .kr-sg-checkbox{
+                margin: 0;
+                padding: 0;
+                .checkbox-custom {
+                    + .checkbox-custom-label{
+                        color: var(--gray-700, var(--primary-colors-gray-700, #344054));
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 20px;
+                    }
+                }
+            }
+        }
         .landing-tab-info{
             display: flex;
             align-items: center;

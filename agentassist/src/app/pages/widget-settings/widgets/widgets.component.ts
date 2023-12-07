@@ -36,10 +36,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   iId = this.authService?.isLoadingOnSm && this.selAcc && this.selAcc?.instanceBots?.length ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
 
   landingPageTabs = {
-    transcript: 'Transcript',
-    assist: 'Assist',
-    library: 'Library',
-    mybot: 'My bot'
+    Transcription: 'Transcription',
+    Assist: 'Assist',
+    Library: 'Library',
+    Mybot: 'My bot'
     // voice: [ 'transcript', 'assist', 'library', 'myBot'],
     // chat: [ 'assist',  'library', 'myBot' ]
   }
@@ -105,7 +105,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         if (res) {
           this.isLoading = false;
           this.disableButtons = false;
-          this.clonedWidgetSettings = clone(res);
+          this.clonedWidgetSettings = JSON.stringify(res);
           this.agentAssistSettings = {...this.agentAssistSettings, ...res.agentAssistSettings};
           this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
         }
@@ -120,17 +120,16 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   saveAgentAssistSettings() {
+    let cloneSettings = JSON.parse(this.clonedWidgetSettings);
     this.disableButtons = true;
     let params = {
       orgId: this.authService?.getOrgId(),
-      aasId: this.clonedWidgetSettings?.id
+      aasId: cloneSettings?.id
     };
     const payload = {
       "orgId": this.authService?.getOrgId(),
       "accountId": this.localstorage?.getSelectedAccount()?.accountId,
       "iId": this.iId,
-      // "updatedByAId": this.clonedWidgetSettings.updatedByAId,
-      // "createdByAId": this.clonedWidgetSettings.createdByAId,
       "agentAssistSettings": {
           agentAssistWidgetEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.agentAssistWidgetEnabled : false,
           isProactiveEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isProactiveEnabled : false,
@@ -141,12 +140,12 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           isWidgetLandingEnabled : {
             isEnabled :  this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.isEnabled : false, 
               chat: {
-                    isEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.chat.isEnabled : false, 
-                    tab: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.chat.tab : 'Assist'  
+                    isEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled : false, 
+                    tab: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled?.chat?.tab : 'Assist'  
                   },
               voice: {
-                    isEnabled:  this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.voice.isEnabled : false,
-                    tab: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.voice.tab : "Transcript" 
+                    isEnabled:  this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled : false,
+                    tab: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled?.voice?.tab : "Transcript" 
                   }
             },
             searchAssistConfig : {
@@ -160,8 +159,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
             fileName: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isCustomisedLogoEnabled.fileName : ''
             }
       },
-      "id": this.clonedWidgetSettings?.id,
-      updatedByAId: this.clonedWidgetSettings?.updatedByAId
+      "id": cloneSettings?.id,
+      updatedByAId: cloneSettings?.updatedByAId
     } 
 
     this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
@@ -170,7 +169,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         if (res) {
             this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
             this.disableButtons = false;
-          this.clonedWidgetSettings = clone(res);
+          this.clonedWidgetSettings = JSON.stringify(res);
           this.agentAssistSettings = {...this.agentAssistSettings, ...res.agentAssistSettings};
           this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
         }
@@ -188,7 +187,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   cancleAgentAssistSettings() {
       if(this.clonedWidgetSettings){
-        this.agentAssistSettings = {...this.agentAssistSettings, ...this.clonedWidgetSettings.agentAssistSettings};
+        let settings = JSON.parse(this.clonedWidgetSettings);
+        this.agentAssistSettings = settings.agentAssistSettings;
       }
   }
 
@@ -211,7 +211,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   selectTab(channel, tab) {
     if(channel === 'chat') {
       this.agentAssistSettings.isWidgetLandingEnabled.chat.tab = tab;
-    } else {
+    } else if(channel === 'voice') {
       this.agentAssistSettings.isWidgetLandingEnabled.voice.tab = tab;
     }
   }
