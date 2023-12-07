@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, HostListener, Inject, OnInit, ViewChild } from '@angular/core';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
+import { RootService } from 'src/app/services/root.service';
 import { SubSink } from 'subsink';
 
 @Component({
@@ -21,7 +22,7 @@ export class BodyComponent implements OnInit{
 
   subs = new SubSink();
 
-  constructor(private handleSubjectService : HandleSubjectService){
+  constructor(private handleSubjectService : HandleSubjectService, public rootService : RootService){
 
   }
 

@@ -68,7 +68,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   showSpinner : boolean = true;
 
 
-  constructor(private rootService: RootService, private serviceInvoker: ServiceInvokerService,
+  constructor(public rootService: RootService, private serviceInvoker: ServiceInvokerService,
     private websocketService: WebSocketService, private localStorageService: LocalStorageService,
     private koreGenerateuuidPipe: KoreGenerateuuidPipe, private randomUUIDPipe: RandomUuidPipe,
     private handleSubjectService: HandleSubjectService, private templateRenderClassService: TemplateRenderClassService,
