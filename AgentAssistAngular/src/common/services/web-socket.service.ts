@@ -44,7 +44,6 @@ export class WebSocketService {
 
   constructor(private handleSubjectService : HandleSubjectService,
     private sanitizeHTMLPipe : SanitizeHtmlPipe, private localStorageService : LocalStorageService,
-    private commonService: CommonService
   ) {
     this.subscribeEvents();
   }
