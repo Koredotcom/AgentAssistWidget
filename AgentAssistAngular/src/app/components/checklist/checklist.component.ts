@@ -408,4 +408,11 @@ export class ChecklistComponent {
     return stepNum;
   }
 
+  mouseLeaveEvent(event){
+    let cl = this.checklists[this.selcLinx];
+    if(cl.order != 'random'){
+      this.onResized();
+    }
+  }
+
 }
