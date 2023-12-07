@@ -130,7 +130,7 @@ export class WebSocketService {
               'query': obj.text,
               'botId': data.botId,
               'agentId': data.agentId,
-              'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
+              'experience': 'chat',
               'positionId': data?.positionId
             }
             this.emitEvents('agent_assist_request', payload);
