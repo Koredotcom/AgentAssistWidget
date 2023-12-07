@@ -98,6 +98,7 @@ export class TypeaheadComponent implements OnInit {
                 'Authorization': 'bearer' + ' ' + connectionDetails.tokenVal,
                 'AccountId': connectionDetails.accountId,
                 'eAD': false,
+                'iid' : connectionDetails.botId ? connectionDetails.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
             }
         } else {
             headersVal = {
