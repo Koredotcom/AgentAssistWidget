@@ -24,15 +24,19 @@ export class WidgetDragDirective {
       return;
     }
 
-    let containerOffsetTop = this.mainele.offsetTop;
-    // let containerOffsetBottom = this.mainele.offsetTop - this.mainele.offsetHeight;    
-    let pointerRelativeXpos = event.clientY - containerOffsetTop;
-    let pointerRelativeXpos2 = this.mainele.offsetHeight - pointerRelativeXpos;
-
+    let pointerRelativeXpos2 = this.mainele.offsetHeight - event.y;
+    let pointerRelativeXpos = this.mainele.offsetHeight - pointerRelativeXpos2 -23;    
     
     if(pointerRelativeXpos > 55 && pointerRelativeXpos2 > 85){
       this.topele.style.minHeight = pointerRelativeXpos + 'px';
       this.bottomele.style.minHeight = pointerRelativeXpos2 + 'px';
+    }
+    
+    if(this.topele.classList.contains('minimized-card')){
+      this.topele.classList.remove('minimized-card')
+    }
+    if(this.bottomele.classList.contains('minimized-card')){
+      this.bottomele.classList.remove('minimized-card')
     }
   }
 
