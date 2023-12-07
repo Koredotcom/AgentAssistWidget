@@ -122,6 +122,7 @@ export class WebSocketService {
           val = val.replace(/&quot;/g, '"');
           let obj = JSON.parse(val);
           if(obj?.isResend){
+            delete data['buttons']
             this.emitEvents('agent_assist_request', {query: obj.text, ...data});
           }
         }
