@@ -93,20 +93,20 @@ export class TypeaheadComponent implements OnInit {
         }
         console.log("connectionDetailsconnectionDetailsconnectionDetails", connectionDetails)
         let headersVal = {};
-        // if(connectionDetails.fromSAT) {
-        //     headersVal = {
-        //         'Authorization': 'bearer' + ' ' + connectionDetails.tokenVal,
-        //         'AccountId': connectionDetails.accountId,
-        //         'eAD': false,
-        //     }
-        // } else {
+        if(connectionDetails.fromSAT) {
+            headersVal = {
+                'Authorization': 'bearer' + ' ' + connectionDetails.tokenVal,
+                'AccountId': connectionDetails.accountId,
+                'eAD': false,
+            }
+        } else {
             headersVal = {
                 'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
                 "AccountId": this.commonService.grantResponseObj?.userInfo?.accountId,
                 'eAD': true,
                 'iid' : connectionDetails.botId ? connectionDetails.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
             }
-       // }
+       }
         if (value?.length > 0 && this.aaSettings?.searchAssistConfig?.showAutoSuggestions) {        
             $.ajax({
                 url: `${connectionDetails.agentassisturl}/agentassist/api/v1/searchaccounts/autosearch?botId=${connectionDetails.botId}`,
