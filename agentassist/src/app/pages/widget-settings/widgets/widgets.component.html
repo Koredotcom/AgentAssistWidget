@@ -81,7 +81,7 @@
             </div>
             <div class="toggle-info-data">
                 <label class="kr-sg-toggle toggle-enabled-disabled">
-                    <input type="checkbox" [(ngModel)]="agentAssistSettings.isSearchAssistEnabled.isEnabled">
+                    <input type="checkbox" [(ngModel)]="agentAssistSettings.isSearchAssistEnabled">
                     <div class="slider">
                         <span class="enabled"></span>
                         <span class="disabled"></span>
@@ -89,13 +89,25 @@
                 </label>
                 <div class="content-data-toggle">
                     <h1>SearchAssist</h1>
-                    <p *ngIf="!agentAssistSettings.isSearchAssistEnabled.isEnabled">When disabled, SearchAssist results won't show up for agents.</p>
-                    <div *ngIf="agentAssistSettings.isSearchAssistEnabled.isEnabled">
+                    <p *ngIf="!agentAssistSettings.isSearchAssistEnabled">When disabled, SearchAssist results won't show up for agents.</p>
+                    <div *ngIf="agentAssistSettings.isSearchAssistEnabled">
                         <p >When checked-off, the SearchAssist results will be shown only if XO results ( Dialog/FAQs ) are found.</p>
-                    <div class="kr-sg-checkbox">
-                        <input id="checkbox-12" class="checkbox-custom" type="checkbox" (click)="selectedOption('xoSearch'); $event.stopPropagation();" [checked]="agentAssistSettings?.isSearchAssistEnabled?.xoResultIsEnabled">
-                        <label for="checkbox-12" class="checkbox-custom-label">Dependant on XO results</label>
-                    </div>
+                        <!--  -->
+                        <div class="landing-tab-info" *ngIf="agentAssistSettings.isSearchAssistEnabled">
+                            <div class="info-dropdowns">
+                                <div class="kr-sg-checkbox">
+                                    <input id="checkbox-3" class="checkbox-custom" type="checkbox" (click)="selectedSearchAssistOption('xoSearch'); $event.stopPropagation();" [checked]="agentAssistSettings?.searchAssistConfig?.isIntentMatchEnabled">
+                                    <label for="checkbox-3" class="checkbox-custom-label">Dependant on XO results</label>
+                                </div>
+                            </div>
+                            <div class="info-dropdowns">
+                                <div class="kr-sg-checkbox">
+                                    <input id="checkbox-4" class="checkbox-custom" type="checkbox" (click)="selectedSearchAssistOption('autoSugg'); $event.stopPropagation();" [checked]="agentAssistSettings?.searchAssistConfig?.showAutoSuggestions">
+                                    <label for="checkbox-4" class="checkbox-custom-label">showAutoSuggestions</label>
+                                </div> 
+                            </div>
+                        </div>
+                        <!--  -->
                     </div>
                      
                 </div>
@@ -109,7 +121,7 @@
                     </div>
                 </label>
                 <div class="content-data-toggle">
-                    <h1>Widget Landing Tab for Voice Channel</h1>
+                    <h1>Widget Landing Tab for Voice and Chat Channel</h1>
                     <p>When disabled, agents will land on playbook/assist tab page by default when widget is launched.
                     </p>
                 </div>
