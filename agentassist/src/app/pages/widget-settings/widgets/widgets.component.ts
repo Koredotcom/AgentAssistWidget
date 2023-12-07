@@ -55,7 +55,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     isSearchAssistEnabled: true,
     searchAssistConfig : {
       isIntentMatchEnabled: false, 
-      showAutoSuggestions: false
+      showAutoSuggestions: true
     },
     isWidgetLandingEnabled: {
       isEnabled :  true, 
@@ -188,7 +188,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   cancleAgentAssistSettings() {
       if(this.clonedWidgetSettings){
-        this.agentAssistSettings.agentAssistWidgetEnabled = {...this.agentAssistSettings, ...this.clonedWidgetSettings};
+        this.agentAssistSettings = {...this.agentAssistSettings, ...this.clonedWidgetSettings.agentAssistSettings};
       }
   }
 

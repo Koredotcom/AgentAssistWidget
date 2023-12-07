@@ -91,7 +91,8 @@
                     <h1>SearchAssist</h1>
                     <p *ngIf="!agentAssistSettings.isSearchAssistEnabled">When disabled, SearchAssist results won't show up for agents.</p>
                     <div *ngIf="agentAssistSettings.isSearchAssistEnabled">
-                        <p >When checked-off, the SearchAssist results will be shown only if XO results ( Dialog/FAQs ) are found.</p>
+                        <p >When Check box is not Selected, the SearchAssist results will be shown only if XO results ( Dialog/FAQs ) are found. </p>
+                        <p>(Recommended Setting : Checkbox off)</p>
                         <!--  -->
                         <div class="landing-tab-info" *ngIf="agentAssistSettings.isSearchAssistEnabled">
                             <div class="info-dropdowns">
