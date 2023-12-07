@@ -44,6 +44,7 @@ export class WebSocketService {
 
   constructor(private handleSubjectService : HandleSubjectService,
     private sanitizeHTMLPipe : SanitizeHtmlPipe, private localStorageService : LocalStorageService,
+    private commonService: CommonService
   ) {
     this.subscribeEvents();
   }
@@ -122,10 +123,17 @@ export class WebSocketService {
           val = val.replace(/&quot;/g, '"');
           let obj = JSON.parse(val);
           if(obj?.isResend){
-            delete data['buttons']
-            data['fromThirdParty'] = true;
-            data['sendUserMessage'] = true;
-            this.emitEvents('agent_assist_request', {query: obj.text, ...data});
+            let payload = {
+              fromThirdParty: true,
+              sendUserMessage: true,
+              'conversationId': data.conversationId,
+              'query': obj.text,
+              'botId': data.botId,
+              'agentId': data.agentId,
+              'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
+              'positionId': data?.positionId
+            }
+            this.emitEvents('agent_assist_request', payload);
           }
         }
       }
