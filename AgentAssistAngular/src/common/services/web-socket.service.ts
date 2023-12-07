@@ -123,6 +123,8 @@ export class WebSocketService {
           let obj = JSON.parse(val);
           if(obj?.isResend){
             delete data['buttons']
+            data['fromThirdParty'] = true;
+            data['sendUserMessage'] = true;
             this.emitEvents('agent_assist_request', {query: obj.text, ...data});
           }
         }
