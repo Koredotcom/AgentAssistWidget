@@ -116,9 +116,20 @@ export class WebSocketService {
       if (this.connectionDetails?.interactiveLanguage && typeof this.connectionDetails?.interactiveLanguage == 'string' && this.connectionDetails?.interactiveLanguage != "''") {
         menu_request_params['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
       }
-      if(data.isResend){
-        this.emitEvents('user_sent_message', data);
+      try{
+        if(data.button?.length && data.button[0]?.value){
+          let val = data.button[0]?.value
+          val = val.replace(/&quot;/g, '"');
+          let obj = JSON.parse(val);
+          if(obj?.isResend){
+            this.emitEvents('user_sent_message', {message: obj.text, ...data});
+          }
+        }
       }
+      catch(e){
+
+      }
+    
       if(data.sendMenuRequest && !this.isWelcomeResonse){
         this.isWelcomeResonse = true;
         this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
