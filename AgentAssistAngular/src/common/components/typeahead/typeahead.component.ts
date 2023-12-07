@@ -59,10 +59,6 @@ export class TypeaheadComponent implements OnInit {
 
     let subscription2 = this.handleSubjectService.agentAssistSettingsSubject.subscribe((settings: any) => {
       this.aaSettings = settings;
-      let test = {searchAssistConfig: {
-        showAutoSuggestions: false
-      }}
-      this.aaSettings = {...this.aaSettings, ...test}
     })
   }
   typeAHead = this.typeAHeadDeBounce((val, connectionDetails)=>this.getAutoSearchApiResult(val, connectionDetails));
