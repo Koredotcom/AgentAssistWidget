@@ -23,6 +23,7 @@ export class TypeaheadComponent implements OnInit {
   isCursorOverFilterSet: boolean;
   isArryDataSet: boolean; 
   subscriptionsList: Subscription[] = [];
+  aaSettings: any;
 
   constructor(public handleSubjectService: HandleSubjectService,private commonService: CommonService) {    
     this.dataSet = this.dataSet || [];
@@ -55,6 +56,14 @@ export class TypeaheadComponent implements OnInit {
       this.handleSubjectService.setLoader(false);
     })
     this.subscriptionsList.push(subscription1);
+
+    let subscription2 = this.handleSubjectService.agentAssistSettingsSubject.subscribe((settings: any) => {
+      this.aaSettings = settings;
+      let test = {searchAssistConfig: {
+        showAutoSuggestions: false
+      }}
+      this.aaSettings = {...this.aaSettings, ...test}
+    })
   }
   typeAHead = this.typeAHeadDeBounce((val, connectionDetails)=>this.getAutoSearchApiResult(val, connectionDetails));
   onSearch(event: any) {   
@@ -66,6 +75,8 @@ export class TypeaheadComponent implements OnInit {
     }
     
   }
+
+  
 
   typeAHeadDeBounce(func, timeout = 300){
       let delay;
@@ -100,7 +111,7 @@ export class TypeaheadComponent implements OnInit {
                 'iid' : connectionDetails.botId ? connectionDetails.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
             }
        // }
-        if (value?.length > 0) {        
+        if (value?.length > 0 && this.aaSettings?.searchAssistConfig?.showAutoSuggestions) {        
             $.ajax({
                 url: `${connectionDetails.agentassisturl}/agentassist/api/v1/searchaccounts/autosearch?botId=${connectionDetails.botId}`,
                 type: 'post',
