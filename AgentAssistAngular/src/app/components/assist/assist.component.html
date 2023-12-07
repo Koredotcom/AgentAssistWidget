@@ -43,7 +43,7 @@
                     <!-- <button class="solid-action stop-assist" aria-label="button" (click)="summeryModalpopup({summary : ['this is summary']})">
                         <span></span>
                     </button> -->
-                    <button class="solid-action minimize-btn" aria-label="button" (click)="minimizeToggle()" *ngIf="(rootService.primaryChecklist.length > 0 || rootService.dynamicChecklist.length > 0)">
+                    <button class="solid-action minimize-btn" aria-label="button" (click)="minimizeToggle()" *ngIf="(rootService.primaryChecklist.length > 0 || rootService.dynamicChecklist.length > 0) && rootService?.settingsData?.isAgentPlaybookEnabled">
                         <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
                         <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
                     </button>

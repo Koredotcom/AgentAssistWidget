@@ -18,7 +18,7 @@
 <app-loader *ngIf="widgetLoader"></app-loader>
 
 
-<ng-container *ngIf="widgetSettings?.agentAssistWidgetEnabled">
+<ng-container *ngIf="widgetSettings?.agentAssistWidgetEnabled && widgetSettings?.isAgentCoachingEnabled">
   <app-hints></app-hints>
   <app-nudges></app-nudges>
 </ng-container>
