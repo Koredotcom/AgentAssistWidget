@@ -117,8 +117,8 @@ export class WebSocketService {
         menu_request_params['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
       }
       try{
-        if(data.button?.length && data.button[0]?.value){
-          let val = data.button[0]?.value
+        if(data.buttons?.length === 1 && data.buttons[0]?.value){
+          let val = data.buttons[0]?.value
           val = val.replace(/&quot;/g, '"');
           let obj = JSON.parse(val);
           if(obj?.isResend){
