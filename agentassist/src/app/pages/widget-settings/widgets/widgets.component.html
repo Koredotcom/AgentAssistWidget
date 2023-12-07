@@ -95,18 +95,19 @@
                         <p>(Recommended Setting : Checkbox off)</p>
                         <!--  -->
                         <div class="search-tab-info" *ngIf="agentAssistSettings.isSearchAssistEnabled">
-                            
+                            <div class="info-dropdowns">
                             <div class="kr-sg-checkbox">
                                 <input id="checkbox-34" class="checkbox-custom" type="checkbox" (click)="selectedSearchAssistOption('xoSearch'); $event.stopPropagation();" [checked]="agentAssistSettings?.searchAssistConfig?.isIntentMatchEnabled">
                                 <label for="checkbox-34" class="checkbox-custom-label">Dependant on XO results</label>
                             </div>
-                        
-                        
+                        </div>
+                        <div class="info-dropdowns">
                             <div class="kr-sg-checkbox">
                                 <input id="checkbox-46" class="checkbox-custom" type="checkbox" (click)="selectedSearchAssistOption('autoSugg'); $event.stopPropagation();" [checked]="agentAssistSettings?.searchAssistConfig?.showAutoSuggestions">
                                 <label for="checkbox-46" class="checkbox-custom-label">showAutoSuggestions</label>
                             
                             </div>
+                        </div>
                         </div>
                         <!--  -->
                     </div>
