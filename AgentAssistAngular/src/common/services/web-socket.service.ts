@@ -122,7 +122,7 @@ export class WebSocketService {
           val = val.replace(/&quot;/g, '"');
           let obj = JSON.parse(val);
           if(obj?.isResend){
-            this.emitEvents('user_sent_message', {message: obj.text, ...data});
+            this.emitEvents('agent_assist_request', {query: obj.text, ...data});
           }
         }
       }
