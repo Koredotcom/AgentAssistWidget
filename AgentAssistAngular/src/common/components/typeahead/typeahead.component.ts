@@ -95,7 +95,7 @@ export class TypeaheadComponent implements OnInit {
         let headersVal = {};
         if(connectionDetails.fromSAT) {
             headersVal = {
-                'Authorization': 'bearer' + ' ' + connectionDetails.tokenVal,
+                'Authorization': 'bearer' + ' ' + connectionDetails.token,
                 'AccountId': connectionDetails.accountId,
                 'eAD': false,
                 'iid' : connectionDetails.botId ? connectionDetails.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
