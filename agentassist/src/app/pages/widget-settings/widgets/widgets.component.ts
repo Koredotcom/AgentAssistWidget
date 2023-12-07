@@ -107,7 +107,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           this.disableButtons = false;
           this.clonedWidgetSettings = clone(res);
           this.agentAssistSettings = {...this.agentAssistSettings, ...res.agentAssistSettings};
-          console.log(this.agentAssistSettings);
           this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
         }
       },
