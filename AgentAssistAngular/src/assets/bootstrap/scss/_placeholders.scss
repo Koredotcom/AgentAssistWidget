@@ -1,11 +1,10 @@
 .placeholder {
-  display: inline-block;
-  min-height: 1em;
-  vertical-align: middle;
+  display: block;
+  height: 12px;
   cursor: wait;
-  background-color: currentcolor;
-  opacity: $placeholder-opacity-max;
-
+  background: linear-gradient(270deg, rgba(219, 219, 219, 0.05) 0%, #DBDBDB 50%);
+  width: 100%;
+  border-radius: 8px;
   &.btn::before {
     display: inline-block;
     content: "";
@@ -34,14 +33,17 @@
 
 @keyframes placeholder-glow {
   50% {
-    opacity: $placeholder-opacity-min;
+    opacity: 0.2;
   }
 }
 
 .placeholder-wave {
-  mask-image: linear-gradient(130deg, $black 55%, rgba(0, 0, 0, (1 - $placeholder-opacity-min)) 75%, $black 95%);
+  mask-image: linear-gradient(270deg, rgba(219, 219, 219, 0.05) 0%, #DBDBDB 50%);
   mask-size: 200% 100%;
+  border-radius: 8px;
+  background: linear-gradient(270deg, rgba(219, 219, 219, 0.05) 0%, #DBDBDB 50%);
   animation: placeholder-wave 2s linear infinite;
+  height: 12px;
 }
 
 @keyframes placeholder-wave {
