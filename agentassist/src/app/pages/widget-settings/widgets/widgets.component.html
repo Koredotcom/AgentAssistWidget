@@ -97,13 +97,13 @@
                         <div class="search-tab-info" *ngIf="agentAssistSettings.isSearchAssistEnabled">
                             <div class="info-dropdowns">
                             <div class="kr-sg-checkbox">
-                                <input id="checkbox-34" class="checkbox-custom" type="checkbox" (click)="selectedSearchAssistOption('xoSearch'); $event.stopPropagation();" [checked]="agentAssistSettings?.searchAssistConfig?.isXODependant">
+                                <input id="checkbox-34" class="checkbox-custom" type="checkbox" (change)="selectedSearchAssistOption($event, 'xoSearch'); $event.stopPropagation();" [checked]="agentAssistSettings?.searchAssistConfig?.isXODependant">
                                 <label for="checkbox-34" class="checkbox-custom-label">Dependant on XO results</label>
                             </div>
                         </div>
                         <div class="info-dropdowns">
                             <div class="kr-sg-checkbox">
-                                <input id="checkbox-46" class="checkbox-custom" type="checkbox" (click)="selectedSearchAssistOption('autoSugg'); $event.stopPropagation();" [checked]="agentAssistSettings?.searchAssistConfig?.showAutoSuggestions">
+                                <input id="checkbox-46" class="checkbox-custom" type="checkbox" (click)="selectedSearchAssistOption($event, 'autoSugg'); $event.stopPropagation();" [checked]="agentAssistSettings?.searchAssistConfig?.showAutoSuggestions">
                                 <label for="checkbox-46" class="checkbox-custom-label">showAutoSuggestions</label>
                             
                             </div>
@@ -132,7 +132,7 @@
             <div class="landing-tab-info" *ngIf="agentAssistSettings?.isWidgetLandingEnabled?.isEnabled">
                 <div class="info-dropdowns">
                     <div class="kr-sg-checkbox">
-                        <input id="checkbox-1" class="checkbox-custom" type="checkbox" (click)="selectedOption('chat'); $event.stopPropagation();" [checked]="agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled">
+                        <input id="checkbox-1" class="checkbox-custom" type="checkbox" (change)="selectedOption($event, 'chat'); $event.stopPropagation();" [checked]="agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled">
                         <label for="checkbox-1" class="checkbox-custom-label">Chat Channel</label>
                     </div> 
                     <div class="dropdown-select-tab">
@@ -155,7 +155,7 @@
                 </div>
                 <div class="info-dropdowns">
                     <div class="kr-sg-checkbox">
-                        <input id="checkbox-12" class="checkbox-custom" type="checkbox" (click)="selectedOption('voice'); $event.stopPropagation();" [checked]="agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled">
+                        <input id="checkbox-12" class="checkbox-custom" type="checkbox" (change)="selectedOption($event, 'voice'); $event.stopPropagation();" [checked]="agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled">
                         <label for="checkbox-12" class="checkbox-custom-label">Voice Channel</label>
                     </div> 
                     <div class="dropdown-select-tab">
