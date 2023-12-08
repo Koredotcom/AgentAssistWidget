@@ -148,8 +148,12 @@
                     <label class="form-check-label" for="flexRadioDefault1">English</label>
                 </div>
                 <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="ja" type="radio" name="radioForLang" id="flexRadioDefault2">
+                    <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="jp" type="radio" name="radioForLang" id="flexRadioDefault2">
                     <label class="form-check-label" for="flexRadioDefault2">スペイン語 (Japanese)</label>
+                </div>
+                <div class="form-check sm">
+                    <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="kr" type="radio" name="radioForLang" id="flexRadioDefault2">
+                    <label class="form-check-label" for="flexRadioDefault2">スペイン語 (Korean)</label>
                 </div>
                 <div class="form-check sm">
                     <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="chi" type="radio" name="radioForLang" id="flexRadioDefault3">

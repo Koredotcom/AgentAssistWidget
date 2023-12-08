@@ -27,12 +27,26 @@
                         </button>
                         <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
                             <ng-container *ngFor="let cl of checklists; let i = index">
-                                <button ngbDropdownItem aria-disabled="true" class="selected"
-                                    (click)="cl.name != checklists[selcLinx]?.name && resumeAndUpdateCheckList(i)">
-                                    <p>{{cl.name}}</p>
-                                    <button class="_btn primaryBtn" *ngIf="!checklists[i].completed && (i!=selcLinx) && checklists[i].openedChecklist">Resume</button>
-                                    <i [ngClass]="{'krIocnsFont-check' : cl.name == checklists[selcLinx]?.name}"></i>
-                                </button>
+                                <div class="heading-text-scripts" *ngIf="i == 0">PRIMARY SCRIPTS</div>
+                                <ng-container *ngIf="cl.type == 'primary'">
+                                    <button ngbDropdownItem aria-disabled="true" class="selected"
+                                        (click)="cl.name != checklists[selcLinx]?.name && resumeAndUpdateCheckList(i)">
+                                        <p>{{cl.name}}</p>
+                                        <button class="_btn primaryBtn" *ngIf="!checklists[i].completed && (i!=selcLinx) && checklists[i].openedChecklist">Resume</button>
+                                        <i [ngClass]="{'krIocnsFont-check' : cl.name == checklists[selcLinx]?.name}"></i>
+                                    </button>
+                                </ng-container>
+                            </ng-container>
+                            <ng-container *ngFor="let cl of checklists; let i = index">
+                                <div class="heading-text-scripts"*ngIf="i == 0">DYNAMIC SCRIPTS</div>
+                                <ng-container *ngIf="cl.type == 'dynamic'">
+                                    <button ngbDropdownItem aria-disabled="true" class="selected"
+                                        (click)="cl.name != checklists[selcLinx]?.name && resumeAndUpdateCheckList(i)">
+                                        <p>{{cl.name}}</p>
+                                        <button class="_btn primaryBtn" *ngIf="!checklists[i].completed && (i!=selcLinx) && checklists[i].openedChecklist">Resume</button>
+                                        <i [ngClass]="{'krIocnsFont-check' : cl.name == checklists[selcLinx]?.name}"></i>
+                                    </button>
+                                </ng-container>
                             </ng-container>
                         </div>
                     </div>

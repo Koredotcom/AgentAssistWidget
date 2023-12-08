@@ -188,6 +188,9 @@ export class AppComponent implements OnInit, OnDestroy{
         this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
       }
       return;
+    }else if(e.data.name === 'conversation.endAgentAssist' && e.data.convsId){
+      this.localStorageService.deleteLocalStorageState(e.data.convsId);
+      return;
     }
 
     if (e.data.value) {

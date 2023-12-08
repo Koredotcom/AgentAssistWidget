@@ -3,6 +3,7 @@ import { EmptyObjectCheckPipe } from '../pipes/empty-object-check.pipe';
 import { SubSink } from "subsink";
 import { ProjConstants, storageConst, WidgetConst } from '../proj.const';
 import { RootService } from './root.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ export class LocalStorageService {
   userDetails : any = {};
   agentDetails : any = {};
 
-  constructor(private rootService : RootService, private emptyObjectCheckPipe : EmptyObjectCheckPipe) {
+  constructor(private rootService : RootService, private emptyObjectCheckPipe : EmptyObjectCheckPipe,
+    private translateService : TranslateService) {
   }
 
 
@@ -139,6 +141,8 @@ export class LocalStorageService {
       }
     }else if(appState && appState[conversationId]){
       this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];
+      let defLanguage = appState[conversationId][storageConst.LANGUAGE] || storageConst.ENGLISH;
+      this.translateService.use(defLanguage);
     }
   }
 

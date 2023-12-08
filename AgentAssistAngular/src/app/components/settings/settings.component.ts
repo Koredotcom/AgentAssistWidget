@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { languages, ProjConstants, storageConst } from 'src/app/proj.const';
 import { DirService } from 'src/app/services/dir.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -16,7 +17,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService,
     private dirService: DirService,
     private rootService : RootService,
-    private handleSubjectService : HandleSubjectService
+    private handleSubjectService : HandleSubjectService,
+    private translateService : TranslateService
   ){}
 
   subs = new SubSink();
@@ -60,6 +62,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
     this.localStorageService.setLocalStorageItem(storageObject);
     // this.localStorageService.setLanguageInfo(this.defLanguage);
+    this.translateService.use(this.defLanguage);
     this.checkRtl();
   }
 
