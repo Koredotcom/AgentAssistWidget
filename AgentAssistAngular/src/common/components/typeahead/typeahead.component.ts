@@ -62,7 +62,7 @@ export class TypeaheadComponent implements OnInit {
   }
   typeAHead = this.typeAHeadDeBounce((val, connectionDetails)=>this.getAutoSearchApiResult(val, connectionDetails));
   onSearch(event: any) {   
-    if(this.searchText.length > 0) {
+    if(this.searchText.length > 0 && this.aaSettings?.searchAssistConfig?.showAutoSuggestions) {
       this.typeAHead(this.searchText, this.connectionData);
     } else {
       this.filterSet = [];
@@ -107,7 +107,7 @@ export class TypeaheadComponent implements OnInit {
                 'iid' : connectionDetails.botId ? connectionDetails.botId : ''
             }
        }
-        if (value?.length > 0 && this.aaSettings?.searchAssistConfig?.showAutoSuggestions) {        
+        if (value?.length > 0) {        
             $.ajax({
                 url: `${connectionDetails.agentassisturl}/agentassist/api/v1/searchaccounts/autosearch?botId=${connectionDetails.botId}`,
                 type: 'post',
