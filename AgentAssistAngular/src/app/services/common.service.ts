@@ -505,7 +505,9 @@ export class CommonService {
           let automationArray = responseArray[i].automationsArray;
           let automationIndexNum = typeof (automationIndex) == 'number' ? automationIndex - 1 : automationArray.length - 1; 
           for(let j = automationIndexNum; j >= 0; j--){
-            automationArray[j].grayOut = true;
+            if(automationArray[j]){
+              automationArray[j].grayOut = true;
+            }
           }
         }else if(responseArray[i].type == this.renderResponseType.SMALLTALK && i != responseArrayIndex - 1){
           responseArray[i].grayOut = true;

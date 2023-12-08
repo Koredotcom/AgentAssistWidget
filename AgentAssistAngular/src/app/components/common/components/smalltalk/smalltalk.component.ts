@@ -10,7 +10,7 @@ export class SmalltalkComponent {
 
   @Input() smallTalkData : any = {};
   @Input() agentassistArrayIndex : number;
-  @Input() agentassistResponseArray : number;
+  @Input() agentassistResponseArray;
   
   projConstants : any = ProjConstants;
   renderResponseType : any = RenderResponseType;

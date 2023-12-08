@@ -1,6 +1,10 @@
 <ng-container *ngIf="smallTalkData.data.isPrompt">
-    <app-ask-customer [automation]="smallTalkData" [responseArray]="agentassistResponseArray" [responseArrayIndex]="agentassistArrayIndex"></app-ask-customer>
+    <app-ask-customer [automation]="smallTalkData" [responseArray]="agentassistResponseArray" [responseArrayIndex]="agentassistArrayIndex"
+    [ngClass]="{'componentSlideUPAnimation' : (agentassistResponseArray?.length == agentassistArrayIndex)}"
+    ></app-ask-customer>
 </ng-container>
 <ng-container *ngIf="!smallTalkData.data.isPrompt">
-    <app-tell-customer [automation]="smallTalkData" [responseArray]="agentassistResponseArray" [responseArrayIndex]="agentassistArrayIndex"></app-tell-customer>
+    <app-tell-customer [automation]="smallTalkData" [responseArray]="agentassistResponseArray" [responseArrayIndex]="agentassistArrayIndex"
+    [ngClass]="{'componentSlideUPAnimation' : (agentassistResponseArray?.length == agentassistArrayIndex)}"
+    ></app-tell-customer>
 </ng-container>

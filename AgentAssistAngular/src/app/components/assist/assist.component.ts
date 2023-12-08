@@ -658,7 +658,8 @@ export class AssistComponent implements OnInit, OnDestroy {
               // this.assistResponseArray = this.commonService.updateOverrideStatusOfAutomation(this.assistResponseArray, previousId, renderResponse);
               this.assistResponseArray = structuredClone(this.assistResponseArray);
             } else if ((previousTaskName != currentTaskName)) {
-              //small talk after dialogue terminate              
+              //small talk after dialogue terminate   
+              this.dialogName = null;           
               renderResponse = this.commonService.formatSmallTalkRenderResponse(res, uuids, result, newTemp, previousId)
               this.assistResponseArray.push(renderResponse);
               this.assistResponseArray = [...this.assistResponseArray];
