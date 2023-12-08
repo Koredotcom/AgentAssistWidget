@@ -36,32 +36,34 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   iId = this.authService?.isLoadingOnSm && this.selAcc && this.selAcc?.instanceBots?.length ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
 
   landingPageTabs = {
-    transcript: 'Transcript',
+    transcript: 'Transcription',
     assist: 'Assist',
     library: 'Library',
     mybot: 'My bot'
-    // voice: [ 'transcript', 'assist', 'library', 'myBot'],
-    // chat: [ 'assist',  'library', 'myBot' ]
   }
 
 
 
   agentAssistSettings = { 
     agentAssistWidgetEnabled: true,
-    isProactiveEnabled: true,
-    isAgentCoachingEnabled: true,
-    isAgentResponseEnabled: true,
-    isAgentPlaybookEnabled: true,
+    isProactiveEnabled: false,
+    isAgentCoachingEnabled: false,
+    isAgentResponseEnabled: false,
+    isAgentPlaybookEnabled: false,
     isSearchAssistEnabled: true,
+    searchAssistConfig : {
+      isXODependant: false, 
+      showAutoSuggestions: true
+    },
     isWidgetLandingEnabled: {
       isEnabled :  true, 
        chat: {
              isEnabled: true, 
-              tab: "Assist"  
+              tab: "assist"  
            },
       voice: {
             isEnabled:  true,
-            tab: "Transcription" 
+            tab: "transcript" 
            }
     },
     isCustomisedLogoEnabled: {
@@ -96,38 +98,13 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     let body = {
       botId
     }
-    // this.agentAssistSettings? = { 
-    //   agentAssistWidgetEnabled: true,
-    //   isProactiveEnabled: true,
-    //   isAgentCoachingEnabled: true,
-    //   isAgentResponseEnabled: true,
-    //   isAgentPlaybookEnabled: true,
-    //   isSearchAssistEnabled: true,
-    //   isWidgetLandingEnabled: {
-    //     isEnabled :  true, 
-    //      chat: {
-    //            isEnabled: true, 
-    //             tab: "Assist"  
-    //          },
-    //     voice: {
-    //           isEnabled:  true,
-    //           tab: "Transcription" 
-    //          }
-    //   },
-    //   isCustomisedLogoEnabled: {
-    //     isEnabled: true, 
-    //     fileId : '',
-    //    hash : '',
-    //   fileName: ''
-    //   }
-    // }
     this.service.invoke("get.agentAssistSettings", params, body).subscribe(
       (res) => {
         if (res) {
           this.isLoading = false;
           this.disableButtons = false;
-          this.clonedWidgetSettings = clone(res);
-          this.agentAssistSettings = {...res.agentAssistSettings};
+          this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
+          this.agentAssistSettings = {...this.agentAssistSettings, ...res.agentAssistSettings};
           this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
         }
       },
@@ -150,25 +127,27 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       "orgId": this.authService?.getOrgId(),
       "accountId": this.localstorage?.getSelectedAccount()?.accountId,
       "iId": this.iId,
-      // "updatedByAId": this.clonedWidgetSettings.updatedByAId,
-      // "createdByAId": this.clonedWidgetSettings.createdByAId,
       "agentAssistSettings": {
           agentAssistWidgetEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.agentAssistWidgetEnabled : false,
           isProactiveEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isProactiveEnabled : false,
           isAgentCoachingEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isAgentCoachingEnabled : false,
           isAgentResponseEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isAgentResponseEnabled :false,
           isAgentPlaybookEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isAgentPlaybookEnabled: false,
-          isSearchAssistEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isSearchAssistEnabled : false,
+          isSearchAssistEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isSearchAssistEnabled: false,
           isWidgetLandingEnabled : {
             isEnabled :  this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.isEnabled : false, 
               chat: {
-                    isEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.chat.isEnabled : false, 
-                    tab: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.chat.tab : 'Assist'  
+                    isEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled : false, 
+                    tab: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled?.chat?.tab : 'assist'  
                   },
               voice: {
-                    isEnabled:  this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.voice.isEnabled : false,
-                    tab: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled.voice.tab : "Transcript" 
+                    isEnabled:  this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled : false,
+                    tab: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isWidgetLandingEnabled?.voice?.tab : "transcript" 
                   }
+            },
+            searchAssistConfig : {
+              isXODependant: (this.agentAssistSettings?.agentAssistWidgetEnabled && this.agentAssistSettings?.isSearchAssistEnabled ) ? this.agentAssistSettings.searchAssistConfig?.isXODependant : false, 
+              showAutoSuggestions: (this.agentAssistSettings?.agentAssistWidgetEnabled && this.agentAssistSettings?.isSearchAssistEnabled ) ? this.agentAssistSettings.searchAssistConfig?.showAutoSuggestions : false
             },
             isCustomisedLogoEnabled: {
               isEnabled: this.agentAssistSettings?.agentAssistWidgetEnabled ? this.agentAssistSettings?.isCustomisedLogoEnabled.isEnabled : false, 
@@ -187,8 +166,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         if (res) {
             this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
             this.disableButtons = false;
-          this.clonedWidgetSettings = clone(res);
-          this.agentAssistSettings = {...res.agentAssistSettings};
+          this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
+          this.agentAssistSettings = {...this.agentAssistSettings, ...res.agentAssistSettings};
           this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
         }
       },
@@ -205,22 +184,32 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   cancleAgentAssistSettings() {
       if(this.clonedWidgetSettings){
-        this.agentAssistSettings.agentAssistWidgetEnabled = {...this.clonedWidgetSettings};
+        this.agentAssistSettings = this.clonedWidgetSettings.agentAssistSettings;
       }
   }
 
-  selectedOption(selectedVal) {
+  selectedOption(e, selectedVal) {
+    let isChecked = e.target.checked;
     if (selectedVal === 'voice') {
-      this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled = !this.agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled;
+      this.agentAssistSettings.isWidgetLandingEnabled.voice.isEnabled = isChecked;
     } else {
-      this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled = !this.agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled;
+      this.agentAssistSettings.isWidgetLandingEnabled.chat.isEnabled = isChecked;
+    }
+  }
+
+  selectedSearchAssistOption(e, selectedVal) {
+    let isChecked = e.target.checked;
+    if (selectedVal === 'xoSearch') {
+      this.agentAssistSettings.searchAssistConfig.isXODependant = isChecked;
+    } else {
+      this.agentAssistSettings.searchAssistConfig.showAutoSuggestions = isChecked;
     }
   }
 
   selectTab(channel, tab) {
     if(channel === 'chat') {
       this.agentAssistSettings.isWidgetLandingEnabled.chat.tab = tab;
-    } else {
+    } else if(channel === 'voice') {
       this.agentAssistSettings.isWidgetLandingEnabled.voice.tab = tab;
     }
   }
