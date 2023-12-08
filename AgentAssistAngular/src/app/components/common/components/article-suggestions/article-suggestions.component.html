@@ -22,11 +22,14 @@
         <div class="data-faq-paragraph">            
             <div class="text-info-more-data-link">
                 <p [ngClass]="{'show-full-text' : !article.showMoreButton}" [innerHTML]="article?.content | removeTagFromString | replaceTextWithTag : article.userInput" #articleContent></p>
-                <a class="btn_link" aria-label="button" [href]="article.link" target="_blank" *ngIf="article.link">{{'VIEW_FULL_ARTICLE' | translate}} | </a>
-                <a class="moreText" role="button" aria-expanded="false" *ngIf="articleContent.scrollHeight > 36">
-                    <span class="more-text" *ngIf="article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'MORE_TEXT' | translate}}</span>
-                    <span class="less-text" *ngIf="!article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'LESS_TEXT' | translate}}</span>
-                </a>
+                <div class="more-links-actions">
+                    <a class="moreText" role="link" *ngIf="articleContent.scrollHeight > 36">
+                        <span class="more-text" *ngIf="article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'MORE_TEXT' | translate}}</span>
+                        <span class="less-text" *ngIf="!article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'LESS_TEXT' | translate}}</span>
+                    </a>
+                    <p *ngIf="articleContent.scrollHeight > 36 && article.link">|</p>
+                    <a class="moreText" role="link" [href]="article.link" target="_blank" *ngIf="article.link">{{'VIEW_FULL_ARTICLE' | translate}}</a>
+                </div>
             </div>                       
             <!-- <div class="btn-more-solid">
                 <a class="btn_link" aria-label="button" [href]="article.link" target="_blank">{{'VIEW_FULL_ARTICLE' | translate}}</a>

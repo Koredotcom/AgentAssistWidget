@@ -259,6 +259,7 @@
                     padding: 8px;
                     position: relative;
                     transition: 0.2s all ease;
+                    min-height: 52px;
                     display: none;
                     &:hover{
                         .step-actions-send-copy{

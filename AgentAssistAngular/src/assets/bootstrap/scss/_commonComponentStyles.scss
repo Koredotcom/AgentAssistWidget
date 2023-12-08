@@ -92,21 +92,21 @@
 .componentSlideUPAnimation{
     -webkit-animation-name: slideInUpComp;
     animation-name: slideInUpComp;
-    -webkit-animation-duration: 0.8s;
-    animation-duration: 0.8s;
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
     display: inline-block;
     width: 100%;
 }
-app-ask-customer, app-tell-customer{
-    @extend .componentSlideUPAnimation;
-}
+// app-ask-customer, app-tell-customer, app-smalltalk, app-feedback, app-dialog, app-suggestions{
+//     @extend .componentSlideUPAnimation;
+// }
 
 @-webkit-keyframes slideInUpComp {
     0% {
-        -webkit-transform: translateY(30px);
-        transform: translateY(30px);
+        -webkit-transform: translateY(100px);
+        transform: translateY(100px);
         visibility: visible;
     }
     100% {
@@ -117,8 +117,8 @@ app-ask-customer, app-tell-customer{
 
 @keyframes slideInUpComp {
     0% {
-        -webkit-transform: translateY(30px);
-        transform: translateY(30px);
+        -webkit-transform: translateY(100px);
+        transform: translateY(100px);
         visibility: visible;
     }
     100% {

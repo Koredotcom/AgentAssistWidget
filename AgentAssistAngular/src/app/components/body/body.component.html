@@ -1,6 +1,6 @@
 <div class="widget-body-wrapper" #bodyWrapper>
     <div class="widgets-list-card" #top [ngClass]="{'minimized-card' : assistMaxButtonClick}" [hidden]="(rootService?.primaryChecklist.length < 1 && rootService?.dynamicChecklist.length < 1) || !rootService?.settingsData?.isAgentPlaybookEnabled">
-        <app-checklist (maxButtonClick)="checkListMaxButtonClickEvent($event)" [maxButton]="checkListMaxButtonClick" [resize]="resized"></app-checklist>
+        <app-checklist (maxButtonClick)="checkListMaxButtonClickEvent($event)" [maxButton]="checkListMaxButtonClick" [resize]="resized" (expandAssist)="assistMaxButtonClickEvent($event)"></app-checklist>
     </div>
     <ng-container *ngIf="(rootService.primaryChecklist.length > 0 || rootService.dynamicChecklist.length > 0) && rootService?.settingsData?.isAgentPlaybookEnabled">
         <div class="resize-divider" appWidgetDrag [(isGrabbing)]="isGrab" (resizeEvent)="resizeEvent($event)" [topele]="top" [bottomele]="bottom" [mainele]="bodyWrapper"></div>

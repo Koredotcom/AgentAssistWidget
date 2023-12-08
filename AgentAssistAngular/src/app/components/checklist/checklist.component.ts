@@ -16,6 +16,7 @@ import { SubSink } from 'subsink';
 export class ChecklistComponent {
 
   @Output() maxButtonClick = new EventEmitter();
+  @Output() expandAssist = new EventEmitter();
   @Input() maxButton: boolean;
   @Input() resize;
 
@@ -132,7 +133,7 @@ export class ChecklistComponent {
     let cl = this.checklists[this.selcLinx];
     if ((this.checklists[this.selcLinx]?.stages)[stInx]?.steps[stepInx]?.complete || (this.checklists[this.selcLinx]?.stages)[stInx]?.steps[stepInx]?.ongoing) {
       return;
-    } else if (cl.order === "random") {
+    } else if (cl?.order === "random") {
       // let close = this.checkCloseStage(this.selcLinx, stInx);
       // if(close){
         this.checklists[this.selcLinx].stages[this.selsTinx].steps[this.selsPinx].ongoing = false;
@@ -198,8 +199,15 @@ export class ChecklistComponent {
   // }
 
   resumeAndUpdateCheckList(i) {
-    this.checkListResume(i);
-    this.updateCheckList(i);
+    if(!this.checklists[i].openedChecklist){
+      this.getCheckListIndex(this.checklists[i], this.checklists[i]._id)
+    }else if(this.checklists[i].name != this.checklists[this.selcLinx].name){
+      this.checkListResume(i);
+      this.selcLinx = i;
+      this.selsTinx = 0;
+      this.selectNextStage();
+    }
+    this.minimizeToggle();
   }
 
   checkListResume(i) {
@@ -242,6 +250,7 @@ export class ChecklistComponent {
         this.checkListData = data;
         this.rootService.primaryChecklist = data.checklists.filter(check => check.type === "primary");
         this.rootService.dynamicChecklist = data.checklists.filter(check => check.type === "dynamic");
+        this.checklists = structuredClone(data.checklists);
         (data?.checklists || [])
           .forEach((item) => {
             (item.stages || [])
@@ -268,28 +277,35 @@ export class ChecklistComponent {
         this.shouldShowCL = true;
         this.sendChecklistEvent();
       }
+    }else{
+      this.expandAssist.emit(this.maxButton);
     }
   }
 
   sendChecklistEvent() {
-    let checklistParams: any = this.commonService.prepareChecklistPayload(this.connectionDetails, 'checklist_opened', this.checkListData,
-      {
-        "id": this.rootService.primaryChecklist[0]._id,
-      }
-    );
     this.isGuidedChecklistApiSuccess = true;
-    this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
-    this.checklists.push(this.rootService.primaryChecklist[0]);
-    this.updateCheckList(this.checklists.length - 1);
+    // this.checklists.push(this.rootService.primaryChecklist[0]);
+    this.getCheckListIndex(this.rootService.primaryChecklist[0], this.rootService.primaryChecklist[0]._id);
+  }
 
+  getCheckListIndex(clT, id){
+    let index = this.checklists.findIndex(obj => obj._id == clT._id);
+    if(index >= 0){
+      this.updateCheckList(index);
+      if(!this.checklists[index].openedChecklist){
+        this.checklists[this.selcLinx].openedChecklist = true;
+        let checklistParams: any = this.commonService.prepareChecklistPayload(this.connectionDetails, 'checklist_opened', this.checkListData, { "id": id });
+        this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
+      }
+    }
   }
 
   selectDynCl(clT, i) {
     this.triggeredDynCheckLists.splice(i, 1);
-    let checklistParams: any = this.commonService.prepareChecklistPayload(this.connectionDetails, 'checklist_opened', this.checkListData, { "id": clT._id });
-    this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
-    this.checklists.push(clT);
-    this.updateCheckList(this.checklists.length - 1);
+    let index = this.checklists.findIndex(obj => obj._id == clT._id);
+    if(this.checklists[index]){
+      this.resumeAndUpdateCheckList(index);
+    }
   }
 
   updateCheckList(clInx) {
@@ -410,7 +426,7 @@ export class ChecklistComponent {
 
   mouseLeaveEvent(event){
     let cl = this.checklists[this.selcLinx];
-    if(cl.order != 'random'){
+    if(cl?.order != 'random'){
       this.onResized();
     }
   }

@@ -5,9 +5,9 @@
       <div class="titles-info-heading">
         <h1 class="text-truncate">{{snippet.title}}</h1>
       </div>
-      <button class="solidbtn" *ngIf="snippet.page_url">
+      <!-- <button class="solidbtn" *ngIf="snippet.page_url">
         <a [href]="snippet.page_url" target="_blank">{{'KNOW_MORE' | translate}}</a>
-      </button>
+      </button> -->
       <div class="faq-actions" [ngClass]="{'sent-cliked-msg' : snippet.send}" *ngIf="!hideActionButtons">
         <ng-container *ngIf="!snippet.send">
           <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.SNIPPET)">
@@ -26,10 +26,15 @@
       <div class="data-faq-paragraph">     
         <div class="text-info-more-data-link">
           <p [ngClass]="{'show-full-text' : !snippet.showMoreButton}" #snippetContent>{{snippet.content}}</p>
-          <a class="moreText" role="button" aria-expanded="false" *ngIf="snippetContent.scrollHeight > 36">
-            <span class="more-text" *ngIf="snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">...{{'MORE_TEXT' | translate}}</span>
-            <span class="less-text" *ngIf="!snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">{{'LESS_TEXT' | translate}}</span>
-          </a>
+          <div class="more-links-actions">
+            <a class="moreText" role="button" aria-expanded="false" *ngIf="snippetContent.scrollHeight > 36">
+              <span class="more-text" *ngIf="snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">{{'MORE_TEXT' | translate}}</span>
+              <span class="less-text" *ngIf="!snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">{{'LESS_TEXT' | translate}}</span>
+            </a>
+            <p *ngIf="snippetContent.scrollHeight > 36 && snippet.page_url">|</p>
+            <a class="moreText" role="link" [href]="snippet.page_url" target="_blank" *ngIf="snippet.page_url">{{'KNOW_MORE' | translate}}</a>
+            </div>
+            
         </div>              
       </div>
     </div>

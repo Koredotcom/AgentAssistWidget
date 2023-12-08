@@ -2,15 +2,17 @@
 <ng-container *ngFor="let automation of automationData.automationsArray; let i = index">
     <ng-container *ngIf="automation.responseType == renderResponseType.ASSISTRESPONSE">
         <ng-container *ngIf="automation.data.isPrompt">
-            <app-ask-customer [automation]="automation" [automationArrayLength]="automationData.automationsArray.length"
-                [automationIndex]="i" [responseArray]="agentassistResponseArray"
-                [responseArrayIndex]="agentassistArrayIndex" [assistAutomationData]="automationData"></app-ask-customer>
+                <app-ask-customer [automation]="automation" [automationArrayLength]="automationData.automationsArray.length"
+                    [automationIndex]="i" [responseArray]="agentassistResponseArray"
+                    [ngClass]="{'componentSlideUPAnimation' : ((automationData?.automationsArray?.length - 1 == i) && agentassistResponseArray?.length == agentassistArrayIndex)}"
+                    [responseArrayIndex]="agentassistArrayIndex" [assistAutomationData]="automationData"></app-ask-customer>
         </ng-container>
         <ng-container *ngIf="!automation.data.isPrompt">
-            <app-tell-customer [automation]="automation"
-                [automationArrayLength]="automationData.automationsArray.length" [automationIndex]="i"
-                [responseArray]="agentassistResponseArray" [responseArrayIndex]="agentassistArrayIndex">
-            </app-tell-customer>
+                <app-tell-customer [automation]="automation" 
+                [ngClass]="{'componentSlideUPAnimation' : ((automationData?.automationsArray?.length - 1 == i) && agentassistResponseArray?.length == agentassistArrayIndex)}"
+                    [automationArrayLength]="automationData.automationsArray.length" [automationIndex]="i"
+                    [responseArray]="agentassistResponseArray" [responseArrayIndex]="agentassistArrayIndex">
+                </app-tell-customer>
         </ng-container>
     </ng-container>
 </ng-container>

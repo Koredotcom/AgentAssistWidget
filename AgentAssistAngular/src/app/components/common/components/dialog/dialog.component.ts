@@ -11,7 +11,7 @@ import { RootService } from 'src/app/services/root.service';
 export class DialogComponent {
   @Input() automationData : any;
   @Input() agentassistArrayIndex : number;
-  @Input() agentassistResponseArray : number;
+  @Input() agentassistResponseArray : any;
 
   renderResponseType : any = RenderResponseType;
 
