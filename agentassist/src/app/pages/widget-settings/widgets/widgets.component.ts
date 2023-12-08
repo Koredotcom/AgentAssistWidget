@@ -184,7 +184,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   cancleAgentAssistSettings() {
       if(this.clonedWidgetSettings){
-        this.agentAssistSettings = this.clonedWidgetSettings;
+        this.agentAssistSettings = this.clonedWidgetSettings.agentAssistSettings;
       }
   }
 
