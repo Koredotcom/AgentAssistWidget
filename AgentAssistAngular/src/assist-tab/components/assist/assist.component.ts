@@ -274,7 +274,8 @@ export class AssistComponent implements OnInit {
   }
 
   commonEmitEvents(shouldProcessResponse){
-    let customData = JSON.parse(this.commonService.configObj?.customdata)
+    let customData = (this.commonService.configObj?.customdata) || (this.commonService.configObj?.customData);
+    customData = JSON.parse(customData);
     let parsedCustomData: any = {};
     let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
     let welcomeMessageParams: any = {
