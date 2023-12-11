@@ -185,7 +185,7 @@
                         <img src="assets/images/themes/theme-auto.svg">
                     </div>
                 </div> -->
-                <div class="theme-settings">
+                <div class="theme-settings" (click)="(selectedTheme = 'dark') && chooseTheme()">
                     <div class="heading-sec">
                         <div class="left-titles-info">
                             <h1>{{'DARK' | translate}}</h1>
@@ -198,7 +198,7 @@
                         <img src="assets/images/themes/dark-theme.svg" alt="Dark Theme">
                     </div>
                 </div>
-                <div class="theme-settings">
+                <div class="theme-settings" (click)="(selectedTheme = 'light') && chooseTheme()">
                     <div class="heading-sec">
                         <div class="left-titles-info">
                             <h1>{{'LIGHT' | translate}}</h1>

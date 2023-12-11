@@ -47,9 +47,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   getLocalStorageParams(){
     let appState : any = this.localStorageService.getLocalStorageState();
-    let convState = appState[this.connectionDetails.conversationId];
-    console.log(convState, "conv state *********");
-    
+    let convState = appState[this.connectionDetails.conversationId];    
     this.defLanguage = convState[storageConst.LANGUAGE] || storageConst.ENGLISH;
     this.selectedTheme = convState[storageConst.THEME] || storageConst.AUTO;
 
