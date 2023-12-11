@@ -51,8 +51,9 @@
         </div>
         <div class="collapse-tab" #collapseTab>
           <div class="card-body">
-                <div class="card_body_acc_content kore-chat-window">          
-                    <ng-container *ngFor="let res of mybotResponseArray; let i = index">
+                <div class="card_body_acc_content kore-chat-window">     
+                    <app-loader [type]="projConstants.WIDGET_LOADER" *ngIf="showSpinner"></app-loader>     
+                    <ng-container *ngFor="let res of mybotResponseArray; let i = index; trackBy:assistRespType;">
                         <ng-container *ngIf="res.type == renderResponseType.SMALLTALK">
                             <app-smalltalk [smallTalkData]="res" [agentassistArrayIndex]="i+1"
                                 [agentassistResponseArray]="mybotResponseArray"

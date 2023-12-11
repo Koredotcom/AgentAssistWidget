@@ -1,5 +1,5 @@
 <ng-container [ngTemplateOutlet]="dialogStarted" *ngIf="automationData?.automationsArray?.length"></ng-container>
-<ng-container *ngFor="let automation of automationData.automationsArray; let i = index">
+<ng-container *ngFor="let automation of automationData.automationsArray; let i = index; trackBy:assistRespType;">
     <ng-container *ngIf="automation.responseType == renderResponseType.ASSISTRESPONSE">
         <ng-container *ngIf="automation.data.isPrompt">
                 <app-ask-customer [automation]="automation" [automationArrayLength]="automationData.automationsArray.length"

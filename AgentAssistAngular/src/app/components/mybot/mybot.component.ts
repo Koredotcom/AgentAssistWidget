@@ -56,7 +56,11 @@ export class MybotComponent {
 
   mybotEmptyState : boolean = true;
   showErrorPrompt : boolean = false;
-  showSpinner : boolean = true;
+  showSpinner : boolean = false;
+
+  assistRespType(index, respType) {
+    return respType?.data?._id;
+  };
 
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
     private websocketService : WebSocketService, private templateRenderClassService : TemplateRenderClassService,
@@ -102,7 +106,9 @@ export class MybotComponent {
 
     this.subs.sink = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {      
       if (runEventObj) {
-        this.showSpinner = true;
+        if(runEventObj.agentRunButton){
+          this.showSpinner = true;
+        }
         if (runEventObj.agentRunButton && !this.rootService.isMyBotAutomationOnGoing) {
           if(runEventObj.from == this.projConstants.INTERRUPT){
             this.interruptDialogList.splice(runEventObj.index, 1);
@@ -171,6 +177,7 @@ export class MybotComponent {
       this.currentRunningStep = data.entityDisplayName ? data.entityDisplayName : data.entityName;
       let previousEntityNodes = this.commonService.getPreviousEntityNodesAndValues(this.mybotResponseArray,data);
       this.showErrorPrompt = data.isErrorPrompt ? true : false;
+      renderResponse = this.commonService.formatAssistAutomation(renderResponse);
       this.mybotResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.mybotResponseArray, data, this.showErrorPrompt, renderResponse, this.rootService.myBotDropdownHeaderUuids, this.projConstants.MYBOT, previousEntityNodes)
       this.mybotResponseArray = structuredClone(this.mybotResponseArray);
     }
@@ -234,6 +241,7 @@ export class MybotComponent {
         this.closeOffCanvas();
       }
     } else if (popupObject.type == this.projConstants.INTERRUPT) {
+      this.showSpinner = false;
       this.showInterruptPopup = popupObject.status;
       if (this.showInterruptPopup) {
         this.showInterruptPopup = false;
@@ -440,6 +448,7 @@ export class MybotComponent {
               renderResponse.toggleOverride = false;
               renderResponse.hideOverrideDiv = true;
             }
+            renderResponse = this.commonService.formatAssistAutomation(renderResponse);
             this.mybotResponseArray = this.commonService.updateOverrideStatusOfAutomation(this.mybotResponseArray, previousId, renderResponse);
             this.mybotResponseArray = structuredClone(this.mybotResponseArray);
 

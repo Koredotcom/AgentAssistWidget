@@ -67,6 +67,10 @@ export class AssistComponent implements OnInit, OnDestroy {
   summaryPopupModal : any;
   showSpinner : boolean = true;
 
+  assistRespType(index, respType) {
+    return respType?.data?._id;
+  };
+
 
   constructor(public rootService: RootService, private serviceInvoker: ServiceInvokerService,
     private websocketService: WebSocketService, private localStorageService: LocalStorageService,
@@ -119,7 +123,9 @@ export class AssistComponent implements OnInit, OnDestroy {
 
     this.subs.sink = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
       if (runEventObj) {
-        this.showSpinner = true;                
+        if(runEventObj && !runEventObj?.agentRunButton){
+          this.showSpinner = true;
+        }                
         if (runEventObj && !runEventObj?.agentRunButton && !this.rootService.isAutomationOnGoing) {
           if (runEventObj.from == this.projConstants.INTERRUPT) {
             this.interruptDialogList.splice(runEventObj.index, 1);
@@ -313,6 +319,7 @@ export class AssistComponent implements OnInit, OnDestroy {
       }
       this.currentRunningStep = data.entityDisplayName ? data.entityDisplayName : data.entityName;
       let previousEntityNodes = this.commonService.getPreviousEntityNodesAndValues(this.assistResponseArray,data);
+      renderResponse = this.commonService.formatAssistAutomation(renderResponse);
       this.assistResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.assistResponseArray, data, this.showErrorPrompt, renderResponse, this.rootService.dropdownHeaderUuids, this.projConstants.ASSIST, previousEntityNodes);
       this.assistResponseArray = structuredClone(this.assistResponseArray);      
     }
@@ -655,6 +662,7 @@ export class AssistComponent implements OnInit, OnDestroy {
                 renderResponse.hideOverrideDiv = true;
               }
               this.currentRunningStep = res.newEntityDisplayName ? res.newEntityDisplayName : res.newEntityName;
+              renderResponse = this.commonService.formatAssistAutomation(renderResponse);
               this.assistResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.assistResponseArray, res, this.showErrorPrompt, renderResponse, this.rootService.dropdownHeaderUuids, this.projConstants.ASSIST);
               // this.assistResponseArray = this.commonService.updateOverrideStatusOfAutomation(this.assistResponseArray, previousId, renderResponse);
               this.assistResponseArray = structuredClone(this.assistResponseArray);
