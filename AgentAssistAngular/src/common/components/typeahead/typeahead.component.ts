@@ -23,7 +23,7 @@ export class TypeaheadComponent implements OnInit {
   isCursorOverFilterSet: boolean;
   isArryDataSet: boolean; 
   subscriptionsList: Subscription[] = [];
-  aaSettings: any;
+  aaSettings: any = {};
 
   constructor(public handleSubjectService: HandleSubjectService,private commonService: CommonService) {    
     this.dataSet = this.dataSet || [];
@@ -90,7 +90,6 @@ export class TypeaheadComponent implements OnInit {
             "maxNumOfResults": 3,
             "lang": "en"
         }
-        console.log("connectionDetailsconnectionDetailsconnectionDetails", connectionDetails)
         let headersVal = {};
         if(connectionDetails.fromSAT) {
             headersVal = {
