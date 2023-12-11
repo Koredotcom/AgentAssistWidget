@@ -28,7 +28,7 @@
 <ng-template #askCustMsg let-automationData="smallTalkData">
     <div class="msg-node-cust"  [ngClass]="{'grayout-msgs-node' : isWelcomeMsg && (automation.grayOut || automationData.send)}">
         <div class="send-copy-actions" *ngIf="!automationData.hideActionButtons">
-            <ng-container *ngIf="!automationData.send">
+            <ng-container>
                 <button class="solidbtn" aria-label="button"
                     (click)="handleSendCopyButton(projConstants.COPY, automationData)" *ngIf="!automationData.hideCopyButton">
                     <i class="krIocnsFont-copy"></i>

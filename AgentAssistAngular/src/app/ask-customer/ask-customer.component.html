@@ -13,7 +13,7 @@
     <ng-template #askCustMsgForAutomation let-automation="automationData">
         <div class="msg-node-cust">
             <div class="send-copy-actions" *ngIf="!automation.hideActionButtons">
-                <ng-container *ngIf="!automation.send">
+                <ng-container>
                     <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, automation)" *ngIf="!automation.hideCopyButton">
                         <i class="krIocnsFont-copy"></i>
                     </button>
