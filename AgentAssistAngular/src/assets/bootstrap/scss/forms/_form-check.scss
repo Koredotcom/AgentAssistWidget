@@ -69,6 +69,7 @@
     margin-top: 1px;
     cursor: pointer;
     border-radius: $form-check-radio-border-radius;
+    outline: 1px solid #0d6efd;
   }
   +.form-check-label{
     display: block;
