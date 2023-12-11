@@ -3,14 +3,18 @@
         .search-block-input {
             .input-block {
                 .form-control{
-                    padding: 8px 40px 8px 12px !important;
+                    padding: 8px 40px 8px 40px !important;
                 }
                 .suggestion-input{
-                    padding: 8px 40px 8px 12px !important;
+                    padding: 8px 40px 8px 40px !important;
                 }
                 svg{
                     left: auto;
                     right: 12px;
+                }
+                .clear-search{
+                    left: 12px;
+                    right: auto !important;
                 }
             }
         }

@@ -40,7 +40,8 @@
       max-width: 100%;
       color: var(--#{$prefix}offcanvas-color);
       visibility: hidden;
-      background-color: var(--#{$prefix}offcanvas-bg);
+      // background-color: var(--#{$prefix}offcanvas-bg);
+      background-color:  #FFF;
       background-clip: padding-box;
       outline: 0;
       border-radius: 12px 12px 0px 0px;

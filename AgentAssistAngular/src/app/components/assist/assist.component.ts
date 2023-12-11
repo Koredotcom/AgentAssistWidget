@@ -441,6 +441,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.closeOffCanvas();
       }
     } else if (popupObject.type == this.projConstants.INTERRUPT) {
+      this.showSpinner = false;
       this.showInterruptPopup = popupObject.status;
       if (this.showInterruptPopup) {
         this.showInterruptPopup = false;

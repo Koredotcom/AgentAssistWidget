@@ -70,11 +70,16 @@ export class SearchComponent implements OnInit {
     if (this.searchText?.length > 0) {
       this.typeAHead(this.searchText, this.rootService.connectionDetails);
     } else {
-      this.autocompleteText = '';
-      this.searched = false;
-      this.searchResponse = {};
-      this.handleSubjectService.setSearchResponse(this.searchResponse);
+      this.clearSearch();
     }
+  }
+
+  clearSearch(){
+    this.searchText = '';
+    this.autocompleteText = '';
+    this.searched = false;
+    this.searchResponse = {};
+    this.handleSubjectService.setSearchResponse(this.searchResponse);
   }
 
   typeAHeadDeBounce(func, timeout = 300) {

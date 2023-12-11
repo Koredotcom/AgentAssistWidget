@@ -27,7 +27,7 @@
                         </button>
                         <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
                             <ng-container *ngFor="let cl of checklists; let i = index">
-                                <div class="heading-text-scripts" *ngIf="i == 0">PRIMARY SCRIPTS</div>
+                                <div class="heading-text-scripts" *ngIf="i == 0 && rootService?.primaryChecklist?.length > 0">PRIMARY SCRIPTS</div>
                                 <ng-container *ngIf="cl.type == 'primary'">
                                     <button ngbDropdownItem aria-disabled="true" class="selected"
                                         (click)="cl.name != checklists[selcLinx]?.name && resumeAndUpdateCheckList(i)">
@@ -99,7 +99,7 @@
         </div>
     </div>
     <div class="playbook-wrapper-body">
-        <ng-container [ngTemplateOutlet]="listingTriggers" *ngIf="!this.rootService?.primaryChecklist.length && !checklists[selcLinx]?.name && (checklists.length || triggeredDynCheckLists.length)"></ng-container>                    
+        <ng-container [ngTemplateOutlet]="listingTriggers" *ngIf="!this.rootService?.primaryChecklist?.length && !checklists[selcLinx]?.name && (checklists.length || triggeredDynCheckLists.length)"></ng-container>                    
 
         <div class="playbook-steps-info">
             <ng-container *ngFor="let stage of checklists[selcLinx]?.stages; let i = index">
