@@ -89,19 +89,30 @@
     }
 }
 
+.pB {
+    padding-bottom: 90px !important;
+}
+
+
+
 .componentSlideUPAnimation{
     -webkit-animation-name: slideInUpComp;
     animation-name: slideInUpComp;
-    -webkit-animation-duration: 0.5s;
-    animation-duration: 0.5s;
+    -webkit-animation-duration: 0.7s;
+    animation-duration: 0.7s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
     display: inline-block;
+    animation-delay: 0.1s;
     width: 100%;
 }
-// app-ask-customer, app-tell-customer, app-smalltalk, app-feedback, app-dialog, app-suggestions{
-//     @extend .componentSlideUPAnimation;
-// }
+app-ask-customer, app-tell-customer, app-smalltalk, app-feedback, app-dialog, app-suggestions{
+    // @extend .componentSlideUPAnimation;
+    display: inline-block;
+    width: 100%;
+    transition: 0.2s all ease;
+    // min-height: 400px;
+}
 
 @-webkit-keyframes slideInUpComp {
     0% {

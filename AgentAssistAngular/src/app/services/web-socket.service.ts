@@ -142,7 +142,7 @@ export class WebSocketService {
         }
         this.agentAssistResponse$.next(data);
         this.addOrRemoveLoader(false);
-      }, 10);
+      }, 100);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_menu_response, (data : any) => {
@@ -178,13 +178,13 @@ export class WebSocketService {
         }
         this.agentAssistAgentResponse$.next(data);
         this.addOrRemoveLoader(false);
-      },10);
+      },100);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_endoftask, (data : any) =>{
       setTimeout(() => {
         this.endOfTaskResponse$.next(data);
-      },10);
+      },100);
     });
 
     this._agentAsisstSocket.on(EVENTS.user_message, (data : any) =>{
@@ -198,7 +198,7 @@ export class WebSocketService {
     this._agentAsisstSocket.on(EVENTS.agent_assist_user_message, (data : any) => {
       setTimeout(() => {
         this.agentAssistUserMessageResponse$.next(data);
-      },10);
+      },100);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_feedback_response, (data : any) =>{

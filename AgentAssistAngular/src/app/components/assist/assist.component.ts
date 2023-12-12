@@ -348,9 +348,11 @@ export class AssistComponent implements OnInit, OnDestroy {
 
     if (data.buttons?.length > 1 && data.sendMenuRequest) {
       this.welcomeMsgResponse = data;
+      this.scrollToBottom();
+    }else{
+      this.scrollToBottomRuntime();
     }
-
-    this.scrollToBottom();
+    
   }
 
 
@@ -704,11 +706,18 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.commonService.dialogueRunClick(dialog, i, flag);
   }
 
-  scrollToBottom = () => {
+  scrollToBottomRuntime = () => {
+    this.collapseTab.nativeElement.classList.add('pB');
     setTimeout(() => {
       try {
-        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
+        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight + 90;
       } catch (err) { }
+    }, 0);
+  }
+
+  scrollToBottom(){
+    setTimeout(() => {
+      this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
     }, 10);
   }
 }

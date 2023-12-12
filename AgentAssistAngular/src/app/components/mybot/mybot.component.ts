@@ -78,14 +78,22 @@ export class MybotComponent {
     this.subs.unsubscribe();
   }
 
-  scrollToBottom = () => {
+  scrollToBottomRuntime = () => {
+    this.collapseTab.nativeElement.classList.add('pB');
+    setTimeout(() => {
+      try {
+        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight + 90;
+      } catch (err) { }
+    }, 0);
+  }
+
+  scrollToBottom() {
     setTimeout(() => {
       try {
         this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
-      } catch (err) {}
+      } catch (err) { }
     }, 10);
   }
-
 
   subscribeEvents(){
     
@@ -204,7 +212,7 @@ export class MybotComponent {
         }
       }, 10);
     }
-    this.scrollToBottom();
+    this.scrollToBottomRuntime();
   }
 
   runDialogFormyBotTab(data) {
