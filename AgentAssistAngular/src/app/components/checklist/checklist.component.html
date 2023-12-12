@@ -62,7 +62,7 @@
                                 <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
                                     <button ngbDropdownItem aria-disabled="true" [ngClass]="{'selected' : i == selsTinx}"
                                         *ngFor="let stage of checklists[selcLinx]?.stages; let i = index"
-                                        (click)="selectStage(i)">
+                                        (click)="selectStageAndMinimize(i)">
                                         <p>{{stage.name}}</p>
                                         <i class="krIocnsFont-check"
                                             [ngClass]="{'krIocnsFont-check' : (checklists[selcLinx]?.stages[selsTinx]?.name == stage.name)}"></i>

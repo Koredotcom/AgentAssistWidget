@@ -14,6 +14,8 @@ export class RootService {
 
   socketConnection$: BehaviorSubject<any> = new BehaviorSubject(null);
   activeTab$: BehaviorSubject<any> = new BehaviorSubject(null);
+  assistTemplateClick$ : BehaviorSubject<any> = new BehaviorSubject(null);
+  mybotTemplateClick$ : BehaviorSubject<any> = new BehaviorSubject(null);
 
   public userBotConversationDetails: any;
 
@@ -162,6 +164,14 @@ export class RootService {
       this.activeTab$.next(tab);
       this.activeTab = tab;
     }
+  }
+
+  setAssistTemplateClick(value){
+    this.assistTemplateClick$.next(value);
+  }
+
+  setMyBotTemplateClick(value){
+    this.assistTemplateClick$.next(value);
   }
 
   formatSearchResponse(response) {

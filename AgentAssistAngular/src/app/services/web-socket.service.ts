@@ -318,6 +318,7 @@ export class WebSocketService {
       }
         this.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
         this.rootService.isAgentSentRequestOnClick = true;
+        this.rootService.setAssistTemplateClick(true);
         localStorage.setItem('innerTextValue', null);
         this.rootService.currentPositionId = "";
       } else if (this.rootService.activeTab == ProjConstants.MYBOT) {
@@ -337,6 +338,7 @@ export class WebSocketService {
       }
         this.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
         this.rootService.isMyBotAgentSentRequestOnClick = true;
+        this.rootService.setMyBotTemplateClick(true);
         localStorage.setItem('innerTextValue', null);
         this.rootService.currentPositionIdOfMyBot = "";
       }

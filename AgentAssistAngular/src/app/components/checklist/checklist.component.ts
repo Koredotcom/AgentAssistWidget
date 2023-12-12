@@ -319,10 +319,14 @@ export class ChecklistComponent {
     }
   }
 
-  selectStage(index) {
+  selectStageAndMinimize(index){
     if(!this.maxButton){
       this.minimizeToggle();
     }
+    this.selectStage(index);
+  }
+
+  selectStage(index) {
     this.selsTinx = index;
     this.selectNextStep();
   }

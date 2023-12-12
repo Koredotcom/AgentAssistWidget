@@ -346,6 +346,10 @@ export class AssistComponent implements OnInit, OnDestroy {
       this.assistResponseArray = [...this.assistResponseArray];
     }
 
+    if(this.rootService.isAgentSentRequestOnClick){
+      this.rootService.setAssistTemplateClick(false);
+    }
+
     if (data.buttons?.length > 1 && data.sendMenuRequest) {
       this.welcomeMsgResponse = data;
       this.scrollToBottom();

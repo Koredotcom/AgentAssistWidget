@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { SubSink } from 'subsink';
 import { EVENTS } from '../helpers/events';
 import { ProjConstants, RenderResponseType } from '../proj.const';
 import { CommonService } from '../services/common.service';
@@ -21,6 +22,8 @@ export class AskCustomerComponent {
   @Input() responseArrayIndex;
   @Input() assistAutomationData;
 
+  subs = new SubSink();
+
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
   inputName: string = this.translateService.instant("AWAITING");
@@ -30,6 +33,33 @@ export class AskCustomerComponent {
 
   }
 
+  ngOnInit(){
+    this.subscribeEvents();
+  }
+
+  subscribeEvents(){
+    this.subs.sink = this.rootService.assistTemplateClick$.subscribe(val => {
+      if(val){
+        this.automation.hideOverrideDiv = true;
+        this.automation.userInput = this.projConstants.NO;
+        this.grayOutCurrentAutomation();
+        this.spinnerUpdate();
+      }
+    })
+
+    this.subs.sink = this.rootService.mybotTemplateClick$.subscribe(val => {
+      if(val){
+        this.automation.hideOverrideDiv = true;
+        this.automation.userInput = this.projConstants.NO;
+        this.grayOutCurrentAutomation();
+        this.spinnerUpdate();
+      }
+    })
+  }
+
+  ngOnDestroy(){
+
+  }
 
   ngOnChanges() {
     if (this.automation?.toggleOverride) {

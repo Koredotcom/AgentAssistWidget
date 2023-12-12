@@ -212,6 +212,11 @@ export class MybotComponent {
         }
       }, 10);
     }
+
+    if(this.rootService.isMyBotAgentSentRequestOnClick){
+      this.rootService.setMyBotTemplateClick(false);
+    }
+
     this.scrollToBottomRuntime();
   }
 

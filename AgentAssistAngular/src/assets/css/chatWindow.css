@@ -945,8 +945,8 @@
 }
 .kore-chat-window .buttonTmplContent .buttonTmplContentChild:hover{
     color: var(--sdk-chat-window-btn-hover-font-clr);
-    border-color: var(--sdk-chat-window-btn-hover-border-clr);
-    background-color: var(--sdk-chat-window-btn-hover-bg);
+    /* border-color: var(--sdk-chat-window-btn-hover-border-clr); */
+    /* background-color: var(--sdk-chat-window-btn-hover-bg); */
 }
 
 .kore-chat-window .quick_replies_btn_parent {
