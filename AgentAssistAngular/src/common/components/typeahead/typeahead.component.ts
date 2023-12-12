@@ -23,6 +23,7 @@ export class TypeaheadComponent implements OnInit {
   isCursorOverFilterSet: boolean;
   isArryDataSet: boolean; 
   subscriptionsList: Subscription[] = [];
+  aaSettings: any = {};
 
   constructor(public handleSubjectService: HandleSubjectService,private commonService: CommonService) {    
     this.dataSet = this.dataSet || [];
@@ -34,7 +35,6 @@ export class TypeaheadComponent implements OnInit {
     //this.isArryDataSet = Array.isArray(this.dataSet);
   }
   ngOnInit(){        
-    console.log('this.connectionDetails', this.connectionData)
     this.subScriberEvent();
   }
   ngOnDestroy() {
@@ -55,10 +55,14 @@ export class TypeaheadComponent implements OnInit {
       this.handleSubjectService.setLoader(false);
     })
     this.subscriptionsList.push(subscription1);
+
+    let subscription2 = this.handleSubjectService.agentAssistSettingsSubject.subscribe((settings: any) => {
+      this.aaSettings = settings;
+    })
   }
   typeAHead = this.typeAHeadDeBounce((val, connectionDetails)=>this.getAutoSearchApiResult(val, connectionDetails));
   onSearch(event: any) {   
-    if(this.searchText.length > 0) {
+    if(this.searchText.length > 0 && this.aaSettings?.searchAssistConfig?.showAutoSuggestions) {
       this.typeAHead(this.searchText, this.connectionData);
     } else {
       this.filterSet = [];
@@ -66,6 +70,8 @@ export class TypeaheadComponent implements OnInit {
     }
     
   }
+
+  
 
   typeAHeadDeBounce(func, timeout = 300){
       let delay;
@@ -84,22 +90,22 @@ export class TypeaheadComponent implements OnInit {
             "maxNumOfResults": 3,
             "lang": "en"
         }
-        console.log("connectionDetailsconnectionDetailsconnectionDetails", connectionDetails)
         let headersVal = {};
-        // if(connectionDetails.fromSAT) {
-        //     headersVal = {
-        //         'Authorization': 'bearer' + ' ' + connectionDetails.tokenVal,
-        //         'AccountId': connectionDetails.accountId,
-        //         'eAD': false,
-        //     }
-        // } else {
+        if(connectionDetails.fromSAT) {
+            headersVal = {
+                'Authorization': 'bearer' + ' ' + connectionDetails.token,
+                'AccountId': connectionDetails.accountId,
+                'eAD': false,
+                'iid' : connectionDetails.botId ? connectionDetails.botId : ''
+            }
+        } else {
             headersVal = {
                 'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
                 "AccountId": this.commonService.grantResponseObj?.userInfo?.accountId,
                 'eAD': true,
-                'iid' : connectionDetails.botId ? connectionDetails.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
+                'iid' : connectionDetails.botId ? connectionDetails.botId : ''
             }
-       // }
+       }
         if (value?.length > 0) {        
             $.ajax({
                 url: `${connectionDetails.agentassisturl}/agentassist/api/v1/searchaccounts/autosearch?botId=${connectionDetails.botId}`,
