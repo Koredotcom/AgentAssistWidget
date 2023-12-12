@@ -275,7 +275,7 @@ export class AssistComponent implements OnInit {
 
   commonEmitEvents(shouldProcessResponse){
     let customData = (this.commonService.configObj?.customdata) || (this.commonService.configObj?.customData);
-    if(this.commonService.configObj?.customdata || this.commonService.configObj?.customData) {
+    if((this.commonService.configObj?.customdata || this.commonService.configObj?.customData) && this.commonService.configObj?.source !== "smartassist-color-scheme") {
       customData = JSON.parse(customData);
     }
     let parsedCustomData: any = {};
