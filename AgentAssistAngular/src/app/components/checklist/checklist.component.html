@@ -103,7 +103,11 @@
 
         <div class="playbook-steps-info">
             <ng-container *ngFor="let stage of checklists[selcLinx]?.stages; let i = index">
-                <button type="button" class="stage-btn" *ngIf="i != 0">{{stage?.name}}</button>
+                <div class="close-playbook-data" *ngIf="i != 0">
+                    <span></span>
+                    <p>{{stage?.name}}</p>
+                    <span></span>
+                </div>
                 <ng-container *ngFor="let step of stage?.steps; let ii=index">
                     <button class="playbook-step" [ngClass]="{'playbook-step-ongoing' : step.ongoing && !step.complete}"
                         (click)="!step.complete && clickStep(i,ii)" [attr.id]="step._id">
