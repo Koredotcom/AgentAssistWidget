@@ -240,10 +240,8 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
   onScroll() {
     if (!this.userBotConversationShow) {
-      console.log("scroll event ******");
       if(this.transcriptTabHistoryText){
-        let scrollInView = this.isScrolledIntoView()
-        console.log(scrollInView);
+        let scrollInView = this.isScrolledIntoView();
         if (scrollInView) {
           this.userBotConversationShow = true;
           this.transcriptScrollTopText = 'Agent Joined the Conversation';
@@ -256,8 +254,6 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     const rect = this.transcriptTabHistoryText.nativeElement.getBoundingClientRect();
     const topShown = rect.top >= 0;
     const bottomShown = rect.bottom <= window.innerHeight;
-    console.log(topShown, bottomShown, rect.top, rect.bottom, 'top && bottom');
-    
     return (topShown && bottomShown);
   }
 

@@ -12,8 +12,8 @@
                 <ng-container *ngIf="userBotConversationShow">
                     <app-user-bot-history></app-user-bot-history>
                 </ng-container>
-                <div>
-                    <!-- <span #transcriptTabHistoryText>{{transcriptScrollTopText}}</span> -->
+                <div class="scroll-agent-joined-conv" #transcriptTabHistoryText>
+                    <h6>{{transcriptScrollTopText}}</h6>
                 </div>
                 <!-- <ng-container [ngTemplateOutlet]="summeryTranscipt"></ng-container> -->
                 <app-transcript-history></app-transcript-history>
