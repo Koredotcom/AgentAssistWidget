@@ -446,6 +446,9 @@ export class HomeComponent implements OnInit {
             },
             "event": "user_message"
          }
+         if(userInputData?.customData) {
+          agent_assist_request['customData'] = JSON.parse(JSON.stringify(userInputData?.customData));
+        }
           if (this.commonService.isCallConversation === true) {
             this.handleSubjectService.setAgentOrTranscriptResponse(userInputData);
           } else {
