@@ -275,7 +275,16 @@ export class AssistComponent implements OnInit {
 
   commonEmitEvents(shouldProcessResponse){
     let customData = (this.commonService.configObj?.customdata) || (this.commonService.configObj?.customData);
-    customData = JSON.parse(customData);
+    
+      if(customData && this.commonService.configObj?.source !== this.projConstants.SMARTASSIST_SOURCE) {
+        try {
+          customData = JSON.parse(customData);
+        } catch (e) {
+          customData = {};
+           throw e;
+        }
+    }
+    
     let parsedCustomData: any = {};
     let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
     let welcomeMessageParams: any = {
@@ -289,7 +298,7 @@ export class AssistComponent implements OnInit {
       'sId': this.userBotSessionDetails?.sessionId || '',
       'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT,
     }
-    if(Object.keys(customData).length > 0) {
+    if(Object.keys(customData).length > 0 && this.commonService.configObj?.source !== this.projConstants.SMARTASSIST_SOURCE) {
       welcomeMessageParams['customData'] = customData
     }
     if (this.connectionDetails.fromSAT) {
