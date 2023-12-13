@@ -15,6 +15,7 @@ export class TellCustomerComponent {
   @Input() automationIndex;
   @Input() responseArray;
   @Input() responseArrayIndex;
+  @Input() assistAutomationData;
 
   projConstants : any = ProjConstants;
   renderResponseType: any = RenderResponseType;

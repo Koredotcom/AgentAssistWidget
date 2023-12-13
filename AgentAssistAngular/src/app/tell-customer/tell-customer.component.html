@@ -14,7 +14,7 @@
 
 
 <div class="ask-cust-node" *ngIf="!isWelcomeMsg && automation && (automation.value || automation.template)"
-    [ngClass]="{'grayout-msgs-node' : automation.grayOut || automation.send}">
+    [ngClass]="{'grayout-msgs-node' : automation.grayOut || automation.send || (assistAutomationData && assistAutomationData?.endAutomation)}">
     <div class="top-section">
         <div class="svg_img">
             <img src="assets/images/icons/askcust.svg" alt="Image">
