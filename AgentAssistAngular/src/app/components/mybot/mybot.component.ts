@@ -227,6 +227,7 @@ export class MybotComponent {
     let agentBotuuids = this.randomUUIDPipe.transform();
     this.rootService.myBotDropdownHeaderUuids = agentBotuuids;
     this.commonService.updateLocalStorageForMyBot(true);
+    this.grayoutOldFeedbacks();
     let renderResponse = this.commonService.formatDialogRunRenderResponse(data, this.rootService.myBotDropdownHeaderUuids, this.myBotDialogPositionId, this.dialogName);
     this.mybotResponseArray.push(renderResponse);
     this.mybotResponseArray = [...this.mybotResponseArray];
@@ -424,6 +425,7 @@ export class MybotComponent {
             this.commonService.automationFlagUpdateForMybot(previousId,true);
             previousTaskPositionId = currentTaskPositionId;
             previousTaskName = currentTaskName;
+            this.grayoutOldFeedbacks();
             let renderResponse =  this.commonService.formatDialogRunRenderResponse(res, previousId, currentTaskPositionId, currentTaskName);
             this.mybotResponseArray.push(renderResponse);
             this.mybotResponseArray = [...this.mybotResponseArray];
@@ -494,6 +496,14 @@ export class MybotComponent {
 
     });
     this.scrollToBottom();
+  }
+
+  grayoutOldFeedbacks(){
+    this.mybotResponseArray.forEach(element => {
+      if(element.type == this.renderResponseType.FEEDBACK){
+        element.oldFeedback = true;
+      }
+    });
   }
 
   processUserMessagesForHistory(data) { 

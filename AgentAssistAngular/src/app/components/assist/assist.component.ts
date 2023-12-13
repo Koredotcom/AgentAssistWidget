@@ -370,6 +370,7 @@ export class AssistComponent implements OnInit, OnDestroy {
       this.dialogPositionId = data?.positionId;
     }
     this.dialogName = data.intentName;
+    this.grayoutOldFeedbacks();
     let renderResponse = this.commonService.formatDialogRunRenderResponse(data, uuids, this.dialogPositionId, this.dialogName);
     this.assistResponseArray.push(renderResponse);
     this.assistResponseArray = [...this.assistResponseArray];
@@ -377,6 +378,14 @@ export class AssistComponent implements OnInit, OnDestroy {
     if (!runInitent) {
       this.commonService.AgentAssist_run_click(data, this.dialogPositionId, this.projConstants.INTENT);
     }
+  }
+
+  grayoutOldFeedbacks(){
+    this.assistResponseArray.forEach(element => {
+      if(element.type == this.renderResponseType.FEEDBACK){
+        element.oldFeedback = true;
+      }
+    });
   }
 
   //dialog terminate code
@@ -635,7 +644,7 @@ export class AssistComponent implements OnInit, OnDestroy {
               this.commonService.automationFlagUpdateForAssist(previousId, true);
               previousTaskPositionId = currentTaskPositionId;
               previousTaskName = currentTaskName;
-
+              this.grayoutOldFeedbacks();
               let renderResponse =  this.commonService.formatDialogRunRenderResponse(res, previousId, currentTaskPositionId, currentTaskName);
 
               this.assistResponseArray.push(renderResponse);
@@ -711,17 +720,21 @@ export class AssistComponent implements OnInit, OnDestroy {
   }
 
   scrollToBottomRuntime = () => {
-    this.collapseTab.nativeElement.classList.add('pB');
-    setTimeout(() => {
-      try {
-        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight + 90;
-      } catch (err) { }
-    }, 0);
+    if(this.collapseTab?.nativeElement){
+      this.collapseTab.nativeElement.classList.add('pB');
+      setTimeout(() => {
+        try {
+          this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight + 90;
+        } catch (err) { }
+      }, 0);
+    }
   }
 
   scrollToBottom(){
-    setTimeout(() => {
-      this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
-    }, 10);
+    if(this.collapseTab?.nativeElement){
+      setTimeout(() => {
+        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
+      }, 10);
+    }
   }
 }

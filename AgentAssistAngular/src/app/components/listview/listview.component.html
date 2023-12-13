@@ -11,8 +11,11 @@
 </div>
 
 <ng-template #listView>
-    <div class="entity-mesage-data" *ngFor="let automation of entityList; let i = index">
-        <app-ask-customer [automation]="automation" [listView]="true"></app-ask-customer>
+    <div class="entity-mesage-data" *ngFor="let automation of entityList; let i = index; let last = last;">
+        <app-ask-customer [automation]="automation" [listView]="true"
+        [ngClass]="{'componentSlideUPAnimation' : last}"
+
+        ></app-ask-customer>
         <!-- <div class="input-block-entity">
             <p>{{automation.entityName}} : </p>
             <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride(automation)" [disabled]="automation.disableInput" (keyup.enter)="handleAgentInput(automation)">

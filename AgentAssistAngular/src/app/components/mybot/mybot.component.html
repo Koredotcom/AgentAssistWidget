@@ -65,7 +65,8 @@
                         </ng-container>
                         <ng-container *ngIf="res.type == renderResponseType.FEEDBACK">
                             <app-feedback [feedbackData]="res" (updateFeedbackProperties)="updateFeedbackProperties($event,i)"
-                                [agentassistArrayIndex]="i+1" [agentassistResponseArray]="mybotResponseArray">
+                                [agentassistArrayIndex]="i+1" [agentassistResponseArray]="mybotResponseArray"
+                                [ngClass]="{'componentSlideUPAnimation' : (mybotResponseArray.length == i+1), 'grayout-msgs-node' : res.oldFeedback}">
                             </app-feedback>
                         </ng-container>
                     </ng-container>

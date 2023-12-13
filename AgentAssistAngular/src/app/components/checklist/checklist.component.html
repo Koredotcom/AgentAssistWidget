@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="bottom-titles-info" *ngIf="checklists[selcLinx]?.stages[selsTinx]?.name">
-                        <h6>Stage: </h6>
+                        <h6>{{'STAGE' | translate}}: </h6>
                         <div ngbDropdown class="dropdown playbook-drp" container="body">
                             <button type="button" id="playbookDrp" ngbDropdownToggle>
                                 <span>{{checklists[selcLinx]?.stages[selsTinx]?.name}}</span>
@@ -87,7 +87,7 @@
                     </button> -->
                     <button class="solid-action stop-assist" aria-label="button" *ngIf="showProceedToClose && !isProceedToClose"
                         (click)="proceedToCloseButtonClick()"
-                        [ngClass]="{'disabled-msg' : checklists[selcLinx].completed}" title="Proceed to close">
+                        [ngClass]="{'disabled-msg' : checklists[selcLinx].completed}" title="{{'PROCEED_TO_CLOSE' | translate}}">
                         <i class="krIocnsFont-terminate-playbook"></i>
                     </button>
                 </ng-container>

@@ -30,7 +30,7 @@ export class ListviewComponent{
       for(let automation of this.automationData.automationsArray){
          automation.entityName = automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation.data.entityName;
         if(automation.entityName){
-          automation.entityValue = automation.entityValue ? automation.entityValue : '';
+          automation.entityValue = automation.entityValue ? automation.entityValue : undefined;
           // automation.disableInput = automation.entityValue ? true : false;
           this.entityList.push(automation);
         }

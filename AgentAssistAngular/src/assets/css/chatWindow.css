@@ -944,7 +944,7 @@
     background-color: transparent;
 }
 .kore-chat-window .buttonTmplContent .buttonTmplContentChild:hover{
-    color: var(--sdk-chat-window-btn-hover-font-clr);
+    /* color: var(--sdk-chat-window-btn-hover-font-clr); */
     /* border-color: var(--sdk-chat-window-btn-hover-border-clr); */
     /* background-color: var(--sdk-chat-window-btn-hover-bg); */
 }

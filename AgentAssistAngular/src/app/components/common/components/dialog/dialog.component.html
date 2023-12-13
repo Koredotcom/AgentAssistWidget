@@ -21,7 +21,7 @@
 
 
 <ng-template #dialogStarted>
-    <div class="dialog-ended-wrapper">
+    <div class="dialog-ended-wrapper" [ngClass]="{'grayout-msgs-node' : automationData?.endAutomation && automationData?.automationsArray?.length}">
         <div class="middle-info">
             <p>{{'DIALOG_TEXT' | translate}}</p>
             <button class="btn_link">{{automationData.data.intentName}}</button>
@@ -33,7 +33,7 @@
 </ng-template>
 
 <ng-template #dialogEnded>
-    <div class="dialog-ended-wrapper">
+    <div class="dialog-ended-wrapper" [ngClass]="{'grayout-msgs-node' : automationData?.endAutomation && automationData?.automationsArray?.length}">
         <div class="line_bar"></div>
         <div class="middle-info">
             <p>{{'DIALOG_TEXT' | translate}}</p>

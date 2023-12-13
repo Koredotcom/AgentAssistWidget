@@ -79,7 +79,7 @@
             <p>{{'SUGGESTED' | translate}}</p>
         </div>
         <div class="input-block">
-            <input type="text" class="form-control" aria-describedby="search" placeholder="Search" value="Edit" [(ngModel)]="searchText"
+            <input type="text" class="form-control" aria-describedby="search" placeholder="{{'SEARCH' | translate}}" value="Edit" [(ngModel)]="searchText"
             (ngModelChange)="onSearch($event)" (keyup.enter)="getSearchResults($event)" (keydown.Tab)="onTabClick($event)">
             <input class="suggestion-input" [value]="autocompleteText" readonly>
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
