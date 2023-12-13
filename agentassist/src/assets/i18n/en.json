@@ -2146,5 +2146,7 @@
     "lbl_agent_exp_playbook": "Agent Playbook",
     "LBL_CONFIGURATIONS": "Configuration",
     "lbl_welcome_events" : "Welcome Events",
-    "lbl_widgets" : "Widget Settings"
+    "lbl_widgets" : "Widget Settings",
+    "SEARCH_ASSIST_DISABLE_TEXT" : "To configure search assist experiences, enable the 'Search Assist' feature under the ",
+    "AGENTASSIST_SETTINGS" : "AgentAssist Settings"
 }
