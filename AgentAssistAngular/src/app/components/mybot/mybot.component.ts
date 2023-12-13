@@ -133,6 +133,9 @@ export class MybotComponent {
 
     this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
       if (endoftaskresponse && (endoftaskresponse.intType == 'myBot' || endoftaskresponse.positionId === this.myBotDialogPositionId)) {
+        if(this.showListView){
+          this.handlePopupEvent({type : this.projConstants.LISTVIEW, status : false});
+        }
         this.dialogTerminatedOrIntrupptedInMyBot();
         if (this.interruptRun) {
           this.interruptRun = false;
@@ -249,7 +252,7 @@ export class MybotComponent {
       this.terminateClick = popupObject.status;
       if (this.terminateClick) {
         this.terminateClick = false;
-        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId, true)
+        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId)
       } 
       if(!this.terminateClick){
         this.closeOffCanvas();
@@ -261,11 +264,12 @@ export class MybotComponent {
         this.showInterruptPopup = false;
         // this.dialogTerminatedOrIntruppted();
         this.interruptRun = true;
-        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId, true)
+        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId)
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
         let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
         if (index < 0) {
+          this.interruptDialog.from = this.projConstants.INTERRUPT;
           this.interruptDialogList.push(this.interruptDialog);
           this.commonService.updateInterruptDialogList(this.interruptDialogList, this.projConstants.MYBOT)
         }

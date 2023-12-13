@@ -42,6 +42,9 @@ export class WebSocketService {
     'request_resolution_comments' : true,
   }
 
+  prevTimeStamp : number = 0;
+  intervalTime : number = 510;
+
   constructor(private rootService : RootService, private localStorageService : LocalStorageService,
     private handleSubjectService : HandleSubjectService, private templateRenderClassService : TemplateRenderClassService) {
   }
@@ -113,6 +116,16 @@ export class WebSocketService {
     this._agentAsisstSocket.emit(eventName, requestParams);
   }
 
+  getTimeout(){
+    let timestamp1 = Date.now();
+    let settimeoutTime = this.intervalTime;
+    if ((timestamp1 - this.prevTimeStamp) < this.intervalTime) {
+      settimeoutTime = settimeoutTime + (this.intervalTime - (timestamp1 - this.prevTimeStamp));
+    }
+    this.prevTimeStamp = timestamp1;
+    return settimeoutTime;
+  }
+
   listenEvents() {
     const {botId, conversationId, isCall, autoBotId} = this.rootService.getConnectionDetails()
     let menu_request_params : any = {
@@ -127,22 +140,23 @@ export class WebSocketService {
     }
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_response, (data : any) => {
+      this.rootService.assistTabSessionId = '';
+      if (data.sessionId) {
+        this.rootService.assistTabSessionId = data?.sessionId;
+      }
+      if (this.rootService.getConnectionDetails()?.interactiveLanguage && typeof this.rootService.getConnectionDetails()?.interactiveLanguage == 'string' && this.rootService.getConnectionDetails()?.interactiveLanguage != "''") {
+        menu_request_params['language'] = this.rootService.getConnectionDetails()?.interactiveLanguage; // Return the default value for null, undefined, or "''"
+      }
+      if (data.sendMenuRequest && !this.isWelcomeResonse) {
+        this.isWelcomeResonse = true;
+        this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
+        this.sendCheckListOpened$.next(true);
+      }
+      let settimeoutTime = this.getTimeout();
       setTimeout(() => {
-        this.rootService.assistTabSessionId = '';
-        if(data.sessionId) {
-          this.rootService.assistTabSessionId = data?.sessionId;
-        }
-        if (this.rootService.getConnectionDetails()?.interactiveLanguage && typeof this.rootService.getConnectionDetails()?.interactiveLanguage == 'string' && this.rootService.getConnectionDetails()?.interactiveLanguage != "''") {
-          menu_request_params['language'] = this.rootService.getConnectionDetails()?.interactiveLanguage; // Return the default value for null, undefined, or "''"
-        }
-        if(data.sendMenuRequest && !this.isWelcomeResonse){
-          this.isWelcomeResonse = true;
-          this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
-          this.sendCheckListOpened$.next(true);
-        }
         this.agentAssistResponse$.next(data);
         this.addOrRemoveLoader(false);
-      }, 100);
+      }, settimeoutTime);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_menu_response, (data : any) => {
@@ -171,6 +185,7 @@ export class WebSocketService {
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_agent_response, (data : any)=>{
+      let settimeoutTime = this.getTimeout();
       setTimeout(() => {
         this.rootService.myBotTabSessionId = '';
         if(data.sessionId) {
@@ -178,13 +193,14 @@ export class WebSocketService {
         }
         this.agentAssistAgentResponse$.next(data);
         this.addOrRemoveLoader(false);
-      },100);
+      },settimeoutTime);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_endoftask, (data : any) =>{
+      let settimeoutTime = this.getTimeout();
       setTimeout(() => {
         this.endOfTaskResponse$.next(data);
-      },100);
+      },settimeoutTime);
     });
 
     this._agentAsisstSocket.on(EVENTS.user_message, (data : any) =>{
@@ -196,9 +212,10 @@ export class WebSocketService {
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_user_message, (data : any) => {
+      let settimeoutTime = this.getTimeout();
       setTimeout(() => {
         this.agentAssistUserMessageResponse$.next(data);
-      },100);
+      },settimeoutTime);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_feedback_response, (data : any) =>{

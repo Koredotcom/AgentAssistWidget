@@ -38,7 +38,7 @@
         <div class="input-block-entity">
             <p container="body" ngbTooltip="{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}">{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}</p>
             <p>:</p>
-            <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride()" [disabled]="automation.disableInput || assistAutomationData?.endAutomation" (keyup.enter)="handleAgentInput()" (focusout)="cancelOverride()">
+            <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride()" [disabled]="automation.disableInput || assistAutomationData?.endAutomation" (keyup.enter)="handleAgentInput()">
             <div class="border-outline"></div>
             <div class="actions-inputs">
                 <button class="remove-input" aria-label="Button" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">
@@ -75,7 +75,7 @@
 <ng-container *ngIf="listView && automation && automation.entityName">
     <div class="input-block-entity">
         <p>{{automation.entityName}} : </p>
-        <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride()" [disabled]="automation.disableInput" (keyup.enter)="handleAgentInput()" (focusout)="cancelOverride()">
+        <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride()" [disabled]="automation.disableInput" (keyup.enter)="handleAgentInput()">
         <div class="border-outline"></div>
         <div class="actions-inputs">                
             <button class="remove-input" aria-label="Button" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">
