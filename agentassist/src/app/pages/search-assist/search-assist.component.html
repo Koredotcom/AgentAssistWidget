@@ -1,4 +1,4 @@
-<div class="search-assist-wrapper">
+<div class="search-assist-wrapper" *ngIf="isSearchAssistEnabled">
     <perfect-scrollbar>
         <div class="scroll-data">
             <div class="header-title d-flex justify-content-between"><span>{{ "SEARCHASSIST_TITLE" | translate}}</span>
@@ -126,3 +126,11 @@
         </div>
     </perfect-scrollbar>
 </div>
+
+<div class="help_hint_data" *ngIf="!isSearchAssistEnabled">
+    <div class="bulb-icon">
+      <i class="icon-sa-info"></i>
+    </div>
+    <div class="hint-content"> {{"SEARCH_ASSIST_DISABLE_TEXT" | translate}}<span
+        (click)="redirectToAASettings()"><u>{{"AGENTASSIST_SETTINGS" | translate}}</u></span>.</div>
+  </div>

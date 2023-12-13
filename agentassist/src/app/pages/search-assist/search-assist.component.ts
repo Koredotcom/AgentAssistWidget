@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
+import { workflowService } from '@kore.services/workflow.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SaDeleteConfirmComponent } from 'src/app/helpers/components/sa-delete-confirm/sa-delete-confirm.component';
 
@@ -32,24 +35,58 @@ export class SearchAssistComponent implements OnInit {
   createFormStatus : boolean = undefined;
   searchAssistUrl : string = "https://searchassist-pilot.kore.ai/";
   searchAssistKeys: any = ['searchAssistbotId', 'domain', 'clientId', 'clientSecret'];
+  isSearchAssistEnabled: boolean = false;
 
   constructor(private localstorage: LocalStoreService, private service: ServiceInvokerService,
     private cdr: ChangeDetectorRef, private dialog: MatDialog,
     private translate: TranslateService, private notificationService: NotificationService,
-
+    public workflowService: workflowService,private authService: AuthService,
+    private router: Router
     ) { }
 
   ngOnInit(): void {
-    this.getAccountId();
+    
   }
 
   ngAfterViewChecked() {
     this.searchFormChangeMode();
   }
 
+  ngAfterViewInit() {
+    this.getAgentAssistSettings();
+  }
+
+  getAgentAssistSettings() {
+    let botId = this.workflowService?.getCurrentBtSmt(true)._id
+    let params = {
+      orgId: this.authService?.getOrgId(),
+    };
+    let body = {
+      botId
+    }
+    this.service.invoke("get.agentAssistSettings", params, body).subscribe(
+      (res) => {
+        if (res) {
+          this.isSearchAssistEnabled = res.agentAssistSettings.isSearchAssistEnabled;
+          this.getAccountId();
+        }
+      },
+      (err) => {
+        this.notificationService.showError(
+          err,
+          this.translate.instant("FALLBACK_ERROR_MSG")
+        );
+      }
+    );
+  }
+
   getAccountId() {
     this.accountId = this.localstorage.getSelectedAccount()?.accountId
     this.getSearchAssistConfigInfo();
+  }
+
+  redirectToAASettings() {
+      this.router.navigate(['/config/widget-settings']);
   }
 
   getSearchAssistConfigInfo() {
