@@ -2394,6 +2394,7 @@ border: 1px solid transparent !important;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    min-height: 100px;
 }
 .empty-data-no-agents .title{
     font-weight: 600;
