@@ -124,7 +124,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.subs.sink = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
       if (runEventObj) {
         if(runEventObj && !runEventObj?.agentRunButton){
-          this.showSpinner = true;
+          this.spinnerUpdate();
         }                
         if (runEventObj && !runEventObj?.agentRunButton && !this.rootService.isAutomationOnGoing) {
           if (runEventObj.from == this.projConstants.INTERRUPT) {
@@ -151,7 +151,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     });
 
     this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {      
-      if (endoftaskresponse && (endoftaskresponse.intType == 'assist' || endoftaskresponse.positionId === this.dialogPositionId || !endoftaskresponse.positionId)) {
+      if (endoftaskresponse && (endoftaskresponse.positionId === this.dialogPositionId) || (!endoftaskresponse.positionId)) {
         if(this.showListView){
           this.handlePopupEvent({type : this.projConstants.LISTVIEW, status : false});
         }
@@ -189,6 +189,13 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.handleSubjectService.setSummaryPopup(data);
       }
     });
+  }
+
+  spinnerUpdate(){
+    this.showSpinner = true;
+    setTimeout(() => {
+      this.showSpinner = false;
+    }, 10000);
   }
 
   getAssistData(params) {
