@@ -8,6 +8,7 @@ import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { TranslateService } from '@ngx-translate/core';
+import { finalize } from 'rxjs/operators';
 import { SaDeleteConfirmComponent } from 'src/app/helpers/components/sa-delete-confirm/sa-delete-confirm.component';
 
 @Component({
@@ -36,27 +37,24 @@ export class SearchAssistComponent implements OnInit {
   searchAssistUrl : string = "https://searchassist-pilot.kore.ai/";
   searchAssistKeys: any = ['searchAssistbotId', 'domain', 'clientId', 'clientSecret'];
   isSearchAssistEnabled: boolean = false;
-
+  loading = false;
   constructor(private localstorage: LocalStoreService, private service: ServiceInvokerService,
     private cdr: ChangeDetectorRef, private dialog: MatDialog,
     private translate: TranslateService, private notificationService: NotificationService,
     public workflowService: workflowService,private authService: AuthService,
     private router: Router
     ) { }
-
   ngOnInit(): void {
-    
+    this.loading = true;
   }
-
-  ngAfterViewChecked() {
     
-  }
 
   ngAfterViewInit() {
     this.getAgentAssistSettings();
   }
 
   getAgentAssistSettings() {
+    this.loading = true;
     let botId = this.workflowService?.getCurrentBtSmt(true)._id
     let params = {
       orgId: this.authService?.getOrgId(),
@@ -64,14 +62,22 @@ export class SearchAssistComponent implements OnInit {
     let body = {
       botId
     }
-    this.service.invoke("get.agentAssistSettings", params, body).subscribe(
+    this.service.invoke("get.agentAssistSettings", params, body)
+    .pipe(
+      finalize(()=>{
+        this.loading = false;
+      })
+    )
+    .subscribe(
       (res) => {
         if (res) {
           this.isSearchAssistEnabled = res.agentAssistSettings.isSearchAssistEnabled;
-          this.getAccountId();
-          setTimeout(() => {
-            this.searchFormChangeMode(); 
-          });
+          if(this.isSearchAssistEnabled){
+            this.getAccountId();
+            setTimeout(() => {
+              this.searchFormChangeMode(); 
+            });
+          }
         }
       },
       (err) => {
@@ -179,7 +185,7 @@ export class SearchAssistComponent implements OnInit {
   }
 
   getFormValueStatus() {
-    this.searchForm.form.valueChanges.subscribe(formObject => {
+    this.searchForm?.form?.valueChanges.subscribe(formObject => {
       this.formDirty = false;
       for (let key in formObject) {
         if (formObject[key] != this.actualConfigDetailsObj[key] && this.actualConfigDetailsObj[key] && formObject[key]) {
@@ -202,9 +208,11 @@ export class SearchAssistComponent implements OnInit {
 
   searchFormChangeMode() {
     if (this.disableSearchForm) {
-      this.searchForm.form.disable();
+      this.searchForm?.form?.disable();
     } else {
-      this.searchForm.form.enable();
+      if(this.isSearchAssistEnabled){
+        this.searchForm.form.enable();
+      }
     }
     this.cdr.detectChanges();
   }
