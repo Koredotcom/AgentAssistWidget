@@ -17,7 +17,7 @@ import { SaDeleteConfirmComponent } from 'src/app/helpers/components/sa-delete-c
 })
 export class SearchAssistComponent implements OnInit {
 
-  @ViewChild("searchForm", { static: true }) searchForm: NgForm
+  @ViewChild("searchForm") searchForm: NgForm
 
 
   userInfo: any;
@@ -49,7 +49,7 @@ export class SearchAssistComponent implements OnInit {
   }
 
   ngAfterViewChecked() {
-    this.searchFormChangeMode();
+    
   }
 
   ngAfterViewInit() {
@@ -69,6 +69,9 @@ export class SearchAssistComponent implements OnInit {
         if (res) {
           this.isSearchAssistEnabled = res.agentAssistSettings.isSearchAssistEnabled;
           this.getAccountId();
+          setTimeout(() => {
+            this.searchFormChangeMode(); 
+          });
         }
       },
       (err) => {
