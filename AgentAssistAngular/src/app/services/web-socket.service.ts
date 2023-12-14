@@ -44,6 +44,7 @@ export class WebSocketService {
 
   prevTimeStamp : number = 0;
   intervalTime : number = 510;
+  count = 1;
 
   constructor(private rootService : RootService, private localStorageService : LocalStorageService,
     private handleSubjectService : HandleSubjectService, private templateRenderClassService : TemplateRenderClassService) {
@@ -120,7 +121,10 @@ export class WebSocketService {
     let timestamp1 = Date.now();
     let settimeoutTime = this.intervalTime;
     if ((timestamp1 - this.prevTimeStamp) < this.intervalTime) {
-      settimeoutTime = settimeoutTime + (this.intervalTime - (timestamp1 - this.prevTimeStamp));
+      settimeoutTime = (settimeoutTime * this.count) + (this.intervalTime - (timestamp1 - this.prevTimeStamp));
+      this.count += 1;
+    }else{
+      this.count = 1;
     }
     this.prevTimeStamp = timestamp1;
     return settimeoutTime;
