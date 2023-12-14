@@ -21,7 +21,6 @@ export class SearchComponent implements OnInit {
 
   subs = new SubSink();
   searchText: string = '';
-  searchedResultData: any = {};
 
   searchResponse: any = {};
   answerPlaceableIDs: any = [];
@@ -54,7 +53,7 @@ export class SearchComponent implements OnInit {
   subscribeEvents() {
     this.subs.sink = this.websocketService.agentAssistAgentResponse$.subscribe((agentResponse: any) => {
       if (agentResponse && (agentResponse.isSearch || this.answerPlaceableIDs.length)) {
-        this.searchedResultData = agentResponse;
+        this.rootService.searchedResultData = agentResponse;
         this.handleSearchResponse(agentResponse);
         this.showSpinner = false;
       }

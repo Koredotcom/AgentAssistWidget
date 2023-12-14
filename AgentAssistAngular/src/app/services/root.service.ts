@@ -63,6 +63,8 @@ export class RootService {
   primaryChecklist: any = [];
   dynamicChecklist: any = [];
 
+  searchedResultData : any = {};
+
   constructor(private templateRenderClassService: TemplateRenderClassService) {
     // this.chatWindowInstance = new chatWindow();
     this.aaHelpers = new agentAssistHelpers();
@@ -222,6 +224,7 @@ export class RootService {
               taskRefId: faq.taskRefId,
               showMoreButton: true,
               showLessButton: false,
+              displayName: faq.displayName
             }
             faqObject.answer.push(object);
           }
@@ -353,47 +356,6 @@ export class RootService {
     return result;
   }
 
-  handleSendCopyButtonForNodes(actionType, sendData) {
-    let message = {};
-    if (actionType == ProjConstants.SEND) {
-      message = {
-        method: 'send',
-        name: ProjConstants.SENDMSG,
-        conversationId: this.connectionDetails.conversationId,
-        payload: sendData
-      };
-      window.parent.postMessage(message, '*');
-    } else {
-      message = {
-        method: 'copy',
-        name: ProjConstants.COPYMSG,
-        conversationId: this.connectionDetails.conversationId,
-        payload: sendData
-      };
-      parent.postMessage(message, '*');
-    }
-  }
-
-  handleSendCopyButton(actionType, faq_or_article_obj, selectType) {
-    let message = {};
-    if (actionType == this.projConstants.SEND) {
-      message = {
-        method: 'send',
-        name: ProjConstants.SENDMSG,
-        conversationId: this.connectionDetails.conversationId,
-        payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
-      };
-      window.parent.postMessage(message, '*');
-    } else {
-      message = {
-        method: 'copy',
-        name: ProjConstants.COPYMSG,
-        conversationId: this.connectionDetails.conversationId,
-        payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
-      };
-      parent.postMessage(message, '*');
-    }
-  }
 
   sendAndCopyForPlaybook(eventName, conversationId, payload){
     let message : any = {

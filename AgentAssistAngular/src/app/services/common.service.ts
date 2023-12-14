@@ -103,6 +103,102 @@ export class CommonService {
     this.websocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE)
   }
 
+  handleSendCopyButtonForNodes(actionType, sendData, positionId) {
+    let message = {};
+    if (actionType == ProjConstants.SEND) {
+      message = {
+        method: 'send',
+        name: ProjConstants.SENDMSG,
+        conversationId: this.rootService.connectionDetails.conversationId,
+        payload: sendData
+      };
+      window.parent.postMessage(message, '*');
+    } else {
+      message = {
+        method: 'copy',
+        name: ProjConstants.COPYMSG,
+        conversationId: this.rootService.connectionDetails.conversationId,
+        payload: sendData
+      };
+      parent.postMessage(message, '*');
+    }
+    this.messageNodeSendorCopyEvent(actionType,sendData, positionId)
+  }
+
+  handleSendCopyButton(actionType, faq_or_article_obj, selectType) {
+    let message = {};
+    if (actionType == this.projConstants.SEND) {
+      message = {
+        method: 'send',
+        name: ProjConstants.SENDMSG,
+        conversationId: this.rootService.connectionDetails.conversationId,
+        payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
+      };
+      if(selectType === this.projConstants.ARTICLE) {
+        message['title'] = faq_or_article_obj.title;
+        message['contentId'] = faq_or_article_obj.contentId;
+      } else {
+        message['title'] = faq_or_article_obj.displayName;
+        message['contentId'] = faq_or_article_obj.taskRefId
+      }
+      window.parent.postMessage(message, '*');
+    } else {
+      message = {
+        method: 'copy',
+        name: ProjConstants.COPYMSG,
+        conversationId: this.rootService.connectionDetails.conversationId,
+        payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
+      };
+      if(selectType === this.projConstants.ARTICLE) {
+        message['title'] = faq_or_article_obj.title;
+        message['contentId'] = faq_or_article_obj.contentId;
+      } else {
+        message['title'] = faq_or_article_obj.displayName;
+        message['contentId'] = faq_or_article_obj.taskRefId
+      }
+      message['type'] = (selectType == this.projConstants.FAQ) ? 'faq' : 'article'
+      parent.postMessage(message, '*');
+    }
+    this.faqArticleSendorCopyEvent(selectType, message)
+  }
+
+  messageNodeSendorCopyEvent(eventName, payload, positionId){
+    let payloadForBE : any = {
+      usedType: (eventName == this.projConstants.SEND) ? this.projConstants.SEND_METHOD : this.projConstants.COPY_METHOD,
+      name: (eventName == this.projConstants.SENDMSG) ? this.projConstants.SENDMSG : this.projConstants.COPYMSG,
+      conversationId: this.rootService.connectionDetails.conversationId,
+      payload: payload,
+      botId: this.rootService.connectionDetails.botId,
+      positionId: positionId,
+      type: 'sentence',
+      sessionId: (this.rootService.activeTab == this.projConstants.MYBOT) ? this.rootService.myBotTabSessionId : this.rootService.assistTabSessionId,
+    };
+    this.websocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE);
+  }
+
+
+  faqArticleSendorCopyEvent(selectType, message) {
+    let data: any = {
+      botId: this.rootService.connectionDetails.botId,
+      conversationId: this.rootService.connectionDetails.conversationId,
+      experience: 'chat',
+      source: this.rootService.connectionDetails.source,
+      usedType: message.method,
+      type: message.type,
+      name: message.name,
+      payload : message.payload,
+      title: message.title,
+      contentId : message.contentId,
+      sessionId: (this.rootService.activeTab == this.projConstants.MYBOT) ? this.rootService.myBotTabSessionId : this.rootService.assistTabSessionId,
+    };
+
+    if(this.rootService.activeTab == this.projConstants.SEARCH){
+      data.input = this.rootService.searchedResultData.userInput;
+    }
+    this.websocketService.emitEvents(EVENTS.agent_send_or_copy, data);
+  }
+
+
   mybot_run_click(dialog, myBotDialogPositionId, intent?) {
     if (dialog) {
       // this.dialogName = dialog.intentName;
@@ -242,6 +338,7 @@ export class CommonService {
           faq.showMoreButton = false;
           faq.showLessButton = false;
           faq.showSpinner = false;
+          faq.displayName = faq.displayName
         }
         if(accumulator[faq.question]){
           faq.showSpinner = false;
@@ -278,7 +375,7 @@ export class CommonService {
     return renderResponse;
   }
 
-  formatAutomationRenderResponse(data, responseId, result, newTemp) {
+  formatAutomationRenderResponse(data, responseId, result, newTemp, dialogPositionId) {
     let renderResponse = {
       data: data,
       type: this.renderResponseType.AUTOMATION,
@@ -289,7 +386,8 @@ export class CommonService {
       toggleOverride: false,
       responseType: this.renderResponseType.ASSISTRESPONSE,
       errorCount: 0,
-      value: data?.buttons[0]?.value
+      value: data?.buttons[0]?.value,
+      dialogId : dialogPositionId
     }
     return renderResponse;
   }

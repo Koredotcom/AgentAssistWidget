@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { ProjConstants } from 'src/app/proj.const';
+import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
@@ -26,7 +27,7 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
   hideSendButton : boolean = false;
 
   constructor(private handleSubjectService : HandleSubjectService, public rootService : RootService,
-    private websocketService : WebSocketService){
+    private websocketService : WebSocketService, private commonService : CommonService){
 
   }
 
@@ -59,7 +60,7 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
 
   handleSendCopyButton(actionType, faq, selectType){   
     faq.send = true; 
-    this.rootService.handleSendCopyButton(actionType, faq, selectType)
+    this.commonService.handleSendCopyButton(actionType, faq, selectType)
   }
 
   getFaqAnswerAndtoggle(faq){

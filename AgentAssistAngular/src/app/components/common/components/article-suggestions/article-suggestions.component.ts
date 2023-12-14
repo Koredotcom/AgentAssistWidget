@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { RemoveTagFromStringPipe } from 'src/app/pipes/remove-tag-from-string.pipe';
 import { ReplaceTextWithTagPipe } from 'src/app/pipes/replace-text-with-tag.pipe';
 import { ProjConstants } from 'src/app/proj.const';
+import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
 import { SubSink } from 'subsink';
@@ -24,7 +25,7 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
   hideSendButton : boolean = false;
 
   constructor(private handleSubjectService : HandleSubjectService,
-     private rootService : RootService){
+     private rootService : RootService, private commonService : CommonService){
 
   }
 
@@ -58,7 +59,7 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
 
   handleSendCopyButton(actionType, articleObj, selectType){
     articleObj.send = true;
-    this.rootService.handleSendCopyButton(actionType, articleObj, selectType)
+    this.commonService.handleSendCopyButton(actionType, articleObj, selectType)
   }
 
   toggleShowMoreLess(article){

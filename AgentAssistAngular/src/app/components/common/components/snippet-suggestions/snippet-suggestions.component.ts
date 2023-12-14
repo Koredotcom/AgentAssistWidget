@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ProjConstants } from 'src/app/proj.const';
+import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
 import { SubSink } from 'subsink';
@@ -22,7 +23,7 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   hideSendButton : boolean = false;
 
   constructor(private handleSubjectService : HandleSubjectService,
-    private rootService : RootService){
+    private rootService : RootService, private commonService : CommonService){
 
   }
 
@@ -55,7 +56,7 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
   handleSendCopyButton(actionType, snippetObj, selectType){
     snippetObj.send = true;
-    this.rootService.handleSendCopyButton(actionType, snippetObj, selectType)
+    this.commonService.handleSendCopyButton(actionType, snippetObj, selectType)
   }
 
   toggleShowMoreLess(snippet){

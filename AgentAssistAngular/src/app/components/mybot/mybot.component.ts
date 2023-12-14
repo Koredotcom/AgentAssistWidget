@@ -182,7 +182,7 @@ export class MybotComponent {
       if (data.entityName) {
         this.myBotDataResponse = Object.assign({}, data);
       }
-      let renderResponse : any = this.commonService.formatAutomationRenderResponse(data, myBotuuids, results, newTemp);
+      let renderResponse : any = this.commonService.formatAutomationRenderResponse(data, myBotuuids, results, newTemp, this.myBotDialogPositionId);
       renderResponse.toggleOverride = data.isPrompt ? true : false;
       renderResponse.hideOverrideDiv =  true;
       this.currentRunningStep = data.entityDisplayName ? data.entityDisplayName : data.entityName;
@@ -462,7 +462,7 @@ export class MybotComponent {
           
           if (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
             let responseId = res.buttons && res.buttons[0]?._id ? (res.buttons && res.buttons[0]?._id) : uuids
-            renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp);
+            renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp, currentTaskPositionId);
             if (res.isPrompt) {
               renderResponse.toggleOverride = false;
               renderResponse.hideOverrideDiv = true;

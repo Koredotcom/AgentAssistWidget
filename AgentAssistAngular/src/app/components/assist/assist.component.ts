@@ -319,7 +319,7 @@ export class AssistComponent implements OnInit, OnDestroy {
 
     if (this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
       this.showSpinner = false;
-      renderResponse = this.commonService.formatAutomationRenderResponse(data,responseId, result, newTemp)
+      renderResponse = this.commonService.formatAutomationRenderResponse(data,responseId, result, newTemp, this.dialogPositionId)
       if (data.isPrompt && (!this.proactiveModeStatus || this.rootService.manualAssistOverrideMode)) {
         renderResponse.toggleOverride = true;
         renderResponse.hideOverrideDiv = true;
@@ -678,7 +678,7 @@ export class AssistComponent implements OnInit, OnDestroy {
             // automation
             if (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
               let responseId = res?.buttons && res?.buttons[0]?._id ? (res?.buttons && res?.buttons[0]?._id) : uuids;
-              renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp);
+              renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp, currentTaskPositionId);
               if (res.isPrompt && !this.proactiveModeStatus) {
                 renderResponse.toggleOverride = true;
                 renderResponse.hideOverrideDiv = true;
