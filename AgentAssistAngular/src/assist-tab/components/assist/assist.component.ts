@@ -298,7 +298,7 @@ export class AssistComponent implements OnInit {
       'sId': this.userBotSessionDetails?.sessionId || '',
       'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT,
     }
-    if(Object.keys(customData).length > 0 && this.commonService.configObj?.source !== this.projConstants.SMARTASSIST_SOURCE) {
+    if(customData && Object.keys(customData).length > 0 && this.commonService.configObj?.source !== this.projConstants.SMARTASSIST_SOURCE) {
       welcomeMessageParams['customData'] = customData
     }
     if (this.connectionDetails.fromSAT) {
