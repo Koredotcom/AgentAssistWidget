@@ -224,7 +224,7 @@ export class AppComponent implements OnInit, OnDestroy{
         this.handleSubjectService.setAgentOrTranscriptResponse(userInputData);
       } else {
         if (userInputData?.author?.type === 'USER') {
-          if (this.rootService.OverRideMode) {
+          if (!this.rootService.OverRideMode) {
             this.webSocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
           } else {
             this.webSocketService.emitEvents(EVENTS.user_message, user_messsage);

@@ -128,7 +128,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
         // this.prepareConversation();
         if (userInputData.author.type === 'USER') {
           this.processTranscriptData(userInputData);
-          if (this.rootService.OverRideMode) {
+          if (!this.rootService.OverRideMode) {
             this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
           } else {
             userAgentMessage['type'] = 'user';
