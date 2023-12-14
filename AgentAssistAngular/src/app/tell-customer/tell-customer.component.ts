@@ -61,6 +61,10 @@ export class TellCustomerComponent {
     this.commonService.handleSendCopyButtonForNodes(method,sendData, this.automation?.dialogId);
     this.responseArray = this.commonService.grayOutPreviousAutomation(this.responseArray, this.automationIndex, this.responseArrayIndex);
     this.responseArray = structuredClone(this.responseArray);
+    if(this.isWelcomeMsg){
+      this.automation.buttons = this.automation.buttons.filter(element => element.value == automation.value);
+      
+    }
   }
 
 }

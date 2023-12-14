@@ -115,7 +115,7 @@ export class MybotComponent {
     this.subs.sink = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {      
       if (runEventObj) {
         if(runEventObj.agentRunButton){
-          this.showSpinner = true;
+          this.spinnerUpdate();
         }
         if (runEventObj.agentRunButton && !this.rootService.isMyBotAutomationOnGoing) {
           if(runEventObj.from == this.projConstants.INTERRUPT){
@@ -159,6 +159,13 @@ export class MybotComponent {
       }
     });
 
+  }
+
+  spinnerUpdate(){
+    this.showSpinner = true;
+    setTimeout(() => {
+      this.showSpinner = false;
+    }, 10000);
   }
 
   getInterruptDialogList(){
@@ -468,11 +475,14 @@ export class MybotComponent {
               renderResponse.hideOverrideDiv = true;
             }
             renderResponse = this.commonService.formatAssistAutomation(renderResponse);
-            this.mybotResponseArray = this.commonService.updateOverrideStatusOfAutomation(this.mybotResponseArray, previousId, renderResponse);
+            this.mybotResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.mybotResponseArray, res, this.showErrorPrompt, renderResponse, this.rootService.myBotDropdownHeaderUuids, this.projConstants.MYBOT);
+
+            // this.mybotResponseArray = this.commonService.updateOverrideStatusOfAutomation(this.mybotResponseArray, previousId, renderResponse);
             this.mybotResponseArray = structuredClone(this.mybotResponseArray);
 
           }else if((previousTaskName != currentTaskName)){
           //small talk after dialogue terminate
+            this.dialogName = null;
             renderResponse = this.commonService.formatSmallTalkRenderResponse(res, uuids, result, newTemp, previousId)
             this.mybotResponseArray.push(renderResponse);
             this.mybotResponseArray = [...this.mybotResponseArray];

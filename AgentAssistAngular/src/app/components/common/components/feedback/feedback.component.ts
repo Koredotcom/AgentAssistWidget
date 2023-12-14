@@ -123,11 +123,13 @@ export class FeedbackComponent {
   }
 
 
-  submitFeedback(){
+  submitFeedback(flag?){
     this.callAgentFeedbackUsage();
-    this.feedbackData.arrowToggle = false;
     this.rootService.isUpdateFeedBackDetailsFlag = true;
     this.updateFeedbackProperties.emit(this.feedbackData);
+    if(flag){
+      this.feedbackData.arrowToggle = false;
+    }
   }
 
   callAgentFeedbackUsage(){
