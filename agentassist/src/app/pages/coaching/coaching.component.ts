@@ -52,6 +52,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
   sortOrder : 'desc' | 'asc' = 'asc';
   showNoneIntent = false;
   configFeatures : any;
+  isAgentCoachingEnabled: boolean = false;
+  loading: boolean = false;
   @ViewChild('noneIntent', { static: true }) noneIntent: SliderComponentComponent;
   constructor(
     private modalService: NgbModal, private service: ServiceInvokerService,
@@ -70,6 +72,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getAgentAssistSettings();
     this.workflowService.getCurrentBtSmt(true)._id
     this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
       this.isCoachingDisable = isEnabled;
@@ -104,6 +107,39 @@ export class CoachingComponent implements OnInit, OnDestroy {
         this.modalService.dismissAll();
       }
     })
+  }
+
+  getAgentAssistSettings() {
+    this.loading = true
+    let botId = this.workflowService?.getCurrentBtSmt(true)._id
+    let params = {
+      orgId: this.authService?.getOrgId(),
+    };
+    let body = {
+      botId
+    }
+    this.service.invoke("get.agentAssistSettings", params, body)
+    .pipe(
+      finalize(()=>{
+        this.loading = false;
+      })
+    )
+    .subscribe(
+      (res) => {
+        if (res) {
+          this.isAgentCoachingEnabled = res.agentAssistSettings.isSearchAssistEnabled;
+          if(this.isAgentCoachingEnabled){
+            
+          }
+        }
+      },
+      (err) => {
+        this.notificationService.showError(
+          err,
+          this.translate.instant("FALLBACK_ERROR_MSG")
+        );
+      }
+    );
   }
 
   initApiCalls() {
