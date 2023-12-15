@@ -78,7 +78,7 @@ export class SearchComponent implements OnInit {
     this.autocompleteText = '';
     this.searched = false;
     this.searchResponse = {};
-    this.handleSubjectService.setSearchResponse(this.searchResponse);
+    // this.handleSubjectService.setSearchResponse(this.searchResponse);
   }
 
   typeAHeadDeBounce(func, timeout = 300) {
@@ -220,7 +220,7 @@ export class SearchComponent implements OnInit {
           // }, 1000);
         }
       }
-      this.handleSubjectService.setSearchResponse(this.searchResponse);
+      // this.handleSubjectService.setSearchResponse(this.searchResponse);
     }
   }
 

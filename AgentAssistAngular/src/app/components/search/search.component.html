@@ -27,7 +27,7 @@
                     <span class="count-text">{{searchResponse?.faqs?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
-                    <app-faq-suggestions (faqAnswerToggle)="checkAnswerAndToggle($event)" [searchResponse]="searchResponse"></app-faq-suggestions>
+                    <app-faq-suggestions (faqAnswerToggle)="checkAnswerAndToggle($event)" [searchResponse]="searchResponse" [from]="projConstants.SEARCH"></app-faq-suggestions>
                 </div>
             </div>
             <div class="sugestions-block" *ngIf="searchResponse?.snippets?.length">

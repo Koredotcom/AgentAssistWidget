@@ -7,7 +7,8 @@ import { ProjConstants } from '../proj.const';
 })
 export class HandleSubjectService {
 
-  searchResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
+  suggestionResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
+  faqsearchResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
   public runButtonClickEventSubject = new BehaviorSubject<object>(null);
   public proactiveModeSubject = new Subject<boolean>();
   public callConversationSuggestions$ = new Subject<object>();
@@ -17,8 +18,12 @@ export class HandleSubjectService {
 
   constructor() { }
 
-  setSearchResponse(data){
-    this.searchResponse$.next(data);
+  setFaqSearchResponse(data){
+    this.faqsearchResponse$.next(data);
+  }
+
+  setSuggestionResponse(data){
+    this.suggestionResponse$.next(data);
   }
 
   setProactiveModeStatus(flag){

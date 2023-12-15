@@ -2,16 +2,17 @@
 <div class="faq-suggestions-wrapper" *ngFor="let faq of searchedFAQList | slice : 0 : viewCount;">
     <div class="faq-s-header">
         <div class="titles-info-heading">
-            <h1 class="text-truncate">{{faq.displayName ? faq.displayName : faq.question}} </h1>
+            <h1 class="text-truncate">{{faq.displayName ? faq.displayName : faq.question}}</h1>
             <span *ngIf="faq.answer && faq.answer.length > 1 && ((!faq.seeMoreWrapper && faq.answerRender) || (faq.toggle && !faq.answerRender && !faq.seeMoreWrapper))">1/{{faq.answer.length}}</span>
             <span *ngIf="faq.childBotName">({{faq.childBotName}})</span>
             <i class="krIocnsFont-chevron-down" *ngIf="!faq.answerRender && !faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
             <i class="krIocnsFont-chevron-up" *ngIf="!faq.answerRender && faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
+            <div class="sent-msg-text" *ngIf="faq.answer[0]?.send">{{ 'SENT'  | translate }} </div>
             <app-loader *ngIf="faq.showSpinner" [type]="projConstants.INDIVIDUAL_LOADER"></app-loader>
         </div>
 
-        <div class="faq-actions" [ngClass]="{'sent-cliked-msg' : faq.answer[0]?.send}" *ngIf="!faq.seeMoreWrapper && faq.answer && faq.answer?.length > 0 && !hideActionButtons">
-            <ng-container *ngIf="!faq.answer[0]?.send">
+        <div class="faq-actions" *ngIf="!faq.seeMoreWrapper && faq.answer && faq.answer?.length > 0 && !hideActionButtons">
+            <ng-container>
                 <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, faq.answer[0], projConstants.FAQ)">
                     <i class="krIocnsFont-copy"></i>
                 </button>
@@ -20,14 +21,13 @@
             <!-- <ng-container *ngIf="faq.answer[0]?.send">
                 <button class="solidbtn">{{ 'SENT'  | translate }}</button>
             </ng-container> -->
-            <div class="sent-msg-text" *ngIf="faq.answer[0]?.send">{{ 'SENT'  | translate }}</div>
         </div>
     </div>
 
     <ng-container *ngIf="faq.answer && faq.answer.length > 0 && ((faq.toggle && !faq.answerRender) || faq.answerRender)">
         <div class="faq-body-content" *ngFor="let ansObj of faq.answer | slice : 0 : faq.answerCount;let ii = index">
-            <div class="faq-actions" [ngClass]="{'sent-cliked-msg' : ansObj['send']}"  *ngIf="!hideActionButtons && (ii != 0 || (ii == 0 && faq.seeMoreWrapper))">
-                <ng-container *ngIf="!ansObj['send']">
+            <div class="faq-actions"  *ngIf="!hideActionButtons && (ii != 0 || (ii == 0 && faq.seeMoreWrapper))">
+                <ng-container>
                     <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, ansObj, projConstants.FAQ)">
                         <i class="krIocnsFont-copy"></i>
                     </button>
@@ -36,16 +36,19 @@
                 <!-- <ng-container *ngIf="ansObj['send']">
                     <button class="solidbtn">{{ 'SENT'  | translate }}</button>
                 </ng-container> -->
-                <div class="sent-msg-text" *ngIf="ansObj['send']">{{ 'SENT'  | translate }}</div>
             </div>
             <div class="data-faq-paragraph">   
-                <div class="text-info-more-data-link">
-                    <p #faqcontent [ngClass]="{'show-full-text' : !ansObj['showMoreButton']}"  [innerHtml]="rootService.handleEmptyLine(ansObj['ans'])"></p>                  
-                    <a class="moreText">
-                        <!-- <span class="more-text" (click)="toggleShowMoreLess(faq)" *ngIf="faq.showMoreButton && faq.answer.length > 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))">Expand / </span> -->
-                        <span class="more-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && ansObj['showMoreButton'] && (faq.answer.length == 1 || faq.seeMoreWrapper)" >...{{'MORE_TEXT' | translate}}</span>
-                        <span class="less-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && !ansObj['showMoreButton']">{{'LESS_TEXT' | translate}}</span>
-                    </a>
+                <div class="text-info-more-data-link">         
+                    <p #faqcontent [ngClass]="{'show-full-text' : !ansObj['showMoreButton']}"  [innerHtml]="rootService.handleEmptyLine(ansObj['ans'])"></p>     
+                    <div class="more-links-actions">
+                        <a class="moreText">
+                            <!-- <span class="more-text" (click)="toggleShowMoreLess(faq)" *ngIf="faq.showMoreButton && faq.answer.length > 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))">Expand / </span> -->
+                            <span class="more-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && ansObj['showMoreButton'] && (faq.answer.length == 1 || faq.seeMoreWrapper)" >{{'MORE_TEXT' | translate}}</span>
+                            <span class="less-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && !ansObj['showMoreButton']">{{'LESS_TEXT' | translate}}</span>
+                        </a>
+                    </div>
+                    
+                    
                 </div>                         
             </div>
         </div>

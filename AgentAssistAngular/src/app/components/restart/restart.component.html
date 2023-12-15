@@ -35,14 +35,14 @@
             <button class="remove-input" aria-label="Button" *ngIf="automation.entityValue && !automation.toggleOverride">
                 <i class="krIocnsFont-keyboard"></i>
             </button>
-            <ng-container *ngIf="automation.toggleOverride">
+            <!-- <ng-container *ngIf="automation.toggleOverride">
                 <button class="remove-input" aria-label="Button" (click)="removeEntityvalue(automation)">
                    <i class="krIocnsFont-close"></i>
                </button>
                <button class="check-input" [ngClass]="{'disabled-msg' : !automation.entityValue}" aria-label="button" (click)="focusOutClick(automation, false)"> 
                    <i class="krIocnsFont-check"></i>
                </button>
-            </ng-container>
+            </ng-container> -->
         </div>
     </div>
     <p class="info-entity-text" *ngIf="!automation.errorCount">{{'OVERRIDE' | translate}}</p>

@@ -29,7 +29,7 @@
                     <!-- <span class="count-text">{{suggestionResponse.searchResponse?.faqs?.length}}</span> -->
                 </div>
                 <div class="suggestion-body-search">
-                    <app-faq-suggestions (faqAnswerToggle)="checkAnswerAndToggle($event)" [searchResponse]="suggestionResponse.searchResponse"></app-faq-suggestions>
+                    <app-faq-suggestions (faqAnswerToggle)="checkAnswerAndToggle($event)" [searchResponse]="suggestionResponse.searchResponse" [from]="projConstants.ASSIST"></app-faq-suggestions>
                 </div>
             </div>
             <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.snippets?.length">

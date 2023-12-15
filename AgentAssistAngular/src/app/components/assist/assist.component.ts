@@ -67,6 +67,8 @@ export class AssistComponent implements OnInit, OnDestroy {
   summaryPopupModal : any;
   showSpinner : boolean = true;
 
+  listViewEntityList : any = [];
+
   assistRespType(index, respType) {
     return respType?.data?._id;
   };
@@ -308,6 +310,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         if (faqAnswerIdsPlace) {
           this.assistResponseArray = this.commonService.updateSearchResponse(this.assistResponseArray, data, faqAnswerIdsPlace)
           this.assistResponseArray = structuredClone(this.assistResponseArray);
+          this.handleSubjectService.setSuggestionResponse(this.assistResponseArray);
         }
       }
     }
@@ -328,7 +331,8 @@ export class AssistComponent implements OnInit, OnDestroy {
       let previousEntityNodes = this.commonService.getPreviousEntityNodesAndValues(this.assistResponseArray,data);
       renderResponse = this.commonService.formatAssistAutomation(renderResponse);
       this.assistResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.assistResponseArray, data, this.showErrorPrompt, renderResponse, this.rootService.dropdownHeaderUuids, this.projConstants.ASSIST, previousEntityNodes);
-      this.assistResponseArray = structuredClone(this.assistResponseArray);      
+      this.assistResponseArray = structuredClone(this.assistResponseArray);     
+      this.formatListViewEntityList(this.projConstants.LISTVIEW);
     }
 
     // small talk with templates
@@ -364,6 +368,22 @@ export class AssistComponent implements OnInit, OnDestroy {
       this.scrollToBottomRuntime();
     }
     
+  }
+
+  formatListViewEntityList(type){
+    this.listViewEntityList = [];
+    if(((type == this.projConstants.LISTVIEW && this.showListView) || (type == this.projConstants.RESTART && this.showRestart)) && this.dialogName){
+      
+      let automationData = this.assistResponseArray[this.assistResponseArray.length-1];
+      for(let automation of automationData.automationsArray){
+          automation.entityName = automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation.data.entityName;
+        if(automation.entityName && automation?.data?.isPrompt){
+          automation.entityValue = automation.entityValue ? automation.entityValue : automation.entityValue;
+          // automation.disableInput = automation.entityValue ? true : false;
+          this.listViewEntityList.push(automation);
+        }
+      }
+    }
   }
 
 
@@ -491,6 +511,7 @@ export class AssistComponent implements OnInit, OnDestroy {
       }
     } else if (popupObject.type == this.projConstants.LISTVIEW) {
       this.showListView = popupObject.status;
+      this.formatListViewEntityList(this.projConstants.LISTVIEW);
       if(!this.showListView){
         this.closeOffCanvas();
       }else{

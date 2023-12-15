@@ -29,7 +29,7 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
 
   }
 
-  ngOnChanges(){
+  ngOnInit(){
     this.handleSearchResponse(this.searchResponse);
     this.hideSendAndCopy();
   }
@@ -45,9 +45,6 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
     }
   }
 
-  ngOnInit(): void {
-   
-  }
 
   handleSearchResponse(searchResponse){
     this.articlesList = [];

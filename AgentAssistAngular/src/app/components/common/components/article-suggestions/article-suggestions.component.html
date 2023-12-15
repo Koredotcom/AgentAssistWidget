@@ -4,8 +4,10 @@
     <div class="faq-s-header">
         <div class="titles-info-heading">
             <h1 class="text-truncate">{{article.title}}</h1>
+            <div class="sent-msg-text" *ngIf="article.send">{{ 'SENT'  | translate }}</div>
+
         </div>
-        <div class="faq-actions" [ngClass]="{'sent-cliked-msg' : article.send}" *ngIf="!hideActionButtons">
+        <div class="faq-actions" *ngIf="!hideActionButtons && article?.content">
             <ng-container *ngIf="!article.send">
                 <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
                     <i class="krIocnsFont-copy"></i>
@@ -15,7 +17,6 @@
             <!-- <ng-container *ngIf="article.send">
                 <button class="solidbtn" aria-label="button">{{ 'SENT'  | translate }}</button>
             </ng-container> -->
-            <div class="sent-msg-text" *ngIf="article.send">{{ 'SENT'  | translate }}</div>
         </div>
     </div>
     <div class="faq-body-content">

@@ -58,6 +58,8 @@ export class MybotComponent {
   showErrorPrompt : boolean = false;
   showSpinner : boolean = false;
 
+  listViewEntityList : any = [];
+
   assistRespType(index, respType) {
     return respType?.data?._id;
   };
@@ -198,6 +200,7 @@ export class MybotComponent {
       renderResponse = this.commonService.formatAssistAutomation(renderResponse);
       this.mybotResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.mybotResponseArray, data, this.showErrorPrompt, renderResponse, this.rootService.myBotDropdownHeaderUuids, this.projConstants.MYBOT, previousEntityNodes)
       this.mybotResponseArray = structuredClone(this.mybotResponseArray);
+      this.formatListViewEntityList();
     }
 
     //small talk
@@ -228,6 +231,21 @@ export class MybotComponent {
     }
 
     this.scrollToBottomRuntime();
+  }
+
+  formatListViewEntityList(){
+    this.listViewEntityList = [];
+    if(this.showListView && this.dialogName){
+      let automationData = this.mybotResponseArray[this.mybotResponseArray.length-1];
+      for(let automation of automationData.automationsArray){
+          automation.entityName = automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation.data.entityName;
+        if(automation.entityName && automation?.data?.isPrompt){
+          automation.entityValue = automation.entityValue ? automation.entityValue : automation.entityValue;
+          // automation.disableInput = automation.entityValue ? true : false;
+          this.listViewEntityList.push(automation);
+        }
+      }
+    }
   }
 
   runDialogFormyBotTab(data) {
@@ -286,6 +304,7 @@ export class MybotComponent {
       }
     } else if (popupObject.type == this.projConstants.LISTVIEW) {
       this.showListView = popupObject.status;
+      this.formatListViewEntityList();
       if(!this.showListView){
         this.closeOffCanvas();
       }else{
@@ -298,7 +317,7 @@ export class MybotComponent {
       }else{
         this.mybotResponseArray[this.mybotResponseArray.length - 1].restart = true;
         this.restartDialogName = this.dialogName;
-        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId, true)
+        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId)
         // if(popupObject.inputType == this.projConstants.STARTOVER){
         // }else if(popupObject.inputType == this.projConstants.RESTART_INPUTS){
         // }

@@ -35,6 +35,7 @@ export class AskCustomerComponent {
 
   ngOnInit(){
     this.subscribeEvents();
+    this.hideSendAndCopy();
   }
 
   subscribeEvents(){
@@ -61,11 +62,10 @@ export class AskCustomerComponent {
 
   }
 
-  ngOnChanges() {
-    if (this.automation?.toggleOverride) {
+  ngOnChanges(changes) {
+    if (changes?.automation?.currentValue?.toggleOverride) {
       this.inputName = this.translateService.instant("OVERRIDE");
     }
-    this.hideSendAndCopy();
   }
 
   hideSendAndCopy(){

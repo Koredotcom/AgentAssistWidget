@@ -12,30 +12,18 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
 export class ListviewComponent{
   projConstants : any = ProjConstants;
 
-  @Input() assistResponseArray : any;
+  @Input() entityList : any;
   @Output() handlePopupEvent = new EventEmitter();
 
   inputName : string = ProjConstants.AWAITING;
-  entityList : any = [];
   automationData : any;
+
+  assistRespType(index, respType) {
+    return respType?.data?._id;
+  };
 
   constructor(public rootService : RootService, private websocketService : WebSocketService){
 
-  }
-
-  ngOnChanges(){    
-    if(this.assistResponseArray.length){
-      this.entityList  = [];
-      this.automationData = this.assistResponseArray[this.assistResponseArray.length-1];
-      for(let automation of this.automationData.automationsArray){
-         automation.entityName = automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation.data.entityName;
-        if(automation.entityName && automation?.data?.isPrompt){
-          automation.entityValue = automation.entityValue ? automation.entityValue : automation.entityValue;
-          // automation.disableInput = automation.entityValue ? true : false;
-          this.entityList.push(automation);
-        }
-      }
-    }
   }
 
   confirmOverride(automation){

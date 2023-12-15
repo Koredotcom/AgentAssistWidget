@@ -384,7 +384,7 @@ export class RootService {
   }
 
   confirmationNodeRenderForHistoryDataTransform(res) {
-    res.expectedFormat = res.entityType;
+    res.expectedFormat = res.entityType || res.newEntityType;
     if (res && (res.componentType == 'dialogAct' || res.entityType == 'list_of_values' || res.newEntityType == 'list_of_values') && res.buttons && res.buttons.length > 0 && res.buttons[0].data && res.buttons[0].value) {
       if (!res?.applyDefaultTemplate) {
         res.componentType = '';

@@ -11,7 +11,7 @@
 </div>
 
 <ng-template #listView>
-    <div class="entity-mesage-data" *ngFor="let automation of entityList; let i = index; let last = last;">
+    <div class="entity-mesage-data" *ngFor="let automation of entityList; let i = index; let last = last;trackBy:assistRespType;">
         <app-ask-customer [automation]="automation" [listView]="true"
         [ngClass]="{'componentSlideUPAnimation' : last}"
 
