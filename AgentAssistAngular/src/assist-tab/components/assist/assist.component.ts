@@ -590,7 +590,14 @@ export class AssistComponent implements OnInit {
                         <button class="know-more-btn hide" id="snippetviewMsg-${uuids+index}" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
 
                     `;
-                    articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index}">${ele.content}</div>`);
+                    // articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index}">${ele.content}</div>`);
+                    if(Array.isArray(ele.content)){
+                      ele.content.forEach((itemEle, index1)=>{
+                      articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index1}">${itemEle.answer_fragment}</div>`);
+                      })
+                      }else{
+                      articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index}">${ele.content}</div>`);
+                      }
                     articles.append(articleActionHtml);
                     let articlestypeInfo = $(`.type-info-run-send #snippetSection-${uuids + index}`);
                     let seeMoreButtonHtml = `

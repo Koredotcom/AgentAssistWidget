@@ -436,6 +436,10 @@ export class OverlaysearchComponent implements OnInit {
 
   // }
 
+  isArray(content) {
+    return Array.isArray(content);
+  }
+
 
 }
 
