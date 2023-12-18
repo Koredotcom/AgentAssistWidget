@@ -12,6 +12,7 @@ import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
 import { finalize } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-guided-checklist',
@@ -29,6 +30,7 @@ export class GuidedChecklistComponent implements OnInit {
   loading = false;
   subs = new SubSink();
   selAcc = this.local.getSelectedAccount();
+  isAgentPlayBookEnabled: boolean = false;
   constructor(
     private modalService : NgbModal,
     private auth: AuthService,
@@ -37,21 +39,13 @@ export class GuidedChecklistComponent implements OnInit {
     private workflowService: workflowService,
     private clS: ChecklistService,
     private notificationService: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private authService: AuthService,
+    private router: Router
   ) { }
   @ViewChild('checklistCreation') checklistCreation: ElementRef;
   ngOnInit(): void {
-    this.getConfigDetails();
-    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
-      if (ele) {
-        this.getConfigDetails();
-        if(this.checkListType === 'primary'){
-          this.checkList1.getPrimaryList(true);
-        }else{
-          this.checkList2.getDynamicList(true);
-        }
-      }
-    });
+    this.getAgentAssistSettings();
     window.addEventListener("message", (event:any) => {
       if(event.data.action === 'reloadChecklist') {
         this.getConfigDetails();
@@ -65,6 +59,53 @@ export class GuidedChecklistComponent implements OnInit {
         this.modalService.dismissAll();
       }
     })
+  }
+
+  getAgentAssistSettings() {
+    this.loading = true
+    let botId = this.workflowService?.getCurrentBtSmt(true)._id
+    let params = {
+      orgId: this.authService?.getOrgId(),
+    };
+    let body = {
+      botId
+    }
+    this.service.invoke("get.agentAssistSettings", params, body)
+    .pipe(
+      finalize(()=>{
+        this.loading = false;
+      })
+    )
+    .subscribe(
+      (res) => {
+        if (res) {
+          this.isAgentPlayBookEnabled = res.agentAssistSettings.isAgentPlaybookEnabled;
+          if(this.isAgentPlayBookEnabled){
+            this.getConfigDetails();
+            this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
+              if (ele) {
+                this.getConfigDetails();
+                if(this.checkListType === 'primary'){
+                  this.checkList1.getPrimaryList(true);
+                }else{
+                  this.checkList2.getDynamicList(true);
+                }
+              }
+            });
+          }
+        }
+      },
+      (err) => {
+        this.notificationService.showError(
+          err,
+          this.translate.instant("FALLBACK_ERROR_MSG")
+        );
+      }
+    );
+  }
+
+  redirectToAASettings() {
+    this.router.navigate(['/config/widget-settings']);
   }
 
   getConfigDetails() {
