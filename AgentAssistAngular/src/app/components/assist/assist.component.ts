@@ -532,6 +532,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.makeOverrideEvent(false)
         this.closeOffCanvas();
       }else{
+        this.showErrorPrompt = false;
         this.restartDialogName = this.dialogName;
         this.assistResponseArray[this.assistResponseArray.length - 1].restart = true;
         this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)

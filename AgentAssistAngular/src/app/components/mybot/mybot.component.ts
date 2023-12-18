@@ -315,6 +315,7 @@ export class MybotComponent {
       if(!this.showRestart){
         this.closeOffCanvas();
       }else{
+        this.showErrorPrompt = false;
         this.mybotResponseArray[this.mybotResponseArray.length - 1].restart = true;
         this.restartDialogName = this.dialogName;
         this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId)
