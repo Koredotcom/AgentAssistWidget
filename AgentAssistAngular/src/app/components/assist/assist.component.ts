@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
 import { forkJoin } from 'rxjs';
@@ -79,7 +79,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     private koreGenerateuuidPipe: KoreGenerateuuidPipe, private randomUUIDPipe: RandomUuidPipe,
     private handleSubjectService: HandleSubjectService, private templateRenderClassService: TemplateRenderClassService,
     public modalService: NgbModal, private offcanvasService: NgbOffcanvas,
-    private commonService : CommonService) {
+    private commonService : CommonService, private renderer : Renderer2) {
 
   }
 
@@ -759,7 +759,13 @@ export class AssistComponent implements OnInit, OnDestroy {
 
   scrollToBottomRuntime = () => {
     if(this.collapseTab?.nativeElement){
-      this.collapseTab.nativeElement.classList.add('pB');
+      let collapseTabHeight = this.collapseTab?.nativeElement?.offsetHeight;
+      if(collapseTabHeight){
+        let pixel = (28 * collapseTabHeight) / 100;
+        this.renderer.setStyle(this.collapseTab.nativeElement, 'padding-bottom', pixel+"px");
+      }else{
+        this.collapseTab.nativeElement.classList.add('pB');
+      }
       setTimeout(() => {
         try {
           this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight + 90;
