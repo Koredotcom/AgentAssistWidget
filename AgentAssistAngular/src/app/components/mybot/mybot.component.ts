@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild } from '@angular/core';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
 import { forkJoin } from 'rxjs';
@@ -68,7 +68,8 @@ export class MybotComponent {
     private websocketService : WebSocketService, private templateRenderClassService : TemplateRenderClassService,
     private koreGenerateuuidPipe : KoreGenerateuuidPipe, private randomUUIDPipe : RandomUuidPipe,
     private handleSubjectService : HandleSubjectService, private localStorageService : LocalStorageService,
-    private offcanvasService: NgbOffcanvas, private commonService : CommonService){
+    private offcanvasService: NgbOffcanvas, private commonService : CommonService,
+    private renderer : Renderer2){
 
   }
 
@@ -81,12 +82,20 @@ export class MybotComponent {
   }
 
   scrollToBottomRuntime = () => {
-    this.collapseTab.nativeElement.classList.add('pB');
-    setTimeout(() => {
-      try {
-        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight + 90;
-      } catch (err) { }
-    }, 0);
+    if(this.collapseTab?.nativeElement){
+      let collapseTabHeight = this.collapseTab?.nativeElement?.offsetHeight;
+      if(collapseTabHeight){
+        let pixel = (28 * collapseTabHeight) / 100;
+        this.renderer.setStyle(this.collapseTab.nativeElement, 'padding-bottom', pixel+"px");
+      }else{
+        this.collapseTab.nativeElement.classList.add('pB');
+      }
+      setTimeout(() => {
+        try {
+          this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight + 90;
+        } catch (err) { }
+      }, 0);
+    }
   }
 
   scrollToBottom() {
@@ -263,8 +272,17 @@ export class MybotComponent {
     this.commonService.mybot_run_click(data, this.myBotDialogPositionId, true)
   }
 
-  openOffCanvas(){
-		this.offcanvasService.open(this.canvas, { position: 'bottom', keyboard:false, backdropClass: 'backdrop-off-canvas-terminate', panelClass: 'termincateOffCanvas', backdrop:'static' });
+  openOffCanvas(flag?){
+    let options : any = {
+      position: 'bottom',
+      keyboard: false,
+      backdropClass: 'backdrop-off-canvas-terminate',
+      panelClass: 'termincateOffCanvas',
+    }  
+    if(!flag){
+      options.backdrop = 'static'
+    }
+		this.offcanvasService.open(this.canvas, options);
   }
 
   closeOffCanvas(){
@@ -308,7 +326,7 @@ export class MybotComponent {
       if(!this.showListView){
         this.closeOffCanvas();
       }else{
-        this.openOffCanvas();
+        this.openOffCanvas(true);
       }
     } else if (popupObject.type == this.projConstants.RESTART) {
       this.showRestart = popupObject.status;

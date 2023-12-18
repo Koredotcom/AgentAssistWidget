@@ -470,6 +470,7 @@ export class CommonService {
               if(automation?.data?.isPrompt && entityNameList[entityName]){
                 automation.showSpinner = false;
                 automation.errorCount = 0;
+                automation.grayOut = true;
                 entityNodes.push(automation);
               }
             });
