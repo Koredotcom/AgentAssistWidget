@@ -60,7 +60,7 @@
                         }
                     }
                     .dropdown-toggle{
-                        color: var(--gray-500, #667085);
+                        color: var(--secondaryTextColor);
                         font-size: 14px;
                         font-weight: 600;
                         line-height: 20px;
@@ -96,7 +96,7 @@
                         justify-content: center;
                         border-radius: 100px;
                         background: var(--error-600, #D92D20);
-                        color: #FFF;
+                        color: var(--whiteTextColor);
                         font-size: 7px;
                         font-weight: 500;
                         line-height: normal;
@@ -105,7 +105,7 @@
                     }
                     i{
                         font-size: 20px;
-                        color: #2B75E4;
+                        color: var(--themeTextColor);
                     }
                 }
                 .dropdowns-text-info{
@@ -116,7 +116,7 @@
                         gap: 5px;
                         margin-top: 1px;
                         h6{
-                            color: var(--gray-400, #98A2B3);
+                            color: var(--secondaryTextColorTwo);
                             font-size: 12px;
                             font-weight: 500;
                             line-height: 20px;
@@ -174,7 +174,7 @@
         padding: 8px;
         .static-play-book-suggestions{
             border-radius: 0px 10px 10px 10px;
-            background: var(--gray-modern-50, #F8FAFC);
+            background: var(--themebgColorVariation-1);
             padding: 8px 8px 4px 8px;
             .heading-text{
                 display: flex;
@@ -241,7 +241,7 @@
                     border-radius: 6px 6px 0px 0px;
                     min-height: 30px;
                     h1{
-                        color: #2B75E4;
+                        color: var(--themeTextColor);
                         font-size: 14px;
                         font-weight: 500;
                         line-height: 20px;
@@ -264,12 +264,12 @@
                         transition: 0.2s all ease;
                         &.checked-playbook{
                             border-color: #FFFFFF;
-                            color: #FFFFFF;
+                            color: var(--whiteTextColor);
                             background: #12B76A;
                         }
                         &:hover{
                             border-color: #FFFFFF;
-                            color: #FFFFFF;
+                            color: var(--whiteTextColor);
                             background: #12B76A;
                         }                      
                     }
@@ -292,7 +292,7 @@
                         display: none;
                         align-items: center;
                         border-radius: 4px;
-                        background: var(--gray-modern-50, #F8FAFC);
+                        background: var(--themebgColorVariation-1);
                         box-shadow: 0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.10);
                         padding: 6px;
                         gap: 4px;
@@ -318,7 +318,7 @@
                     }
                     p{
                         padding: 0 0 0 12px;
-                        color: var(--gray-700, #344054);
+                        color: var(--primaryTextColorTwo);
                         font-size: 14px;
                         font-weight: 400;
                         line-height: 20px;
@@ -328,7 +328,7 @@
                     padding: 0 12px;
                     margin-top: 6px;
                     .bottom-data-info{
-                        border-top: 1px solid var(--gray-100, #F2F4F7);
+                        border-top: 1px solid var(--borderSuggestions);
                         display: flex;
                         align-items: center;
                         gap: 10px;
@@ -355,7 +355,7 @@
                                 border: 0;
                                 &:hover{
                                     background: var(--blue-light-50, #F0F9FF);
-                                    color: #2B75E4;
+                                    color: var(--themeTextColor);
                                 }
                             }
                             h2{
@@ -378,10 +378,10 @@
                     animation-fill-mode: both;
                     // animation-delay: 0.5s;
                     .heading-step{
-                        background: #2B75E4;
+                        background: var(--backgroundThemeColor);
                         h1{
                             
-                            color: var(--generic-white, #FFF);
+                            color: var(--whiteTextColor);
                         }
                         .check-btn{
                             display: flex;

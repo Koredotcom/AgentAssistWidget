@@ -1,5 +1,5 @@
 .btn_link{
-  color: var(--primary-500, #2970FF);
+  color: var(--themeTextColor);
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: var(--gray-700, #344054);
+  color: var(--primaryTextColorTwo);
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
@@ -36,13 +36,13 @@
 
 .primaryBtn{
   border: 1px solid var(--primary-600, #155EEF);
-  background: var(--primary-500, #2970FF);
+  background: var(--backgroundThemeColor);
   color: var(--base-white, #FFF);
   &:focus{
-    box-shadow: 0px 0px 0px 4px #EFF4FF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    box-shadow: 0px 0px 0px 4px var(--backgroundColorFormFocus), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
   &:active{
-    box-shadow: 0px 0px 0px 4px #EFF4FF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    box-shadow: 0px 0px 0px 4px var(--backgroundColorFormFocus), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
   &:hover{
     border: 1px solid var(--primary-700, #004EEB);
@@ -51,8 +51,8 @@
 }
 
 .secondaryBtn{
-  border: 1px solid var(--primary-50, #EFF4FF);
-  background: var(--primary-50, #EFF4FF);
+  border: 1px solid var(--backgroundColorFormFocus);
+  background: var(--backgroundColorFormFocus);
   color: var(--primary-700, #004EEB);
   &:focus{
     box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
@@ -69,10 +69,10 @@
 .solidBtn{
   border: 1px solid var(--gray-300, #D0D5DD);
   &:focus{
-    box-shadow: 0px 0px 0px 4px #F2F4F7, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    box-shadow: 0px 0px 0px 4px var(--borderSuggestions), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
   &:active{
-    box-shadow: 0px 0px 0px 4px #F2F4F7, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    box-shadow: 0px 0px 0px 4px var(--borderSuggestions), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
   &:hover{
     background: var(--gray-50, #F9FAFB);

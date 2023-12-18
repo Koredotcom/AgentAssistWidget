@@ -40,27 +40,27 @@
   white-space: nowrap;
   background-color: transparent;
   border: 0;
-  color: var(--gray-700, #344054);
+  color: var(--primaryTextColorTwo);
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;
   border-radius: 6px;
   &:hover,
   &:focus {
-    color: #344054;
-    background: #EFF4FF;
+    color: var(--primaryTextColorTwo);
+    background: var(--backgroundColorFormFocus);
   }
 
   &.active,
   &:active {
-    color: #344054;
+    color: var(--primaryTextColorTwo);
     text-decoration: none;
-    background: #EFF4FF;
+    background: var(--backgroundColorFormFocus);
   }
 
   &.disabled,
   &:disabled {
-    color: #344054;
+    color: var(--primaryTextColorTwo);
     pointer-events: none;
     background-color: transparent;
   }
@@ -80,9 +80,9 @@
   max-width: 350px;
   .heading-text-scripts{
     border-radius: 8px 8px 0px 0px;
-    background: var(--gray-100, #F2F4F7);
+    background: var(--backgroundColorWidget);
     padding: 8px 10px;
-    color: var(--gray-700, #344054);
+    color: var(--primaryTextColorTwo);
     font-size: 11px;
     font-weight: 600;
     line-height: normal;
@@ -95,11 +95,11 @@
     margin: 1px 0;
     white-space: normal;
     &.selected{
-      background: #EFF4FF;
+      background: var(--backgroundColorFormFocus);
     }
     p{
       width: 100%;
-      color: var(--gray-700, #344054);
+      color: var(--primaryTextColorTwo);
       font-size: 12px;
       font-weight: 500;
       line-height: 18px;
@@ -110,7 +110,7 @@
     .primaryBtn{
       border-radius: 16px;
       background: var(--blue-600, #1570EF);
-      color: #FFF;
+      color: var(--whiteTextColor);
       font-size: 12px;
       font-weight: 500;
       height: 22px;
@@ -119,13 +119,13 @@
     }
     span{
       flex-shrink: 0;
-      color: var(--gray-500, #667085);
+      color: var(--secondaryTextColor);
       font-size: 12px;
       font-weight: 400;
       line-height: 18px;
     }
     i{
-      color: #2970FF;
+      color: var(--themeTextColor);
       flex-shrink: 0;
       font-size: 10px;
     }

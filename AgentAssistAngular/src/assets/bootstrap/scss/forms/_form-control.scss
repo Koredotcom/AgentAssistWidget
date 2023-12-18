@@ -23,7 +23,7 @@
   &:focus {
     outline: 0;
     border: 1px solid var(--primary-300, #84ADFF);
-    box-shadow: 0px 0px 0px 4px #EFF4FF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    box-shadow: 0px 0px 0px 4px var(--backgroundColorFormFocus), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
 
   &::-webkit-date-and-time-value {
@@ -36,7 +36,7 @@
 
   // Placeholder
   &::placeholder {
-    color: #667085;
+    color: var(--secondaryTextColor);
     opacity: 1;
   }
   &:disabled {

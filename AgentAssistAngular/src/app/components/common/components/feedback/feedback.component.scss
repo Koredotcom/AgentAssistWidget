@@ -2,7 +2,7 @@
 
 .feedback-wrapper{
     border-radius: 0px 10px 10px 10px;
-    background: var(--gray-modern-50, #F8FAFC);
+    background: var(--themebgColorVariation-1);
     padding: 8px;
     .feedback-actions-info{
         display: flex;
@@ -38,26 +38,26 @@
                 font-size: 16px;
                 cursor: pointer;
                 transition: 0.2s all ease;
-                // &[aria-expanded="true"]{
-                //     background: var(--primary-500, #2970FF);
-                //     color: #FFFFFF;
-                // }
+                &[aria-expanded="true"]{
+                    background: var(--backgroundThemeColor);
+                    color: var(--whiteTextColor);
+                }
                 &:disabled{
                     opacity: 0.3;
                 }
                 &.active-feedback-btn{
-                    background: var(--primary-500, #2970FF);
-                    color: #FFFFFF;
+                    background: var(--backgroundThemeColor);
+                    color: var(--whiteTextColor);
                 }
                 &:hover{
-                    background: var(--primary-500, #2970FF);
-                    color: #FFFFFF;
+                    background: var(--backgroundThemeColor);
+                    color: var(--whiteTextColor);
                 }
             }
         }
         .thankyou-text{
             flex-shrink: 0;
-            color: var(--primary-500-main, #2B75E4);
+            color: var(--themeTextColor);
             font-size: 12px;
             font-weight: 400;
             line-height: 20px;
@@ -74,12 +74,12 @@
             margin-bottom: 12px;
             .improve-lable-text{
                 border-radius: 16px;
-                background: var(--gray-100, #F2F4F7);
+                background: var(--backgroundColorWidget);
                 display: flex;
                 padding: 2px 8px;
                 justify-content: center;
                 align-items: center;
-                color: var(--gray-700, #344054);
+                color: var(--primaryTextColorTwo);
                 font-size: 12px;
                 font-weight: 500;
                 line-height: 18px;
@@ -87,11 +87,11 @@
                 min-height: 22px;
                 transition: 0.2s all ease;
                 &:hover{
-                    background: #EFF4FF;
+                    background: var(--backgroundColorFormFocus);
                     color: #004EEB;
                 }
                 &.active-improve-btn{
-                    background: #EFF4FF;
+                    background: var(--backgroundColorFormFocus);
                     color: #004EEB;
                 }
             }
@@ -115,7 +115,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                color: #2970FF;
+                color: var(--themeTextColor);
                 font-size: 20px;
                 cursor: pointer;
                 &:disabled{

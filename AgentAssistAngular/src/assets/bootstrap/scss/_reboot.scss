@@ -14,7 +14,7 @@ body{
 }
 
 :focus-visible{
-	outline-color: #2970FF;
+	outline-color: var(--themeTextColor);
   outline-offset: 1px;
   outline-style: auto;
 }
@@ -53,7 +53,7 @@ body {
   font-size: 14px;
   font-weight: 400;
   line-height: normal;
-  color: #121926;
+  color: var(--primaryTextColor);
   background-color: #fff;
   -webkit-text-size-adjust: 100%;
 }
@@ -95,7 +95,7 @@ h6 {
   margin: 0;
   font-weight: 400;
   line-height: 20px;
-  color: #121926;
+  color: var(--primaryTextColor);
 }
 .paragraph{
   @extend %paragraph;
@@ -167,10 +167,10 @@ sup { top: -.5em; }
 // Links
 
 a {
-  color: var(--primary-500, #2970FF);
+  color: var(--themeTextColor);
   text-decoration: none;
   &:hover {
-    color: var(--primary-500, #2970FF);
+    color: var(--themeTextColor);
   }
 }
 

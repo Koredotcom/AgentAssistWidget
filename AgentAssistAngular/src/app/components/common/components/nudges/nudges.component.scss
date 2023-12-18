@@ -34,10 +34,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #FFFFFF;
+            color: var(--whiteTextColor)
         }
         p{
-            color: var(--generic-white, #FFF);
+            color: var(--whiteTextColor);
             font-size: 14px;
             font-weight: 500;
             line-height: 20px;
@@ -53,7 +53,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
+            color: var(--whiteTextColor);
             font-size: 16px;
         }   
     }

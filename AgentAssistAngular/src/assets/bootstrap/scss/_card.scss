@@ -8,7 +8,7 @@
   cursor: pointer;
   transition: 0.2s all ease;
   &:hover{
-    background: #F8FAFC;
+    background: var(--backgroundAskTellCustBg);
   }
   &.help-cards{
     border: 1px solid var(--neutral-200, #E5E5E5);
@@ -20,7 +20,7 @@
       height: 60px;
       flex-shrink: 0;
       font-size: 30px;
-      color: #2970FF;
+      color: var(--themeTextColor);
     }
 
   }
@@ -89,8 +89,8 @@
   justify-content: center;
   align-items: center;
   border-radius: 16px;
-  background: var(--gray-100, #F2F4F7);
-  color: var(--gray-700, #344054);
+  background: var(--backgroundColorWidget);
+  color: var(--primaryTextColorTwo);
   text-align: center;
   font-size: 10px;
   font-weight: 500;

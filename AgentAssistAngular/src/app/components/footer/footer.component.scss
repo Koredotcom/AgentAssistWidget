@@ -52,7 +52,7 @@
                 flex-direction: column;
             }
             &.selected-tab{
-                color:#2970FF;
+                color: var(--themeTextColor);
                 p{
                     display: block;
                 }
@@ -61,16 +61,16 @@
                 border-radius: 45px;
                 background: var(--gray-200, #EAECF0);
                 &.selected-tab{
-                    background: #2970FF;
-                    color: #FFF;
+                    background: var(--backgroundThemeColor);
+                    color: var(--whiteTextColor);
                 }
                 &:hover{
-                    background: #2970FF;
-                    color: #FFF;
+                    background: var(--backgroundThemeColor);
+                    color: var(--whiteTextColor);
                 }
             }
             &:hover{
-                color: #2970FF;
+                color: var(--themeTextColor);
                 p{
                     display: block;
                 }

@@ -2,7 +2,7 @@
 
 .ask-cust-node{
     border-radius: 0px 10px 10px 10px;
-    background: var(--gray-modern-50, #F8FAFC);
+    background: var(--themebgColorVariation-1);
     padding: 4px 8px;
     margin-bottom: 6px;
     .top-section{
@@ -18,7 +18,7 @@
             justify-content: center;
         }
         p{
-            color: var(--gray-700, #344054);
+            color: var(--primaryTextColorTwo);
             font-size: 11px;
             font-weight: 600;
             line-height: 16px;
@@ -27,9 +27,9 @@
     }
     .msg-node-cust{
         border-radius: 10px;
-        background: var(--primary-50, #EFF4FF);
+        background: var(--backgroundColorFormFocus);
         padding: 10px;
-        color: var(--gray-modern-900, #121926);
+        color: var(--primaryTextColor);
         font-size: 13px;
         font-weight: 400;
         line-height: 20px;
@@ -53,13 +53,13 @@
             gap: 5px;
             button{
                 border-radius: 24px;
-                border: 1px solid var(--primary-500-main, #2B75E4);
+                border: 1px solid var(--borderThemeColor);
                 display: flex;
                 padding: 3px 12px;
                 justify-content: center;
                 align-items: center;
                 gap: 6px;
-                color: var(--primary-500-main, #2B75E4);
+                color: var(--themeTextColor);
                 font-size: 14px;
                 font-weight: 500;
                 line-height: 20px;
@@ -67,18 +67,18 @@
                 min-height: 28px;
                 transition: 0.2s all ease;
                 &:hover{
-                    background: var(--primary-500-main, #2B75E4);
-                    color: var(--generic-white, #FFF);
+                    background: var(--backgroundThemeColor);
+                    color: var(--whiteTextColor);
                 }
                 &.active-btn{
-                    background: var(--primary-500-main, #2B75E4);
-                    color: var(--generic-white, #FFF);
+                    background: var(--backgroundThemeColor);
+                    color: var(--whiteTextColor);
                 }
             }
         }
         .send-copy-actions{
             border-radius: 4px;
-            background: var(--gray-modern-50, #F8FAFC);
+            background: var(--themebgColorVariation-1);
             box-shadow: 0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.10);
             position: absolute;
             display: none;
@@ -113,7 +113,7 @@
             position: absolute;
             top: 0;
             right: 4px;
-            color: var(--primary-500-main, #2B75E4);
+            color: var(--themeTextColor);
             font-size: 12px;
             font-weight: 400;
             line-height: 20px;

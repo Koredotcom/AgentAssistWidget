@@ -57,7 +57,7 @@
                 .icon_block{
                     border: 2px solid var(--neutral-200, #E5E5E5);
                     background: var(--base-white, #FFF);
-                    color: #667085;
+                    color: var(--secondaryTextColor);
                 }
             }
         }
@@ -117,7 +117,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                color: #fff;
+                color: var(--whiteTextColor);
                 font-size: 20px;
             }
         }

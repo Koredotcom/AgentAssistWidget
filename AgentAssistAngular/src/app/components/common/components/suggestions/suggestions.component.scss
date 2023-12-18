@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     border-radius: 12px 12px 0px 0px;
-    background: var(--gray-modern-50, #F8FAFC);
+    background: var(--themebgColorVariation-1);
     .suggestionslist-conntent-search{
         padding: 8px 12px 0px 12px;
         flex: 1 1 auto;
@@ -15,7 +15,7 @@
         position: relative;
         .sugestions-block{
             border-radius: 4px;
-            border: 1px solid var(--gray-100, #F2F4F7);
+            border: 1px solid var(--borderSuggestions);
             background: var(--base-white, #FFF);
             // height: 100%;
             // max-height: 100%;
@@ -57,13 +57,13 @@
                 .help-tip-icon{
                     flex-shrink: 0;
                     cursor: pointer;
-                    color: #98A2B3;
+                    color: var(--secondaryTextColorTwo);
                     font-size: 12px;
                 }
                 .count-text{
                     flex-shrink: 0;
                     border-radius: 16px;
-                    background: var(--primary-50, #EFF4FF);
+                    background: var(--backgroundColorFormFocus);
                     padding: 0px 8px;
                     height: 15px;
                     display: flex;                   

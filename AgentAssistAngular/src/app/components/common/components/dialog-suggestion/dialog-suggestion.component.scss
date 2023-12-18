@@ -6,7 +6,7 @@
 }
 .dialog-suggestion-wrapper{
     border-radius: 0px 10px 10px 10px;
-    background: var(--gray-modern-50, #F8FAFC);
+    background: var(--themebgColorVariation-1);
     padding: 8px;
     margin-bottom: 6px;
     .top-section{
@@ -22,7 +22,7 @@
             justify-content: center;
         }
         p{
-            color: var(--gray-700, #344054);
+            color: var(--primaryTextColorTwo);
             font-size: 11px;
             font-weight: 600;
             line-height: 16px;
@@ -30,7 +30,7 @@
             flex-shrink: 0;
         }
         span{
-            color: var(--gray-500, #667085);
+            color: var(--secondaryTextColor);
             font-size: 11px;
             font-weight: 400;
             line-height: 16px;
@@ -41,7 +41,7 @@
         }
         .dialog-count{
             border-radius: 16px;
-            background: var(--primary-50, #EFF4FF);
+            background: var(--backgroundColorFormFocus);
             display: flex;
             padding: 2px 8px;
             justify-content: center;
@@ -56,7 +56,7 @@
 }
 .dialogSuggestions{
     .moreText{
-        color: var(--primary-500, #2970FF);
+        color: var(--themeTextColor);
         font-size: 12px;
         font-weight: 400;
         line-height: 18px;

@@ -31,7 +31,7 @@
         &:hover{
             .bubble-msg-with-img{
                 .bubble-msg{
-                    background-color: #2B75E4;
+                    background-color: var(--backgroundThemeColor);
                 }                
             }            
         }     
@@ -71,7 +71,7 @@
                     justify-content: center;
                     border-radius: 100px;
                     background: var(--error-600, #D92D20);
-                    color: #FFF;
+                    color: var(--whiteTextColor);
                     font-size: 7px;
                     font-weight: 500;
                     line-height: normal;
@@ -80,16 +80,16 @@
                 }
                 i{
                     font-size: 20px;
-                    color: #2B75E4;
+                    color: var(--themeTextColor);
                 }
             }
             .bubble-msg{
-                background:#2B75E4;
+                background: var(--backgroundThemeColor);
                 border-radius: 8px 8px 2px 8px;
                 font-weight: 400;
                 font-size: 14px;
                 line-height: 17px;
-                color: #FFF;
+                color: var(--whiteTextColor);
                 padding: 8px 12px;
                 margin: 2px 0;
                 word-break: break-word;
@@ -111,7 +111,7 @@
             //     display: none;
             //     svg{
             //         path{
-            //             fill: #121926;
+            //             fill: var(--primaryTextColor);
             //         }
             //     }
             // }
@@ -173,7 +173,7 @@
         &:hover{
             .bubble-msg-with-img{
                 .bubble-msg{
-                    background-color: #EFF4FF;
+                    background-color: var(--backgroundColorFormFocus);
                 }                
             }
         }
@@ -228,7 +228,7 @@
                     justify-content: center;
                     border-radius: 100px;
                     background: var(--error-600, #D92D20);
-                    color: #FFF;
+                    color: var(--whiteTextColor);
                     font-size: 7px;
                     font-weight: 500;
                     line-height: normal;
@@ -237,16 +237,16 @@
                 }
                 i{
                     font-size: 20px;
-                    color: #2B75E4;
+                    color: var(--themeTextColor);
                 }
             }
             .bubble-msg{
-                background: #EFF4FF;
+                background: var(--backgroundColorFormFocus);
                 border-radius: 8px 8px 2px 8px;
                 font-weight: 400;
                 font-size: 14px;
                 line-height: 17px;
-                color: #121926;
+                color: var(--primaryTextColor);
                 padding: 8px 12px;
                 margin: 2px 0;
                 word-break: break-word;
@@ -263,7 +263,7 @@
             //     display: none;
             //     svg{
             //         path{
-            //             fill: #121926;
+            //             fill: var(--primaryTextColor);
             //         }
             //     }
             // }
@@ -397,7 +397,7 @@
                 }
                 .more-tooltip{
                     flex-shrink: 0;
-                    color: var(--primary-500-main, #2B75E4);
+                    color: var(--themeTextColor);
                     font-size: 11px;
                     font-style: italic;
                     font-weight: 400;
@@ -409,7 +409,7 @@
 }
 ::ng-deep .tipcontent-summery-more-info{
     p{
-        color: var(--gray-modern-900, #121926);
+        color: var(--primaryTextColor);
         text-align: center;
         font-size: 11px;
         font-weight: 500;

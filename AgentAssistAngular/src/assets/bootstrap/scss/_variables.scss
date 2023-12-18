@@ -1752,3 +1752,52 @@ $card-bg:                           var(--#{$prefix}body-bg) !default;
 $card-img-overlay-padding:          $spacer !default;
 $card-group-margin:                 $grid-gutter-width * .5 !default;
 // scss-docs-end card-variables
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// New Variables
+
+body{
+  --themeColor:#2B75E4; //#2970FF
+  --themeBgWhiteColor:#FFFFFF;
+  --themeBgColor:#F2F4F7;
+  --themebgColorVariation-1:#F8FAFC;
+  --themebgColorVariation-2:#EFF4FF;
+  --themeBorderColor:#F2F4F7;
+
+  // Fonts Colors
+  --whiteTextColor:#FFFFFF;
+  --primaryTextColor:#121926;
+  --primaryTextColorTwo:#344054;
+  --secondaryTextColor:#667085;
+  --secondaryTextColorTwo:#98A2B3;
+  --themeTextColor:var(--themeColor);
+  --warningTextColor:#D92D20;
+
+  // Borders
+  --borderSuggestions:var(--themeBgColor);
+  --borderThemeColor:var(--themeColor);
+
+
+  // Backgrounds
+  --backgroundThemeColor:var(--themeColor);
+  --backgroundColorWidget:var(--themeBgColor);
+  --backgroundAskTellCustBg:var(--bgColorVthemebgColorVariationariation-1);
+  --backgroundColorWhite:var(--bgWhiteColor);
+  --backgroundColorFormFocus:var(--themebgColorVariation-2);
+}

@@ -69,11 +69,11 @@
     margin-top: 1px;
     cursor: pointer;
     border-radius: $form-check-radio-border-radius;
-    outline: 1px solid #0d6efd;
+    outline: 1px solid var(--borderThemeColor);
   }
   +.form-check-label{
     display: block;
-    color: var(--gray-700, #344054);
+    color: var(--primaryTextColorTwo);
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
@@ -103,9 +103,9 @@
     }
 
     &[type="radio"] {
-      background-color: #0d6efd;
-      border: 4px solid #EFF4FF;
-      outline: 1px solid #0d6efd;
+      background-color: var(--backgroundThemeColor);
+      border: 4px solid var(--backgroundColorFormFocus);
+      outline: 1px solid var(--borderThemeColor);
     }
   }
 

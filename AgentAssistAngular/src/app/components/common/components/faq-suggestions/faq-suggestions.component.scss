@@ -60,7 +60,7 @@
             gap: 4px;
             overflow: hidden;
             h1{
-                color: var(--gray-modern-900, #121926);
+                color: var(--primaryTextColor);
                 font-size: 12px;
                 font-weight: 600;
                 line-height: 18px;
@@ -131,7 +131,7 @@
             gap: 2px;
             padding-left: 10px;
             .moreText{
-                color: var(--primary-500, #2970FF);
+                color: var(--themeTextColor);
                 font-size: 12px;
                 font-weight: 400;
                 line-height: 18px;
@@ -139,7 +139,7 @@
                 cursor: pointer;
             }
             p{
-                color: var(--primary-500, #2970FF);
+                color: var(--themeTextColor);
                 font-size: 12px;
                 font-weight: 400;
                 line-height: 18px;
@@ -160,7 +160,7 @@
     }
 }
 .moreText-bottom{
-    color: var(--primary-500, #2970FF);
+    color: var(--themeTextColor);
     font-size: 12px;
     font-weight: 400;
     line-height: 18px;
