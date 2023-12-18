@@ -49,6 +49,10 @@ export class SentimentScoreComponent {
     this.subscribeEvents();
   }
 
+  ngOnDestroy(){
+    this.subs.unsubscribe();
+  }
+
 
   ngAfterViewInit() {
     this.setRealtimeIntialOptions();

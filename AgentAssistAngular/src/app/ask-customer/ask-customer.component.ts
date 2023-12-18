@@ -59,7 +59,7 @@ export class AskCustomerComponent {
   }
 
   ngOnDestroy(){
-
+    this.subs.unsubscribe();
   }
 
   ngOnChanges(changes) {

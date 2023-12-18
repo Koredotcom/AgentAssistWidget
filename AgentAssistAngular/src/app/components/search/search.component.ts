@@ -50,6 +50,10 @@ export class SearchComponent implements OnInit {
     this.subscribeEvents();
   }
 
+  ngOnDestroy(){
+    this.subs.unsubscribe();
+  }
+
   subscribeEvents() {
     this.subs.sink = this.websocketService.agentAssistAgentResponse$.subscribe((agentResponse: any) => {
       if (agentResponse && (agentResponse.isSearch || this.answerPlaceableIDs.length)) {

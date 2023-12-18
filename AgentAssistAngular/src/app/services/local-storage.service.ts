@@ -10,7 +10,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class LocalStorageService {
 
-  subs = new SubSink();
   userDetails : any = {};
   agentDetails : any = {};
 
