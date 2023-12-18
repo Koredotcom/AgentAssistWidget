@@ -41,10 +41,19 @@ export class TranscriptHistoryComponent {
       this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
         if (response) {
           connectionDetails = response;
-          headersVal = {
-            'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
-            'accountId': this.commonService.grantResponseObj?.userInfo?.accountId,
-            'iid' : connectionDetails.botId ? connectionDetails.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
+          if(connectionDetails.fromSAT) {
+            headersVal = {
+                'Authorization': 'bearer' + ' ' + connectionDetails.token,
+                'AccountId': connectionDetails.accountId,
+                'eAD': false,
+                'iid' : connectionDetails.botId ? connectionDetails.botId : ''
+            }
+          } else {
+            headersVal = {
+              'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
+              'accountId': this.commonService.grantResponseObj?.userInfo?.accountId,
+              'iid' : connectionDetails.botId ? connectionDetails.botId : ''
+            }
         }
         $.ajax({
           url: `${connectionDetails.agentassisturl}/agentassist/api/v1/agentassistconversations/${connectionDetails.conversationId}/conversation?page=1&&limit=1000`,
