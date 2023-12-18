@@ -207,7 +207,7 @@ export class ChecklistComponent {
       this.selsTinx = 0;
       this.selectNextStage();
     }
-    this.minimizeToggle();
+    // this.minimizeToggle();
   }
 
   checkListResume(i) {
@@ -320,9 +320,9 @@ export class ChecklistComponent {
   }
 
   selectStageAndMinimize(index){
-    if(!this.maxButton){
-      this.minimizeToggle();
-    }
+    // if(!this.maxButton){
+    //   this.minimizeToggle();
+    // }
     this.selectStage(index);
   }
 

@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ProjConstants, storageConst } from 'src/app/proj.const';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
@@ -35,6 +35,15 @@ export class FooterComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     // this.subscribeEvents();
   }
+
+  @HostListener('document:click', ['$event.target']) onMouseEnter(targetElement) {
+    if(targetElement?.className?.includes('custom-backdrop-off-canvas')){
+      this.canvas = null;
+      this.selectedTab = this.projConstants.ASSIST;
+      this.changeTab(this.selectedTab);
+    }
+  }
+
 
   ngAfterViewInit(){
     this.subscribeEvents();
@@ -105,7 +114,7 @@ export class FooterComponent implements OnInit, OnDestroy{
     this.rootService.setActiveTab(selectedTab);
   }
   openCanvas(canvas) {
-		this.canvas = this.offcanvasService.open(canvas, { position: 'bottom', keyboard:false, backdropClass: 'custom-backdrop-off-canvas', panelClass: 'offCanvasWrapperContaier', backdrop:'static' });
+		this.canvas = this.offcanvasService.open(canvas, { position: 'bottom', keyboard:false, backdropClass: 'custom-backdrop-off-canvas', panelClass: 'offCanvasWrapperContaier' });
 	}
 
   minMaxButtonClick(event){
