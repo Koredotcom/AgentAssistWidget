@@ -90,10 +90,11 @@ export class FooterComponent implements OnInit, OnDestroy{
     }
 
     let className = 'if-maximized-canvas';
-    if(this.selectedTab == ProjConstants.SETTINGS){
+    if(this.selectedTab == ProjConstants.SETTINGS || this.rootService.notLookingForClick){
       if(this.document.body.classList.contains(className)){
         this.renderer.removeClass(this.document.body, className);
       }
+      this.rootService.notLookingForClick = false;
       this.maxButton = false;
     }else{
       this.renderer.addClass(this.document.body, className);

@@ -104,6 +104,7 @@ export class SuggestionsComponent {
   }
 
   openSearch(){
+    this.rootService.notLookingForClick = true;
     this.rootService.setActiveTab(ProjConstants.SEARCH);
   }
 

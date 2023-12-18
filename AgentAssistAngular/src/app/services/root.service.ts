@@ -65,6 +65,7 @@ export class RootService {
 
   searchedResultData : any = {};
   widgetMaxButtonClick : boolean = true;
+  notLookingForClick : boolean = false;
 
   constructor(private templateRenderClassService: TemplateRenderClassService) {
     // this.chatWindowInstance = new chatWindow();
