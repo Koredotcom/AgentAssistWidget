@@ -26,8 +26,8 @@
                     </div>
 
                     <div class="bottom-titles">
-                        <p *ngIf="dialogName">{{dialogName}}</p>
-                        <span *ngIf="dialogName && currentRunningStep">{{'STEP' | translate}}: <b>{{currentRunningStep}}</b></span>
+                        <p *ngIf="dialogName" [title]="dialogName">{{dialogName}}</p>
+                        <span *ngIf="dialogName && currentRunningStep" [title]="currentRunningStep">{{'STEP' | translate}}: <b>{{currentRunningStep}}</b></span>
                     </div>
                 </div>
                 <div class="actions-assist-header">
