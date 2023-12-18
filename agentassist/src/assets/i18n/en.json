@@ -2149,6 +2149,6 @@
     "lbl_widgets" : "Widget Settings",
     "SEARCH_ASSIST_DISABLE_TEXT" : "To configure search assist experiences, enable the 'Search Assist' feature under the ",
     "AGENTASSIST_SETTINGS" : "AgentAssist Settings",
-    "PLAYBOOK_DISABLE_TEXT" : "To configure Playbook experiences, enable the 'Agent Playbook' feature under the ",
-    "COACHING_DISABLE_TEXT" : "To configure Playbook experiences, enable the 'Agent Coaching' feature under the "
+    "PLAYBOOK_DISABLE_TEXT" : "To configure Agent Playbook experiences, enable the 'Agent Playbook' feature under the ",
+    "COACHING_DISABLE_TEXT" : "To configure Agent Coaching experiences, enable the 'Agent Coaching' feature under the "
 }
