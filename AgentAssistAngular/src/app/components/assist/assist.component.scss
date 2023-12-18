@@ -90,7 +90,7 @@
                 gap: 4px;
                 .solid-action{
                     border-radius: 3px;
-                    border: 1px solid var(--gray-300, #D0D5DD);
+                    border: 0px solid var(--gray-300, #D0D5DD);
                     background: var(--generic-white, #FFF);
                     display: flex;
                     width: 25px;
@@ -107,7 +107,7 @@
                         color: #155EEF;
                     }
                     &.stop-assist{
-                        border: 1px solid var(--error-200, #FECDCA);
+                        border: 0px solid var(--error-200, #FECDCA);
                         background: var(--generic-white, #FFF);
                         &:hover{
                             border: 1px solid var(--error-300, #FDA29B);
