@@ -60,6 +60,7 @@ export class BodyComponent implements OnInit{
     }
     this.assistDiv.nativeElement.style.minHeight = 0 + 'px';
     this.checklistDiv.nativeElement.style.minHeight = 0 + 'px';
+    this.rootService.widgetMaxButtonClick = true;
   }
 
   assistMaxButtonClickEvent(event){
@@ -71,6 +72,7 @@ export class BodyComponent implements OnInit{
     }
     this.checklistDiv.nativeElement.style.minHeight = 0 + 'px';
     this.assistDiv.nativeElement.style.minHeight = 0 + 'px';
+    this.rootService.widgetMaxButtonClick = true;
   }
 
 }

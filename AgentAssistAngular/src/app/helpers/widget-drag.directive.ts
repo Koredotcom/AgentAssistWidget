@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, EventEmitter, HostListener, Inject, INJECTOR, Input, OnInit, Output } from '@angular/core';
+import { RootService } from '../services/root.service';
 
 @Directive({
   selector: '[appWidgetDrag]'
@@ -17,6 +18,10 @@ export class WidgetDragDirective {
   @Input() topele;
   @Input() bottomele;
   @Input() mainele;
+
+  constructor(private rootService : RootService){
+
+  }
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
@@ -38,6 +43,7 @@ export class WidgetDragDirective {
     if(this.bottomele.classList.contains('minimized-card')){
       this.bottomele.classList.remove('minimized-card')
     }
+    this.rootService.widgetMaxButtonClick = false;
   }
 
   @HostListener('mouseup', ['$event'])

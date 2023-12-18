@@ -64,6 +64,7 @@ export class RootService {
   dynamicChecklist: any = [];
 
   searchedResultData : any = {};
+  widgetMaxButtonClick : boolean = true;
 
   constructor(private templateRenderClassService: TemplateRenderClassService) {
     // this.chatWindowInstance = new chatWindow();
