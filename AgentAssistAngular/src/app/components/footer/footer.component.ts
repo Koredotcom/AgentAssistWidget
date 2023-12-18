@@ -33,10 +33,11 @@ export class FooterComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.subscribeEvents();
+    // this.subscribeEvents();
   }
 
   ngAfterViewInit(){
+    this.subscribeEvents();
     this.minMaxButtonClick(true);
   }
 
@@ -50,6 +51,7 @@ export class FooterComponent implements OnInit, OnDestroy{
 
     this.rootService.activeTab$.subscribe(tab => {
       if(tab){
+        this.selectedTab = tab;
         this.actionOnButton(tab);
         this.updateLocalStorageForTabSwitch(tab);
       }
