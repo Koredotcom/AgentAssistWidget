@@ -73,20 +73,6 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getAgentAssistSettings();
-    this.workflowService.getCurrentBtSmt(true)._id
-    this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
-      this.isCoachingDisable = isEnabled;
-    });
-    if (!this.isCoachingDisable) {
-      this.router.navigate(['/config/usecases']);
-    } else {
-      this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
-        if (ele) {
-          this.initApiCalls();
-        }
-      });
-      this.initApiCalls();
-    }
     window.addEventListener("message", (event:any) => {
       if(event.data.action === 'reloadCoaching') {
         this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
@@ -127,9 +113,22 @@ export class CoachingComponent implements OnInit, OnDestroy {
     .subscribe(
       (res) => {
         if (res) {
-          this.isAgentCoachingEnabled = res.agentAssistSettings.isSearchAssistEnabled;
+          this.isAgentCoachingEnabled = res.agentAssistSettings.isAgentCoachingEnabled;
           if(this.isAgentCoachingEnabled){
-            
+            this.workflowService.getCurrentBtSmt(true)._id
+            this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+              this.isCoachingDisable = isEnabled;
+            });
+            if (!this.isCoachingDisable) {
+              this.router.navigate(['/config/usecases']);
+            } else {
+              this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
+                if (ele) {
+                  this.initApiCalls();
+                }
+              });
+              this.initApiCalls();
+            }
           }
         }
       },
@@ -140,6 +139,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
         );
       }
     );
+  }
+
+  redirectToAASettings() {
+    this.router.navigate(['/config/widget-settings']);
   }
 
   initApiCalls() {
