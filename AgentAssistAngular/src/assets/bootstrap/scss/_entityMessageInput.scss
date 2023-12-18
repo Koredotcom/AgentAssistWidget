@@ -1,6 +1,9 @@
 .entity-mesage-data{
     padding: 8px;
     margin-bottom: 6px;
+    &.listView{
+        padding: 0px !important;
+    }
     &.error-no-reponse{
         .input-block-entity {
             input {

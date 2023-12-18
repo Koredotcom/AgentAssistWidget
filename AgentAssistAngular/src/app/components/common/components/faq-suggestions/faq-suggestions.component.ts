@@ -17,6 +17,7 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
   @Input() agentassistArrayIndex : number;
   @Output() faqAnswerToggle = new EventEmitter();
   @Input() searchResponse : any;
+  @Input() from : string;
 
   subs = new SubSink();
   projConstants: any = ProjConstants;
@@ -32,10 +33,20 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-   
+    this.handleResponse();
+    this.subscribeEvents();
   }
 
-  ngOnChanges(){
+  subscribeEvents(){
+    this.handleSubjectService.faqsearchResponse$.subscribe((response)=> {
+      if(response && Object.keys(response).length > 0 && this.from == ProjConstants.ASSIST){
+        this.searchResponse = response;
+        this.handleResponse();
+      }
+    })
+  }
+
+  handleResponse(){
     this.handleSearchResponse(this.searchResponse);
     this.hideSendAndCopy();
   }

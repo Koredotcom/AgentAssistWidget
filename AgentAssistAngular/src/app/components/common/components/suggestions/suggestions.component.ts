@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChange } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { ProjConstants, RenderResponseType } from 'src/app/proj.const';
+import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
@@ -22,20 +23,34 @@ export class SuggestionsComponent {
 
   subs = new SubSink();
   renderResponseType : any = RenderResponseType;
+  projConstants : any = ProjConstants;
 
-  constructor(private rootService: RootService, private websocketService: WebSocketService, private handleSubjectService: HandleSubjectService) {
+  constructor(private rootService: RootService, private websocketService: WebSocketService,
+     private handleSubjectService: HandleSubjectService, private commonService : CommonService) {
 
   }
 
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-  }
-
-  ngOnChanges() {
+  ngOnInit(){
     if (this.suggestionResponse && this.suggestionResponse.data) {
       this.connectionDetails = this.suggestionResponse.connectionDetails;
       this.updateResponse();
     }
+    this.subscribeEvents();
+  }
+
+  subscribeEvents(){
+    this.subs.sink = this.handleSubjectService.suggestionResponse$.subscribe((response: any) => {
+      if (response && response.length > 0 && response[this.agentassistArrayIndex - 1]) {
+       this.suggestionResponse = response[this.agentassistArrayIndex -1];
+       if(this.suggestionResponse.searchResponse){
+         this.handleSubjectService.setFaqSearchResponse(this.suggestionResponse.searchResponse)
+       }
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   updateResponse() {
@@ -46,8 +61,8 @@ export class SuggestionsComponent {
 
 
   handleSearchResponse(response) {
-    this.checkFaqAnswerNotRenderCountAndRequest()
-    this.handleSubjectService.setSearchResponse(this.suggestionResponse.searchResponse);
+    this.checkFaqAnswerNotRenderCountAndRequest();
+    // this.handleSubjectService.setSearchResponse(this.suggestionResponse.searchResponse);
   }
 
   checkFaqAnswerNotRenderCountAndRequest() {
@@ -67,7 +82,7 @@ export class SuggestionsComponent {
 
   checkAnswerAndToggle(faq) {
     if (!faq.answer && faq.toggle) {
-      this.rootService.suggestionsAnswerPlaceableIDs.push({ input: faq.question, assistSuggestion: this.agentassistArrayIndex });
+      this.rootService.suggestionsAnswerPlaceableIDs.push({ input: faq.question, assistSuggestion: this.agentassistArrayIndex - 1 });
       let searchObj: any = {};
       searchObj.value = faq.displayName;
       searchObj.question = faq.question;

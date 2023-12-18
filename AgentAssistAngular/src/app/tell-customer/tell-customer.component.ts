@@ -24,7 +24,7 @@ export class TellCustomerComponent {
     
   }
 
-  ngOnChanges() {
+  ngOnInit() {
     this.hideSendAndCopy();
   }
 

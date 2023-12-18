@@ -1,8 +1,8 @@
-<ng-container *ngIf="connectionDetails.isCallConversation">
+<ng-container *ngIf="connectionDetails?.isCallConversation">
     <ng-container [ngTemplateOutlet]="userBotHistory"></ng-container>
 </ng-container>
 
-<ng-container *ngIf="!connectionDetails.isCallConversation">
+<ng-container *ngIf="!connectionDetails?.isCallConversation">
     <div class="transcipt-wrapper-info">
         <div class="offcanvas-header">
             <p class="paragraph semibold">{{'HISTORY' | translate}}</p>

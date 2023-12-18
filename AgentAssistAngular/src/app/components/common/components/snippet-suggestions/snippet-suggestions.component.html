@@ -4,12 +4,14 @@
     <div class="faq-s-header">
       <div class="titles-info-heading">
         <h1 class="text-truncate">{{snippet.title}}</h1>
+        <div class="sent-msg-text" *ngIf="snippet.send">{{ 'SENT'  | translate }} </div>
+
       </div>
       <!-- <button class="solidbtn" *ngIf="snippet.page_url">
         <a [href]="snippet.page_url" target="_blank">{{'KNOW_MORE' | translate}}</a>
       </button> -->
-      <div class="faq-actions" [ngClass]="{'sent-cliked-msg' : snippet.send}" *ngIf="!hideActionButtons">
-        <ng-container *ngIf="!snippet.send">
+      <div class="faq-actions" *ngIf="!hideActionButtons && snippet.content">
+        <ng-container>
           <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.SNIPPET)">
             <i class="krIocnsFont-copy"></i>
           </button>
@@ -18,7 +20,6 @@
         <!-- <ng-container *ngIf="snippet.send">
           <button class="solidbtn">{{ 'SENT'  | translate }}</button>
         </ng-container> -->
-        <div class="sent-msg-text" *ngIf="snippet.send">{{ 'SENT'  | translate }}</div>
 
       </div>
     </div>

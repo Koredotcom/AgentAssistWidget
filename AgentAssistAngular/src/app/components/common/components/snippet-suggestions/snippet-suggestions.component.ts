@@ -27,10 +27,7 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
   }
 
-  ngOnInit(): void {
-  }
-
-  ngOnChanges(){
+  ngOnInit(){
     this.handleSearchResponse(this.searchResponse);
     this.hideSendAndCopy();
   }

@@ -46,13 +46,7 @@
         &.sent-cliked-msg{
             display: flex !important;
             position: relative !important;
-        }
-        .sent-msg-text{
-            color: var(--primary-500-main, #2B75E4);
-            font-size: 12px;
-            font-weight: 400;
-            line-height: 20px;
-        }
+        }        
     }
     .faq-s-header{
         display: flex;
@@ -77,6 +71,14 @@
                 font-size: 12px;
                 font-weight: 600;
                 line-height: 18px;
+            }
+            .sent-msg-text{
+                color: var(--primary-500-main, #2B75E4);
+                font-size: 12px;
+                font-weight: 400;
+                flex-shrink: 0;
+                line-height: 20px;
+                margin: 0 0 0 auto;
             }
         }
     }

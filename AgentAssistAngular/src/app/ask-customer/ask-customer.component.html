@@ -73,33 +73,39 @@
 </ng-container>
 
 <ng-container *ngIf="listView && automation && automation.entityName">
-    <div class="input-block-entity">
-        <p>{{automation.entityName}} : </p>
-        <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride()" [disabled]="automation.disableInput" (keyup.enter)="handleAgentInput()">
-        <div class="border-outline"></div>
-        <div class="actions-inputs">                
-            <button class="remove-input" aria-label="Button" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">
-                <i class="krIocnsFont-keyboard"></i>
-            </button>
-            <button class="success-check-input" aria-label="button" *ngIf="automation.userInput == projConstants.YES && !automation.errorCount">
-                <i class="krIocnsFont-check-circle"></i>
-            </button>
-            <button class="remove-input" aria-label="Button" (click)="cancelOverride()" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">
-                <i class="krIocnsFont-close"></i>
-            </button>
-            <button class="check-input" [ngClass]="{'disabled-msg' : !automation.entityValue}" aria-label="button" (click)="handleAgentInput()" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">
-                <i class="krIocnsFont-check"></i>
-            </button>
-            <button class="wrong-res-info" aria-label="button" *ngIf="automation.errorCount">
-                <i class="krIocnsFont-warning-solid"></i>
-                <span>{{automation.errorCount}}</span>
-            </button>
+    <div class="entity-mesage-data listView" [ngClass]="{'error-no-reponse' : automation.errorCount, 'grayout-msgs-node' : automation.grayOut}">
+        <div class="input-block-entity">
+            <p>{{automation.entityName}} : </p>
+            <input type="text" aria-label="Input" [(ngModel)]="automation.entityValue" (click)="confirmOverride()" [disabled]="automation.disableInput" (keyup.enter)="handleAgentInput()">
+            <div class="border-outline"></div>
+            <div class="actions-inputs">                
+                <button class="remove-input" aria-label="Button" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">
+                    <i class="krIocnsFont-keyboard"></i>
+                </button>
+                <button class="success-check-input" aria-label="button" *ngIf="automation.userInput == projConstants.YES && !automation.errorCount">
+                    <i class="krIocnsFont-check-circle"></i>
+                </button>
+                <button class="remove-input" aria-label="Button" (click)="cancelOverride()" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">
+                    <i class="krIocnsFont-close"></i>
+                </button>
+                <button class="check-input" [ngClass]="{'disabled-msg' : !automation.entityValue}" aria-label="button" (click)="handleAgentInput()" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">
+                    <i class="krIocnsFont-check"></i>
+                </button>
+                <button class="wrong-res-info" aria-label="button" *ngIf="automation.errorCount">
+                    <i class="krIocnsFont-warning-solid"></i>
+                    <span>{{automation.errorCount}}</span>
+                </button>
+            </div>
         </div>
+        <ng-container  *ngIf="!automation.errorCount; else errCount">
+            <p class="info-entity-text" *ngIf="automation.userInput == projConstants.NO">{{'AGENT_ENTERED' | translate}}</p>
+            <p class="info-entity-text" *ngIf="automation.userInput == projConstants.YES">{{'ACCEPT_RESPONSE' | translate}}</p>
+            <p class="info-entity-text" *ngIf="automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p>
+        </ng-container>
+        <ng-template #errCount>
+            <p class="info-entity-text">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.expectedFormat}}  |  {{'OVERRIDE' | translate}}</p>
+        </ng-template>
+        <app-loader [type]="projConstants.INDIVIDUAL_LOADER" *ngIf="automation.showSpinner"></app-loader>
     </div>
-    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.NO">{{'AGENT_ENTERED' | translate}}</p>
-    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput == projConstants.YES">{{'ACCEPT_RESPONSE' | translate}}</p>
-    <p class="info-entity-text" *ngIf="!automation.errorCount && automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p>
-    <p class="info-entity-text" *ngIf="automation.errorCount">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.expectedFormat}}  |  {{'OVERRIDE' | translate}}</p>
-    <app-loader [type]="projConstants.INDIVIDUAL_LOADER" *ngIf="automation.showSpinner"></app-loader>
 </ng-container>
 

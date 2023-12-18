@@ -50,6 +50,10 @@ export class SearchComponent implements OnInit {
     this.subscribeEvents();
   }
 
+  ngOnDestroy(){
+    this.subs.unsubscribe();
+  }
+
   subscribeEvents() {
     this.subs.sink = this.websocketService.agentAssistAgentResponse$.subscribe((agentResponse: any) => {
       if (agentResponse && (agentResponse.isSearch || this.answerPlaceableIDs.length)) {
@@ -78,7 +82,7 @@ export class SearchComponent implements OnInit {
     this.autocompleteText = '';
     this.searched = false;
     this.searchResponse = {};
-    this.handleSubjectService.setSearchResponse(this.searchResponse);
+    // this.handleSubjectService.setSearchResponse(this.searchResponse);
   }
 
   typeAHeadDeBounce(func, timeout = 300) {
@@ -220,7 +224,7 @@ export class SearchComponent implements OnInit {
           // }, 1000);
         }
       }
-      this.handleSubjectService.setSearchResponse(this.searchResponse);
+      // this.handleSubjectService.setSearchResponse(this.searchResponse);
     }
   }
 

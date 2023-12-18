@@ -33,9 +33,6 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.subscribeEvents();
-  }
-
-  ngOnChanges(){
     this.handleSearchResponse(this.searchResponse);
   }
 

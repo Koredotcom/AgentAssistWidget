@@ -87,14 +87,14 @@
 </div>
 
 <ng-template #terminateCanvas let-offcanvas>
-    <ng-container *ngIf="terminateClick">
+    <ng-container *ngIf="terminateClick && dialogName">
         <app-terminate (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
     </ng-container>
-    <ng-container *ngIf="showInterruptPopup">
+    <ng-container *ngIf="showInterruptPopup && dialogName">
         <app-interrupt (handlePopupEvent)="handlePopupEvent($event)" [currentDialog]="dialogName"></app-interrupt>
     </ng-container>
     <ng-container *ngIf="(showListView) && dialogName">
-        <app-listview [assistResponseArray]="assistResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
+        <app-listview [entityList]="listViewEntityList"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
     </ng-container>
     <ng-container *ngIf="showRestart && dialogName">
         <app-restart [assistResponseArray]="assistResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-restart>
