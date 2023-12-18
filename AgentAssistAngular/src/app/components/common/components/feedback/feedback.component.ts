@@ -65,6 +65,9 @@ export class FeedbackComponent {
     if(this.rootService.isUpdateFeedBackDetailsFlag && this.feedbackData?.feedbackResponse){
       this.updateFeedbackForm(this.feedbackData);
     }
+    if(this.feedbackData?.feedback){
+      this.feedbackData.oldFeedback = true;
+    }
     setTimeout(() => {
       this.subscribeValChanges();
     }, 100);
@@ -84,6 +87,7 @@ export class FeedbackComponent {
     this.formTouched = false;
     this.rootService.isUpdateFeedBackDetailsFlag = false;
     this.callAgentFeedbackUsage(); 
+    this.feedbackData.oldFeedback = (feedBackFlag == this.feedbackConst.LIKE) ? true : false;
   }
 
   dislikeFeedbackArrowToggle(){
@@ -129,6 +133,7 @@ export class FeedbackComponent {
     this.updateFeedbackProperties.emit(this.feedbackData);
     if(flag){
       this.feedbackData.arrowToggle = false;
+      this.feedbackData.oldFeedback = true;
     }
   }
 

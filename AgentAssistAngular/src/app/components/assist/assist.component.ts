@@ -456,8 +456,17 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.terminateClick = true;
 	}
 
-  openOffCanvas(){    
-		this.offcanvasService.open(this.canvas, { position: 'bottom', keyboard:false, backdropClass: 'backdrop-off-canvas-terminate', panelClass: 'termincateOffCanvas', backdrop:'static' });
+  openOffCanvas(flag?){  
+    let options : any = {
+      position: 'bottom',
+      keyboard: false,
+      backdropClass: 'backdrop-off-canvas-terminate',
+      panelClass: 'termincateOffCanvas',
+    }  
+    if(!flag){
+      options.backdrop = 'static'
+    }
+		this.offcanvasService.open(this.canvas, options);
   }
 
   closeOffCanvas(){
@@ -515,7 +524,7 @@ export class AssistComponent implements OnInit, OnDestroy {
       if(!this.showListView){
         this.closeOffCanvas();
       }else{
-        this.openOffCanvas();
+        this.openOffCanvas(true);
       }
     } else if (popupObject.type == this.projConstants.RESTART) {
       this.showRestart = popupObject.status;
