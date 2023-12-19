@@ -168,26 +168,6 @@ export class VoicePreferencesComponent implements OnInit {
 
     if (lang.languagePreference !== this.workflowService.getCurrentBt()?.defaultLanguage) {
       const botLanguage = this.ttsLanguages.find(f => f.languagePreference === this.workflowService.getCurrentBt()?.defaultLanguage)?.displayName || this.workflowService.getCurrentBt()?.defaultLanguage;
-      const dialogRef = this.dialog.open(UcDeleteConfirmComponent, {
-        width: '540px',
-        panelClass: "delete-uc",
-        data: {
-          title: this.translate.instant('VOICE_LANG_WARNING_HEADER'),
-          text: this.translate.instant('VOICE_LANG_WARNING_DESC', { currentBotLanguage: botLanguage }),
-          buttons: [{ key: 'yes', label: this.translate.instant('SETTINGS.YES') }, { key: 'no', label: this.translate.instant('BUTTONS.NO_IDONT') }]
-        }
-      });
-
-      dialogRef.componentInstance.onSelect
-        .subscribe(result => {
-          if (result === 'yes') {
-            dialogRef.close();
-            this.changeVoiceLang(lang);
-          } else if (result === 'no') {
-            dialogRef.close();
-          }
-        });
-    } else {
       this.changeVoiceLang(lang);
     }
 
@@ -253,6 +233,7 @@ export class VoicePreferencesComponent implements OnInit {
     this.saveInProgress = true;
     this.voicePreferences.languagePreference = this.selectedTTSLanguage?.languagePreference;
     this.voicePreferences.dialectPreference = this.selectedDialect;
+    this.voicePreferences.voicePreference = this.selectedTTSLanguage.voicePreferences[0];
     for(let i=0; i<this.addedParams.length; i++){
       if(!this.addedParams[i].name.trim() || !this.addedParams[i].value.trim()){
         this.notificationService.showError({}, this.translate.instant('AGENTS.FORM_INVALID'))
