@@ -235,7 +235,7 @@ export class RootService {
       }
       if (suggestions?.searchassist?.snippets?.length > 0) {
         for (let snippet of snippersArray) {
-          if(Array.isArray(snippet.content)){
+          if(Array.isArray(snippet?.content)){
             snippet.content = snippet.content.reduce((acc, obj) => {
               if(obj.answer_fragment){
                 acc += obj.answer_fragment;
