@@ -235,7 +235,7 @@ export class RootService {
       }
       if (suggestions?.searchassist?.snippets?.length > 0) {
         for (let snippet of snippersArray) {
-          if(snippet.title){
+          if(snippet.title || snippet.content){
             searchResponse.snippets.push(snippet);
           }
         }

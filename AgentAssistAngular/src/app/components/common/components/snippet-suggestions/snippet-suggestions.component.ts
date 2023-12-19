@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -10,9 +10,12 @@ import { SubSink } from 'subsink';
   templateUrl: './snippet-suggestions.component.html',
   styleUrls: ['./snippet-suggestions.component.scss']
 })
-export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
+export class SnippetSuggestionsComponent implements OnInit, OnDestroy, AfterContentChecked{
 
   @Input() searchResponse : any;
+  @ViewChild('ifSnippet', { static: false }) public ifSnippet: ElementRef<HTMLDivElement>
+  @ViewChild('snippetContent', { static: false }) public snippetContent: ElementRef<HTMLDivElement>
+
 
   subs = new SubSink();
   projConstants: any = ProjConstants;
@@ -23,7 +26,8 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   hideSendButton : boolean = false;
 
   constructor(private handleSubjectService : HandleSubjectService,
-    private rootService : RootService, private commonService : CommonService){
+    public rootService : RootService, private commonService : CommonService,
+    private cdr : ChangeDetectorRef){
 
   }
 
@@ -31,6 +35,10 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     this.handleSearchResponse(this.searchResponse);
     this.hideSendAndCopy();
   }
+
+  ngAfterContentChecked(): void {
+    this.cdr.detectChanges();
+ }  
 
 
   hideSendAndCopy(){
@@ -53,7 +61,21 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
   handleSendCopyButton(actionType, snippetObj, selectType){
     snippetObj.send = true;
-    this.commonService.handleSendCopyButton(actionType, snippetObj, selectType)
+    let clonedSnippetObj = this.modifySnippetObjForMultiContent(snippetObj);
+    this.commonService.handleSendCopyButton(actionType, clonedSnippetObj, selectType)
+  }
+
+  modifySnippetObjForMultiContent(snippetObj){
+    let clonedSnippetObj = JSON.parse(JSON.stringify(snippetObj));
+    if(this.isArray(clonedSnippetObj.content)){
+      clonedSnippetObj.content = clonedSnippetObj.content.reduce((acc, obj) => {
+        if(obj.answer_fragment){
+          acc += obj.answer_fragment;
+          return acc;
+        }
+      }, '')
+    }
+    return clonedSnippetObj
   }
 
   toggleShowMoreLess(snippet){
@@ -74,5 +96,8 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     this.viewCount = (this.searchedSnippetList && this.searchedSnippetList?.length <= 2) ? this.searchedSnippetList?.length : 2;
   }
 
+  isArray(content) {
+    return Array.isArray(content);
+  }
 
 }
