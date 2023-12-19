@@ -574,10 +574,7 @@ export class AssistComponent implements OnInit {
           data.suggestions?.searchassist?.snippets?.forEach((ele, index) => {
 
               if(Array.isArray(ele?.content)){
-                ele.content = ele.content.reduce((acc, obj) => {
-                  acc += obj.answer_fragment || '';
-                  return acc;
-                }, '')
+                ele.content = ele.content.reduce((acc, obj) => acc += (obj.answer_fragment || ''), '')
               }
 
               let articleSuggestions = document.getElementById(`snippetsSuggestions-${responseId}`);
