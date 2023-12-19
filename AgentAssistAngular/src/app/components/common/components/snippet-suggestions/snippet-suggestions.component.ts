@@ -23,7 +23,7 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   hideSendButton : boolean = false;
 
   constructor(private handleSubjectService : HandleSubjectService,
-    private rootService : RootService, private commonService : CommonService){
+    public rootService : RootService, private commonService : CommonService){
 
   }
 
@@ -73,6 +73,5 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     this.moreClick = false;
     this.viewCount = (this.searchedSnippetList && this.searchedSnippetList?.length <= 2) ? this.searchedSnippetList?.length : 2;
   }
-
 
 }
