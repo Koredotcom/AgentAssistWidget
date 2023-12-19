@@ -566,43 +566,52 @@ export class AssistComponent implements OnInit {
 
       if (data.suggestions) {
 
-          if(data.suggestions?.searchassist?.snippets?.length > 0){
-            let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
-            automationSuggestions.classList.remove('hide');
-            let dialogAreaHtml = this.assisttabService.getSnippetAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames)
-            automationSuggestions.innerHTML += dialogAreaHtml;
-            data.suggestions?.searchassist?.snippets?.forEach((ele, index) => {
-                let articleSuggestions = document.getElementById(`snippetsSuggestions-${responseId}`);
+        if(data.suggestions?.searchassist?.snippets?.length > 0){
+          let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
+          automationSuggestions.classList.remove('hide');
+          let dialogAreaHtml = this.assisttabService.getSnippetAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames)
+          automationSuggestions.innerHTML += dialogAreaHtml;
+          data.suggestions?.searchassist?.snippets?.forEach((ele, index) => {
 
-                let articleHtml = `
-                <div class="type-info-run-send" id="snippetDiv-${uuids+index}">
-                    <div class="left-content" id="snippetSection-${uuids+index}">
-                        <div class="title-text" title="${ele.title}" id="snippettitle-${uuids+index}">${ele.title}</div>
-                    </div>
+              if(Array.isArray(ele?.content)){
+                ele.content = ele.content.reduce((acc, obj) => {
+                  acc += obj.answer_fragment || '';
+                  return acc;
+                }, '')
+              }
 
-                </div>`;
+              let articleSuggestions = document.getElementById(`snippetsSuggestions-${responseId}`);
 
-                articleSuggestions.innerHTML += articleHtml;
-                let articles = $(`.type-info-run-send #snippetSection-${uuids+index}`);
+              let articleHtml = `
+              <div class="type-info-run-send" id="snippetDiv-${uuids+index}">
+                  <div class="left-content" id="snippetSection-${uuids+index}">
+                      <div class="title-text" title="${ele.title}" id="snippettitle-${uuids+index}">${ele.title}</div>
+                  </div>
 
-                        let a = $(`#snippetDiv-${uuids + index}`);
-                        let articleActionHtml = `
-                        <button class="know-more-btn hide" id="snippetviewMsg-${uuids+index}" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
+              </div>`;
 
-                    `;
-                    articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index}">${ele.content}</div>`);
-                    articles.append(articleActionHtml);
-                    let articlestypeInfo = $(`.type-info-run-send #snippetSection-${uuids + index}`);
-                    let seeMoreButtonHtml = `
-                <button class="ghost-btn hide" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">${this.projConstants.READ_MORE}</button>
-                <button class="ghost-btn hide" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">${this.projConstants.READ_LESS}</button>
-                `;
-                    articlestypeInfo.append(seeMoreButtonHtml);
-                    setTimeout(() => {
-                        this.commonService.updateSeeMoreButtonForAssist(uuids + index,'snippet');
-                    }, 1000);
-            })
-          }
+              articleSuggestions.innerHTML += articleHtml;
+              let articles = $(`.type-info-run-send #snippetSection-${uuids+index}`);
+
+                      let a = $(`#snippetDiv-${uuids + index}`);
+                      let articleActionHtml = `
+                      <button class="know-more-btn hide" id="snippetviewMsg-${uuids+index}" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
+
+                  `;
+                  articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index}">${this.commonService.handleEmptyLine(ele.content, false)}</div>`);
+                  articles.append(articleActionHtml);
+                  let articlestypeInfo = $(`.type-info-run-send #snippetSection-${uuids + index}`);
+                  let seeMoreButtonHtml = `
+              <button class="ghost-btn hide" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">${this.projConstants.READ_MORE}</button>
+              <button class="ghost-btn hide" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">${this.projConstants.READ_LESS}</button>
+              `;
+                  articlestypeInfo.append(seeMoreButtonHtml);
+                  setTimeout(() => {                    
+                      this.commonService.updateSeeMoreButtonForAssist(uuids + index, ProjConstants.SNIPPET);
+                  }, 1000);
+          });          
+          this.handleSeeMoreButton(responseId, data.suggestions.searchassist.snippets, this.projConstants.SNIPPET);
+        }
 
 
         if (data.suggestions.dialogs?.length > 0) {
@@ -1114,7 +1123,11 @@ export class AssistComponent implements OnInit {
           setTimeout(() => {
             this.clickEvents(IdReferenceConst.SEEMORE_BTN, id, '', dataObj)
           }, 1000);
-        }
+        }else{          
+          setTimeout(() => {
+            this.clickEvents(IdReferenceConst.SEEMORE_BTN, id, '', {type : type})
+          }, 1000);
+        } 
       }
     }
   }
@@ -1558,6 +1571,14 @@ export class AssistComponent implements OnInit {
       titleElement = document.getElementById("articletitle-" + id);
       descElement = document.getElementById("articledesc-" + id);
     }
+
+    if (data.type == this.projConstants.SNIPPET) {
+      seeMoreElement = document.getElementById('snippetseeMore-' + id);
+      seeLessElement = document.getElementById('snippetseeLess-' + id);
+      titleElement = document.getElementById("snippettitle-" + id);
+      descElement = document.getElementById("snippetdesc-" + id);
+    }
+
     seeMoreElement.addEventListener('click', (event: any) => {
       event.target.classList.add('hide');
       seeLessElement.classList.remove('hide');
