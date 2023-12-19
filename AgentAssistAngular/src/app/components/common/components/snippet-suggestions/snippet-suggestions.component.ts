@@ -1,4 +1,4 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -10,7 +10,7 @@ import { SubSink } from 'subsink';
   templateUrl: './snippet-suggestions.component.html',
   styleUrls: ['./snippet-suggestions.component.scss']
 })
-export class SnippetSuggestionsComponent implements OnInit, OnDestroy, AfterContentChecked{
+export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
   @Input() searchResponse : any;
 
@@ -23,8 +23,7 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy, AfterCont
   hideSendButton : boolean = false;
 
   constructor(private handleSubjectService : HandleSubjectService,
-    public rootService : RootService, private commonService : CommonService,
-    private cdr : ChangeDetectorRef){
+    public rootService : RootService, private commonService : CommonService){
 
   }
 
@@ -32,10 +31,6 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy, AfterCont
     this.handleSearchResponse(this.searchResponse);
     this.hideSendAndCopy();
   }
-
-  ngAfterContentChecked(): void {
-    this.cdr.detectChanges();
- }  
 
 
   hideSendAndCopy(){

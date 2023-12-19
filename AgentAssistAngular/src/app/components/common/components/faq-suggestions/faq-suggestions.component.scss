@@ -104,20 +104,6 @@
             .text-info-more-data-link{
                 position: relative;
             }
-            .multiSnippet{
-                color: var(--gray-modern-600, #4B5565);
-                font-size: 12px;
-                font-weight: 400;
-                line-height: 18px;
-                margin: 0;
-                display: -webkit-box;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;  
-                overflow: hidden;
-                &.show-full-text{
-                    display: block;
-                }  
-            }
             p{
                 color: var(--gray-modern-600, #4B5565);
                 font-size: 12px;
