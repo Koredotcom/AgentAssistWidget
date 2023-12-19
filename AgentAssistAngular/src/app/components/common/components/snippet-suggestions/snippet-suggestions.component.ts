@@ -13,9 +13,6 @@ import { SubSink } from 'subsink';
 export class SnippetSuggestionsComponent implements OnInit, OnDestroy, AfterContentChecked{
 
   @Input() searchResponse : any;
-  @ViewChild('ifSnippet', { static: false }) public ifSnippet: ElementRef<HTMLDivElement>
-  @ViewChild('snippetContent', { static: false }) public snippetContent: ElementRef<HTMLDivElement>
-
 
   subs = new SubSink();
   projConstants: any = ProjConstants;
@@ -61,21 +58,7 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy, AfterCont
 
   handleSendCopyButton(actionType, snippetObj, selectType){
     snippetObj.send = true;
-    let clonedSnippetObj = this.modifySnippetObjForMultiContent(snippetObj);
-    this.commonService.handleSendCopyButton(actionType, clonedSnippetObj, selectType)
-  }
-
-  modifySnippetObjForMultiContent(snippetObj){
-    let clonedSnippetObj = JSON.parse(JSON.stringify(snippetObj));
-    if(this.isArray(clonedSnippetObj.content)){
-      clonedSnippetObj.content = clonedSnippetObj.content.reduce((acc, obj) => {
-        if(obj.answer_fragment){
-          acc += obj.answer_fragment;
-          return acc;
-        }
-      }, '')
-    }
-    return clonedSnippetObj
+    this.commonService.handleSendCopyButton(actionType, snippetObj, selectType)
   }
 
   toggleShowMoreLess(snippet){
@@ -94,10 +77,6 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy, AfterCont
   viewLessClick(){
     this.moreClick = false;
     this.viewCount = (this.searchedSnippetList && this.searchedSnippetList?.length <= 2) ? this.searchedSnippetList?.length : 2;
-  }
-
-  isArray(content) {
-    return Array.isArray(content);
   }
 
 }

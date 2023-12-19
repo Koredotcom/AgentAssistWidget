@@ -22,27 +22,13 @@
     <div class="faq-body-content">
       <div class="data-faq-paragraph">     
         <div class="text-info-more-data-link">
-          <ng-container *ngIf="isArray(snippet.content);then ifSnippetContent else elseSnippetContent">
-           
-          </ng-container>
-
-          <ng-template #ifSnippetContent>
-            <div #ifSnippet [ngClass]="{'show-full-text' : !snippet.showMoreButton}" class="multiSnippet">
-              <ng-container *ngFor="let content of snippet.content; let i = index">
-                <div [innerHTML]="rootService.handleEmptyLine(content.answer_fragment)"></div>
-              </ng-container>
-            </div>
-          </ng-template>
-          <ng-template #elseSnippetContent>
-            <p [ngClass]="{'show-full-text' : !snippet.showMoreButton}" #snippetContent [innerHTML]="rootService.handleEmptyLine(snippet.content)"></p>
-          </ng-template>
-
+          <p [ngClass]="{'show-full-text' : !snippet.showMoreButton}" #snippetContent [innerHTML]="rootService.handleEmptyLine(snippet.content)"></p>
           <div class="more-links-actions">
-            <a class="moreText" role="button" aria-expanded="false" *ngIf="isArray(snippet?.content) ? (ifSnippet?.nativeElement?.scrollHeight > 36) : (snippetContent?.nativeElement?.scrollHeight > 36)">
+            <a class="moreText" role="button" aria-expanded="false" *ngIf="(snippetContent?.scrollHeight > 36)">
               <span class="more-text" *ngIf="snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">{{'MORE_TEXT' | translate}}</span>
               <span class="less-text" *ngIf="!snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">{{'LESS_TEXT' | translate}}</span>
             </a>
-            <p  *ngIf="(isArray(snippet?.content) ? (ifSnippet?.nativeElement?.scrollHeight > 36) : (snippetContent?.nativeElement?.scrollHeight > 36)) && snippet.page_url">|</p>
+            <p  *ngIf="(snippetContent?.scrollHeight > 36) && snippet.page_url">|</p>
             <a class="moreText" role="link" [href]="snippet.page_url" target="_blank" *ngIf="snippet.page_url">{{'KNOW_MORE' | translate}}</a>
             </div>
         </div>              
