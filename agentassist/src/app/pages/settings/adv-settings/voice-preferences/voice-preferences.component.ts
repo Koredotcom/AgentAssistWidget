@@ -233,7 +233,7 @@ export class VoicePreferencesComponent implements OnInit {
     this.saveInProgress = true;
     this.voicePreferences.languagePreference = this.selectedTTSLanguage?.languagePreference;
     this.voicePreferences.dialectPreference = this.selectedDialect;
-    this.voicePreferences.voicePreference = this.selectedTTSLanguage.voicePreferences[0];
+    this.voicePreferences.voicePreference = this.selectedTTSLanguage?.voicePreferences[0];
     for(let i=0; i<this.addedParams.length; i++){
       if(!this.addedParams[i].name.trim() || !this.addedParams[i].value.trim()){
         this.notificationService.showError({}, this.translate.instant('AGENTS.FORM_INVALID'))
