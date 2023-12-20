@@ -18,7 +18,7 @@
                             <!-- <i class="ast-carrotup rotate-carrot" [id]="'articlecheckLib-' + i" *ngIf="!article.content"></i> -->
                         </div>
                         <div class="desc-text" [id]="'snippetdescLib-' + i"
-                            *ngIf="snippet.content">{{snippet.content}}
+                            *ngIf="snippet.content" [innerHTML]="commonService.handleEmptyLine(snippet.content)">
                             <!-- <div class="link-view-full-article" [id]="'articleViewLinkLib-' + i" *ngIf="article.link"><a [href]="article.link" target="_blank">View Full Article</a></div> -->
                             <button class="know-more-btn" [id]="'snippetViewMsgLib-' + i" ><a style="color: #FFFFFF;" [href]="snippet.page_url" target="_blank">Know more</a></button>
                         </div>
