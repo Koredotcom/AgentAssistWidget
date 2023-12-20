@@ -714,6 +714,9 @@ export class CommonService {
     }
     if(suggestions?.searchassist?.snippets?.length > 0){
       for(let snippet of snippersArray){
+        if(Array.isArray(snippet?.content)){
+          snippet.content = snippet.content.reduce((acc, obj) => acc += (obj.answer_fragment || ''), '')
+        }
         searchResponse.snippets.push(snippet);
       }
       for (let snippet of searchResponse.snippets) {

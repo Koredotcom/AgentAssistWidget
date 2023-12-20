@@ -31,9 +31,9 @@ export class TemplateRenderClassService {
 
   formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse){
 
-    let lastIndex = actualStringFromBE.lastIndexOf('\n');
-    let mainText = actualStringFromBE.substring(0, lastIndex);
-    let confirmationString = actualStringFromBE.substring(lastIndex+1);
+    let lastIndex = actualStringFromBE?.lastIndexOf('\n');
+    let mainText = actualStringFromBE?.substring(0, lastIndex);
+    let confirmationString = actualStringFromBE?.substring(lastIndex+1);
 
     _msgsResponse.message[0] = {
       "type": "text",
@@ -226,16 +226,21 @@ export class TemplateRenderClassService {
     if (res.srcChannel && res.srcChannel !== 'msteams') {
       if (res.componentType === 'dialogAct') {
         let actualStringFromBE = '';
-        if (res.buttons[0].value.includes('text')) {
-          let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
-          let str1 = JSON.parse(str);
-          actualStringFromBE = str1.text;
-          // arr = str1.text.split('\nYes, No');
-        } else {
+        // if (res.buttons[0].value.includes('text')) {
+        //   let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
+        //   let str1 = JSON.parse(str);
+        //   actualStringFromBE = str1.text;
+        //   // arr = str1.text.split('\nYes, No');
+        // } else {
+        //   actualStringFromBE = res.buttons[0].value;
+        //   // arr = res.buttons[0].value.split('\nYes, No');
+        // }
+        // _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
+
+        if(res && res?.buttons && res?.buttons[0]?.value && !res?.buttons[0]?.value?.includes('text')){
           actualStringFromBE = res.buttons[0].value;
-          // arr = res.buttons[0].value.split('\nYes, No');
+          _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
         }
-        _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
 
       } else if (res.entityType === "list_of_values" && !res.buttons[0].value.includes('payload')) {
         let arr = [];
