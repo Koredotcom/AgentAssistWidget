@@ -20,6 +20,7 @@ export class WelcomeeventComponent implements OnInit {
   welcomeMsg : string = 'WELCOME_MSG';
   chatTab : string = 'chat';
   voiceTab : string = 'voice';
+  emailTab : string ='email';
   save : string = 'save';
   cancel : string = 'cancel';
   universalBot : string = 'universalbot'

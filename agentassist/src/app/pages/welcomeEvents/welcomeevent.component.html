@@ -1,171 +1,259 @@
 <div class="welcome-events-wrapper">
-    <div class="header-block">
-        <div class="left-sec">
-            <div class="title">Welcome Event</div>
-            <div class="tabs-list">
-                <!-- <div class="tab-name" [ngClass]="{'active-tab' : activeTab == welcomeMsg}" (click)="changeActiveTab(welcomeMsg)">Welcome Message</div> -->
-                <!-- <div class="tab-name" [ngClass]="{'active-tab' : activeTab == welcomeTask}" (click)="changeActiveTab(welcomeTask)">Welcome Task</div> -->
-            </div>
+    <div class="header-data">
+        <div class="title">
+            <p>Welcome Event</p>
+            <i class="icon-sa-info"></i>
         </div>
-        <button class="kr-sg-button-primary btn_lg" (click)="openWelcomeEvent()" *ngIf="activeTab == welcomeMsg">New Welcome Message</button>
+        <div class="desc-text">Define welcome event activities for Agents</div>
     </div>
-    <div class="events-block-wrapper">
-        <perfect-scrollbar>
-            <div class="inner-wrapper-details">
-                <!-- <div class="box-wrapper" [hidden]="activeTab != welcomeMsg">
-                    <div class="heading-events">
-                        <div class="icon_block">
-                            <i class="icon-sa-call-welcome"></i>
+    <div class="event-main-wrapper">
+        <!--Configure On-Connect Dialog Task-->
+        <div id="accordion" class="welcome-event-accordion">
+            <div data-toggle="collapse" href="#configDialoge" data-parent="#accordion" class="card_link collapsed"
+                aria-expanded="false">
+                <div class="accordion-content-header">
+                    <div class="team-with-profile">
+                        <i class="icon-sa-arrow-down arrow-icon"></i>
+                        <div class="accordion-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path
+                                    d="M7.82888 16.1427L8.31591 17.238C8.4607 17.5641 8.69698 17.8412 8.9961 18.0356C9.29522 18.23 9.64434 18.3335 10.0011 18.3334C10.3579 18.3335 10.707 18.23 11.0061 18.0356C11.3052 17.8412 11.5415 17.5641 11.6863 17.238L12.1733 16.1427C12.3467 15.754 12.6383 15.43 13.0067 15.2168C13.3773 15.0029 13.8061 14.9119 14.2317 14.9566L15.4233 15.0834C15.778 15.1209 16.136 15.0547 16.4539 14.8929C16.7717 14.731 17.0358 14.4803 17.2141 14.1714C17.3925 13.8626 17.4776 13.5086 17.4588 13.1525C17.4401 12.7963 17.3184 12.4532 17.1085 12.1649L16.403 11.1955C16.1517 10.8477 16.0175 10.4291 16.0196 10.0001C16.0195 9.57224 16.155 9.15537 16.4067 8.80934L17.1122 7.8399C17.3221 7.55154 17.4438 7.20847 17.4625 6.85231C17.4813 6.49615 17.3962 6.1422 17.2178 5.83341C17.0395 5.52444 16.7754 5.27382 16.4576 5.11194C16.1397 4.95005 15.7817 4.88386 15.427 4.92138L14.2354 5.04823C13.8098 5.09292 13.381 5.00185 13.0104 4.78804C12.6413 4.57363 12.3496 4.24788 12.177 3.85749L11.6863 2.76212C11.5415 2.43606 11.3052 2.15901 11.0061 1.96458C10.707 1.77015 10.3579 1.66669 10.0011 1.66675C9.64434 1.66669 9.29522 1.77015 8.9961 1.96458C8.69698 2.15901 8.4607 2.43606 8.31591 2.76212L7.82888 3.85749C7.65632 4.24788 7.3646 4.57363 6.99554 4.78804C6.62489 5.00185 6.1961 5.09292 5.77054 5.04823L4.57517 4.92138C4.22045 4.88386 3.86246 4.95005 3.5446 5.11194C3.22675 5.27382 2.96269 5.52444 2.78443 5.83341C2.60595 6.1422 2.52092 6.49615 2.53965 6.85231C2.55839 7.20847 2.68009 7.55154 2.88999 7.8399L3.59554 8.80934C3.84716 9.15537 3.98266 9.57224 3.98258 10.0001C3.98266 10.4279 3.84716 10.8448 3.59554 11.1908L2.88999 12.1603C2.68009 12.4486 2.55839 12.7917 2.53965 13.1479C2.52092 13.504 2.60595 13.858 2.78443 14.1667C2.96286 14.4756 3.22696 14.726 3.54476 14.8879C3.86257 15.0498 4.22047 15.1161 4.57517 15.0788L5.76684 14.9519C6.1924 14.9072 6.62119 14.9983 6.99184 15.2121C7.36228 15.4259 7.65535 15.7517 7.82888 16.1427Z"
+                                    stroke="#475467" stroke-width="1.2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path
+                                    d="M9.99961 12.5001C11.3803 12.5001 12.4996 11.3808 12.4996 10.0001C12.4996 8.61937 11.3803 7.50008 9.99961 7.50008C8.6189 7.50008 7.49961 8.61937 7.49961 10.0001C7.49961 11.3808 8.6189 12.5001 9.99961 12.5001Z"
+                                    stroke="#475467" stroke-width="1.2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
                         </div>
-                        <div class="left-titles">
-                            <div class="title">Welcome</div>
-                            <div class="desc-title">Hanndling begining of  conversation</div>
-                        </div>
-                        <div class="toggle-display">
-                            <i class="icon-sa-help" ngbTooltip="Welcome Messages are displayed randomly on the agent console" container='body' tooltipClass="tooltip-global-styles"></i>
-                            <span>Display Randomly</span>
-                            <label class="kr-sg-toggle">
-                                <input type="checkbox" checked>
-                                <div class="slider"></div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="table-wrapper-info-padding">
-                        <div class="body-data-table-info">
-                            <div class="shadow-freeze"></div>
-                            <div class="col-12 d-flex table-status-header">
-                                <div class="col-4 title p-l-20">Title</div>
-                                <div class="col-3 title">ACTIONS</div>
-                                <div class="col-3 title">REsponses</div>
-                                <div class="col-2 title">Status</div>
-                            </div>
-                            <ng-container>
-                                <div class="col-12 d-flex table-status-body">
-                                    <div class="col-4 available">Default Message 1</div>
-                                    <div class="actions-data col-3">
-                                        <button class="edit-btn">
-                                            <i class="icon-sa-welcome-edit"></i>
-                                        </button>
-                                        <button class="edit-btn" (click)="deleteWelcomeEvent(contentDeleteWelcomeEvents)">
-                                            <i class="icon-sa-welcome-delete"></i>
-                                        </button>
-                                    </div>
-                                    <div class="col-3 status-type">
-                                        <i class="icon-sa-welcome-chat"></i>
-                                        <i class="icon-sa-welcome-voice"></i>
-                                    </div>
-                                    <div class="col-2 desc-text">
-                                        <label class="kr-sg-toggle">
-                                            <input type="checkbox" checked>
-                                            <div class="slider"></div>
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                            </ng-container>
-                        </div>
-                        <div class="note-info-wrapper">
-                            <div class="bulb_icon">
-                                <i class="icon-sa-welcome-bulb"></i>
-                            </div>
-                            <div class="content-info">
-                                <div class="title-note">note</div>
-                                <div class="text_desc">Only 3 Welcome message can be turned on, Also maximum welcome message that a user can have is 10 including the Default Messages</div>
-                            </div>
-                            <div class="close-icon">
-                                <i class="icon-sa-close"></i>
-                            </div>
+                        <div class="accordion-header-info">
+                            <div class="accordion-header-title">Configure On-Connect Dialog Task</div>
+                            <div class="accordion-header-des">Select the dialog task you want to run when AgentAssist
+                                widget is launched.</div>
                         </div>
                     </div>
-                </div> -->
-
-                <div class="box-wrapper" [hidden]="activeTab != welcomeTask">                    
-                    <div class="heading-events">
-                        <div class="icon_block">
-                            <i class="icon-sa-settings"></i>
-                        </div>
-                        <div class="left-titles">
-                            <div class="title">Configure Welcome Event</div>
-                            <div class="desc-title">Configure how welcome events are being handled in the agent Desktop</div>
-                        </div>
-                    </div>
-                    <div class="table-wrapper-info-padding">
-                        <div class="chat-voice-tabs">
-                            <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == chatTab}" (click)="changeTaskActive(chatTab)">Chat</div>
-                            <div class="name-tab"  [ngClass]="{'active-tab-name' : taskActive == voiceTab}" (click)="changeTaskActive(voiceTab)">Voice</div>
-                        </div>
-                        <div class='init-loading' *ngIf="showSpinner">
-                            <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
-                            </div>
-                            <div class="radio-info-block">
-                                <div class="kr-sg-radiobutton">
-                                    <input id="radio-1" name="taskEnable" class="radio-custom" type="radio" [(ngModel)]="taskEnable" [value]="false">
-                                    <label for="radio-1" class="radio-custom-label">
-                                        <span class="bold_text">Disabled: </span>
-                                        <span>Stop welcome events</span>
-                                    </label>
-                                </div> 
-                                <div class="kr-sg-radiobutton">
-                                    <input id="radio-11" name="taskEnable" class="radio-custom" type="radio" [(ngModel)]="taskEnable" [value]="true">
-                                    <label for="radio-11" class="radio-custom-label">
-                                        <span class="bold_text">Select Dialog: </span>
-                                        <span>Make a choice among the bots and select the dialog task you are interested in</span>
-                                    </label>
-                                </div> 
-                                <ng-container *ngIf="taskEnable">
-                                    <div class="d-flex">
-                                        <div class="col-6" *ngIf="currentBt?.type == universalBot">
-                                            <div class="label-text">Select Bot</div>
-                                            <div class="kr-sg-dropdowns" ngbDropdown>
-                                                <div class="dropdown dropdown-open">
-                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedBot?.botName ? selectedBot?.botName : 'Select bot'}}</button>
-                                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                                                        <perfect-scrollbar>
-                                                            <div class="scroll-ul">
-                                                                <li ngbDropdownItem (click)="changeBot(bot)" *ngFor="let bot of linkedBots"><a>{{bot.botName}}</a></li>
-                                                            </div>
-                                                        </perfect-scrollbar>
-                                                    </ul>
-                                                </div>
-                                            </div> 
-                                        </div>
-                                        <div class="col-6" [ngClass]="{'col-12' : currentBt?.type != universalBot}">
-                                            <div class="label-text">Automation</div>
-                                            <div class="kr-sg-dropdowns" ngbDropdown>
-                                                <div class="dropdown dropdown-open">
-                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle [disabled]="currentBt.type == universalBot && !selectedBot?.botName">{{selectedUseCase?.usecaseName ? selectedUseCase?.usecaseName : 'Select Use Cases'}}</button>
-                                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                                                        <perfect-scrollbar>
-                                                            <div class="scroll-ul">
-                                                                <li ngbDropdownItem (click)="changeUseCase(conv)" *ngFor="let conv of conversations"><a>{{conv.usecaseName}}</a></li>
-                                                            </div>
-                                                        </perfect-scrollbar>
-                                                    </ul>
-                                                </div>
-                                            </div> 
-                                        </div>
-                                    </div>
-                                </ng-container>
-                                <div class="msg-note">Note : Make sure to publish the bot in order to reflect the changes in realtime</div>
-                            </div>
-                    </div>
-                    <div class="save-cancel-info">
-                        <button class="kr-sg-button-secondary-two btn_lg" type="submit" (click)="updateDetails(cancel)" [disabled]="checkFieldChange() || showSpinner" >Cancel</button>
-                        <button class="kr-sg-button-primary btn_lg" type="submit" (click)="updateDetails(save)" [disabled]="(taskEnable && !selectedUseCase?.usecaseName) || checkFieldChange() || showSpinner">Save</button>
+                    <div class="agent-counts">
+                        <span class="accordion-badge">Enabled</span>
                     </div>
                 </div>
             </div>
-        </perfect-scrollbar>
+            <div id="configDialoge" class="collapse">
+                <div class="accordion-content-body">
+                    <div class="enabled-block">
+                        <div class="toggle-info-data m-0">
+                            <label class="kr-sg-toggle">
+                                <input type="checkbox">
+                                <div class="slider">
+                                    <span class="enabled"></span>
+                                    <span class="disabled"></span>
+                                </div>
+                            </label>
+                            <div class="content-data-toggle">
+                                <h1>Enabled</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="connect-dialoge-info">
+                        <div class="chat-voice-tabs-block">
+                            <div class="chat-voice-tabs">
+                                <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == chatTab}"
+                                    (click)="changeTaskActive(chatTab)">Chat</div>
+                                <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == voiceTab}"
+                                    (click)="changeTaskActive(voiceTab)">Voice</div>
+                                <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == emailTab}"
+                                    (click)="changeTaskActive(emailTab)">Email</div>
+                            </div>
+                        </div>
+                        <div class="chat-voice-tabs-content">
+                            <div class="dialog-header">Select Dialog</div>
+                            <div class="dialog-des">Make a choice among the bots and select the dialogue task you are
+                                interested in</div>
+                            <div class="kr-sg-dropdowns dialoge-dropdpwn" ngbDropdown>
+                                <div class="dropdown dropdown-open">
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Select Use
+                                        Cases</button>
+                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                        <perfect-scrollbar>
+                                            <div class="scroll-ul">
+                                                <li ngbDropdownItem><a>Custom Data</a></li>
+                                            </div>
+                                        </perfect-scrollbar>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="kr-sg-checkbox">
+                                <input id="checkbox-1" class="checkbox-custom" type="checkbox">
+                                <label for="checkbox-1" class="checkbox-custom-label">Extract intents from On Connect
+                                    Dialog Task</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-footer">
+                        <button class="kr-sg-button-secondary btn_lg">{{'BUTTONS.CANCEL' | translate}}</button>
+                        <button class="kr-sg-button-primary btn_lg">{{'BUTTONS.SAVE' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Configure Greeting Messages-->
+        <div id="accordion" class="welcome-event-accordion">
+            <div data-toggle="collapse" href="#configGreetings" data-parent="#accordion" class="card_link collapsed"
+                aria-expanded="false">
+                <div class="accordion-content-header">
+                    <div class="team-with-profile">
+                        <i class="icon-sa-arrow-down arrow-icon"></i>
+                        <div class="accordion-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path
+                                    d="M7.82888 16.1427L8.31591 17.238C8.4607 17.5641 8.69698 17.8412 8.9961 18.0356C9.29522 18.23 9.64434 18.3335 10.0011 18.3334C10.3579 18.3335 10.707 18.23 11.0061 18.0356C11.3052 17.8412 11.5415 17.5641 11.6863 17.238L12.1733 16.1427C12.3467 15.754 12.6383 15.43 13.0067 15.2168C13.3773 15.0029 13.8061 14.9119 14.2317 14.9566L15.4233 15.0834C15.778 15.1209 16.136 15.0547 16.4539 14.8929C16.7717 14.731 17.0358 14.4803 17.2141 14.1714C17.3925 13.8626 17.4776 13.5086 17.4588 13.1525C17.4401 12.7963 17.3184 12.4532 17.1085 12.1649L16.403 11.1955C16.1517 10.8477 16.0175 10.4291 16.0196 10.0001C16.0195 9.57224 16.155 9.15537 16.4067 8.80934L17.1122 7.8399C17.3221 7.55154 17.4438 7.20847 17.4625 6.85231C17.4813 6.49615 17.3962 6.1422 17.2178 5.83341C17.0395 5.52444 16.7754 5.27382 16.4576 5.11194C16.1397 4.95005 15.7817 4.88386 15.427 4.92138L14.2354 5.04823C13.8098 5.09292 13.381 5.00185 13.0104 4.78804C12.6413 4.57363 12.3496 4.24788 12.177 3.85749L11.6863 2.76212C11.5415 2.43606 11.3052 2.15901 11.0061 1.96458C10.707 1.77015 10.3579 1.66669 10.0011 1.66675C9.64434 1.66669 9.29522 1.77015 8.9961 1.96458C8.69698 2.15901 8.4607 2.43606 8.31591 2.76212L7.82888 3.85749C7.65632 4.24788 7.3646 4.57363 6.99554 4.78804C6.62489 5.00185 6.1961 5.09292 5.77054 5.04823L4.57517 4.92138C4.22045 4.88386 3.86246 4.95005 3.5446 5.11194C3.22675 5.27382 2.96269 5.52444 2.78443 5.83341C2.60595 6.1422 2.52092 6.49615 2.53965 6.85231C2.55839 7.20847 2.68009 7.55154 2.88999 7.8399L3.59554 8.80934C3.84716 9.15537 3.98266 9.57224 3.98258 10.0001C3.98266 10.4279 3.84716 10.8448 3.59554 11.1908L2.88999 12.1603C2.68009 12.4486 2.55839 12.7917 2.53965 13.1479C2.52092 13.504 2.60595 13.858 2.78443 14.1667C2.96286 14.4756 3.22696 14.726 3.54476 14.8879C3.86257 15.0498 4.22047 15.1161 4.57517 15.0788L5.76684 14.9519C6.1924 14.9072 6.62119 14.9983 6.99184 15.2121C7.36228 15.4259 7.65535 15.7517 7.82888 16.1427Z"
+                                    stroke="#475467" stroke-width="1.2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path
+                                    d="M9.99961 12.5001C11.3803 12.5001 12.4996 11.3808 12.4996 10.0001C12.4996 8.61937 11.3803 7.50008 9.99961 7.50008C8.6189 7.50008 7.49961 8.61937 7.49961 10.0001C7.49961 11.3808 8.6189 12.5001 9.99961 12.5001Z"
+                                    stroke="#475467" stroke-width="1.2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <div class="accordion-header-info">
+                            <div class="accordion-header-title">Configure Greeting Messages</div>
+                            <div class="accordion-header-des">Customize greeting messages at the beginning of the
+                                conversation.</div>
+                        </div>
+                    </div>
+                    <div class="agent-counts">
+                        <span class="accordion-badge">Enabled</span>
+                    </div>
+                </div>
+            </div>
+            <div id="configGreetings" class="collapse">
+                <div class="accordion-content-body">
+                    <div class="enabled-block">
+                        <div class="toggle-info-data m-0">
+                            <label class="kr-sg-toggle">
+                                <input type="checkbox">
+                                <div class="slider">
+                                    <span class="enabled"></span>
+                                    <span class="disabled"></span>
+                                </div>
+                            </label>
+                            <div class="content-data-toggle">
+                                <h1>Enabled</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="connect-dialoge-info">
+                        <div class="chat-voice-tabs-block">
+                            <div class="chat-voice-tabs">
+                                <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == chatTab}"
+                                    (click)="changeTaskActive(chatTab)">Chat</div>
+                                <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == voiceTab}"
+                                    (click)="changeTaskActive(voiceTab)">Voice</div>
+                                <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == emailTab}"
+                                    (click)="changeTaskActive(emailTab)">Email</div>
+                            </div>
+                        </div>
+                        <div class="chat-voice-tabs-content">
+                            <div class="dialog-header">Configure Greeting Messages</div>
+                            <div class="dialog-des">Add Greeting messages for agents to use when communicating with
+                                customers through the AgentAssist widget.</div>
+                            <div class="add-message-block">
+                                <div class="add-message-dropdown">
+                                    <button class="kr-sg-button-secondary-two btn_lg"><svg width="20" height="20"
+                                        viewBox="0 0 20 20" fill="none">
+                                        <path d="M10.0001 4.16675V15.8334M4.16675 10.0001H15.8334" stroke="#2970FF"
+                                            stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>Add Message</button>
+                                    <div class="message-dropdown">
+                                         <span>New Messages</span>
+                                         <span>Copy from Voice</span>
+                                    </div>
+                                </div>
+
+                                <div class="add-message-block-right">
+                                    <div class="kr-sg-dropdowns" ngbDropdown>
+                                        <div class="dropdown dropdown-open">
+                                            <button class="lang-btn" ngbDropdownToggle>EN <i class="icon-sa-arrow-down m-r-8"></i></button>
+                                            <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                                <div class="scroll-ul">
+                                                    <li ngbDropdownItem><a>EN</a></li>
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="toggle-info-data m-0">
+                                        <label class="kr-sg-toggle">
+                                            <input type="checkbox">
+                                            <div class="slider">
+                                                <span class="enabled"></span>
+                                                <span class="disabled"></span>
+                                            </div>
+                                        </label>
+                                        <div class="content-data-toggle">
+                                            <p>Display Random Message</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="messages-rendor-table">
+                                <div class="rendor-table-data">
+                                     <div class="data-cell w-65">
+                                        <div class="rendor-message">
+                                            <div class="rendor-message-icon">
+                                                <svg  width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                    <path d="M13.3334 4.99992C13.7937 4.99992 14.1667 4.62682 14.1667 4.16659C14.1667 3.70635 13.7937 3.33325 13.3334 3.33325C12.8732 3.33325 12.5001 3.70635 12.5001 4.16659C12.5001 4.62682 12.8732 4.99992 13.3334 4.99992Z" stroke="#667085" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M13.3334 10.8333C13.7937 10.8333 14.1667 10.4602 14.1667 9.99992C14.1667 9.53968 13.7937 9.16659 13.3334 9.16659C12.8732 9.16659 12.5001 9.53968 12.5001 9.99992C12.5001 10.4602 12.8732 10.8333 13.3334 10.8333Z" stroke="#667085" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M13.3334 16.6666C13.7937 16.6666 14.1667 16.2935 14.1667 15.8333C14.1667 15.373 13.7937 14.9999 13.3334 14.9999C12.8732 14.9999 12.5001 15.373 12.5001 15.8333C12.5001 16.2935 12.8732 16.6666 13.3334 16.6666Z" stroke="#667085" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M7.50008 4.99992C7.96032 4.99992 8.33341 4.62682 8.33341 4.16659C8.33341 3.70635 7.96032 3.33325 7.50008 3.33325C7.03984 3.33325 6.66675 3.70635 6.66675 4.16659C6.66675 4.62682 7.03984 4.99992 7.50008 4.99992Z" stroke="#667085" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M7.50008 10.8333C7.96032 10.8333 8.33341 10.4602 8.33341 9.99992C8.33341 9.53968 7.96032 9.16659 7.50008 9.16659C7.03984 9.16659 6.66675 9.53968 6.66675 9.99992C6.66675 10.4602 7.03984 10.8333 7.50008 10.8333Z" stroke="#667085" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M7.50008 16.6666C7.96032 16.6666 8.33341 16.2935 8.33341 15.8333C8.33341 15.373 7.96032 14.9999 7.50008 14.9999C7.03984 14.9999 6.66675 15.373 6.66675 15.8333C6.66675 16.2935 7.03984 16.6666 7.50008 16.6666Z" stroke="#667085" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                                                  </svg>
+                                            </div>
+                                              <span>"Hello and welcome! We're delighted to have you here. How may I assist youtoday?"</span>
+                                        </div>
+                                     </div>
+                                     <div class="data-cell w-15">
+                                        <div class="rendor-message-action">
+                                            <span><i class="icon-sa-welcome-edit"></i></span>
+                                            <span><i class="icon-sa-delete"></i></span>
+                                        </div>
+                                     </div>
+                                     <div class="data-cell w-20">
+                                        <div class="toggle-info-data m-0">
+                                            <label class="kr-sg-toggle">
+                                                <input type="checkbox">
+                                                <div class="slider">
+                                                    <span class="enabled"></span>
+                                                    <span class="disabled"></span>
+                                                </div>
+                                            </label>
+                                            <div class="content-data-toggle">
+                                                <h1>Enabled</h1>
+                                            </div>
+                                        </div>
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-footer">
+                        <button class="kr-sg-button-secondary btn_lg">{{'BUTTONS.CANCEL' | translate}}</button>
+                        <button class="kr-sg-button-primary btn_lg">{{'BUTTONS.SAVE' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<app-slider-component id="newWelcome" #newWelcomeEvent='app-slider'>
+<!--(click)="openWelcomeEvent()"-->
+<!-- <app-slider-component id="newWelcome" #newWelcomeEvent='app-slider'>
     <app-new-welcome-event (close)="closeWelcomeEvent()"></app-new-welcome-event>
-</app-slider-component>
+</app-slider-component> -->
 
 
-<ng-template #contentDeleteWelcomeEvents let-modal>
+<!-- <ng-template #contentDeleteWelcomeEvents let-modal>
 	<div class="delete-comp-wrapper">
         <div class="icon_block">
             <i class="icon-sa-welcome-delete"></i>
@@ -182,4 +270,4 @@
             <button class="kr-sg-button-danger btn_lg">Yes</button>
         </div>
     </div>
-</ng-template>
+</ng-template> -->
