@@ -114,6 +114,7 @@ export class AppComponent implements OnInit, OnDestroy{
   }
 
   receiveMessage(e: any) {
+    console.log(e, "event from desktops *****");
     if (e.data.name === 'init_agentassist') {
       console.log(e, 'data from smartAssist');
       let urlParams = e.data.urlParams;
@@ -175,6 +176,7 @@ export class AppComponent implements OnInit, OnDestroy{
     }
     if (e.data.name === 'agentAssist.endOfConversation' && (e.data.conversationId || e.data.conversationid)) {
       let currentEndedConversationId = e.data.conversationId || e.data.conversationid;
+      console.log("inside end of conversaton", e.data, this.localStorageService.checkConversationIdStateInStorage([currentEndedConversationId]));    
       if (this.localStorageService.checkConversationIdStateInStorage([currentEndedConversationId])) {
         let request_resolution_comments = {
           conversationId: e.data?.conversationId,
