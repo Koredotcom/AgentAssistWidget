@@ -2450,26 +2450,28 @@
                             setTimeout(function () {
                                 $(`#carousel-one-by-one-${msgData.messageId}`).addClass("carousel" + carouselTemplateCount);
                                 var count = $(".carousel" + carouselTemplateCount).children().length;
-                                if (count >= 1) {
-                                    var carouselOneByOne = new PureJSCarousel({
-                                        carousel: ".carousel" + carouselTemplateCount,
-                                        slide: '.slide',
-                                        oneByOne: true
-                                    });
-                                    $(`#carousel-one-by-one-${msgData.messageId}`).parent().show();
-                                    $(`#carousel-one-by-one-${msgData.messageId}`).attr('style', 'height: 100% !important');
-                                    carouselEles.push(carouselOneByOne);
-                                    for (var i = 0; i < carouselEles.length; i++) {
-                                        $(carouselEles[i].carousel).parent().show();
+                                setTimeout(() => {
+                                    if (count >= 1) {
+                                        var carouselOneByOne = new PureJSCarousel({
+                                            carousel: ".carousel" + carouselTemplateCount,
+                                            slide: '.slide',
+                                            oneByOne: true
+                                        });
+                                        $(`#carousel-one-by-one-${msgData.messageId}`).parent().show();
+                                        $(`#carousel-one-by-one-${msgData.messageId}`).attr('style', 'height: 100% !important');
+                                        carouselEles.push(carouselOneByOne);
+                                        for (var i = 0; i < carouselEles.length; i++) {
+                                            $(carouselEles[i].carousel).parent().show();
+                                        }
                                     }
-                                }
-                                //window.dispatchEvent(new Event('resize'));
-                                var evt = document.createEvent("HTMLEvents");
-                                evt.initEvent('resize', true, false);
-                                window.dispatchEvent(evt);
-                                carouselTemplateCount += 1;
-                                _chatContainer.animate({
-                                    scrollTop: _chatContainer.prop("scrollHeight")
+                                    //window.dispatchEvent(new Event('resize'));
+                                    var evt = document.createEvent("HTMLEvents");
+                                    evt.initEvent('resize', true, false);
+                                    window.dispatchEvent(evt);
+                                    carouselTemplateCount += 1;
+                                    _chatContainer.animate({
+                                        scrollTop: _chatContainer.prop("scrollHeight")
+                                    }, 0);
                                 }, 0);
                             });
                         } else {
