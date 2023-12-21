@@ -9,6 +9,8 @@ import { throwError } from 'rxjs';
 import { SubSink } from 'subsink';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
+import { ApiAdvancedModelComponent } from '../api-advanced-model/api-advanced-model.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-widgets',
@@ -16,7 +18,7 @@ import { LocalStoreService } from '@kore.services/localstore.service';
   styleUrls: ['./widgets.component.scss']
 })
 export class WidgetsComponent implements OnInit, OnDestroy {
-
+  newRoleModalRef: any = {};
   @ViewChild('fileInput') inputRef: ElementRef<HTMLInputElement>;
 
   isUnifiedPlatform: boolean = false;
@@ -73,7 +75,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     fileName: ''
     }
   }
-  
+  modalRef: any;  
 
   constructor(
     public workflowService: workflowService,
@@ -81,12 +83,17 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     public translate: TranslateService,
     private authService: AuthService,
-    private localstorage: LocalStoreService
+    private localstorage: LocalStoreService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
     this.isUnifiedPlatform = this.workflowService?.isUnifiedPlatform();
     this.getAgentAssistSettings();
+  }
+  apiAdvancedMode() {
+
+    this.modalRef = this.modalService.open(ApiAdvancedModelComponent, { centered: true, keyboard: false, windowClass: 'api-advance-mode', backdrop: 'static' });
   }
 
   getAgentAssistSettings() {
