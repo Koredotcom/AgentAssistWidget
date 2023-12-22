@@ -4,6 +4,7 @@ import { ProjConstants } from '../proj.const';
 import { TemplateRenderClassService } from './template-render-class.service';
 import * as $ from 'jquery';
 import { EVENTS } from '../helpers/events';
+import { DirService } from './dir.service';
 
 declare var $: any;
 declare const agentAssistHelpers: any;
@@ -67,7 +68,8 @@ export class RootService {
   widgetMaxButtonClick : boolean = true;
   notLookingForClick : boolean = false;
 
-  constructor(private templateRenderClassService: TemplateRenderClassService) {
+  constructor(private templateRenderClassService: TemplateRenderClassService,
+    private dirService : DirService) {
     // this.chatWindowInstance = new chatWindow();
     this.aaHelpers = new agentAssistHelpers();
   }
@@ -455,6 +457,13 @@ export class RootService {
     return false
   }
 
+  checkRtl(defLanguage){
+    if(defLanguage === 'ar'){
+      this.dirService.setDirection('rtl');
+    }else{
+      this.dirService.setDirection('ltr');
+    }
+  }
 
 
 

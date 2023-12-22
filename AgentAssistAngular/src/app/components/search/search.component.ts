@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { ProjConstants } from 'src/app/proj.const';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -12,7 +12,7 @@ import { SubSink } from 'subsink';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   @Input() maxButton;
   @Output() maxMinButtonClick = new EventEmitter();
@@ -39,16 +39,23 @@ export class SearchComponent implements OnInit {
   searched : boolean = false;
   autocompleteText : string = '';
   showSpinner : boolean = true;
+  closeSuggestions : boolean = true;
 
 
   constructor(private rootService: RootService, private serviceInvoker: ServiceInvokerService,
-    private websocketService: WebSocketService, private handleSubjectService: HandleSubjectService) {
+    private websocketService: WebSocketService, private handleSubjectService: HandleSubjectService,
+    private cdr: ChangeDetectorRef) {
 
   }
 
   ngOnInit(): void {
     this.subscribeEvents();
   }
+
+  ngAfterContentChecked(): void {
+    this.cdr.detectChanges();
+ }
+
 
   ngOnDestroy(){
     this.subs.unsubscribe();

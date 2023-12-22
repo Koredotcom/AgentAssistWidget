@@ -142,6 +142,7 @@ export class LocalStorageService {
       this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];
       let defLanguage = appState[conversationId][storageConst.LANGUAGE] || storageConst.ENGLISH;
       this.translateService.use(defLanguage);
+      this.rootService.checkRtl(defLanguage);
     }
   }
 

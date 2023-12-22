@@ -40,7 +40,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();
         this.getLocalStorageParams();
-        this.checkRtl();
       }
     })
   }
@@ -61,16 +60,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.localStorageService.setLocalStorageItem(storageObject);
     // this.localStorageService.setLanguageInfo(this.defLanguage);
     this.translateService.use(this.defLanguage);
-    this.checkRtl();
+    this.rootService.checkRtl(this.defLanguage);
   }
 
-  checkRtl(){
-    if(this.defLanguage === 'ar'){
-      this.dirService.setDirection('rtl');
-    }else{
-      this.dirService.setDirection('ltr');
-    }
-  }
 
   chooseTheme() {
     let storageObject: any = {

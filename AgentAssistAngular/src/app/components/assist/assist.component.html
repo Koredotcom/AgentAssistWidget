@@ -97,7 +97,7 @@
         <app-interrupt (handlePopupEvent)="handlePopupEvent($event)" [currentDialog]="dialogName"></app-interrupt>
     </ng-container>
     <ng-container *ngIf="(showListView) && dialogName">
-        <app-listview [entityList]="listViewEntityList"  (handlePopupEvent)="handlePopupEvent($event)"></app-listview>
+        <app-listview [entityList]="listViewEntityList"  (handlePopupEvent)="handlePopupEvent($event)" #listViewTemplate></app-listview>
     </ng-container>
     <ng-container *ngIf="showRestart && dialogName">
         <app-restart [assistResponseArray]="assistResponseArray"  (handlePopupEvent)="handlePopupEvent($event)"></app-restart>
