@@ -11,6 +11,14 @@ import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { ApiAdvancedModelComponent } from '../api-advanced-model/api-advanced-model.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators,
+} from '@angular/forms';
+// import Validation from './utils/validation';
 
 @Component({
   selector: 'app-widgets',
@@ -91,38 +99,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.isUnifiedPlatform = this.workflowService?.isUnifiedPlatform();
     this.getAgentAssistSettings();
   }
-  apiAdvancedMode() {
+  
 
-    this.modalRef = this.modalService.open(ApiAdvancedModelComponent, { centered: true, keyboard: false, windowClass: 'api-advance-mode', backdrop: 'static' });
-  }
-
-  getAgentAssistSettings() {
-    this.disableButtons = true;
-    let botId = this.workflowService?.getCurrentBtSmt(true)._id
-    let params = {
-      orgId: this.authService?.getOrgId(),
-    };
-    let body = {
-      botId
-    }
-    this.service.invoke("get.agentAssistSettings", params, body).subscribe(
-      (res) => {
-        if (res) {
-          this.isLoading = false;
-          this.disableButtons = false;
-          this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
-          this.agentAssistSettings = {...this.agentAssistSettings, ...res.agentAssistSettings};
-          this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
-        }
-      },
-      (err) => {
-        this.notificationService.showError(
-          err,
-          this.translate.instant("FALLBACK_ERROR_MSG")
-        );
-      }
-    );
-  }
+  
 
   saveAgentAssistSettings() {
     this.disableButtons = true;
@@ -338,6 +317,54 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   //       ) 
   // }
 
+  
+
+  // Get AgentAssist Settings in the Get API Call
+  getAgentAssistSettingsNew() {
+    let botId = this.workflowService?.getCurrentBtSmt(true)._id
+    let params = {
+      orgId: this.authService?.getOrgId(),
+    };
+    let body = {
+      botId
+    }
+    this.service.invoke("get.agentAssistSettings", params, body).subscribe(() => {})
+  }
+
+  // API Configuration for the SearchAssist in Advanced Mode
+  apiAdvancedMode() {
+    this.modalRef = this.modalService.open(ApiAdvancedModelComponent, { centered: true, keyboard: false, windowClass: 'api-advance-mode', backdrop: 'static' });
+  }
+
+  getAgentAssistSettings() {
+    this.disableButtons = true;
+    let botId = this.workflowService?.getCurrentBtSmt(true)._id
+    let params = {
+      orgId: this.authService?.getOrgId(),
+    };
+    let body = {
+      botId
+    }
+    this.service.invoke("get.agentAssistSettings", params, body).subscribe(
+      (res) => {
+        if (res) {
+          this.isLoading = false;
+          this.disableButtons = false;
+          this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
+          this.agentAssistSettings = {...this.agentAssistSettings, ...res.agentAssistSettings};
+          this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
+        }
+      },
+      (err) => {
+        this.notificationService.showError(
+          err,
+          this.translate.instant("FALLBACK_ERROR_MSG")
+        );
+      }
+    );
+  }
+
+  // Destroy all the subscribed event
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
