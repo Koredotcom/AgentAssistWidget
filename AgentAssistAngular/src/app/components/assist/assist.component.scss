@@ -69,14 +69,28 @@
                         font-weight: 500;
                         line-height: 20px;
                         margin: 0;
+                        display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 1;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 75%;
                     }
-                    span{
-                        color: var(--secondaryTextColorTwo);
-                        font-size: 12px;
-                        font-weight: 500;
-                        line-height: 20px;
-                        padding-left: 6px;
-                        border-left: 1px solid var(--gray-300, #D0D5DD);
+                    .entity-name-cstm{
+                        display: -webkit-box;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 1;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        span{
+                            color: var(--secondaryTextColorTwo);
+                            font-size: 12px;
+                            font-weight: 500;
+                            line-height: 20px;
+                            padding-left: 6px;
+                            border-left: 1px solid var(--gray-300, #D0D5DD);
+                            flex-shrink: 0;
+                        }
                         b{
                             font-weight: 500;
                         }

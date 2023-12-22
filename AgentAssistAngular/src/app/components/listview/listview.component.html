@@ -1,11 +1,15 @@
 <div class="restart-experience-wrpaaer">
     <div class="restart-experience-canvas-wrapper">
-        <button class="btn_link" (click)="closeListView(false)">
-            <i class="krIocnsFont-close-md"></i>
-        </button>
-        <ng-container>
+        <div class="restart-experience-header">
             <h1>{{'INPUT_VALUES' | translate}}</h1>
+            <button class="btn_link" (click)="closeListView(false)">
+                <i class="krIocnsFont-close-md"></i>
+            </button>
+        </div>
+        <ng-container>
+            <div class="restart-experience-body">
                 <ng-container [ngTemplateOutlet]="listView"></ng-container>
+            </div>
         </ng-container>
     </div>  
 </div>

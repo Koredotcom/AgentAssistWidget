@@ -1,9 +1,12 @@
 <div class="restart-experience-wrpaaer">
     <div class="restart-experience-canvas-wrapper">
-        <button class="btn_link" (click)="cancel()">
-            <i class="krIocnsFont-close-md"></i>
-        </button>
-        <h1>{{'RESTART' | translate}}</h1>
+        <div class="restart-experience-header">
+            <h1>{{'RESTART' | translate}}</h1>
+            <button class="btn_link" (click)="cancel()">
+                <i class="krIocnsFont-close-md"></i>
+            </button>
+        </div>
+      <div class="restart-experience-body">
         <div class="form-check sm">
             <input class="form-check-input" type="radio" id="startover" name="staroverradio" [checked]="restartCheck == projConstants.STARTOVER" (change)="changeRestartType(projConstants.STARTOVER)">
             <label class="form-check-label" for="startover">{{'START_OVER' | translate}}</label>
@@ -21,6 +24,7 @@
             <button class="_btn primaryBtn" (click)="restart()">{{'RESTART' | translate}}</button>
             <button class="_btn solidBtn" (click)="cancel()">{{'CANCEL' | translate}}</button>
         </div>
+      </div>
     </div>  
 </div>
 

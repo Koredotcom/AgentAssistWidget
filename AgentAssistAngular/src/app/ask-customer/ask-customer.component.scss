@@ -123,4 +123,12 @@
             justify-content: center;
         }
     }
+
+}
+ .list-view-loader{
+    ::ng-deep{
+        .loader-progress-individual{
+          top:-11px !important;
+        }
+    }
 }

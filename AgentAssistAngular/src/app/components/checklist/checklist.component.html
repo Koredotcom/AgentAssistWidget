@@ -65,7 +65,7 @@
                                         (click)="selectStageAndMinimize(i)"
                                         [disabled]="stage.name == 'Close' && !isProceedToClose"
                                         [title]="(stage.name == 'Close' && !isProceedToClose) ? 'Click on proceed to close button to enable Close Stage' : stage.name">
-                                        <p>{{stage.name}}</p>
+                                        <p title="{{stage.name}}">{{stage.name}}</p>
                                         <i class="krIocnsFont-check"
                                             [ngClass]="{'krIocnsFont-check' : (checklists[selcLinx]?.stages[selsTinx]?.name == stage.name)}"></i>
                                     </button>

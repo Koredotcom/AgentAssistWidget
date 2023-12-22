@@ -140,3 +140,15 @@
         }
     }
 }
+.awaiting-sentiment{
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 16px;
+    background: var(--Gray-100, #F2F4F7);
+    color: var(--Gray-modern-500, #697586);
+    font-size: 9px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 18px;
+    width: 115px;
+}
