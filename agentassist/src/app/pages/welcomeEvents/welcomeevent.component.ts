@@ -16,6 +16,8 @@ import { SubSink } from 'subsink';
 })
 export class WelcomeeventComponent implements OnInit {
 
+  @ViewChild('newWelcomeEvent', { static: true }) newWelcomeEventSlider: SliderComponentComponent;
+
   welcomeTask : string = 'WELCOME_TASK';
   welcomeMsg : string = 'WELCOME_MSG';
   chatTab : string = 'chat';
@@ -284,6 +286,11 @@ export class WelcomeeventComponent implements OnInit {
     this.updateTaskDetails(this.welcomeTaskData, true);
   }
 
+  openModal(contentDeleteWelcomeEvents){
+    this.modalService.open(contentDeleteWelcomeEvents, {backdropClass: 'adjust-zindex-above-slider', modalDialogClass:'confirm-copy', centered: true, backdrop: 'static', keyboard: false});
+
+  }
+
   // slider events
 
   deleteWelcomeEvent(contentDeleteWelcomeEvents) {
@@ -291,11 +298,11 @@ export class WelcomeeventComponent implements OnInit {
 	}
   
   openWelcomeEvent(){
-    this.newWelcomeEvent.openSlider("#newWelcome", "width600");
+    this.newWelcomeEventSlider.openSlider("#newWelcome", "width550");
   }
 
   closeWelcomeEvent() {
-    this.newWelcomeEvent.closeSlider('#newWelcome');
+    this.newWelcomeEventSlider.closeSlider('#newWelcome');
   }
 
 }
