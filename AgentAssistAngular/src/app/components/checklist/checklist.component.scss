@@ -31,8 +31,8 @@
 
 .playbook-wrapper{
     border-radius: 6px;
-    border: 1px solid var(--gray-modern-300, #CDD5DF);
-    background: var(--base-white, #FFF);
+    border: 1px solid var(--themeBorderColor);
+    background: var(--backgroundColorWhite);
     overflow: auto;
     height: 100%;
     display: flex;
@@ -45,7 +45,7 @@
             gap: 10px;
             padding: 4px;
             min-height: 50px;
-            border-bottom: 1px solid var(--gray-modern-300, #CDD5DF);
+            border-bottom: 1px solid var(--themeBorderColor);
             .left-sec-data{
                 width: 100%;
                 display: flex;
@@ -95,7 +95,7 @@
                         align-items: center;
                         justify-content: center;
                         border-radius: 100px;
-                        background: var(--error-600, #D92D20);
+                        background: var(--warningTextColor);
                         color: var(--whiteTextColor);
                         font-size: 7px;
                         font-weight: 500;
@@ -132,8 +132,8 @@
                 gap: 4px;
                 .solid-action{
                     border-radius: 3px;
-                    border: 0px solid var(--gray-300, #D0D5DD);
-                    background: var(--generic-white, #FFF);
+                    border: 0px solid var(--themeBorderColor);
+                    background: var(--themeBgWhiteColor);
                     display: flex;
                     width: 25px;
                     height: 25px;
@@ -141,7 +141,7 @@
                     justify-content: center;
                     align-items: center;
                     gap: 6px;
-                    color: #101828;
+                    color: var(--primaryTextColor);
                     font-size: 16px;
                     cursor: pointer;
                     &.step-complete{
@@ -150,12 +150,12 @@
                     }
                     &:hover{
                         border: 1px solid var(--primary-300, #84ADFF);
-                        color: #155EEF;
+                        color: var(--themeColor);
                     }
                     &.stop-assist{
                         border: 0px solid var(--error-200, #FECDCA);
-                        background: var(--generic-white, #FFF);
-                        color: #DC2626;
+                        background: var(--themeBgWhiteColor);
+                        color: var(--warningTextColor);
                         &:hover{
                             border: 1px solid var(--error-300, #FDA29B);
                             box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10);
@@ -180,7 +180,7 @@
                 display: flex;
                 align-items: center;
                 gap: 5px;
-                color: var(--gray-modern-700, #364152);
+                color: var(--primaryTextColorTwo);
                 font-size: 11px;
                 font-weight: 600;
                 line-height: 16px;
@@ -205,7 +205,7 @@
                     background: var(--gray-200, #EAECF0);
                 }
                 p{
-                    color: var(--gray-300, #D0D5DD);
+                    color: var(--themeBorderColor);
                     font-size: 12px;
                     font-weight: 400;
                     line-height: 20px;
@@ -214,7 +214,7 @@
                 }
             }
             .stage-btn{
-                color: var(--gray-300, #D0D5DD);
+                color: var(--themeBorderColor);
                 font-size: 14px;
                 font-weight: 500;
                 line-height: 20px;
@@ -254,12 +254,12 @@
                         display: none;
                         align-items: center;
                         justify-content: center;
-                        border: 2px solid #D4D4D4;
+                        border: 2px solid var(--themeBorderColor);
                         border-radius: 100%;
                         background: transparent;
                         font-size: 7px;
                         font-weight: bold;
-                        color: #D4D4D4;
+                        color: var(--themeBorderColor);
                         padding: 0; 
                         transition: 0.2s all ease;
                         &.checked-playbook{
@@ -299,11 +299,11 @@
                         .solidbtn{
                             position: relative;
                             border-radius: 4px;
-                            border: 1px solid var(--neutral-200, #E5E5E5);
-                            background: var(--generic-white, #FFF);
+                            border: 1px solid var(--themeBorderColor);
+                            background: var(--themeBgWhiteColor);
                             padding: 2px 8px;
                             min-height: 24px;
-                            color: var(--neutral-800, #262626);
+                            color: var(--primaryTextColor);
                             font-size: 11px;
                             font-weight: 500;
                             line-height: 16px;
@@ -336,7 +336,7 @@
                         min-height: 32px;
                         h1{
                             width: 100%;
-                            color: var(--base-black, #121314);
+                            color: var(--primaryTextColor);
                             font-size: 11px;
                             font-weight: 500;
                             line-height: normal;
@@ -359,7 +359,7 @@
                                 }
                             }
                             h2{
-                                color: var(--base-black, #121314);
+                                color: var(--primaryTextColor);
                                 font-size: 11px;
                                 font-weight: 400;
                                 line-height: normal;
@@ -368,7 +368,7 @@
                     }
                 }      
                 &.playbook-step-ongoing{
-                    background: var(--base-white, #FFF);
+                    background: var(--backgroundColorWhite);
                     box-shadow: -7px 4px 30px 0px rgba(18, 61, 101, 0.20), -8px -6px 80px 0px rgba(255, 255, 255, 0.18) inset;
                     -webkit-animation-name: slideInUpPlaybookAnim;
                     animation-name: slideInUpPlaybookAnim;
@@ -400,14 +400,14 @@
     padding: 50px;
     text-align: center;
     h1{
-        color: #000;
+        color: var(--primaryTextColor);
         font-size: 14px;
         font-weight: 700;
         line-height: 16px;
         margin-bottom: 15px;
     }
     p{
-        color: var(--gray-modern-600, #4B5565);
+        color: var(--primaryTextColorTwo);
         font-size: 12px;
         font-weight: 400;
         line-height: 18px;

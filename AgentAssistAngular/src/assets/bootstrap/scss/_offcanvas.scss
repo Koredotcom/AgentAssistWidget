@@ -41,7 +41,7 @@
       color: var(--#{$prefix}offcanvas-color);
       visibility: hidden;
       // background-color: var(--#{$prefix}offcanvas-bg);
-      background-color:  #FFF;
+      background-color:  var(--themeBgWhiteColor);
       background-clip: padding-box;
       outline: 0;
       border-radius: 12px 12px 0px 0px;
@@ -141,8 +141,8 @@
 
 .offcanvas-header {
   border-radius: 8px 8px 0px 0px;
-  border: 0px solid var(--gray-300, #D0D5DD);
-  background: #FFF;
+  border: 0px solid var(--themeBorderColor);
+  background: var(--themeBgWhiteColor);
   display: flex;
   gap: 4px;
   align-items: center;
@@ -164,7 +164,7 @@
   p{
     width: 100%;
     span{
-      color: var(--gray-modern-500, #697586);
+      color: var(--secondaryTextColor);
       font-size: 12px;
       font-weight: 500;
       line-height: 20px;
@@ -206,7 +206,7 @@ body{
           height: calc(100% - 108px);
           padding: 8px 8px 0px 8px;
           .canvas-auto-height{
-            border: 1px solid #D0D5DD;
+            border: 1px solid var(--themeBorderColor);
             box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08);
             border-radius: 6px;
             height: 100%;

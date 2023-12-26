@@ -5,8 +5,8 @@
 
 .card-assist{
     border-radius: 6px;
-    border: 1px solid var(--gray-modern-300, #CDD5DF);
-    background: var(--generic-white, #FFF);
+    border: 1px solid var(--themeBorderColor);
+    background: var(--themeBgWhiteColor);
     box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08);
     height: 100%;
     display: flex;
@@ -34,10 +34,10 @@
                     }
                     .dialogs-number{
                         border-radius: 3px;
-                        background: var(--primary-600, #155EEF);
+                        background: var(--themeColor);
                         flex-shrink: 0;
                         padding: 0px 4px;
-                        color: var(--base-white, #FFF);
+                        color: var(--whiteTextColor);
                         font-size: 12px;
                         font-weight: 500;
                         line-height: 18px;
@@ -88,7 +88,7 @@
                             font-weight: 500;
                             line-height: 20px;
                             padding-left: 6px;
-                            border-left: 1px solid var(--gray-300, #D0D5DD);
+                            border-left: 1px solid var(--themeBorderColor);
                             flex-shrink: 0;
                         }
                         b{
@@ -104,8 +104,8 @@
                 gap: 4px;
                 .solid-action{
                     border-radius: 3px;
-                    border: 0px solid var(--gray-300, #D0D5DD);
-                    background: var(--generic-white, #FFF);
+                    border: 0px solid var(--themeBorderColor);
+                    background: var(--themeBgWhiteColor);
                     display: flex;
                     width: 25px;
                     height: 25px;
@@ -113,16 +113,20 @@
                     justify-content: center;
                     align-items: center;
                     gap: 6px;
-                    color: #101828;
+                    color: var(--primaryTextColor);
                     font-size: 16px;
                     cursor: pointer;
+                    &:disabled{
+                        opacity: 0.3;
+                        pointer-events: none;
+                    }
                     &:hover{
                         border: 1px solid var(--primary-300, #84ADFF);
-                        color: #155EEF;
+                        color: var(--themeColor);
                     }
                     &.stop-assist{
                         border: 0px solid var(--error-200, #FECDCA);
-                        background: var(--generic-white, #FFF);
+                        background: var(--themeBgWhiteColor);
                         &:hover{
                             border: 1px solid var(--error-300, #FDA29B);
                             box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10);
@@ -134,7 +138,7 @@
                     span{
                         width: 12px;
                         height: 12px;
-                        background: #D92D20;
+                        background: var(--warningTextColor);
                     }
                 }
             }
@@ -147,7 +151,7 @@
     .card-body{
         padding: 0px 10px 10px 10px;
         .card_body_acc_content{
-            border-top: 1px solid var(--gray-300, #D0D5DD);
+            border-top: 1px solid var(--themeBorderColor);
             padding-top: 8px;
             position: relative;
         }
@@ -158,14 +162,14 @@
     padding: 50px;
     text-align: center;
     h1{
-        color: #000;
+        color: var(--primaryTextColor);
         font-size: 14px;
         font-weight: 700;
         line-height: 16px;
         margin-bottom: 15px;
     }
     p{
-        color: var(--gray-modern-600, #4B5565);
+        color: var(--primaryTextColorTwo);
         font-size: 12px;
         font-weight: 400;
         line-height: 18px;
@@ -180,7 +184,7 @@
         color: var(--secondaryTextColor);
     }
     span{
-        color: #000;
+        color: var(--primaryTextColor);
         font-weight: 500;
     }
 }

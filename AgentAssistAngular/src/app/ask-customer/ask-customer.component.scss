@@ -91,11 +91,11 @@
             .solidbtn{
                 position: relative;
                 border-radius: 4px;
-                border: 1px solid var(--neutral-200, #E5E5E5);
-                background: var(--generic-white, #FFF);
+                border: 1px solid var(--themeBorderColor);
+                background: var(--themeBgWhiteColor);
                 padding: 2px 8px;
                 min-height: 24px;
-                color: var(--neutral-800, #262626);
+                color: var(--primaryTextColor);
                 text-align: center;
                 font-size: 11px;
                 font-weight: 500;

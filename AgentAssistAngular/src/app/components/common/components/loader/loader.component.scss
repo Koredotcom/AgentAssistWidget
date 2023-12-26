@@ -15,19 +15,24 @@
     justify-content: center;
     position: absolute;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     z-index: 9;
     // background: rgba(255, 255, 255, 0.7);
     .loading-border{
         // border: 4px solid #f8f9fa;
-        border: 3px solid var(--gray-300, #D0D5DD);
+        border: 3px solid var(--themeBorderColor);
         border-radius: 50%;
-        border-top: 4px solid #155EEF;
+        border-top: 4px solid var(--borderThemeColor);
         width: 40px;
         height: 40px;
         -webkit-animation: kr-spin 2s linear infinite;
         animation: kr-spin 2s linear infinite;
+    }
+    img{
+        width: 30px;
+        height: 30px;
     }
 }
 
@@ -43,12 +48,16 @@
     z-index: 9;
     // background: rgba(255, 255, 255, 0.7);
     .loading-border{
-        border: 3px solid var(--gray-300, #D0D5DD);
+        border: 3px solid var(--themeBorderColor);
         border-radius: 50%;
-        border-top: 3px solid #155EEF;
+        border-top: 3px solid var(--borderThemeColor);
         width: 24px;
         height: 24px;
         -webkit-animation: kr-spin 2s linear infinite;
         animation: kr-spin 2s linear infinite;
+    }
+    img{
+        width: 24px;
+        height: 24px;
     }
 }

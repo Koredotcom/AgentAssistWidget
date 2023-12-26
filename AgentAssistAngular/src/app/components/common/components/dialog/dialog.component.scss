@@ -16,7 +16,7 @@
     @extend .animation-slide-up-little;
     .line_bar{
         width: 100%;
-        border-top: 1px solid #D0D5DD;
+        border-top: 1px solid var(--themeBorderColor);
     }
     .middle-info{
         display: flex;

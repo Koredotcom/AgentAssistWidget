@@ -50,8 +50,8 @@
       margin: 0 auto;
       .modal-content{
         border-radius: 6px;
-        border: 1px solid var(--gray-modern-300, #CDD5DF);
-        background: var(--generic-white, #FFF);
+        border: 1px solid var(--themeBorderColor);
+        background: var(--themeBgWhiteColor);
         box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08);
       }
     }

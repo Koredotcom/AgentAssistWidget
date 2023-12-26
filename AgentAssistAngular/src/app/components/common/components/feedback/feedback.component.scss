@@ -17,7 +17,7 @@
                 flex-shrink: 0;
             }
             h1{
-                color: var(--neutral-900, #171717);
+                color: var(--primaryTextColor);
                 font-size: 12px;
                 font-weight: 500;
                 line-height: 18px;
@@ -25,8 +25,8 @@
             }
             .feedback-btn-thumb{
                 border-radius: 4px;
-                border: 1px solid var(--neutral-200, #E5E5E5);
-                background: var(--generic-white, #FFF);
+                border: 1px solid var(--themeBorderColor);
+                background: var(--themeBgWhiteColor);
                 display: flex;
                 width: 28px;
                 height: 28px;
@@ -34,7 +34,7 @@
                 justify-content: center;
                 align-items: center;
                 gap: 6px;
-                color: #101828;
+                color: var(--primaryTextColor);
                 font-size: 16px;
                 cursor: pointer;
                 transition: 0.2s all ease;
@@ -88,11 +88,11 @@
                 transition: 0.2s all ease;
                 &:hover{
                     background: var(--backgroundColorFormFocus);
-                    color: #004EEB;
+                    color: var(--themeColor);
                 }
                 &.active-improve-btn{
                     background: var(--backgroundColorFormFocus);
-                    color: #004EEB;
+                    color: var(--themeColor);
                 }
             }
         }

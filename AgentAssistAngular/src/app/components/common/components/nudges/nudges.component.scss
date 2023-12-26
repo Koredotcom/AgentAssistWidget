@@ -13,12 +13,12 @@
         padding: 6px 16px;
         gap: 6px;
         &.info-nudge{
-            background: var(--neutral-200, #E5E5E5);
+            background: var(--themeBorderColor);
             p{
-                color: var(--generic-black, #000);
+                color: var(--primaryTextColor);
             }
             .close-nudge{
-                color: var(--generic-black, #000);
+                color: var(--primaryTextColor);
             }
         }
         &.warning-nudge{

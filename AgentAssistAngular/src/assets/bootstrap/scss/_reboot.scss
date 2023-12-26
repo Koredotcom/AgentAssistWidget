@@ -11,6 +11,7 @@ html{
 }
 body{
   height: 100%;
+  color: var(--primaryTextColor);
 }
 
 :focus-visible{
@@ -35,7 +36,7 @@ body::-webkit-scrollbar {
   transition: background-color 0.2s linear, width 0.2s ease-in-out;
   -webkit-transition: background-color 0.2s linear, width 0.2s ease-in-out;
   &:hover{
-    background-color: #CDD5DF;
+    background-color: var(--themeBorderColor);
   }
 }
 
@@ -54,7 +55,7 @@ body {
   font-weight: 400;
   line-height: normal;
   color: var(--primaryTextColor);
-  background-color: #fff;
+  background-color: var(--themeBgWhiteColor);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -137,10 +138,6 @@ ul ul,
 ol ul,
 ul ol {
   margin-bottom: 0;
-}
-
-dt {
-  font-weight: $dt-font-weight;
 }
 
 // 1. Undo browser default

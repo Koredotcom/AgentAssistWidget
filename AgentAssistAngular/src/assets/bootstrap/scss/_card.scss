@@ -3,7 +3,7 @@
   align-items: center;
   padding: 10px;
   gap: 5px;
-  background: #FFF;
+  background: var(--themeBgWhiteColor);
   border-radius: 4px;
   cursor: pointer;
   transition: 0.2s all ease;
@@ -11,11 +11,11 @@
     background: var(--backgroundAskTellCustBg);
   }
   &.help-cards{
-    border: 1px solid var(--neutral-200, #E5E5E5);
+    border: 1px solid var(--themeBorderColor);
     gap: 12px;
     .card-icon{
       border-radius: 4px;
-      background: var(--primary-50, #EAF1FC);
+      background: var(--themeSentimentBgColor);
       width: 60px;
       height: 60px;
       flex-shrink: 0;
@@ -26,7 +26,7 @@
   }
   .card-icon{
     border-radius: 200px;
-    background: var(--primary-50, #EAF1FC);
+    background: var(--themeSentimentBgColor);
     width: 28px;
     height: 28px;
     display: flex;
@@ -39,7 +39,7 @@
     .card-title{
       display: flex;
       align-items: center;
-      color: var(--gray-modern-700, #364152);
+      color: var(--primaryTextColorTwo);
       font-size: 14px;
       font-weight: 500;
       line-height: 16px;
@@ -49,7 +49,7 @@
       }
     }
     .card-desc{
-      color: var(--neutral-600, #525252);
+      color: var(--secondaryTextColor);
       font-size: 14px;
       font-weight: 400;
       line-height: 20px;
@@ -66,15 +66,15 @@
       align-items: center;
       justify-content: center;
       font-size: 16px;
-      color: #9AA4B2;
+      color: var(--secondaryTextColorTwo);
     }
   }
 }
 
 .card-group {
   border-radius: 6px;
-  border: 1px solid var(--gray-modern-200, #E3E8EF);
-  background: #FFF;
+  border: 1px solid var(--themeBorderColor);
+  background: var(--themeBgWhiteColor);
   width: 100%;
   padding: 10px 5px;
   display: flex;

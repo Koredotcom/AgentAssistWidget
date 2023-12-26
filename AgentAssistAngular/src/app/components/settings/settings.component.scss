@@ -62,8 +62,8 @@
             @extend .animation-fadout-in;
             .theme-settings{
                 border-radius: 4px;
-                border: 1px solid var(--gray-200, #EAECF0);
-                background: var(--base-white, #FFF);
+                border: 1px solid var(--themeBorderColor);
+                background: var(--backgroundColorWhite);
                 padding: 11px;
                 .heading-sec{
                     display: flex;
@@ -73,14 +73,14 @@
                     .left-titles-info{
                         width: 100%;
                         h1{
-                            color: var(--gray-modern-700, #364152);
+                            color: var(--primaryTextColorTwo);
                             font-size: 14px;
                             font-weight: 500;
                             line-height: 16px;
                             margin: 0;
                         }
                         p{
-                            color: var(--gray-modern-500, #697586);
+                            color: var(--secondaryTextColor);
                             font-size: 12px;
                             font-weight: 500;
                             line-height: 16px;
@@ -104,17 +104,16 @@
                 .theme-info-img{
                     margin-top: 6px;
                     border-radius: 8px;
-                    background: var(--gray-50, #F9FAFB);
+                    background: var(--themeBgColor);
                     padding: 10px;
                     text-align: center;
-
                 }
             }
         }
         .language-settigs{
             border-radius: 4px;
-            border: 1px solid var(--gray-200, #EAECF0);
-            background: var(--base-white, #FFF);
+            border: 1px solid var(--themeBorderColor);
+            background: var(--backgroundColorWhite);
             padding: 12px;
             display: flex;
             flex-direction: column;

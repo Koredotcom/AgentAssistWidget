@@ -33,11 +33,11 @@
 // Wrapper for the tooltip content
 .tooltip-inner {
   max-width: 300px;
-  border: 1px solid #E5E5E5;
-  background: #fff;
+  border: 1px solid var(--themeBorderColor);
+  background: var(--themeBgWhiteColor);
   border-radius: 6px;
   padding: 9px 12px;
-  color: #000;
+  color: var(--primaryTextColor);
   text-align: center;
   font-size: 12px;
   font-weight: 500;

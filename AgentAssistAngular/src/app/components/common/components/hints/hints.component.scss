@@ -36,6 +36,10 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow: auto;
+    height: 100%;
+    max-height: calc(50vh - 30px);
+    padding: 10px 16px;
     .hint-card{
         border-radius: 12px;
         background: var(--success-600, #16A34A);
@@ -55,8 +59,8 @@
             box-shadow: 0px 25px 50px -12px rgba(16, 24, 40, 0.25);
             .top-card-info{
                 .icon_block{
-                    border: 2px solid var(--neutral-200, #E5E5E5);
-                    background: var(--base-white, #FFF);
+                    border: 2px solid var(--themeBorderColor);
+                    background: var(--backgroundColorWhite);
                     color: var(--secondaryTextColor);
                 }
             }
@@ -67,7 +71,7 @@
             .top-card-info{
                 .icon_block{
                     border: 2px solid var(--warning-100, #FEF0C7);
-                    background: var(--base-white, #FFF);
+                    background: var(--backgroundColorWhite);
                     color: #F79009;
                 }
             }
@@ -78,7 +82,7 @@
             .top-card-info{
                 .icon_block{
                     border: 2px solid var(--error-200, #FECDCA);
-                    background: var(--base-white, #FFF);
+                    background: var(--backgroundColorWhite);
                     color: #F04438;
                 }
             }
@@ -100,7 +104,7 @@
                 color: #039855;
             }
             h1{
-                color: var(--base-white, #FFF);
+                color: var(--whiteTextColor);
                 font-size: 14px;
                 font-weight: 500;
                 line-height: 20px;
@@ -124,7 +128,7 @@
         .body-hint{
             padding: 6px 0;
             p{
-                color: var(--base-white, #FFF);
+                color: var(--whiteTextColor);
                 font-size: 14px;
                 font-weight: 400;
                 line-height: 20px;
@@ -134,7 +138,7 @@
         .footer-hint{
             text-align: right;
             button{
-                color: var(--base-white, #FFF);
+                color: var(--whiteTextColor);
                 font-size: 14px;
                 font-weight: 500;
                 line-height: 20px;

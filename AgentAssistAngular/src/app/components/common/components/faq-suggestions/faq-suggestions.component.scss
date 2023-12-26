@@ -16,11 +16,11 @@
     .solidbtn{
         position: relative;
         border-radius: 4px;
-        border: 1px solid var(--neutral-200, #E5E5E5);
-        background: var(--generic-white, #FFF);
+        border: 1px solid var(--themeBorderColor);
+        background: var(--themeBgWhiteColor);
         padding: 2px 8px;
         min-height: 24px;
-        color: var(--neutral-800, #262626);
+        color: var(--primaryTextColor);
         font-size: 11px;
         font-weight: 500;
         line-height: 16px;
@@ -41,7 +41,7 @@
         position: absolute;
         right: 0;
         top: auto;
-        background: #fff;
+        background: var(--themeBgWhiteColor);
         z-index: 2;
         &.sent-cliked-msg{
             display: flex !important;
@@ -67,13 +67,13 @@
                 margin: 0;
             }
             span{
-                color: var(--gray-modern-500, #697586);
+                color: var(--secondaryTextColor);
                 font-size: 12px;
                 font-weight: 600;
                 line-height: 18px;
             }
             .sent-msg-text{
-                color: var(--primary-500-main, #2B75E4);
+                color: var(--themeColor);
                 font-size: 12px;
                 font-weight: 400;
                 flex-shrink: 0;
@@ -105,7 +105,7 @@
                 position: relative;
             }
             p{
-                color: var(--gray-modern-600, #4B5565);
+                color: var(--primaryTextColorTwo);
                 font-size: 12px;
                 font-weight: 400;
                 line-height: 18px;
@@ -123,7 +123,7 @@
             position: absolute;
             bottom: 0;
             right: 0;
-            background: #FFF;
+            background: var(--themeBgWhiteColor);
             z-index: 2;
             flex-shrink: 0;
             display: flex;

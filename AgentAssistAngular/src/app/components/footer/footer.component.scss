@@ -25,10 +25,11 @@
         background: #EAECF0;
         width: 100%;
         height: 4px;
+        display: none;
     }
     .footer-links-data{
         border-radius: 6px 6px 0px 0px;
-        background: #FFF;
+        background: var(--themeBgWhiteColor);
         padding: 6px 12px;
         display: flex;
         width: 100%;
@@ -48,6 +49,7 @@
             gap: 4px;
             flex: 1;
             transition: 0.2s all ease;
+            color: var(--primaryTextColor);
             @media screen and (max-width:600px){
                 flex-direction: column;
             }
@@ -59,7 +61,6 @@
             }
             &.sel-bg{
                 border-radius: 45px;
-                background: var(--gray-200, #EAECF0);
                 &.selected-tab{
                     background: var(--backgroundThemeColor);
                     color: var(--whiteTextColor);
@@ -97,7 +98,7 @@
 }
 
 ::ng-deep .canvas-auto-height{
-    background: #fff;
+    background: var(--themeBgWhiteColor);
     border-radius: 12px 12px 0px 0px;
     max-height: 100%;
     display: block;

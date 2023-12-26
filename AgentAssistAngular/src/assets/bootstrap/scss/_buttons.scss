@@ -15,7 +15,7 @@
   height: 30px;
   border-radius: 8px;
   border: 1px solid transparent;
-  background: var(--base-white, #FFF);
+  background: var(--backgroundColorWhite);
   box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   display: inline-flex;
   align-items: center;
@@ -35,9 +35,9 @@
 }
 
 .primaryBtn{
-  border: 1px solid var(--primary-600, #155EEF);
+  border: 1px solid var(--themeColor);
   background: var(--backgroundThemeColor);
-  color: var(--base-white, #FFF);
+  color: var(--whiteTextColor);
   &:focus{
     box-shadow: 0px 0px 0px 4px var(--backgroundColorFormFocus), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
@@ -45,15 +45,15 @@
     box-shadow: 0px 0px 0px 4px var(--backgroundColorFormFocus), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
   &:hover{
-    border: 1px solid var(--primary-700, #004EEB);
-    background: var(--primary-700, #004EEB);
+    border: 1px solid var(--themeColor);
+    background: var(--themeColor);
   }
 }
 
 .secondaryBtn{
   border: 1px solid var(--backgroundColorFormFocus);
   background: var(--backgroundColorFormFocus);
-  color: var(--primary-700, #004EEB);
+  color: var(--themeColor);
   &:focus{
     box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
@@ -67,7 +67,7 @@
 }
 
 .solidBtn{
-  border: 1px solid var(--gray-300, #D0D5DD);
+  border: 1px solid var(--themeBorderColor);
   &:focus{
     box-shadow: 0px 0px 0px 4px var(--borderSuggestions), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
@@ -80,9 +80,9 @@
 }
 
 .dangerBtn{
-  border: 1px solid var(--error-600, #D92D20);
-  background: var(--error-600, #D92D20);
-  color: var(--base-white, #FFF);
+  border: 1px solid var(--warningTextColor);
+  background: var(--warningTextColor);
+  color: var(--whiteTextColor);
   &:focus{
     box-shadow: 0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
