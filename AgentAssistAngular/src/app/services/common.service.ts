@@ -189,7 +189,7 @@ export class CommonService {
       payload : message.payload,
       title: message.title,
       contentId : message.contentId,
-      sessionId: (this.rootService.activeTab == this.projConstants.MYBOT) ? this.rootService.myBotTabSessionId : this.rootService.assistTabSessionId,
+      sessionId: (this.rootService.activeTab == this.projConstants.MYBOT || this.rootService.activeTab == this.projConstants.SEARCH) ? this.rootService.myBotTabSessionId : this.rootService.assistTabSessionId,
     };
 
     if(this.rootService.activeTab == this.projConstants.SEARCH){

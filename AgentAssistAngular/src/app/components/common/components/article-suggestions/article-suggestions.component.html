@@ -8,7 +8,7 @@
 
         </div>
         <div class="faq-actions" *ngIf="!hideActionButtons && article?.content">
-            <ng-container *ngIf="!article.send">
+            <ng-container>
                 <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
                     <i class="krIocnsFont-copy"></i>
                 </button>
@@ -22,7 +22,7 @@
     <div class="faq-body-content">
         <div class="data-faq-paragraph">            
             <div class="text-info-more-data-link">
-                <p [ngClass]="{'show-full-text' : !article.showMoreButton}" [innerHTML]="article?.content | removeTagFromString | replaceTextWithTag : article.userInput" #articleContent></p>
+                <p [ngClass]="{'show-full-text' : !article.showMoreButton}" [innerHTML]="article?.content | removeTagFromString" #articleContent></p>
                 <div class="more-links-actions">
                     <a class="moreText" role="link" *ngIf="articleContent.scrollHeight > 36">
                         <span class="more-text" *ngIf="article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'MORE_TEXT' | translate}}</span>
