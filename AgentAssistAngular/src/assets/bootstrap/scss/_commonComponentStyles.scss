@@ -106,6 +106,19 @@
     animation-delay: 0.1s;
     width: 100%;
 }
+
+.componentSlideUPAnimationList{
+    -webkit-animation-name: slideInUpCompList;
+    animation-name: slideInUpCompList;
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    display: inline-block;
+    animation-delay: 0.1s;
+    width: 100%;
+}
+
 app-ask-customer, app-tell-customer, app-smalltalk, app-feedback, app-dialog, app-suggestions{
     // @extend .componentSlideUPAnimation;
     display: inline-block;
@@ -137,6 +150,31 @@ app-ask-customer, app-tell-customer, app-smalltalk, app-feedback, app-dialog, ap
         transform: translateY(0);
     }
 }
+
+@-webkit-keyframes slideInUpCompList {
+    0% {
+        -webkit-transform: translateY(50px);
+        transform: translateY(50px);
+        visibility: visible;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUpCompList {
+    0% {
+        -webkit-transform: translateY(50px);
+        transform: translateY(50px);
+        visibility: visible;
+    }
+    100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
 
 
 

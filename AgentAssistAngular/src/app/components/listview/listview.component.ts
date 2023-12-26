@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { ProjConstants } from 'src/app/proj.const';
 import { RootService } from 'src/app/services/root.service';
@@ -9,8 +9,11 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
   templateUrl: './listview.component.html',
   styleUrls: ['./listview.component.scss']
 })
-export class ListviewComponent{
+export class ListviewComponent implements AfterViewInit{
   projConstants : any = ProjConstants;
+
+  @ViewChild('collapseTabListView', { static: false }) private collapseTab: ElementRef;
+
 
   @Input() entityList : any;
   @Output() handlePopupEvent = new EventEmitter();
@@ -22,8 +25,36 @@ export class ListviewComponent{
     return respType?.data?._id;
   };
 
-  constructor(public rootService : RootService, private websocketService : WebSocketService){
+  constructor(public rootService : RootService, private websocketService : WebSocketService, private renderer : Renderer2){
 
+  }
+
+  ngOnChanges(changes){
+    if(changes?.entityList?.currentValue){
+      this.scrollToBottomPadding();
+    }
+  }
+
+  ngAfterViewInit(){
+    this.scrollToBottomPadding();
+  }
+
+  scrollToBottomPadding(){    
+    if(this.collapseTab?.nativeElement){
+      let collapseTabHeight = this.collapseTab?.nativeElement?.offsetHeight;      
+      // if(collapseTabHeight){
+      //   let pixel = (50 * collapseTabHeight) / 100;
+      //   this.renderer.setStyle(this.collapseTab.nativeElement, 'padding-bottom', pixel+"px");
+      // }else{
+        this.collapseTab.nativeElement.classList.add('pB');
+      // }
+      setTimeout(() => {
+        try {
+          this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
+          this.collapseTab.nativeElement.classList.remove('pB');
+        } catch (err) { }
+      }, 0);
+    }
   }
 
   confirmOverride(automation){
