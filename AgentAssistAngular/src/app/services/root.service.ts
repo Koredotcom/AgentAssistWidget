@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ProjConstants } from '../proj.const';
 import { TemplateRenderClassService } from './template-render-class.service';
 import * as $ from 'jquery';
@@ -17,6 +17,7 @@ export class RootService {
   activeTab$: BehaviorSubject<any> = new BehaviorSubject(null);
   assistTemplateClick$ : BehaviorSubject<any> = new BehaviorSubject(null);
   mybotTemplateClick$ : BehaviorSubject<any> = new BehaviorSubject(null);
+  userBotHistory$ : Subject<any> = new Subject<any>();
 
   public userBotConversationDetails: any;
 
@@ -170,6 +171,10 @@ export class RootService {
       this.activeTab$.next(tab);
       this.activeTab = tab;
     }
+  }
+
+  setUserBotHistory(obj){
+    this.userBotHistory$.next(obj);
   }
 
   setAssistTemplateClick(value){

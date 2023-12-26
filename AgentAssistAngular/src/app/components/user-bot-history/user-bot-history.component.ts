@@ -57,6 +57,9 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
           this.historyResponse = data.messages;
           this.formatHistoryResponse();
         }
+        this.rootService.setUserBotHistory(data);
+      },(error)=> {
+        this.rootService.setUserBotHistory(null);
       });
     }
   }

@@ -33,6 +33,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
   userBotConversationShow: boolean = false;
   transcriptScrollTopText: string = 'Scroll up for Bot Conversation History';
+  hideUserBotHistory : boolean = true;
 
 
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
@@ -152,6 +153,13 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
       }
     });
 
+    this.subs.sink = this.rootService.userBotHistory$.subscribe((data : any) => {
+      if(data && data.messages){
+        this.hideUserBotHistory = false;
+      }else{
+        this.hideUserBotHistory = true;
+      }
+    });
 
   }
 
@@ -239,7 +247,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
   }
 
   onScroll() {
-    if (!this.userBotConversationShow) {
+    if (!this.userBotConversationShow && !this.hideUserBotHistory) {
       if(this.transcriptTabHistoryText){
         let scrollInView = this.isScrolledIntoView();
         if (scrollInView) {

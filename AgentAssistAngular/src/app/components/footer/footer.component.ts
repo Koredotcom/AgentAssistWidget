@@ -22,6 +22,7 @@ export class FooterComponent implements OnInit, OnDestroy{
   subs = new SubSink();
   maxButton = true;
   sourceDesktop : string = this.rootService.connectionDetails.source;
+  hideUserBotHistory : boolean = true;
 
 
 
@@ -51,20 +52,28 @@ export class FooterComponent implements OnInit, OnDestroy{
   }
 
   subscribeEvents(){
-    this.rootService.socketConnection$.subscribe(res => {
+    this.subs.sink = this.rootService.socketConnection$.subscribe(res => {
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();        
         this.updateActiveTab();
       }
     });
 
-    this.rootService.activeTab$.subscribe(tab => {
+    this.subs.sink = this.rootService.activeTab$.subscribe(tab => {
       if(tab){
         this.selectedTab = tab;
         this.actionOnButton(tab);
         this.updateLocalStorageForTabSwitch(tab);
       }
     });
+
+    this.subs.sink = this.rootService.userBotHistory$.subscribe((data : any) => {
+      if(data && data.messages){
+        this.hideUserBotHistory = false;
+      }else{
+        this.hideUserBotHistory = true;
+      }
+    })
   }
   
   updateLocalStorageForTabSwitch(tab){
