@@ -321,7 +321,8 @@ export class WebSocketService {
     });
   }
 
-  HandleClickAndSendRequest(tab, connectionObj, e) {
+  HandleClickAndSendRequest(tab, connectionDetails, e) {
+    let connectionObj = this.rootService.getConnectionDetails();
     if (JSON.parse(localStorage.getItem('innerTextValue'))) {
       if (this.rootService.activeTab == ProjConstants.ASSIST) {
 
@@ -335,7 +336,8 @@ export class WebSocketService {
           "positionId": this.rootService.currentPositionId,
           "entities": [],
           "check": true,
-          "autoBotId": connectionObj.autoBotId
+          "autoBotId": connectionObj.autoBotId,
+          "intType" : "assist"
       }
         this.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
         this.rootService.isAgentSentRequestOnClick = true;
@@ -352,7 +354,8 @@ export class WebSocketService {
           "botId": connectionObj.botId,
           "experience": connectionObj.isCallConversation === true ? 'voice' : 'chat',
           "positionId": this.rootService.currentPositionIdOfMyBot,
-          "autoBotId": connectionObj.autoBotId
+          "autoBotId": connectionObj.autoBotId,
+          "intType" : "myBot"
       }
       if(connectionObj.userInput && connectionObj.intentName) {
         agent_assist_agent_request_params['query'] = connectionObj.userInput;

@@ -2370,28 +2370,30 @@
                         setTimeout(function () {
                             $(`#carousel-one-by-one-${msgData.messageId}`).addClass("carousel" + carouselTemplateCount);
                             var count = $(".carousel" + carouselTemplateCount).children().length;
-                            if (count >= 1) {
-                                var carouselOneByOne = new PureJSCarousel({
-                                    carousel: ".carousel" + carouselTemplateCount,
-                                    slide: '.slide',
-                                    oneByOne: true
-                                });
-                                $(`#carousel-one-by-one-${msgData.messageId}`).parent().show();
-                                $(`#carousel-one-by-one-${msgData.messageId}`).attr('style', 'height: 100% !important');
-                                carouselEles.push(carouselOneByOne);
-                                console.log("xxxxxxxxxxxxxxxxx carousels", carouselEles)
-                                for (var i = 0; i < carouselEles.length; i++) {
-                                    $(carouselEles[i].carousel).parent().show();
+                            setTimeout(() => {
+                                if (count >= 1) {
+                                    var carouselOneByOne = new PureJSCarousel({
+                                        carousel: ".carousel" + carouselTemplateCount,
+                                        slide: '.slide',
+                                        oneByOne: true
+                                    });
+                                    $(`#carousel-one-by-one-${msgData.messageId}`).parent().show();
+                                    $(`#carousel-one-by-one-${msgData.messageId}`).attr('style', 'height: 100% !important');
+                                    carouselEles.push(carouselOneByOne);
+                                    console.log("xxxxxxxxxxxxxxxxx carousels", carouselEles)
+                                    for (var i = 0; i < carouselEles.length; i++) {
+                                        $(carouselEles[i].carousel).parent().show();
+                                    }
                                 }
-                            }
-                            //window.dispatchEvent(new Event('resize'));
-                            var evt = document.createEvent("HTMLEvents");
-                            evt.initEvent('resize', true, false);
-                            window.dispatchEvent(evt);
-                            carouselTemplateCount += 1;
-                            _chatContainer.animate({
-                                scrollTop: _chatContainer.prop("scrollHeight")
-                            }, 0);
+                                //window.dispatchEvent(new Event('resize'));
+                                var evt = document.createEvent("HTMLEvents");
+                                evt.initEvent('resize', true, false);
+                                window.dispatchEvent(evt);
+                                carouselTemplateCount += 1;
+                                _chatContainer.animate({
+                                    scrollTop: _chatContainer.prop("scrollHeight")
+                                }, 0);
+                            })
                         });
                     }
                     else if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && (msgData.message[0].component.type == "image" || msgData.message[0].component.type == "audio" || msgData.message[0].component.type == "video" || msgData.message[0].component.type == "link")) {
