@@ -1,14 +1,19 @@
 <div class="api-advance-mode-wrapper">
     <div class="header-sec">
        <h3 class="title">Advance API Configuration</h3>
-       <i class="icon-sa-close"></i>
+       <i class="icon-sa-close" (click)="cancel()"></i>
     </div>
     <div class="body-sec">
-     <p class="define-script">Define script</p>
+     <!-- <p class="define-script">Define script</p> -->
+     <ace-editor
+       [(text)]="apiScript"
+        #editor style="height:350px;" [mode]="'json'"
+        [options]="editorOptions"
+        ></ace-editor>
     </div>
     <div class="footer-sec">
         <button class="kr-sg-button-secondary-two btn_lg" (click)="cancel()" >{{'BUTTONS.CANCEL' | translate}}</button>
-        <button class="kr-sg-button-primary btn_lg" (click)="save()" >{{'BUTTONS.SAVE' | translate}}</button>
+        <button class="kr-sg-button-primary btn_lg" [disabled]="apiScript.length === 0" (click)="save()" >{{'BUTTONS.SAVE' | translate}}</button>
     </div>
 </div>
 
