@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
@@ -7,6 +7,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./api-advanced-model.component.scss']
 })
 export class ApiAdvancedModelComponent implements OnInit {
+
+  @Output() emitScriptService = new EventEmitter();
 
   constructor(
     private activeModal : NgbActiveModal
@@ -17,6 +19,7 @@ export class ApiAdvancedModelComponent implements OnInit {
   }
 
   save() {
+    this.emitScriptService.next('ScriptData');
     this.activeModal.close();
   }
 
