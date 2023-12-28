@@ -83,53 +83,95 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     private fb: FormBuilder
   ) { 
     // agentAssistSettings Form object
+
+    
+    // KnowledgeFromObject
+
+  }
+
+  createOrUpdateAgSettingsForm(obj?){
+    let isUpdate = false;
+    if(obj && Object.keys(obj)){
+      isUpdate = true;
+    }
     this.agentAssistFormGroup = this.fb.group({
       agentAssistSettings: this.fb.group({
-        agentAssistWidgetEnabled: [false],
-        isProactiveEnabled: [false],
-        isAgentCoachingEnabled: [false],
-        isAgentResponseEnabled: [true],
-        issummarizationEnabled: [false],
-        isAgentPlaybookEnabled: [false],
+        agentAssistWidgetEnabled: [isUpdate ? obj.agentAssistWidgetEnabled : false],
+        isProactiveEnabled: [isUpdate ? obj.isProactiveEnabled : false],
+        isAgentCoachingEnabled: [isUpdate ? obj.isAgentCoachingEnabled : false],
+        isAgentResponseEnabled: [isUpdate ? obj.isAgentResponseEnabled : true],
+        issummarizationEnabled: [isUpdate ? obj.issummarizationEnabled : false],
+        isAgentPlaybookEnabled: [isUpdate ? obj.isAgentPlaybookEnabled : false],
         isWidgetLandingEnabled: this.fb.group({
-          isEnabled: [false],
+          isEnabled: [isUpdate ? obj.isWidgetLandingEnabled.isEnabled : false],
           chat: this.fb.group({
-            isEnabled: [false],
-            tab: ['assist']
+            isEnabled: [isUpdate ? obj.isWidgetLandingEnabled?.chat?.isEnabled : false],
+            tab: [isUpdate ? obj.isWidgetLandingEnabled?.chat?.tab : 'assist']
           }),
           voice: this.fb.group({
-            isEnabled: [false],
-            tab: ['transcript']
+            isEnabled: [isUpdate ? obj.isWidgetLandingEnabled?.voice?.isEnabled : false],
+            tab: [isUpdate ? obj.isWidgetLandingEnabled?.voice?.tab : 'transcript']
           })
         }),
-        isbotEventsEnabled: [false],
+        isbotEventsEnabled: [isUpdate ? obj.isbotEventsEnabled : false],
         isCustomisedLogoEnabled: this.fb.group({
-          isEnabled: [false],
-          fileId: [''],
-          fileName: [''],
-          hash: ['']
+          isEnabled: [isUpdate ? obj.isCustomisedLogoEnabled?.isEnabled : false],
+          fileId: [isUpdate ? obj.isCustomisedLogoEnabled?.fileId : ''],
+          fileName: [isUpdate ? obj.isCustomisedLogoEnabled?.fileName : ''],
+          hash: [isUpdate ? obj.isCustomisedLogoEnabled?.hash : '']
         })
       })
     });
-    
-    // KnowledgeFromObject
+  }
+
+  createOrUpdateSearchForm(obj?){
+    let isUpdate = false;
+    let searchObj: any = {};
+    if(obj && Object.keys(obj)){
+      searchObj = obj.searchAssistConfig
+      isUpdate = true;
+    }
     this.knowledgeAIFormGroup = this.fb.group({
-      isSearchAssistEnabled: [false],
+      isSearchAssistEnabled: [isUpdate ? obj.isSearchAssistEnabled : false],
       searchAssistConfig: this.fb.group({
-        criteria: ['alwaysShow'],
-        alwaysShow: [true],
-        isXODependant: [false],
-        fallback: [false],
-        suggestVal: ['On'],
-        showAutoSuggestions: [true],
+        criteria: ['alwaysShow'], //need to check
+        alwaysShow: [isUpdate ? searchObj?.alwaysShow : true],
+        isXODependant: [isUpdate ? searchObj?.isXODependant : false],
+        fallback: [isUpdate ? searchObj?.isXODependant : false],
+        suggestVal: [isUpdate ? (searchObj?.showAutoSuggestions ? 'On' : 'Off') : 'On'], 
+        showAutoSuggestions: [isUpdate ? searchObj?.showAutoSuggestions : true],
         integrations : this.fb.group({
-          type: ['basic']
+          type: [ isUpdate ? searchObj?.integrations?.type : 'basic']
         })
       })
-    })
+    });
+    if(isUpdate){
+      let picked = (({ alwaysShow, isXODependant, fallback }) => ({ alwaysShow, isXODependant, fallback }))(searchObj);
+      let criteria = 'alwaysShow';
+      for(let key in picked){
+        if(picked[key]){
+          criteria = key;
+        }
+      }
+      ((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup)
+      .get('criteria') as FormControl)
+      .patchValue(criteria);
+
+
+      if(searchObj?.integrations?.type === 'advanced') {
+        ((((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
+      .addControl('config', this.fb.group({
+        script: [searchObj.integrations?.config.script || '']
+      }))));
+      this.advancedModeScript = (searchObj.integrations?.config.script.length > 0) ? searchObj.integrations?.config.script : '';
+      }
+      
+    }
   }
 
   ngOnInit(): void {
+    this.createOrUpdateAgSettingsForm();
+    this.createOrUpdateSearchForm();
     this.isUnifiedPlatform = this.workflowService?.isUnifiedPlatform();
     this.isLoading = true;
     this.getAgentAssistSettingsNew();
@@ -149,13 +191,22 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       (res) => {
         if (res) {
           this.isLoading = false;
-          this.disableButtons = false;
+          //backup
           this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
-          this.setAgentAssistAndKnowledgeSettings(res.agentAssistSettings);
+
+
+
+          // this.setAgentAssistAndKnowledgeSettings(res.agentAssistSettings);
+    this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
+    this.createOrUpdateSearchForm(res.agentAssistSettings)
+
+
+          //why we need global variable
           this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
         }
       },
       (err) => {
+        this.isLoading = false;
         this.notificationService.showError(
           err,
           this.translate.instant("FALLBACK_ERROR_MSG")
@@ -286,7 +337,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
               this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
               this.disableButtons = false;
             this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
-            this.setAgentAssistAndKnowledgeSettings(res?.agentAssistSettings);
+            this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
             this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
           }
         },
@@ -309,7 +360,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
               this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
               this.disableButtons = false;
             this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
-            this.setAgentAssistAndKnowledgeSettings(res.agentAssistSettings);
+            this.createOrUpdateSearchForm(res.agentAssistSettings)
             this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
           }
         },
@@ -325,37 +376,28 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }
   }
 
-  //Landing tab enabling
-  selectTab(channel, tab) {
-    if(channel === 'chat') {
-      this.agentAssistFormGroup.value.agentAssistSettings.isWidgetLandingEnabled.chat.tab = tab;
-    } else if(channel === 'voice') {
-      this.agentAssistFormGroup.value.agentAssistSettings.isWidgetLandingEnabled.voice.tab = tab;
-    }
-  }
-
   // API Configuration for the SearchAssist in Advanced Mode
   apiAdvancedMode() {
     this.modalRef = this.modalService.open(ApiAdvancedModelComponent, { centered: true, keyboard: false, windowClass: 'api-advance-mode', backdrop: 'static' });
     this.modalRef.componentInstance.data = this.advancedModeScript;
     this.modalRef.result.then(emitedValue => {
       this.advancedModeScript = emitedValue;
+      ((((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
+       .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
+      this.knowledgeAIFormGroup.get('searchAssistConfig').get('integrations').updateValueAndValidity();
       if(this.knowledgeAIFormGroup?.value?.searchAssistConfig?.integrations?.type === 'advanced' && emitedValue.length !== 0) {
         this.isApiConfigured = true;
       } else {
         this.isApiConfigured = false;
       }
-     ((((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
-      .get('config') as FormGroup).get('script') as FormControl).patchValue(this.advancedModeScript);
     });
   }
 
   // update the AutoSuggestions keys
   selectedSuggestionType(e, val) {
-    this.knowledgeAIFormGroup.patchValue({
-      searchAssistConfig: {
-        showAutoSuggestions: (val.type === 'On') ? true : false
-      }})
+    ((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup)
+    .get('showAutoSuggestions') as FormControl)
+    .patchValue((val.type === 'On') ? true : false);
   }
 
   // open script editor for the Advanced Mode
@@ -368,173 +410,29 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       .addControl('config', this.fb.group({
         script: ['',[Validators.required]],
       }));
-      this.isApiConfigured = true;
       this.apiAdvancedMode();
     }
   }
 
   // update search result keys
   getSelectedSearchResult(e, result) {
-    if(this.knowledgeAIFormGroup.value.searchAssistConfig.criteria === 'alwaysShow') {
-      this.knowledgeAIFormGroup.patchValue({
-        searchAssistConfig: {
-          alwaysShow: true,
-          fallback: false,
-          isXODependant: false
-        },
-      });
-    } else if(this.knowledgeAIFormGroup.value.searchAssistConfig.criteria === 'fallback') {
-      this.knowledgeAIFormGroup.patchValue({
-        searchAssistConfig: {
-          alwaysShow: false,
-          fallback: true,
-          isXODependant: false
-        },
-      });
-    } else {
-      this.knowledgeAIFormGroup.patchValue({
-        searchAssistConfig: {
-          alwaysShow: false,
-          fallback: false,
-          isXODependant: true
-        },
-      });
-    }
-  }
-
-  // update the settings
-  setAgentAssistAndKnowledgeSettings(res) {
-    this.agentAssistFormGroup.patchValue({
-      agentAssistSettings: { 
-        agentAssistWidgetEnabled: res?.agentAssistWidgetEnabled,
-        isProactiveEnabled: res?.isProactiveEnabled,
-        isAgentCoachingEnabled: res?.isAgentCoachingEnabled,
-        isAgentResponseEnabled: res?.isAgentResponseEnabled,
-        issummarizationEnabled: res?.issummarizationEnabled,
-        isAgentPlaybookEnabled: res?.isAgentPlaybookEnabled,
-        isWidgetLandingEnabled: {
-          isEnabled :  res?.isWidgetLandingEnabled.isEnabled, 
-           chat: {
-                 isEnabled: res?.isWidgetLandingEnabled?.chat?.isEnabled, 
-                  tab: res?.isWidgetLandingEnabled?.chat?.tab  
-               },
-          voice: {
-                isEnabled: res?.isWidgetLandingEnabled?.voice?.isEnabled,
-                tab: res?.isWidgetLandingEnabled?.voice?.tab 
-               }
-        },
-        isbotEventsEnabled: res?.isbotEventsEnabled,
-        isCustomisedLogoEnabled: {
-          isEnabled: res?.isCustomisedLogoEnabled?.isEnabled, 
-          fileId : res?.isCustomisedLogoEnabled?.fileId,
-          hash : res?.isCustomisedLogoEnabled?.hash,
-          fileName: res?.isCustomisedLogoEnabled?.fileName
-        }
-      }
-    })
-    this.setCriteria();
-    this.setAutoSugg();
-    this.knowledgeAIFormGroup.patchValue({
-      isSearchAssistEnabled: res?.isSearchAssistEnabled,
-    searchAssistConfig: {
-      alwaysShow: res?.searchAssistConfig?.alwaysShow,
-      isXODependant: res?.searchAssistConfig?.isXODependant,
-      fallback: res?.searchAssistConfig?.fallback,
-      showAutoSuggestions: res?.searchAssistConfig?.showAutoSuggestions,
-      integrations : {
-        type: res?.searchAssistConfig?.integrations?.type,
-      }    
-    }   
-    });
-    if(this.knowledgeAIFormGroup.value.searchAssistConfig.integrations.type === 'advanced') {
-      this.advancedModeScript = res.searchAssistConfig?.integrations?.script;
-      ((((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
-      .get('config') as FormGroup).get('script') as FormControl).patchValue(res.searchAssistConfig?.integrations?.script);
-    } 
+    let obj = {
+      alwaysShow: false,
+      fallback: false,
+      isXODependant: false
+    };
+    obj[this.knowledgeAIFormGroup.value.searchAssistConfig.criteria] = true;
+    (this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup)
+    .patchValue(obj);
   }
 
   // cancel agentassist Settings
   cancleAgentAssistSettingsNew(settingType, obj) {
     if(settingType === 'widget') {
-      this.agentAssistFormGroup.patchValue({
-        agentAssistSettings: { 
-          agentAssistWidgetEnabled: obj.agentAssistWidgetEnabled,
-          isProactiveEnabled: obj.isProactiveEnabled,
-          isAgentCoachingEnabled: obj.isAgentCoachingEnabled,
-          isAgentResponseEnabled: obj.isAgentResponseEnabled,
-          issummarizationEnabled: obj.issummarizationEnabled,
-          isAgentPlaybookEnabled: obj.isAgentPlaybookEnabled,
-          isWidgetLandingEnabled: {
-            isEnabled :  obj.isWidgetLandingEnabled?.isEnabled, 
-             chat: {
-                   isEnabled: obj.isWidgetLandingEnabled?.chat?.isEnabled, 
-                    tab: obj.isWidgetLandingEnabled?.chat?.tab  
-                 },
-            voice: {
-                  isEnabled: obj.isWidgetLandingEnabled?.voice?.isEnabled,
-                  tab: obj.isWidgetLandingEnabled?.voice?.tab 
-                 }
-          },
-          isbotEventsEnabled: obj.isbotEventsEnabled,
-          isCustomisedLogoEnabled: {
-            isEnabled: obj.isCustomisedLogoEnabled?.isEnabled, 
-            fileId : obj.isCustomisedLogoEnabled?.fileId,
-            hash : obj.isCustomisedLogoEnabled?.hash,
-            fileName: obj.isCustomisedLogoEnabled?.fileName
-          }
-        }
-      }) 
-    } else {
-      this.setCriteria();
-      this.setAutoSugg();
-      this.knowledgeAIFormGroup.patchValue({
-        isSearchAssistEnabled: obj.isSearchAssistEnabled,
-      searchAssistConfig: {
-        alwaysShow: obj.searchAssistConfig?.alwaysShow,
-        isXODependant: obj.searchAssistConfig?.isXODependant,
-        fallback: obj.searchAssistConfig?.fallback,
-        suggestVal: obj.searchAssistConfig.suggestVal,
-        showAutoSuggestions: obj.searchAssistConfig?.showAutoSuggestions,
-        integrations : {
-          type: obj.searchAssistConfig?.integrations?.type,
-        }    
-      } 
-      });
-      if(this.knowledgeAIFormGroup.value.searchAssistConfig.integrations.type === 'advanced') {
-        ((((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
-        .get('config') as FormGroup).get('script') as FormControl).patchValue(obj.searchAssistConfig?.integrations?.script);
-      }
+      this.createOrUpdateAgSettingsForm(obj.agentAssistSettings);
+    }else {
+      this.createOrUpdateSearchForm(obj.agentAssistSettings);
     }
-  }
-
-  setCriteria() {
-    if(this.clonedWidgetSettings.agentAssistSettings.searchAssistConfig.alwaysShow) {
-      this.knowledgeAIFormGroup.patchValue({
-        searchAssistConfig: {
-          criteria: 'alwaysShow'
-        }
-      })
-    } else if(this.clonedWidgetSettings.agentAssistSettings.searchAssistConfig.isXODependant) {
-      this.knowledgeAIFormGroup.patchValue({
-        searchAssistConfig: {
-          criteria: 'isXODependant'
-        }
-      })
-    } else {
-      this.knowledgeAIFormGroup.patchValue({
-        searchAssistConfig: {
-          criteria: 'fallback'
-        }
-      })
-    }
-  }
-
-  setAutoSugg() {
-    this.knowledgeAIFormGroup.patchValue({
-      searchAssistConfig: {
-        suggestVal: this.clonedWidgetSettings.agentAssistSettings.searchAssistConfig.showAutoSuggestions ? 'On' : 'Off'
-      }
-    })
   }
 
 

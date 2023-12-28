@@ -266,7 +266,7 @@
                       </div>
                    </div>
                    <div class="widgetenable-footer">
-                    <button class="kr-sg-button-secondary-two btn_lg" [disabled]="!agentAssistFormGroup.dirty" (click)="cancleAgentAssistSettingsNew('widget', clonedWidgetSettings?.agentAssistSettings)">{{'BUTTONS.CANCEL' | translate}}</button>
+                    <button class="kr-sg-button-secondary-two btn_lg" [disabled]="!agentAssistFormGroup.dirty" (click)="cancleAgentAssistSettingsNew('widget', clonedWidgetSettings)">{{'BUTTONS.CANCEL' | translate}}</button>
                     <button class="kr-sg-button-primary btn_lg" [disabled]="!agentAssistFormGroup.dirty" (click)="saveAgentAssistSettingsNew('widget')">{{'BUTTONS.SAVE' | translate}}</button>
                    </div>
                </div>
@@ -339,7 +339,7 @@
                             <div class="search-results-des">Optimize your search experience with our Advanced Knowledge AI API Configuration.</div>
                             <div class="api-intigration-block">
                                 <div class="kr-sg-radiobutton" *ngFor="let integrate of integration; let idxVal = index">
-                                    <input id="val-{{idxVal}}" class="radio-custom" type="radio" [value]="integrate.type" name="type" formControlName="type" (change)="selectedIntegrationType($event, integrate)">
+                                    <input id="val-{{idxVal}}" class="radio-custom" type="radio" [value]="integrate.type" name="type" formControlName="type" (click)="selectedIntegrationType($event, integrate)">
                                     <label for="val-{{idxVal}}" class="radio-custom-label">
                                         <div class="mode-title">{{integrate.type}}</div>
                                         <div class="mode-des"> {{integrate.desc}} </div>
@@ -361,7 +361,7 @@
                       </div>
                    </div>
                    <div class="widgetenable-footer">
-                    <button class="kr-sg-button-secondary-two btn_lg" (click)="cancleAgentAssistSettingsNew('search', clonedWidgetSettings?.agentAssistSettings)">{{'BUTTONS.CANCEL' | translate}}</button>
+                    <button class="kr-sg-button-secondary-two btn_lg" (click)="cancleAgentAssistSettingsNew('search', clonedWidgetSettings)">{{'BUTTONS.CANCEL' | translate}}</button>
                     <button class="kr-sg-button-primary btn_lg" [disabled]="!knowledgeAIFormGroup.valid " (click)="saveAgentAssistSettingsNew('search')">Save</button>
                    </div>
                </div>
