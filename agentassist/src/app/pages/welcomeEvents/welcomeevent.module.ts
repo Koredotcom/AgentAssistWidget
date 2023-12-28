@@ -6,13 +6,14 @@ import { WelcomeeventComponent } from './welcomeevent.component';
 import { NewWelcomeEventComponent } from './new-welcome-event/new-welcome-event.component';
 import { PrioritySettingsComponent } from './priority-settings/priority-settings.component';
 import { OnConnectDialogComponent } from './on-connect-dialog/on-connect-dialog.component';
+import { GreetingMessagesComponent } from './greeting-messages/greeting-messages.component';
 
 const routes: Routes = [
   { path: '', component:  WelcomeeventComponent}
 ];
 
 @NgModule({
-  declarations: [WelcomeeventComponent, NewWelcomeEventComponent, PrioritySettingsComponent, OnConnectDialogComponent],
+  declarations: [WelcomeeventComponent, NewWelcomeEventComponent, PrioritySettingsComponent, OnConnectDialogComponent, GreetingMessagesComponent],
   imports: [
     CommonModule,
     SharedModule,

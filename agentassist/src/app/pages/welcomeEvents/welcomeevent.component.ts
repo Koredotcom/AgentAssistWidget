@@ -16,8 +16,6 @@ import { SubSink } from 'subsink';
 })
 export class WelcomeeventComponent implements OnInit {
 
-  @ViewChild('newWelcomeEvent', { static: true }) newWelcomeEventSlider: SliderComponentComponent;
-
   welcomeTask : string = 'WELCOME_TASK';
   welcomeMsg : string = 'WELCOME_MSG';
   universalBot : string = 'universalbot'
@@ -36,17 +34,13 @@ export class WelcomeeventComponent implements OnInit {
   currentBt : any;
 
   
-  greetingForm : FormGroup;
 
-  
-  greetingActiveTab : string = 'chat';
 
 
 
   @ViewChild('newWelcomeEvent', { static: true }) newWelcomeEvent: SliderComponentComponent;
   
   constructor(
-    private modalService: NgbModal,
     private service: ServiceInvokerService,
     private workflowService : workflowService,
     private authService: AuthService,
@@ -128,29 +122,6 @@ export class WelcomeeventComponent implements OnInit {
     return data;
   }
 
-
-  changeGreetingActiveTab(tab){
-    this.greetingActiveTab = tab;
-  } 
-
-  // slider events
-
-  deleteWelcomeEvent(contentDeleteWelcomeEvents) {
-    this.modalService.open(contentDeleteWelcomeEvents,{ centered: true, windowClass: 'delete-welcome-events-dialog', backdrop: 'static', keyboard: false });
-  }
-  
-  openWelcomeEvent(){
-    this.newWelcomeEventSlider.openSlider("#newWelcome", "width550");
-  }
-
-  closeWelcomeEvent() {
-    this.newWelcomeEventSlider.closeSlider('#newWelcome');
-  }
-
-  openModal(contentDeleteWelcomeEvents){
-    this.modalService.open(contentDeleteWelcomeEvents, {backdropClass: 'adjust-zindex-above-slider', modalDialogClass:'confirm-copy', centered: true, backdrop: 'static', keyboard: false});
-
-  }
 
   getMockData(){
     return {

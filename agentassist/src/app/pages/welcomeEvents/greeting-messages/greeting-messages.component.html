@@ -1,0 +1,245 @@
+<div id="accordion" class="welcome-event-accordion childComp">
+    <div data-toggle="collapse" href="#configGreetings" data-parent="#accordion" class="card_link"
+        aria-expanded="false">
+        <div class="accordion-content-header">
+            <div class="team-with-profile">
+                <i class="icon-sa-arrow-down arrow-icon"></i>
+                <div class="accordion-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M8.33366 12.5001L5.77095 15.0948C5.41348 15.4568 5.23475 15.6377 5.08112 15.6505C4.94784 15.6616 4.81734 15.608 4.73029 15.5064C4.62996 15.3894 4.62996 15.1351 4.62996 14.6264V13.3264C4.62996 12.87 4.25622 12.5398 3.80466 12.4737V12.4737C2.71178 12.3136 1.85347 11.4553 1.69339 10.3624C1.66699 10.1822 1.66699 9.96718 1.66699 9.53712V5.66675C1.66699 4.26662 1.66699 3.56655 1.93948 3.03177C2.17916 2.56137 2.56161 2.17892 3.03202 1.93923C3.5668 1.66675 4.26686 1.66675 5.66699 1.66675H11.8337C13.2338 1.66675 13.9339 1.66675 14.4686 1.93923C14.939 2.17892 15.3215 2.56137 15.5612 3.03177C15.8337 3.56655 15.8337 4.26662 15.8337 5.66675V9.16675M15.8337 18.3334L14.02 17.0725C13.765 16.8952 13.6376 16.8066 13.4988 16.7438C13.3757 16.688 13.2462 16.6474 13.1133 16.6229C12.9635 16.5953 12.8083 16.5953 12.4978 16.5953H11.0003C10.0669 16.5953 9.60019 16.5953 9.24368 16.4137C8.93007 16.2539 8.6751 15.9989 8.51532 15.6853C8.33366 15.3288 8.33366 14.8621 8.33366 13.9287V11.8334C8.33366 10.9 8.33366 10.4333 8.51532 10.0768C8.6751 9.76316 8.93007 9.50819 9.24368 9.3484C9.60019 9.16675 10.0669 9.16675 11.0003 9.16675H15.667C16.6004 9.16675 17.0671 9.16675 17.4236 9.3484C17.7372 9.50819 17.9922 9.76316 18.152 10.0768C18.3337 10.4333 18.3337 10.9 18.3337 11.8334V14.0953C18.3337 14.8719 18.3337 15.2602 18.2068 15.5665C18.0376 15.9748 17.7132 16.2993 17.3048 16.4685C16.9985 16.5953 16.6102 16.5953 15.8337 16.5953V18.3334Z" stroke="#475467" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="accordion-header-info">
+                    <div class="accordion-header-title">Configure Greeting Messages</div>
+                    <div class="accordion-header-des">Customize greeting messages at the beginning of the
+                        conversation.</div>
+                </div>
+            </div>
+            <div class="agent-counts">
+                <span class="accordion-badge">Enabled</span>
+            </div>
+        </div>
+    </div>
+    <div id="configGreetings" class="collapse">
+        <div class="accordion-content-body">
+            <div class="enabled-block">
+                <div class="toggle-info-data m-0">
+                    <label class="kr-sg-toggle">
+                        <input type="checkbox">
+                        <div class="slider">
+                            <span class="enabled"></span>
+                            <span class="disabled"></span>
+                        </div>
+                    </label>
+                    <div class="content-data-toggle">
+                        <h1>Enabled</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="connect-dialoge-info">
+                <div class="chat-voice-tabs-block">
+                    <div class="chat-voice-tabs">
+                        <div class="name-tab" [ngClass]="{'active-tab-name' : greetingActiveTab == 'chat'}"
+                            (click)="changeGreetingActiveTab('chat')">{{'WELCOME_EVENT_CHAT' | translate}}</div>
+                        <div class="name-tab" [ngClass]="{'active-tab-name' : greetingActiveTab == 'voice'}"
+                            (click)="changeGreetingActiveTab('voice')">{{'WELCOME_EVENT_VOICE' | translate}}</div>
+                        <div class="name-tab" [ngClass]="{'active-tab-name' : greetingActiveTab == 'email'}"
+                            (click)="changeGreetingActiveTab('email')">{{'WELCOME_EVENT_EMAIL' | translate}}</div>
+                    </div>
+                </div>
+                <div class="chat-voice-tabs-content">
+                    <div class="dialog-header">Configure Greeting Messages</div>
+                    <div class="dialog-des">Add Greeting messages for agents to use when communicating with
+                        customers through the AgentAssist widget.</div>
+                    <div class="add-message-block">
+                        <div class="add-message-dropdown">
+                            <button class="kr-sg-button-secondary-two btn_lg"><svg width="20" height="20"
+                                    viewBox="0 0 20 20" fill="none">
+                                    <path d="M10.0001 4.16675V15.8334M4.16675 10.0001H15.8334" stroke="#2970FF"
+                                        stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>Add Message</button>
+                            <div class="message-dropdown">
+                                <span (click)="openWelcomeEvent()">New Messages</span>
+                                <span (click)="openModal(contentDeleteWelcomeEvents)">Copy from Voice</span>
+                            </div>
+                        </div>
+
+                        <div class="add-message-block-right">
+                            <div class="kr-sg-dropdowns" ngbDropdown>
+                                <div class="dropdown dropdown-open">
+                                    <button class="lang-btn" ngbDropdownToggle>EN <i
+                                            class="icon-sa-arrow-down m-r-8"></i></button>
+                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                        <div class="scroll-ul">
+                                            <li ngbDropdownItem><a>EN</a></li>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="toggle-info-data m-0">
+                                <label class="kr-sg-toggle">
+                                    <input type="checkbox">
+                                    <div class="slider">
+                                        <span class="enabled"></span>
+                                        <span class="disabled"></span>
+                                    </div>
+                                </label>
+                                <div class="content-data-toggle">
+                                    <p>Display Random Message
+                                        <span tooltipClass="tooltip-global-styles" container="body" ngbTooltip=" &quot;If enabled, all the configured 
+                                        greeting messages will be enabled 
+                                        and at random three messages will 
+                                        be picked and displayed to an agents 
+                                        screen to be sent to customers.&quot;">
+                                            <i class="icon-sa-info"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="messages-rendor-table">
+                        <div class="rendor-table-data">
+                            <div class="data-cell w-65">
+                                <div class="rendor-message">
+                                    <div class="rendor-message-icon">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path
+                                                d="M13.3334 4.99992C13.7937 4.99992 14.1667 4.62682 14.1667 4.16659C14.1667 3.70635 13.7937 3.33325 13.3334 3.33325C12.8732 3.33325 12.5001 3.70635 12.5001 4.16659C12.5001 4.62682 12.8732 4.99992 13.3334 4.99992Z"
+                                                stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M13.3334 10.8333C13.7937 10.8333 14.1667 10.4602 14.1667 9.99992C14.1667 9.53968 13.7937 9.16659 13.3334 9.16659C12.8732 9.16659 12.5001 9.53968 12.5001 9.99992C12.5001 10.4602 12.8732 10.8333 13.3334 10.8333Z"
+                                                stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M13.3334 16.6666C13.7937 16.6666 14.1667 16.2935 14.1667 15.8333C14.1667 15.373 13.7937 14.9999 13.3334 14.9999C12.8732 14.9999 12.5001 15.373 12.5001 15.8333C12.5001 16.2935 12.8732 16.6666 13.3334 16.6666Z"
+                                                stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M7.50008 4.99992C7.96032 4.99992 8.33341 4.62682 8.33341 4.16659C8.33341 3.70635 7.96032 3.33325 7.50008 3.33325C7.03984 3.33325 6.66675 3.70635 6.66675 4.16659C6.66675 4.62682 7.03984 4.99992 7.50008 4.99992Z"
+                                                stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M7.50008 10.8333C7.96032 10.8333 8.33341 10.4602 8.33341 9.99992C8.33341 9.53968 7.96032 9.16659 7.50008 9.16659C7.03984 9.16659 6.66675 9.53968 6.66675 9.99992C6.66675 10.4602 7.03984 10.8333 7.50008 10.8333Z"
+                                                stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M7.50008 16.6666C7.96032 16.6666 8.33341 16.2935 8.33341 15.8333C8.33341 15.373 7.96032 14.9999 7.50008 14.9999C7.03984 14.9999 6.66675 15.373 6.66675 15.8333C6.66675 16.2935 7.03984 16.6666 7.50008 16.6666Z"
+                                                stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <span>"Hello and welcome! We're delighted to have you here. How may I assist
+                                        youtoday?"</span>
+                                </div>
+                            </div>
+                            <div class="data-cell w-15">
+                                <div class="rendor-message-action">
+                                    <span><i class="icon-sa-welcome-edit"></i></span>
+                                    <span><i class="icon-sa-delete"></i></span>
+                                </div>
+                            </div>
+                            <div class="data-cell w-20">
+                                <div class="toggle-info-data m-0">
+                                    <label class="kr-sg-toggle">
+                                        <input type="checkbox">
+                                        <div class="slider">
+                                            <span class="enabled"></span>
+                                            <span class="disabled"></span>
+                                        </div>
+                                    </label>
+                                    <div class="content-data-toggle">
+                                        <h1>Enabled</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="disable-state-error">
+                    <div class="disable-state-error-icon">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                          <path d="M8.1827 13.8889H11.8172M9.99996 3V3.77778M14.9497 5.05025L14.3997 5.60022M17 9.99996H16.2222M3.77778 9.99996H3M5.60018 5.60022L5.05021 5.05025M7.2501 12.7499C5.73139 11.2312 5.73139 8.76886 7.2501 7.25016C8.7688 5.73145 11.2311 5.73145 12.7498 7.25016C14.2685 8.76886 14.2685 11.2312 12.7498 12.7499L12.3243 13.1754C11.8321 13.6676 11.5555 14.3353 11.5555 15.0314V15.4444C11.5555 16.3036 10.8591 17 9.99996 17C9.14085 17 8.4444 16.3036 8.4444 15.4444V15.0314C8.4444 14.3353 8.16786 13.6676 7.67562 13.1754L7.2501 12.7499Z" stroke="#DC6803" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <div class="disable-state-error-info">
+                       <h4>Warning</h4>
+                       <p>Only 3 Welcome message can be turned on,</p>
+                    </div>
+                    <div class="disable-state-error-close">
+                         <svg  width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M15 5L5 15M5 5L15 15" stroke="#F79009" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                    </div>
+                 </div>
+            </div>
+            <div class="accordion-footer">
+                <button class="kr-sg-button-secondary btn_lg">{{'BUTTONS.CANCEL' | translate}}</button>
+                <button class="kr-sg-button-primary btn_lg">{{'BUTTONS.SAVE' | translate}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--(click)="openWelcomeEvent()"-->
+<app-slider-component id="newWelcome" #newWelcomeEvent='app-slider'>
+    <div class="new-message-wrapper">
+        <div class="header-sec row m-0">
+            <div class="lef-sec col-9 p-0">         
+                <div class="main-title text-truncate">New Welcome Message</div>
+            </div>
+            <div class="close-link col-3 p-0"><img src="assets/images/close.svg" (click)=" closeWelcomeEvent() "></div>
+        </div>
+        <div class="body-sec">
+            <div class="kr-sg-input-text-area">
+                <div class="label-text">Message</div>
+                <textarea placeholder="Hello Customer Name, thank you for calling how can i help." class="input-text"></textarea>                               
+            </div>
+            <div class="new-message-error">
+                <span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10.875 3.875C10.875 3.39175 10.4832 3 10 3C9.51675 3 9.125 3.39175 9.125 3.875V4.75C9.125 5.23325 9.51675 5.625 10 5.625C10.4832 5.625 10.875 5.23325 10.875 4.75V3.875Z" fill="#D97706"/>
+                        <path d="M14.9497 6.28764C15.2914 5.94593 15.2914 5.39192 14.9497 5.05021C14.608 4.7085 14.054 4.7085 13.7123 5.05021L13.0936 5.66893C12.7518 6.01063 12.7518 6.56465 13.0936 6.90636C13.4353 7.24807 13.9893 7.24807 14.331 6.90636L14.9497 6.28764Z" fill="#D97706"/>
+                        <path d="M17 10C17 10.4832 16.6082 10.875 16.125 10.875H15.25C14.7668 10.875 14.375 10.4832 14.375 10C14.375 9.51675 14.7668 9.125 15.25 9.125H16.125C16.6082 9.125 17 9.51675 17 10Z" fill="#D97706"/>
+                        <path d="M5.66892 6.90638C6.01062 7.24809 6.56464 7.24809 6.90635 6.90638C7.24806 6.56467 7.24806 6.01065 6.90635 5.66894L6.28763 5.05022C5.94592 4.70851 5.39191 4.70851 5.0502 5.05022C4.70849 5.39193 4.70849 5.94595 5.0502 6.28766L5.66892 6.90638Z" fill="#D97706"/>
+                        <path d="M5.625 10C5.625 10.4832 5.23325 10.875 4.75 10.875H3.875C3.39175 10.875 3 10.4832 3 10C3 9.51675 3.39175 9.125 3.875 9.125H4.75C5.23325 9.125 5.625 9.51675 5.625 10Z" fill="#D97706"/>
+                        <path d="M8.25 15.25V14.375H11.75V15.25C11.75 16.2165 10.9665 17 10 17C9.0335 17 8.25 16.2165 8.25 15.25Z" fill="#D97706"/>
+                        <path d="M11.7508 13.5C11.7636 13.2022 11.9316 12.9345 12.1672 12.7485C12.979 12.1075 13.5 11.1146 13.5 10C13.5 8.067 11.933 6.5 10 6.5C8.067 6.5 6.5 8.067 6.5 10C6.5 11.1146 7.02102 12.1075 7.83279 12.7485C8.06836 12.9345 8.23645 13.2022 8.24922 13.5H11.7508Z" fill="#D97706"/>
+                      </svg>
+                </span>
+               <div class="message-error-text">
+                  <p class="m-0">Pro Tip: When ever you want to insert customer name inside greeting messages please use <span class="customer-name">Customer.Name</span> Example: 'Hello <span class="customer-name">Customer.Name</span>.</p>
+                  <p class="m-0">If customer name is not passed dynamically in run-time, <span class="customer-name">Customer.Name</span> will be removed from greeting.</p>
+               </div>
+               <span class="close-error">
+                  <svg  width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M5 15L15 5M5 5L15 15" stroke="#F59E0B" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+               </span>
+            </div>
+        </div>
+        <div class="footer-sec">
+            <button class="kr-sg-button-secondary btn_lg">Cancel</button>
+            <button class="kr-sg-button-primary btn_lg">Add</button>
+        </div>
+    </div>
+</app-slider-component>
+
+
+<ng-template #contentDeleteWelcomeEvents let-modal>
+	<div class="confirm-copy-wrapper">
+        <div class="icon-copy">
+            <i class="icon-sa-copy"></i>
+        </div>
+        <div class="confirm-copy-body">
+            <div class="t-heading"><h3>Copy Messages from voice</h3> <i class="icon-sa-close" (click)="modal.dismiss()"></i></div>
+            <div class="d-desc">Are you sure you want copy welcome message from voice</div>
+            <div class="confirm-copy-actions">
+                <button class="kr-sg-button-secondary btn_lg">Cancel</button>
+                <button class="kr-sg-button-primary btn_lg">Confirm</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
