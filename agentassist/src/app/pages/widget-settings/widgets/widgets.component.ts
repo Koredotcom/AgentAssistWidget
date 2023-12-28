@@ -100,7 +100,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         isProactiveEnabled: [isUpdate ? obj.isProactiveEnabled : false],
         isAgentCoachingEnabled: [isUpdate ? obj.isAgentCoachingEnabled : false],
         isAgentResponseEnabled: [isUpdate ? obj.isAgentResponseEnabled : true],
-        issummarizationEnabled: [isUpdate ? obj.issummarizationEnabled : false],
+        summarization: this.fb.group({
+          isEnabled : [isUpdate ? obj.summarization.isEnabled : false],
+          canSubmit : [isUpdate ? obj.summarization.canSubmit : false]
+        }),
         isAgentPlaybookEnabled: [isUpdate ? obj.isAgentPlaybookEnabled : false],
         isWidgetLandingEnabled: this.fb.group({
           isEnabled: [isUpdate ? obj.isWidgetLandingEnabled.isEnabled : false],
@@ -113,7 +116,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
             tab: [isUpdate ? obj.isWidgetLandingEnabled?.voice?.tab : 'transcript']
           })
         }),
-        isbotEventsEnabled: [isUpdate ? obj.isbotEventsEnabled : false],
+        botEvents: this.fb.group({
+          fallback: this.fb.group({
+              isEnabled: [isUpdate ? obj.botEvents?.fallback?.isEnabled : false],
+          })
+        }),
         isCustomisedLogoEnabled: this.fb.group({
           isEnabled: [isUpdate ? obj.isCustomisedLogoEnabled?.isEnabled : false],
           fileId: [isUpdate ? obj.isCustomisedLogoEnabled?.fileId : ''],

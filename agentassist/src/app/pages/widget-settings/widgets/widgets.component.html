@@ -90,9 +90,9 @@
                                 <p>Controls the accessibility of send button for AgentAssist Responses.</p>
                             </div>
                         </div>
-                        <div class="toggle-info-data m-0">
+                        <div class="toggle-info-data m-0" formGroupName="summarization">
                             <label class="kr-sg-toggle">
-                                <input type="checkbox" formControlName="issummarizationEnabled">
+                                <input type="checkbox" formControlName="isEnabled">
                                 <div class="slider">
                                     <span class="enabled"></span>
                                     <span class="disabled"></span>
@@ -101,6 +101,14 @@
                             <div class="content-data-toggle">
                                 <h1>Auto Summarization</h1>
                                 <p>Triggers the Automatic Summarization at the end of conversation.</p>
+                                <div class="summary-tab-info"  *ngIf="agentAssistFormGroup?.value?.agentAssistSettings?.summarization?.isEnabled">
+                                    <div class="info-dropdowns">
+                                        <div class="kr-sg-checkbox">
+                                            <input id="canSub-12" class="checkbox-custom" type="checkbox" formControlName="canSubmit">
+                                            <label for="canSub-12" class="checkbox-custom-label">Enable submit button</label>
+                                        </div>
+                                    </div>
+                                </div> 
                             </div>
                         </div>
                         <div class="toggle-info-data m-0">
@@ -113,7 +121,7 @@
                             </label>
                             <div class="content-data-toggle">
                                 <h1>Agent Playbook</h1>
-                                <p>Configure guided checklist / Playbook features. </p>
+                                <p>Configure guided checklist / Playbook features. </p>   
                             </div>
                         </div>
                         <div class="widget-landing" formGroupName="isWidgetLandingEnabled">
@@ -177,9 +185,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="toggle-info-data m-0">
-                            <label class="kr-sg-toggle">
-                                <input type="checkbox" formControlName="isbotEventsEnabled">
+                        <div class="toggle-info-data m-0" formGroupName="botEvents">
+                            <label class="kr-sg-toggle" formGroupName="fallback">
+                                <input type="checkbox" formControlName="isEnabled">
                                 <div class="slider">
                                     <span class="enabled"></span>
                                     <span class="disabled"></span>
