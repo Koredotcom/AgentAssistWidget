@@ -229,13 +229,46 @@
 
 
 <ng-template #contentDeleteWelcomeEvents let-modal>
-	<div class="confirm-copy-wrapper">
-        <div class="icon-copy">
-            <i class="icon-sa-copy"></i>
-        </div>
-        <div class="confirm-copy-body">
-            <div class="t-heading"><h3>Copy Messages from voice</h3> <i class="icon-sa-close" (click)="modal.dismiss()"></i></div>
+    <div class="confirm-copy-wrapper">
+        <div class="confirm-header">
+            <div class="t-heading">
+                <h3>Copy Messages from voice</h3> <i class="icon-sa-close" (click)="modal.dismiss()"></i>
+            </div>
             <div class="d-desc">Are you sure you want copy welcome message from voice</div>
+        </div>
+        <div class="confirm-body">
+            <div class="message-checkbox-header">
+                <div class="kr-sg-checkbox m-0">
+                    <input id="welcome_message" class="checkbox-custom" type="checkbox">
+                    <label for="welcome_message" class="checkbox-custom-label">
+                        <div class="message-checkbox-label">
+                            Welcome Messages
+                            <span class="message-checkbox-badge">6 messages</span>
+                        </div>
+                    </label>
+                </div>   
+            </div>
+            <div class="message-checkbox-body">
+                <div class="kr-sg-checkbox m-0">
+                    <input id="welcome_message" class="checkbox-custom" type="checkbox">
+                    <label for="welcome_message" class="checkbox-custom-label">
+                            <p class="checkbox-label-des"> "Hello and welcome! We're delighted to have you here. How may I assist youtoday?"</p>
+                     
+                    </label>
+                </div>   
+            </div>
+            <div class="message-checkbox-body">
+                <div class="kr-sg-checkbox m-0">
+                    <input id="welcome_message" class="checkbox-custom" type="checkbox">
+                    <label for="welcome_message" class="checkbox-custom-label">
+                            <p class="checkbox-label-des">"Good [morning/afternoon/evening]! Thank you for choosing our services. We're ready to make your experience exceptional. How can I help you?"</p>
+                        
+                    </label>
+                </div>   
+            </div>
+        </div>
+        <div class="confirm-footer">
+            <span class="confirm-footer-badge">6 Selected</span>
             <div class="confirm-copy-actions">
                 <button class="kr-sg-button-secondary btn_lg">Cancel</button>
                 <button class="kr-sg-button-primary btn_lg">Confirm</button>

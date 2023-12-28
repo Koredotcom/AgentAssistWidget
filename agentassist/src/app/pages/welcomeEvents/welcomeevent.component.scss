@@ -382,19 +382,7 @@
     }
 }
 
-//Modal styles
-::ng-deep {
-    .confirm-copy {
-        width: 540px;
-        max-width: 540px !important;
-        .modal-content{
-            padding: 24px;
-            border-radius: 12px;
-            background: var(--Base-White, #FFF);
-            box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08);
-        }
-    }
-}
+
 
 //Accordion styles
 .welcome-event-accordion {
