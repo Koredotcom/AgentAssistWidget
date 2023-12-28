@@ -251,13 +251,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="progress" *ngIf="progress">
-                                <div class="progress-bar" [style.width]="progress + '%'">{{progress}}%</div>
-                            </div>
-                            <div *ngIf="this.agentAssistSettings.isCustomisedLogoEnabled.fileName !== ''">
-                                {{ fileList | json }}
-                                <img [src]="this.agentAssistSettings.isCustomisedLogoEnabled.fileName !== '' ? 'this.agentAssistSettings.isCustomisedLogoEnabled.fileName' : ''" alt="" style="height: 100%; width: 40%;">
-                            </div> -->
                         </div>
                    </div>
                    <!--AgentAssist Widget Disabled-->
@@ -273,8 +266,8 @@
                       </div>
                    </div>
                    <div class="widgetenable-footer">
-                    <button class="kr-sg-button-secondary-two btn_lg" [disabled]="!this.agentAssistFormGroup.dirty" (click)="cancleAgentAssistSettingsNew('widget')">{{'BUTTONS.CANCEL' | translate}}</button>
-                    <button class="kr-sg-button-primary btn_lg" [disabled]="!this.agentAssistFormGroup.dirty" (click)="saveAgentAssistSettingsNew('widget')">{{'BUTTONS.SAVE' | translate}}</button>
+                    <button class="kr-sg-button-secondary-two btn_lg" [disabled]="!agentAssistFormGroup.dirty" (click)="cancleAgentAssistSettingsNew('widget', clonedWidgetSettings?.agentAssistSettings)">{{'BUTTONS.CANCEL' | translate}}</button>
+                    <button class="kr-sg-button-primary btn_lg" [disabled]="!agentAssistFormGroup.dirty" (click)="saveAgentAssistSettingsNew('widget')">{{'BUTTONS.SAVE' | translate}}</button>
                    </div>
                </div>
             </div>
@@ -328,15 +321,7 @@
                                     <input id="res-{{i}}" class="radio-custom" type="radio" [value]="result.type" name="criteria" formControlName="criteria" (change)="getSelectedSearchResult($event, result)">
                                     <label for="res-{{i}}" class="radio-custom-label">{{result.text}} 
                                         <span class="info-tip" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip={{result.tooltip}}><i class="icon-sa-info"></i></span> </label>
-                                </div>  
-                                <!-- <div class="kr-sg-radiobutton p-0">
-                                    <input id="radio-1" name="radio" class="radio-custom" type="radio">
-                                    <label for="radio-1" class="radio-custom-label">Show with XO results <i class="icon-sa-info"></i></label>
-                                </div> 
-                                <div class="kr-sg-radiobutton p-0">
-                                    <input id="radio-1" name="radio" class="radio-custom" type="radio">
-                                    <label for="radio-1" class="radio-custom-label">Show as a Fallback event <i class="icon-sa-info"></i></label>
-                                </div>   -->
+                                </div>
                             </div>
                         </div>
                         <div class="search-results-block">
@@ -346,11 +331,7 @@
                                 <div class="kr-sg-radiobutton p-0" *ngFor="let auto of AutoSuggestions; let idx = index">
                                     <input id="autosugg-{{idx}}" class="radio-custom" type="radio" [value]="auto.type" name="suggestVal" formControlName="suggestVal" (change)="selectedSuggestionType($event, auto)">
                                     <label for="autosugg-{{idx}}" class="radio-custom-label">{{auto.type}}</label>
-                                </div>  
-                                <!-- <div class="kr-sg-radiobutton p-0">
-                                    <input id="radio-1" name="radio" class="radio-custom" type="radio">
-                                    <label for="radio-1" class="radio-custom-label">Off</label>
-                                </div>  -->
+                                </div>
                             </div>
                         </div> 
                         <div class="search-results-block" formGroupName="integrations">
@@ -358,24 +339,17 @@
                             <div class="search-results-des">Optimize your search experience with our Advanced Knowledge AI API Configuration.</div>
                             <div class="api-intigration-block">
                                 <div class="kr-sg-radiobutton" *ngFor="let integrate of integration; let idxVal = index">
-                                    <input id="val-{{idxVal}}" class="radio-custom" type="radio" [value]="integrate.type" name="type" formControlName="type" (click)="selectedIntegrationType($event, integrate)">
+                                    <input id="val-{{idxVal}}" class="radio-custom" type="radio" [value]="integrate.type" name="type" formControlName="type" (change)="selectedIntegrationType($event, integrate)">
                                     <label for="val-{{idxVal}}" class="radio-custom-label">
                                         <div class="mode-title">{{integrate.type}}</div>
                                         <div class="mode-des"> {{integrate.desc}} </div>
                                     </label>
                                 </div>
-                                <!-- <div class="kr-sg-radiobutton" (click)="apiAdvancedMode()">
-                                    <input id="advance" class="radio-custom" type="radio" value="advance" formControlName="type">
-                                    <label for="advance" class="radio-custom-label">
-                                        <div class="mode-title">Advance Mode</div>
-                                        <div class="mode-des">Configure how you want to use Knowledge AI </div>
-                                    </label>
-                                </div> -->
                             </div>
                         </div> 
                    </div>
                    <!--AgentAssist Widget Disabled-->
-                   <div class="disable-state-error" *ngIf="!knowledgeAIFormGroup.value.isSearchAssistEnabled">
+                   <div class="disable-state-error" *ngIf="!knowledgeAIFormGroup?.value?.isSearchAssistEnabled">
                       <div class="disable-state-error-icon">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M8.1827 13.8889H11.8172M9.99996 3V3.77778M14.9497 5.05025L14.3997 5.60022M17 9.99996H16.2222M3.77778 9.99996H3M5.60018 5.60022L5.05021 5.05025M7.2501 12.7499C5.73139 11.2312 5.73139 8.76886 7.2501 7.25016C8.7688 5.73145 11.2311 5.73145 12.7498 7.25016C14.2685 8.76886 14.2685 11.2312 12.7498 12.7499L12.3243 13.1754C11.8321 13.6676 11.5555 14.3353 11.5555 15.0314V15.4444C11.5555 16.3036 10.8591 17 9.99996 17C9.14085 17 8.4444 16.3036 8.4444 15.4444V15.0314C8.4444 14.3353 8.16786 13.6676 7.67562 13.1754L7.2501 12.7499Z" stroke="#DC6803" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
@@ -387,17 +361,18 @@
                       </div>
                    </div>
                    <div class="widgetenable-footer">
-                    <button class="kr-sg-button-secondary-two btn_lg" [disabled]="!this.knowledgeAIFormGroup.dirty" (click)="cancleAgentAssistSettingsNew('search')">{{'BUTTONS.CANCEL' | translate}}</button>
-                    <button class="kr-sg-button-primary btn_lg" [disabled]="!this.knowledgeAIFormGroup.dirty || (knowledgeAIFormGroup.value.searchAssistConfig.integrations.type === 'advanced'&& knowledgeAIFormGroup.value.searchAssistConfig.integrations.config.script.length === 0)" (click)="saveAgentAssistSettingsNew('search')">{{'BUTTONS.SAVE' | translate}}</button>
+                    <button class="kr-sg-button-secondary-two btn_lg" (click)="cancleAgentAssistSettingsNew('search', clonedWidgetSettings?.agentAssistSettings)">{{'BUTTONS.CANCEL' | translate}}</button>
+                    <button class="kr-sg-button-primary btn_lg" [disabled]="!knowledgeAIFormGroup.valid " (click)="saveAgentAssistSettingsNew('search')">Save</button>
                    </div>
                </div>
             </div>
         </div>
     </div>
-    <div class="error-toast" *ngIf="knowledgeAIFormGroup.value.searchAssistConfig.integrations.type === 'advanced' && knowledgeAIFormGroup.value.searchAssistConfig.integrations.config.script.length == 0">
+    <!-- <div class="error-toast" *ngIf="knowledgeAIFormGroup?.value?.searchAssistConfig?.integrations?.type === 'advanced' && knowledgeAIFormGroup?.value?.searchAssistConfig?.integrations?.config?.script.length == 0"> -->
+    <div class="error-toast" *ngIf="!isApiConfigured">
         <div class="error-toast-header">
             <i class="icon-sa-warning"></i>
-            <span><i class="icon-sa-close"></i></span>
+            <!-- <span><i class="icon-sa-close" (click)=""></i></span> -->
         </div>
         <div class="error-toast-body">Please add your API Configuration script in order to use Advance Mode</div>
         <div class="error-toast-footer">

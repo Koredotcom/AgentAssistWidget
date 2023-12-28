@@ -45,8 +45,7 @@ export class ApiAdvancedModelComponent implements OnInit {
     try {
       let script;
         script = JSON.parse(this.apiScript)
-        console.log(typeof this.apiScript, typeof script);
-        if(!(Array.isArray(JSON.parse(this.apiScript))) && typeof script === 'object') {
+        if(typeof script === 'object') {
          script = this.apiScript;
          this.emitScriptService.next(script);
          this.activeModal.close(script);
@@ -56,7 +55,6 @@ export class ApiAdvancedModelComponent implements OnInit {
      
     } catch (err) {
       this.notificationService.showError(err, 'Please provide a valid JSON format.');
-      console.log(err);
     }
   } 
     
