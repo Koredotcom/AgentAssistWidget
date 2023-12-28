@@ -176,6 +176,14 @@
             }
         }
         .chat-voice-tabs-content {
+            .select-dialoge-info{
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+                .select-dialoge-block{
+                    width: 48%;
+                }
+            }
             .dialog-header {
                 color: var(--Gray-700, var(--Primary-Colors-Gray-700, #344054));
                 font-size: 14px;
@@ -190,7 +198,6 @@
             }
             .dialoge-dropdpwn {
                 margin: 4px 0px 8px 0px;
-                width: 40%;
                 .content-menu {
                     .scroll-ul {
                         max-height: 200px;

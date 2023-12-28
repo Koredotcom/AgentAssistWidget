@@ -55,9 +55,49 @@
                     </div>
                 </div>
                 <div class="chat-voice-tabs-content">
-                    <div class="dialog-des">{{(currentBt?.type == universalBot) ? ('WELCOME_EVENT_UB_DIALOG_DESC' | translate) : ('WELCOME_EVENT_DIALOG_DESC' | translate)}}</div>
+                    <div class="select-dialoge-info">
+                        <div class="select-dialoge-block">
+                            <div class="dialog-header">Select Dialoge</div>
+                            <div class="dialog-des">{{(currentBt?.type == universalBot) ? ('WELCOME_EVENT_UB_DIALOG_DESC' | translate) : ('WELCOME_EVENT_DIALOG_DESC' | translate)}}</div>
+                            <div class="dialoge-dropdpwn"  *ngIf="currentBt?.type == universalBot">
+                                <div class="label-text">Select Bot</div>
+                                <div class="kr-sg-dropdowns" ngbDropdown>
+                                    <div class="dropdown dropdown-open">
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedBot?.botName ? selectedBot?.botName : 'Select bot'}}</button>
+                                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                            <perfect-scrollbar>
+                                                <div class="scroll-ul">
+                                                    <li ngbDropdownItem (click)="changeBot(bot)" *ngFor="let bot of linkedBots"><a>{{bot.botName}}</a></li>
+                                                </div>
+                                            </perfect-scrollbar>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="select-dialoge-block">
+                            <div class="dialog-header">Select Dialoge</div>
+                            <div class="dialog-des">{{(currentBt?.type == universalBot) ? ('WELCOME_EVENT_UB_DIALOG_DESC' | translate) : ('WELCOME_EVENT_DIALOG_DESC' | translate)}}</div>
+                            <div class="dialoge-dropdpwn" >
+                                <div class="label-text">Automation</div>
+                                <div class="kr-sg-dropdowns" ngbDropdown>
+                                    <div class="dropdown dropdown-open">
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle [disabled]="currentBt.type == universalBot && !selectedBot?.botName">{{selectedUseCase?.usecaseName ? selectedUseCase?.usecaseName : 'Select Use Cases'}}</button>
+                                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                            <perfect-scrollbar>
+                                                <div class="scroll-ul">
+                                                    <li ngbDropdownItem (click)="changeUseCase(conv)" *ngFor="let conv of conversations"><a>{{conv.usecaseName}}</a></li>
+                                                </div>
+                                            </perfect-scrollbar>
+                                        </ul>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                   
 
-                    <div class="d-flex">
+                    <!-- <div class="d-flex">
                         <div class="col-6" *ngIf="currentBt?.type == universalBot">
                             <div class="label-text">Select Bot</div>
                             <div class="kr-sg-dropdowns" ngbDropdown>
@@ -88,7 +128,7 @@
                                 </div>
                             </div> 
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- <div class="dialog-header">{{'WELCOME_EVENT_SELECTDIALOG' | translate}}</div>
                     <div class="kr-sg-dropdowns dialoge-dropdpwn" ngbDropdown>
