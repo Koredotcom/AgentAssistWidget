@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -20,15 +20,7 @@ export class WelcomeeventComponent implements OnInit {
 
   welcomeTask : string = 'WELCOME_TASK';
   welcomeMsg : string = 'WELCOME_MSG';
-  chatTab : string = 'chat';
-  voiceTab : string = 'voice';
-  emailTab : string ='email';
-  save : string = 'save';
-  cancel : string = 'cancel';
   universalBot : string = 'universalbot'
-
-  activeTab : string = 'WELCOME_TASK';
-  taskActive : string = 'chat';
 
   subs = new SubSink();
 
@@ -36,15 +28,19 @@ export class WelcomeeventComponent implements OnInit {
   formDirty : boolean = false;
 
   //welcomeTaskData
-  conversations: any[] = [];
-  automationBots : any[] = [];
+  
   linkedBots : any[] = [];
-  welcomeTaskData : any = {};
-  selectedUseCase : any = null;
-  selectedBot : any = null;
-  taskEnable : boolean;
+  welcomeTaskData : any;
+  welcomeTaskPreviousData : any;
   showSpinner : boolean = false;
   currentBt : any;
+
+  
+  greetingForm : FormGroup;
+
+  
+  greetingActiveTab : string = 'chat';
+
 
 
   @ViewChild('newWelcomeEvent', { static: true }) newWelcomeEvent: SliderComponentComponent;
@@ -67,19 +63,9 @@ export class WelcomeeventComponent implements OnInit {
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
+  
 
   subscribeEvents(){
-    // this.subs.sink = this.authService.deflectApps.subscribe( (res : any) => {
-    //   if(res){
-    //     this.automationBots = Object.assign([], res);
-    //     if(this.currentBt.type == this.universalBot){
-    //       let linkedBotIds = [];
-    //       let config_publish_bot_array = [...this.currentBt?.configuredBots, ...this.currentBt.publishedBots];
-    //       linkedBotIds = config_publish_bot_array.map(a => a._id);          
-    //       this.linkedBots = res.filter(element => linkedBotIds.includes(element._id));          
-    //     }
-    //   }
-    // });
     this.subs.sink = this.workflowService.updateBotDetails$.subscribe((bot)=>{
       if(bot){
         this.updateDetailsOnBotUpdation(bot);
@@ -118,184 +104,40 @@ export class WelcomeeventComponent implements OnInit {
     }
     this.showSpinner = true;
     this.service.invoke('get.welcomeevent', params).subscribe(data => {
+      data = this.getMockData();
       this.showSpinner = false;
-      if (data) {
-       this.welcomeTaskData = Object.assign({}, data);
-       this.updateUseCaseData();
+      if(data){
+        this.welcomeTaskData = this.formatWelcomeTaskData(data);
+
+        console.log(this.welcomeTaskData, "welcome task data");        
+       
       }
     },error => {
       this.showSpinner = false;
     });
   }
-  getUseCaseData(botId, update = true) { 
-    const params : any = {
-      streamId: botId,
-      search: '',
-      filterby: '',
-      status: '',
-      usecaseType: 'dialog',
-      offset: 0,
-      parentBotId : (this.currentBt.type == this.universalBot) ? this.currentBt._id : null
-    }
-    this.showSpinner = true;
-    this.subs.sink = this.service.invoke('get.LinkedBotUsecase', params, {})
-      .subscribe((res) => {
-        this.showSpinner = false;
-        this.conversations = res.usecases;
-        if(update){
-          this.updateTaskDetails(this.welcomeTaskData)
-        }
-      }, err => {
-        this.showSpinner = false;
-        this.conversations  = [];
-      });
+
+
+ 
+  formatWelcomeTaskData(data){
+    data.events?.forEach(obj => {
+      data[obj.name] = Object.assign({}, obj);
+    });
+    this.welcomeTaskPreviousData = JSON.parse(JSON.stringify(data));
+    console.log(data, 'data *********'); 
+    return data;
   }
 
-  // updating the welcome task and use case data after api call
-  updateUseCaseData(){
-    let botId = this.currentBt._id;
-    if(this.currentBt.type == this.universalBot && this.welcomeTaskData?.events[0]?.[this.taskActive]?.linkedBotId){
-      this.getUseCaseData(this.welcomeTaskData.events[0][this.taskActive].linkedBotId);
-    }else if(this.currentBt.type == this.universalBot && !this.welcomeTaskData?.events[0]?.[this.taskActive]?.linkedBotId){
-      this.updateTaskDetails(this.welcomeTaskData);
-    }else if(this.currentBt.type != this.universalBot){
-      this.getUseCaseData(botId);
-    }
-  }
-  updateWelcomeTaskData(data){
-    this.welcomeTaskData = data;
-    this.updateTaskDetails(data);
-  }
 
-  // updating ngmodels in UI based on data from backend.
-  updateTaskDetails(data, tabChange=false){
-    let welcomeTaskData = Object.assign({}, data);
-    this.taskEnable = welcomeTaskData && welcomeTaskData.events && welcomeTaskData.events[0] && welcomeTaskData.events[0][this.taskActive]?.enabled ? true : false;
-    this.selectedBot = this.taskEnable ? this.filterBotfromAutomationBotList(welcomeTaskData.events[0][this.taskActive].linkedBotId) : null;
-    if(this.currentBt.type == this.universalBot && tabChange && this.selectedBot?._id){
-      this.getUseCaseData(this.selectedBot._id);
-    }
-    this.selectedUseCase = this.taskEnable ? this.filterUseCaseFromUseCaseList(welcomeTaskData.events[0][this.taskActive].taskRefId) : null;
-  }
-
-  //automation bot list and usecase list filter based on selection
-  filterBotfromAutomationBotList(linkBotId){
-    let filteredArray = this.linkedBots.filter(obj => obj._id == linkBotId);
-    if((this.currentBt.type == this.universalBot)){
-      if(Object.keys(filteredArray).length > 0){
-        return filteredArray[0];
-      }
-    }
-    return null;
-  }
-  filterUseCaseFromUseCaseList(trid){
-    let filteredArray = this.conversations.filter(obj => obj.taskRefId == trid);    
-    if(this.currentBt.type != this.universalBot || (this.currentBt.type == this.universalBot && this.selectedBot && this.selectedBot.botName)){
-      if(Object.keys(filteredArray).length > 0){
-        return filteredArray[0];
-      }
-    }
-    return null;
-  }
-
-  // save and cancel click events
-  updateDetails(type){
-    this.showSpinner = true;
-    if(type == this.save){
-      let payLoad = this.prepareTaskPayLoad(this.taskEnable);
-      // this.updateWelcomeTaskData(payLoad);
-      this.service.invoke('post.welcomeevent', { streamId: this.streamId }, payLoad).subscribe((data) => {
-        this.showSpinner = false;
-        if(data){
-           this.updateWelcomeTaskData(data);
-           this.notificationService.notify(this.translate.instant("WELCOMEEVENT.SAVE_SUCCESS"), 'success');
-        }else{
-          this.notificationService.showError(this.translate.instant("WELCOMEEVENT.SAVE_FALIED"));
-        }
-      },error => {
-        this.notificationService.showError(this.translate.instant("WELCOMEEVENT.SAVE_FALIED"));
-        this.showSpinner = false;
-      });      
-    }else if(type == this.cancel){
-      this.updateUseCaseData();
-      this.showSpinner = false;
-    }
-  }
-  prepareTaskPayLoad(taskEnable){
-    let payLoad : any = {
-      "events" : [
-        {
-          "name": "AA_ON_CONNECT_EVENT",
-          "chat" : this.welcomeTaskData && this.welcomeTaskData.events && this.welcomeTaskData.events[0] && this.welcomeTaskData.events[0].chat ? this.welcomeTaskData.events[0].chat : {enabled : false},
-          "voice": this.welcomeTaskData && this.welcomeTaskData.events && this.welcomeTaskData.events[0] && this.welcomeTaskData.events[0].voice ? this.welcomeTaskData.events[0].voice : {enabled : false}
-        }
-      ]
-    }
-    if(!taskEnable){
-      payLoad.events[0][this.taskActive] = this.welcomeTaskData && this.welcomeTaskData.events && this.welcomeTaskData.events[0] && this.welcomeTaskData.events[0][this.taskActive] ?
-      this.welcomeTaskData.events[0][this.taskActive] : payLoad.events[0][this.taskActive];
-      payLoad.events[0][this.taskActive].enabled = false;
-    }else{
-      let innerObject : any = {
-        enabled : true,
-        usecaseId : this.selectedUseCase && this.selectedUseCase.usecaseId ? this.selectedUseCase.usecaseId  : '',
-        refId : this.selectedUseCase.refId,
-        dialogId : this.selectedUseCase.dialogId,
-        taskRefId : this.selectedUseCase.taskRefId,
-        linkedBotId : this.selectedBot && this.selectedBot._id ? this.selectedBot._id : ''
-      }
-      payLoad.events[0][this.taskActive] = Object.assign({}, innerObject);
-    }
-    return payLoad;
-  }
-
-  // dropdown on change activities
-  changeUseCase(conv){
-    this.selectedUseCase = Object.assign({}, conv);
-    this.cdRef.detectChanges();
-  }
-  changeBot(bot){
-    this.selectedUseCase = null;
-    this.selectedBot = bot;
-    this.getUseCaseData(bot._id, false);
-    this.cdRef.detectChanges();
-  }
-
-  // save and cancel button disable condition
-  checkFieldChange(){
-    if(this.welcomeTaskData && this.welcomeTaskData.events && this.welcomeTaskData.events[0] && this.welcomeTaskData.events[0][this.taskActive]){
-      if(this.welcomeTaskData.events[0][this.taskActive].enabled != this.taskEnable || (this.selectedUseCase && this.welcomeTaskData.events[0][this.taskActive].taskRefId != this.selectedUseCase?.taskRefId) || (this.currentBt.type == this.universalBot && this.selectedBot && this.welcomeTaskData.events[0][this.taskActive].linkedBotId != this.selectedBot?._id)){
-        return false;
-      }
-    }else if(!this.welcomeTaskData || !this.welcomeTaskData?.events || !this.welcomeTaskData?.events[0] || !this.welcomeTaskData?.events[0]?.[this.taskActive]){
-      if(this.taskEnable){
-        return false;
-      }
-    }
-    return true;
-  }
-
- // changing tab actives
-  changeActiveTab(tab){
-    this.activeTab = tab;
-  }
-  changeTaskActive(tab){
-    this.taskActive = tab;
-    this.selectedBot = null;
-    this.selectedUseCase = null;
-    this.updateTaskDetails(this.welcomeTaskData, true);
-  }
-
-  openModal(contentDeleteWelcomeEvents){
-    this.modalService.open(contentDeleteWelcomeEvents, {backdropClass: 'adjust-zindex-above-slider', modalDialogClass:'confirm-copy', centered: true, backdrop: 'static', keyboard: false});
-
-  }
+  changeGreetingActiveTab(tab){
+    this.greetingActiveTab = tab;
+  } 
 
   // slider events
 
   deleteWelcomeEvent(contentDeleteWelcomeEvents) {
-		this.modalService.open(contentDeleteWelcomeEvents,{ centered: true, windowClass: 'delete-welcome-events-dialog', backdrop: 'static', keyboard: false });
-	}
+    this.modalService.open(contentDeleteWelcomeEvents,{ centered: true, windowClass: 'delete-welcome-events-dialog', backdrop: 'static', keyboard: false });
+  }
   
   openWelcomeEvent(){
     this.newWelcomeEventSlider.openSlider("#newWelcome", "width550");
@@ -303,6 +145,112 @@ export class WelcomeeventComponent implements OnInit {
 
   closeWelcomeEvent() {
     this.newWelcomeEventSlider.closeSlider('#newWelcome');
+  }
+
+  openModal(contentDeleteWelcomeEvents){
+    this.modalService.open(contentDeleteWelcomeEvents, {backdropClass: 'adjust-zindex-above-slider', modalDialogClass:'confirm-copy', centered: true, backdrop: 'static', keyboard: false});
+
+  }
+
+  getMockData(){
+    return {
+      "events": [
+        {
+          "name": "AA_ON_CONNECT_EVENT",
+          "enabled" : false,
+          "chat": {
+            "enabled": true,
+            "usecaseId": "sat-db9e832b-7d73-57e3-86d9-b30ec1b461ff",
+            "refId": "3b9cf1a0-ea97-52a6-ae27-238f9f63dbcd",
+            "dialogId": "dg-bc19ef5b-cfb3-5c1e-947b-64994c448bed",
+            "taskRefId": "3b9cf1a0-ea97-52a6-ae27-238f9f63dbcd",
+            "linkedBotId": "st-b245235c-5206-5053-b329-fc7ee33494d4"
+        },
+          "voice": {
+            "enabled": false
+          }
+        },
+        {
+          "name": "AA_GREETING_MESSAGES",
+          "enabled": true,
+          "config": {
+            "chat": {
+              "randomMsg": true,
+              "locale": {
+                "en": [{
+                  "message": "Hi Hello How are you",
+                  "enabled": true
+                },
+                {
+                  "message": "I hope you are good",
+                  "enabled": true
+                }
+                ],
+                "de": [{
+                  "text": "de asdQYTSDdadqwqw afdasdas",
+                  "enabled": true
+                },
+                {
+                  "text": "kjo QWEMsfcdsfsdfsdf mbgvij",
+                  "enabled": true
+                }
+                ]
+              }
+            },
+            "voice": {
+              "randomMsg": true,
+              "locale": {
+                "en": [{
+                  "message": "Hi Hello How are you",
+                  "enabled": true
+                },
+                {
+                  "message": "I hope you are good",
+                  "enabled": true
+                }
+                ],
+                "de": [{
+                  "text": "de asdQYTSDdadqwqw afdasdas",
+                  "enabled": true
+                },
+                {
+                  "text": "kjo QWEMsfcdsfsdfsdf mbgvij",
+                  "enabled": true
+                }
+                ]
+              }
+            },
+            "email": {
+              "randomMsg": true,
+              "locale": {
+                "en": [{
+                  "message": "Hi Hello How are you",
+                  "enabled": true
+                },
+                {
+                  "message": "I hope you are good",
+                  "enabled": true
+                }
+                ],
+                "de": [{
+                  "text": "de asdQYTSDdadqwqw afdasdas",
+                  "enabled": true
+                },
+                {
+                  "text": "kjo QWEMsfcdsfsdfsdf mbgvij",
+                  "enabled": true
+                }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "priority": {
+        "AA_ON_CONNECT_EVENT": false,
+        "AA_GREETING_MESSAGES": true,
+      }
+    }    
   }
 
 }

@@ -1,101 +1,14 @@
 <div class="welcome-events-wrapper">
     <div class="header-data">
         <div class="title">
-            <p>Welcome Event</p>
-            <i class="icon-sa-info" tooltipClass="tooltip-global-styles" placement="right" ngbTooltip=" &quot;Configure the welcome experience when AgentAssist Widget is launched.&quot;"></i>
+            <p>{{'WELCOME_EVENT_TITLE' | translate}}</p>
+            <i class="icon-sa-info" tooltipClass="tooltip-global-styles" placement="right" ngbTooltip="{{'WELCOME_EVENT_TOOLTIP' | translate}}"></i>
         </div>
-        <div class="desc-text">Define welcome event activities for Agents</div>
+        <div class="desc-text">{{'WELCOME_EVENT_DESC' | translate}}</div>
     </div>
     <div class="event-main-wrapper">
         <!--Configure On-Connect Dialog Task-->
-        <div id="accordion" class="welcome-event-accordion">
-            <div data-toggle="collapse" href="#configDialoge" data-parent="#accordion" class="card_link"
-                aria-expanded="false">
-                <div class="accordion-content-header">
-                    <div class="team-with-profile">
-                        <i class="icon-sa-arrow-down arrow-icon"></i>
-                        <div class="accordion-icon">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path
-                                    d="M7.82888 16.1427L8.31591 17.238C8.4607 17.5641 8.69698 17.8412 8.9961 18.0356C9.29522 18.23 9.64434 18.3335 10.0011 18.3334C10.3579 18.3335 10.707 18.23 11.0061 18.0356C11.3052 17.8412 11.5415 17.5641 11.6863 17.238L12.1733 16.1427C12.3467 15.754 12.6383 15.43 13.0067 15.2168C13.3773 15.0029 13.8061 14.9119 14.2317 14.9566L15.4233 15.0834C15.778 15.1209 16.136 15.0547 16.4539 14.8929C16.7717 14.731 17.0358 14.4803 17.2141 14.1714C17.3925 13.8626 17.4776 13.5086 17.4588 13.1525C17.4401 12.7963 17.3184 12.4532 17.1085 12.1649L16.403 11.1955C16.1517 10.8477 16.0175 10.4291 16.0196 10.0001C16.0195 9.57224 16.155 9.15537 16.4067 8.80934L17.1122 7.8399C17.3221 7.55154 17.4438 7.20847 17.4625 6.85231C17.4813 6.49615 17.3962 6.1422 17.2178 5.83341C17.0395 5.52444 16.7754 5.27382 16.4576 5.11194C16.1397 4.95005 15.7817 4.88386 15.427 4.92138L14.2354 5.04823C13.8098 5.09292 13.381 5.00185 13.0104 4.78804C12.6413 4.57363 12.3496 4.24788 12.177 3.85749L11.6863 2.76212C11.5415 2.43606 11.3052 2.15901 11.0061 1.96458C10.707 1.77015 10.3579 1.66669 10.0011 1.66675C9.64434 1.66669 9.29522 1.77015 8.9961 1.96458C8.69698 2.15901 8.4607 2.43606 8.31591 2.76212L7.82888 3.85749C7.65632 4.24788 7.3646 4.57363 6.99554 4.78804C6.62489 5.00185 6.1961 5.09292 5.77054 5.04823L4.57517 4.92138C4.22045 4.88386 3.86246 4.95005 3.5446 5.11194C3.22675 5.27382 2.96269 5.52444 2.78443 5.83341C2.60595 6.1422 2.52092 6.49615 2.53965 6.85231C2.55839 7.20847 2.68009 7.55154 2.88999 7.8399L3.59554 8.80934C3.84716 9.15537 3.98266 9.57224 3.98258 10.0001C3.98266 10.4279 3.84716 10.8448 3.59554 11.1908L2.88999 12.1603C2.68009 12.4486 2.55839 12.7917 2.53965 13.1479C2.52092 13.504 2.60595 13.858 2.78443 14.1667C2.96286 14.4756 3.22696 14.726 3.54476 14.8879C3.86257 15.0498 4.22047 15.1161 4.57517 15.0788L5.76684 14.9519C6.1924 14.9072 6.62119 14.9983 6.99184 15.2121C7.36228 15.4259 7.65535 15.7517 7.82888 16.1427Z"
-                                    stroke="#475467" stroke-width="1.2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path
-                                    d="M9.99961 12.5001C11.3803 12.5001 12.4996 11.3808 12.4996 10.0001C12.4996 8.61937 11.3803 7.50008 9.99961 7.50008C8.6189 7.50008 7.49961 8.61937 7.49961 10.0001C7.49961 11.3808 8.6189 12.5001 9.99961 12.5001Z"
-                                    stroke="#475467" stroke-width="1.2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <div class="accordion-header-info">
-                            <div class="accordion-header-title">Configure On-Connect Dialog Task</div>
-                            <div class="accordion-header-des">Select the dialog task you want to run when AgentAssist
-                                widget is launched.</div>
-                        </div>
-                    </div>
-                    <div class="agent-counts">
-                        <span class="accordion-badge">Enabled</span>
-                    </div>
-                </div>
-            </div>
-            <div id="configDialoge" class="collapse">
-                <div class="accordion-content-body">
-                    <div class="enabled-block">
-                        <div class="toggle-info-data m-0">
-                            <label class="kr-sg-toggle">
-                                <input type="checkbox">
-                                <div class="slider">
-                                    <span class="enabled"></span>
-                                    <span class="disabled"></span>
-                                </div>
-                            </label>
-                            <div class="content-data-toggle">
-                                <h1>Enabled</h1>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="connect-dialoge-info">
-                        <div class="chat-voice-tabs-block">
-                            <div class="chat-voice-tabs">
-                                <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == chatTab}"
-                                    (click)="changeTaskActive(chatTab)">Chat</div>
-                                <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == voiceTab}"
-                                    (click)="changeTaskActive(voiceTab)">Voice</div>
-                                <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == emailTab}"
-                                    (click)="changeTaskActive(emailTab)">Email</div>
-                            </div>
-                        </div>
-                        <div class="chat-voice-tabs-content">
-                            <div class="dialog-header">Select Dialog</div>
-                            <div class="dialog-des">Make a choice among the bots and select the dialogue task you are
-                                interested in</div>
-                            <div class="kr-sg-dropdowns dialoge-dropdpwn" ngbDropdown>
-                                <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Select Use
-                                        Cases</button>
-                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                                        <perfect-scrollbar>
-                                            <div class="scroll-ul">
-                                                <li ngbDropdownItem><a>Custom Data</a></li>
-                                            </div>
-                                        </perfect-scrollbar>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="kr-sg-checkbox">
-                                <input id="checkbox-1" class="checkbox-custom" type="checkbox">
-                                <label for="checkbox-1" class="checkbox-custom-label">Extract intents from On Connect
-                                    Dialog Task</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-footer">
-                        <button class="kr-sg-button-secondary btn_lg">{{'BUTTONS.CANCEL' | translate}}</button>
-                        <button class="kr-sg-button-primary btn_lg">{{'BUTTONS.SAVE' | translate}}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+       <app-on-connect-dialog [welcomeTaskData]="welcomeTaskData" [welcomeTaskPreviousData]="welcomeTaskPreviousData" [linkedBots]="linkedBots" [currentBt]="currentBt"></app-on-connect-dialog>
         <!--Configure Greeting Messages-->
         <div id="accordion" class="welcome-event-accordion">
             <div data-toggle="collapse" href="#configGreetings" data-parent="#accordion" class="card_link"
@@ -139,12 +52,12 @@
                     <div class="connect-dialoge-info">
                         <div class="chat-voice-tabs-block">
                             <div class="chat-voice-tabs">
-                                <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == chatTab}"
-                                    (click)="changeTaskActive(chatTab)">Chat</div>
-                                <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == voiceTab}"
-                                    (click)="changeTaskActive(voiceTab)">Voice</div>
-                                <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == emailTab}"
-                                    (click)="changeTaskActive(emailTab)">Email</div>
+                                <div class="name-tab" [ngClass]="{'active-tab-name' : greetingActiveTab == 'chat'}"
+                                    (click)="changeGreetingActiveTab('chat')">{{'WELCOME_EVENT_CHAT' | translate}}</div>
+                                <div class="name-tab" [ngClass]="{'active-tab-name' : greetingActiveTab == 'voice'}"
+                                    (click)="changeGreetingActiveTab('voice')">{{'WELCOME_EVENT_VOICE' | translate}}</div>
+                                <div class="name-tab" [ngClass]="{'active-tab-name' : greetingActiveTab == 'email'}"
+                                    (click)="changeGreetingActiveTab('email')">{{'WELCOME_EVENT_EMAIL' | translate}}</div>
                             </div>
                         </div>
                         <div class="chat-voice-tabs-content">
@@ -282,47 +195,7 @@
             </div>
         </div>
         <!--Priority Settings-->
-        <div id="accordion" class="welcome-event-accordion">
-        <div data-toggle="collapse" href="#prioritySettings" data-parent="#accordion" class="card_link"
-            aria-expanded="false">
-            <div class="accordion-content-header">
-                <div class="team-with-profile">
-                    <i class="icon-sa-arrow-down arrow-icon"></i>
-                    <div class="accordion-icon">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M17.5 10.0001L7.5 10.0001M17.5 5.00008L7.5 5.00008M17.5 15.0001L7.5 15.0001M4.16667 10.0001C4.16667 10.4603 3.79357 10.8334 3.33333 10.8334C2.8731 10.8334 2.5 10.4603 2.5 10.0001C2.5 9.53984 2.8731 9.16675 3.33333 9.16675C3.79357 9.16675 4.16667 9.53984 4.16667 10.0001ZM4.16667 5.00008C4.16667 5.46032 3.79357 5.83341 3.33333 5.83341C2.8731 5.83341 2.5 5.46032 2.5 5.00008C2.5 4.53984 2.8731 4.16675 3.33333 4.16675C3.79357 4.16675 4.16667 4.53984 4.16667 5.00008ZM4.16667 15.0001C4.16667 15.4603 3.79357 15.8334 3.33333 15.8334C2.8731 15.8334 2.5 15.4603 2.5 15.0001C2.5 14.5398 2.8731 14.1667 3.33333 14.1667C3.79357 14.1667 4.16667 14.5398 4.16667 15.0001Z" stroke="#475467" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <div class="accordion-header-info">
-                        <div class="accordion-header-title">Priority Settings</div>
-                        <div class="accordion-header-des">Select the priority settings of Welcome Events.</div>
-                    </div>
-                </div>
-                <div class="agent-counts">
-                    <span class="accordion-badge">On-Connect Task</span>
-                </div>
-            </div>
-        </div>
-        <div id="prioritySettings" class="collapse">
-            <div class="accordion-content-body">
-                <div class="priority-settings-wrapper">
-                    <div class="settings-des">Choose what would you will like to run first</div>
-                    <div class="kr-sg-radiobutton p-0">
-                        <input id="connect_dialoge" name="connect_dialoge" class="radio-custom" type="radio">
-                        <label for="connect_dialoge" class="radio-custom-label">On-Connect Dialog Task</label>
-                    </div> 
-                    <div class="kr-sg-radiobutton  p-0">
-                        <input id="greeting_messages" name="greeting_messages" class="radio-custom" type="radio">
-                        <label for="greeting_messages" class="radio-custom-label">Greeting Messages</label>
-                    </div> 
-                </div>
-                <div class="accordion-footer">
-                    <button class="kr-sg-button-secondary btn_lg">{{'BUTTONS.CANCEL' | translate}}</button>
-                    <button class="kr-sg-button-primary btn_lg">{{'BUTTONS.SAVE' | translate}}</button>
-                </div>
-            </div>
-        </div>
-        </div>
+        <app-priority-settings [welcomeTaskData]="welcomeTaskData" [welcomeTaskPreviousData]="welcomeTaskPreviousData"></app-priority-settings>
     </div>
 </div>
 
