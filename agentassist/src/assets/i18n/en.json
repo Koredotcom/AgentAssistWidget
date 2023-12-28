@@ -2167,13 +2167,30 @@
     "WELCOME_EVENT_ENABLED" : "Enabled",
     "WELCOME_EVENT_DISABLED" : "Disabled",
     "WELCOME_EVENT_SELECTDIALOG" : "Select Dialog",
-    "WELCOME_EVENT_UB_DIALOG_DESC" : "Make a choice among the bots and select the dialogue task you are interested in",
+    "WELCOME_EVENT_UB_DIALOG_DESC" : "Make a choice among the bots",
     "WELCOME_EVENT_DIALOG_DESC" : "select the dialogue task you are interested in",
     "WELCOME_EVENT_SELECTUSECASE" : "Select UseCases",
     "WELCOME_EVENT_EXTRACT_INTENT" : "Extract intents from On Connect Dialog Task",
     "WELCOME_EVENT_CHAT" : "Chat",
     "WELCOME_EVENT_VOICE" : "Voice",
-    "WELCOME_EVENT_EMAIL" : "Email"
+    "WELCOME_EVENT_EMAIL" : "Email",
+    "WELCOME_EVENT_GREETMSG_TITLE" : "Configure Greeting Messages",
+    "WELCOME_EVENT_GREETMSG_DESC" : "Customize greeting messages at the beginning of the conversation.",
+    "WELCOME_EVENT_ADD_GREETMSG_DESC" : "Add Greeting messages for agents to use when communicating with customers through the AgentAssist widget.",
+    "WELCOME_EVENT_ADD_MSG" : "Add Message",
+    "WELCOME_EVENT_NEW_MSG" : "New Messages",
+    "WELCOME_EVENT_COPY_FROM" : "Copy from {{x}}",
+    "WELCOME_EVENT_DISPLAY_RANDOM" : "Display Random Message",
+    "WELCOME_EVENT_WARNING" : "Warning",
+    "WELCOME_EVENT_WARNING_DESC" : "Only 3 Welcome message can be turned on",
+    "WELCOME_EVENT_ACTION" : "{{X}} Welcome Message",
+    "WELCOME_EVENT_MESSAGE" : "Message",
+    "WELCOME_EVENT_EXCEED_WARNING_DESC" : "The maximum number of welcome messages allowed for a user is 10, which includes Default Messages. To add a new message, you must delete a previous message.",
+    "WELCOME_EVENT_ADD" : "Add",
+    "WELCOME_EVENT_CANCEL" : "Cancel",
+    "WELCOME_EVENT_COPY_FROM_DESC" : "Are you sure you want copy welcome message from {{x}}",
+    "WELCOME_EVENT_GREET_MSG" : "Welcome Messages",
+    "WELCOME_EVENT_MESSAGES" : "messages"
     
     
 }

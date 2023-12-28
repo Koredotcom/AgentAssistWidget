@@ -1,4 +1,4 @@
-<div id="accordion" class="welcome-event-accordion childComp">
+<div id="accordion" class="welcome-event-accordion childComp" *ngIf="priorityForm">
             
     <div data-toggle="collapse" href="#prioritySettings" data-parent="#accordion" class="card_link"
         aria-expanded="false">
@@ -15,7 +15,7 @@
                     <div class="accordion-header-des">{{'PRIORITY_SETTINS_DESC' | translate}}</div> 
                 </div>
             </div>
-            <div class="agent-counts">
+            <div class="agent-counts" *ngIf="priorityForm?.get('AA_ON_CONNECT_EVENT')?.value || priorityForm?.get('AA_GREETING_MESSAGES')?.value">
                 <span class="accordion-badge">{{priorityForm?.get('AA_ON_CONNECT_EVENT')?.value ? ('ON_CONNECT_TASK' | translate) : (priorityForm?.get('AA_GREETING_MESSAGES')?.value ? ('GREETING_MESSAGES' | translate) : '' )}}</span>
             </div>
         </div>

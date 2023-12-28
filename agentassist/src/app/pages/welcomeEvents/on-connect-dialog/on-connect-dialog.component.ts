@@ -35,7 +35,6 @@ export class OnConnectDialogComponent implements OnInit {
 
   ngOnChanges(changes : SimpleChanges){
     if(changes?.welcomeTaskData?.currentValue && changes?.welcomeTaskPreviousData?.currentValue){
-      console.log(changes, "changes****** inside on connect");
       this.updateUseCaseData();
       this.updateOnConnectDialogForm(this.welcomeTaskData?.['AA_ON_CONNECT_EVENT']?.[this.onConnectActiveTab] || {})
     }
@@ -91,9 +90,7 @@ export class OnConnectDialogComponent implements OnInit {
   }
 
   // updating ngmodels in UI based on data from backend.
-  updateTaskDetails(data, tabChange=false){
-    console.log("inside task details", data);
-    
+  updateTaskDetails(data, tabChange=false){    
     let welcomeTaskData = Object.assign({}, data);
     // this.taskEnable = welcomeTaskData && welcomeTaskData.events && welcomeTaskData?.['AA_ON_CONNECT_EVENT'] && welcomeTaskData?.['AA_ON_CONNECT_EVENT'][this.onConnectActiveTab]?.enabled ? true : false;
     this.selectedBot = this.filterBotfromAutomationBotList(welcomeTaskData?.['AA_ON_CONNECT_EVENT'][this.onConnectActiveTab]?.linkedBotId)
@@ -141,12 +138,12 @@ export class OnConnectDialogComponent implements OnInit {
     //   payLoad['AA_ON_CONNECT_EVENT'][this.onConnectActiveTab].enabled = false;
     // }else{
       let innerObject : any = {
-        enabled : true,
-        usecaseId : this.selectedUseCase && this.selectedUseCase.usecaseId ? this.selectedUseCase.usecaseId  : '',
-        refId : this.selectedUseCase.refId,
-        dialogId : this.selectedUseCase.dialogId,
-        taskRefId : this.selectedUseCase.taskRefId,
-        linkedBotId : this.selectedBot && this.selectedBot._id ? this.selectedBot._id : ''
+        enabled : this.selectedUseCase._id ? true : false,
+        usecaseId : this.selectedUseCase && this.selectedUseCase?.usecaseId ? this.selectedUseCase.usecaseId  : '',
+        refId : this.selectedUseCase?.refId,
+        dialogId : this.selectedUseCase?.dialogId,
+        taskRefId : this.selectedUseCase?.taskRefId,
+        linkedBotId : this.selectedBot && this.selectedBot?._id ? this.selectedBot._id : ''
       }
       payLoad['AA_ON_CONNECT_EVENT'][this.onConnectActiveTab] = Object.assign({}, innerObject);
     // }
@@ -154,17 +151,20 @@ export class OnConnectDialogComponent implements OnInit {
   }
 
   // dropdown on change activities
-  changeUseCase(conv){
-    this.selectedUseCase = Object.assign({}, conv);
+  changeUseCase(conv, none = false){
+    this.selectedUseCase = none ? 'none' : Object.assign({}, conv);
     this.updateUsecaseFormData();
+    this.updateOnConnectValidators();
     this.cdRef.detectChanges();
   }
 
   changeBot(bot){
-    this.selectedUseCase = null;
-    this.selectedBot = bot;
-    this.getUseCaseData(bot._id, false);
-    this.cdRef.detectChanges();
+    if(this.selectedBot?._id != bot._id){
+      this.selectedUseCase = null;
+      this.selectedBot = bot;
+      this.getUseCaseData(bot._id, false);
+      this.cdRef.detectChanges();
+    }
   }
 
   changeOnConnectActiveTab(tab){
@@ -188,11 +188,11 @@ export class OnConnectDialogComponent implements OnInit {
 
   updateUsecaseFormData(){    
     let innerObject : any = {
-      enabled : true,
-      usecaseId : this.selectedUseCase && this.selectedUseCase._id ? this.selectedUseCase._id  : '',
-      refId : this.selectedUseCase.refId,
-      dialogId : this.selectedUseCase.dialogId,
-      taskRefId : this.selectedUseCase.taskRefId,
+      enabled : this.selectedUseCase?._id ? true : false,
+      usecaseId : this.selectedUseCase && this.selectedUseCase?._id ? this.selectedUseCase._id  : '',
+      refId : this.selectedUseCase?.refId || '',
+      dialogId : this.selectedUseCase?.dialogId || '',
+      taskRefId : this.selectedUseCase?.taskRefId || '',
       linkedBotId : this.selectedBot && this.selectedBot._id ? this.selectedBot._id : ''
     }    
     this.onConnectDialogForm.patchValue({
@@ -202,7 +202,7 @@ export class OnConnectDialogComponent implements OnInit {
 
   updateOnConnectValidators(){
     for(let key in (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls){        
-      if(this.onConnectDialogForm.get('enabled').value){ 
+      if(this.onConnectDialogForm.get('enabled').value && this.selectedUseCase != 'none'){ 
         let validatorList : any = [Validators.required];
         (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls[key].setValidators(validatorList);
       }else{          

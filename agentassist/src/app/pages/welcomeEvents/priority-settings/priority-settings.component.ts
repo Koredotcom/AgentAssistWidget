@@ -23,7 +23,6 @@ export class PrioritySettingsComponent implements OnInit {
     }
 
     ngOnChanges(changes : SimpleChanges){
-      console.log(changes, "changes******");
       if(changes?.welcomeTaskData?.currentValue && changes?.welcomeTaskPreviousData?.currentValue){
         this.updatePriorityDisableStatus();
         this.updatePriorityForm(this.welcomeTaskData?.priority);
@@ -48,9 +47,7 @@ export class PrioritySettingsComponent implements OnInit {
   
     
      
-    updatePriorityDisableStatus(){
-      console.log(this.welcomeTaskPreviousData, 'previous data');
-      
+    updatePriorityDisableStatus(){      
       this.onConnectEnable = this.welcomeTaskPreviousData['AA_ON_CONNECT_EVENT']?.enabled || false;
       this.greetingEnable = this.welcomeTaskPreviousData['AA_GREETING_MESSAGES']?.enabled || false;
     }
@@ -66,7 +63,6 @@ export class PrioritySettingsComponent implements OnInit {
     priorityInputClick(event, name){    
       if(event.target.checked != this.priorityForm.value[name]){
         this.priorityForm.controls[name].setValue(event.target.checked);
-        console.log(this.priorityForm.value, "value");
         if(name == 'AA_ON_CONNECT_EVENT' && this.greetingEnable){
           this.priorityForm.controls.AA_GREETING_MESSAGES.setValue(!event.target.checked);
         }else if(name == 'AA_GREETING_MESSAGES' && this.onConnectEnable){

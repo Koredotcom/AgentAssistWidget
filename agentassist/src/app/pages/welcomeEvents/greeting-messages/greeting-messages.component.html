@@ -1,4 +1,4 @@
-<div id="accordion" class="welcome-event-accordion childComp">
+<div id="accordion" class="welcome-event-accordion childComp" [formGroup]="greetingForm" *ngIf="greetingForm">
     <div data-toggle="collapse" href="#configGreetings" data-parent="#accordion" class="card_link"
         aria-expanded="false">
         <div class="accordion-content-header">
@@ -10,13 +10,12 @@
                     </svg>
                 </div>
                 <div class="accordion-header-info">
-                    <div class="accordion-header-title">Configure Greeting Messages</div>
-                    <div class="accordion-header-des">Customize greeting messages at the beginning of the
-                        conversation.</div>
+                    <div class="accordion-header-title">{{'WELCOME_EVENT_GREETMSG_TITLE' | translate}}</div>
+                    <div class="accordion-header-des">{{'WELCOME_EVENT_GREETMSG_DESC' | translate}}</div>
                 </div>
             </div>
             <div class="agent-counts">
-                <span class="accordion-badge">Enabled</span>
+                <span class="accordion-badge">{{(greetingForm?.get('enabled')?.value) ? ('WELCOME_EVENT_ENABLED' | translate) : ('WELCOME_EVENT_DISABLED' | translate)}}</span>
             </div>
         </div>
     </div>
@@ -25,19 +24,19 @@
             <div class="enabled-block">
                 <div class="toggle-info-data m-0">
                     <label class="kr-sg-toggle">
-                        <input type="checkbox">
+                        <input type="checkbox" formControlName="enabled" [checked]="greetingForm?.get('enabled').value" (change)="toggleGreetMsgEvent($event)">
                         <div class="slider">
                             <span class="enabled"></span>
                             <span class="disabled"></span>
                         </div>
                     </label>
                     <div class="content-data-toggle">
-                        <h1>Enabled</h1>
+                        <h1>{{(greetingForm?.get('enabled')?.value) ? ('WELCOME_EVENT_ENABLED' | translate) : ('WELCOME_EVENT_DISABLED' | translate)}}</h1>
                     </div>
                 </div>
             </div>
             <div class="divider"></div>
-            <div class="connect-dialoge-info">
+            <div class="connect-dialoge-info" *ngIf="greetingForm?.get('enabled')?.value">
                 <div class="chat-voice-tabs-block">
                     <div class="chat-voice-tabs">
                         <div class="name-tab" [ngClass]="{'active-tab-name' : greetingActiveTab == 'chat'}"
@@ -49,44 +48,44 @@
                     </div>
                 </div>
                 <div class="chat-voice-tabs-content">
-                    <div class="dialog-header">Configure Greeting Messages</div>
-                    <div class="dialog-des">Add Greeting messages for agents to use when communicating with
-                        customers through the AgentAssist widget.</div>
+                    <div class="dialog-header">{{'WELCOME_EVENT_GREETMSG_TITLE' | translate}}</div>
+                    <div class="dialog-des">{{'WELCOME_EVENT_ADD_GREETMSG_DESC' | translate}}</div>
                     <div class="add-message-block">
-                        <div class="add-message-dropdown">
-                            <button class="kr-sg-button-secondary-two btn_lg"><svg width="20" height="20"
+                        <div class="add-message-dropdown" ngbDropdown>
+                            <button class="kr-sg-button-secondary-two btn_lg" ngbDropdownToggle>
+                                <svg width="20" height="20"
                                     viewBox="0 0 20 20" fill="none">
                                     <path d="M10.0001 4.16675V15.8334M4.16675 10.0001H15.8334" stroke="#2970FF"
                                         stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>Add Message</button>
-                            <div class="message-dropdown">
-                                <span (click)="openWelcomeEvent()">New Messages</span>
-                                <span (click)="openModal(contentDeleteWelcomeEvents)">Copy from Voice</span>
+                                </svg>{{'WELCOME_EVENT_ADD_MSG' | translate}}</button>
+                            <div class="message-dropdown dropdown-menu content-menu" ngbDropdownMenu>
+                                <span (click)="openWelcomeEvent('New')" ngbDropdownItem>{{'WELCOME_EVENT_NEW_MSG' | translate}}</span>
+                                <span (click)="openModal(contentDeleteWelcomeEvents)" *ngIf="greetingActiveTab != 'email'" ngbDropdownItem>{{'WELCOME_EVENT_COPY_FROM' |  translate:{ x: greetingActiveTab == 'chat' ? 'Voice' : 'Chat'} }}</span>
                             </div>
                         </div>
 
                         <div class="add-message-block-right">
                             <div class="kr-sg-dropdowns" ngbDropdown>
                                 <div class="dropdown dropdown-open">
-                                    <button class="lang-btn" ngbDropdownToggle>EN <i
+                                    <button class="lang-btn" ngbDropdownToggle>{{selectedLocale | titlecase}} <i
                                             class="icon-sa-arrow-down m-r-8"></i></button>
                                     <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                         <div class="scroll-ul">
-                                            <li ngbDropdownItem><a>EN</a></li>
+                                            <li ngbDropdownItem *ngFor="let item of greetingLocaleMap | keyvalue" (click)="selectedLang(item.key)"><a>{{item.key | titlecase}}</a></li>
                                         </div>
                                     </ul>
                                 </div>
                             </div>
                             <div class="toggle-info-data m-0">
                                 <label class="kr-sg-toggle">
-                                    <input type="checkbox">
+                                    <input type="checkbox" [checked]="greetingForm?.get('config')?.get(greetingActiveTab)?.get('randomMsg')?.value" (change)="toggleRandomMsgEvent($event)">
                                     <div class="slider">
                                         <span class="enabled"></span>
                                         <span class="disabled"></span>
                                     </div>
                                 </label>
                                 <div class="content-data-toggle">
-                                    <p>Display Random Message
+                                    <p>{{'WELCOME_EVENT_DISPLAY_RANDOM' | translate}}
                                         <span tooltipClass="tooltip-global-styles" container="body" ngbTooltip=" &quot;If enabled, all the configured 
                                         greeting messages will be enabled 
                                         and at random three messages will 
@@ -99,8 +98,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="messages-rendor-table">
-                        <div class="rendor-table-data">
+                    <div class="messages-rendor-table" *ngIf="greetingLocaleMap && greetingLocaleMap[selectedLocale]?.length > 0">
+                        <div class="rendor-table-data" *ngFor="let item of greetingLocaleMap[selectedLocale]; let i = index">
                             <div class="data-cell w-65">
                                 <div class="rendor-message">
                                     <div class="rendor-message-icon">
@@ -131,44 +130,44 @@
                                                 stroke-linejoin="round" />
                                         </svg>
                                     </div>
-                                    <span>"Hello and welcome! We're delighted to have you here. How may I assist
-                                        youtoday?"</span>
+                                    <span>{{item.message}}</span>
                                 </div>
                             </div>
                             <div class="data-cell w-15">
                                 <div class="rendor-message-action">
-                                    <span><i class="icon-sa-welcome-edit"></i></span>
-                                    <span><i class="icon-sa-delete"></i></span>
+                                    <span><i class="icon-sa-welcome-edit" (click)="openWelcomeEvent('Edit', i)"></i></span>
+                                    <span><i class="icon-sa-delete" (click)="deleteMsg(item, i)"></i></span>
                                 </div>
                             </div>
                             <div class="data-cell w-20">
                                 <div class="toggle-info-data m-0">
                                     <label class="kr-sg-toggle">
-                                        <input type="checkbox">
+                                        <input type="checkbox" [checked]="item.enabled" (change)="toggleMsgEnable($event, i)">
                                         <div class="slider">
                                             <span class="enabled"></span>
                                             <span class="disabled"></span>
                                         </div>
                                     </label>
                                     <div class="content-data-toggle">
-                                        <h1>Enabled</h1>
+                                        <h1>{{item.enabled ? ('WELCOME_EVENT_ENABLED' | translate) : ('WELCOME_EVENT_DISABLED' | translate)}}</h1>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="disable-state-error">
+                <div class="disable-state-error" *ngIf="showMsgEnableWarn || showExceedMsgWarn">
                     <div class="disable-state-error-icon">
                       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                           <path d="M8.1827 13.8889H11.8172M9.99996 3V3.77778M14.9497 5.05025L14.3997 5.60022M17 9.99996H16.2222M3.77778 9.99996H3M5.60018 5.60022L5.05021 5.05025M7.2501 12.7499C5.73139 11.2312 5.73139 8.76886 7.2501 7.25016C8.7688 5.73145 11.2311 5.73145 12.7498 7.25016C14.2685 8.76886 14.2685 11.2312 12.7498 12.7499L12.3243 13.1754C11.8321 13.6676 11.5555 14.3353 11.5555 15.0314V15.4444C11.5555 16.3036 10.8591 17 9.99996 17C9.14085 17 8.4444 16.3036 8.4444 15.4444V15.0314C8.4444 14.3353 8.16786 13.6676 7.67562 13.1754L7.2501 12.7499Z" stroke="#DC6803" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
                     </div>
                     <div class="disable-state-error-info">
-                       <h4>Warning</h4>
-                       <p>Only 3 Welcome message can be turned on,</p>
+                       <h4>{{'WELCOME_EVENT_WARNING' | translate}}</h4>
+                       <p *ngIf="showExceedMsgWarn">{{('WELCOME_EVENT_EXCEED_WARNING_DESC' | translate)}}</p>
+                       <p *ngIf="showMsgEnableWarn">{{('WELCOME_EVENT_WARNING_DESC' | translate)}}</p>
                     </div>
-                    <div class="disable-state-error-close">
+                    <div class="disable-state-error-close" (click)="showMsgEnableWarn = false; showExceedMsgWarn = false">
                          <svg  width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M15 5L5 15M5 5L15 15" stroke="#F79009" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
                           </svg>
@@ -176,28 +175,29 @@
                  </div>
             </div>
             <div class="accordion-footer">
-                <button class="kr-sg-button-secondary btn_lg">{{'BUTTONS.CANCEL' | translate}}</button>
-                <button class="kr-sg-button-primary btn_lg">{{'BUTTONS.SAVE' | translate}}</button>
+                <button class="kr-sg-button-secondary btn_lg" (click)="cancelGreetMessages()">{{'BUTTONS.CANCEL' | translate}}</button>
+                <button class="kr-sg-button-primary btn_lg" (click)="saveGreetMessages()" [disabled]="greetingForm?.invalid">{{'BUTTONS.SAVE' | translate}}</button>
             </div>
         </div>
     </div>
 </div>
 
 <!--(click)="openWelcomeEvent()"-->
+
 <app-slider-component id="newWelcome" #newWelcomeEvent='app-slider'>
     <div class="new-message-wrapper">
         <div class="header-sec row m-0">
             <div class="lef-sec col-9 p-0">         
-                <div class="main-title text-truncate">New Welcome Message</div>
+                <div class="main-title text-truncate">{{'WELCOME_EVENT_ACTION' | translate : { X : selectedMsgActionMode} }}</div>
             </div>
-            <div class="close-link col-3 p-0"><img src="assets/images/close.svg" (click)=" closeWelcomeEvent() "></div>
+            <div class="close-link col-3 p-0"><img src="assets/images/close.svg" (click)=" closeGreeMessageSlider()"></div>
         </div>
         <div class="body-sec">
             <div class="kr-sg-input-text-area">
-                <div class="label-text">Message</div>
-                <textarea placeholder="Hello Customer Name, thank you for calling how can i help." class="input-text"></textarea>                               
+                <div class="label-text">{{'WELCOME_EVENT_MESSAGE' | translate}}</div>
+                <textarea placeholder="Hello Customer Name, thank you for calling how can i help." class="input-text" [(ngModel)]="selectedMsg.message"></textarea>                               
             </div>
-            <div class="new-message-error">
+            <div class="new-message-error"  *ngIf="showProTip">
                 <span>
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path d="M10.875 3.875C10.875 3.39175 10.4832 3 10 3C9.51675 3 9.125 3.39175 9.125 3.875V4.75C9.125 5.23325 9.51675 5.625 10 5.625C10.4832 5.625 10.875 5.23325 10.875 4.75V3.875Z" fill="#D97706"/>
@@ -213,7 +213,7 @@
                   <p class="m-0">Pro Tip: When ever you want to insert customer name inside greeting messages please use <span class="customer-name">Customer.Name</span> Example: 'Hello <span class="customer-name">Customer.Name</span>.</p>
                   <p class="m-0">If customer name is not passed dynamically in run-time, <span class="customer-name">Customer.Name</span> will be removed from greeting.</p>
                </div>
-               <span class="close-error">
+               <span class="close-error" (click)="showProTip = false">
                   <svg  width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <path d="M5 15L15 5M5 5L15 15" stroke="#F59E0B" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
@@ -221,57 +221,47 @@
             </div>
         </div>
         <div class="footer-sec">
-            <button class="kr-sg-button-secondary btn_lg">Cancel</button>
-            <button class="kr-sg-button-primary btn_lg">Add</button>
+            <button class="kr-sg-button-secondary btn_lg" (click)="closeGreeMessageSlider()">{{'WELCOME_EVENT_CANCEL' | translate}}</button>
+            <button class="kr-sg-button-primary btn_lg" [disabled]="!selectedMsg.message" (click)="AddOrEditWelcomeMsg()">{{'WELCOME_EVENT_ADD' | translate}}</button>
         </div>
     </div>
 </app-slider-component>
-
 
 <ng-template #contentDeleteWelcomeEvents let-modal>
     <div class="confirm-copy-wrapper">
         <div class="confirm-header">
             <div class="t-heading">
-                <h3>Copy Messages from voice</h3> <i class="icon-sa-close" (click)="modal.dismiss()"></i>
+                <h3>{{'WELCOME_EVENT_COPY_FROM' |  translate:{ x: greetingActiveTab == 'chat' ? 'Voice' : 'Chat'} }}</h3> <i class="icon-sa-close" (click)="closeModal()"></i>
             </div>
-            <div class="d-desc">Are you sure you want copy welcome message from voice</div>
+            <div class="d-desc">{{'WELCOME_EVENT_COPY_FROM_DESC' | translate : { x :  (greetingActiveTab == 'chat' ? 'Voice' : 'Chat') } }}</div>
         </div>
         <div class="confirm-body">
             <div class="message-checkbox-header">
                 <div class="kr-sg-checkbox m-0">
-                    <input id="welcome_message" class="checkbox-custom" type="checkbox">
+                    <input id="welcome_message" class="checkbox-custom" type="checkbox" (click)="toggleMultiSelection($event)">
                     <label for="welcome_message" class="checkbox-custom-label">
                         <div class="message-checkbox-label">
-                            Welcome Messages
-                            <span class="message-checkbox-badge">6 messages</span>
+                            {{'WELCOME_EVENT_GREET_MSG' | translate}}
+                            <span class="message-checkbox-badge">{{copyMessageList.length}} {{'WELCOME_EVENT_MESSAGES' | translate}}</span>
                         </div>
                     </label>
                 </div>   
             </div>
-            <div class="message-checkbox-body">
+            <div class="message-checkbox-body" *ngFor="let obj of copyMessageList; let i = index">
                 <div class="kr-sg-checkbox m-0">
-                    <input id="welcome_message" class="checkbox-custom" type="checkbox">
-                    <label for="welcome_message" class="checkbox-custom-label">
-                            <p class="checkbox-label-des"> "Hello and welcome! We're delighted to have you here. How may I assist youtoday?"</p>
-                     
-                    </label>
-                </div>   
-            </div>
-            <div class="message-checkbox-body">
-                <div class="kr-sg-checkbox m-0">
-                    <input id="welcome_message" class="checkbox-custom" type="checkbox">
-                    <label for="welcome_message" class="checkbox-custom-label">
-                            <p class="checkbox-label-des">"Good [morning/afternoon/evening]! Thank you for choosing our services. We're ready to make your experience exceptional. How can I help you?"</p>
-                        
+                    <input id="welcome_message{{i}}" class="checkbox-custom" type="checkbox" [checked]="obj.selected" (click)="selectedMessage(obj)">
+                    <label for="welcome_message{{i}}" class="checkbox-custom-label">
+                            <p class="checkbox-label-des"> {{obj.message}}</p>
                     </label>
                 </div>   
             </div>
         </div>
         <div class="confirm-footer">
-            <span class="confirm-footer-badge">6 Selected</span>
+            <span class="confirm-footer-badge">{{selectedMessageCount}} Selected</span>
+            <span class="warn-message" *ngIf="(greetingLocaleMap[this.selectedLocale]?.length + selectedMessageCount) > 10">Can't add More than {{10 - greetingLocaleMap[this.selectedLocale]?.length}} Please Deselect few messages</span>
             <div class="confirm-copy-actions">
-                <button class="kr-sg-button-secondary btn_lg">Cancel</button>
-                <button class="kr-sg-button-primary btn_lg">Confirm</button>
+                <button class="kr-sg-button-secondary btn_lg" (click)="closeModal()">Cancel</button>
+                <button class="kr-sg-button-primary btn_lg" (click)="copyMessages()" [disabled]="(greetingLocaleMap[this.selectedLocale].length + selectedMessageCount) > 10">Confirm</button>
             </div>
         </div>
     </div>
