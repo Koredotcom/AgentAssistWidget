@@ -404,22 +404,25 @@ export class HomeComponent implements OnInit {
             }
           })
         }
-        if (e.data.name === 'agentAssist.endOfConversation' && (e.data.conversationId || e.data.conversationid)) {
-          let currentEndedConversationId = e.data.conversationId || e.data.conversationid;
-          if (this.localStorageService.checkConversationIdStateInStorage([currentEndedConversationId])) {
-            let request_resolution_comments = {
-              conversationId: e.data?.conversationId,
-              userId: '',
-              botId: this.connectionDetails.botId,
-              sessionId: this.koregenerateUUIDPipe.transform(),
-              chatHistory: e.data?.payload?.chatHistory
+        if(this.aaSettings?.summarization?.isEnabled) {
+          if (e.data.name === 'agentAssist.endOfConversation' && (e.data.conversationId || e.data.conversationid)) {
+            let currentEndedConversationId = e.data.conversationId || e.data.conversationid;
+            if (this.localStorageService.checkConversationIdStateInStorage([currentEndedConversationId])) {
+              let request_resolution_comments = {
+                conversationId: e.data?.conversationId,
+                userId: '',
+                botId: this.connectionDetails.botId,
+                sessionId: this.koregenerateUUIDPipe.transform(),
+                chatHistory: e.data?.payload?.chatHistory
+              }
+              this.websocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
+              this.websocketService.emitEvents(EVENTS.end_of_conversation, request_resolution_comments);
+              this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
             }
-            this.websocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
-            this.websocketService.emitEvents(EVENTS.end_of_conversation, request_resolution_comments);
-            this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
+            return;
           }
-          return;
         }
+        
 
         if (e.data.value) {
           let userInputData = e.data;
