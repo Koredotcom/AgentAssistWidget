@@ -405,7 +405,7 @@ export class HomeComponent implements OnInit {
             }
           })
         }
-        if(this.aaSettings?.summarization?.isEnabled) {
+        
           if (e.data.name === 'agentAssist.endOfConversation' && (e.data.conversationId || e.data.conversationid)) {
             let currentEndedConversationId = e.data.conversationId || e.data.conversationid;
             if (this.localStorageService.checkConversationIdStateInStorage([currentEndedConversationId])) {
@@ -416,13 +416,15 @@ export class HomeComponent implements OnInit {
                 sessionId: this.koregenerateUUIDPipe.transform(),
                 chatHistory: e.data?.payload?.chatHistory
               }
-              this.websocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
+              if(this.aaSettings?.summarization?.isEnabled) {
+                this.websocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
+              }
               this.websocketService.emitEvents(EVENTS.end_of_conversation, request_resolution_comments);
               this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
             }
             return;
           }
-        }
+       
 
         if(e.data.type === 'USER') {
           console.log("🚀 ~ file: home.component.ts:427 ~ HomeComponent ~ window.addEventListener ~ e.data:", e.data)
