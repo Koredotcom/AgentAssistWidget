@@ -35,6 +35,10 @@ export class GreetingMessagesComponent implements OnInit {
   subs = new SubSink();
   noFormchange : boolean = true;
 
+  greetMsgStr = 'AA_GREETING_MESSAGES';
+  newStr = 'New';
+  editStr = 'Edit';
+
   constructor(private modalService: NgbModal, private fb: FormBuilder, private welcomeEventService: WelcomeEventsService) { }
 
   ngOnInit(): void {
@@ -61,18 +65,18 @@ export class GreetingMessagesComponent implements OnInit {
   }
 
   updateData(welcomeTaskData) {
-    if (welcomeTaskData && welcomeTaskData['AA_GREETING_MESSAGES']?.config && welcomeTaskData['AA_GREETING_MESSAGES']?.config[this.greetingActiveTab] && welcomeTaskData['AA_GREETING_MESSAGES']?.config[this.greetingActiveTab].locale) {
-      this.greetingLocaleMap = JSON.parse(JSON.stringify(welcomeTaskData['AA_GREETING_MESSAGES']?.config[this.greetingActiveTab].locale));
+    if (welcomeTaskData && welcomeTaskData[this.greetMsgStr]?.config && welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab] && welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab].locale) {
+      this.greetingLocaleMap = JSON.parse(JSON.stringify(welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab].locale));
       this.selectedLocale = Object.keys(this.greetingLocaleMap)[0];
     }
   }
 
   initGreetingForm(welcomeTaskData) {
     this.greetingForm = this.fb.group({
-      'name': new FormControl('AA_GREETING_MESSAGES', Validators.required),
-      'enabled': new FormControl(welcomeTaskData['AA_GREETING_MESSAGES']?.enabled || false, Validators.required),
+      'name': new FormControl(this.greetMsgStr, Validators.required),
+      'enabled': new FormControl(welcomeTaskData[this.greetMsgStr]?.enabled || false, Validators.required),
       'config': this.fb.group({
-        [this.greetingActiveTab]: this.fb.group(this.getGreetMsgActiveTabFormGroup(welcomeTaskData['AA_GREETING_MESSAGES']?.config[this.greetingActiveTab]))
+        [this.greetingActiveTab]: this.fb.group(this.getGreetMsgActiveTabFormGroup(welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab]))
       })
     });
     this.greetingForm.valueChanges.subscribe((data)=> {
@@ -91,13 +95,15 @@ export class GreetingMessagesComponent implements OnInit {
 
   toggleGreetMsgEvent(event) {
     this.greetingForm.patchValue({ enabled: event.target.checked });
-    this.welcomeTaskData['AA_GREETING_MESSAGES'].enabled = event.target.checked;
+    if(this.welcomeTaskData[this.greetMsgStr]){
+      this.welcomeTaskData[this.greetMsgStr].enabled = event.target.checked;
+    }
     // this.updateGreetingValidators();
   }
 
   toggleRandomMsgEvent(event) {
     this.greetingForm.get('config').get(this.greetingActiveTab).patchValue({ randomMsg: event.target.checked });
-    this.welcomeTaskData['AA_GREETING_MESSAGES'].config[this.greetingActiveTab].randomMsg = event.target.checked;
+    this.welcomeTaskData[this.greetMsgStr].config[this.greetingActiveTab].randomMsg = event.target.checked;
     if (!event.target.checked) {
       this.toggleMsgEnabling(false);
     }
@@ -126,7 +132,7 @@ export class GreetingMessagesComponent implements OnInit {
 
   toggleMsgEnable(event, index) {
     let langEnableCount = this.getLangEnableCount();
-    if (this.welcomeTaskData['AA_GREETING_MESSAGES'].config[this.greetingActiveTab].randomMsg || langEnableCount <= 2) {
+    if (this.welcomeTaskData[this.greetMsgStr].config[this.greetingActiveTab].randomMsg || langEnableCount <= 2) {
       this.greetingLocaleMap[this.selectedLocale][index].enabled = event.target.checked;
       this.updateGreetingFormLocale();
     } else {
@@ -137,7 +143,7 @@ export class GreetingMessagesComponent implements OnInit {
   }
 
   AddOrEditWelcomeMsg() {
-    if (this.selectedMsgActionMode == 'New') {
+    if (this.selectedMsgActionMode == this.newStr) {
       this.greetingLocaleMap[this.selectedLocale].push(this.selectedMsg);
     } else {
       this.greetingLocaleMap[this.selectedLocale][this.selectedMsgActionIndex] = this.selectedMsg;
@@ -164,13 +170,13 @@ export class GreetingMessagesComponent implements OnInit {
   openWelcomeEvent(event, index?) {
     this.selectedMsgActionMode = event;
     this.selectedMsgActionIndex = index;
-    if (this.selectedMsgActionMode == 'New') {
+    if (this.selectedMsgActionMode == this.newStr) {
       this.selectedMsg = { message: '', enabled: false };
     } else if (typeof this.selectedMsgActionIndex == 'number') {
       this.selectedMsg = JSON.parse(JSON.stringify(this.greetingLocaleMap[this.selectedLocale][index]));
     }
 
-    if (this.selectedMsgActionMode == 'Edit' || (this.selectedMsgActionMode == 'New' && this.greetingLocaleMap[this.selectedLocale].length < 10)) {
+    if (this.selectedMsgActionMode == this.editStr || (this.selectedMsgActionMode == this.newStr && this.greetingLocaleMap[this.selectedLocale].length < 10)) {
       this.showProTip = true;
       this.newWelcomeEventSlider.openSlider("#newWelcome", "width550");
     } else {
@@ -188,7 +194,7 @@ export class GreetingMessagesComponent implements OnInit {
 
   openModal(contentDeleteWelcomeEvents) {
     let channel = this.greetingActiveTab == 'chat' ? 'voice' : 'chat';
-    this.copyMessageList = JSON.parse(JSON.stringify(this.welcomeTaskPreviousData['AA_GREETING_MESSAGES']?.config[channel]?.locale[this.selectedLocale] || []));
+    this.copyMessageList = JSON.parse(JSON.stringify(this.welcomeTaskPreviousData[this.greetMsgStr]?.config[channel]?.locale[this.selectedLocale] || []));
     this.copyMessageList.forEach((obj: any) => {
       obj.selected = false;
     });

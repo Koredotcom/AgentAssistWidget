@@ -24,11 +24,12 @@ export class OnConnectDialogComponent implements OnInit {
 
   conversations: any[] = [];
   automationBots: any[] = [];
-  selectedUseCase: any = null;
-  selectedBot: any = null;
+  selectedUseCase: any;
+  selectedBot: any;
   taskEnable: boolean;
   universalBot: string = 'universalbot';
   noFormchange : boolean = true;
+  onConnectStr =  'AA_ON_CONNECT_EVENT';
 
   constructor(private service: ServiceInvokerService, private cdRef: ChangeDetectorRef,
     private welcomeEventService: WelcomeEventsService) { }
@@ -43,7 +44,7 @@ export class OnConnectDialogComponent implements OnInit {
         this.welcomeTaskData = data;
         this.welcomeTaskPreviousData = JSON.parse(JSON.stringify(this.welcomeEventService.formatWelcomeTaskData(this.welcomeTaskData)));
         this.updateUseCaseData();
-        this.initOnConnectDialogForm(this.welcomeTaskData)
+        this.initOnConnectDialogForm(this.welcomeTaskData);
       }else{
         this.noFormchange = false;
       }
@@ -52,10 +53,16 @@ export class OnConnectDialogComponent implements OnInit {
 
   initOnConnectDialogForm(welcomeTaskData) {
     this.onConnectDialogForm = new FormGroup({
-      'name': new FormControl('AA_ON_CONNECT_EVENT', Validators.required),
-      'enabled': new FormControl(welcomeTaskData['AA_ON_CONNECT_EVENT']?.enabled || false, Validators.required),
-      [this.onConnectActiveTab]: new FormGroup(this.getOnConnectActiveTabFormGroup(welcomeTaskData?.['AA_ON_CONNECT_EVENT']?.[this.onConnectActiveTab]))
+      'name': new FormControl(this.onConnectStr, Validators.required),
+      'enabled': new FormControl(welcomeTaskData[this.onConnectStr]?.enabled || false, Validators.required),
+      [this.onConnectActiveTab]: new FormGroup(this.getOnConnectActiveTabFormGroup(welcomeTaskData?.[this.onConnectStr]?.[this.onConnectActiveTab]))
     });
+    
+    if(!(welcomeTaskData?.[this.onConnectStr]?.[this.onConnectActiveTab]?.enabled)){
+      this.selectedUseCase = 'none';
+      this.updateOnConnectValidators();
+    }
+    
    this.onConnectDialogForm.valueChanges.subscribe((data)=> {
     this.noFormchange = false;
    }); 
@@ -85,9 +92,9 @@ export class OnConnectDialogComponent implements OnInit {
   // updating the welcome task and use case data after api call
   updateUseCaseData() {
     let botId = this.currentBt._id;
-    if (this.currentBt.type == this.universalBot && this.welcomeTaskData?.['AA_ON_CONNECT_EVENT']?.[this.onConnectActiveTab]?.linkedBotId) {
-      this.getUseCaseData(this.welcomeTaskData?.['AA_ON_CONNECT_EVENT'][this.onConnectActiveTab]?.linkedBotId);
-    } else if (this.currentBt.type == this.universalBot && !this.welcomeTaskData?.['AA_ON_CONNECT_EVENT']?.[this.onConnectActiveTab]?.linkedBotId) {
+    if (this.currentBt.type == this.universalBot && this.welcomeTaskData?.[this.onConnectStr]?.[this.onConnectActiveTab]?.linkedBotId) {
+      this.getUseCaseData(this.welcomeTaskData?.[this.onConnectStr][this.onConnectActiveTab]?.linkedBotId);
+    } else if (this.currentBt.type == this.universalBot && !this.welcomeTaskData?.[this.onConnectStr]?.[this.onConnectActiveTab]?.linkedBotId) {
       this.updateTaskDetails(this.welcomeTaskData);
     } else if (this.currentBt.type != this.universalBot) {
       this.getUseCaseData(botId);
@@ -101,11 +108,13 @@ export class OnConnectDialogComponent implements OnInit {
   // updating ngmodels in UI based on data from backend.
   updateTaskDetails(data, tabChange = false) {
     let welcomeTaskData = Object.assign({}, data);
-    this.selectedBot = this.welcomeEventService.filterBotfromAutomationBotList(welcomeTaskData?.['AA_ON_CONNECT_EVENT']?.[this.onConnectActiveTab]?.linkedBotId, this.linkedBots, this.currentBt);
+    this.selectedBot = this.welcomeEventService.filterBotfromAutomationBotList(welcomeTaskData?.[this.onConnectStr]?.[this.onConnectActiveTab]?.linkedBotId, this.linkedBots, this.currentBt);
     if (this.currentBt.type == this.universalBot && tabChange && this.selectedBot?._id) {
       this.getUseCaseData(this.selectedBot._id);
     }
-    this.selectedUseCase = this.welcomeEventService.filterUseCaseFromUseCaseList(welcomeTaskData?.['AA_ON_CONNECT_EVENT']?.[this.onConnectActiveTab]?.taskRefId, this.conversations, this.currentBt, this.selectedBot);
+    if((welcomeTaskData?.[this.onConnectStr]?.[this.onConnectActiveTab]?.enabled)){
+      this.selectedUseCase = this.welcomeEventService.filterUseCaseFromUseCaseList(welcomeTaskData?.[this.onConnectStr]?.[this.onConnectActiveTab]?.taskRefId, this.conversations, this.currentBt, this.selectedBot);
+    }
   }
 
 
@@ -122,6 +131,7 @@ export class OnConnectDialogComponent implements OnInit {
       this.selectedUseCase = null;
       this.selectedBot = bot;
       this.getUseCaseData(bot._id, false);
+      this.noFormchange = false;
       this.cdRef.detectChanges();
     }
   }
@@ -160,7 +170,7 @@ export class OnConnectDialogComponent implements OnInit {
 
   toggleOnConnectDialog(event) {
     this.onConnectDialogForm.patchValue({ enabled: event.target.checked });
-    this.welcomeTaskData['AA_ON_CONNECT_EVENT'].enabled = event.target.checked;
+    this.welcomeTaskData[this.onConnectStr].enabled = event.target.checked;
     this.updateOnConnectValidators();
   }
 

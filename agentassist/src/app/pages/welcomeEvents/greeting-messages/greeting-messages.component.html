@@ -175,7 +175,7 @@
                  </div>
             </div>
             <div class="accordion-footer">
-                <button class="kr-sg-button-secondary btn_lg" (click)="cancelGreetMessages()">{{'BUTTONS.CANCEL' | translate}}</button>
+                <button class="kr-sg-button-secondary btn_lg" (click)="cancelGreetMessages()" [disabled]="noFormchange">{{'BUTTONS.CANCEL' | translate}}</button>
                 <button class="kr-sg-button-primary btn_lg" (click)="saveGreetMessages()" [disabled]="greetingForm?.invalid || noFormchange">{{'BUTTONS.SAVE' | translate}}</button>
             </div>
         </div>

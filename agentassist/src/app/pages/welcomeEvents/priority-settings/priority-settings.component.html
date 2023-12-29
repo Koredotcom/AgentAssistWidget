@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="accordion-footer">
-                <button class="kr-sg-button-secondary btn_lg" (click)="cancelPriority()">{{'BUTTONS.CANCEL' |
+                <button class="kr-sg-button-secondary btn_lg" (click)="cancelPriority()" [disabled]="noFormchange">{{'BUTTONS.CANCEL' |
                     translate}}</button>
                 <button class="kr-sg-button-primary btn_lg" (click)="savePriority()" [disabled]="noFormchange">{{'BUTTONS.SAVE' | translate}}</button>
             </div>
