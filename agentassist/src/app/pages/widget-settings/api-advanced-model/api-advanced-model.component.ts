@@ -29,7 +29,6 @@ export class ApiAdvancedModelComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.data);
     if(this.data != '') {
       this.apiScript = this.data;
     }
