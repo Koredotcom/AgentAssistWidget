@@ -4,6 +4,11 @@
     flex-direction: column;
     height: calc(100vh - 58px);
     overflow: hidden;
+    .init-loading {
+        position: absolute;
+        left: 50%;
+        top: 180px;
+    }
     .header-data {
         display: flex;
         flex-direction: column;

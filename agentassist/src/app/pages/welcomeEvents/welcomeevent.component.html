@@ -6,12 +6,15 @@
         </div>
         <div class="desc-text">{{'WELCOME_EVENT_DESC' | translate}}</div>
     </div>
+    <div class='init-loading' *ngIf="showSpinner">
+        <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+    </div>
     <div class="event-main-wrapper">
         <!--Configure On-Connect Dialog Task-->
-       <app-on-connect-dialog [welcomeTaskData]="welcomeTaskData" [welcomeTaskPreviousData]="welcomeTaskPreviousData" [linkedBots]="linkedBots" [currentBt]="currentBt"></app-on-connect-dialog>
+       <app-on-connect-dialog [linkedBots]="linkedBots" [currentBt]="currentBt" (saveOnconnectEvent)="updateApi($event)"></app-on-connect-dialog>
         <!--Configure Greeting Messages-->
-       <app-greeting-messages [welcomeTaskData]="welcomeTaskData" [welcomeTaskPreviousData]="welcomeTaskPreviousData"></app-greeting-messages>
+       <app-greeting-messages (saveGreetingMessages)="updateApi($event)"></app-greeting-messages>
         <!--Priority Settings-->
-        <app-priority-settings [welcomeTaskData]="welcomeTaskData" [welcomeTaskPreviousData]="welcomeTaskPreviousData"></app-priority-settings>
+        <app-priority-settings (savePrioritySettings)="updateApi($event)"></app-priority-settings>
     </div>
 </div>

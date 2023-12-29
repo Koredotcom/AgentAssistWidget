@@ -8,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { SubSink } from 'subsink';
+import { WelcomeEventsService } from './welcome-events.service';
 
 @Component({
   selector: 'app-welcomeevent',
@@ -28,15 +29,8 @@ export class WelcomeeventComponent implements OnInit {
   //welcomeTaskData
   
   linkedBots : any[] = [];
-  welcomeTaskData : any;
-  welcomeTaskPreviousData : any;
   showSpinner : boolean = false;
   currentBt : any;
-
-  
-
-
-
 
   @ViewChild('newWelcomeEvent', { static: true }) newWelcomeEvent: SliderComponentComponent;
   
@@ -46,7 +40,8 @@ export class WelcomeeventComponent implements OnInit {
     private authService: AuthService,
     private cdRef : ChangeDetectorRef,
     private notificationService : NotificationService,
-    private translate : TranslateService
+    private translate : TranslateService,
+    private welcomeEventService : WelcomeEventsService
   ) { }
 
   ngOnInit(): void {
@@ -98,173 +93,179 @@ export class WelcomeeventComponent implements OnInit {
     }
     this.showSpinner = true;
     this.service.invoke('get.welcomeevent', params).subscribe(data => {
-      data = this.getMockData();
+      // data = this.getMockData();
       this.showSpinner = false;
-      if(data){
-        this.welcomeTaskData = this.formatWelcomeTaskData(data);
-
-        console.log(this.welcomeTaskData, "welcome task data");        
-       
-      }
-    },error => {
+      this.welcomeEventService.setWelcomeEventData(data);
+    },(error) => {
+      this.welcomeEventService.setWelcomeEventData({});
       this.showSpinner = false;
     });
   }
 
 
  
-  formatWelcomeTaskData(data){
-    data.events?.forEach(obj => {
-      data[obj.name] = Object.assign({}, obj);
-    });
-    this.welcomeTaskPreviousData = JSON.parse(JSON.stringify(data));
-    console.log(data, 'data *********'); 
-    return data;
-  }
+  
 
+  updateApi(postData){
+    this.showSpinner = true;
+    this.service.invoke('post.welcomeevent', { streamId: this.streamId }, postData).subscribe((data) => {
+      this.showSpinner = false;
 
-  getMockData(){
-    return {
-      "events": [
-        {
-          "name": "AA_ON_CONNECT_EVENT",
-          "enabled" : false,
-        //   "chat": {
-        //     "enabled": true,
-        //     "usecaseId": "sat-db9e832b-7d73-57e3-86d9-b30ec1b461ff",
-        //     "refId": "3b9cf1a0-ea97-52a6-ae27-238f9f63dbcd",
-        //     "dialogId": "dg-bc19ef5b-cfb3-5c1e-947b-64994c448bed",
-        //     "taskRefId": "3b9cf1a0-ea97-52a6-ae27-238f9f63dbcd",
-        //     "linkedBotId": "st-b245235c-5206-5053-b329-fc7ee33494d4"
-        // },
-        "chat": {
-          "enabled": true,
-          "usecaseId": "",
-          "refId": "",
-          "dialogId": "",
-          "taskRefId": "",
-          "linkedBotId": ""
-      },
-          "voice": {
-            "enabled": false
-          }
-        },
-        {
-          "name": "AA_GREETING_MESSAGES",
-          "enabled": true,
-          "config": {
-            "chat": {
-              "randomMsg": true,
-              "locale": {
-                "en": [
-                  {
-                  "message": "Hi Hello How are you",
-                  "enabled": true
-                },
-                {
-                  "message": "I hope you are good",
-                  "enabled": true
-                },
-                {
-                  "message": "Hi Hello How are you",
-                  "enabled": true
-                },
-                {
-                  "message": "I hope you are good",
-                  "enabled": false
-                },
-                {
-                  "message": "Hi Hello How are you",
-                  "enabled": false
-                },
-                {
-                  "message": "I hope you are good",
-                  "enabled": false
-                },
-                {
-                  "message": "Hi Hello How are you",
-                  "enabled": false
-                },
-                {
-                  "message": "I hope you are good",
-                  "enabled": false
-                }
-                ],
-                "de": [
-                  {
-                  "message": "de asdQYTSDdadqwqw afdasdas",
-                  "enabled": true
-                },
-                {
-                  "message": "kjo QWEMsfcdsfsdfsdf mbgvij",
-                  "enabled": true
-                }
-                ]
-              }
-            },
-            "voice": {
-              "randomMsg": true,
-              "locale": {
-                "en": [
-                  {
-                  "message": "Hi Hello How are you",
-                  "enabled": true
-                },
-                {
-                  "message": "I hope you are good",
-                  "enabled": true
-                },
-                {
-                  "message": "Hi Hello How are you",
-                  "enabled": true
-                },
-                {
-                  "message": "I hope you are good",
-                  "enabled": false
-                }
-                ],
-                "de": [{
-                  "message": "de asdQYTSDdadqwqw afdasdas",
-                  "enabled": true
-                },
-                {
-                  "message": "kjo QWEMsfcdsfsdfsdf mbgvij",
-                  "enabled": true
-                }
-                ]
-              }
-            },
-            "email": {
-              "randomMsg": true,
-              "locale": {
-                "en": [{
-                  "message": "Hi Hello How are you",
-                  "enabled": true
-                },
-                {
-                  "message": "I hope you are good",
-                  "enabled": true
-                }
-                ],
-                "de": [{
-                  "text": "de asdQYTSDdadqwqw afdasdas",
-                  "enabled": true
-                },
-                {
-                  "text": "kjo QWEMsfcdsfsdfsdf mbgvij",
-                  "enabled": true
-                }
-                ]
-              }
-            }
-          }
-        }
-      ],
-      "priority": {
-        "AA_ON_CONNECT_EVENT": false,
-        "AA_GREETING_MESSAGES": true,
+      if(data){
+        this.welcomeEventService.setWelcomeEventData(data);
+        this.notificationService.notify(this.translate.instant("WELCOMEEVENT.SAVE_SUCCESS"), 'success');
+      }else{
+        this.notificationService.showError(this.translate.instant("WELCOMEEVENT.SAVE_FALIED"));
       }
-    }    
+    },(error)=> {
+      this.notificationService.showError(this.translate.instant("WELCOMEEVENT.SAVE_FALIED"));
+      this.showSpinner = false;
+    })
   }
+
+
+  // getMockData(){
+  //   return {
+  //     "events": [
+  //       {
+  //         "name": "AA_ON_CONNECT_EVENT",
+  //         "enabled" : false,
+  //       //   "chat": {
+  //       //     "enabled": true,
+  //       //     "usecaseId": "sat-db9e832b-7d73-57e3-86d9-b30ec1b461ff",
+  //       //     "refId": "3b9cf1a0-ea97-52a6-ae27-238f9f63dbcd",
+  //       //     "dialogId": "dg-bc19ef5b-cfb3-5c1e-947b-64994c448bed",
+  //       //     "taskRefId": "3b9cf1a0-ea97-52a6-ae27-238f9f63dbcd",
+  //       //     "linkedBotId": "st-b245235c-5206-5053-b329-fc7ee33494d4"
+  //       // },
+  //       "chat": {
+  //         "enabled": true,
+  //         "usecaseId": "",
+  //         "refId": "",
+  //         "dialogId": "",
+  //         "taskRefId": "",
+  //         "linkedBotId": ""
+  //     },
+  //         "voice": {
+  //           "enabled": false
+  //         }
+  //       },
+  //       {
+  //         "name": "AA_GREETING_MESSAGES",
+  //         "enabled": true,
+  //         "config": {
+  //           "chat": {
+  //             "randomMsg": true,
+  //             "locale": {
+  //               "en": [
+  //                 {
+  //                 "message": "Hi Hello How are you",
+  //                 "enabled": true
+  //               },
+  //               {
+  //                 "message": "I hope you are good",
+  //                 "enabled": true
+  //               },
+  //               {
+  //                 "message": "Hi Hello How are you",
+  //                 "enabled": true
+  //               },
+  //               {
+  //                 "message": "I hope you are good",
+  //                 "enabled": false
+  //               },
+  //               {
+  //                 "message": "Hi Hello How are you",
+  //                 "enabled": false
+  //               },
+  //               {
+  //                 "message": "I hope you are good",
+  //                 "enabled": false
+  //               },
+  //               {
+  //                 "message": "Hi Hello How are you",
+  //                 "enabled": false
+  //               },
+  //               {
+  //                 "message": "I hope you are good",
+  //                 "enabled": false
+  //               }
+  //               ],
+  //               "de": [
+  //                 {
+  //                 "message": "de asdQYTSDdadqwqw afdasdas",
+  //                 "enabled": true
+  //               },
+  //               {
+  //                 "message": "kjo QWEMsfcdsfsdfsdf mbgvij",
+  //                 "enabled": true
+  //               }
+  //               ]
+  //             }
+  //           },
+  //           "voice": {
+  //             "randomMsg": true,
+  //             "locale": {
+  //               "en": [
+  //                 {
+  //                 "message": "Hi Hello How are you",
+  //                 "enabled": true
+  //               },
+  //               {
+  //                 "message": "I hope you are good",
+  //                 "enabled": true
+  //               },
+  //               {
+  //                 "message": "Hi Hello How are you",
+  //                 "enabled": true
+  //               },
+  //               {
+  //                 "message": "I hope you are good",
+  //                 "enabled": false
+  //               }
+  //               ],
+  //               "de": [{
+  //                 "message": "de asdQYTSDdadqwqw afdasdas",
+  //                 "enabled": true
+  //               },
+  //               {
+  //                 "message": "kjo QWEMsfcdsfsdfsdf mbgvij",
+  //                 "enabled": true
+  //               }
+  //               ]
+  //             }
+  //           },
+  //           "email": {
+  //             "randomMsg": true,
+  //             "locale": {
+  //               "en": [{
+  //                 "message": "Hi Hello How are you",
+  //                 "enabled": true
+  //               },
+  //               {
+  //                 "message": "I hope you are good",
+  //                 "enabled": true
+  //               }
+  //               ],
+  //               "de": [{
+  //                 "text": "de asdQYTSDdadqwqw afdasdas",
+  //                 "enabled": true
+  //               },
+  //               {
+  //                 "text": "kjo QWEMsfcdsfsdfsdf mbgvij",
+  //                 "enabled": true
+  //               }
+  //               ]
+  //             }
+  //           }
+  //         }
+  //       }
+  //     ],
+  //     "priority": {
+  //       "AA_ON_CONNECT_EVENT": false,
+  //       "AA_GREETING_MESSAGES": true,
+  //     }
+  //   }    
+  // }
 
 }

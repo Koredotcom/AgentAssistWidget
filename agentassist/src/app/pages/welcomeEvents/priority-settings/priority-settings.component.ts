@@ -1,5 +1,7 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SubSink } from 'subsink';
+import { WelcomeEventsService } from '../welcome-events.service';
 
 @Component({
   selector: 'app-priority-settings',
@@ -8,67 +10,84 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class PrioritySettingsComponent implements OnInit {
 
-  @Input() welcomeTaskData : any;
-  @Input() welcomeTaskPreviousData : any;
+  @Output() savePrioritySettings = new EventEmitter();
 
-  priorityForm : FormGroup;
+  welcomeTaskData: any = {};
+  welcomeTaskPreviousData: any = {};
 
-  onConnectEnable : boolean = false;
-  greetingEnable : boolean = false;
 
-  constructor() { }
+  priorityForm: FormGroup;
 
-    ngOnInit(): void {
-      this.initPriorityForm();
-    }
+  onConnectEnable: boolean = false;
+  greetingEnable: boolean = false;
 
-    ngOnChanges(changes : SimpleChanges){
-      if(changes?.welcomeTaskData?.currentValue && changes?.welcomeTaskPreviousData?.currentValue){
-        this.updatePriorityDisableStatus();
+  subs = new SubSink();
+  noFormchange : boolean = true;
+
+  constructor(private welcomeEventService: WelcomeEventsService) { }
+
+  ngOnInit(): void {
+    // this.initPriorityForm();
+    this.subscribeEvents();
+  }
+
+  subscribeEvents() {
+    this.subs.sink = this.welcomeEventService.welcomeEventData$.subscribe((data) => {
+      if (data) {
+        this.welcomeTaskData = data;
+        this.welcomeTaskPreviousData = JSON.parse(JSON.stringify(this.welcomeEventService.formatWelcomeTaskData(this.welcomeTaskData)));
         this.updatePriorityForm(this.welcomeTaskData?.priority);
+        this.updatePriorityDisableStatus();
+      }else{
+        this.noFormchange = false;
+      }
+    })
+  }
+
+  // priority Form
+
+  updatePriorityForm(priorityData) {
+    this.priorityForm = new FormGroup({
+      'AA_ON_CONNECT_EVENT': new FormControl(priorityData?.AA_ON_CONNECT_EVENT || false, Validators.required),
+      'AA_GREETING_MESSAGES': new FormControl(priorityData?.AA_ON_CONNECT_EVENT || false, Validators.required)
+    });
+
+    this.priorityForm.valueChanges.subscribe((data)=> {
+      this.noFormchange = false;
+    }); 
+  }
+
+
+
+  updatePriorityDisableStatus() {
+    this.onConnectEnable = this.welcomeTaskPreviousData['AA_ON_CONNECT_EVENT']?.enabled || false;
+    this.greetingEnable = this.welcomeTaskPreviousData['AA_GREETING_MESSAGES']?.enabled || false;
+  }
+
+  cancelPriority() {
+    this.updatePriorityForm(this.welcomeTaskPreviousData?.priority);
+    this.noFormchange = true;
+  }
+
+  savePriority() {
+    let payLoad = {
+      priority: [this.priorityForm.value]
+    }
+    this.noFormchange = true;
+
+    console.log(this.priorityForm.value, "priority form value");
+    // this.savePrioritySettings.emit(payLoad);
+  }
+
+  priorityInputClick(event, name) {
+    if (event.target.checked != this.priorityForm.value[name]) {
+      this.priorityForm.controls[name].setValue(event.target.checked);
+      if (name == 'AA_ON_CONNECT_EVENT' && this.greetingEnable) {
+        this.priorityForm.controls.AA_GREETING_MESSAGES.setValue(!event.target.checked);
+      } else if (name == 'AA_GREETING_MESSAGES' && this.onConnectEnable) {
+        this.priorityForm.controls.AA_ON_CONNECT_EVENT.setValue(!event.target.checked);
       }
     }
-
-    // priority Form
-
-    initPriorityForm(){
-      this.priorityForm = new FormGroup({
-        'AA_ON_CONNECT_EVENT': new FormControl(false, Validators.required),
-        'AA_GREETING_MESSAGES': new FormControl(false, Validators.required)
-      });
-    }
-  
-    updatePriorityForm(priorityData){
-      this.priorityForm.setValue({
-        'AA_ON_CONNECT_EVENT': priorityData?.AA_ON_CONNECT_EVENT || false,
-        'AA_GREETING_MESSAGES': priorityData?.AA_ON_CONNECT_EVENT || false
-      });
-    }
-  
-    
-     
-    updatePriorityDisableStatus(){      
-      this.onConnectEnable = this.welcomeTaskPreviousData['AA_ON_CONNECT_EVENT']?.enabled || false;
-      this.greetingEnable = this.welcomeTaskPreviousData['AA_GREETING_MESSAGES']?.enabled || false;
-    }
-  
-    cancelPriority(){
-      this.updatePriorityForm(this.welcomeTaskPreviousData?.priority);
-    }
-  
-    savePriority(){
-      console.log(this.priorityForm.value, "priority form value");
-    }
-  
-    priorityInputClick(event, name){    
-      if(event.target.checked != this.priorityForm.value[name]){
-        this.priorityForm.controls[name].setValue(event.target.checked);
-        if(name == 'AA_ON_CONNECT_EVENT' && this.greetingEnable){
-          this.priorityForm.controls.AA_GREETING_MESSAGES.setValue(!event.target.checked);
-        }else if(name == 'AA_GREETING_MESSAGES' && this.onConnectEnable){
-          this.priorityForm.controls.AA_ON_CONNECT_EVENT.setValue(!event.target.checked);
-        }
-      }
-    }
+  }
 
 }

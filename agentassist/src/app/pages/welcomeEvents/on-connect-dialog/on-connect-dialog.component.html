@@ -104,7 +104,7 @@
             </div>
             <div class="accordion-footer">
                 <button class="kr-sg-button-secondary btn_lg" (click)="cancelDialogTask()">{{'BUTTONS.CANCEL' | translate}}</button>
-                <button class="kr-sg-button-primary btn_lg" [disabled]="onConnectDialogForm?.invalid || !selectedUseCase" (click)="saveDialogTask()">{{'BUTTONS.SAVE' | translate}}</button>
+                <button class="kr-sg-button-primary btn_lg" [disabled]="onConnectDialogForm?.invalid || !selectedUseCase || noFormchange" (click)="saveDialogTask()">{{'BUTTONS.SAVE' | translate}}</button>
             </div>
         </div>
     </div>
