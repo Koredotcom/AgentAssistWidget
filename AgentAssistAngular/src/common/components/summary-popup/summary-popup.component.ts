@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ProjConstants } from 'src/common/constants/proj.cnts';
+import { CommonService } from 'src/common/services/common.service';
+import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 
 @Component({
   selector: 'app-summary-popup',
@@ -14,10 +16,19 @@ export class SummaryPopupComponent implements OnInit {
   editedSummaryText : any;
   projCnst : any = ProjConstants;
   tooltipText : string = ProjConstants.COPY;
+  aaSettings: any = {};
+  submitEnabled:boolean = false
 
-  constructor() { }
+  constructor(public handleSubjectService: HandleSubjectService) { }
 
   ngOnInit(): void {
+    this.handleSubjectService.agentAssistSettingsSubject.subscribe((settings: any) => {
+      this.aaSettings = settings;
+      if(this.aaSettings?.summarization?.isEnabled) {
+        this.submitEnabled = this.aaSettings?.summarization?.canSubmit
+      }
+      
+    })
     this.editedSummaryText = this.summaryText?.summary ? this.summaryText?.summary[0]: '';
   }
 

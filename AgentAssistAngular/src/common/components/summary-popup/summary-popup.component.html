@@ -6,7 +6,7 @@
             <div class="label-text">Remarks</div>
             <textarea class="input-text" id="summaryText" rows="4" cols="50" [(ngModel)]="editedSummaryText"></textarea>
         </div>
-        <button class="submit-btn" id="summarySubmit" (click)="summaryButtonClick(true)">Submit</button>
+        <button class="submit-btn" *ngIf="submitEnabled" id="summarySubmit" (click)="summaryButtonClick(true)">Submit</button>
         <button class="btn-secondary-button" id="summaryCopy"
         (click)="handleCopyButton(editedSummaryText)" [disabled]="(tooltipText === projCnst.COPIED)">{{tooltipText}}</button>
     </div>
