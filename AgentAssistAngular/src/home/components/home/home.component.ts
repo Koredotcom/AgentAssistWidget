@@ -378,6 +378,7 @@ export class HomeComponent implements OnInit {
 
     if (!(window)._agentAssisteventListenerAdded) {
       window.addEventListener("message", (e: any) => {
+        let customObj = {};
         if (e.data.name === EVENTS.response_resolution_comments &&  e.data.conversationId == this.connectionDetails.conversationId) {
           this.handleResponseResoultionComments(e.data);
         }
@@ -422,6 +423,11 @@ export class HomeComponent implements OnInit {
             return;
           }
         }
+
+        if(e.data.type === 'USER') {
+          console.log("🚀 ~ file: home.component.ts:427 ~ HomeComponent ~ window.addEventListener ~ e.data:", e.data)
+          customObj = e.data.customData;
+        }
         
 
         if (e.data.value) {
@@ -449,8 +455,8 @@ export class HomeComponent implements OnInit {
             },
             "event": "user_message"
          }
-         if(userInputData?.customData) {
-          agent_assist_request['customData'] = JSON.parse(JSON.stringify(userInputData?.customData));
+         if(Object.keys(customObj).length > 0) {
+          agent_assist_request['customData'] = JSON.parse(JSON.stringify(customObj));
         }
           if (this.commonService.isCallConversation === true) {
             this.handleSubjectService.setAgentOrTranscriptResponse(userInputData);
