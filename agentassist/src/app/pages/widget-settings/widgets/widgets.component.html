@@ -370,7 +370,7 @@
                    </div>
                    <div class="widgetenable-footer">
                     <button class="kr-sg-button-secondary-two btn_lg" (click)="cancleAgentAssistSettingsNew('search', clonedWidgetSettings)">{{'BUTTONS.CANCEL' | translate}}</button>
-                    <button class="kr-sg-button-primary btn_lg" [disabled]="!knowledgeAIFormGroup.valid " (click)="saveAgentAssistSettingsNew('search')">Save</button>
+                    <button class="kr-sg-button-primary btn_lg" [disabled]="!knowledgeAIFormGroup.dirty || !isApiConfigured" (click)="saveAgentAssistSettingsNew('search')">Save</button>
                    </div>
                </div>
             </div>
