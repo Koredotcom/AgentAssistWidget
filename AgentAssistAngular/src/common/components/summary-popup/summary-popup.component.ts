@@ -17,7 +17,7 @@ export class SummaryPopupComponent implements OnInit {
   projCnst : any = ProjConstants;
   tooltipText : string = ProjConstants.COPY;
   aaSettings: any = {};
-  submitEnabled:any = false
+  submitEnabled:boolean = false
 
   constructor(public handleSubjectService: HandleSubjectService) { }
 
