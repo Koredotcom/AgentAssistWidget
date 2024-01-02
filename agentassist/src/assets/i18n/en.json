@@ -2138,7 +2138,7 @@
     "CHECKLIST.PRIMARY": "Primary",
     "CHECKLIST.DYNAMIC": "Dynamic",
     "MAX_FILE_SIZE_PERMITED_MB": "Maximum file size Permited 2MB",
-    "AGENTASSIST_SETTINGS_SAVED": "Agent Assist setting saved Successfully",
+    "AGENTASSIST_SETTINGS_SAVED": "Settings saved successfully",
     "FALLBACK_ERROR_MSG" : "Falied to get the AgentAssist settings",
     "SAVE_FALLBACK_ERROR_MSG" : "Failed to save the AgentAssist Settings",
     "LBL_AGENT_EXPERIENCE" : "Experience",
