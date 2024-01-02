@@ -1,10 +1,10 @@
 @font-face {
-  font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?41e5n1');
-  src:  url('fonts/icomoon.eot?41e5n1#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?41e5n1') format('truetype'),
-    url('fonts/icomoon.woff?41e5n1') format('woff'),
-    url('fonts/icomoon.svg?41e5n1#icomoon') format('svg');
+  font-family: 'icomoon-agentassist';
+  src:  url('fonts/icomoon-agentassist.eot?6zv1r5');
+  src:  url('fonts/icomoon-agentassist.eot?6zv1r5#iefix') format('embedded-opentype'),
+    url('fonts/icomoon-agentassist.ttf?6zv1r5') format('truetype'),
+    url('fonts/icomoon-agentassist.woff?6zv1r5') format('woff'),
+    url('fonts/icomoon-agentassist.svg?6zv1r5#icomoon-agentassist') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -12,7 +12,7 @@
 
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
+  font-family: 'icomoon-agentassist' !important;
   speak: never;
   font-style: normal;
   font-weight: normal;
@@ -26,7 +26,6 @@
 }
 
 .icon-sa-play-book:before {
-  background-color: red;
   content: "\e98f";
 }
 .icon-ast_thumbsup:before {
