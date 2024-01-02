@@ -68,7 +68,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   AutoSuggestions = [{type:'On'}, {type: 'Off'}];
   integration = [
     {type:'basic', desc: 'Use default Knowledge AI Configurations'}, 
-    {type:'advanced', desc:'Configure how you want to use Knowledge AI'}
+    {type:'advance', desc:'Configure how you want to use Knowledge AI'}
   ]
   advancedModeScript: string = '';
 
@@ -165,7 +165,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       .patchValue(criteria);
 
 
-      if(searchObj?.integrations?.type === 'advanced') {
+      if(searchObj?.integrations?.type === 'advance') {
         ((((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
       .addControl('config', this.fb.group({
         script: [searchObj.integrations?.config.script || '']
@@ -392,7 +392,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       ((((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
        .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
       this.knowledgeAIFormGroup.get('searchAssistConfig').get('integrations').updateValueAndValidity();
-      if(this.knowledgeAIFormGroup?.value?.searchAssistConfig?.integrations?.type === 'advanced' && emitedValue.length !== 0) {
+      if(this.knowledgeAIFormGroup?.value?.searchAssistConfig?.integrations?.type === 'advance' && emitedValue.length !== 0) {
         this.isApiConfigured = true;
       } else {
         this.isApiConfigured = false;
@@ -412,7 +412,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.isApiConfigured = true;
     ((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
     .removeControl('config');
-    if(integrate.type === 'advanced') {
+    if(integrate.type === 'advance') {
       ((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
       .addControl('config', this.fb.group({
         script: ['',[Validators.required]],
