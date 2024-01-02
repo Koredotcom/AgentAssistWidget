@@ -23,7 +23,7 @@
                 </ul>
             </div>
             <div class="right-action-btns">
-                <button class="kr-sg-button-secondary-two btn_lg publish" (click)="publush()" [disabled]="!(checkList1?.primaryCheckList?.length || checkList2?.dynamicList?.length) || loading">{{loading ? 'Publishing...' : 'Publish'}}</button>
+                <button class="kr-sg-button-secondary-two btn_lg publish" (click)="publush()" [disabled]="!(checkList1?.primaryCheckList?.length || checkList2?.dynamicList?.length) || publishInprogress">{{loading ? 'Publishing...' : 'Publish'}}</button>
                 <button class="kr-sg-button-primary btn_lg" (click)="createCheckList(checklistCreation)">+ New Playbook</button>
             </div>
         </div>
