@@ -393,6 +393,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
        .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
       this.knowledgeAIFormGroup.get('searchAssistConfig').get('integrations').updateValueAndValidity();
       if(this.knowledgeAIFormGroup?.value?.searchAssistConfig?.integrations?.type === 'advance' && emitedValue.length !== 0) {
+        this.knowledgeAIFormGroup.markAsDirty();
         this.isApiConfigured = true;
       } else {
         this.isApiConfigured = false;
