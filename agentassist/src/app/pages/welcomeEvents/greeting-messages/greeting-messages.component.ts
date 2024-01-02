@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -245,6 +246,15 @@ export class GreetingMessagesComponent implements OnInit {
     
     // this.saveGreetingMessages.emit(payLoad);
 
+  }
+
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.greetingLocaleMap[this.selectedLocale], event.previousIndex, event.currentIndex);
+    if(event.previousIndex != event.currentIndex){
+      this.noFormchange = false;
+    }
+    this.updateGreetingFormLocale();
   }
 
   cancelGreetMessages() {

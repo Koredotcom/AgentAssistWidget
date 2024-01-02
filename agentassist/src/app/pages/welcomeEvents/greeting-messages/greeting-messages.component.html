@@ -98,58 +98,63 @@
                             </div>
                         </div>
                     </div>
-                    <div class="messages-rendor-table" *ngIf="greetingLocaleMap && greetingLocaleMap[selectedLocale]?.length > 0">
-                        <div class="rendor-table-data" *ngFor="let item of greetingLocaleMap[selectedLocale]; let i = index">
-                            <div class="data-cell w-65">
-                                <div class="rendor-message">
-                                    <div class="rendor-message-icon">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                            <path
-                                                d="M13.3334 4.99992C13.7937 4.99992 14.1667 4.62682 14.1667 4.16659C14.1667 3.70635 13.7937 3.33325 13.3334 3.33325C12.8732 3.33325 12.5001 3.70635 12.5001 4.16659C12.5001 4.62682 12.8732 4.99992 13.3334 4.99992Z"
-                                                stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path
-                                                d="M13.3334 10.8333C13.7937 10.8333 14.1667 10.4602 14.1667 9.99992C14.1667 9.53968 13.7937 9.16659 13.3334 9.16659C12.8732 9.16659 12.5001 9.53968 12.5001 9.99992C12.5001 10.4602 12.8732 10.8333 13.3334 10.8333Z"
-                                                stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path
-                                                d="M13.3334 16.6666C13.7937 16.6666 14.1667 16.2935 14.1667 15.8333C14.1667 15.373 13.7937 14.9999 13.3334 14.9999C12.8732 14.9999 12.5001 15.373 12.5001 15.8333C12.5001 16.2935 12.8732 16.6666 13.3334 16.6666Z"
-                                                stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path
-                                                d="M7.50008 4.99992C7.96032 4.99992 8.33341 4.62682 8.33341 4.16659C8.33341 3.70635 7.96032 3.33325 7.50008 3.33325C7.03984 3.33325 6.66675 3.70635 6.66675 4.16659C6.66675 4.62682 7.03984 4.99992 7.50008 4.99992Z"
-                                                stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path
-                                                d="M7.50008 10.8333C7.96032 10.8333 8.33341 10.4602 8.33341 9.99992C8.33341 9.53968 7.96032 9.16659 7.50008 9.16659C7.03984 9.16659 6.66675 9.53968 6.66675 9.99992C6.66675 10.4602 7.03984 10.8333 7.50008 10.8333Z"
-                                                stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path
-                                                d="M7.50008 16.6666C7.96032 16.6666 8.33341 16.2935 8.33341 15.8333C8.33341 15.373 7.96032 14.9999 7.50008 14.9999C7.03984 14.9999 6.66675 15.373 6.66675 15.8333C6.66675 16.2935 7.03984 16.6666 7.50008 16.6666Z"
-                                                stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </div>
-                                    <span>{{item.message}}</span>
-                                </div>
-                            </div>
-                            <div class="data-cell w-15">
-                                <div class="rendor-message-action">
-                                    <span><i class="icon-sa-welcome-edit" (click)="openWelcomeEvent('Edit', i)"></i></span>
-                                    <span><i class="icon-sa-delete" (click)="deleteMsg(item, i)"></i></span>
-                                </div>
-                            </div>
-                            <div class="data-cell w-20">
-                                <div class="toggle-info-data m-0">
-                                    <label class="kr-sg-toggle">
-                                        <input type="checkbox" [checked]="item.enabled" (change)="toggleMsgEnable($event, i)">
-                                        <div class="slider">
-                                            <span class="enabled"></span>
-                                            <span class="disabled"></span>
+                    <div class="messages-rendor-table" cdkDropList (cdkDropListDropped)="drop($event)" *ngIf="greetingLocaleMap && greetingLocaleMap[selectedLocale]?.length > 0">
+                        <div class="rendor-table-data"  *ngFor="let item of greetingLocaleMap[selectedLocale]; let i = index">
+                            <div cdkDrag class="example-box">
+                                <div class="data-cell w-65" >
+                                    <div class="rendor-message">
+                                        <div class="drag-content" cdkDragHandle>
+                                            <i class="icon-coaching--move1"></i>
                                         </div>
-                                    </label>
-                                    <div class="content-data-toggle">
-                                        <h1>{{item.enabled ? ('WELCOME_EVENT_ENABLED' | translate) : ('WELCOME_EVENT_DISABLED' | translate)}}</h1>
+                                        <!-- <div class="rendor-message-icon" cdkDragHandle>
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                <path
+                                                    d="M13.3334 4.99992C13.7937 4.99992 14.1667 4.62682 14.1667 4.16659C14.1667 3.70635 13.7937 3.33325 13.3334 3.33325C12.8732 3.33325 12.5001 3.70635 12.5001 4.16659C12.5001 4.62682 12.8732 4.99992 13.3334 4.99992Z"
+                                                    stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M13.3334 10.8333C13.7937 10.8333 14.1667 10.4602 14.1667 9.99992C14.1667 9.53968 13.7937 9.16659 13.3334 9.16659C12.8732 9.16659 12.5001 9.53968 12.5001 9.99992C12.5001 10.4602 12.8732 10.8333 13.3334 10.8333Z"
+                                                    stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M13.3334 16.6666C13.7937 16.6666 14.1667 16.2935 14.1667 15.8333C14.1667 15.373 13.7937 14.9999 13.3334 14.9999C12.8732 14.9999 12.5001 15.373 12.5001 15.8333C12.5001 16.2935 12.8732 16.6666 13.3334 16.6666Z"
+                                                    stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M7.50008 4.99992C7.96032 4.99992 8.33341 4.62682 8.33341 4.16659C8.33341 3.70635 7.96032 3.33325 7.50008 3.33325C7.03984 3.33325 6.66675 3.70635 6.66675 4.16659C6.66675 4.62682 7.03984 4.99992 7.50008 4.99992Z"
+                                                    stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M7.50008 10.8333C7.96032 10.8333 8.33341 10.4602 8.33341 9.99992C8.33341 9.53968 7.96032 9.16659 7.50008 9.16659C7.03984 9.16659 6.66675 9.53968 6.66675 9.99992C6.66675 10.4602 7.03984 10.8333 7.50008 10.8333Z"
+                                                    stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M7.50008 16.6666C7.96032 16.6666 8.33341 16.2935 8.33341 15.8333C8.33341 15.373 7.96032 14.9999 7.50008 14.9999C7.03984 14.9999 6.66675 15.373 6.66675 15.8333C6.66675 16.2935 7.03984 16.6666 7.50008 16.6666Z"
+                                                    stroke="#667085" stroke-width="1.66667" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+                                        </div> -->
+                                        <span>{{item.message}}</span>
+                                    </div>
+                                </div>
+                                <div class="data-cell w-15">
+                                    <div class="rendor-message-action">
+                                        <span><i class="icon-sa-welcome-edit" (click)="openWelcomeEvent('Edit', i)"></i></span>
+                                        <span><i class="icon-sa-delete" (click)="deleteMsg(item, i)"></i></span>
+                                    </div>
+                                </div>
+                                <div class="data-cell w-20">
+                                    <div class="toggle-info-data m-0">
+                                        <label class="kr-sg-toggle">
+                                            <input type="checkbox" [checked]="item.enabled" (change)="toggleMsgEnable($event, i)">
+                                            <div class="slider">
+                                                <span class="enabled"></span>
+                                                <span class="disabled"></span>
+                                            </div>
+                                        </label>
+                                        <div class="content-data-toggle">
+                                            <h1>{{item.enabled ? ('WELCOME_EVENT_ENABLED' | translate) : ('WELCOME_EVENT_DISABLED' | translate)}}</h1>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

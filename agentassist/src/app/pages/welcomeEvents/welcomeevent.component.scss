@@ -297,58 +297,65 @@
                 border: 1px solid var(--Primary-Colors-Gray-200, #eaecf0);
                 background: var(--Base-White, #fff);
                 .rendor-table-data {
-                    display: flex;
-                    padding: 16px 0px;
-                    align-items: center;
-                    border-bottom: 1px solid var(--Gray-200, #eaecf0);
-                    .data-cell {
-                        padding: 0px 16px;
-                        .rendor-message {
-                            display: flex;
-                            gap: 8px;
-                            align-items: center;
-                            .rendor-message-icon {
-                                flex-shrink: 0;
-                                cursor: pointer;
+                    .example-box{
+                        display: flex;
+                        padding: 16px 0px;
+                        align-items: center;
+                        border-bottom: 1px solid var(--Gray-200, #eaecf0);
+                        .data-cell {
+                            padding: 0px 16px;
+                            .drag-content{
+                                height: max-content;
+                                margin-top: 4px;
+                                cursor: move;
                             }
-                            span {
-                                display: -webkit-box;
-                                -webkit-box-orient: vertical;
-                                -webkit-line-clamp: 1;
-                                overflow: hidden;
-                                color: var(--Gray-900, #101828);
-                                text-overflow: ellipsis;
-                                font-size: 14px;
-                                font-weight: 400;
-                                line-height: 20px;
-                            }
-                        }
-                        .rendor-message-action {
-                            display: flex;
-                            gap: 8px;
-                            span {
-                                width: 24px;
-                                height: 24px;
-                                justify-content: center;
+                            .rendor-message {
                                 display: flex;
+                                gap: 8px;
                                 align-items: center;
-                                color: #667085;
-                                cursor: pointer;
-                                font-size: 14px;
-                                &:last-child {
-                                    color: #d92d20;
+                                .rendor-message-icon {
+                                    flex-shrink: 0;
+                                    cursor: pointer;
+                                }
+                                span {
+                                    display: -webkit-box;
+                                    -webkit-box-orient: vertical;
+                                    -webkit-line-clamp: 1;
+                                    overflow: hidden;
+                                    color: var(--Gray-900, #101828);
+                                    text-overflow: ellipsis;
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    line-height: 20px;
+                                }
+                            }
+                            .rendor-message-action {
+                                display: flex;
+                                gap: 8px;
+                                span {
+                                    width: 24px;
+                                    height: 24px;
+                                    justify-content: center;
+                                    display: flex;
+                                    align-items: center;
+                                    color: #667085;
+                                    cursor: pointer;
+                                    font-size: 14px;
+                                    &:last-child {
+                                        color: #d92d20;
+                                    }
                                 }
                             }
                         }
-                    }
-                    &:first-child {
-                        border-radius: 8px 8px 0px 0px;
-                    }
-                    &:first-child {
-                        border-radius: 0px 0px 8px 8px;
-                    }
-                    &:nth-child(odd) {
-                        background-color: var(--Primary-Colors-Gray-50, #f9fafb);
+                        &:first-child {
+                            border-radius: 8px 8px 0px 0px;
+                        }
+                        &:first-child {
+                            border-radius: 0px 0px 8px 8px;
+                        }
+                        &:nth-child(odd) {
+                            background-color: var(--Primary-Colors-Gray-50, #f9fafb);
+                        }
                     }
                 }
             }
