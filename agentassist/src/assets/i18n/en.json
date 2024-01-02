@@ -2154,7 +2154,7 @@
     "WELCOME_EVENT_TITLE" : "Welcome Event",
     "WELCOME_EVENT_DESC" : "Define welcome event activities for Agents",
     "WELCOME_EVENT_TOOLTIP" : "\"Configure the welcome experience when AgentAssist Widget is launched.\"",
-    "AA_ON_CONNECT_EVENT" : "AA_ON_CONNECT_EVENT",
+    "AA_ON_CONNECT_EVENT" : "On-Connect Task",
     "AA_GREETING_MESSAGES" : "Greeting Messages",
     "PRIORITY_SETTINGS" : "Priority Settings",
     "PRIORITY_SETTINS_DESC" : "Select the priority settings of Welcome Events.",

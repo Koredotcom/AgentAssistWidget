@@ -62,7 +62,7 @@ export class WelcomeEventsService {
         "dialogId": new FormControl(data?.dialogId || '', Validators.required),
         "taskRefId": new FormControl(data?.taskRefId || '', Validators.required),
         "extractIntents": new FormControl(data?.extractIntents || false, Validators.required),
-        "linkedBotId": new FormControl(data?.linkedBotId || '', Validators.required)
+        "linkedBotId": new FormControl(data?.linkedBotId || '')
       };
     }
 

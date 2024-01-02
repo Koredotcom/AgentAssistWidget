@@ -48,8 +48,7 @@ export class PrioritySettingsComponent implements OnInit {
 
   updatePriorityForm(priorityData) {
     this.priorityForm = new FormGroup({
-      [this.onConnectStr] : new FormControl(priorityData?.AA_ON_CONNECT_EVENT || false, Validators.required),
-      [this.greetMsgStr] : new FormControl(priorityData?.AA_ON_CONNECT_EVENT || false, Validators.required)
+      event : new FormControl(priorityData?.event || false, Validators.required)
     });
 
     this.priorityForm.valueChanges.subscribe((data)=> {
@@ -75,17 +74,6 @@ export class PrioritySettingsComponent implements OnInit {
 
     console.log(this.priorityForm.value, "priority form value");
     // this.savePrioritySettings.emit(payLoad);
-  }
-
-  priorityInputClick(event, name) {
-    if (event.target.checked != this.priorityForm.value[name]) {
-      this.priorityForm.controls[name].setValue(event.target.checked);
-      if (name == this.onConnectStr && this.greetingEnable) {
-        this.priorityForm.controls.AA_GREETING_MESSAGES.setValue(!event.target.checked);
-      } else if (name == this.greetMsgStr && this.onConnectEnable) {
-        this.priorityForm.controls.AA_ON_CONNECT_EVENT.setValue(!event.target.checked);
-      }
-    }
   }
 
 }

@@ -35,6 +35,7 @@ export class GreetingMessagesComponent implements OnInit {
   selectedMessageCount: number = 0;
   subs = new SubSink();
   noFormchange : boolean = true;
+  default_lang : string = 'en';
 
   greetMsgStr = 'AA_GREETING_MESSAGES';
   newStr = 'New';
@@ -50,6 +51,7 @@ export class GreetingMessagesComponent implements OnInit {
     this.subs.sink = this.welcomeEventService.welcomeEventData$.subscribe((data) => {
       if (data) {
         this.welcomeTaskData = data;
+        this.supportBackwardCompatibility(data);
         this.welcomeTaskPreviousData = JSON.parse(JSON.stringify(this.welcomeEventService.formatWelcomeTaskData(this.welcomeTaskData)));
         this.updateData(this.welcomeTaskData);
         this.initGreetingForm(this.welcomeTaskData);
@@ -59,14 +61,25 @@ export class GreetingMessagesComponent implements OnInit {
     })
   }
 
+  supportBackwardCompatibility(data){
+    if(!data[this.greetMsgStr]){
+      data[this.greetMsgStr] = { name : this.greetMsgStr, enabled : false, config : {}};
+    }
+    if(!data[this.greetMsgStr]?.config[this.greetingActiveTab]){
+      data[this.greetMsgStr].config[this.greetingActiveTab] = {"randomMsg" : false, locale : {'en' : []}}
+    }
+    
+  }
+
   changeGreetingActiveTab(tab) {
     this.greetingActiveTab = tab;
+    this.supportBackwardCompatibility(this.welcomeTaskData);
     this.updateData(this.welcomeTaskPreviousData);
     this.initGreetingForm(this.welcomeTaskPreviousData);
   }
 
   updateData(welcomeTaskData) {
-    if (welcomeTaskData && welcomeTaskData[this.greetMsgStr]?.config && welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab] && welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab].locale) {
+    if (welcomeTaskData && welcomeTaskData[this.greetMsgStr]?.config && welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab] && Object.keys(welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab].locale)?.length) {
       this.greetingLocaleMap = JSON.parse(JSON.stringify(welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab].locale));
       this.selectedLocale = Object.keys(this.greetingLocaleMap)[0];
     }
@@ -133,7 +146,10 @@ export class GreetingMessagesComponent implements OnInit {
 
   toggleMsgEnable(event, index) {
     let langEnableCount = this.getLangEnableCount();
-    if (this.welcomeTaskData[this.greetMsgStr].config[this.greetingActiveTab].randomMsg || langEnableCount <= 2) {
+    if(!event.target.checked){
+      this.greetingLocaleMap[this.selectedLocale][index].enabled = event.target.checked;
+      this.updateGreetingFormLocale();
+    }else if (this.welcomeTaskData[this.greetMsgStr].config[this.greetingActiveTab].randomMsg || langEnableCount <= 2) {
       this.greetingLocaleMap[this.selectedLocale][index].enabled = event.target.checked;
       this.updateGreetingFormLocale();
     } else {
@@ -177,7 +193,7 @@ export class GreetingMessagesComponent implements OnInit {
       this.selectedMsg = JSON.parse(JSON.stringify(this.greetingLocaleMap[this.selectedLocale][index]));
     }
 
-    if (this.selectedMsgActionMode == this.editStr || (this.selectedMsgActionMode == this.newStr && this.greetingLocaleMap[this.selectedLocale].length < 10)) {
+    if (this.selectedMsgActionMode == this.editStr || (this.selectedMsgActionMode == this.newStr && (this.greetingLocaleMap[this.selectedLocale]?.length || 0) < 10)) {
       this.showProTip = true;
       this.newWelcomeEventSlider.openSlider("#newWelcome", "width550");
     } else {

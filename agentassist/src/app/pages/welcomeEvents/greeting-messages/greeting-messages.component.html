@@ -60,7 +60,7 @@
                                 </svg>{{'WELCOME_EVENT_ADD_MSG' | translate}}</button>
                             <div class="message-dropdown dropdown-menu content-menu" ngbDropdownMenu>
                                 <span (click)="openWelcomeEvent('New')" ngbDropdownItem>{{'WELCOME_EVENT_NEW_MSG' | translate}}</span>
-                                <span (click)="openModal(contentDeleteWelcomeEvents)" *ngIf="greetingActiveTab != 'email'" ngbDropdownItem>{{'WELCOME_EVENT_COPY_FROM' |  translate:{ x: greetingActiveTab == 'chat' ? 'Voice' : 'Chat'} }}</span>
+                                <span (click)="openModal(contentDeleteWelcomeEvents)" *ngIf="greetingActiveTab != 'email'" ngbDropdownItem [disabled]="!welcomeTaskPreviousData[greetMsgStr]?.config[greetingActiveTab == 'chat' ? 'voice' : 'chat']?.locale[selectedLocale]?.length">{{'WELCOME_EVENT_COPY_FROM' |  translate:{ x: greetingActiveTab == 'chat' ? 'Voice' : 'Chat'} }}</span>
                             </div>
                         </div>
 
@@ -263,10 +263,10 @@
         </div>
         <div class="confirm-footer">
             <span class="confirm-footer-badge">{{selectedMessageCount}} Selected</span>
-            <span class="warn-message" *ngIf="(greetingLocaleMap[this.selectedLocale]?.length + selectedMessageCount) > 10">Can't add More than {{10 - greetingLocaleMap[this.selectedLocale]?.length}} Please Deselect few messages</span>
+            <span class="warn-message" *ngIf="((greetingLocaleMap[this.selectedLocale]?.length || 0) + selectedMessageCount) > 10">Can't add More than {{10 - greetingLocaleMap[this.selectedLocale]?.length}} Please Deselect few messages</span>
             <div class="confirm-copy-actions">
                 <button class="kr-sg-button-secondary btn_lg" (click)="closeModal()">Cancel</button>
-                <button class="kr-sg-button-primary btn_lg" (click)="copyMessages()" [disabled]="(greetingLocaleMap[this.selectedLocale].length + selectedMessageCount) > 10">Confirm</button>
+                <button class="kr-sg-button-primary btn_lg" (click)="copyMessages()" [disabled]="((greetingLocaleMap[this.selectedLocale]?.length || 0) + selectedMessageCount) > 10">Confirm</button>
             </div>
         </div>
     </div>

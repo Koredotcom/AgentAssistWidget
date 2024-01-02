@@ -41,6 +41,9 @@ export class OnConnectDialogComponent implements OnInit {
   subscribeEvents() {
     this.subs.sink = this.welcomeEventService.welcomeEventData$.subscribe((data) => {
       if (data) {
+        if(!data[this.onConnectStr]){
+          data[this.onConnectStr] = { name : this.onConnectStr, enabled : false};
+        }
         this.welcomeTaskData = data;
         this.welcomeTaskPreviousData = JSON.parse(JSON.stringify(this.welcomeEventService.formatWelcomeTaskData(this.welcomeTaskData)));
         this.updateUseCaseData();
@@ -155,7 +158,11 @@ export class OnConnectDialogComponent implements OnInit {
     for (let key in (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls) {
       if (this.onConnectDialogForm.get('enabled').value && this.selectedUseCase != 'none') {
         let validatorList: any = [Validators.required];
-        (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls[key].setValidators(validatorList);
+        if(key == 'linkedBotId' && this.currentBt.type == this.universalBot ){
+          (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls['linkedBotId'].setValidators(validatorList);
+        }else if(key != 'linkedBotId'){
+          (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls[key].setValidators(validatorList);
+        }
       } else {
         (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls[key].clearValidators();
       }

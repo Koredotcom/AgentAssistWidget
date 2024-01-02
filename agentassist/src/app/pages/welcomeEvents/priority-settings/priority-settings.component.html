@@ -15,26 +15,24 @@
                     <div class="accordion-header-des">{{'PRIORITY_SETTINS_DESC' | translate}}</div> 
                 </div>
             </div>
-            <div class="agent-counts" *ngIf="priorityForm?.get('AA_ON_CONNECT_EVENT')?.value || priorityForm?.get('AA_GREETING_MESSAGES')?.value">
-                <span class="accordion-badge">{{priorityForm?.get('AA_ON_CONNECT_EVENT')?.value ? ('ON_CONNECT_TASK' | translate) : (priorityForm?.get('AA_GREETING_MESSAGES')?.value ? ('GREETING_MESSAGES' | translate) : '' )}}</span>
+            <div class="agent-counts" *ngIf="priorityForm?.get('event')?.value">
+                <span class="accordion-badge">{{ priorityForm?.get('event')?.value ? (priorityForm?.get('event')?.value | translate) : '' }}</span>
             </div>
         </div>
     </div>
-    <div id="prioritySettings" class="collapse">
+    <div id="prioritySettings" class="collapse" [formGroup]="priorityForm">
         <div class="accordion-content-body">
             <div class="priority-settings-wrapper">
                 <div class="settings-des">{{'CHOOSE_PRIORITY' | translate}}</div>
                 <div class="kr-sg-radiobutton p-0" [class.disabled]="!onConnectEnable">
-                    <input id="connect_dialoge" name="AA_ON_CONNECT_EVENT" class="radio-custom" type="radio"
-                        [checked]="priorityForm?.get('AA_ON_CONNECT_EVENT')?.value"
-                        (click)="priorityInputClick($event,'AA_ON_CONNECT_EVENT')">
-                    <label for="connect_dialoge" class="radio-custom-label">{{'ON_CONNECT_DIALOG' | translate}}</label>
+                    <input id="AA_ON_CONNECT_EVENT" class="radio-custom" type="radio" value="AA_ON_CONNECT_EVENT" name="event"
+                        formControlName="event">
+                    <label for="AA_ON_CONNECT_EVENT" class="radio-custom-label">{{'ON_CONNECT_DIALOG' | translate}}</label>
                 </div>
                 <div class="kr-sg-radiobutton  p-0" [class.disabled]="!greetingEnable">
-                    <input id="greeting_messages" name="AA_GREETING_MESSAGES" class="radio-custom" type="radio"
-                        [checked]="priorityForm?.get('AA_GREETING_MESSAGES')?.value"
-                        (click)="priorityInputClick($event, 'AA_GREETING_MESSAGES')">
-                    <label for="greeting_messages" class="radio-custom-label">{{'GREETING_MESSAGES' | translate}}</label>
+                    <input id="AA_GREETING_MESSAGES" class="radio-custom" type="radio" value="AA_GREETING_MESSAGES" name="event"
+                        formControlName="event">
+                    <label for="AA_GREETING_MESSAGES" class="radio-custom-label">{{'GREETING_MESSAGES' | translate}}</label>
                 </div>
             </div>
             <div class="accordion-footer">
