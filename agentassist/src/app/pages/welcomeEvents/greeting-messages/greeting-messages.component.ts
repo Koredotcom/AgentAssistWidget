@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { SubSink } from 'subsink';
+import { DeleteGreetMessageComponent } from '../delete-greet-message/delete-greet-message.component';
 import { WelcomeEventsService } from '../welcome-events.service';
 
 @Component({
@@ -36,6 +37,7 @@ export class GreetingMessagesComponent implements OnInit {
   subs = new SubSink();
   noFormchange : boolean = true;
   default_lang : string = 'en';
+  deleteModalRef : any;
 
   greetMsgStr = 'AA_GREETING_MESSAGES';
   newStr = 'New';
@@ -169,6 +171,23 @@ export class GreetingMessagesComponent implements OnInit {
     }
     this.updateGreetingFormLocale();
     this.closeGreeMessageSlider();
+  }
+
+  openDeleteMsgPopup(item, index) {
+    let deleteMessage = {
+      title: "Delete Message",
+      desc: "Are you sure, you want to delete message.",
+      type: "message",
+      item : item,
+      index : index
+    }
+    this.deleteModalRef = this.modalService.open(DeleteGreetMessageComponent, { centered: true, keyboard: false, windowClass: 'delete-greet-msg-modal', backdrop: 'static' });
+    this.deleteModalRef.componentInstance.data = deleteMessage;
+    this.deleteModalRef.result.then(emitedValue => {
+      if (emitedValue) {
+        this.deleteMsg(deleteMessage.item, deleteMessage.index);
+      }
+    });
   }
 
   deleteMsg(item, index) {

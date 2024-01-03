@@ -8,13 +8,14 @@ import { PrioritySettingsComponent } from './priority-settings/priority-settings
 import { OnConnectDialogComponent } from './on-connect-dialog/on-connect-dialog.component';
 import { GreetingMessagesComponent } from './greeting-messages/greeting-messages.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { DeleteGreetMessageComponent } from './delete-greet-message/delete-greet-message.component';
 
 const routes: Routes = [
   { path: '', component:  WelcomeeventComponent}
 ];
 
 @NgModule({
-  declarations: [WelcomeeventComponent, NewWelcomeEventComponent, PrioritySettingsComponent, OnConnectDialogComponent, GreetingMessagesComponent],
+  declarations: [WelcomeeventComponent, NewWelcomeEventComponent, PrioritySettingsComponent, OnConnectDialogComponent, GreetingMessagesComponent, DeleteGreetMessageComponent],
   imports: [
     DragDropModule,
     CommonModule,
