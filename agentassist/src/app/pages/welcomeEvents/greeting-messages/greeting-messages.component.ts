@@ -124,6 +124,9 @@ export class GreetingMessagesComponent implements OnInit {
     this.welcomeTaskData[this.greetMsgStr].config[this.greetingActiveTab].randomMsg = event.target.checked;
     if (!event.target.checked) {
       this.toggleMsgEnabling(false);
+    }else{
+      this.toggleMsgEnabling(true);
+      this.showMsgEnableWarn = false;
     }
   }
 
@@ -131,6 +134,7 @@ export class GreetingMessagesComponent implements OnInit {
     this.greetingLocaleMap[this.selectedLocale].forEach((obj: any) => {
       obj.enabled = flag;
     });
+    this.updateGreetingFormLocale();
   }
 
   selectedLang(item) {
@@ -193,6 +197,9 @@ export class GreetingMessagesComponent implements OnInit {
   deleteMsg(item, index) {
     this.greetingLocaleMap[this.selectedLocale].splice(index, 1);
     this.updateGreetingFormLocale();
+    if(this.greetingLocaleMap[this.selectedLocale]?.length <= 10){
+      this.showExceedMsgWarn = false;
+    }
   }
 
   updateGreetingFormLocale() {
@@ -237,6 +244,7 @@ export class GreetingMessagesComponent implements OnInit {
     this.copyMessageList.forEach((obj: any) => {
       obj.selected = false;
     });
+    this.copyMultiSelectModal = false;
     this.selectedMessageCount = 0;
     this.modalService.open(contentDeleteWelcomeEvents, { backdropClass: 'adjust-zindex-above-slider', modalDialogClass: 'confirm-copy', centered: true, backdrop: 'static', keyboard: false });
   }
@@ -250,7 +258,7 @@ export class GreetingMessagesComponent implements OnInit {
   copyMessages() {
     this.copyMessageList.forEach((obj: any) => {
       if (obj.selected) {
-        this.greetingLocaleMap[this.selectedLocale].push({ message: obj.message, enabled: false });
+        this.greetingLocaleMap[this.selectedLocale].push({ message: obj.message, enabled: this.greetingForm?.get('config')?.get(this.greetingActiveTab)?.get('randomMsg')?.value ? true : false });
       }
     });
     this.updateGreetingFormLocale();
