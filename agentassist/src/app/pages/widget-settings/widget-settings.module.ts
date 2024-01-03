@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { WidgetsComponent } from './widgets/widgets.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
+import { ApiAdvancedModelComponent } from './api-advanced-model/api-advanced-model.component';
 
 const routes: Routes = [
   { path: '', component:  WidgetsComponent}
@@ -10,7 +11,8 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    WidgetsComponent
+    WidgetsComponent,
+    ApiAdvancedModelComponent
   ],
   imports: [
     CommonModule,

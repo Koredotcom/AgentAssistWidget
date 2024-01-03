@@ -25,6 +25,27 @@
                           </ul>
                     </div>
                 </div>
+                <div class="aa-voice-audio-data">
+                    <div class="label-text">{{'SELECT_PREFERRED_LANGUAGE' | translate}}</div>
+                        <div class="kr-sg-dropdowns">
+                            <div class="dropdown dropdown-open open">
+                                <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{selectedTTSLanguage?.displayName}}</button>                                            
+                                <ul class="dropdown-menu content-menu">
+                                    <li class="search-box">
+                                        <input type="text" placeholder="{{'PLACEHOLDERS.SEARCH' | translate}}" class="seach-input" #voiceLangSearchTerm (input)="voiceLangSearchTerm.value = $event.target.value">
+                                        <img src="assets/icons/search_gray.svg">
+                                    </li>
+                                    <perfect-scrollbar>
+                                        <div class="scroll-data">
+                                            <ng-container  *ngFor="let lang of ttsLanguages | filter: [ voiceLangSearchTerm.value, 'displayName']">
+                                                <li (click)="selectedVoiceLanguage(lang); voiceLangSearchTerm.value = ''" *ngIf="lang.languagePreference !== selectedTTSLanguage?.languagePreference"><a>{{lang.displayName}}</a></li>
+                                            </ng-container>
+                                        </div>
+                                    </perfect-scrollbar>                                    
+                                </ul>
+                            </div>
+                        </div>
+                </div>
                 <div class="kr-sg-dropdowns">
                     <div class="label-text show-info-icon">Dialect</div>
                     <div class="dropdown dropdown-open dialectDropDown">

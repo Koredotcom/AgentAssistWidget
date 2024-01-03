@@ -29,6 +29,7 @@ export class GuidedChecklistComponent implements OnInit {
   @ViewChild('checkList2') checkList2: DynamicChecklistComponent;
   loading = false;
   subs = new SubSink();
+  publishInprogress = false;
   selAcc = this.local.getSelectedAccount();
   isAgentPlayBookEnabled: boolean = false;
   constructor(
@@ -162,12 +163,12 @@ export class GuidedChecklistComponent implements OnInit {
   }
 
   publush(){
-    this.loading = true;
+    this.publishInprogress = true;
     let botId = this.workflowService.getCurrentBtSmt(true)._id;
     this.service.invoke('publish.checklist', {}, {botId})
     .pipe(
       finalize(()=>{
-        this.loading = false;
+        this.publishInprogress = false;
       })
     )
     .subscribe((data)=>{

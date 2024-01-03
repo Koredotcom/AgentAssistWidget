@@ -2138,7 +2138,7 @@
     "CHECKLIST.PRIMARY": "Primary",
     "CHECKLIST.DYNAMIC": "Dynamic",
     "MAX_FILE_SIZE_PERMITED_MB": "Maximum file size Permited 2MB",
-    "AGENTASSIST_SETTINGS_SAVED": "Agent Assist setting saved Successfully",
+    "AGENTASSIST_SETTINGS_SAVED": "Settings saved successfully",
     "FALLBACK_ERROR_MSG" : "Falied to get the AgentAssist settings",
     "SAVE_FALLBACK_ERROR_MSG" : "Failed to save the AgentAssist Settings",
     "LBL_AGENT_EXPERIENCE" : "Experience",
@@ -2191,7 +2191,6 @@
     "WELCOME_EVENT_COPY_FROM_DESC" : "Are you sure you want copy welcome message from {{x}}",
     "WELCOME_EVENT_GREET_MSG" : "Welcome Messages",
     "WELCOME_EVENT_MESSAGES" : "messages",
-    "WELCOME_EVENT_UPDATE" : "Update"
-    
-    
+    "WELCOME_EVENT_UPDATE" : "Update",
+    "SELECT_PREFERRED_LANGUAGE" : "Select preferred Language"
 }
