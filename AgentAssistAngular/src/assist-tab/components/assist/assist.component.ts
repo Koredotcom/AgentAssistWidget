@@ -1014,7 +1014,7 @@ export class AssistComponent implements OnInit {
       }, this.waitingTimeForUUID);
     }
 
-    if (data.buttons?.length > 1 && data.sendMenuRequest) {
+    if ( data.sendMenuRequest) {
       this.welcomeMsgResponse = data;
     }
 
@@ -2150,15 +2150,9 @@ export class AssistComponent implements OnInit {
         if (!parsedPayload && !res.tN && !shouldProcessResponse && !isPromtFlag) {
           let dynamicBlockDiv = $('#dynamicBlock');
           res.components?.forEach((ele, i) => {
-            if (res.components?.length > 1) {
-              this.welcomeMsgResponse = res.components;
-            } else {
-              if(res.components?.length && res.components[0]?.data?.text !== '') {
-                let botResHtml = this.assisttabService.historySmallTalkTemplate(res.components[0], res._id);
-                dynamicBlockDiv.append(botResHtml);
-              }
-
-
+            if(res.components?.length && res.components[0]?.data?.text !== '') {
+              let botResHtml = this.assisttabService.historySmallTalkTemplate(res.components[0], res._id);
+              dynamicBlockDiv.append(botResHtml);
             }
           });
         }
