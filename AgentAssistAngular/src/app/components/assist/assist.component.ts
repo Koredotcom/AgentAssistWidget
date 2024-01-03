@@ -361,7 +361,7 @@ export class AssistComponent implements OnInit, OnDestroy {
       this.rootService.setAssistTemplateClick(false);
     }
 
-    if (data.buttons?.length > 1 && data.sendMenuRequest) {
+    if (data.sendMenuRequest) {
       this.welcomeMsgResponse = data;
       this.scrollToBottom();
     }else{
