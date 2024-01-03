@@ -631,3 +631,14 @@
 .disableDropdown {
     opacity: 0.5;
 }
+
+.card_link{
+    .arrow-icon{
+        transform: rotate(-90deg);
+    }
+    &[aria-expanded="true"]{
+        .arrow-icon{
+            transform: rotate(0deg) !important;
+        }
+    }
+}
