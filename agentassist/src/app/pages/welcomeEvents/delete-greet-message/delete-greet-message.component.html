@@ -1,0 +1,18 @@
+<div class="dlete-greet-msg-dialog">
+    <div class="close-rule-modal" (click)="closeDeleteMessage()">
+        <i class="icon-sa-close"></i>
+    </div>
+    <div class="content-data">
+        <div class="delete-icon">
+            <i class="icon-sa-welcome-delete"></i>
+        </div>
+        <div class="info-titles">
+            <div class="title">{{data?.title}}</div>
+            <div class="desc-text">{{data?.desc}}</div>
+        </div>
+    </div>
+    <div class="btn-actions-footer">
+        <button class="kr-sg-button-secondary btn_lg" (click)="closeDeleteMessage()">No</button>
+        <button class="kr-sg-button-danger btn_lg" (click)="deletGroupMessage()">Yes</button>
+    </div>
+</div>
