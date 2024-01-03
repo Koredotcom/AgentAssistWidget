@@ -2190,7 +2190,8 @@
     "WELCOME_EVENT_CANCEL" : "Cancel",
     "WELCOME_EVENT_COPY_FROM_DESC" : "Are you sure you want copy welcome message from {{x}}",
     "WELCOME_EVENT_GREET_MSG" : "Welcome Messages",
-    "WELCOME_EVENT_MESSAGES" : "messages"
+    "WELCOME_EVENT_MESSAGES" : "messages",
+    "WELCOME_EVENT_UPDATE" : "Update"
     
     
 }

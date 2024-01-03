@@ -200,7 +200,7 @@
         <div class="body-sec">
             <div class="kr-sg-input-text-area">
                 <div class="label-text">{{'WELCOME_EVENT_MESSAGE' | translate}}</div>
-                <textarea placeholder="Hello Customer Name, thank you for calling how can i help." class="input-text" [(ngModel)]="selectedMsg.message"></textarea>                               
+                <textarea placeholder="Hello Customer Name, thank you for calling how can i help." class="input-text" [(ngModel)]="selectedMsg.message" (focus)="newOrEditFormTouch = true"></textarea>                               
             </div>
             <div class="new-message-error"  *ngIf="showProTip">
                 <span>
@@ -227,7 +227,7 @@
         </div>
         <div class="footer-sec">
             <button class="kr-sg-button-secondary btn_lg" (click)="closeGreeMessageSlider()">{{'WELCOME_EVENT_CANCEL' | translate}}</button>
-            <button class="kr-sg-button-primary btn_lg" [disabled]="!selectedMsg.message" (click)="AddOrEditWelcomeMsg()">{{'WELCOME_EVENT_ADD' | translate}}</button>
+            <button class="kr-sg-button-primary btn_lg" [disabled]="!selectedMsg.message || !newOrEditFormTouch" (click)="AddOrEditWelcomeMsg()">{{(selectedMsgActionMode == newStr) ? ('WELCOME_EVENT_ADD' | translate) : ('WELCOME_EVENT_UPDATE' | translate) }}</button>
         </div>
     </div>
 </app-slider-component>
@@ -243,7 +243,7 @@
         <div class="confirm-body">
             <div class="message-checkbox-header">
                 <div class="kr-sg-checkbox m-0">
-                    <input id="welcome_message" class="checkbox-custom" type="checkbox" (click)="toggleMultiSelection($event)">
+                    <input id="welcome_message" class="checkbox-custom" type="checkbox" (click)="toggleMultiSelection($event)" [(ngModel)]="copyMultiSelectModal">
                     <label for="welcome_message" class="checkbox-custom-label">
                         <div class="message-checkbox-label">
                             {{'WELCOME_EVENT_GREET_MSG' | translate}}
@@ -263,7 +263,7 @@
         </div>
         <div class="confirm-footer">
             <span class="confirm-footer-badge">{{selectedMessageCount}} Selected</span>
-            <span class="warn-message" *ngIf="((greetingLocaleMap[this.selectedLocale]?.length || 0) + selectedMessageCount) > 10">Can't add More than {{10 - greetingLocaleMap[this.selectedLocale]?.length}} Please Deselect few messages</span>
+            <span class="disable-state-error-copy" *ngIf="((greetingLocaleMap[this.selectedLocale]?.length || 0) + selectedMessageCount) > 10">Can't add More than {{10 - (greetingLocaleMap[this.selectedLocale]?.length || 0)}} messages, Please deselect few messages</span>
             <div class="confirm-copy-actions">
                 <button class="kr-sg-button-secondary btn_lg" (click)="closeModal()">Cancel</button>
                 <button class="kr-sg-button-primary btn_lg" (click)="copyMessages()" [disabled]="((greetingLocaleMap[this.selectedLocale]?.length || 0) + selectedMessageCount) > 10">Confirm</button>

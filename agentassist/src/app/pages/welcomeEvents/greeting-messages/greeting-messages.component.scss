@@ -260,6 +260,13 @@
             gap: 12px;
             justify-content: end;
         }
+        .disable-state-error-copy {
+            color: var(--Warning-600, #dc6803);
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            margin-bottom: 0px;
+        }
     }
 }
 

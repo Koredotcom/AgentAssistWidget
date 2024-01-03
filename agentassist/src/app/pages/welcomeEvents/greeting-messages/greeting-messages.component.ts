@@ -40,6 +40,8 @@ export class GreetingMessagesComponent implements OnInit {
   greetMsgStr = 'AA_GREETING_MESSAGES';
   newStr = 'New';
   editStr = 'Edit';
+  newOrEditFormTouch : boolean = false;
+  copyMultiSelectModal : boolean = false;
 
   constructor(private modalService: NgbModal, private fb: FormBuilder, private welcomeEventService: WelcomeEventsService) { }
 
@@ -185,6 +187,7 @@ export class GreetingMessagesComponent implements OnInit {
   }
 
   openWelcomeEvent(event, index?) {
+    this.newOrEditFormTouch = false;
     this.selectedMsgActionMode = event;
     this.selectedMsgActionIndex = index;
     if (this.selectedMsgActionMode == this.newStr) {
@@ -243,9 +246,11 @@ export class GreetingMessagesComponent implements OnInit {
         this.selectedMessageCount++;
       }
     });
+    this.copyMultiSelectModal = (this.selectedMessageCount == this.copyMessageList.length) ? true : false;
   }
 
   toggleMultiSelection(event) {
+    this.copyMultiSelectModal = event.target.checked;
     this.copyMessageList.forEach((obj) => {
       obj.selected = event.target.checked;
     });
