@@ -282,9 +282,7 @@ export class GreetingMessagesComponent implements OnInit {
       events: [this.greetingForm.value]
     }
     this.noFormchange = true;
-    console.log(payLoad, "payload");
-    
-    // this.saveGreetingMessages.emit(payLoad);
+    this.saveGreetingMessages.emit(payLoad);
 
   }
 
@@ -298,6 +296,7 @@ export class GreetingMessagesComponent implements OnInit {
   }
 
   cancelGreetMessages() {
+    this.welcomeTaskData = JSON.parse(JSON.stringify(this.welcomeTaskPreviousData));
     this.updateData(this.welcomeTaskPreviousData);
     this.initGreetingForm(this.welcomeTaskPreviousData);
     this.noFormchange = true;

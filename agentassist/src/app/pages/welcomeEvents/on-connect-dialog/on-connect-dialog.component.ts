@@ -186,6 +186,7 @@ export class OnConnectDialogComponent implements OnInit {
   }
 
   cancelDialogTask() {
+    this.welcomeTaskData = JSON.parse(JSON.stringify(this.welcomeTaskPreviousData));
     this.updateTaskDetails(this.welcomeTaskPreviousData);
     this.initOnConnectDialogForm(this.welcomeTaskPreviousData);
     this.noFormchange = true;

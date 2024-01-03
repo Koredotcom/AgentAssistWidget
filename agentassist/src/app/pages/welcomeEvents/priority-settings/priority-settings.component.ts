@@ -62,18 +62,19 @@ export class PrioritySettingsComponent implements OnInit {
   }
 
   cancelPriority() {
+    this.welcomeTaskData = JSON.parse(JSON.stringify(this.welcomeTaskPreviousData));
     this.updatePriorityForm(this.welcomeTaskPreviousData?.priority);
     this.noFormchange = true;
   }
 
   savePriority() {
     let payLoad = {
-      priority: [this.priorityForm.value]
+      priority: this.priorityForm.value
     }
     this.noFormchange = true;
 
     console.log(this.priorityForm.value, "priority form value");
-    // this.savePrioritySettings.emit(payLoad);
+    this.savePrioritySettings.emit(payLoad);
   }
 
 }
