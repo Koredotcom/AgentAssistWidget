@@ -253,6 +253,11 @@
                             font-weight: 400;
                             line-height: 12px;
                             cursor: pointer;
+                            &:active{
+                                color: #16181b !important;
+                                text-decoration: none !important;
+                                background-color: #e9ecef !important;
+                            }
                         }
                     }
                 }
