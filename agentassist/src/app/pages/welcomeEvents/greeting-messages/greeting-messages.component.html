@@ -215,8 +215,11 @@
                       </svg>
                 </span>
                <div class="message-error-text">
-                  <p class="m-0">Pro Tip: When ever you want to insert customer name inside greeting messages please use <span class="customer-name">Customer.Name</span> Example: 'Hello <span class="customer-name">Customer.Name</span>.</p>
-                  <p class="m-0">If customer name is not passed dynamically in run-time, <span class="customer-name">Customer.Name</span> will be removed from greeting.</p>
+
+                <p class="m-0"> Pro Tip: When ever you want to insert customer name inside greeting messages please use <span class="customer-name"> {{"{{"}}context.session.UserContext.customData.&lt;key&gt;{{"}}"}} </span> Example: 'Hello <span class="customer-name">{{"{{"}}context.session.UserContext.customData.&lt;key&gt;{{"}}"}}.</span> How can I help you'.</p>
+                <p class="m-0"> If customer name is not passed dynamically in run-time, {{"{{"}}context.session.UserContext.customData.&lt;key&gt;{{"}}"}} will be removed from greeting.</p>  
+                  <!-- <p class="m-0">Pro Tip: When ever you want to insert customer name inside greeting messages please use <span class="customer-name">Customer.Name</span> Example: 'Hello <span class="customer-name">Customer.Name</span>.</p> -->
+                  <!-- <p class="m-0">If customer name is not passed dynamically in run-time, <span class="customer-name">Customer.Name</span> will be removed from greeting.</p> -->
                </div>
                <span class="close-error" (click)="showProTip = false">
                   <svg  width="20" height="20" viewBox="0 0 20 20" fill="none">
