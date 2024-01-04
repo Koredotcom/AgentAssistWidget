@@ -260,7 +260,7 @@ export class GreetingMessagesComponent implements OnInit {
     this.selectedMsgActionMode = event;
     this.selectedMsgActionIndex = index;
     if (this.selectedMsgActionMode == this.newStr) {
-      this.selectedMsg = { message: '', enabled: false };
+      this.selectedMsg = { message: '', enabled: this.greetingForm?.get('config')?.get(this.greetingActiveTab)?.get('randomMsg')?.value ? true : false };
     } else if (typeof this.selectedMsgActionIndex == 'number') {
       this.selectedMsg = JSON.parse(JSON.stringify(this.greetingLocaleMap[this.selectedLocale][index]));
     }
