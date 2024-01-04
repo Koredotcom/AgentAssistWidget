@@ -149,10 +149,10 @@
                                         <div class="kr-sg-dropdowns" ngbDropdown>
                                             <div class="dropdown dropdown-open">
                                             <button class="dropdown-toggle dropdown-input" [disabled]="!agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled" ngbDropdownToggle 
-                                            [ngClass]="!agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled ? 'disableDropdown' : ''">{{agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.voice?.tab}}</button>
+                                            [ngClass]="!agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled ? 'disableDropdown' : ''">{{landingPageTabs[agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.voice?.tab]}}</button>
                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                                 <ng-container *ngFor="let tab of landingPageTabs | keyvalue;">
-                                                    <li ngbDropdownItem class="p-0" *ngIf="tab.key !== 'transcript'" (click)="selectTab('voice' ,tab.key)">
+                                                    <li ngbDropdownItem class="p-0" (click)="selectTab('voice' ,tab.key)">
                                                         <a>{{tab.value}}</a>
                                                     </li>
                                                 </ng-container>
@@ -171,7 +171,7 @@
                                         <div class="kr-sg-dropdowns" ngbDropdown>                    
                                             <div class="dropdown dropdown-open">
                                             <button class="dropdown-toggle dropdown-input" [disabled]="!agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled" ngbDropdownToggle 
-                                            [ngClass]="!agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled ? 'disableDropdown' : ''">{{agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.chat?.tab}}</button>
+                                            [ngClass]="!agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled ? 'disableDropdown' : ''">{{landingPageTabs[agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.chat?.tab]}}</button>
                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                                 <ng-container *ngFor="let tab of landingPageTabs | keyvalue;">
                                                     <li ngbDropdownItem class="p-0" *ngIf="tab.key !== 'transcript'" (click)="selectTab('chat' ,tab.key)">
