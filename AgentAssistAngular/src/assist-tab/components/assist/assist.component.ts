@@ -1015,7 +1015,13 @@ export class AssistComponent implements OnInit {
     }
 
     if ( data.sendMenuRequest) {
-      this.welcomeMsgResponse = data;
+      let dynamicBlockDiv = $('#dynamicBlock');
+      let actionLinkTemplate = ``;
+      let welcomeMsgHtml = this.assisttabService.prepareWelcomeMsgTemplate(uuids, this.interactiveLangaugeDetails);
+      actionLinkTemplate = this.assisttabService.parseWelcomeMsgResponse(uuids, data);
+      dynamicBlockDiv.append(welcomeMsgHtml);
+      $(`#smallTalk-${uuids} .run-info-content`).append(actionLinkTemplate);
+       this.welcomeMsgResponse = data;
     }
 
     let renderedMessage = !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';
