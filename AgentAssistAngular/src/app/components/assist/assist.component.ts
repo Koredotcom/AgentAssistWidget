@@ -152,8 +152,9 @@ export class AssistComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {      
-      if (endoftaskresponse && (endoftaskresponse.positionId === this.dialogPositionId) || (!endoftaskresponse?.positionId)) {
+    this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => { 
+     
+      if (endoftaskresponse && (endoftaskresponse.positionId === this.dialogPositionId || !endoftaskresponse?.positionId)) {
         if(this.showListView){
           this.handlePopupEvent({type : this.projConstants.LISTVIEW, status : false});
         }
@@ -362,7 +363,10 @@ export class AssistComponent implements OnInit, OnDestroy {
     }
 
     if (data.sendMenuRequest) {
+      renderResponse = this.commonService.formatWelcomeMessageResponse(data);
       this.welcomeMsgResponse = data;
+      this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);
+      this.assistResponseArray = [...this.assistResponseArray];
       this.scrollToBottom();
     }else{
       this.scrollToBottomRuntime();
