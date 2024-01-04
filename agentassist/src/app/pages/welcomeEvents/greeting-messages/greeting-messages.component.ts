@@ -1,6 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { workflowService } from '@kore.services/workflow.service';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { SubSink } from 'subsink';
@@ -36,7 +37,6 @@ export class GreetingMessagesComponent implements OnInit {
   selectedMessageCount: number = 0;
   subs = new SubSink();
   noFormchange : boolean = true;
-  default_lang : string = 'en';
   deleteModalRef : any;
 
   greetMsgStr = 'AA_GREETING_MESSAGES';
@@ -44,14 +44,24 @@ export class GreetingMessagesComponent implements OnInit {
   editStr = 'Edit';
   newOrEditFormTouch : boolean = false;
   copyMultiSelectModal : boolean = false;
+  supportedLanguageSeedData : any = {};
 
-  constructor(private modalService: NgbModal, private fb: FormBuilder, private welcomeEventService: WelcomeEventsService) { }
+  constructor(private modalService: NgbModal, private fb: FormBuilder, private welcomeEventService: WelcomeEventsService,
+    private workflowService : workflowService) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
   }
 
   subscribeEvents() {
+    this.subs.sink = this.workflowService.seedData$.subscribe(res => {
+      if(res?.agentAssistSeedData?.supportedLanguages){
+        Object.keys(res?.agentAssistSeedData?.supportedLanguages).forEach((key) => {
+          let greetMessages = res?.agentAssistSeedData?.supportedLanguages[key]?.greetingMessages;
+          this.supportedLanguageSeedData[key] = greetMessages;
+        });
+      }
+    });
     this.subs.sink = this.welcomeEventService.welcomeEventData$.subscribe((data) => {
       if (data) {
         this.welcomeTaskData = data;
@@ -70,7 +80,7 @@ export class GreetingMessagesComponent implements OnInit {
       data[this.greetMsgStr] = { name : this.greetMsgStr, enabled : false, config : {}};
     }
     if(!data[this.greetMsgStr]?.config[this.greetingActiveTab]){
-      data[this.greetMsgStr].config[this.greetingActiveTab] = {"randomMsg" : false, locale : {'en' : []}}
+      data[this.greetMsgStr].config[this.greetingActiveTab] = {"randomMsg" : false, locale : {}}
     }
     
   }
@@ -83,9 +93,12 @@ export class GreetingMessagesComponent implements OnInit {
   }
 
   updateData(welcomeTaskData) {
-    if (welcomeTaskData && welcomeTaskData[this.greetMsgStr]?.config && welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab] && Object.keys(welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab].locale)?.length) {
+    if (welcomeTaskData && welcomeTaskData[this.greetMsgStr]?.config && welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab] && Object.keys(welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab].locale)?.length) {      
       this.greetingLocaleMap = JSON.parse(JSON.stringify(welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab].locale));
-      this.selectedLocale = Object.keys(this.greetingLocaleMap)[0];
+      this.selectedLocale = this.selectedLocale ? this.selectedLocale : Object.keys(this.greetingLocaleMap)[0];     
+      this.selectedLang(this.selectedLocale, true); 
+    }else if(Object.keys(this.supportedLanguageSeedData).length){
+      this.selectedLang(Object.keys(this.supportedLanguageSeedData)[0], true);
     }
   }
 
@@ -105,7 +118,7 @@ export class GreetingMessagesComponent implements OnInit {
   getGreetMsgActiveTabFormGroup(data) {
     let activeTabGroup: any = {
       "randomMsg": new FormControl(data?.randomMsg || false, Validators.required),
-      "locale": this.fb.group(this.greetingLocaleMap)
+      "locale": new FormControl(this.greetingLocaleMap || {})
     };
     return activeTabGroup;
   }
@@ -131,14 +144,44 @@ export class GreetingMessagesComponent implements OnInit {
   }
 
   toggleMsgEnabling(flag) {
-    this.greetingLocaleMap[this.selectedLocale].forEach((obj: any) => {
-      obj.enabled = flag;
-    });
+    for(let key in this.greetingLocaleMap){
+      this.greetingLocaleMap[key].forEach((obj: any) => {
+        obj.enabled = flag;
+      });
+    }
     this.updateGreetingFormLocale();
   }
 
-  selectedLang(item) {
+  selectedLang(item, init = false) {
     this.selectedLocale = item;
+    
+    if(!this.greetingLocaleMap[item]){
+      this.greetingLocaleMap[item] = [];
+      this.supportedLanguageSeedData[item].forEach(element => {
+        let object : any = {
+          message : element,
+          enabled : this.greetingForm?.get('config')?.get(this.greetingActiveTab)?.get('randomMsg')?.value ? true : false
+        }
+        this.greetingLocaleMap[item].push(object);
+      });
+      if(!init){
+        this.updateGreetingFormLocale();
+      }
+    }
+
+    if(this.greetingActiveTab != 'email'){
+      let channel = this.greetingActiveTab == 'chat' ? 'voice' : 'chat';
+      if(!this.welcomeTaskPreviousData[this.greetMsgStr]?.config[channel]?.locale[this.selectedLocale]){
+        this.welcomeTaskPreviousData[this.greetMsgStr].config[channel].locale[this.selectedLocale] = [];
+        this.supportedLanguageSeedData[item].forEach(element => {
+          let object : any = {
+            message : element,
+            enabled : this.greetingForm?.get('config')?.get(this.greetingActiveTab)?.get('randomMsg')?.value ? true : false
+          }
+          this.welcomeTaskPreviousData[this.greetMsgStr].config[channel].locale[this.selectedLocale].push(object);
+        });
+      }
+    }
 
   }
 
@@ -285,7 +328,6 @@ export class GreetingMessagesComponent implements OnInit {
   }
 
   saveGreetMessages() {
-    console.log("save greet messages", this.greetingForm.value);
     let payLoad = {
       events: [this.greetingForm.value]
     }
