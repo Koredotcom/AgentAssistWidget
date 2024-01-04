@@ -89,6 +89,16 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   }
 
+  selectTab(tab, key){
+    (((((this.agentAssistFormGroup as FormGroup)
+    .get('agentAssistSettings') as FormGroup)
+    .get('isWidgetLandingEnabled') as FormGroup)
+    .get(tab) as FormGroup)
+    .get('tab') as FormControl)
+    .patchValue(key);
+    this.agentAssistFormGroup.markAsDirty();
+  }
+
   createOrUpdateAgSettingsForm(obj?){
     let isUpdate = false;
     if(obj && Object.keys(obj)){
