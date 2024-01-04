@@ -1,8 +1,9 @@
-import { Component, ElementRef, Input, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, AfterViewInit, HostListener } from '@angular/core';
 import { ProjConstants, RenderResponseType } from '../proj.const';
 import { CommonService } from '../services/common.service';
 import { RootService } from '../services/root.service';
 import { chatWindow } from '@koredev/kore-web-sdk';
+import $ from "jquery";
 
 @Component({
   selector: 'app-tell-customer',
@@ -30,9 +31,9 @@ export class TellCustomerComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     // v3 templates
-    this.chatWindowInstance.on('beforeWSSendMessage', event => {
+    this.chatWindowInstance.on('beforeRenderMessage', event => {
       console.log('data: ', event);
-    })
+    });
     this.chatWindowInstance.setBranding();   
   }
 
@@ -43,8 +44,36 @@ export class TellCustomerComponent implements AfterViewInit {
 
   checkTemplateOrNot() {
     if(this.automation?.templateRender && this.automation?.template) {
+      
     let template = (this.chatWindowInstance.generateMessageDOM(this.automation?.result));
+    if(this.automation?.result?.message[0].cInfo?.body?.payload?.cards) {
+        let cardsArr = this.automation?.result?.message[0].cInfo?.body?.payload?.cards;
+        template.querySelectorAll('.btn-action-card').forEach((ele, i) => {
+          cardsArr[i].id = i;
+          ele.setAttribute("id", `clickable-${cardsArr[i].id}`);
+        })
+        this.v_Template = template.innerHTML;
+        return this.v_Template;
+      }
+      if(this.automation?.result.message[0].cInfo.body.payload.buttons) {
+        template.querySelectorAll('.kr-btn').forEach((element, i) => {
+          console.log("🚀 ~ file: tell-customer.component.ts:50 ~ TellCustomerComponent ~ template.querySelectorAll ~ element:", element, i)
+          let click_Id = i;
+          element.setAttribute("id", `clickable-${click_Id}`);
+          element.setAttribute("payload", ``)
+          // element.setAttribute("data", `${}`)
+        });
+      }
     this.v_Template = template.innerHTML;
+    }
+  }
+
+  @HostListener('click', ['$event'])
+  onClick(evt) {
+    console.log("🚀 ~ file: tell-customer.component.ts:49 ~ TellCustomerComponent ~ checkTemplateOrNot ~ this.automation?.result:",evt)
+    console.log(evt.target)
+    $('')
+    if(evt.target) {
     }
   }
 

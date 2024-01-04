@@ -11,7 +11,7 @@
         <ng-container [ngTemplateOutlet]="askCustMsg" [ngTemplateOutletContext]="{smallTalkData: item}"></ng-container>
     </ng-container>
 </div>
-
+{{automation | json}}
 
 <div class="ask-cust-node" *ngIf="!isWelcomeMsg && automation && (automation.value || automation.template)"
     [ngClass]="{'grayout-msgs-node' : automation.grayOut || automation.send}">
