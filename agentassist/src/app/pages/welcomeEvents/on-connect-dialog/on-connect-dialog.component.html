@@ -1,0 +1,111 @@
+<div id="accordion" class="welcome-event-accordion childComp" [formGroup]="onConnectDialogForm" *ngIf="onConnectDialogForm">
+    <div data-toggle="collapse" href="#configDialoge" data-parent="#accordion" class="card_link"
+        aria-expanded="false">
+        <div class="accordion-content-header">
+            <div class="team-with-profile">
+                <i class="icon-sa-arrow-down arrow-icon"></i>
+                <div class="accordion-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path
+                            d="M7.82888 16.1427L8.31591 17.238C8.4607 17.5641 8.69698 17.8412 8.9961 18.0356C9.29522 18.23 9.64434 18.3335 10.0011 18.3334C10.3579 18.3335 10.707 18.23 11.0061 18.0356C11.3052 17.8412 11.5415 17.5641 11.6863 17.238L12.1733 16.1427C12.3467 15.754 12.6383 15.43 13.0067 15.2168C13.3773 15.0029 13.8061 14.9119 14.2317 14.9566L15.4233 15.0834C15.778 15.1209 16.136 15.0547 16.4539 14.8929C16.7717 14.731 17.0358 14.4803 17.2141 14.1714C17.3925 13.8626 17.4776 13.5086 17.4588 13.1525C17.4401 12.7963 17.3184 12.4532 17.1085 12.1649L16.403 11.1955C16.1517 10.8477 16.0175 10.4291 16.0196 10.0001C16.0195 9.57224 16.155 9.15537 16.4067 8.80934L17.1122 7.8399C17.3221 7.55154 17.4438 7.20847 17.4625 6.85231C17.4813 6.49615 17.3962 6.1422 17.2178 5.83341C17.0395 5.52444 16.7754 5.27382 16.4576 5.11194C16.1397 4.95005 15.7817 4.88386 15.427 4.92138L14.2354 5.04823C13.8098 5.09292 13.381 5.00185 13.0104 4.78804C12.6413 4.57363 12.3496 4.24788 12.177 3.85749L11.6863 2.76212C11.5415 2.43606 11.3052 2.15901 11.0061 1.96458C10.707 1.77015 10.3579 1.66669 10.0011 1.66675C9.64434 1.66669 9.29522 1.77015 8.9961 1.96458C8.69698 2.15901 8.4607 2.43606 8.31591 2.76212L7.82888 3.85749C7.65632 4.24788 7.3646 4.57363 6.99554 4.78804C6.62489 5.00185 6.1961 5.09292 5.77054 5.04823L4.57517 4.92138C4.22045 4.88386 3.86246 4.95005 3.5446 5.11194C3.22675 5.27382 2.96269 5.52444 2.78443 5.83341C2.60595 6.1422 2.52092 6.49615 2.53965 6.85231C2.55839 7.20847 2.68009 7.55154 2.88999 7.8399L3.59554 8.80934C3.84716 9.15537 3.98266 9.57224 3.98258 10.0001C3.98266 10.4279 3.84716 10.8448 3.59554 11.1908L2.88999 12.1603C2.68009 12.4486 2.55839 12.7917 2.53965 13.1479C2.52092 13.504 2.60595 13.858 2.78443 14.1667C2.96286 14.4756 3.22696 14.726 3.54476 14.8879C3.86257 15.0498 4.22047 15.1161 4.57517 15.0788L5.76684 14.9519C6.1924 14.9072 6.62119 14.9983 6.99184 15.2121C7.36228 15.4259 7.65535 15.7517 7.82888 16.1427Z"
+                            stroke="#475467" stroke-width="1.2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path
+                            d="M9.99961 12.5001C11.3803 12.5001 12.4996 11.3808 12.4996 10.0001C12.4996 8.61937 11.3803 7.50008 9.99961 7.50008C8.6189 7.50008 7.49961 8.61937 7.49961 10.0001C7.49961 11.3808 8.6189 12.5001 9.99961 12.5001Z"
+                            stroke="#475467" stroke-width="1.2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="accordion-header-info">
+                    <div class="accordion-header-title">{{'DIALOG_TASK_TITLE' | translate}}</div>
+                    <div class="accordion-header-des">{{'DIALOG_TASK_DESC' | translate}}</div>
+                </div>
+            </div>
+            <div class="agent-counts">
+                <span class="accordion-badge">{{(onConnectDialogForm?.get('enabled')?.value) ? ('WELCOME_EVENT_ENABLED' | translate) : ('WELCOME_EVENT_DISABLED' | translate)}}</span>
+            </div>
+        </div>
+    </div>
+    <div id="configDialoge" class="collapse">
+        <div class="accordion-content-body">
+            <div class="enabled-block">
+                <div class="toggle-info-data m-0">
+                    <label class="kr-sg-toggle">
+                        <input type="checkbox" formControlName="enabled" [checked]="onConnectDialogForm?.get('enabled').value" (change)="toggleOnConnectDialog($event)">
+                        <div class="slider">
+                            <span class="enabled"></span>
+                            <span class="disabled"></span>
+                        </div>
+                    </label>
+                    <div class="content-data-toggle">
+                        <h1>{{(onConnectDialogForm?.get('enabled')?.value) ? ('WELCOME_EVENT_ENABLED' | translate) : ('WELCOME_EVENT_DISABLED' | translate)}}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="connect-dialoge-info" *ngIf="onConnectDialogForm?.get('enabled')?.value">
+                <div class="chat-voice-tabs-block">
+                    <div class="chat-voice-tabs">
+                        <div class="name-tab" [ngClass]="{'active-tab-name' : onConnectActiveTab == 'chat'}"
+                            (click)="changeOnConnectActiveTab('chat')">{{'WELCOME_EVENT_CHAT' | translate}}</div>
+                        <div class="name-tab" [ngClass]="{'active-tab-name' : onConnectActiveTab == 'voice'}"
+                            (click)="changeOnConnectActiveTab('voice')">{{'WELCOME_EVENT_VOICE' | translate}}</div>
+                        <div class="name-tab" [ngClass]="{'active-tab-name' : onConnectActiveTab == 'email'}"
+                            (click)="changeOnConnectActiveTab('email')">{{'WELCOME_EVENT_EMAIL' | translate}}</div>
+                    </div>
+                </div>
+                <div class="chat-voice-tabs-content">
+                    <div class="select-dialoge-info">
+                        <div class="select-dialoge-block" *ngIf="currentBt?.type == universalBot">
+                            <div class="dialog-header">Select Bot</div>
+                            <div class="dialog-des">{{('WELCOME_EVENT_UB_DIALOG_DESC' | translate)}}</div>
+                            <div class="dialoge-dropdpwn">
+                                <!-- <div class="label-text">Select Bot</div> -->
+                                <div class="kr-sg-dropdowns" ngbDropdown>
+                                    <div class="dropdown dropdown-open">
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedBot?.botName ? selectedBot?.botName : 'Select bot'}}</button>
+                                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                            <perfect-scrollbar>
+                                                <div class="scroll-ul">
+                                                    <li ngbDropdownItem (click)="changeBot(bot)" *ngFor="let bot of linkedBots"><a>{{bot.botName}}</a></li>
+                                                </div>
+                                            </perfect-scrollbar>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="select-dialoge-block">
+                            <div class="dialog-header">Select Dialoge</div>
+                            <div class="dialog-des">{{('WELCOME_EVENT_DIALOG_DESC' | translate)}}</div>
+                            <div class="dialoge-dropdpwn" >
+                                <!-- <div class="label-text">Automation</div> -->
+                                <div class="kr-sg-dropdowns" ngbDropdown>
+                                    <div class="dropdown dropdown-open">
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle [disabled]="currentBt.type == universalBot && !selectedBot?.botName">{{selectedUseCase?.usecaseName ? selectedUseCase?.usecaseName : (selectedUseCase == 'none' ? 'None' : 'Select Use Cases') }}</button>
+                                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                            <perfect-scrollbar>
+                                                <div class="scroll-ul">
+                                                    <li ngbDropdownItem (click)="changeUseCase({}, true)">- None -</li>
+                                                    <li ngbDropdownItem (click)="changeUseCase(conv)" *ngFor="let conv of conversations"><a>{{conv.usecaseName}}</a></li>
+                                                </div>
+                                            </perfect-scrollbar>
+                                        </ul>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kr-sg-checkbox">
+                        <input id="checkbox-1" class="checkbox-custom" type="checkbox" [checked]="onConnectDialogForm?.get(onConnectActiveTab)?.get('extractIntents')?.value" (change)="toggleExtractIntents($event)">
+                        <label for="checkbox-1" class="checkbox-custom-label">{{'WELCOME_EVENT_EXTRACT_INTENT' | translate}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-footer">
+                <button class="kr-sg-button-secondary btn_lg" (click)="cancelDialogTask()" [disabled]="noFormchange">{{'BUTTONS.CANCEL' | translate}}</button>
+                <button class="kr-sg-button-primary btn_lg" [disabled]="onConnectDialogForm?.invalid || !selectedUseCase || noFormchange" (click)="saveDialogTask()">{{'BUTTONS.SAVE' | translate}}</button>
+            </div>
+        </div>
+    </div>
+</div>
