@@ -101,12 +101,12 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         isAgentCoachingEnabled: [isUpdate ? obj.isAgentCoachingEnabled : false],
         isAgentResponseEnabled: [isUpdate ? obj.isAgentResponseEnabled : true],
         summarization: this.fb.group({
-          isEnabled : [isUpdate ? obj.summarization.isEnabled : false],
-          canSubmit : [isUpdate ? obj.summarization.canSubmit : false]
+          isEnabled : [isUpdate ? obj.summarization?.isEnabled : false],
+          canSubmit : [isUpdate ? obj.summarization?.canSubmit : false]
         }),
         isAgentPlaybookEnabled: [isUpdate ? obj.isAgentPlaybookEnabled : false],
         isWidgetLandingEnabled: this.fb.group({
-          isEnabled: [isUpdate ? obj.isWidgetLandingEnabled.isEnabled : false],
+          isEnabled: [isUpdate ? obj.isWidgetLandingEnabled?.isEnabled : false],
           chat: this.fb.group({
             isEnabled: [isUpdate ? obj.isWidgetLandingEnabled?.chat?.isEnabled : false],
             tab: [isUpdate ? obj.isWidgetLandingEnabled?.chat?.tab : 'assist']
@@ -142,13 +142,13 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       isSearchAssistEnabled: [isUpdate ? obj.isSearchAssistEnabled : false],
       searchAssistConfig: this.fb.group({
         criteria: ['alwaysShow'], //need to check
-        alwaysShow: [isUpdate ? searchObj?.alwaysShow : true],
+        alwaysShow: [isUpdate ? (searchObj?.alwaysShow ?? false) : false],
         isXODependant: [isUpdate ? searchObj?.isXODependant : false],
-        fallback: [isUpdate ? searchObj?.isXODependant : false],
+        fallback: [isUpdate ? (searchObj?.fallback ?? false) : false],
         suggestVal: [isUpdate ? (searchObj?.showAutoSuggestions ? 'On' : 'Off') : 'On'], 
         showAutoSuggestions: [isUpdate ? searchObj?.showAutoSuggestions : true],
         integrations : this.fb.group({
-          type: [ isUpdate ? searchObj?.integrations?.type : 'basic']
+          type: [ isUpdate ? (searchObj?.integrations?.type || 'basic') : 'basic']
         })
       })
     });
@@ -201,7 +201,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           //backup
           this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
 
-
+          
 
           // this.setAgentAssistAndKnowledgeSettings(res.agentAssistSettings);
     this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
