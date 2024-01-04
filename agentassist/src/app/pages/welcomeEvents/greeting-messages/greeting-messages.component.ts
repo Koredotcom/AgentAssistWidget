@@ -171,7 +171,7 @@ export class GreetingMessagesComponent implements OnInit {
 
     if(this.greetingActiveTab != 'email'){
       let channel = this.greetingActiveTab == 'chat' ? 'voice' : 'chat';
-      if(!this.welcomeTaskPreviousData[this.greetMsgStr]?.config[channel]?.locale[this.selectedLocale]){
+      if(!this.welcomeTaskPreviousData[this.greetMsgStr]?.config[channel]?.locale[this.selectedLocale] && this.welcomeTaskPreviousData[this.greetMsgStr]?.config[channel]){
         this.welcomeTaskPreviousData[this.greetMsgStr].config[channel].locale[this.selectedLocale] = [];
         this.supportedLanguageSeedData[item].forEach(element => {
           let object : any = {
