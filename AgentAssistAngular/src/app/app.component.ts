@@ -185,7 +185,9 @@ export class AppComponent implements OnInit, OnDestroy{
           sessionId: this.koregenerateUUIDPipe.transform(),
           chatHistory: e.data?.payload?.chatHistory
         }
+        if(this.widgetSettings?.summarization?.isEnabled) {
         this.webSocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
+        }
         this.webSocketService.emitEvents(EVENTS.end_of_conversation, request_resolution_comments);
         this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
       }
@@ -221,6 +223,9 @@ export class AppComponent implements OnInit, OnDestroy{
         },
         "event": "user_message",
         'positionId' : this.rootService.isAutomationOnGoing ? this.rootService.currentPositionId : null
+      }
+      if(userInputData?.customData) {
+        agent_assist_request['customData'] = JSON.parse(JSON.stringify(userInputData?.customData));
       }
       if (this.connectionDetails.isCallConversation === true) {
         this.handleSubjectService.setAgentOrTranscriptResponse(userInputData);
@@ -278,25 +283,46 @@ export class AppComponent implements OnInit, OnDestroy{
       let res: any = {
         agentAssistSettings: {
           "isWidgetLandingEnabled": {
-            "chat": {
-              "isEnabled": true,
-              "tab": "assist"
-            },
-            "voice": {
-              "isEnabled": true,
-              "tab": "assist"
-            },
-            "isEnabled": true
+              "chat": {
+                  "isEnabled": true,
+                  "tab": "assist"
+              },
+              "voice": {
+                  "isEnabled": true,
+                  "tab": "assist"
+              },
+              "isEnabled": true
           },
           "isCustomisedLogoEnabled": {
-            "isEnabled": false
+              "isEnabled": false
           },
           "agentAssistWidgetEnabled": true,
           "isProactiveEnabled": true,
-          "isAgentCoachingEnabled": true,
+          "isAgentCoachingEnabled": false,
           "isAgentResponseEnabled": true,
-          "isAgentPlaybookEnabled": true,
-          "isSearchAssistEnabled": true
+          "isAgentPlaybookEnabled": false,
+          "isSearchAssistEnabled": true,
+          "searchAssistConfig": {
+            "isXODependant": false,
+            "alwaysShow": false,
+            "showAutoSuggestions": false,
+            "fallback": false,
+            "integrations": {
+                "type": "basic",
+                "config": {
+                    "script": ""
+                }
+            }
+          },
+          "botEvents": {
+            "fallback": {
+                "isEnabled": true
+            }
+          },
+          "summarization" : {
+            "isEnabled" : false,
+            "canSubmit" : false
+          }
         }
       }
       this.widgetSettings = res.agentAssistSettings;

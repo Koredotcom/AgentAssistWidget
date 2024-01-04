@@ -76,12 +76,21 @@ export class WebSocketService {
   }
 
   commonEmitEvents(shouldProcessResponse){
-    const {botId, conversationId, isCall, autoBotId, interactiveLanguage} = this.rootService.getConnectionDetails()
+    let customData = (this.rootService.connectionDetails?.customdata) || (this.rootService.connectionDetails?.customData);
+    if(customData && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
+      try {
+        customData = JSON.parse(customData);
+      } catch (e) {
+        customData = {};
+          throw e;
+      }
+    }
+    const {botId, conversationId, isCall, autoBotId, interactiveLanguage, userName} = this.rootService.getConnectionDetails()
     let parsedCustomData: any = {};
     let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
     let welcomeMessageParams: any = {
       'waitTime': 2000,
-      'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
+      'userName': userName,
       'id': conversationId,
       "isSendWelcomeMessage": shouldProcessResponse,
       'agentassistInfo' : agent_user_details,
@@ -91,6 +100,11 @@ export class WebSocketService {
       'sId': this.rootService.userBotConversationDetails?.sessionId || '',
       'experience' : (isCall && isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT,
     }
+    if(customData && Object.keys(customData).length > 0 && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
+      welcomeMessageParams['customData'] = customData
+    }
+    // Check with Sarada regarding how to get the connectionDetails
+    
     if(autoBotId && autoBotId !== 'undefined') {
       welcomeMessageParams['autoBotId'] = autoBotId;
     } else {
