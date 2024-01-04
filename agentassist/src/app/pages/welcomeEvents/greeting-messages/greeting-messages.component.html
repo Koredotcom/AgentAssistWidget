@@ -71,7 +71,7 @@
                                             class="icon-sa-arrow-down m-r-8"></i></button>
                                     <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                         <div class="scroll-ul">
-                                            <li ngbDropdownItem *ngFor="let item of greetingLocaleMap | keyvalue" (click)="selectedLang(item.key)"><a>{{item.key | titlecase}}</a></li>
+                                            <li ngbDropdownItem *ngFor="let item of supportedLanguageSeedData | keyvalue" (click)="selectedLang(item.key)"><a>{{item.key | titlecase}}</a></li>
                                         </div>
                                     </ul>
                                 </div>
