@@ -11,6 +11,9 @@
     &:hover{
         .faq-actions{
             display: flex;
+            &.faq-actions-top{
+                top : 0px;
+            }
         }
     }
     .solidbtn{

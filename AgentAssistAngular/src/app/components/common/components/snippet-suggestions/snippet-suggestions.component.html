@@ -10,7 +10,7 @@
       <!-- <button class="solidbtn" *ngIf="snippet.page_url">
         <a [href]="snippet.page_url" target="_blank">{{'KNOW_MORE' | translate}}</a>
       </button> -->
-      <div class="faq-actions" *ngIf="!hideActionButtons && snippet.content">
+      <div class="faq-actions" *ngIf="!hideActionButtons && snippet.content" [ngClass]="{'faq-actions-top' : !snippet.title}">
         <ng-container>
           <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.SNIPPET)">
             <i class="krIocnsFont-copy"></i>
