@@ -1,5 +1,5 @@
 <input (focus)="showList()" (blur)="hideList()" type="text" [ngClass]="isNotLibraryTab? 'suggestion-input':'input-text'" [id]="isNotLibraryTab?'agentSearch':'librarySearch'"
-    placeholder="Ask AgentAssist" (keyup.enter)="getSearchResults($event)" [(ngModel)]="searchText"
+    placeholder="Ask AgentAssist" (keyup.enter)="getSearchResults($event);showOverlay = false" [(ngModel)]="searchText"
     (ngModelChange)="onSearch($event)" />
 
 <div class="overlay-suggestions fixed-overlay" [ngClass]="isNotLibraryTab? 'overlay-box':'overlay-box-libraray'" id="overLayAutoSearchDiv" *ngIf="showOverlay">
