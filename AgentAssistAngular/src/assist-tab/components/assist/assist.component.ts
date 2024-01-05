@@ -590,7 +590,22 @@ export class AssistComponent implements OnInit {
               articleSuggestions.innerHTML += articleHtml;
               let articles = $(`.type-info-run-send #snippetSection-${uuids+index}`);
 
-                      let a = $(`#snippetDiv-${uuids + index}`);
+              let a = $(`#snippetDiv-${uuids + index}`);
+
+              ele.content = this.removeTagFromString.transform(ele.content);
+
+              let answerSanitized = this.commonService.handleEmptyLine(ele.content, true);
+              let snippetActionHtml = `<div class="action-links">
+                              <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}">Send</button>
+                              <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}">
+                                  <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}"></i>
+                              </div>
+                          </div>`;
+              if (ele.content) {
+                a.append(snippetActionHtml);
+                this.commonService.hideSendAndCopyBtnsforCallconversation(a)
+              }
+
                       let articleActionHtml = `
                       <button class="know-more-btn hide" id="snippetviewMsg-${uuids+index}" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
 

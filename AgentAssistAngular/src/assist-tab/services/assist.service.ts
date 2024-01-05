@@ -323,7 +323,7 @@ export class AssistService {
         <img src="${imageFilePath}${imageFileNames['FAQ_SUGGESTION']}">
     </div>
     <div class="content-dialog-task-type" id="snippetsSuggestions-${responseId}">
-        <div class="type-with-img-title">Snippets (${data.suggestions?.searchassist?.snippets?.length})</div>
+        <div class="type-with-img-title">Answers (${data.suggestions?.searchassist?.snippets?.length})</div>
 
     </div>
 </div>`;
