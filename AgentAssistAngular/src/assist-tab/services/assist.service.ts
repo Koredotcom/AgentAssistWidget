@@ -57,7 +57,7 @@ export class AssistService {
   }
 
 
-  _createRunTemplateContiner(uuids, intentName) {
+  _createRunTemplateContiner(uuids, intentName, isInitDialog?) {
     let dynamicBlock = document.getElementById('dynamicBlock');
     let dropdownHtml = `
       <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${uuids}" >
@@ -80,6 +80,9 @@ export class AssistService {
       </div>
       `;
     dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
+    if(isInitDialog){
+      document.getElementById("dropDownData-"+uuids)?.classList?.add("onconnect");
+    }
   }
 
   getUserMsgSmallTalkTemplate(uuids,data){

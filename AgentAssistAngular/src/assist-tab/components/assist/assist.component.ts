@@ -366,7 +366,7 @@ export class AssistComponent implements OnInit {
     if (runInitent) {
       this.dialogPositionId = data?.positionId;
     }
-    this.assisttabService._createRunTemplateContiner(uuids, data.intentName);
+    this.assisttabService._createRunTemplateContiner(uuids, data.intentName, idTarget);
     this.dialogName = data.intentName;
     if (idTarget) {
       let ids = idTarget.split('-');
@@ -1295,7 +1295,7 @@ export class AssistComponent implements OnInit {
       if ($(`#dynamicBlocksData .collapse-acc-data`).length > 0) {
         let listItems = $("#dynamicBlocksData .collapse-acc-data");
         listItems.each(function (idx, collapseElement) {
-          if (!collapseElement.id.includes('smallTalk') && collapseElement.id.includes('dropDownData')) {
+          if (!collapseElement.id.includes('smallTalk') && collapseElement.id.includes('dropDownData') && !collapseElement?.classList?.contains("onconnect")) {
             collapseElement.classList.add('hide');
           }
         });
