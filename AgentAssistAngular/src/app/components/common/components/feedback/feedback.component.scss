@@ -1,128 +1,138 @@
-
-
-.feedback-wrapper{
-    border-radius: 0px 10px 10px 10px;
-    background: var(--themebgColorVariation-1);
-    padding: 8px;
-    .feedback-actions-info{
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        .left-sec-info{
+.dialog-ended-and-feedback{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    .feedback-wrapper{
+        // border-radius: 0px 10px 10px 10px;
+        // background: var(--themebgColorVariation-1);
+        // padding: 8px;
+        .feedback-actions-info{
             display: flex;
             align-items: center;
             gap: 6px;
-            width: 100%;
-            .icon_block{
-                flex-shrink: 0;
-            }
-            h1{
-                color: var(--primaryTextColor);
-                font-size: 12px;
-                font-weight: 500;
-                line-height: 18px;
-                margin: 0;
-            }
-            .feedback-btn-thumb{
-                border-radius: 4px;
-                border: 1px solid var(--themeBorderColor);
-                background: var(--themeBgWhiteColor);
+            .left-sec-info{
                 display: flex;
-                width: 28px;
-                height: 28px;
-                padding: 0;
-                justify-content: center;
                 align-items: center;
                 gap: 6px;
-                color: var(--primaryTextColor);
-                font-size: 16px;
-                cursor: pointer;
-                transition: 0.2s all ease;
-                &[aria-expanded="true"]{
-                    background: var(--backgroundThemeColor);
-                    color: var(--whiteTextColor);
+                width: 100%;
+                .icon_block{
+                    flex-shrink: 0;
+                    img{
+                        width: 24px;
+                        height: 24px;
+                    }
                 }
-                &:disabled{
-                    opacity: 0.3;
+                h1{
+                    color: var(--primaryTextColor);
+                    font-size: 12px;
+                    font-weight: 500;
+                    line-height: 18px;
+                    margin: 0;
                 }
-                &.active-feedback-btn{
-                    background: var(--backgroundThemeColor);
-                    color: var(--whiteTextColor);
-                }
-                &:hover{
-                    background: var(--backgroundThemeColor);
-                    color: var(--whiteTextColor);
-                }
-            }
-        }
-        .thankyou-text{
-            flex-shrink: 0;
-            color: var(--themeTextColor);
-            font-size: 12px;
-            font-weight: 400;
-            line-height: 20px;
-            margin: 0;
-            padding-right: 8px;
-        }
-    }
-    .improve-feedback-block{
-        padding: 8px 8px 0px 24px;
-        .improve-options-text{
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            margin-bottom: 12px;
-            .improve-lable-text{
-                border-radius: 16px;
-                background: var(--backgroundColorWidget);
-                display: flex;
-                padding: 2px 8px;
-                justify-content: center;
-                align-items: center;
-                color: var(--primaryTextColorTwo);
-                font-size: 12px;
-                font-weight: 500;
-                line-height: 18px;
-                border: 0;
-                min-height: 22px;
-                transition: 0.2s all ease;
-                &:hover{
-                    background: var(--backgroundColorFormFocus);
-                    color: var(--themeColor);
-                }
-                &.active-improve-btn{
-                    background: var(--backgroundColorFormFocus);
-                    color: var(--themeColor);
+                .feedback-btn-thumb{
+                    border-radius: 4px;
+                    border: 1px solid var(--themeBorderColor);
+                    background: var(--themeBgWhiteColor);
+                    display: flex;
+                    width: 28px;
+                    height: 28px;
+                    padding: 0;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 6px;
+                    color: var(--primaryTextColor);
+                    font-size: 16px;
+                    cursor: pointer;
+                    transition: 0.2s all ease;
+                    &[aria-expanded="true"]{
+                        background: var(--backgroundThemeColor);
+                        color: var(--whiteTextColor);
+                    }
+                    &:disabled{
+                        opacity: 0.3;
+                    }
+                    &.active-feedback-btn{
+                        background: var(--backgroundThemeColor);
+                        color: var(--whiteTextColor);
+                    }
+                    &:hover{
+                        background: var(--backgroundThemeColor);
+                        color: var(--whiteTextColor);
+                    }
                 }
             }
-        }
-        .input-improve-text{
-            display: flex;
-            align-items: center;
-            textarea{
+            .thankyou-text{
+                flex-shrink: 0;
+                color: var(--themeTextColor);
                 font-size: 12px;
                 font-weight: 400;
-                line-height: 18px;
-                resize: none;
+                line-height: 20px;
+                margin: 0;
+                padding-right: 8px;
             }
-            .send-btn-feedback{
-                width: 36px;
-                height: 36px;
-                flex-shrink: 0;
-                padding: 0;
-                border: 0;
-                background: transparent;
+        }
+        .improve-feedback-block{
+            padding: 8px 8px 0px 24px;
+            .improve-options-text{
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                margin-bottom: 12px;
+                .improve-lable-text{
+                    border-radius: 16px;
+                    background: var(--backgroundColorWidget);
+                    display: flex;
+                    padding: 2px 8px;
+                    justify-content: center;
+                    align-items: center;
+                    color: var(--primaryTextColorTwo);
+                    font-size: 12px;
+                    font-weight: 500;
+                    line-height: 18px;
+                    border: 0;
+                    min-height: 22px;
+                    transition: 0.2s all ease;
+                    &:hover{
+                        background: var(--backgroundColorFormFocus);
+                        color: var(--themeColor);
+                    }
+                    &.active-improve-btn{
+                        background: var(--backgroundColorFormFocus);
+                        color: var(--themeColor);
+                    }
+                }
+            }
+            .input-improve-text{
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                color: var(--themeTextColor);
-                font-size: 20px;
-                cursor: pointer;
-                &:disabled{
-                    opacity: 0.3;
+                textarea{
+                    font-size: 12px;
+                    font-weight: 400;
+                    line-height: 18px;
+                    resize: none;
+                }
+                .send-btn-feedback{
+                    width: 36px;
+                    height: 36px;
+                    flex-shrink: 0;
+                    padding: 0;
+                    border: 0;
+                    background: transparent;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: var(--themeTextColor);
+                    font-size: 20px;
+                    cursor: pointer;
+                    &:disabled{
+                        opacity: 0.3;
+                    }
                 }
             }
         }
+    }
+    .form-feedback-div{
+        flex-shrink: 0;
     }
 }
 
