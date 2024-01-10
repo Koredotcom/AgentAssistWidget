@@ -78,6 +78,8 @@
                     &::before{
                         left: 2px;
                         top: 1px;
+                        width: 12px;
+                        height: 12px;
                         fill: var(--base-white, #FFF);
                         filter: drop-shadow(0px 0.7777777910232544px 1.5555555820465088px rgba(16, 24, 40, 0.06)) drop-shadow(0px 0.7777777910232544px 2.3333334922790527px rgba(16, 24, 40, 0.10));
                     }

@@ -10,7 +10,7 @@
   font-display: block;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+.single-spa-agentassist [class^="icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon-agentassist' !important;
   speak: never;
@@ -25,485 +25,499 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-sa-play-book:before {
+.single-spa-agentassist [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon-agentassist' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.single-spa-agentassist .icon-sa-play-book:before {
   content: "\e98f";
 }
-.icon-ast_thumbsup:before {
+.single-spa-agentassist .icon-ast_thumbsup:before {
   content: "\e984";
 }
-.icon-ast_sortdown:before {
+.single-spa-agentassist .icon-ast_sortdown:before {
   content: "\e985";
 }
-.icon-ast_sortup:before {
+.single-spa-agentassist .icon-ast_sortup:before {
   content: "\e986";
 }
-.icon-ast_sortupdown:before {
+.single-spa-agentassist .icon-ast_sortupdown:before {
   content: "\e987";
 }
-.icon-ast_key:before {
+.single-spa-agentassist .icon-ast_key:before {
   content: "\e988";
 }
-.icon-ast_alpha:before {
+.single-spa-agentassist .icon-ast_alpha:before {
   content: "\e989";
 }
-.icon-ast_export:before {
+.single-spa-agentassist .icon-ast_export:before {
   content: "\e98a";
 }
-.icon-ast_calendar:before {
+.single-spa-agentassist .icon-ast_calendar:before {
   content: "\e98b";
 }
-.icon-ast_channels:before {
+.single-spa-agentassist .icon-ast_channels:before {
   content: "\e98c";
 }
-.icon-ast_checkright:before {
+.single-spa-agentassist .icon-ast_checkright:before {
   content: "\e98d";
 }
-.icon-sat_thumsdown:before {
+.single-spa-agentassist .icon-sat_thumsdown:before {
   content: "\e98e";
 }
-.icon-coaching-publish:before {
+.single-spa-agentassist .icon-coaching-publish:before {
   content: "\e982";
 }
-.icon-coaching-menu-icon:before {
+.single-spa-agentassist .icon-coaching-menu-icon:before {
   content: "\e983";
 }
-.icon-coaching--clock-refresh:before {
+.single-spa-agentassist .icon-coaching--clock-refresh:before {
   content: "\e957";
 }
-.icon-coaching--delete:before {
+.single-spa-agentassist .icon-coaching--delete:before {
   content: "\e958";
 }
-.icon-coaching--edit:before {
+.single-spa-agentassist .icon-coaching--edit:before {
   content: "\e959";
 }
-.icon-coaching--email-manager .path1:before {
+.single-spa-agentassist .icon-coaching--email-manager .path1:before {
   content: "\e95a";
   color: rgb(16, 24, 40);
   opacity: 0.12;
 }
-.icon-coaching--email-manager .path2:before {
+.single-spa-agentassist .icon-coaching--email-manager .path2:before {
   content: "\e95b";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--faq .path1:before {
+.single-spa-agentassist .icon-coaching--faq .path1:before {
   content: "\e95c";
   color: rgb(16, 24, 40);
   opacity: 0.12;
 }
-.icon-coaching--faq .path2:before {
+.single-spa-agentassist .icon-coaching--faq .path2:before {
   content: "\e95d";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--hint-agent .path1:before {
+.single-spa-agentassist .icon-coaching--hint-agent .path1:before {
   content: "\e95e";
   color: rgb(16, 24, 40);
   opacity: 0.4;
 }
-.icon-coaching--hint-agent .path2:before {
+.single-spa-agentassist .icon-coaching--hint-agent .path2:before {
   content: "\e95f";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--hint-agent .path3:before {
+.single-spa-agentassist .icon-coaching--hint-agent .path3:before {
   content: "\e960";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--left-arrow:before {
+.single-spa-agentassist .icon-coaching--left-arrow:before {
   content: "\e961";
 }
-.icon-coaching--message-chat-square .path1:before {
+.single-spa-agentassist .icon-coaching--message-chat-square .path1:before {
   content: "\e962";
   color: rgb(16, 24, 40);
   opacity: 0.4;
 }
-.icon-coaching--message-chat-square .path2:before {
+.single-spa-agentassist .icon-coaching--message-chat-square .path2:before {
   content: "\e963";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--message-check-square .path1:before {
+.single-spa-agentassist .icon-coaching--message-check-square .path1:before {
   content: "\e964";
   color: rgb(16, 24, 40);
   opacity: 0.4;
 }
-.icon-coaching--message-check-square .path2:before {
+.single-spa-agentassist .icon-coaching--message-check-square .path2:before {
   content: "\e965";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--move:before {
+.single-spa-agentassist .icon-coaching--move:before {
   content: "\e966";
 }
-.icon-coaching--move1:before {
+.single-spa-agentassist .icon-coaching--move1:before {
   content: "\e967";
 }
-.icon-coaching--nudge-agent .path1:before {
+.single-spa-agentassist .icon-coaching--nudge-agent .path1:before {
   content: "\e968";
   color: rgb(16, 24, 40);
   opacity: 0.4;
 }
-.icon-coaching--nudge-agent .path2:before {
+.single-spa-agentassist .icon-coaching--nudge-agent .path2:before {
   content: "\e969";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--plus:before {
+.single-spa-agentassist .icon-coaching--plus:before {
   content: "\e96a";
 }
-.icon-coaching--search:before {
+.single-spa-agentassist .icon-coaching--search:before {
   content: "\e96b";
 }
-.icon-coaching--settings:before {
+.single-spa-agentassist .icon-coaching--settings:before {
   content: "\e96c";
 }
-.icon-coaching--tag:before {
+.single-spa-agentassist .icon-coaching--tag:before {
   content: "\e96d";
 }
-.icon-coaching--thendo:before {
+.single-spa-agentassist .icon-coaching--thendo:before {
   content: "\e96e";
 }
-.icon-coaching--trigger-dialog .path1:before {
+.single-spa-agentassist .icon-coaching--trigger-dialog .path1:before {
   content: "\e96f";
   color: rgb(16, 24, 40);
   opacity: 0.4;
 }
-.icon-coaching--trigger-dialog .path2:before {
+.single-spa-agentassist .icon-coaching--trigger-dialog .path2:before {
   content: "\e970";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--trigger-dialog .path3:before {
+.single-spa-agentassist .icon-coaching--trigger-dialog .path3:before {
   content: "\e971";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--trigger-dialog .path4:before {
+.single-spa-agentassist .icon-coaching--trigger-dialog .path4:before {
   content: "\e972";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--trigger-speech1 .path1:before {
+.single-spa-agentassist .icon-coaching--trigger-speech1 .path1:before {
   content: "\e973";
   color: rgb(16, 24, 40);
   opacity: 0.4;
 }
-.icon-coaching--trigger-speech1 .path2:before {
+.single-spa-agentassist .icon-coaching--trigger-speech1 .path2:before {
   content: "\e974";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--trigger-speech:before {
+.single-spa-agentassist .icon-coaching--trigger-speech:before {
   content: "\e975";
 }
-.icon-coaching--trigger-variable .path1:before {
+.single-spa-agentassist .icon-coaching--trigger-variable .path1:before {
   content: "\e976";
   color: rgb(16, 24, 40);
   opacity: 0.4;
 }
-.icon-coaching--trigger-variable .path2:before {
+.single-spa-agentassist .icon-coaching--trigger-variable .path2:before {
   content: "\e977";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--when:before {
+.single-spa-agentassist .icon-coaching--when:before {
   content: "\e978";
 }
-.icon-coaching--adherence-set:before {
+.single-spa-agentassist .icon-coaching--adherence-set:before {
   content: "\e979";
 }
-.icon-coaching--ai:before {
+.single-spa-agentassist .icon-coaching--ai:before {
   content: "\e97a";
 }
-.icon-coaching--aleart-manager .path1:before {
+.single-spa-agentassist .icon-coaching--aleart-manager .path1:before {
   content: "\e97b";
   color: rgb(16, 24, 40);
   opacity: 0.4;
 }
-.icon-coaching--aleart-manager .path2:before {
+.single-spa-agentassist .icon-coaching--aleart-manager .path2:before {
   content: "\e97c";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--announce:before {
+.single-spa-agentassist .icon-coaching--announce:before {
   content: "\e97d";
 }
-.icon-coaching-assign-this .path1:before {
+.single-spa-agentassist .icon-coaching-assign-this .path1:before {
   content: "\e97e";
   color: rgb(16, 24, 40);
   opacity: 0.4;
 }
-.icon-coaching-assign-this .path2:before {
+.single-spa-agentassist .icon-coaching-assign-this .path2:before {
   content: "\e97f";
   margin-left: -1em;
   color: rgb(16, 24, 40);
 }
-.icon-coaching--award:before {
+.single-spa-agentassist .icon-coaching--award:before {
   content: "\e980";
 }
-.icon-coaching--check:before {
+.single-spa-agentassist .icon-coaching--check:before {
   content: "\e981";
 }
-.icon-sa-welcome-chat:before {
+.single-spa-agentassist .icon-sa-welcome-chat:before {
   content: "\e951";
 }
-.icon-sa-welcome-delete:before {
+.single-spa-agentassist .icon-sa-welcome-delete:before {
   content: "\e952";
 }
-.icon-sa-welcome-voice:before {
+.single-spa-agentassist .icon-sa-welcome-voice:before {
   content: "\e953";
 }
-.icon-sa-call-welcome:before {
+.single-spa-agentassist .icon-sa-call-welcome:before {
   content: "\e954";
 }
-.icon-sa-welcome-edit:before {
+.single-spa-agentassist .icon-sa-welcome-edit:before {
   content: "\e955";
 }
-.icon-sa-welcome-bulb:before {
+.single-spa-agentassist .icon-sa-welcome-bulb:before {
   content: "\e956";
 }
-.icon-sa-conv-info:before {
+.single-spa-agentassist .icon-sa-conv-info:before {
   content: "\e93c";
 }
-.icon-sa-conv-keypad:before {
+.single-spa-agentassist .icon-sa-conv-keypad:before {
   content: "\e93d";
 }
-.icon-sa-conv-mybot:before {
+.single-spa-agentassist .icon-sa-conv-mybot:before {
   content: "\e93e";
 }
-.icon-sa-conv-refreshten:before {
+.single-spa-agentassist .icon-sa-conv-refreshten:before {
   content: "\e93f";
 }
-.icon-sa-conv-search:before {
+.single-spa-agentassist .icon-sa-conv-search:before {
   content: "\e940";
 }
-.icon-sa-conv-speed:before {
+.single-spa-agentassist .icon-sa-conv-speed:before {
   content: "\e941";
 }
-.icon-sa-conv-thumb-down:before {
+.single-spa-agentassist .icon-sa-conv-thumb-down:before {
   content: "\e942";
 }
-.icon-sa-conv-thumbup:before {
+.single-spa-agentassist .icon-sa-conv-thumbup:before {
   content: "\e943";
 }
-.icon-sa-conv-thumbupdown:before {
+.single-spa-agentassist .icon-sa-conv-thumbupdown:before {
   content: "\e944";
 }
-.icon-sa-conv-time:before {
+.single-spa-agentassist .icon-sa-conv-time:before {
   content: "\e945";
 }
-.icon-sa-conv-user:before {
+.single-spa-agentassist .icon-sa-conv-user:before {
   content: "\e946";
 }
-.icon-sa-conv-via-search:before {
+.single-spa-agentassist .icon-sa-conv-via-search:before {
   content: "\e947";
 }
-.icon-sa-conv-volume:before {
+.single-spa-agentassist .icon-sa-conv-volume:before {
   content: "\e948";
 }
-.icon-sa-conv-agentassist:before {
+.single-spa-agentassist .icon-sa-conv-agentassist:before {
   content: "\e949";
 }
-.icon-sa-conv-agentselected:before {
+.single-spa-agentassist .icon-sa-conv-agentselected:before {
   content: "\e94a";
 }
-.icon-sa-conv-calendar:before {
+.single-spa-agentassist .icon-sa-conv-calendar:before {
   content: "\e94b";
 }
-.icon-sa-conv-check:before {
+.single-spa-agentassist .icon-sa-conv-check:before {
   content: "\e94c";
 }
-.icon-sa-conv-close:before {
+.single-spa-agentassist .icon-sa-conv-close:before {
   content: "\e94d";
 }
-.icon-sa-conv-conversation-white:before {
+.single-spa-agentassist .icon-sa-conv-conversation-white:before {
   content: "\e94e";
 }
-.icon-sa-conv-download:before {
+.single-spa-agentassist .icon-sa-conv-download:before {
   content: "\e94f";
 }
-.icon-sa-conv-eye:before {
+.single-spa-agentassist .icon-sa-conv-eye:before {
   content: "\e950";
 }
-.icon-sa-ext-link:before {
+.single-spa-agentassist .icon-sa-ext-link:before {
   content: "\e938";
 }
-.icon-sa-eye-open:before {
+.single-spa-agentassist .icon-sa-eye-open:before {
   content: "\e939";
 }
-.icon-sa-eye:before {
+.single-spa-agentassist .icon-sa-eye:before {
   content: "\e93a";
 }
-.icon-sa-copy:before {
+.single-spa-agentassist .icon-sa-copy:before {
   content: "\e93b";
 }
-.icon-sa-info:before {
+.single-spa-agentassist .icon-sa-info:before {
   content: "\e937";
 }
-.icon-sa-square-bg:before {
+.single-spa-agentassist .icon-sa-square-bg:before {
   content: "\e936";
 }
-.icon-sa-check-gray:before {
+.single-spa-agentassist .icon-sa-check-gray:before {
   content: "\e934";
 }
-.icon-sa-video-play:before {
+.single-spa-agentassist .icon-sa-video-play:before {
   content: "\e931";
 }
-.icon-sa-check-round:before {
+.single-spa-agentassist .icon-sa-check-round:before {
   content: "\e932";
 }
-.icon-sa-help:before {
+.single-spa-agentassist .icon-sa-help:before {
   content: "\e933";
 }
-.icon-sa-waves:before {
+.single-spa-agentassist .icon-sa-waves:before {
   content: "\e935";
 }
-.icon-sa-save:before {
+.single-spa-agentassist .icon-sa-save:before {
   content: "\e930";
 }
-.icon-sa-deflect-call:before {
+.single-spa-agentassist .icon-sa-deflect-call:before {
   content: "\e92f";
 }
-.icon-sa-split-down:before {
+.single-spa-agentassist .icon-sa-split-down:before {
   content: "\e92e";
 }
-.icon-sa-call-transfer:before {
+.single-spa-agentassist .icon-sa-call-transfer:before {
   content: "\e900";
 }
-.icon-sa-chat:before {
+.single-spa-agentassist .icon-sa-chat:before {
   content: "\e901";
 }
-.icon-sa-close:before {
+.single-spa-agentassist .icon-sa-close:before {
   content: "\e902";
 }
-.icon-sa-comment:before {
+.single-spa-agentassist .icon-sa-comment:before {
   content: "\e903";
 }
-.icon-sa-common-properties:before {
+.single-spa-agentassist .icon-sa-common-properties:before {
   content: "\e904";
 }
-.icon-sa-connections:before {
+.single-spa-agentassist .icon-sa-connections:before {
   content: "\e905";
 }
-.icon-sa-conv-input:before {
+.single-spa-agentassist .icon-sa-conv-input:before {
   content: "\e906";
 }
-.icon-sa-delete:before {
+.single-spa-agentassist .icon-sa-delete:before {
   content: "\e907";
 }
-.icon-sa-elipse:before {
+.single-spa-agentassist .icon-sa-elipse:before {
   content: "\e908";
 }
-.icon-sa-end-flow:before {
+.single-spa-agentassist .icon-sa-end-flow:before {
   content: "\e909";
 }
-.icon-sa-goto-flow:before {
+.single-spa-agentassist .icon-sa-goto-flow:before {
   content: "\e90a";
 }
-.icon-sa-grid:before {
+.single-spa-agentassist .icon-sa-grid:before {
   content: "\e90b";
 }
-.icon-sa-ivr-digital-menu:before {
+.single-spa-agentassist .icon-sa-ivr-digital-menu:before {
   content: "\e90c";
 }
-.icon-sa-ivr-menu:before {
+.single-spa-agentassist .icon-sa-ivr-menu:before {
   content: "\e90d";
 }
-.icon-sa-list:before {
+.single-spa-agentassist .icon-sa-list:before {
   content: "\e90e";
 }
-.icon-sa-message:before {
+.single-spa-agentassist .icon-sa-message:before {
   content: "\e90f";
 }
-.icon-sa-minimize:before {
+.single-spa-agentassist .icon-sa-minimize:before {
   content: "\e910";
 }
-.icon-sa-minus:before {
+.single-spa-agentassist .icon-sa-minus:before {
   content: "\e911";
 }
-.icon-sa-onboarding:before {
+.single-spa-agentassist .icon-sa-onboarding:before {
   content: "\e912";
 }
-.icon-sa-play:before {
+.single-spa-agentassist .icon-sa-play:before {
   content: "\e913";
 }
-.icon-sa-publish:before {
+.single-spa-agentassist .icon-sa-publish:before {
   content: "\e914";
 }
-.icon-sa-round-chat:before {
+.single-spa-agentassist .icon-sa-round-chat:before {
   content: "\e915";
 }
-.icon-sa-round-check:before {
+.single-spa-agentassist .icon-sa-round-check:before {
   content: "\e916";
 }
-.icon-sa-script-node:before {
+.single-spa-agentassist .icon-sa-script-node:before {
   content: "\e917";
 }
-.icon-sa-search:before {
+.single-spa-agentassist .icon-sa-search:before {
   content: "\e918";
 }
-.icon-sa-service-node:before {
+.single-spa-agentassist .icon-sa-service-node:before {
   content: "\e919";
 }
-.icon-sa-settings:before {
+.single-spa-agentassist .icon-sa-settings:before {
   content: "\e91a";
 }
-.icon-sa-sort:before {
+.single-spa-agentassist .icon-sa-sort:before {
   content: "\e91b";
 }
-.icon-sa-split:before {
+.single-spa-agentassist .icon-sa-split:before {
   content: "\e91c";
 }
-.icon-sa-start-point:before {
+.single-spa-agentassist .icon-sa-start-point:before {
   content: "\e91d";
 }
-.icon-sa-survey:before {
+.single-spa-agentassist .icon-sa-survey:before {
   content: "\e91e";
 }
-.icon-sa-testing-icon:before {
+.single-spa-agentassist .icon-sa-testing-icon:before {
   content: "\e91f";
 }
-.icon-sa-time:before {
+.single-spa-agentassist .icon-sa-time:before {
   content: "\e920";
 }
-.icon-sa-union:before {
+.single-spa-agentassist .icon-sa-union:before {
   content: "\e921";
 }
-.icon-sa-warning:before {
+.single-spa-agentassist .icon-sa-warning:before {
   content: "\e922";
 }
-.icon-sa-window-maximize:before {
+.single-spa-agentassist .icon-sa-window-maximize:before {
   content: "\e923";
 }
-.icon-sa-testing:before {
+.single-spa-agentassist .icon-sa-testing:before {
   content: "\e924";
 }
-.icon-sa-restore:before {
+.single-spa-agentassist .icon-sa-restore:before {
   content: "\e925";
 }
-.icon-sa-agent:before {
+.single-spa-agentassist .icon-sa-agent:before {
   content: "\e926";
 }
-.icon-sa-arrow-down:before {
+.single-spa-agentassist .icon-sa-arrow-down:before {
   content: "\e927";
 }
-.icon-sa-arrow-left:before {
+.single-spa-agentassist .icon-sa-arrow-left:before {
   content: "\e928";
 }
-.icon-sa-arrow-right:before {
+.single-spa-agentassist .icon-sa-arrow-right:before {
   content: "\e929";
 }
-.icon-sa-authentication:before {
+.single-spa-agentassist .icon-sa-authentication:before {
   content: "\e92a";
 }
-.icon-sa-automation:before {
+.single-spa-agentassist .icon-sa-automation:before {
   content: "\e92b";
 }
-.icon-sa-bottasks:before {
+.single-spa-agentassist .icon-sa-bottasks:before {
   content: "\e92c";
 }
-.icon-sa-call:before {
+.single-spa-agentassist .icon-sa-call:before {
   content: "\e92d";
 }
