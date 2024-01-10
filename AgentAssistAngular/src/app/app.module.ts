@@ -54,6 +54,7 @@ import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
 import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
 import { WidgetDragDirective } from './helpers/widget-drag.directive';
+import { FileSuggestionsComponent } from './components/common/components/file-suggestions/file-suggestions.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -102,7 +103,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoaderComponent,
     SafeHtmlPipe,
     SanitizeHtmlPipe,
-    WidgetDragDirective
+    WidgetDragDirective,
+    FileSuggestionsComponent
   ],
   imports: [
     TranslateModule.forRoot({
