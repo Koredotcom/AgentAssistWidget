@@ -62,6 +62,21 @@
                           </ul>
                     </div>
                 </div>
+
+                <div class="toggle-info-data m-0">
+                    <label class="kr-sg-toggle">
+                        <input type="checkbox" [checked]="voicePreferences.aaTranscriptController" (change)="voicePreferences.aaTranscriptController = $event.target.checked">
+                        <div class="slider">
+                            <span class="enabled"></span>
+                            <span class="disabled"></span>
+                        </div>
+                    </label>
+                    <div class="content-data-toggle">
+                        <h1>AgentAssist Initiated transcription</h1>
+                        <p>When Disabled, transcription will start automatically when RTP stream is received at Kore’s SBC level”. </p>
+                    </div>
+                </div>
+
                 <div class="call-control-parameters">
                     <button class="kr-sg-button-primary btn_lg" (click)="openCallControlParameter(newCallControlParameter)">Add</button>
                     <div class="heading-text">Call Control Parameters <i class="icon-sa-help"></i></div>
