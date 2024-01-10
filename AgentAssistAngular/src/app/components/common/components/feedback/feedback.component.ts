@@ -99,15 +99,17 @@ export class FeedbackComponent {
   }
 
   addDislikeSuggestion(suggestion){
+    this.formTouched = true;
     let suggestionIndex = this.feedbackData.feedbackDetails.indexOf(suggestion);
     if(suggestionIndex >= 0){
       this.feedbackData.feedbackDetails.splice(suggestionIndex, 1);
-    }else{
+    }
+    else{
       this.feedbackData.feedbackDetails.push(suggestion);
     }
-    this.feedbackData.comment = this.feedbackForm.get('comment').value;
-    this.feedbackData = structuredClone(this.feedbackData);
-    this.submitFeedback();
+    // this.feedbackData.comment = this.feedbackForm.get('comment').value;
+    // this.feedbackData = structuredClone(this.feedbackData);
+    // this.submitFeedback();
   }
 
   AgentAssist_feedBack_Update_Request() {
