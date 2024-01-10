@@ -54,7 +54,7 @@
     "ALL_DIALOG" : "All Dialog Tasks",
     "DIALOG_TEXT" : "Dialog",
     "INTENT_IDENTIFIED" : "Customer utterance",
-    "NOT_WHAT_LOOKING" : "Not what you are looking for ?",
+    "NOT_WHAT_LOOKING" : "Wrong Suggestion ?",
     "BOT" : "Bot", 
     "CUSTOMER" : "Customer",
     "YOU" : "You",
