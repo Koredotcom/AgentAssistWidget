@@ -54,6 +54,7 @@
                 position: relative;
                 .icon_block{
                     flex-shrink: 0;
+                    line-height: 0;
                 }
                 h1{
                     color: var(--primaryTextColorTwo);

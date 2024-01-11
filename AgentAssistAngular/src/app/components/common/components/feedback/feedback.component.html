@@ -1,55 +1,60 @@
-
-<div class="dialog-ended-and-feedback">
-    <!-- <div class="dialog-ended-wrapper" [ngClass]="{'grayout-msgs-node' : automationData?.endAutomation && automationData?.automationsArray?.length}">
-        <div class="line_bar"></div>grayout-msgs-node
-        <div class="middle-info">
-            <p>{{'DIALOG_TEXT' | translate}}</p>
-            <button class="btn_link">{{automationData.data.intentName}}</button>
-            <p>{{'ENDED' | translate}}</p>
+<form class="form-feedback-info" [formGroup]="feedbackForm" (keydown.enter)="$event.preventDefault()">
+    <div class="dialog-ended-and-feedback">
+        <!-- <div class="dialog-ended-wrapper" [ngClass]="{'grayout-msgs-node' : automationData?.endAutomation && automationData?.automationsArray?.length}">
+            <div class="line_bar"></div>grayout-msgs-node
+            <div class="middle-info">
+                <p>{{'DIALOG_TEXT' | translate}}</p>
+                <button class="btn_link">{{automationData.data.intentName}}</button>
+                <p>{{'ENDED' | translate}}</p>
+            </div>
+        </div> -->
+        <div class="dialog-ended-wrapper grayout-msgs-node">        
+            <div class="middle-info">
+                <p>{{'DIALOG_TEXT' | translate}}</p>
+                <button class="btn_link">‘Order Pizza’</button>
+                <p>{{'ENDED' | translate}}</p>
+            </div>
+            <div class="line_bar"></div>
         </div>
-    </div> -->
-    <div class="dialog-ended-wrapper grayout-msgs-node">        
-        <div class="middle-info">
-            <p>{{'DIALOG_TEXT' | translate}}</p>
-            <button class="btn_link">‘Order Pizza’</button>
-            <p>{{'ENDED' | translate}}</p>
-        </div>
-        <div class="line_bar"></div>
-    </div>
 
-    <form class="form-feedback-div" [formGroup]="feedbackForm" (keydown.enter)="$event.preventDefault()">
-        <div class="feedback-wrapper" [ngClass]="{'grayout-msgs-node' : feedbackData.oldFeedback}">
-            <div class="feedback-actions-info">
-                <div class="left-sec-info">
-                    <div class="icon_block">
-                        <img src="assets/images/logo/gifLoader.gif" alt="Image">
+        <div class="form-feedback-div">
+            <div class="feedback-wrapper" [ngClass]="{'grayout-msgs-node' : feedbackData.oldFeedback}">
+                <div class="feedback-actions-info">
+                    <div class="left-sec-info">
+                        <div class="icon_block">
+                            <img src="assets/images/logo/gifLoader.gif" alt="Image">
+                        </div>
+                        <h1>{{'HELP_FULL' | translate}}</h1>
+                        <button class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn' : feedbackData?.feedback === feedbackConst.LIKE}" (click)="addFeedback(feedbackConst.LIKE)" aria-label="Button" [attr.href]="'#thankyou' + feedbackData.dialogPositionId" data-bs-toggle="collapse">
+                            <i class="krIocnsFont-thumbs-up-solid"></i>
+                        </button>
+                        <button class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn' : feedbackData?.feedback === feedbackConst.DISLIKE}" (click)="addFeedback(feedbackConst.DISLIKE)" aria-label="Button" [attr.href]="'#helpImprove' + feedbackData.dialogPositionId" data-bs-toggle="collapse">
+                            <i class="krIocnsFont-thumbs-down"></i>
+                        </button>
+                        <button class="feedback-btn-arrow" [ngClass]="{'active-feedback-btn-rotate' : feedbackData?.feedback === feedbackConst.DISLIKE}" (click)="addFeedback(feedbackConst.DISLIKE)" aria-label="Button" [attr.href]="'#helpImprove' + feedbackData.dialogPositionId" data-bs-toggle="collapse">
+                            <i class="krIocnsFont-chevron-down"></i>
+                        </button>
                     </div>
-                    <h1>{{'HELP_FULL' | translate}}</h1>
-                    <button class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn' : feedbackData?.feedback === feedbackConst.LIKE}" (click)="addFeedback(feedbackConst.LIKE)" aria-label="Button" [attr.href]="'#thankyou' + feedbackData.dialogPositionId" data-bs-toggle="collapse">
-                        <i class="krIocnsFont-thumbs-up-solid"></i>
-                    </button>
-                    <button class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn' : feedbackData?.feedback === feedbackConst.DISLIKE}" (click)="addFeedback(feedbackConst.DISLIKE)" aria-label="Button" [attr.href]="'#helpImprove' + feedbackData.dialogPositionId" data-bs-toggle="collapse">
-                        <i class="krIocnsFont-thumbs-down"></i>
-                    </button>
-                </div>
-                <p class="thankyou-text" *ngIf="(feedbackData?.feedback)">{{'THANKYOU' | translate}}</p>
-            </div>
-            <div class="improve-feedback-block" [attr.id]="'helpImprove' + feedbackData.dialogPositionId" *ngIf="feedbackData?.feedback == feedbackConst.DISLIKE && feedbackData.arrowToggle">
-                <div class="improve-options-text">
-                    <button class="improve-lable-text" [ngClass]="{'active-improve-btn' : feedbackData.feedbackDetails.includes(suggestion)}"
-                    aria-label="Button" (click)="addDislikeSuggestion(suggestion)"  *ngFor="let suggestion of dislikeList">{{suggestion}}</button>
-                    <!-- <button class="improve-lable-text" aria-label="Button">Content error</button>
-                    <button class="improve-lable-text" aria-label="Button">Time taking</button>
-                    <button class="improve-lable-text" aria-label="Button">Incorrect intent</button>
-                    <button class="improve-lable-text" aria-label="Button">Other</button> -->
-                </div>
-                <div class="input-improve-text">
-                    <textarea #txtInput placeholder="Add additional comments here" class="form-control" formControlName="comment" (keyup.enter)="submitFeedback(true);txtInput.blur()" [ngClass]="{'grayout-msgs-node' : !formTouched}" (click)="formTouched = true;feedbackData.oldFeedback =  false"></textarea>
-                    <button class="send-btn-feedback" aria-label="Button" [disabled]="!formTouched" (click)="submitFeedback(true)">
-                        <i class="krIocnsFont-check-circle"></i>
-                    </button>
+                    <!-- <p class="thankyou-text" *ngIf="(feedbackData?.feedback)">{{'THANKYOU' | translate}}</p> -->
                 </div>
             </div>
         </div>
-    </form>
-</div>
+    </div>
+    <div class="improve-feedback-block" [attr.id]="'helpImprove' + feedbackData.dialogPositionId" *ngIf="feedbackData?.feedback == feedbackConst.DISLIKE && feedbackData.arrowToggle">
+        <div class="improve-options-text">
+            <button class="improve-lable-text" [ngClass]="{'active-improve-btn' : feedbackData.feedbackDetails.includes(suggestion)}"
+            aria-label="Button" (click)="addDislikeSuggestion(suggestion)"  *ngFor="let suggestion of dislikeList">{{suggestion}}</button>
+            <!-- <button class="improve-lable-text" aria-label="Button">Content error</button>
+            <button class="improve-lable-text" aria-label="Button">Time taking</button>
+            <button class="improve-lable-text" aria-label="Button">Incorrect intent</button>
+            <button class="improve-lable-text" aria-label="Button">Other</button> -->
+        </div>
+        <div class="input-improve-text">
+            <textarea #txtInput placeholder="Add additional comments here" class="form-control" formControlName="comment" (keyup.enter)="submitFeedback(true);txtInput.blur()" [ngClass]="{'grayout-msgs-node' : !formTouched}" (click)="formTouched = true;feedbackData.oldFeedback =  false"></textarea>
+        </div>
+        <div class="submit-count-text">
+            <p>0/64</p>
+            <button class="send-btn-feedback" aria-label="Button" [disabled]="!formTouched" (click)="submitFeedback(true)">Submit</button>
+        </div>
+    </div>
+</form>
