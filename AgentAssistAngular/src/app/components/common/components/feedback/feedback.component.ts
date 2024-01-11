@@ -94,10 +94,6 @@ export class FeedbackComponent implements AfterViewInit {
 
   dislikeFeedbackArrowToggle(){
     this.feedbackData.arrowToggle = !this.feedbackData.arrowToggle;
-    if(this.feedbackData.arrowToggle){
-      this.AgentAssist_feedBack_Update_Request();
-      this.rootService.isUpdateFeedBackDetailsFlag = true;
-    }
   }
 
   addDislikeSuggestion(suggestion){

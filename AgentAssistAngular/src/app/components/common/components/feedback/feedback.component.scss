@@ -78,9 +78,9 @@
                     font-size: 20px;
                     color: #9AA4B2;
                     transform: rotate(0);
-                    &[aria-expanded="true"]{
-                        transform: rotate(180deg);
-                    }   
+                    // &[aria-expanded="true"]{
+                    //     transform: rotate(0);
+                    // }   
                     &.active-feedback-btn-rotate{
                         transform: rotate(180deg);
                     }

@@ -28,10 +28,10 @@
                         <button class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn' : feedbackData?.feedback === feedbackConst.LIKE}" (click)="addFeedback(feedbackConst.LIKE)" aria-label="Button" [attr.href]="'#thankyou' + feedbackData.dialogPositionId" data-bs-toggle="collapse">
                             <i class="krIocnsFont-thumbs-up-solid"></i>
                         </button>
-                        <button class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn' : feedbackData?.feedback === feedbackConst.DISLIKE}" (click)="addFeedback(feedbackConst.DISLIKE)" aria-label="Button" [attr.href]="'#helpImprove' + feedbackData.dialogPositionId" data-bs-toggle="collapse">
+                        <button class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn' : feedbackData?.feedback === feedbackConst.DISLIKE}" (click)="addFeedback(feedbackConst.DISLIKE)" aria-label="Button">
                             <i class="krIocnsFont-thumbs-down"></i>
                         </button>
-                        <button class="feedback-btn-arrow" [ngClass]="{'active-feedback-btn-rotate' : feedbackData?.feedback === feedbackConst.DISLIKE}" (click)="addFeedback(feedbackConst.DISLIKE)" aria-label="Button" [attr.href]="'#helpImprove' + feedbackData.dialogPositionId" data-bs-toggle="collapse">
+                        <button class="feedback-btn-arrow" *ngIf="feedbackData?.feedback === feedbackConst.DISLIKE" (click)="dislikeFeedbackArrowToggle()" [ngClass]="{'active-feedback-btn-rotate' : feedbackData?.arrowToggle}"  aria-label="Button" [attr.href]="'#helpImprove' + feedbackData.dialogPositionId" data-bs-toggle="collapse">
                             <i class="krIocnsFont-chevron-down"></i>
                         </button>
                     </div>
@@ -50,10 +50,10 @@
             <button class="improve-lable-text" aria-label="Button">Other</button> -->
         </div>
         <div class="input-improve-text">
-            <textarea #txtInput placeholder="Add additional comments here" class="form-control" formControlName="comment" (keyup.enter)="submitFeedback(true);txtInput.blur()" [ngClass]="{'grayout-msgs-node' : !formTouched}" (click)="formTouched = true;feedbackData.oldFeedback =  false"></textarea>
+            <textarea #txtInput maxlength="64" placeholder="Add additional comments here" class="form-control" formControlName="comment" (keyup.enter)="submitFeedback(true);txtInput.blur()" [ngClass]="{'grayout-msgs-node' : !formTouched}" (click)="formTouched = true;feedbackData.oldFeedback =  false"></textarea>
         </div>
         <div class="submit-count-text">
-            <p>0/64</p>
+            <p>{{feedbackForm?.get('comment')?.value?.length || 0}}/64</p>
             <button class="send-btn-feedback" aria-label="Button" [disabled]="!formTouched" (click)="submitFeedback(true)">Submit</button>
         </div>
     </div>
