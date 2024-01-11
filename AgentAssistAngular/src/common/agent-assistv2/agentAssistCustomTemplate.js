@@ -13,6 +13,40 @@
 	 */
 	agentAssistCustomTemplate.prototype.renderMessage = function (msgData) {
 		var messageHtml = '';
+		var constantsTemplateTypes = {
+			'tableList' : true,
+			'table' : true,
+			'mini_table': true,
+			'quick_replies' :true,
+			'carousel' : true,
+			'advanced_multi_select' : true,
+			'advancedListTemplate': true,
+			'multi_select' : true,
+			'dropdown_template' : true,
+			'list': true,
+			'listView': true,
+			'form_template' : true,
+			'button' : true,
+			'cardTemplate' : true,
+			'carousel' : true,
+			'piechart': true,
+			'barchart' : true,
+			'linechart' : true,
+			'feedbackTemplate' : true,
+			'like_dislike' : true,
+			'listWidget' : true,
+			'wait_for_response' : true,
+			'proposeTimes' : true,
+			'default_card_template' : true,
+			'advancedMultiListTemplate' : true,
+			'custom_table' : true,
+			'articleTemplate' : true,
+			'resetPinTemplate' : true,
+			'quick_replies_welcome' : true,
+			'otpValidationTemplate' : true,
+			'bankingFeedbackTemplate' : true,
+
+		}
     if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "dropdown_template") {
 			messageHtml = $(this.getChatTemplate("dropdown_template")).tmpl({
 				'msgData': msgData,
@@ -247,6 +281,16 @@
 			});
 			this.bankingFeedbackTemplateEvents(messageHtml);
 			$(messageHtml).data(msgData);
+		} 
+		else if(!constantsTemplateTypes[msgData.message[0]?.component?.payload?.template_type]){
+			if(msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && (msgData.message[0].component.payload?.text)) {
+				messageHtml = (msgData.message[0].component.payload?.text)
+				messageHtml = $(this.getChatTemplate("templateText")).tmpl({
+			        'msgData': msgData,
+			        'helpers': this.helpers,
+			        'extension': this.extension
+				});
+			}
 		}
 	   return messageHtml;
 
@@ -574,8 +618,6 @@ var formTemplate='<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
 }
 };
 print(JSON.stringify(message)); */
-
-
 	var advancedMultiSelect = '<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
 	{{if msgData.message}} \
 	<li {{if msgData.type !== "bot_response"}}id="msg_${msgItem.clientMessageId}"{{/if}} class="{{if msgData.type === "bot_response"}}fromOtherUsers{{else}}fromCurrentUser{{/if}} {{if msgData.icon}}with-icon{{/if}}"> \
@@ -3159,6 +3201,20 @@ var message= {
 	</li>\
 	{{/if}}\
     </script>';
+	var templateText = 
+		'<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
+			{{if msgData.message}} \
+				<li {{if msgData.type !== "bot_response"}}id="msg_${msgItem.clientMessageId}"{{/if}} class="{{if msgData.type === "bot_response"}}fromOtherUsers{{else}}fromCurrentUser{{/if}} with-icon"> \
+					<div class= template_text> \
+					{{if msgData.createdOn}}<div aria-live="off" class="extra-info">${helpers.formatDate(msgData.createdOn)}</div>{{/if}} \
+					{{if msgData.icon}}<div aria-live="off" class="profile-photo"> <div class="user-account avtar" style="background-image:url(${msgData.icon})"></div> </div> {{/if}} \
+					<div class="{{if msgData.message[0].component.payload.fromHistory}} dummy messageBubble {{else}}messageBubble{{/if}}"> \
+						{{if msgData.message[0].component.payload.text}}<div class="templateHeading">${msgData.message[0].component.payload.text}</div>{{/if}}\
+					</div> \
+					</div> \
+				</li> \
+			{{/if}} \
+		</script>';
 		if (tempType === "dropdown_template") {
 			return dropdownTemplate;
 		} else if (tempType === "checkBoxesTemplate") {
@@ -3212,7 +3268,9 @@ var message= {
             return otpValidationTemplate;
         } else if (tempType === "bankingFeedbackTemplate") {
             return bankingFeedbackTemplate;
-        }
+        } else if(tempType = "templateText") {
+			return templateText;
+		}
 		else {
 			return "";
 		}
