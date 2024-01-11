@@ -35,7 +35,7 @@
             <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.snippets?.length">
                 <div class="suggestion-header">
                     <div class="icon_block">
-                        <img src="assets/images/icons/custchoice.svg" alt="Snippet">
+                        <img src="assets/images/icons/web-page.svg" alt="Snippet">
                     </div>
                     <h1 class="text-truncate">{{'SNIPPET' | translate}}</h1>
                         <i class="krIocnsFont-info-circle help-tip-icon" [ngbTooltip]="tipContent" container="body" *ngIf="suggestionResponse?.data?.userInput"></i>
@@ -49,7 +49,7 @@
             <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.articles?.length">
                 <div class="suggestion-header">
                     <div class="icon_block">
-                        <img src="assets/images/icons/custchoice.svg" alt="Article">
+                        <img src="assets/images/icons/web-page.svg" alt="Article">
                     </div>
                     <h1 class="text-truncate">{{'ARTICLE' | translate}}</h1>
                     <i class="krIocnsFont-info-circle help-tip-icon" [ngbTooltip]="tipContent" container="body" *ngIf="suggestionResponse?.data?.userInput"></i>
@@ -58,6 +58,20 @@
                 </div>
                 <div class="suggestion-body-search">
                     <app-article-suggestions [searchResponse]="suggestionResponse.searchResponse"></app-article-suggestions>
+                </div>
+            </div>
+            <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.files?.length">
+                <div class="suggestion-header">
+                    <div class="icon_block">
+                        <img src="assets/images/icons/file.svg" alt="File">
+                    </div>
+                    <h1 class="text-truncate">{{'FILE' | translate}}</h1>
+                    <i class="krIocnsFont-info-circle help-tip-icon" [ngbTooltip]="tipContent" container="body" *ngIf="suggestionResponse?.data?.userInput"></i>
+                    <!-- <span [ngbTooltip]="suggestionResponse?.data?.userInput" *ngIf="suggestionResponse?.data?.userInput"> : ({{suggestionResponse?.data?.userInput?.slice(0,10) + '...'}})</span> -->
+                    <!-- <span class="count-text">{{suggestionResponse.searchResponse?.articles?.length}}</span> -->
+                </div>
+                <div class="suggestion-body-search">
+                    <app-file-suggestions [searchResponse]="suggestionResponse.searchResponse"></app-file-suggestions>
                 </div>
             </div>
         </ng-container>
