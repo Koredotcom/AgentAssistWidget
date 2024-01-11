@@ -44,7 +44,7 @@
                     <button class="improve-lable-text" aria-label="Button">Other</button> -->
                 </div>
                 <div class="input-improve-text">
-                    <textarea #txtInput placeholder="Add additional comments here" class="form-control" formControlName="comment" (keyup.enter)="submitFeedback(true);txtInput.blur()" [ngClass]="{'grayout-msgs-node' : !formTouched}" (click)="formTouched = true"></textarea>
+                    <textarea #txtInput placeholder="Add additional comments here" class="form-control" formControlName="comment" (keyup.enter)="submitFeedback(true);txtInput.blur()" [ngClass]="{'grayout-msgs-node' : !formTouched}" (click)="formTouched = true;feedbackData.oldFeedback =  false"></textarea>
                     <button class="send-btn-feedback" aria-label="Button" [disabled]="!formTouched" (click)="submitFeedback(true)">
                         <i class="krIocnsFont-check-circle"></i>
                     </button>

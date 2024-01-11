@@ -44,10 +44,10 @@
                     font-size: 16px;
                     cursor: pointer;
                     transition: 0.2s all ease;
-                    &[aria-expanded="true"]{
-                        background: var(--backgroundThemeColor);
-                        color: var(--whiteTextColor);
-                    }
+                    // &[aria-expanded="true"]{
+                    //     background: var(--backgroundThemeColor);
+                    //     color: var(--whiteTextColor);
+                    // }
                     &:disabled{
                         opacity: 0.3;
                     }

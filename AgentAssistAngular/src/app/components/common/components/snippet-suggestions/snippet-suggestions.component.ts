@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, SimpleChange } from '@angular/core';
 import { ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -28,8 +28,14 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(){
-    this.handleSearchResponse(this.searchResponse);
-    this.hideSendAndCopy();
+    
+  }
+
+  ngOnChanges(changes : SimpleChange){
+    if(this.searchResponse){
+      this.handleSearchResponse(this.searchResponse);
+      this.hideSendAndCopy();
+    }
   }
 
 
