@@ -151,7 +151,7 @@ export class WebSocketService {
       if (this.rootService.getConnectionDetails()?.interactiveLanguage && typeof this.rootService.getConnectionDetails()?.interactiveLanguage == 'string' && this.rootService.getConnectionDetails()?.interactiveLanguage != "''") {
         menu_request_params['language'] = this.rootService.getConnectionDetails()?.interactiveLanguage; // Return the default value for null, undefined, or "''"
       }
-      if (data.sendMenuRequest && !this.isWelcomeResonse) {
+      if (!this.isWelcomeResonse) {
         this.isWelcomeResonse = true;
         this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
         this.sendCheckListOpened$.next(true);
