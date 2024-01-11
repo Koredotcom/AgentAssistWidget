@@ -318,3 +318,53 @@ app-ask-customer, app-tell-customer, app-smalltalk, app-feedback, app-dialog, ap
         transform: translateY(0);
     }
 }
+
+
+// Dialog task ended and start
+
+.animation-slide-up-little{
+    -webkit-animation-name: slideInUpSmall;
+    animation-name: slideInUpSmall;
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.dialog-ended-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 12px 0;
+    width: 100%;
+    @extend .animation-slide-up-little;
+    .line_bar{
+        width: 100%;
+        border-top: 1px solid var(--themeBorderColor);
+    }
+    .middle-info{
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        gap: 3px;
+        p{
+            color: var(--secondaryTextColor);
+            font-size: 10px;
+            font-weight: 600;
+            line-height: normal;
+            letter-spacing: 0.7px;
+            margin: 0;
+        }
+        button{
+            font-size: 10px;
+            font-weight: 500;
+            line-height: normal;
+            letter-spacing: 0.7px;
+        }
+    }
+    i{
+        font-size: 14px;
+        color: #12B76A;
+    }
+}
