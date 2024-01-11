@@ -1,13 +1,14 @@
 
 <ng-container *ngFor="let article of articlesList | slice : 0 : viewCount;">
-  <div class="faq-suggestions-wrapper">
+  <div class="faq-suggestions-wrapper" [ngClass]="{'grayout-msgs-node' : article?.send}">
     <div class="faq-s-header">
         <div class="titles-info-heading">
-            <h1 class="text-truncate">{{article.title}}</h1>
+            <h1 class="text-truncate" *ngIf="!article.link && article.title">{{article.title}}</h1>
+            <h1 class="text-truncate" *ngIf="article.link && article.title"> <a class="moreText" role="link" [href]="article.link" target="_blank" >{{article.title}}</a></h1>
             <div class="sent-msg-text" *ngIf="article.send">{{ 'SENT'  | translate }}</div>
 
         </div>
-        <div class="faq-actions" *ngIf="!hideActionButtons && article?.content">
+        <div class="faq-actions" *ngIf="!hideActionButtons && article?.content" [ngClass]="{'faq-actions-top' : !article?.title}">
             <ng-container>
                 <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
                     <i class="krIocnsFont-copy"></i>
@@ -29,7 +30,7 @@
                         <span class="less-text" *ngIf="!article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'LESS_TEXT' | translate}}</span>
                     </a>
                     <p *ngIf="articleContent.scrollHeight > 36 && article.link">|</p>
-                    <a class="moreText" role="link" [href]="article.link" target="_blank" *ngIf="article.link">{{'VIEW_FULL_ARTICLE' | translate}}</a>
+                    <a class="moreText" role="link" [href]="article.link" target="_blank" *ngIf="article.link && !article.title">{{'VIEW_FULL_ARTICLE' | translate}}</a>
                 </div>
             </div>                       
             <!-- <div class="btn-more-solid">

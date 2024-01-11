@@ -54,6 +54,18 @@
                     <app-article-suggestions [searchResponse]="searchResponse"></app-article-suggestions>
                 </div>
             </div>
+            <div class="sugestions-block" *ngIf="searchResponse?.files?.length">
+                <div class="suggestion-header">
+                    <div class="icon_block">
+                        <img src="assets/images/icons/custchoice.svg" alt="File">
+                    </div>
+                    <h1 class="text-truncate">{{'FILE' | translate}}</h1>
+                    <span class="count-text">{{searchResponse?.files?.length}}</span>
+                </div>
+                <div class="suggestion-body-search">
+                    <app-file-suggestions [searchResponse]="searchResponse"></app-file-suggestions>
+                </div>
+            </div>
         </ng-container>
         <ng-container *ngIf="(searchResponse | json) == '{}' && !searched">
             <div class="sugestions-block">

@@ -152,9 +152,8 @@ export class AssistComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => { 
-     
-      if (endoftaskresponse && (endoftaskresponse.positionId === this.dialogPositionId || !endoftaskresponse?.positionId)) {
+    this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {      
+      if (endoftaskresponse && (endoftaskresponse?.positionId === this.dialogPositionId) || (!endoftaskresponse?.positionId)) {
         if(this.showListView){
           this.handlePopupEvent({type : this.projConstants.LISTVIEW, status : false});
         }

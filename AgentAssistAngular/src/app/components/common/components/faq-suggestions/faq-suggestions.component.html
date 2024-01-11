@@ -1,5 +1,7 @@
 
-<div class="faq-suggestions-wrapper" *ngFor="let faq of searchedFAQList | slice : 0 : viewCount;">
+
+<ng-container *ngFor="let faq of searchedFAQList | slice : 0 : viewCount;let i=index">
+<div class="faq-suggestions-wrapper" [ngClass]="{'grayout-msgs-node' : faq.answer[0]?.send}">
     <div class="faq-s-header">
         <div class="titles-info-heading">
             <h1 class="text-truncate">{{faq.displayName ? faq.displayName : faq.question}}</h1>
@@ -56,6 +58,7 @@
         <button class="close-expand btn_link" (click)="toggleExpandAndClose(faq)" *ngIf="faq?.answer?.length > 1 && faq.seeMoreWrapper">{{'CLOSE_TEXT' | translate}}</button>
     </ng-container>
 </div>
+</ng-container>
 <a class="moreText-bottom" *ngIf="searchedFAQList?.length > 2">
     <span class="more-text" (click)="viewMoreClick()" *ngIf="!moreClick">{{'SHOW_MORE_FAQ' | translate}}</span>
     <span class="less-text" (click)="viewLessClick()" *ngIf="moreClick">{{'SHOW_LESS_FAQ' | translate}}</span>

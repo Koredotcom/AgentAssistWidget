@@ -49,6 +49,9 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.updateMenuResponseLoader(false);
+    }, 10000);
     this.subscribeEvents();
   }
 
@@ -134,7 +137,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
         let autoText = this.typeAHeads[0];
         this.autocompleteText = autoText ? this.searchText.trim() + autoText.replace(searchText, '') : this.searchText;
       }else{
-        this.autocompleteText = this.searchText;
+        this.autocompleteText = '';
       }
     })
   }
@@ -145,7 +148,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   selectSuggestion(suggestion){
     this.searchText = suggestion;
-    this.autocompleteText = suggestion;
+    this.autocompleteText = '';
     this.getSearchResults({target : { value : suggestion}});
   }
 
