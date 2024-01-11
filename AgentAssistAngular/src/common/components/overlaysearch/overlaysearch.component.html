@@ -9,7 +9,7 @@
                 <img [src]="imageFilePath + imageFileNames['FAQ_SUGGESTION']">
             </div>
             <div class="content-dialog-task-type arr-cont-dialogtask" id="snippetsSuggestions-results">
-                <div class="type-with-img-title">Snippets ({{searchResponse.snippets?.length}})</div>
+                <div class="type-with-img-title">Answers ({{searchResponse.snippets?.length}})</div>
     
                 <div class="type-info-run-send is-dropdown-show-default is-dropdown-open" [id]="'snippetDivLib-' + i" *ngFor="let snippet of searchResponse.snippets | slice : 0 : snippetViewCount; let i = index">
                     <div class="left-content" [id]="'snippetSectionLib-' + i">
@@ -24,6 +24,12 @@
                         </div>
                         <button class="ghost-btn" [id]="'snippetseeMore-' + i" *ngIf="snippet.showMoreButton" (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.READ_MORE}}</button>
                         <button class="ghost-btn" [id]="'snippetseeLess-' + i" *ngIf="snippet.showLessButton" (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.READ_LESS}}</button>
+                    </div>
+                    <div class="action-links" *ngIf="!commonService.isCallConversation && snippet?.content">
+                        <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, snippet, projConstants.ARTICLE)">{{projConstants.SEND}}</button>
+                        <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, snippet, projConstants.ARTICLE)">
+                            <i class="ast-copy"></i>
+                        </div>
                     </div>
                     <!-- <div class="action-links">
                         <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND}}</button>
