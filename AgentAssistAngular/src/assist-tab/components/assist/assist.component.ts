@@ -900,136 +900,136 @@ export class AssistComponent implements OnInit {
 
     let result: any = this.templateRenderClassService.getResponseUsingTemplate(data, this.commonService.configObj);
     this.commonService.currentPositionId = this.dialogPositionId;
-    if (this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
-      let msgStringify = JSON.stringify(result);
-      let newTemp = encodeURI(msgStringify);
-      if (this.proactiveModeStatus) {
-        $(`#overRideBtn-${this.dropdownHeaderUuids}`).removeClass('hide');
-      } else {
-        $(`#overRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
-      }
-      $(`#cancelOverRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
-      $("#inputFieldForAgent").remove();
-      let runInfoContent = $(`#dropDownData-${this.dropdownHeaderUuids}`);
-      if (this.isFirstMessagOfDialog) {
-        $(`#dropDownData-${this.dropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
-      }
-      this.isFirstMessagOfDialog = false;
-      setTimeout(() => {
-        if (data.entityName) {
-          this.agentAssistResponse = {};
-          this.agentAssistResponse = Object.assign({}, data);
-        }
-      }, 10);
-      let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
-/// componentType === 'dialogAct' means its confirmation node or else not
-      let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
-      if (data.isPrompt) {
-        runInfoContent.append(askToUserHtml);
-        if (!this.proactiveModeStatus) {
-          this.handleOverridBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId, true);
+    if(!data.sendMenuRequest){
+      if (this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
+        let msgStringify = JSON.stringify(result);
+        let newTemp = encodeURI(msgStringify);
+        if (this.proactiveModeStatus) {
+          $(`#overRideBtn-${this.dropdownHeaderUuids}`).removeClass('hide');
         } else {
-          $(`.override-input-div`).removeClass('hide');
+          $(`#overRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
         }
-        this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
-      } else {
-        $(`.override-input-div`).addClass('hide');
-        $(runInfoContent).append(tellToUserHtml);
-        this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
-      }
-      if(data && data.componentType == 'dialogAct' && (data.srcChannel != 'msteams' && data.srcChannel != 'rtm')){
-        console.log("inside dialogact and channel");
-        isTemplateRender = true;
-      }else{
-        isTemplateRender = false;
-        this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
-      }
-      setTimeout(() => {
-        this.updateNewMessageUUIDList(this.dropdownHeaderUuids);
-      }, this.waitingTimeForUUID);
-    }
-
-    if (this.commonService.isAutomationOnGoing && !data.suggestions && !result.parsePayLoad) {
-//      this.welcomeMsgResponse = data;
-      if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
-        this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages = 0;
-      }
-      this.scrollToBottom();
-    }
-
-    if (!this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
-      $('#dynamicBlock .empty-data-no-agents').addClass('hide');
-      let msgStringify = JSON.stringify(result);
-      let newTemp = encodeURI(msgStringify);
-      let dynamicBlockDiv = $('#dynamicBlock');
-      data.buttons?.forEach((ele, i) => {
-        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data, result,newTemp);
-        let titleData = ``;
-        let actionLinkTemplate = ``;
-        if(this.smallTalkTemplateRenderCheck(data, result)){
-            isTemplateRender = false;
-            titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
-            let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
-            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
-        }else{
-            titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`;
-            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
-            isTemplateRender = true;
-            result.parsedPayload = null;
+        $(`#cancelOverRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
+        $("#inputFieldForAgent").remove();
+        let runInfoContent = $(`#dropDownData-${this.dropdownHeaderUuids}`);
+        if (this.isFirstMessagOfDialog) {
+          $(`#dropDownData-${this.dropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
         }
-        dynamicBlockDiv.append(botResHtml);
-        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
-        $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
+        this.isFirstMessagOfDialog = false;
         setTimeout(() => {
           if (data.entityName) {
             this.agentAssistResponse = {};
             this.agentAssistResponse = Object.assign({}, data);
           }
         }, 10);
-        $(`.override-input-div`).remove();
+        let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
+  /// componentType === 'dialogAct' means its confirmation node or else not
+        let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
         if (data.isPrompt) {
-          this.smallTalkOverrideButtonTemplate(uuids);
+          runInfoContent.append(askToUserHtml);
+          if (!this.proactiveModeStatus) {
+            this.handleOverridBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId, true);
+          } else {
+            $(`.override-input-div`).removeClass('hide');
+          }
+          this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
+        } else {
+          $(`.override-input-div`).addClass('hide');
+          $(runInfoContent).append(tellToUserHtml);
+          this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
         }
-        this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
-      });
-    }
-
-    if (!this.commonService.isAutomationOnGoing && !this.dropdownHeaderUuids && !data.suggestions && !result.parsePayLoad) {
-      $('#dynamicBlock .empty-data-no-agents').addClass('hide');
-      let msgStringify = JSON.stringify(result);
-      let newTemp = encodeURI(msgStringify);
-      let dynamicBlockDiv = $('#dynamicBlock');
-      if(data?.buttons?.length == 1){
-        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(data.buttons[0], uuids, data, result,newTemp);
-        let titleData = ``;
-        let actionLinkTemplate = ``;
-        if(this.smallTalkTemplateRenderCheck(data, result)){
-            isTemplateRender = false;
-            titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
-            let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
-            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
+        if(data && data.componentType == 'dialogAct' && (data.srcChannel != 'msteams' && data.srcChannel != 'rtm')){
+          console.log("inside dialogact and channel");
+          isTemplateRender = true;
         }else{
-            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
-            titleData = `<div class="title-data" id="displayData-${uuids}">${data.buttons[0].value}</div>`
-            isTemplateRender = true;
-            result.parsedPayload = null;
+          isTemplateRender = false;
+          this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
         }
-        dynamicBlockDiv.append(botResHtml);
-        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
-        $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
-        $(`.override-input-div`).remove();
-        if (data.isPrompt) {
-          this.smallTalkOverrideButtonTemplate(uuids);
-        }
-        this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
+        setTimeout(() => {
+          this.updateNewMessageUUIDList(this.dropdownHeaderUuids);
+        }, this.waitingTimeForUUID);
       }
-
-      setTimeout(() => {
-        this.updateNewMessageUUIDList(uuids);
-      }, this.waitingTimeForUUID);
-    }
-
-    if ( data.sendMenuRequest) {
+  
+      if (this.commonService.isAutomationOnGoing && !data.suggestions && !result.parsePayLoad) {
+  //      this.welcomeMsgResponse = data;
+        if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
+          this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages = 0;
+        }
+        this.scrollToBottom();
+      }
+  
+      if (!this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
+        $('#dynamicBlock .empty-data-no-agents').addClass('hide');
+        let msgStringify = JSON.stringify(result);
+        let newTemp = encodeURI(msgStringify);
+        let dynamicBlockDiv = $('#dynamicBlock');
+        data.buttons?.forEach((ele, i) => {
+          let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data, result,newTemp);
+          let titleData = ``;
+          let actionLinkTemplate = ``;
+          if(this.smallTalkTemplateRenderCheck(data, result)){
+              isTemplateRender = false;
+              titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
+              let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
+              actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
+          }else{
+              titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`;
+              actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
+              isTemplateRender = true;
+              result.parsedPayload = null;
+          }
+          dynamicBlockDiv.append(botResHtml);
+          $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+          $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
+          setTimeout(() => {
+            if (data.entityName) {
+              this.agentAssistResponse = {};
+              this.agentAssistResponse = Object.assign({}, data);
+            }
+          }, 10);
+          $(`.override-input-div`).remove();
+          if (data.isPrompt) {
+            this.smallTalkOverrideButtonTemplate(uuids);
+          }
+          this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
+        });
+      }
+  
+      if (!this.commonService.isAutomationOnGoing && !this.dropdownHeaderUuids && !data.suggestions && !result.parsePayLoad) {
+        $('#dynamicBlock .empty-data-no-agents').addClass('hide');
+        let msgStringify = JSON.stringify(result);
+        let newTemp = encodeURI(msgStringify);
+        let dynamicBlockDiv = $('#dynamicBlock');
+        if(data?.buttons?.length == 1){
+          let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(data.buttons[0], uuids, data, result,newTemp);
+          let titleData = ``;
+          let actionLinkTemplate = ``;
+          if(this.smallTalkTemplateRenderCheck(data, result)){
+              isTemplateRender = false;
+              titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
+              let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
+              actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
+          }else{
+              actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
+              titleData = `<div class="title-data" id="displayData-${uuids}">${data.buttons[0].value}</div>`
+              isTemplateRender = true;
+              result.parsedPayload = null;
+          }
+          dynamicBlockDiv.append(botResHtml);
+          $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+          $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
+          $(`.override-input-div`).remove();
+          if (data.isPrompt) {
+            this.smallTalkOverrideButtonTemplate(uuids);
+          }
+          this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
+        }
+  
+        setTimeout(() => {
+          this.updateNewMessageUUIDList(uuids);
+        }, this.waitingTimeForUUID);
+      }
+    }else{
       let dynamicBlockDiv = $('#dynamicBlock');
       let actionLinkTemplate = ``;
       let welcomeMsgHtml = this.assisttabService.prepareWelcomeMsgTemplate(uuids, this.interactiveLangaugeDetails);
