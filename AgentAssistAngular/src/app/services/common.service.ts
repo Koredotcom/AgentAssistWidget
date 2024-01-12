@@ -392,6 +392,16 @@ export class CommonService {
     return renderResponse;
   }
 
+  formatWelcomeMessageResponse(data){
+    let renderResponse: any = {
+      data: data,
+      type: this.renderResponseType.WELCOME_MSG,
+      connectionDetails: this.rootService.connectionDetails,
+      responseType: this.renderResponseType.ASSISTRESPONSE
+    }
+    return renderResponse;
+  }
+
   formatSmallTalkRenderResponse(data, responseId, result, newTemp, dialogPositionId?) {
     let renderResponse: any = {
       data: data,

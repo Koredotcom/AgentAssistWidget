@@ -117,7 +117,8 @@ export const RenderResponseType = {
     AUTOMATION : 'AUTOMATION',
     USERMSG : 'USERMSG',
     ASSISTRESPONSE : 'ASSISTRESPONSE',
-    FEEDBACK : 'FEEDBACK'
+    FEEDBACK : 'FEEDBACK',
+    WELCOME_MSG : 'WELCOME_MSG'
 }
 
 export const FeebackConst = {
