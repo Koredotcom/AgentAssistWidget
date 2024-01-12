@@ -57,11 +57,16 @@
           <div class="card-body">
                 <div class="card_body_acc_content kore-chat-window">
                     <app-loader [type]="projConstants.WIDGET_LOADER" *ngIf="showSpinner"></app-loader>
-                    <app-tell-customer [automation]="welcomeMsgResponse" [isWelcomeMsg]="true" *ngIf="(welcomeMsgResponse | json) != '{}'" [responseArray]="assistResponseArray" [responseArrayIndex]="0"
+                    <!-- <app-tell-customer [automation]="welcomeMsgResponse" [isWelcomeMsg]="true" *ngIf="(welcomeMsgResponse | json) != '{}'" [responseArray]="assistResponseArray" [responseArrayIndex]="0"
                     [ngClass]="{'componentSlideUPAnimation' : !assistResponseArray?.length}"
-                    ></app-tell-customer>
+                    ></app-tell-customer> -->
                     <ng-container [ngTemplateOutlet]="listingTriggers" *ngIf="!assistResponseArray.length && (welcomeMsgResponse | json) == '{}'"></ng-container>                    
                     <ng-container *ngFor="let res of assistResponseArray; let i = index; trackBy:assistRespType;">
+                        <ng-container *ngIf="res.type == renderResponseType.WELCOME_MSG">
+                            <app-tell-customer [automation]="welcomeMsgResponse" [isWelcomeMsg]="true" *ngIf="(welcomeMsgResponse | json) != '{}'" [responseArray]="assistResponseArray" [responseArrayIndex]="0"
+                            [ngClass]="{'componentSlideUPAnimation' : (assistResponseArray?.length == i+1)}"
+                            ></app-tell-customer>
+                        </ng-container>
                         <ng-container *ngIf="res.type == renderResponseType.SUGGESTIONS">
                             <app-suggestions [suggestionResponse]="res" [agentassistArrayIndex]="i+1"
                                 [agentassistResponseArray]="assistResponseArray"

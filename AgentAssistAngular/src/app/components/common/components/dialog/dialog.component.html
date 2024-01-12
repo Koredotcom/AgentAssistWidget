@@ -16,8 +16,8 @@
         </ng-container>
     </ng-container>
 </ng-container>
-<ng-container [ngTemplateOutlet]="dialogEnded"
-    *ngIf="automationData.endAutomation && automationData?.automationsArray?.length"></ng-container>
+<!-- <ng-container [ngTemplateOutlet]="dialogEnded"
+    *ngIf="automationData.endAutomation && automationData?.automationsArray?.length"></ng-container> -->
 
 
 <ng-template #dialogStarted>
@@ -40,6 +40,5 @@
             <button class="btn_link">{{automationData.data.intentName}}</button>
             <p>{{'ENDED' | translate}}</p>
         </div>
-        <!-- <i class="krIocnsFont-check-circle"></i> -->
     </div>
 </ng-template>
