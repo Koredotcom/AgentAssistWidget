@@ -197,18 +197,26 @@ export class RootService {
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
     let snippersArray = suggestions?.searchassist?.snippets || [];
+    let filesArray = suggestions?.searchassist?.files || [];
     let searchResponse: any = {};
-    if(dialoguesArray.length || faqArray.length || snippersArray.length){
+    if(dialoguesArray.length || faqArray.length || snippersArray.length || filesArray.length || Object.keys(suggestions?.searchassist)?.length){
       searchResponse.dialogs = [];
       searchResponse.faqs = [];
       searchResponse.articles = [];
       searchResponse.snippets = [];
+      searchResponse.files = [];
       if (suggestions.searchassist && Object.keys(suggestions.searchassist).length > 0) {
         for (let source in suggestions.searchassist) {
-          if (source != "snippets") {
+          if (source != "snippets" && source != "file") {
             suggestions.searchassist[source] = this.checkEmptyObjectsInArray(suggestions.searchassist[source]);
             if (Object.keys(suggestions.searchassist[source]).length > 0) {
               searchResponse.articles.push.apply(searchResponse.articles, suggestions.searchassist[source]);
+            }
+          }
+          if(source == "file"){
+            suggestions.searchassist[source] = this.checkEmptyObjectsInArray(suggestions.searchassist[source]);
+            if (Object.keys(suggestions.searchassist[source]).length > 0) {
+              searchResponse.files.push.apply(searchResponse.files, suggestions.searchassist[source]);
             }
           }
         }
@@ -218,6 +226,13 @@ export class RootService {
           article.content = article.content ? article.content : '';
           article.contentId = article.contentId;
           article.userInput = response.userInput;
+        }
+        for (let file of searchResponse.files) {
+          file.showMoreButton = true;
+          file.showLessButton = false;
+          file.content = file.content ? file.content : '';
+          file.contentId = file.contentId;
+          file.userInput = response.userInput;
         }
       }
       for (let faq of faqArray) {

@@ -9,8 +9,8 @@
   height: 100vh;
   background-color: $backdrop-bg;
   &.custom-backdrop-off-canvas{
-    height: calc(100% - 113px);
-    top: 48px;
+    height: calc(100% - 95px);
+    top: 36px;
   }
   // Fade for backdrop
   &.fade { opacity: 0; }

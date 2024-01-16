@@ -153,7 +153,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     });
 
     this.subs.sink = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {      
-      if (endoftaskresponse && (endoftaskresponse.positionId === this.dialogPositionId) || (!endoftaskresponse?.positionId)) {
+      if (endoftaskresponse && ((endoftaskresponse?.positionId === this.dialogPositionId) || (!endoftaskresponse?.positionId))) {
         if(this.showListView){
           this.handlePopupEvent({type : this.projConstants.LISTVIEW, status : false});
         }
@@ -318,53 +318,58 @@ export class AssistComponent implements OnInit, OnDestroy {
     let result: any = this.templateRenderClassService.getResponseUsingTemplate(data);
     this.rootService.currentPositionId = this.dialogPositionId;
     let msgStringify = JSON.stringify(result);
-    let newTemp = encodeURI(msgStringify);    
-
-    if (this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
-      this.showSpinner = false;
-      renderResponse = this.commonService.formatAutomationRenderResponse(data,responseId, result, newTemp, this.dialogPositionId)
-      if (data.isPrompt && (!this.proactiveModeStatus || this.rootService.manualAssistOverrideMode)) {
-        renderResponse.toggleOverride = true;
-        renderResponse.hideOverrideDiv = true;
+    let newTemp = encodeURI(msgStringify);  
+    
+    if(!data.sendMenuRequest){
+      if (this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
+        this.showSpinner = false;
+        renderResponse = this.commonService.formatAutomationRenderResponse(data,responseId, result, newTemp, this.dialogPositionId)
+        if (data.isPrompt && (!this.proactiveModeStatus || this.rootService.manualAssistOverrideMode)) {
+          renderResponse.toggleOverride = true;
+          renderResponse.hideOverrideDiv = true;
+        }
+        this.currentRunningStep = data.entityDisplayName ? data.entityDisplayName : data.entityName;
+        let previousEntityNodes = this.commonService.getPreviousEntityNodesAndValues(this.assistResponseArray,data);
+        renderResponse = this.commonService.formatAssistAutomation(renderResponse);
+        this.assistResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.assistResponseArray, data, this.showErrorPrompt, renderResponse, this.rootService.dropdownHeaderUuids, this.projConstants.ASSIST, previousEntityNodes);
+        this.assistResponseArray = structuredClone(this.assistResponseArray);     
+        this.formatListViewEntityList(this.projConstants.LISTVIEW);
       }
-      this.currentRunningStep = data.entityDisplayName ? data.entityDisplayName : data.entityName;
-      let previousEntityNodes = this.commonService.getPreviousEntityNodesAndValues(this.assistResponseArray,data);
-      renderResponse = this.commonService.formatAssistAutomation(renderResponse);
-      this.assistResponseArray = this.commonService.formatRunningLastAutomationEntityNode(this.assistResponseArray, data, this.showErrorPrompt, renderResponse, this.rootService.dropdownHeaderUuids, this.projConstants.ASSIST, previousEntityNodes);
-      this.assistResponseArray = structuredClone(this.assistResponseArray);     
-      this.formatListViewEntityList(this.projConstants.LISTVIEW);
-    }
-
-    // small talk with templates
-    if (!this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
-      renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId)
-      if (data.isPrompt && !this.proactiveModeStatus) {
-        renderResponse.toggleOverride = true;
-        renderResponse.hideOverrideDiv = true;
+  
+      // small talk with templates
+      if (!this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
+        renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId)
+        if (data.isPrompt && !this.proactiveModeStatus) {
+          renderResponse.toggleOverride = true;
+          renderResponse.hideOverrideDiv = true;
+        }
+        this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);
+        this.assistResponseArray = [...this.assistResponseArray];
       }
+  
+      // small talk without templates
+      if (!this.rootService.isAutomationOnGoing && !this.rootService.dropdownHeaderUuids && !data.suggestions && !result.parsePayLoad && !data.sendMenuRequest) {
+        renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId)
+        if (data.isPrompt && !this.proactiveModeStatus) {
+          renderResponse.toggleOverride = true;
+          renderResponse.hideOverrideDiv = true;
+        }
+        this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);
+        this.assistResponseArray = [...this.assistResponseArray];
+      }
+    }else{
+      renderResponse = this.commonService.formatWelcomeMessageResponse(data);
+      this.welcomeMsgResponse = data;
       this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);
       this.assistResponseArray = [...this.assistResponseArray];
-    }
-
-    // small talk without templates
-    if (!this.rootService.isAutomationOnGoing && !this.rootService.dropdownHeaderUuids && !data.suggestions && !result.parsePayLoad && !data.sendMenuRequest) {
-      renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId)
-      if (data.isPrompt && !this.proactiveModeStatus) {
-        renderResponse.toggleOverride = true;
-        renderResponse.hideOverrideDiv = true;
-      }
-      this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);
-      this.assistResponseArray = [...this.assistResponseArray];
+      this.scrollToBottom();
     }
 
     if(this.rootService.isAgentSentRequestOnClick){
       this.rootService.setAssistTemplateClick(false);
     }
 
-    if (data.sendMenuRequest) {
-      this.welcomeMsgResponse = data;
-      this.scrollToBottom();
-    }else{
+    if (!data.sendMenuRequest) {
       this.scrollToBottomRuntime();
     }
     

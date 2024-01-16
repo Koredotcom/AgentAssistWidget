@@ -1,6 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, SimpleChange } from '@angular/core';
-import { RemoveTagFromStringPipe } from 'src/app/pipes/remove-tag-from-string.pipe';
-import { ReplaceTextWithTagPipe } from 'src/app/pipes/replace-text-with-tag.pipe';
+import { Component, Input, SimpleChange } from '@angular/core';
 import { ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -8,17 +6,16 @@ import { RootService } from 'src/app/services/root.service';
 import { SubSink } from 'subsink';
 
 @Component({
-  selector: 'app-article-suggestions',
-  templateUrl: './article-suggestions.component.html',
-  styleUrls: ['./article-suggestions.component.scss']
+  selector: 'app-file-suggestions',
+  templateUrl: './file-suggestions.component.html',
+  styleUrls: ['./file-suggestions.component.scss']
 })
-export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
-
+export class FileSuggestionsComponent {
   @Input() searchResponse : any;
   
   subs = new SubSink();
   projConstants: any = ProjConstants;
-  articlesList : any[] = [];
+  filesList : any[] = [];
   viewCount = 2;
   moreClick = false;
   hideActionButtons : boolean = false;
@@ -30,6 +27,7 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(){
+  
   }
 
   ngOnChanges(changes : SimpleChange){
@@ -51,20 +49,22 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
 
 
   handleSearchResponse(searchResponse){
-    this.articlesList = [];
-    if(searchResponse && searchResponse.articles){
-      this.articlesList = searchResponse.articles;
+    this.filesList = [];
+    console.log(searchResponse, "search respone*************");
+    
+    if(searchResponse && searchResponse.files){
+      this.filesList = searchResponse.files;
       this.viewLessClick();
     }
   }
 
-  handleSendCopyButton(actionType, articleObj, selectType){
-    articleObj.send = true;
-    this.commonService.handleSendCopyButton(actionType, articleObj, selectType)
+  handleSendCopyButton(actionType, fileObj, selectType){
+    fileObj.send = true;
+    this.commonService.handleSendCopyButton(actionType, fileObj, selectType)
   }
 
-  toggleShowMoreLess(article){
-    article.showMoreButton = !article.showMoreButton;
+  toggleShowMoreLess(file){
+    file.showMoreButton = !file.showMoreButton;
   }
 
   ngOnDestroy(){
@@ -73,14 +73,11 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
 
   viewMoreClick(){
     this.moreClick = true;
-    this.viewCount = this.articlesList?.length;
+    this.viewCount = this.filesList?.length;
   }
 
   viewLessClick(){
     this.moreClick = false;
-    this.viewCount = (this.articlesList && this.articlesList?.length <= 2) ? this.articlesList?.length : 2;
+    this.viewCount = (this.filesList && this.filesList?.length <= 2) ? this.filesList?.length : 2;
   }
-
 }
-
-

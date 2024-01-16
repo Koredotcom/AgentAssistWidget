@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { EVENTS } from 'src/app/helpers/events';
@@ -11,7 +11,7 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.scss']
 })
-export class FeedbackComponent {
+export class FeedbackComponent implements AfterViewInit {
   @Input() feedbackData : any;
   @Input() agentassistArrayIndex : number;
   @Input() agentassistResponseArray : number;
@@ -36,7 +36,7 @@ export class FeedbackComponent {
 
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.createForm();
   }
 
@@ -81,33 +81,34 @@ export class FeedbackComponent {
 
 
   addFeedback(feedBackFlag){
-    this.feedbackData.feedback = feedBackFlag;
     this.feedbackData.arrowToggle = (feedBackFlag == this.feedbackConst.DISLIKE) ? true : false;
-    (this.feedbackForm.controls?.['feedback']).setValue(feedBackFlag);
-    this.formTouched = false;
-    this.rootService.isUpdateFeedBackDetailsFlag = false;
-    this.callAgentFeedbackUsage(); 
-    this.feedbackData.oldFeedback = (feedBackFlag == this.feedbackConst.LIKE) ? true : false;
+    if(this.feedbackData?.feedback != feedBackFlag){
+      this.feedbackData.feedback = feedBackFlag;
+      (this.feedbackForm.controls?.['feedback']).setValue(feedBackFlag);
+      this.formTouched = false;
+      this.rootService.isUpdateFeedBackDetailsFlag = false;
+      this.callAgentFeedbackUsage(); 
+      this.feedbackData.oldFeedback = (feedBackFlag == this.feedbackConst.LIKE) ? true : false;
+    }    
   }
 
   dislikeFeedbackArrowToggle(){
     this.feedbackData.arrowToggle = !this.feedbackData.arrowToggle;
-    if(this.feedbackData.arrowToggle){
-      this.AgentAssist_feedBack_Update_Request();
-      this.rootService.isUpdateFeedBackDetailsFlag = true;
-    }
   }
 
   addDislikeSuggestion(suggestion){
+    this.formTouched = true;
     let suggestionIndex = this.feedbackData.feedbackDetails.indexOf(suggestion);
     if(suggestionIndex >= 0){
       this.feedbackData.feedbackDetails.splice(suggestionIndex, 1);
-    }else{
+    }
+    else{
       this.feedbackData.feedbackDetails.push(suggestion);
     }
-    this.feedbackData.comment = this.feedbackForm.get('comment').value;
-    this.feedbackData = structuredClone(this.feedbackData);
-    this.submitFeedback();
+    this.feedbackData.oldFeedback =  false;
+    // this.feedbackData.comment = this.feedbackForm.get('comment').value;
+    // this.feedbackData = structuredClone(this.feedbackData);
+    // this.submitFeedback();
   }
 
   AgentAssist_feedBack_Update_Request() {

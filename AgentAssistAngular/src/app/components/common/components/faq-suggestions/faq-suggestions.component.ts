@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
@@ -33,8 +33,13 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.handleResponse();
     this.subscribeEvents();
+  }
+
+  ngOnChanges(changes: SimpleChange){
+    if(changes['searchResponse']?.currentValue){
+      this.handleResponse();
+    }
   }
 
   subscribeEvents(){

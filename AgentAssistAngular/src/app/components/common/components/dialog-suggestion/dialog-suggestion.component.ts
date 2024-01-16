@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
 import { ProjConstants } from 'src/app/proj.const';
@@ -33,7 +33,12 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.subscribeEvents();
-    this.handleSearchResponse(this.searchResponse);
+  }
+
+  ngOnChanges(changes : SimpleChange){
+    if(this.searchResponse){
+      this.handleSearchResponse(this.searchResponse);
+    }
   }
 
   subscribeEvents(){

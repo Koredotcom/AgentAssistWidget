@@ -30,10 +30,11 @@
     .footer-links-data{
         border-radius: 6px 6px 0px 0px;
         background: var(--themeBgWhiteColor);
-        padding: 6px 12px;
+        padding: 5px 12px;
         display: flex;
         width: 100%;
         gap: 32px;
+        min-height: 50px;
         @media screen and (max-width:500px){
             gap: initial;
         }
@@ -42,7 +43,7 @@
             padding: 0;
             background: transparent;
             min-width: 62px;
-            height: 48px;
+            height: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -78,7 +79,7 @@
             }
             .svg_icon{
                 line-height: 0;
-                font-size: 18px;
+                font-size: 16px;
             }
             p{
                 // display: none;
