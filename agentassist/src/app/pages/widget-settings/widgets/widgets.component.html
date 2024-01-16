@@ -349,8 +349,8 @@
                                 <div class="kr-sg-radiobutton" *ngFor="let integrate of integration; let idxVal = index">
                                     <input id="val-{{idxVal}}" class="radio-custom" type="radio" [value]="integrate.type" name="type" formControlName="type" (click)="selectedIntegrationType($event, integrate)">
                                     <label for="val-{{idxVal}}" class="radio-custom-label">
-                                        <div class="mode-title">{{integrate.type}}</div>
-                                        <div class="mode-des"> {{integrate.desc}} </div>
+                                        <div class="mode-title">{{integrate.type | titlecase}}</div>
+                                        <div class="mode-des"> {{integrate.desc | titlecase}} </div>
                                     </label>
                                 </div>
                             </div>
