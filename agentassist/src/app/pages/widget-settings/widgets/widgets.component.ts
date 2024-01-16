@@ -67,8 +67,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   ];
   AutoSuggestions = [{type:'On'}, {type: 'Off'}];
   integration = [
-    {type:'Basic', desc: 'Use default Knowledge AI Configurations'}, 
-    {type:'Advance', desc:'Configure how you want to use Knowledge AI'}
+    {type:'basic', desc: 'Use default Knowledge AI Configurations'}, 
+    {type:'advance', desc:'Configure how you want to use Knowledge AI'}
   ]
   advancedModeScript: string = '';
 
