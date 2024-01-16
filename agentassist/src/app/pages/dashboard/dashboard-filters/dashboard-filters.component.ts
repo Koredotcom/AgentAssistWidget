@@ -101,6 +101,7 @@ export class DashboardFiltersComponent implements OnInit {
   changeChannel(channel){
     this.filters = { ... this.filters, experience : channel }
     this.selectedChannel = channel;
+    this.updateFilters(this.filters);
   }
 
   changeBot(bot) {
