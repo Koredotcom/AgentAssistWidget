@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ProjConstants } from 'src/app/proj.const';
+import { RootService } from 'src/app/services/root.service';
 
 @Component({
   selector: 'app-summary-popup',
@@ -15,11 +16,14 @@ export class SummaryPopupComponent {
 
   editedSummaryText : any;
   projCnst : any = ProjConstants;
-  tooltipText : string = this.translate.instant("COPY");;
+  tooltipText : string = this.translate.instant("COPY");
+  submitEnabled:boolean = false
 
-  constructor(public modal : NgbActiveModal, private translate : TranslateService) { }
+  constructor(public modal : NgbActiveModal, private translate : TranslateService, private rootService: RootService) { }
 
   ngOnInit(): void {
+    console.log(this.rootService.settingsData);
+    this.submitEnabled = this.rootService?.settingsData?.summarization?.canSubmit;
     this.editedSummaryText = this.summaryText?.summary ? this.summaryText?.summary[0]: '';
   }
 
