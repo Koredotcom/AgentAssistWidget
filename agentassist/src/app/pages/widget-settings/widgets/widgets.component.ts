@@ -106,36 +106,36 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }
     this.agentAssistFormGroup = this.fb.group({
       agentAssistSettings: this.fb.group({
-        agentAssistWidgetEnabled: [isUpdate ? obj.agentAssistWidgetEnabled : false],
-        isProactiveEnabled: [isUpdate ? obj.isProactiveEnabled : false],
-        isAgentCoachingEnabled: [isUpdate ? obj.isAgentCoachingEnabled : false],
-        isAgentResponseEnabled: [isUpdate ? obj.isAgentResponseEnabled : true],
+        agentAssistWidgetEnabled: [isUpdate ? (obj.agentAssistWidgetEnabled ?? false) : false],
+        isProactiveEnabled: [isUpdate ? (obj.isProactiveEnabled ?? false) : false],
+        isAgentCoachingEnabled: [isUpdate ? (obj.isAgentCoachingEnabled ?? false) : false],
+        isAgentResponseEnabled: [isUpdate ? (obj.isAgentResponseEnabled ?? false) : true],
         summarization: this.fb.group({
-          isEnabled : [isUpdate ? obj.summarization?.isEnabled : false],
-          canSubmit : [isUpdate ? obj.summarization?.canSubmit : false]
+          isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
+          canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false]
         }),
-        isAgentPlaybookEnabled: [isUpdate ? obj.isAgentPlaybookEnabled : false],
+        isAgentPlaybookEnabled: [isUpdate ? (obj.isAgentPlaybookEnabled ?? false) : false],
         isWidgetLandingEnabled: this.fb.group({
-          isEnabled: [isUpdate ? obj.isWidgetLandingEnabled?.isEnabled : false],
+          isEnabled: [isUpdate ? (obj.isWidgetLandingEnabled?.isEnabled??false) : false],
           chat: this.fb.group({
-            isEnabled: [isUpdate ? obj.isWidgetLandingEnabled?.chat?.isEnabled : false],
-            tab: [isUpdate ? obj.isWidgetLandingEnabled?.chat?.tab : 'assist']
+            isEnabled: [isUpdate ? (obj.isWidgetLandingEnabled?.chat?.isEnabled??false) : false],
+            tab: [isUpdate ? (obj.isWidgetLandingEnabled?.chat?.tab??'assist') : 'assist']
           }),
           voice: this.fb.group({
-            isEnabled: [isUpdate ? obj.isWidgetLandingEnabled?.voice?.isEnabled : false],
-            tab: [isUpdate ? obj.isWidgetLandingEnabled?.voice?.tab : 'transcript']
+            isEnabled: [isUpdate ? (obj.isWidgetLandingEnabled?.voice?.isEnabled??false) : false],
+            tab: [isUpdate ? (obj.isWidgetLandingEnabled?.voice?.tab??'transcript') : 'transcript']
           })
         }),
         botEvents: this.fb.group({
           fallback: this.fb.group({
-              isEnabled: [isUpdate ? obj.botEvents?.fallback?.isEnabled : false],
+              isEnabled: [isUpdate ? (obj.botEvents?.fallback?.isEnabled??false) : false],
           })
         }),
         isCustomisedLogoEnabled: this.fb.group({
-          isEnabled: [isUpdate ? obj.isCustomisedLogoEnabled?.isEnabled : false],
-          fileId: [isUpdate ? obj.isCustomisedLogoEnabled?.fileId : ''],
-          fileName: [isUpdate ? obj.isCustomisedLogoEnabled?.fileName : ''],
-          hash: [isUpdate ? obj.isCustomisedLogoEnabled?.hash : '']
+          isEnabled: [isUpdate ? (obj.isCustomisedLogoEnabled?.isEnabled??false) : false],
+          fileId: [isUpdate ? (obj.isCustomisedLogoEnabled?.fileId??'') : ''],
+          fileName: [isUpdate ? (obj.isCustomisedLogoEnabled?.fileName??'') : ''],
+          hash: [isUpdate ? (obj.isCustomisedLogoEnabled?.hash??'') : '']
         })
       })
     });
@@ -153,17 +153,17 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       searchAssistConfig: this.fb.group({
         criteria: ['alwaysShow'], //need to check
         alwaysShow: [isUpdate ? (searchObj?.alwaysShow ?? false) : false],
-        isXODependant: [isUpdate ? searchObj?.isXODependant : false],
+        isXODependant: [isUpdate ? (searchObj?.isXODependant ?? false) : false],
         fallback: [isUpdate ? (searchObj?.fallback ?? false) : false],
         suggestVal: [isUpdate ? (searchObj?.showAutoSuggestions ? 'On' : 'Off') : 'On'], 
-        showAutoSuggestions: [isUpdate ? searchObj?.showAutoSuggestions : true],
+        showAutoSuggestions: [isUpdate ? (searchObj?.showAutoSuggestions ?? true) : true],
         integrations : this.fb.group({
           type: [ isUpdate ? (searchObj?.integrations?.type || 'basic') : 'basic']
         })
       })
     });
     if(isUpdate){
-      let picked = (({ alwaysShow, isXODependant, fallback }) => ({ alwaysShow, isXODependant, fallback }))(searchObj);
+      let picked = (({ alwaysShow, isXODependant, fallback }) => ({ alwaysShow, isXODependant, fallback }))(searchObj || {});
       let criteria = 'alwaysShow';
       for(let key in picked){
         if(picked[key]){
