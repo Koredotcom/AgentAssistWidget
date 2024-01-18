@@ -1,6 +1,6 @@
 {
     "/accounts": {
-      "target": "https://uat-smartassist.kore.ai",
+      "target": "https://huddl-agentassist-dev.kore.ai",
       "pathRewrite": {
         "^/accounts/": "/accounts/"
       },
@@ -9,7 +9,7 @@
       "logLevel": "debug"
     },
     "/botbuilder": {
-      "target": "https://uat-smartassist.kore.ai",
+      "target": "https://huddl-agentassist-dev.kore.ai",
       "pathRewrite": {
         "^/botbuilder/": "/botbuilder/"
       },
@@ -19,7 +19,7 @@
     },
     "/agentassist/api/v1": {
       "target": {
-        "host": "uat-smartassist.kore.ai",
+        "host": "huddl-agentassist-dev.kore.ai",
         "protocol": "https:",
         "port": 443
       },
@@ -28,7 +28,7 @@
       "logLevel": "debug"
     },
     "/api/*": {
-      "target": "https://uat-smartassist.kore.ai/",
+      "target": "https://huddl-agentassist-dev.kore.ai/",
       "pathRewrite": {
         "^/api/": "/api/"
       },
