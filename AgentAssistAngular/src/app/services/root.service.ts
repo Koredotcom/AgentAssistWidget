@@ -102,6 +102,13 @@ export class RootService {
         }
       }
     }
+    if (parmasObj.fromSAT) {
+      parmasObj['userName'] = parmasObj?.endUserName !== 'Anonymous' ? parmasObj?.endUserName : 'user';
+    } else {
+      parmasObj.customData = JSON.parse(parmasObj.customData || parmasObj.customdata || "{}");
+      parmasObj['userName'] = parmasObj.customData?.userName || (parmasObj.customData?.fName && parmasObj.customData?.lName) ? (parmasObj.customData?.fName + " " + parmasObj.customData?.lName) : 'user'
+    }
+    
     this.connectionDetails = parmasObj;
   }
 
