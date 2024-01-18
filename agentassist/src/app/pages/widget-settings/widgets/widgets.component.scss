@@ -59,7 +59,7 @@
             margin-bottom: 24px;
             .accordion-content-header {
                 padding: 16px 24px 16px 16px;
-                border-radius: 12px 12px 0px 0px;
+                border-radius:12px;
                 border: 1px solid var(--Gray-200, #eaecf0);
                 background: var(--Gray-50, #f9fafb);
                 display: flex;
@@ -719,6 +719,9 @@
     &[aria-expanded="true"] {
         .arrow-icon {
             transform: rotate(0deg) !important;
+        }
+        .accordion-content-header{
+            border-radius: 12px 12px 0px 0px !important;
         }
     }
 }
