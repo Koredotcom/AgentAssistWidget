@@ -29,26 +29,29 @@ export class AppComponent implements OnDestroy {
   iswidgetEnabled = false;
   isErrorMsg = false;
   sampleSettings = {
-    "isWidgetLandingEnabled": {
-        "chat": {
-            "isEnabled": true,
-            "tab": "assist"
-        },
-        "voice": {
-            "isEnabled": true,
-            "tab": "assist"
-        },
-        "isEnabled": true
-    },
     "isCustomisedLogoEnabled": {
-        "isEnabled": false
+      "isEnabled": false
+    },
+    "botEvents": {
+      "fallback": {
+        "isEnabled": true
+      }
+    },
+    "isWidgetLandingEnabled": {
+      "isEnabled": true,
+      "tab": "assist"
     },
     "agentAssistWidgetEnabled": true,
     "isProactiveEnabled": true,
     "isAgentCoachingEnabled": false,
     "isAgentResponseEnabled": true,
     "isAgentPlaybookEnabled": false,
+    "isAgentResponseCopyEnabled" : true,
     "isSearchAssistEnabled": true,
+    "summarization" : {
+      "isEnabled" : false,
+      "canSubmit" : false
+    },
     "searchAssistConfig": {
       "isXODependant": false,
       "alwaysShow": false,
@@ -60,15 +63,6 @@ export class AppComponent implements OnDestroy {
               "script": ""
           }
       }
-    },
-    "botEvents": {
-      "fallback": {
-          "isEnabled": true
-      }
-    },
-    "summarization" : {
-      "isEnabled" : false,
-      "canSubmit" : false
     }
   };
   constructor(private webSocketService: WebSocketService,
@@ -257,6 +251,7 @@ export class AppComponent implements OnDestroy {
   getAgentAssistSettings(params) {
     // api call
     let paramsCopy = {...params};
+    paramsCopy.channel = 'chat';
     let headersVal : any = {};
     if(!this.service.configObj.fromSAT) {
         headersVal = {
@@ -274,36 +269,92 @@ export class AppComponent implements OnDestroy {
         }
     }
     $.ajax({
-      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${paramsCopy.instanceBotId}/agentassistsetting`,
+      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${paramsCopy.instanceBotId}/agentassistsetting?e="chat"`,
       type: 'get',
       headers: headersVal,
       dataType: 'json',
       success:  (data) => {
-        this.aaSettings = data.agentAssistSettings;
-        this.service.configObj = {...this.service.configObj, ...this.aaSettings};
-        this.iswidgetEnabled = this.aaSettings['agentAssistWidgetEnabled'];
-        if(data.agentAssistSettings?.agentAssistWidgetEnabled) { 
-        this.initiateSocketConnection(paramsCopy);
-        this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
-        } else {
-          this.iswidgetEnabled = data?.agentAssistSettings?.agentAssistWidgetEnabled;
-          this.errorMsg = "AgentAssist Settings configuration are Disabled! Please reach out to AgentAssist Admin.";
-        };
-        this.isErrorMsg = true;
+        data = {
+          "orgId": "o-ab58660e-9058-5eb7-b3c7-45c76337c610",
+          "accountId": "643fc84acd33301a6a3ff5c7",
+          "iId": "st-fc6732d3-f54f-5b51-b15a-8a5e335158f7",
+          "agentAssistSettings": {
+            "isCustomisedLogoEnabled": {
+              "isEnabled": false,
+              "fileId": null,
+              "fileName": null,
+              "hash": null
+            },
+            "botEvents": {
+              "fallback": {
+                "isEnabled": false
+              }
+            },
+            "chat": {
+              "agentAssistWidgetEnabled": true,
+              "isProactiveEnabled": false,
+              "isAgentCoachingEnabled": true,
+              "isAgentResponseEnabled": true,
+              "isAgentResponseCopyEnabled": true, //new flag
+              "isAgentPlaybookEnabled": true,
+              "isWidgetLandingEnabled": {
+                "isEnabled": true,
+                "tab": "mybot" //new flag
+              },
+              "summarization": {
+                "isEnabled": true,
+                "canSubmit": true
+              },
+              "isSearchAssistEnabled": true,
+              "searchAssistConfig": {
+                "integrations": {
+                  "type": "basic"
+                },
+                "alwaysShow": true,
+                "isXODependant": false,
+                "fallback": false,
+                "showAutoSuggestions": true
+              },
+            },
+          },
+          "id": "aase-41ede32-4cc5-4b14-8b3a-8554abb16c6d"
+        }   
+        if (data?.agentAssistSettings && data.agentAssistSettings[paramsCopy.channel]) {
+          data.agentAssistSettings = Object.assign(data.agentAssistSettings, data.agentAssistSettings[paramsCopy.channel]);
+          console.log(data, "data inside widget settings***********");
+          
+          this.aaSettings = data.agentAssistSettings;
+          this.service.configObj = { ...this.service.configObj, ...this.aaSettings };
+          this.iswidgetEnabled = this.aaSettings['agentAssistWidgetEnabled'];
+          if (data.agentAssistSettings?.agentAssistWidgetEnabled) {
+            this.initiateSocketConnection(paramsCopy);
+            this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
+          } else {
+            this.iswidgetEnabled = data?.agentAssistSettings?.agentAssistWidgetEnabled;
+            this.errorMsg = "AgentAssist Settings configuration are Disabled! Please reach out to AgentAssist Admin.";
+          };
+          this.isErrorMsg = true;
+        } else{
+          this.handleEmptyWidgetSettings(paramsCopy);
+        }
     },
       error: (err)=> {
-        if(Object.keys(connectionObj)){
-          const proAct = connectionObj['isProactiveAgentAssistEnabled'];
-          this.aaSettings.isProactiveEnabled = (proAct === undefined || proAct === 'undefined') ? true : proAct;
-        };
-        this.aaSettings = this.sampleSettings;
-        this.service.configObj = {...this.service.configObj, ...this.aaSettings};
-        this.iswidgetEnabled = true;
-        this.initiateSocketConnection(paramsCopy);
-        this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
-        this.isErrorMsg = true;
+        // if(Object.keys(connectionObj)){
+        //   const proAct = connectionObj['isProactiveAgentAssistEnabled'];
+        //   this.aaSettings.isProactiveEnabled = (proAct === undefined || proAct === 'undefined') ? true : proAct;
+        // };
+        this.handleEmptyWidgetSettings(paramsCopy);
       }
     });
+  }
+
+  handleEmptyWidgetSettings(paramsCopy){
+    this.aaSettings = this.sampleSettings;
+    this.service.configObj = {...this.service.configObj, ...this.aaSettings};
+    this.iswidgetEnabled = true;
+    this.initiateSocketConnection(paramsCopy);
+    this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
+    this.isErrorMsg = true;
   }
 
 }
