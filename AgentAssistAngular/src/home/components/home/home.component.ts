@@ -388,7 +388,7 @@ export class HomeComponent implements OnInit {
               'query': this.sanitizeHTMLPipe.transform(ele.value),
               'botId': ele.botId,
               'agentId': '',
-              'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
+              'experience': this.commonService.configObj.channel,
               'positionId': ele?.positionId
             }
             if (ele?.intentName) {
@@ -434,7 +434,7 @@ export class HomeComponent implements OnInit {
             },
             'botId': this.connectionDetails.botId,
             'conversationId': userInputData.conversationid,
-            'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
+            'experience': this.commonService.configObj.channel,
             'query': this.sanitizeHTMLPipe.transform(userInputData.value),
           }
           let user_messsage = {
@@ -1122,7 +1122,7 @@ setProactiveMode(){
       taskId: data.taskId,
       comment: data.comment,
       feedbackDetails: data.feedbackDetails,
-      'experience': (this.commonService.configObj.isCall && this.commonService.configObj.isCall == 'true') ? ProjConstants.VOICE : ProjConstants.CHAT,
+      'experience': this.commonService.configObj.channel,
       "interactionType": this.activeTab == 'Assist' ? 'assist' : 'mybot'
     }
     this.websocketService.emitEvents(EVENTS.agent_usage_feedback, agent_assist_request);
@@ -1136,7 +1136,7 @@ setProactiveMode(){
       orgId: '',
       taskId: e.taskId,
       positionId: e.dialogid,
-      'experience': (this.commonService.configObj.isCall && this.commonService.configObj.isCall == 'true') ? ProjConstants.VOICE : ProjConstants.CHAT,
+      'experience': this.commonService.configObj.channel,
       "interactionType": this.activeTab == 'Assist' ? 'assist' : 'mybot'
     }
 

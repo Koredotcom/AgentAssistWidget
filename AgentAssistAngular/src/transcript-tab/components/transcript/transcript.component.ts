@@ -85,7 +85,7 @@ export class TranscriptComponent implements OnInit {
           },
           'botId': this.connectionDetails.botId,
           'conversationId': userInputData.conversationid,
-          'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
+          'experience': this.commonService.configObj.channel,
           'query': this.sanitizeHTMLPipe.transform(userInputData.value),
         }
         let user_messsage = {
