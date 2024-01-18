@@ -81,7 +81,7 @@ export class EndPointsService {
     }
 
     this.serviceList['get.settings'] = {
-      endpoint : '/agentassist/api/v1/agentassist/:instanceBotId/agentassistsetting',
+      endpoint : '/agentassist/api/v1/agentassist/:instanceBotId/agentassistsetting?e=:channel',
       method : 'get',
       defaultEndPoint : false
     }

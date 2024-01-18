@@ -272,60 +272,65 @@ export class AppComponent implements OnInit, OnDestroy{
 
   getAgentAssistSettings(params){
     let instanceBotId = params.fromSAT ? params.instanceBotId : params.botId;
-    this.serviceInvoker.invoke('get.settings', {instanceBotId : instanceBotId}, {},{ settings: 'true', botId : params.botId },params.agentassisturl).pipe(finalize(() => {this.widgetLoader = false})).subscribe((res)=> {
+    // it should be removed.
+    params.channel = 'chat';
+    this.serviceInvoker.invoke('get.settings', {instanceBotId : instanceBotId, channel : params.channel}, {},{ settings: 'true', botId : params.botId },params.agentassisturl).pipe(finalize(() => {this.widgetLoader = false})).subscribe((res)=> {
       console.log(res, 'res ************');
-      if(res && res.agentAssistSettings){
-        this.rootService.settingsData = res.agentAssistSettings;
-        this.widgetSettings = res.agentAssistSettings;
-      }
-      this.initiateSocketConnection(params);
-    },(err)=> {
-      let res: any = {
-        agentAssistSettings: {
-          "isWidgetLandingEnabled": {
-              "chat": {
-                  "isEnabled": true,
-                  "tab": "assist"
-              },
-              "voice": {
-                  "isEnabled": true,
-                  "tab": "assist"
-              },
-              "isEnabled": true
-          },
+      res = {
+        "orgId": "o-ab58660e-9058-5eb7-b3c7-45c76337c610",
+        "accountId": "643fc84acd33301a6a3ff5c7",
+        "iId": "st-fc6732d3-f54f-5b51-b15a-8a5e335158f7",
+        "agentAssistSettings": {
           "isCustomisedLogoEnabled": {
-              "isEnabled": false
-          },
-          "agentAssistWidgetEnabled": true,
-          "isProactiveEnabled": true,
-          "isAgentCoachingEnabled": false,
-          "isAgentResponseEnabled": true,
-          "isAgentPlaybookEnabled": false,
-          "isSearchAssistEnabled": true,
-          "searchAssistConfig": {
-            "isXODependant": false,
-            "alwaysShow": false,
-            "showAutoSuggestions": false,
-            "fallback": false,
-            "integrations": {
-                "type": "basic",
-                "config": {
-                    "script": ""
-                }
-            }
+            "isEnabled": false,
+            "fileId": null,
+            "fileName": null,
+            "hash": null
           },
           "botEvents": {
             "fallback": {
-                "isEnabled": true
+              "isEnabled": false
             }
           },
-          "summarization" : {
-            "isEnabled" : false,
-            "canSubmit" : false
-          }
-        }
+          "chat": {
+            "agentAssistWidgetEnabled": true,
+            "isProactiveEnabled": false,
+            "isAgentCoachingEnabled": true,
+            "isAgentResponseEnabled": true,
+            "isAgentResponseCopyEnabled": true, //new flag
+            "isAgentPlaybookEnabled": false,
+            "isWidgetLandingEnabled": {
+              "isEnabled": true,
+              "tab": "mybot" //new flag
+            },
+            "summarization": {
+              "isEnabled": true,
+              "canSubmit": true
+            },
+            "isSearchAssistEnabled": true,
+            "searchAssistConfig": {
+              "integrations": {
+                "type": "basic"
+              },
+              "alwaysShow": true,
+              "isXODependant": false,
+              "fallback": false,
+              "showAutoSuggestions": true
+            },
+          },
+        },
+        "id": "aase-41ede32-4cc5-4b14-8b3a-8554abb16c6d"
+      }   
+      if(res && res.agentAssistSettings && res.agentAssistSettings[params.channel]){
+        this.widgetSettings = Object.assign(res.agentAssistSettings, res.agentAssistSettings[params.channel]);
+      }else{
+        this.widgetSettings = this.rootService.defaultwidgetSettings.agentAssistSettings;
       }
-      this.widgetSettings = res.agentAssistSettings;
+      this.rootService.settingsData = JSON.parse(JSON.stringify(this.widgetSettings));
+      this.initiateSocketConnection(params);
+    },(err)=> {
+      this.widgetSettings = this.rootService.defaultwidgetSettings.agentAssistSettings;
+      this.rootService.settingsData = JSON.parse(JSON.stringify(this.widgetSettings));
       this.initiateSocketConnection(params);
     });
 

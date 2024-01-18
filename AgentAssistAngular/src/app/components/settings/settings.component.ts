@@ -29,7 +29,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   projConstants : any = ProjConstants;
   connectionDetails : any;
   proactiveModeEnabled: boolean = this.rootService.proactiveModeStatus;
-
+  aaSettings : any = this.rootService.settingsData;
 
   ngOnInit(): void {
     this.subscribeEvents(); 

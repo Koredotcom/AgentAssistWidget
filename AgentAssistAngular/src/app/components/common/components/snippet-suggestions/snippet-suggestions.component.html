@@ -14,7 +14,7 @@
       </button> -->
       <div class="faq-actions" *ngIf="!hideActionButtons && snippet.content" [ngClass]="{'faq-actions-top' : !snippet.title}">
         <ng-container>
-          <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.ARTICLE)">
+          <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.ARTICLE)" *ngIf="!hideCopyButton">
             <i class="krIocnsFont-copy"></i>
           </button>
           <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, snippet , projConstants.ARTICLE)" *ngIf="!hideSendButton">{{ 'SEND'  | translate }}</button>

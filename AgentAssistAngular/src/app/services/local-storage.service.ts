@@ -129,8 +129,8 @@ export class LocalStorageService {
 
         let experience = connectionDetails.isCallConversation ? 'voice' : 'chat';
 
-        if(widgetSettings && widgetSettings?.isWidgetLandingEnabled && widgetSettings?.isWidgetLandingEnabled[experience] && widgetSettings?.isWidgetLandingEnabled[experience]?.tab){
-          appState[conversationId][storageConst.ACTIVE_TAB] = WidgetConst[widgetSettings?.isWidgetLandingEnabled[experience]?.tab];
+        if(widgetSettings && widgetSettings?.isWidgetLandingEnabled && widgetSettings?.isWidgetLandingEnabled?.tab){
+          appState[conversationId][storageConst.ACTIVE_TAB] = WidgetConst[widgetSettings?.isWidgetLandingEnabled?.tab];
         }
 
         this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];

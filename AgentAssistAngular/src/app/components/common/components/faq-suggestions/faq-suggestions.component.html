@@ -15,7 +15,7 @@
 
         <div class="faq-actions" *ngIf="!faq.seeMoreWrapper && faq.answer && faq.answer?.length > 0 && !hideActionButtons">
             <ng-container>
-                <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, faq.answer[0], projConstants.FAQ)">
+                <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, faq.answer[0], projConstants.FAQ)" *ngIf="!hideCopyButton">
                     <i class="krIocnsFont-copy"></i>
                 </button>
                 <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, faq.answer[0], projConstants.FAQ)" *ngIf="!hideSendButton">{{ 'SEND'  | translate }}</button>
@@ -30,7 +30,7 @@
         <div class="faq-body-content" *ngFor="let ansObj of faq.answer | slice : 0 : faq.answerCount;let ii = index">
             <div class="faq-actions"  *ngIf="!hideActionButtons && (ii != 0 || (ii == 0 && faq.seeMoreWrapper))">
                 <ng-container>
-                    <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, ansObj, projConstants.FAQ)">
+                    <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, ansObj, projConstants.FAQ)" *ngIf="!hideCopyButton">
                         <i class="krIocnsFont-copy"></i>
                     </button>
                     <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, ansObj, projConstants.FAQ)" *ngIf="!hideSendButton">{{'SEND' | translate}}</button>

@@ -52,7 +52,7 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
     let userId = userBotConversationDetails?.userId;
     let sessionId = userBotConversationDetails?.sessionId;  
     if((userBotConversationDetails?.botId || this.rootService.connectionDetails?.botId) && userBotConversationDetails?.userId && userBotConversationDetails?.sessionId) {
-      this.serviceInvoker.invoke('get.userBotHistory', { botId: botId, convId: params.conversationId, userId, sessionId }, {}, { transcriptHistory: 'true', botId : botId }, params.agentassisturl).subscribe((data)=> {
+      this.serviceInvoker.invoke('get.userBotHistory', { botId: botId, convId: params.conversationId, userId, sessionId }, {}, { userBotHistory: 'true', botId : botId }, params.agentassisturl).subscribe((data)=> {
         if(data && data.messages){
           this.historyResponse = data.messages;
           this.formatHistoryResponse();

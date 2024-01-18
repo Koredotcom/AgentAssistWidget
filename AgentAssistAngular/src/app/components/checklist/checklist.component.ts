@@ -93,12 +93,14 @@ export class ChecklistComponent {
 
   subscribeEvents() {
 
-    this.subs.sink = this.websocketService.sendCheckListOpened$.subscribe(res => {
-      if (res) {
-        this.connectionDetails = this.rootService.getConnectionDetails();
-        this.getCheckListData();
-      }
-    });
+    if(this.rootService.settingsData?.isAgentPlaybookEnabled) {
+      this.subs.sink = this.websocketService.sendCheckListOpened$.subscribe(res => {
+        if (res) {
+          this.connectionDetails = this.rootService.getConnectionDetails();
+          this.getCheckListData();
+        }
+      });
+    }
 
     this.subs.sink = this.websocketService.checkListStepResponse$.subscribe((data) => {
       let clObj = data?.checklistStepsIdentified;

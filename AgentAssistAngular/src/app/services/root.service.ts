@@ -69,6 +69,44 @@ export class RootService {
   widgetMaxButtonClick : boolean = true;
   notLookingForClick : boolean = false;
 
+  defaultwidgetSettings : any = {
+    "isCustomisedLogoEnabled": {
+      "isEnabled": false
+    },
+    "botEvents": {
+      "fallback": {
+        "isEnabled": true
+      }
+    },
+    "isWidgetLandingEnabled": {
+      "isEnabled": true,
+      "tab": "assist"
+    },
+    "agentAssistWidgetEnabled": true,
+    "isProactiveEnabled": true,
+    "isAgentCoachingEnabled": false,
+    "isAgentResponseEnabled": true,
+    "isAgentPlaybookEnabled": false,
+    "isAgentResponseCopyEnabled" : true,
+    "isSearchAssistEnabled": true,
+    "summarization" : {
+      "isEnabled" : false,
+      "canSubmit" : false
+    },
+    "searchAssistConfig": {
+      "isXODependant": false,
+      "alwaysShow": false,
+      "showAutoSuggestions": false,
+      "fallback": false,
+      "integrations": {
+          "type": "basic",
+          "config": {
+              "script": ""
+          }
+      }
+    }
+  }
+
   constructor(private templateRenderClassService: TemplateRenderClassService,
     private dirService : DirService) {
     // this.chatWindowInstance = new chatWindow();

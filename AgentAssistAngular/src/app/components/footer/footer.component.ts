@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ProjConstants, storageConst } from 'src/app/proj.const';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
@@ -29,7 +29,8 @@ export class FooterComponent implements OnInit, OnDestroy{
   constructor(private offcanvasService: NgbOffcanvas, private localStorageService : LocalStorageService,
     private rootService: RootService, 
     @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2){
+    private renderer: Renderer2,
+    private cdRef : ChangeDetectorRef){
 
   }
 
@@ -49,6 +50,7 @@ export class FooterComponent implements OnInit, OnDestroy{
   ngAfterViewInit(){
     this.subscribeEvents();
     this.minMaxButtonClick(true);
+    this.cdRef.detectChanges();
   }
 
   subscribeEvents(){
