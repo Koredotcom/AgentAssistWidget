@@ -282,19 +282,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
           roleId: val.roleInfo[0]._id
         });
       });
-      if (_.isArray(res)) {
-        res = res.map(val => {
+      if (_.isArray(res?.emailList)) {
+        res.emailList = (res?.emailList).map(val => {
           return {
             emailId: val.email,
-            roleId: _.findWhere(this.botRoles, { role: 'Bot Developer' })._id
+            roleId: _.findWhere(this.botRoles, { role: res?.role })._id
           }
         });
-        usersList = usersList.concat(res);
-        res = _.map(res, function (r) {
+        usersList = usersList.concat(res.emailList);
+        res.emailList = _.map(res?.emailList, function (r) {
           return _.pick(r, 'emailId');
         });
         const payloadEmails = {
-          emailIds: res
+          emailIds: res.emailList
         };
         const payload = {
           codevelopers: {

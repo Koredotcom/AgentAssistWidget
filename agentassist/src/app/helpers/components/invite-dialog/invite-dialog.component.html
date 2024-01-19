@@ -26,11 +26,11 @@
             <div class="label-text">Role</div>
             <div class="kr-sg-dropdowns" ngbDropdown>
                 <div class="dropdown dropdown-open">
-                <button class="dropdown-toggle dropdown-input" ngbDropdownToggle >{{selectedRole}}</button>
+                <button class="dropdown-toggle dropdown-input" ngbDropdownToggle >{{roleType}}</button>
                 <perfect-scrollbar class="bots-scroll">
                 <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                     <ng-container *ngFor="let role of rolesList; let i - index"> 
-                            <li ngbDropdownItem class="p-0" (click)="selectRole(role)">
+                            <li ngbDropdownItem class="p-0" (click)="selectedRole(role)">
                                 <a>{{role}}</a>
                             </li>
                     </ng-container>
@@ -46,7 +46,7 @@
         <button mat-button color='stroked' mat-dialog-close>{{ "HEADER.CANCEL" | translate }}</button>
     </div> -->
     <div mat-dialog-actions>
-        <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="!isValidList || emailList.length == 0" [mat-dialog-close]="emailList">{{ "HEADER.INVITE_BUTTON" | translate }}</button>
+        <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="(!isValidList || emailList.length == 0) && roleType !== ''" (click)="onSubmit()">{{ "HEADER.INVITE_BUTTON" | translate }}</button>
         <button class="kr-sg-button-secondary btn_lg" (click)="onCancel()">{{ "HEADER.CANCEL" | translate }}</button>
     </div>
 </div>

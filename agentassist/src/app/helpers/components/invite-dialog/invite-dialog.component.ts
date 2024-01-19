@@ -15,7 +15,7 @@ export class InviteDialogComponent implements OnInit {
   emailList: {email: string, invalid: boolean}[] = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   isValidList = true;
-  selectedRole = 'Bot Developer';
+  roleType = 'Bot Developer';
   rolesList = ['Master Admin', 'Bot Owner', 'Bot Developer', 'Bot Tester', 'Process Tester', 'Agent']
 
   constructor(public dialogRef: MatDialogRef<InviteDialogComponent>,
@@ -57,15 +57,15 @@ export class InviteDialogComponent implements OnInit {
       return re.test(String(email).toLowerCase());
   }
 
-  selectRole(roleType) {
-    this.selectedRole = roleType;
+  selectedRole(roleType) {
+    this.roleType = roleType;
   }
 
 
   onSubmit(){
     let data: any = {};
     data['emailList'] = this.emailList;
-    data['role'] = this.selectRole;
+    data['role'] = this.roleType;
     this.dialogRef.close(data);
   }
 
