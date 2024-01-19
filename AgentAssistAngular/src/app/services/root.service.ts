@@ -118,7 +118,7 @@ export class RootService {
       'conversationId': data.conversationId,
       'query': data.value,
       'botId': data.botId,
-      'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+      'experience': this.connectionDetails?.channel,
       'positionId': data?.positionId,
       'childBotId': data?.childBotId || '',
       'childBotName': data?.childBotName || '',
@@ -501,7 +501,7 @@ export class RootService {
       'query': data.value,
       'botId': data.botId,
       'agentId': '',
-      'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+      'experience': this.connectionDetails?.channel,
       'positionId': data.positionId,
       'intType': 'assist'
     }

@@ -98,7 +98,7 @@ export class WebSocketService {
       'sendMenuRequest': true,
       'uId': this.rootService.userBotConversationDetails?.userId || '',
       'sId': this.rootService.userBotConversationDetails?.sessionId || '',
-      'experience' : (isCall && isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT,
+      'experience' : this.rootService.connectionDetails?.channel,
     }
     if(customData && Object.keys(customData).length > 0 && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
       welcomeMessageParams['customData'] = customData
@@ -121,7 +121,7 @@ export class WebSocketService {
     if(requestParams){
       requestParams.isExtAD = fromSAT ? false : true;
       requestParams.source = source;
-      requestParams.experience = (isCall && isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
+      requestParams.experience = this.rootService.connectionDetails?.channel
     }
 
     if(this.loaderEvents[eventName]) {
@@ -149,7 +149,7 @@ export class WebSocketService {
     let menu_request_params : any = {
       botId,
       conversationId,
-      experience : isCall && isCall === "true" ?  ProjConstants.VOICE : ProjConstants.CHAT
+      experience : this.rootService.connectionDetails?.channel
     }
     if(autoBotId && autoBotId !== 'undefined') {
       menu_request_params['autoBotId'] = autoBotId;
@@ -255,7 +255,7 @@ export class WebSocketService {
       "conversationId": connectionDetails.conversationId,
       "query": "",
       "enable_override_userinput": toggleOverride,
-      'experience': connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+      'experience': this.rootService.connectionDetails?.channel,
       "positionId": dialogId
     }
     this.emitEvents(EVENTS.enable_override_userinput, overRideObj);
@@ -346,7 +346,7 @@ export class WebSocketService {
           "query": JSON.parse(localStorage.getItem('innerTextValue')),
           "botId": connectionObj.botId,
           "agentId": "",
-          "experience": connectionObj.isCallConversation === true ? 'voice' : 'chat',
+          "experience": this.rootService.connectionDetails?.channel,
           "positionId": this.rootService.currentPositionId,
           "entities": [],
           "check": true,
@@ -366,7 +366,7 @@ export class WebSocketService {
           "conversationId": connectionObj.conversationId,
           "query": JSON.parse(localStorage.getItem('innerTextValue')),
           "botId": connectionObj.botId,
-          "experience": connectionObj.isCallConversation === true ? 'voice' : 'chat',
+          "experience": this.rootService.connectionDetails?.channel,
           "positionId": this.rootService.currentPositionIdOfMyBot,
           "autoBotId": connectionObj.autoBotId,
           "intType" : "myBot"
