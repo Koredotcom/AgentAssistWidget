@@ -108,6 +108,9 @@ export class RootService {
       parmasObj.customData = JSON.parse(parmasObj.customData || parmasObj.customdata || "{}");
       parmasObj['userName'] = parmasObj.customData?.userName || (parmasObj.customData?.fName && parmasObj.customData?.lName) ? (parmasObj.customData?.fName + " " + parmasObj.customData?.lName) : 'user'
     }
+
+    let channel = ((parmasObj?.channel && parmasObj?.channel.trim() !== "''") ? parmasObj?.channel : (parmasObj.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
+    parmasObj['channel'] = channel;
     
     this.connectionDetails = parmasObj;
   }

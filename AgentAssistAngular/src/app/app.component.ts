@@ -271,8 +271,6 @@ export class AppComponent implements OnInit, OnDestroy{
 
 
   getAgentAssistSettings(params){
-    let channel = ((params?.channel && params?.channel.trim() !== "''") ? params?.channel : (params.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
-    this.rootService.connectionDetails['channel'] = channel;
     let instanceBotId = params.fromSAT ? params.instanceBotId : params.botId;
     this.serviceInvoker.invoke('get.settings', {instanceBotId : instanceBotId}, {},{ settings: 'true', botId : params.botId },params.agentassisturl).pipe(finalize(() => {this.widgetLoader = false})).subscribe((res)=> {
       console.log(res, 'res ************');
