@@ -52,7 +52,7 @@ export class WebSocketService {
     this.handleSubjectService.connectDetailsSubject.subscribe((urlParams : any) =>{
       if(urlParams && urlParams?.token){
         this.connectionDetails = urlParams;
-        this.connectionDetails['channel'] = ((urlParams?.channel && urlParams?.channel.trim() !== "''") ? urlParams?.channel : (urlParams.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
+        // this.connectionDetails['channel'] = ((urlParams?.channel && urlParams?.channel.trim() !== "''") ? urlParams?.channel : (urlParams.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
         // this.socketConnection();
       }
     })
