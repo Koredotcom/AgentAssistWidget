@@ -84,7 +84,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
           },
           'botId': this.connectionDetails.botId,
           'conversationId': userInputData.conversationid,
-          'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+          'experience': this.connectionDetails?.channel,
           'query': this.sanitizeHTMLPipe.transform(userInputData.value),
         }
         let user_messsage = {

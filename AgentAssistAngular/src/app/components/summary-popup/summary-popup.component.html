@@ -26,7 +26,7 @@
         <textarea class="form-control" id="summaryText" placeholder="Summary" rows="4" cols="50" [(ngModel)]="editedSummaryText"></textarea>
     </div>
     <div class="actions-footer">
-        <button class="_btn primaryBtn" id="summarySubmit" (click)="summaryButtonClick(true)">{{'SUBMIT' | translate}}</button>
+        <button class="_btn primaryBtn" *ngIf="submitEnabled" id="summarySubmit" (click)="summaryButtonClick(true)">{{'SUBMIT' | translate}}</button>
         <button class="_btn solidBtn" id="summaryCopy" (click)="handleCopyButton(editedSummaryText)" [disabled]="(tooltipText === projCnst.COPIED)">{{tooltipText}}</button>
     </div>
 </div>
