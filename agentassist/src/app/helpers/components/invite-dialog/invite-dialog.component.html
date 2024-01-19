@@ -1,4 +1,4 @@
-<div fxFlex="530px" class="invite-dialog" fxLayout='column' fxLayoutGap="15px">
+<div fxFlex="650px" class="invite-dialog" fxLayout='column' fxLayoutGap="15px" height="250px">
     <div mat-title-dialog fxLayoutAlign="space-between">
         <h1 style="font-size: 22px">{{ "HEADER.INVITE_ACCOUNT" | translate }}</h1>
         <mat-icon mat-dialog-close style="cursor: pointer;">close</mat-icon>
@@ -22,13 +22,31 @@
               </mat-chip-list>
         </mat-form-field>
         <div class="error-label" *ngIf="!isValidList">{{ "HEADER.ENTER_VALID_EMAIL" | translate }}</div>
-    </div>  
+        <div class="dropdown-select-tab">
+            <div class="label-text">Role</div>
+            <div class="kr-sg-dropdowns" ngbDropdown>
+                <div class="dropdown dropdown-open">
+                <button class="dropdown-toggle dropdown-input" ngbDropdownToggle >{{selectedRole}}</button>
+                <perfect-scrollbar class="bots-scroll">
+                <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
+                    <ng-container *ngFor="let role of rolesList; let i - index"> 
+                            <li ngbDropdownItem class="p-0" (click)="selectRole(role)">
+                                <a>{{role}}</a>
+                            </li>
+                    </ng-container>
+                </ul>
+                </perfect-scrollbar>
+                </div>
+            </div>
+        </div> 
+    </div>
+    
     <!-- <div mat-dialog-actions>
         <button mat-button color='primary' [disabled]="!isValidList || emailList.length == 0" [mat-dialog-close]="emailList">{{ "HEADER.INVITE_BUTTON" | translate }}</button>
         <button mat-button color='stroked' mat-dialog-close>{{ "HEADER.CANCEL" | translate }}</button>
     </div> -->
     <div mat-dialog-actions>
-        <button class="kr-sg-button-primary btn_lg mr-2" [mat-dialog-close]="emailList">{{ "HEADER.INVITE_BUTTON" | translate }}</button>
-        <button class="kr-sg-button-secondary btn_lg" mat-dialog-close>{{ "HEADER.CANCEL" | translate }}</button>
+        <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="!isValidList || emailList.length == 0" [mat-dialog-close]="emailList">{{ "HEADER.INVITE_BUTTON" | translate }}</button>
+        <button class="kr-sg-button-secondary btn_lg" (click)="onCancel()">{{ "HEADER.CANCEL" | translate }}</button>
     </div>
 </div>
