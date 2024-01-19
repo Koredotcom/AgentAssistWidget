@@ -153,7 +153,7 @@ export class OverlaysearchComponent implements OnInit {
     let data: any = {
       botId: this.connectionDetails.botId,
       conversationId: this.connectionDetails.conversationId,
-      experience: 'chat',
+      experience: this.commonService.configObj.channel,
       source: this.connectionDetails.source,
       type: 'dialog',
       input : this.searchedResultData?.userInput,
@@ -318,7 +318,7 @@ export class OverlaysearchComponent implements OnInit {
       botId: this.connectionDetails.botId,
       conversationId: this.connectionDetails.conversationId,
       sessionId: this.handleSubjectService.myBotTabSessionId,
-      experience: 'chat',
+      experience: this.commonService.configObj.channel,
       source: this.connectionDetails.source,
       usedType: message.method,
       type: selectType,

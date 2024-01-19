@@ -199,7 +199,9 @@ export class AppComponent implements OnDestroy {
   }
 
   initAgentAssist(chatConfig, params) {
-    console.log(this.service.configObj, "configobj");
+    // let paramsObj = this.service.configObj
+    // let channel = ((paramsObj?.channel && paramsObj?.channel.trim() !== "''") ? paramsObj?.channel : (paramsObj.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
+    // this.service.configObj['channel'] = channel;
      this.service.configObj['conversationId'] = this.service.configObj.conversationid || this.service.configObj.conversationId
     // constructed url in 3rd party agentdesktops
     if (this.service.configObj.token && this.service.configObj.botid && this.service.configObj.agentassisturl && this.service.configObj.conversationId && !this.service.configObj.fromSAT) {
@@ -253,6 +255,9 @@ export class AppComponent implements OnDestroy {
     let paramsCopy = {...params};
     paramsCopy.channel = 'chat';
     let headersVal : any = {};
+    let channel = ((paramsCopy?.channel && paramsCopy?.channel.trim() !== "''") ? paramsCopy?.channel : (paramsCopy.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
+    paramsCopy.channel = channel;
+    this.service.configObj['channel'] = channel;
     if(!this.service.configObj.fromSAT) {
         headersVal = {
             'Authorization': 'bearer' + ' ' + this.service.grantResponseObj?.authorization?.accessToken,
