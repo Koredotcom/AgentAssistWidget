@@ -92,7 +92,8 @@ export const storageConst = {
     AUTO : 'auto',
     ACTIVE_TAB : 'activeTab',
     SHOWSEND : 'showSend',
-    ENABLEWIDGET :   'enableWidget'
+    ENABLEWIDGET :   'enableWidget',
+    ISSEND_WELCOME_MSG : 'isSendWelcomeMessage'
 }
 
 export const WidgetConst = {

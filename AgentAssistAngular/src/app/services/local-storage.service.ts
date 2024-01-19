@@ -77,6 +77,10 @@ export class LocalStorageService {
       if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.ACTIVE_TAB])){
         appState[conversationId][storageConst.ACTIVE_TAB] = storageObject[storageConst.ACTIVE_TAB];
       }
+
+      if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.ISSEND_WELCOME_MSG])){
+        appState[conversationId][storageConst.ISSEND_WELCOME_MSG] = storageObject[storageConst.ISSEND_WELCOME_MSG];
+      }
       
     }
     localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
@@ -114,6 +118,7 @@ export class LocalStorageService {
         appState[conversationId][storageConst.ACTIVE_TAB] = ProjConstants.ASSIST;
         appState[conversationId][storageConst.SHOWSEND] = true;
         appState[conversationId][storageConst.ENABLEWIDGET] = true;
+        appState[conversationId][storageConst.ISSEND_WELCOME_MSG] = true;
 
         if(widgetSettings && typeof widgetSettings?.isProactiveEnabled == 'boolean'){
           appState[conversationId][storageConst.PROACTIVE_MODE] = widgetSettings?.isProactiveEnabled;
