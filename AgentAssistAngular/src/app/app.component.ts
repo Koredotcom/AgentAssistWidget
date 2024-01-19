@@ -158,7 +158,7 @@ export class AppComponent implements OnInit, OnDestroy{
           'query': this.sanitizeHTMLPipe.transform(ele.value),
           'botId': ele.botId,
           'agentId': '',
-          'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+          'experience': this.connectionDetails?.channel,
           'positionId': ele?.positionId
         }
         if (ele?.intentName) {
@@ -207,7 +207,7 @@ export class AppComponent implements OnInit, OnDestroy{
         },
         'botId': this.connectionDetails.botId,
         'conversationId': userInputData.conversationid,
-        'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+        'experience': this.connectionDetails?.channel,
         'query': this.sanitizeHTMLPipe.transform(userInputData.value),
         'positionId' : this.rootService.isAutomationOnGoing ? this.rootService.currentPositionId : null
       }

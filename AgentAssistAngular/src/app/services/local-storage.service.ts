@@ -127,7 +127,7 @@ export class LocalStorageService {
           appState[conversationId][storageConst.ENABLEWIDGET] = widgetSettings?.agentAssistWidgetEnabled;
         }
 
-        let experience = connectionDetails.isCallConversation ? 'voice' : 'chat';
+        let experience = connectionDetails?.channel;
 
         if(widgetSettings && widgetSettings?.isWidgetLandingEnabled && widgetSettings?.isWidgetLandingEnabled[experience] && widgetSettings?.isWidgetLandingEnabled[experience]?.tab){
           appState[conversationId][storageConst.ACTIVE_TAB] = WidgetConst[widgetSettings?.isWidgetLandingEnabled[experience]?.tab];
