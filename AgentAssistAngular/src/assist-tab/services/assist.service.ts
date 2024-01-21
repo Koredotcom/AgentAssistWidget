@@ -112,9 +112,9 @@ export class AssistService {
       template += `<div class="agent-utt">
       <div class="title-data" id="displayData-${uuids + index}">${item.value}</div>
       <div class="action-links">
-      <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${this.sanitizeHtmlPipe.transform(item)}" data-text-type="sentence">Send</button>
-      <div class="copy-btn welcome-msg-copy" data-msg-id="${uuids + index}"  data-text-type="sentence">
-          <i class="ast-copy welcome-msg-copy" data-msg-id="${uuids + index}"  data-text-type="sentence"></i>
+      <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}" data-text-type="sentence">Send</button>
+      <div class="copy-btn" data-msg-id="${uuids + index}"  data-text-type="sentence" data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}">
+          <i class="ast-copy" data-msg-id="${uuids + index}"  data-text-type="sentence" data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}"></i>
       </div>
       </div>
       </div>`;
