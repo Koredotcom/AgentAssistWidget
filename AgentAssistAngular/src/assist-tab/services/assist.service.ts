@@ -85,6 +85,44 @@ export class AssistService {
     }
   }
 
+  prepareWelcomeMsgTemplate(uuids, interactiveLangaugeDetails){
+    let title = interactiveLangaugeDetails == 'es' ? "El cliente ha esperado a un agente durante unos segundos.<br/>Aquí hay algunas líneas de apertura apropiadas."
+     : "Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.";
+
+    let template = `
+    <div class="welcome-msg collapse-acc-data before-none" id='smallTalk-${uuids}'>
+    <div class="steps-run-data">
+    <div class="icon_block">
+        <i class="ast-agent"></i>
+    </div>
+    <div class="run-info-content">
+    <div class="title">${title} </div>
+    
+    </div>
+    </div>
+    </div>
+    </div>`;
+    return template;
+  }
+
+  parseWelcomeMsgResponse(uuids,welcomeMsgResponse){
+    let template = '';
+    let index = 0;
+    for(let item of welcomeMsgResponse?.buttons){
+      template += `<div class="agent-utt">
+      <div class="title-data" id="displayData-${uuids + index}">${item.value}</div>
+      <div class="action-links">
+      <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}" data-text-type="sentence">Send</button>
+      <div class="copy-btn" data-msg-id="${uuids + index}"  data-text-type="sentence" data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}">
+          <i class="ast-copy" data-msg-id="${uuids + index}"  data-text-type="sentence" data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}"></i>
+      </div>
+      </div>
+      </div>`;
+      index++;
+    }
+    return template;
+  }
+
   getUserMsgSmallTalkTemplate(uuids,data){
     let template = `
     <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
