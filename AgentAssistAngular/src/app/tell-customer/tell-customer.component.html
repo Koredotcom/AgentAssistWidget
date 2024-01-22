@@ -1,6 +1,6 @@
 <!-- Ask Customer Message Node v3 -->
 
-<div class="ask-cust-node" *ngIf="isWelcomeMsg && automation">
+<div class="ask-cust-node" *ngIf="isWelcomeMsg && automation && automation?.buttons?.length > 0">
     <div class="top-section">
         <div class="svg_img">
             <img src="assets/images/icons/askcust.svg" alt="Image">
