@@ -47,7 +47,7 @@ export class TellCustomerComponent {
     }
 
     if(this.isWelcomeMsg){
-      this.automation.buttons.forEach(element => {
+      this.automation?.buttons?.forEach(element => {
         element.hideActionButtons = this.automation.hideActionButtons;
         element.hideSendButton = this.automation.hideSendButton;
       });

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ProjConstants } from '../proj.const';
+import { ProjConstants, storageConst } from '../proj.const';
 import { io } from 'socket.io-client';
 import { EVENTS } from '../helpers/events';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -76,18 +76,19 @@ export class WebSocketService {
   }
 
   commonEmitEvents(shouldProcessResponse){
-    let customData = (this.rootService.connectionDetails?.customdata) || (this.rootService.connectionDetails?.customData);
-    if(customData && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
-      try {
-        customData = JSON.parse(customData);
-      } catch (e) {
-        customData = {};
-          throw e;
-      }
-    }
+    let customData = (this.rootService.connectionDetails?.customdata) || (this.rootService.connectionDetails?.customData);  
+    // if(customData && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
+    //   try {
+    //     customData = JSON.parse(customData);
+    //   } catch (e) {
+    //     customData = {};
+    //       throw e;
+    //   }
+    // }
     const {botId, conversationId, isCall, autoBotId, interactiveLanguage, userName} = this.rootService.getConnectionDetails()
-    let parsedCustomData: any = {};
     let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
+    let appState = this.localStorageService.getLocalStorageState();
+    shouldProcessResponse = appState[this.rootService.connectionDetails.conversationId] ? appState[this.rootService.connectionDetails.conversationId][storageConst.ISSEND_WELCOME_MSG] : true
     let welcomeMessageParams: any = {
       'waitTime': 2000,
       'userName': userName,
@@ -144,6 +145,19 @@ export class WebSocketService {
     return settimeoutTime;
   }
 
+  handleIsSendWelcomeRequest(data){
+    let appState = this.localStorageService.getLocalStorageState();
+    if (appState[this.rootService.connectionDetails.conversationId]) {
+      if(!data.sendMenuRequest){
+        let storageObject: any = {};
+        storageObject = {
+          [storageConst.ISSEND_WELCOME_MSG]: false
+        }
+        this.localStorageService.setLocalStorageItem(storageObject);
+      }
+    }
+  }
+
   listenEvents() {
     const {botId, conversationId, isCall, autoBotId} = this.rootService.getConnectionDetails()
     let menu_request_params : any = {
@@ -170,6 +184,7 @@ export class WebSocketService {
         this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
         this.sendCheckListOpened$.next(true);
       }
+      this.handleIsSendWelcomeRequest(data);
       let settimeoutTime = this.getTimeout();
       setTimeout(() => {
         this.agentAssistResponse$.next(data);
