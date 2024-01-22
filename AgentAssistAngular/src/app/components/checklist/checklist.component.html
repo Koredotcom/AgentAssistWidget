@@ -10,7 +10,7 @@
                     </button>
                     <!-- <ng-container [ngTemplateOutlet]="recomendedMenu"></ng-container> -->
                     <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
-                        <div class="heading-text-scripts">RECOMENDED PLAYBOOK</div>
+                        <div class="heading-text-scripts">{{'RECOMENDED_PLAYBOOK' | translate}}</div>
                         <ng-container *ngFor="let clT of triggeredDynCheckLists; let int = index">
                             <button ngbDropdownItem aria-disabled="true" (click)="selectDynCl(clT, int)">
                                 <p>{{clT.name}}</p>
@@ -27,23 +27,23 @@
                         </button>
                         <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
                             <ng-container *ngFor="let cl of checklists; let i = index">
-                                <div class="heading-text-scripts" *ngIf="i == 0 && rootService?.primaryChecklist?.length > 0">PRIMARY SCRIPTS</div>
+                                <div class="heading-text-scripts" *ngIf="i == 0 && rootService?.primaryChecklist?.length > 0">{{'PRIMARY_SCRIPTS' | translate}}</div>
                                 <ng-container *ngIf="cl.type == 'primary'">
                                     <button ngbDropdownItem aria-disabled="true" class="selected"
                                         (click)="cl.name != checklists[selcLinx]?.name && resumeAndUpdateCheckList(i)">
                                         <p>{{cl.name}}</p>
-                                        <button class="_btn primaryBtn" *ngIf="!checklists[i].completed && (i!=selcLinx) && checklists[i].openedChecklist">Resume</button>
+                                        <button class="_btn primaryBtn" *ngIf="!checklists[i].completed && (i!=selcLinx) && checklists[i].openedChecklist">{{'RESUME' | translate}}</button>
                                         <i [ngClass]="{'krIocnsFont-check' : cl.name == checklists[selcLinx]?.name}"></i>
                                     </button>
                                 </ng-container>
                             </ng-container>
                             <ng-container *ngFor="let cl of checklists; let i = index">
-                                <div class="heading-text-scripts"*ngIf="i == 0">DYNAMIC SCRIPTS</div>
+                                <div class="heading-text-scripts"*ngIf="i == 0">{{'DYNAMIC_SCRIPTS' | translate}}</div>
                                 <ng-container *ngIf="cl.type == 'dynamic'">
                                     <button ngbDropdownItem aria-disabled="true" class="selected"
                                         (click)="cl.name != checklists[selcLinx]?.name && resumeAndUpdateCheckList(i)">
                                         <p>{{cl.name}}</p>
-                                        <button class="_btn primaryBtn" *ngIf="!checklists[i].completed && (i!=selcLinx) && checklists[i].openedChecklist">Resume</button>
+                                        <button class="_btn primaryBtn" *ngIf="!checklists[i].completed && (i!=selcLinx) && checklists[i].openedChecklist">{{'RESUME' | translate}}</button>
                                         <i [ngClass]="{'krIocnsFont-check' : cl.name == checklists[selcLinx]?.name}"></i>
                                     </button>
                                 </ng-container>
@@ -64,7 +64,7 @@
                                         *ngFor="let stage of checklists[selcLinx]?.stages; let i = index"
                                         (click)="selectStageAndMinimize(i)"
                                         [disabled]="stage.name == 'Close' && !isProceedToClose"
-                                        [title]="(stage.name == 'Close' && !isProceedToClose) ? 'Click on proceed to close button to enable Close Stage' : stage.name">
+                                        [title]="(stage.name == 'Close' && !isProceedToClose) ? ('ENABLE_CLOSE' | translate) : stage.name">
                                         <p title="{{stage.name}}">{{stage.name}}</p>
                                         <i class="krIocnsFont-check"
                                             [ngClass]="{'krIocnsFont-check' : (checklists[selcLinx]?.stages[selsTinx]?.name == stage.name)}"></i>
@@ -93,7 +93,8 @@
                         <i class="krIocnsFont-terminate-playbook"></i>
                     </button>
                 </ng-container>
-                <button class="solid-action minimize-btn" aria-label="button" (click)="minimizeToggle()">
+                <button class="solid-action minimize-btn" aria-label="button" (click)="minimizeToggle()"
+                [title]="maxButton ? ('MINIMIZE' | translate) : ('MAXIMIZE' | translate)">
                     <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
                     <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
                 </button>

@@ -1,7 +1,8 @@
 <div class="transcipt-wrapper-info" (wheel)="onScroll()">
     <div class="offcanvas-header">
-        <p class="paragraph semibold">Transcript</p>
-        <button class="maximize-btn" (click)="minMaxButtonClick()">
+        <p class="paragraph semibold">{{'TRANSCRIPT' | translate}}</p>
+        <button class="maximize-btn" (click)="minMaxButtonClick()" 
+        [title]="maxButton ? ('MINIMIZE' | translate) : ('MAXIMIZE' | translate)">
             <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
             <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
         </button>

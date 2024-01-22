@@ -16,7 +16,7 @@
     </div> -->
 
     <div class="sentiment-data-analysis" ngbDropdown container="body" #sentiDrop="ngbDropdown">
-       <div class="awaiting-sentiment" *ngIf="!currentPolarity">Awaiting for sentiment</div>
+       <div class="awaiting-sentiment" *ngIf="!currentPolarity">{{'SENTIMENT_AWAITING' | translate}}</div>
        <ng-container *ngIf="currentPolarity">
            <button class="btn-sentiment-graph" ngbDropdownToggle>
                <div class="chart-data-s" echarts [options]="initChartOption" [merge]="mergeSentiOptions"></div>
@@ -27,9 +27,9 @@
                    <i class="krIocnsFont-close-md"></i>
                </button>
                <h1>{{'SENTI_ANALY' | translate}} <i class="krIocnsFont-info-circle"></i></h1>
-               <h2>+Pos</h2>
+               <h2>+{{'POSITIVE' | translate}}</h2>
                <div echarts [options]="chartOption" class="chart-data-content" [merge]="mergeSentiOptions"></div>
-               <h2>-Neg</h2>
+               <h2>-{{'NEGATIVE' | translate}}</h2>
            </div>
        </ng-container>
     </div>

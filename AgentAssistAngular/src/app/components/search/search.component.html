@@ -1,6 +1,7 @@
 <div class="search-block-data-suggestions">
     <div class="suggestionslist-conntent-search">
-        <button class="solid-action maximize-btn" (click)="minMaxButtonClick()">
+        <button class="solid-action maximize-btn" (click)="minMaxButtonClick()"
+        [title]="maxButton ? ('MINIMIZE' | translate) : ('MAXIMIZE' | translate)">
             <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
             <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
         </button>
@@ -82,7 +83,7 @@
             </div>
         </ng-container>
         <ng-container *ngIf="(searchResponse | json) == '{}' && searched">
-            <div class="empty-search">No search result found</div>
+            <div class="empty-search">{{'NO_SEARCH_RESULT' | translate}}</div>
         </ng-container>
     </div>
     <div class="search-block-input">
