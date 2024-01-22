@@ -154,7 +154,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     });
 
     this.subs.sink = this.rootService.userBotHistory$.subscribe((data : any) => {
-      if(data && data.messages){
+      if(data && data.messages?.length > 0){
         this.hideUserBotHistory = false;
       }else{
         this.hideUserBotHistory = true;
