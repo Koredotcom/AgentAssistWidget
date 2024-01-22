@@ -12,7 +12,7 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
   styleUrls: ['./feedback.component.scss']
 })
 export class FeedbackComponent implements AfterViewInit {
-  @Input() feedbackData : any;
+  @Input() feedbackData : any = {};
   @Input() agentassistArrayIndex : number;
   @Input() agentassistResponseArray : number;
   @Output() updateFeedbackProperties = new EventEmitter();

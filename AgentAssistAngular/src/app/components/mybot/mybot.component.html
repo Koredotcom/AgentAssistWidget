@@ -42,7 +42,8 @@
                     <button class="solid-action stop-assist" aria-label="button" (click)="terminateDialog()" [disabled]="!dialogName">
                         <span></span>
                     </button>
-                    <button class="solid-action minimize-btn" aria-label="button" (click)="minMaxButtonClick()">
+                    <button class="solid-action minimize-btn" aria-label="button" (click)="minMaxButtonClick()"
+                    [title]="maxButton ? ('MINIMIZE' | translate) : ('MAXIMIZE' | translate)">
                         <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
                         <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
                     </button>

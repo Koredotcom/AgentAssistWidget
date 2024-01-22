@@ -1,4 +1,4 @@
-<form class="form-feedback-info" [formGroup]="feedbackForm" (keydown.enter)="$event.preventDefault()">
+<form class="form-feedback-info" [formGroup]="feedbackForm" (keydown.enter)="$event.preventDefault()" *ngIf="feedbackForm">
     <div class="dialog-ended-and-feedback">
         <!-- <div class="dialog-ended-wrapper" [ngClass]="{'grayout-msgs-node' : automationData?.endAutomation && automationData?.automationsArray?.length}">
             <div class="line_bar"></div>grayout-msgs-node
@@ -11,7 +11,7 @@
         <div class="dialog-ended-wrapper grayout-msgs-node">        
             <div class="middle-info">
                 <p>{{'DIALOG_TEXT' | translate}}</p>
-                <button class="btn_link">‘Order Pizza’</button>
+                <button class="btn_link">{{feedbackData?.dialogName}}</button>
                 <p>{{'ENDED' | translate}}</p>
             </div>
             <div class="line_bar"></div>
@@ -54,7 +54,7 @@
         </div>
         <div class="submit-count-text">
             <p>{{feedbackForm?.get('comment')?.value?.length || 0}}/64</p>
-            <button class="send-btn-feedback" aria-label="Button" [disabled]="!formTouched" (click)="submitFeedback(true)">Submit</button>
+            <button class="send-btn-feedback" aria-label="Button" [disabled]="!formTouched" (click)="submitFeedback(true)">{{'SUBMIT' | translate}}</button>
         </div>
     </div>
 </form>
