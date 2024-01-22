@@ -19,9 +19,9 @@ export class I1 implements HttpInterceptor {
         if(headerToken && headerAccountId){
             if(fromSAT){
                 headerObj.eAD = 'false';
-                headerObj.accountId = headerAccountId 
+                headerObj.accountId = headerAccountId;
             }else if(headers.indexOf('historyAPiCall') == -1 && headers.indexOf('userBotHistory') == -1){
-                headerObj.accountId = headerAccountId 
+                headerObj.accountId = headerAccountId;
             }
             headerObj.Authorization = headerToken;
         }
