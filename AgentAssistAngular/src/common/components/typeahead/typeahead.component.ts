@@ -88,7 +88,8 @@ export class TypeaheadComponent implements OnInit {
         let payload = {
             "query": value,
             "maxNumOfResults": 3,
-            "lang": "en"
+            "lang": "en",
+            "experience" : connectionDetails?.channel
         }
         let headersVal = {};
         if(connectionDetails.fromSAT) {
