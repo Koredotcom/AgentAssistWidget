@@ -108,11 +108,12 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   getAutoSearchApiResult(value, params) {
     // this.querySuggestions = [];
-    const { botId, conversationId } = this.rootService.getConnectionDetails();
+    const { botId, conversationId, channel } = this.rootService.getConnectionDetails();
     let payload = {
       "query": value,
       "maxNumOfResults": 3,
-      "lang": "en"
+      "lang": "en",
+      "experience" : channel
     }
     this.serviceInvoker.invoke('post.autoSearch', { botId: botId, convId: conversationId }, payload, { autoSearch: 'true', botId: botId }, params.agentassisturl).subscribe((res) => {
       // console.log(res, 'res********from autho search');
