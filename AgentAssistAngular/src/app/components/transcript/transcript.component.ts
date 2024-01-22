@@ -84,7 +84,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
           },
           'botId': this.connectionDetails.botId,
           'conversationId': userInputData.conversationid,
-          'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+          'experience': this.connectionDetails?.channel,
           'query': this.sanitizeHTMLPipe.transform(userInputData.value),
         }
         let user_messsage = {
@@ -154,7 +154,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     });
 
     this.subs.sink = this.rootService.userBotHistory$.subscribe((data : any) => {
-      if(data && data.messages){
+      if(data && data.messages?.length > 0){
         this.hideUserBotHistory = false;
       }else{
         this.hideUserBotHistory = true;

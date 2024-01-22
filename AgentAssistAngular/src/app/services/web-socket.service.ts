@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ProjConstants } from '../proj.const';
+import { ProjConstants, storageConst } from '../proj.const';
 import { io } from 'socket.io-client';
 import { EVENTS } from '../helpers/events';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -76,18 +76,19 @@ export class WebSocketService {
   }
 
   commonEmitEvents(shouldProcessResponse){
-    let customData = (this.rootService.connectionDetails?.customdata) || (this.rootService.connectionDetails?.customData);
-    if(customData && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
-      try {
-        customData = JSON.parse(customData);
-      } catch (e) {
-        customData = {};
-          throw e;
-      }
-    }
+    let customData = (this.rootService.connectionDetails?.customdata) || (this.rootService.connectionDetails?.customData);  
+    // if(customData && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
+    //   try {
+    //     customData = JSON.parse(customData);
+    //   } catch (e) {
+    //     customData = {};
+    //       throw e;
+    //   }
+    // }
     const {botId, conversationId, isCall, autoBotId, interactiveLanguage, userName} = this.rootService.getConnectionDetails()
-    let parsedCustomData: any = {};
     let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
+    let appState = this.localStorageService.getLocalStorageState();
+    shouldProcessResponse = appState[this.rootService.connectionDetails.conversationId] ? appState[this.rootService.connectionDetails.conversationId][storageConst.ISSEND_WELCOME_MSG] : true
     let welcomeMessageParams: any = {
       'waitTime': 2000,
       'userName': userName,
@@ -98,7 +99,7 @@ export class WebSocketService {
       'sendMenuRequest': true,
       'uId': this.rootService.userBotConversationDetails?.userId || '',
       'sId': this.rootService.userBotConversationDetails?.sessionId || '',
-      'experience' : (isCall && isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT,
+      'experience' : this.rootService.connectionDetails?.channel,
     }
     if(customData && Object.keys(customData).length > 0 && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
       welcomeMessageParams['customData'] = customData
@@ -121,7 +122,7 @@ export class WebSocketService {
     if(requestParams){
       requestParams.isExtAD = fromSAT ? false : true;
       requestParams.source = source;
-      requestParams.experience = (isCall && isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
+      requestParams.experience = this.rootService.connectionDetails?.channel
     }
 
     if(this.loaderEvents[eventName]) {
@@ -144,12 +145,25 @@ export class WebSocketService {
     return settimeoutTime;
   }
 
+  handleIsSendWelcomeRequest(data){
+    let appState = this.localStorageService.getLocalStorageState();
+    if (appState[this.rootService.connectionDetails.conversationId]) {
+      if(!data.sendMenuRequest){
+        let storageObject: any = {};
+        storageObject = {
+          [storageConst.ISSEND_WELCOME_MSG]: false
+        }
+        this.localStorageService.setLocalStorageItem(storageObject);
+      }
+    }
+  }
+
   listenEvents() {
     const {botId, conversationId, isCall, autoBotId} = this.rootService.getConnectionDetails()
     let menu_request_params : any = {
       botId,
       conversationId,
-      experience : isCall && isCall === "true" ?  ProjConstants.VOICE : ProjConstants.CHAT
+      experience : this.rootService.connectionDetails?.channel
     }
     if(autoBotId && autoBotId !== 'undefined') {
       menu_request_params['autoBotId'] = autoBotId;
@@ -170,6 +184,7 @@ export class WebSocketService {
         this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
         this.sendCheckListOpened$.next(true);
       }
+      this.handleIsSendWelcomeRequest(data);
       let settimeoutTime = this.getTimeout();
       setTimeout(() => {
         this.agentAssistResponse$.next(data);
@@ -255,7 +270,7 @@ export class WebSocketService {
       "conversationId": connectionDetails.conversationId,
       "query": "",
       "enable_override_userinput": toggleOverride,
-      'experience': connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+      'experience': this.rootService.connectionDetails?.channel,
       "positionId": dialogId
     }
     this.emitEvents(EVENTS.enable_override_userinput, overRideObj);
@@ -346,7 +361,7 @@ export class WebSocketService {
           "query": JSON.parse(localStorage.getItem('innerTextValue')),
           "botId": connectionObj.botId,
           "agentId": "",
-          "experience": connectionObj.isCallConversation === true ? 'voice' : 'chat',
+          "experience": this.rootService.connectionDetails?.channel,
           "positionId": this.rootService.currentPositionId,
           "entities": [],
           "check": true,
@@ -366,7 +381,7 @@ export class WebSocketService {
           "conversationId": connectionObj.conversationId,
           "query": JSON.parse(localStorage.getItem('innerTextValue')),
           "botId": connectionObj.botId,
-          "experience": connectionObj.isCallConversation === true ? 'voice' : 'chat',
+          "experience": this.rootService.connectionDetails?.channel,
           "positionId": this.rootService.currentPositionIdOfMyBot,
           "autoBotId": connectionObj.autoBotId,
           "intType" : "myBot"

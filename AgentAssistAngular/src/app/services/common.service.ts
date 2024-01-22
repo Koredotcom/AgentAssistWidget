@@ -181,7 +181,7 @@ export class CommonService {
     let data: any = {
       botId: this.rootService.connectionDetails.botId,
       conversationId: this.rootService.connectionDetails.conversationId,
-      experience: 'chat',
+      experience: this.rootService.connectionDetails?.channel,
       source: this.rootService.connectionDetails.source,
       usedType: message.method,
       type: message.type,

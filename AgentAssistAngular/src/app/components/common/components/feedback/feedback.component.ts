@@ -12,7 +12,7 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
   styleUrls: ['./feedback.component.scss']
 })
 export class FeedbackComponent implements AfterViewInit {
-  @Input() feedbackData : any;
+  @Input() feedbackData : any = {};
   @Input() agentassistArrayIndex : number;
   @Input() agentassistResponseArray : number;
   @Output() updateFeedbackProperties = new EventEmitter();
@@ -120,7 +120,7 @@ export class FeedbackComponent implements AfterViewInit {
         orgId: '',
         taskId: this.feedbackData.uuid,
         positionId: this.feedbackData.dialogPositionId,
-        'experience': (this.rootService.connectionDetails.isCall && this.rootService.connectionDetails.isCall == 'true') ? ProjConstants.VOICE : ProjConstants.CHAT,
+        'experience': this.rootService.connectionDetails?.channel,
         "interactionType": this.rootService.activeTab == ProjConstants.ASSIST ? 'assist' : 'mybot'
       }
       this.websocketService.emitEvents(EVENTS.agent_feedback_request, agent_assist_feedback_request);

@@ -357,7 +357,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);
         this.assistResponseArray = [...this.assistResponseArray];
       }
-    }else{
+    }else if(data?.buttons?.length > 0  && Object.keys(this.welcomeMsgResponse).length == 0){
       renderResponse = this.commonService.formatWelcomeMessageResponse(data);
       this.welcomeMsgResponse = data;
       this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);

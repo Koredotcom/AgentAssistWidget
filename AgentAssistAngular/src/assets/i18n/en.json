@@ -103,5 +103,19 @@
     "PLAYBOOK_EMPTY_MSG" : "Select Playbook",
     "PLAYBOOK_EMPTY_DESC" : "AgentAssist is unable to load the playbook due to all available playbooks being dynamic. Click 'Select Playbook' to access the playbook",
     "STAGE" : "Stage", 
-    "PROCEED_TO_CLOSE" : "Proceed to close"
+    "PROCEED_TO_CLOSE" : "Proceed to close",
+    "RECOMENDED_PLAYBOOK" : "RECOMENDED PLAYBOOK",
+    "PRIMARY_SCRIPTS" : "PRIMARY SCRIPTS",
+    "DYNAMIC_SCRIPTS" : "DYNAMIC SCRIPTS",
+    "RESUME" : "Resume",
+    "ENABLE_CLOSE" : "Click on proceed to close button to enable Close Stage",
+    "LIST_VIEW" : "List View",
+    "TERMINATE" : "Terminate",
+    "MINIMIZE" : "Minimize",
+    "MAXIMIZE" : "Maximize",
+    "NO_SEARCH_RESULT" : "No search result found",
+    "SENTIMENT_AWAITING" : "Awaiting for sentiment",
+    "POSITIVE" : "Pos",
+    "NEGATIVE" : "Neg"
+
 }

@@ -146,6 +146,9 @@ export class RootService {
       parmasObj.customData = JSON.parse(parmasObj.customData || parmasObj.customdata || "{}");
       parmasObj['userName'] = parmasObj.customData?.userName || (parmasObj.customData?.fName && parmasObj.customData?.lName) ? (parmasObj.customData?.fName + " " + parmasObj.customData?.lName) : 'user'
     }
+
+    let channel = ((parmasObj?.channel && parmasObj?.channel.trim() !== "''") ? parmasObj?.channel : (parmasObj.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
+    parmasObj['channel'] = channel;
     
     this.connectionDetails = parmasObj;
   }
@@ -156,7 +159,7 @@ export class RootService {
       'conversationId': data.conversationId,
       'query': data.value,
       'botId': data.botId,
-      'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+      'experience': this.connectionDetails?.channel,
       'positionId': data?.positionId,
       'childBotId': data?.childBotId || '',
       'childBotName': data?.childBotName || '',
@@ -539,7 +542,7 @@ export class RootService {
       'query': data.value,
       'botId': data.botId,
       'agentId': '',
-      'experience': this.connectionDetails.isCallConversation === true ? 'voice' : 'chat',
+      'experience': this.connectionDetails?.channel,
       'positionId': data.positionId,
       'intType': 'assist'
     }

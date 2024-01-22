@@ -4,6 +4,7 @@ import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ProjConstants, storageConst } from 'src/app/proj.const';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { RootService } from 'src/app/services/root.service';
+import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
 import { SubSink } from 'subsink';
 @Component({
   selector: 'app-footer',
@@ -30,11 +31,13 @@ export class FooterComponent implements OnInit, OnDestroy{
     private rootService: RootService, 
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
-    private cdRef : ChangeDetectorRef){
+    private cdRef : ChangeDetectorRef,
+    private serviceInvoker : ServiceInvokerService){
 
   }
 
   ngOnInit(): void {
+    this.getUserBotHistory(this.rootService.connectionDetails);
     // this.subscribeEvents();
   }
 
@@ -68,14 +71,27 @@ export class FooterComponent implements OnInit, OnDestroy{
         this.updateLocalStorageForTabSwitch(tab);
       }
     });
+  }
 
-    this.subs.sink = this.rootService.userBotHistory$.subscribe((data : any) => {
-      if(data && data.messages){
-        this.hideUserBotHistory = false;
-      }else{
+  getUserBotHistory(params){
+    let userBotConversationDetails = this.rootService.getUserBotConvosDataDetails() || {};
+    let botId = userBotConversationDetails?.botId || params?.botId;
+    let userId = userBotConversationDetails?.userId;
+    let sessionId = userBotConversationDetails?.sessionId; 
+    console.log(userBotConversationDetails, "user bot conversation details***");
+    if((userBotConversationDetails?.botId || this.rootService.connectionDetails?.botId) && userBotConversationDetails?.userId && userBotConversationDetails?.sessionId) {
+      this.serviceInvoker.invoke('get.userBotHistory', { botId: botId, convId: params.conversationId, userId, sessionId }, {}, { userBotHistory: 'true', botId : botId }, params.agentassisturl).subscribe((data)=> {
+        if(data && data.messages?.length > 0){
+          this.hideUserBotHistory = false;
+        }else{
+          this.hideUserBotHistory = true;
+        }
+        this.rootService.setUserBotHistory(data);
+      },(error)=> {
         this.hideUserBotHistory = true;
-      }
-    })
+        this.rootService.setUserBotHistory(null);
+      });
+    }
   }
   
   updateLocalStorageForTabSwitch(tab){
