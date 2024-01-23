@@ -266,7 +266,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   inviteDialog() {
     this.inviteDevelopers();
     this.workflowService.headerInitCalls$.next();
-    const dialogRef = this.dialog.open(InviteDialogComponent);
+    const dialogRef = this.dialog.open(InviteDialogComponent, {
+      width: '660px',
+      minHeight: '312px',
+      panelClass: "invite-dev-switch-dialog",
+    });
     const params = {
       userId: this.authService.getUserId(),
       streamId : this.workflowService.getCurrentBt(true)._id,

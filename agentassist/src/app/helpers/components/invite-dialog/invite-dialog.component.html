@@ -1,17 +1,28 @@
-<div fxFlex="650px" class="invite-dialog" fxLayout='column' fxLayoutGap="15px" height="250px">
-    <div mat-title-dialog fxLayoutAlign="space-between">
-        <h1 style="font-size: 22px">{{ "HEADER.INVITE_ACCOUNT" | translate }}</h1>
-        <mat-icon mat-dialog-close style="cursor: pointer;">close</mat-icon>
+<div class="invite-dialog">
+    <div class="header-block">
+       <div class="icon_blcok">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9.92405 3.00098C7.63619 3.00098 5.77021 4.86696 5.77021 7.15482C5.77021 9.44268 7.63619 11.3087 9.92405 11.3087C10.3567 11.3087 10.7624 11.2221 11.1572 11.1031C11.0274 11.1897 10.9192 11.2924 10.8003 11.3952C10.5082 11.3573 10.2215 11.3087 9.92405 11.3087C6.3442 11.3087 3.38409 14.0498 3.03534 17.5404C2.99733 17.9209 3.31093 18.2317 3.69328 18.2317C4.07564 18.2317 4.38102 17.9202 4.42808 17.5408C4.75304 14.9206 6.90422 12.895 9.5779 12.7257C8.92345 13.7155 8.53944 14.8892 8.53944 16.1548C8.53944 19.5893 11.3357 22.3856 14.7702 22.3856C18.2047 22.3856 21.001 19.5893 21.001 16.1548C21.001 12.7203 18.2047 9.92405 14.7702 9.92405C13.9805 9.92405 13.2341 10.0863 12.5364 10.3567C13.4667 9.58872 14.0779 8.44749 14.0779 7.15482C14.0779 4.86696 12.2119 3.00098 9.92405 3.00098ZM9.92405 4.38559C11.4601 4.38559 12.6933 5.61877 12.6933 7.15482C12.6933 8.69088 11.4601 9.92405 9.92405 9.92405C8.388 9.92405 7.15482 8.69088 7.15482 7.15482C7.15482 5.61877 8.388 4.38559 9.92405 4.38559ZM14.7702 11.3087C17.4529 11.3087 19.6164 13.4721 19.6164 16.1548C19.6164 18.8375 17.4529 21.001 14.7702 21.001C12.0875 21.001 9.92405 18.8375 9.92405 16.1548C9.92405 13.4721 12.0875 11.3087 14.7702 11.3087ZM14.7702 12.6933C14.3879 12.6933 14.0779 13.0032 14.0779 13.3856V15.4625H12.001C11.6186 15.4625 11.3087 15.7725 11.3087 16.1548C11.3087 16.5372 11.6186 16.8471 12.001 16.8471H14.0779V18.9241C14.0779 19.3064 14.3879 19.6164 14.7702 19.6164C15.1526 19.6164 15.4625 19.3064 15.4625 18.9241V16.8471H17.5394C17.9218 16.8471 18.2317 16.5372 18.2317 16.1548C18.2317 15.7725 17.9218 15.4625 17.5394 15.4625H15.4625V13.3856C15.4625 13.0032 15.1526 12.6933 14.7702 12.6933Z" fill="#2B75E4"/>
+            </svg>
+       </div>
+       <div class="content-blcok">
+            <h1>{{ "HEADER.INVITE_ACCOUNT" | translate }}</h1>
+            <p>Once the user accept the invite they will appear on the users Page</p>
+       </div>
+       <button mat-dialog-close>
+            <i class="icon-sa-close"></i>
+        </button>
     </div>
-    <div mat-dialog-content fxFlex fxLayout="column">
-        <div class="label">{{ "HEADER.ENTER_EMAIL" | translate }}</div>
+    <div class="body-invite-dev">
+        <div class="label-text">{{ "HEADER.ENTER_EMAIL" | translate }}</div>
         <mat-form-field class="example-chip-list" appearance="outline">
             <mat-chip-list #chipList>
                 <mat-chip *ngFor="let email of emailList" [ngClass]="{'chip-error': email.invalid}" (removed)="remove(email)">
                   {{email.email}}
                   <mat-icon matChipRemove [selectable]="'true'"
                   [removable]="'true'">
-                <img src="assets/icons/use-case/close-info.svg"></mat-icon>
+                <i class="icon-sa-close"></i>
+            </mat-icon>
                 </mat-chip>
                 <input placeholder="{{'PLACEHOLDERS.TYPE_ENTER_TO_SAVE' | translate}}"
                        [matChipInputFor]="chipList"
@@ -19,34 +30,29 @@
                        [matChipInputAddOnBlur]="'true'"
                        (matChipInputTokenEnd)="add($event)"
                        autocomplete="off">
-              </mat-chip-list>
+            </mat-chip-list>
         </mat-form-field>
         <div class="error-label" *ngIf="!isValidList">{{ "HEADER.ENTER_VALID_EMAIL" | translate }}</div>
         <div class="dropdown-select-tab">
             <div class="label-text">Role</div>
             <div class="kr-sg-dropdowns" ngbDropdown>
                 <div class="dropdown dropdown-open">
-                <button class="dropdown-toggle dropdown-input" ngbDropdownToggle >{{roleType}}</button>
-                <perfect-scrollbar class="bots-scroll">
-                <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
-                    <ng-container *ngFor="let role of rolesList; let i - index"> 
-                            <li ngbDropdownItem class="p-0" (click)="selectedRole(role)">
-                                <a>{{role}}</a>
-                            </li>
-                    </ng-container>
-                </ul>
-                </perfect-scrollbar>
+                <button class="dropdown-toggle dropdown-input" ngbDropdownToggle >{{roleType}}</button>                    
+                    <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
+                        <perfect-scrollbar class="bots-scroll">
+                            <ng-container *ngFor="let role of rolesList; let i - index"> 
+                                <li ngbDropdownItem class="p-0" (click)="selectedRole(role)">
+                                    <a>{{role}}</a>
+                                </li>
+                            </ng-container>
+                        </perfect-scrollbar>
+                    </ul>
                 </div>
             </div>
         </div> 
     </div>
-    
-    <!-- <div mat-dialog-actions>
-        <button mat-button color='primary' [disabled]="!isValidList || emailList.length == 0" [mat-dialog-close]="emailList">{{ "HEADER.INVITE_BUTTON" | translate }}</button>
-        <button mat-button color='stroked' mat-dialog-close>{{ "HEADER.CANCEL" | translate }}</button>
-    </div> -->
-    <div mat-dialog-actions>
-        <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="(!isValidList || emailList.length == 0) && roleType !== ''" (click)="onSubmit()">{{ "HEADER.INVITE_BUTTON" | translate }}</button>
+    <div class="footer-data">
+        <button class="kr-sg-button-primary btn_lg" [disabled]="(!isValidList || emailList.length == 0) && roleType !== ''" (click)="onSubmit()">{{ "HEADER.INVITE_BUTTON" | translate }}</button>
         <button class="kr-sg-button-secondary btn_lg" (click)="onCancel()">{{ "HEADER.CANCEL" | translate }}</button>
     </div>
 </div>
