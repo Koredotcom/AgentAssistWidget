@@ -3268,7 +3268,7 @@ var message= {
             return otpValidationTemplate;
         } else if (tempType === "bankingFeedbackTemplate") {
             return bankingFeedbackTemplate;
-        } else if(tempType = "templateText") {
+        } else if(tempType === "templateText") {
 			return templateText;
 		}
 		else {
