@@ -34,24 +34,24 @@
                     </div>
                     <div class="agent-counts">
                         <span class="accordion-badge"
-                            *ngIf="agentAssistFormGroup.value.agentAssistSettings?.agentAssistWidgetEnabled">Enabled</span>
+                            *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.agentAssistWidgetEnabled">Enabled</span>
                         <span class="accordion-badge disabled-badge"
-                            *ngIf="!agentAssistFormGroup.value.agentAssistSettings?.agentAssistWidgetEnabled">Disabled</span>
+                            *ngIf="!agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.agentAssistWidgetEnabled">Disabled</span>
                     </div>
                 </div>
             </div>
-            <div id="collapse2" class="collapse" [formGroup]="agentAssistFormGroup">
-                <div class="accordion-content-body" formGroupName="agentAssistSettings">
+            <div id="collapse2" class="collapse" [formGroup]="agentAssistFormGroup.get('agentAssistSettings').get(selectedChannel)">
+                <div class="accordion-content-body">
                     <div class="settings-info-block">
                         <div class="settings-info-text">
                             <h4>AgentAssist Channel Specific Settings</h4>
                             <span>Select channel</span>
                             <div class="kr-sg-dropdowns" ngbDropdown>
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Chat</button>
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedChannel | titlecase}}</button>
                                     <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
-                                        <li ngbDropdownItem class="p-0">
-                                            <a>Chat</a>
+                                        <li ngbDropdownItem class="p-0" *ngFor="let channel of channels" (click)="chooseChannel(channel)">
+                                            <a>{{channel | titlecase}}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -69,7 +69,7 @@
                     </div>
                     <!--AgentAssist Widget enabled-->
                     <div class="widgetenable-body"
-                        *ngIf="agentAssistFormGroup.value.agentAssistSettings?.agentAssistWidgetEnabled">
+                        *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.agentAssistWidgetEnabled">
                         <div class="toggle-info-data m-0">
                             <div class="content-data-toggle">
                                 <h1>Proactive Mode</h1>
@@ -137,7 +137,7 @@
                             </div>
                             <div class="content-data-check">
                                 <label class="kr-sg-toggle">
-                                    <input type="checkbox">
+                                    <input type="checkbox" formControlName="isAgentResponseCopyEnabled">
                                     <div class="slider">
                                         <span class="enabled">Enabled</span>
                                         <span class="disabled">Disabled</span>
@@ -150,7 +150,7 @@
                                 <h1>Auto Summarization</h1>
                                 <p>Triggers the Automatic Summarization at the end of conversation.</p>
                                 <div class="auto-sub"
-                                    *ngIf="agentAssistFormGroup?.value?.agentAssistSettings?.summarization?.isEnabled">
+                                    *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.isEnabled">
                                     <span class="action-text">Actions</span>
                                     <div class="kr-sg-checkbox">
                                         <input id="canSub-12" class="checkbox-custom" type="checkbox"
@@ -177,11 +177,13 @@
                             <div class="widget-landing-check">
                                 <div class="kr-sg-dropdowns" ngbDropdown>
                                     <div class="dropdown dropdown-open">
-                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Assist</button>
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{landingPageTabs[agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.isWidgetLandingEnabled?.tab]}}</button>
                                         <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
-                                            <li ngbDropdownItem class="p-0">
-                                                <a>Assist</a>
-                                            </li>
+                                            <ng-container *ngFor="let tab of landingPageTabs | keyvalue">
+                                                <li *ngIf="tab.key !== 'transcript'" ngbDropdownItem class="p-0" (click)="selectTab(selectedChannel ,tab.key)">
+                                                    <a>{{tab.value}}</a>
+                                                </li>
+                                            </ng-container>
                                         </ul>
                                     </div>
                                 </div>
@@ -201,7 +203,7 @@
                                     <p>Set the landing tab for the AgentAssist widget.</p>
                                 </div>
                             </div>
-                            <div class="landing-tab-info"  *ngIf="agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.isEnabled">
+                            <div class="landing-tab-info"  *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.isWidgetLandingEnabled?.isEnabled">
                                 <div class="info-dropdowns" formGroupName="voice">
                                     <div class="kr-sg-checkbox">
                                         <input id="checkbox-12" class="checkbox-custom" type="checkbox" formControlName="isEnabled">
@@ -211,8 +213,8 @@
                                         <div class="label-text">Choose your preferred page you want to set as Landing page</div>
                                         <div class="kr-sg-dropdowns" ngbDropdown>
                                             <div class="dropdown dropdown-open">
-                                            <button class="dropdown-toggle dropdown-input" [disabled]="!agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled" ngbDropdownToggle 
-                                            [ngClass]="!agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.voice?.isEnabled ? 'disableDropdown' : ''">{{landingPageTabs[agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.voice?.tab]}}</button>
+                                            <button class="dropdown-toggle dropdown-input" [disabled]="!agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.isWidgetLandingEnabled?.voice?.isEnabled" ngbDropdownToggle 
+                                            [ngClass]="!agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.isWidgetLandingEnabled?.voice?.isEnabled ? 'disableDropdown' : ''">{{landingPageTabs[agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.isWidgetLandingEnabled?.voice?.tab]}}</button>
                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                                 <ng-container *ngFor="let tab of landingPageTabs | keyvalue;">
                                                     <li ngbDropdownItem class="p-0" (click)="selectTab('voice' ,tab.key)">
@@ -233,8 +235,8 @@
                                         <div class="label-text">Choose your preferred page you want to set as Landing page</div>
                                         <div class="kr-sg-dropdowns" ngbDropdown>                    
                                             <div class="dropdown dropdown-open">
-                                            <button class="dropdown-toggle dropdown-input" [disabled]="!agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled" ngbDropdownToggle 
-                                            [ngClass]="!agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.chat?.isEnabled ? 'disableDropdown' : ''">{{landingPageTabs[agentAssistFormGroup?.value?.agentAssistSettings?.isWidgetLandingEnabled?.chat?.tab]}}</button>
+                                            <button class="dropdown-toggle dropdown-input" [disabled]="!agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.isWidgetLandingEnabled?.chat?.isEnabled" ngbDropdownToggle 
+                                            [ngClass]="!agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.isWidgetLandingEnabled?.chat?.isEnabled ? 'disableDropdown' : ''">{{landingPageTabs[agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.isWidgetLandingEnabled?.chat?.tab]}}</button>
                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                                 <ng-container *ngFor="let tab of landingPageTabs | keyvalue;">
                                                     <li ngbDropdownItem class="p-0" *ngIf="tab.key !== 'transcript'" (click)="selectTab('chat' ,tab.key)">
@@ -252,7 +254,7 @@
                     </div>
                     <!--AgentAssist Widget Disabled-->
                     <div class="disable-state-error"
-                        *ngIf="!agentAssistFormGroup.value.agentAssistSettings?.agentAssistWidgetEnabled">
+                        *ngIf="!agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.agentAssistWidgetEnabled">
                         <div class="disable-state-error-icon">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path
@@ -267,10 +269,10 @@
                         </div>
                     </div>
                     <div class="widgetenable-footer">
-                        <button class="kr-sg-button-secondary-two btn_lg" [disabled]="!agentAssistFormGroup.dirty"
-                            (click)="cancleAgentAssistSettingsNew('widget', clonedWidgetSettings)">{{'BUTTONS.CANCEL' |
+                        <button class="kr-sg-button-secondary-two btn_lg" [disabled]="agentAssistFormGroup.invalid"
+                            (click)="cancleAgentAssistSettingsNew()">{{'BUTTONS.CANCEL' |
                             translate}}</button>
-                        <button class="kr-sg-button-primary btn_lg" [disabled]="!agentAssistFormGroup.dirty"
+                        <button class="kr-sg-button-primary btn_lg" [disabled]="agentAssistFormGroup.invalid"
                             (click)="saveAgentAssistSettingsNew('widget')">{{'BUTTONS.SAVE' | translate}}</button>
                     </div>
                 </div>
@@ -298,13 +300,13 @@
                     </div>
                     <div class="agent-counts">
                         <span class="accordion-badge"
-                            *ngIf="knowledgeAIFormGroup.value.isSearchAssistEnabled">Enabled</span>
+                            *ngIf="knowledgeAIFormGroup.get(selectedKAIChannel)?.value.isSearchAssistEnabled">Enabled</span>
                         <span class="accordion-badge disabled-badge"
-                            *ngIf="!knowledgeAIFormGroup.value.isSearchAssistEnabled">Disabled</span>
+                            *ngIf="!knowledgeAIFormGroup.get(selectedKAIChannel)?.value.isSearchAssistEnabled">Disabled</span>
                     </div>
                 </div>
             </div>
-            <div id="collapse1" class="collapse" [formGroup]="knowledgeAIFormGroup">
+            <div id="collapse1" class="collapse" [formGroup]="knowledgeAIFormGroup.get(selectedKAIChannel)">
                 <div class="accordion-content-body">
                     <div class="settings-info-block">
                         <div class="settings-info-text">
@@ -312,10 +314,10 @@
                             <span>Select channel</span>
                             <div class="kr-sg-dropdowns" ngbDropdown>
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Chat</button>
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedKAIChannel}}</button>
                                     <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
-                                        <li ngbDropdownItem class="p-0">
-                                            <a>Chat</a>
+                                        <li ngbDropdownItem class="p-0" *ngFor="let channel of channels" (click)="chooseKAIChannel(channel)">
+                                            <a>{{channel | titlecase}}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -333,7 +335,7 @@
                     </div>
                     <div class="widgetenable-divider"></div>
                     <!--searchAssist Widget enabled-->
-                    <div class="widgetenable-body" *ngIf="knowledgeAIFormGroup.value.isSearchAssistEnabled"
+                    <div class="widgetenable-body" *ngIf="knowledgeAIFormGroup.get(selectedKAIChannel).value.isSearchAssistEnabled"
                         formGroupName="searchAssistConfig">
                         <div class="search-results-block">
                             <div class="search-results-title">Search Results</div>
@@ -385,7 +387,7 @@
                         </div>
                     </div>
                     <!--AgentAssist Widget Disabled-->
-                    <div class="disable-state-error" *ngIf="!knowledgeAIFormGroup?.value?.isSearchAssistEnabled">
+                    <div class="disable-state-error" *ngIf="!knowledgeAIFormGroup.get(selectedKAIChannel)?.value?.isSearchAssistEnabled">
                         <div class="disable-state-error-icon">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path
@@ -402,10 +404,10 @@
                     </div>
                     <div class="widgetenable-footer">
                         <button class="kr-sg-button-secondary-two btn_lg"
-                            (click)="cancleAgentAssistSettingsNew('search', clonedWidgetSettings)">{{'BUTTONS.CANCEL' |
+                            (click)="cancleAgentAssistSettingsNew()">{{'BUTTONS.CANCEL' |
                             translate}}</button>
                         <button class="kr-sg-button-primary btn_lg"
-                            [disabled]="!knowledgeAIFormGroup.dirty || !isApiConfigured"
+                            [disabled]="knowledgeAIFormGroup.invalid"
                             (click)="saveAgentAssistSettingsNew('search')">Save</button>
                     </div>
                 </div>
@@ -434,9 +436,9 @@
                     </div>
                     <!-- <div class="agent-counts">
                         <span class="accordion-badge"
-                            *ngIf="agentAssistFormGroup.value.agentAssistSettings?.agentAssistWidgetEnabled">Enabled</span>
+                            *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.agentAssistWidgetEnabled">Enabled</span>
                         <span class="accordion-badge disabled-badge"
-                            *ngIf="!agentAssistFormGroup.value.agentAssistSettings?.agentAssistWidgetEnabled">Disabled</span>
+                            *ngIf="!agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.agentAssistWidgetEnabled">Disabled</span>
                     </div> -->
                 </div>
             </div>
@@ -468,8 +470,8 @@
                     </div> -->
                     </div>
                     <!--AgentAssist Widget enabled-->
-                    <div class="widgetenable-body"
-                        *ngIf="agentAssistFormGroup.value.agentAssistSettings?.agentAssistWidgetEnabled">
+                    <!-- *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.agentAssistWidgetEnabled" -->
+                    <div class="widgetenable-body">
                         <div class="toggle-info-data m-0" formGroupName="botEvents">
                             <div class="content-data-toggle">
                                 <h1>Honour Bot Event - Intent not found</h1>
@@ -491,7 +493,7 @@
                                 <h1>Customise Logo</h1>
                                 <p>Customize your company’s Logo in AgentAssist widget.</p>
                                 <div class="customize-logo-data"
-                                    *ngIf="agentAssistFormGroup?.value?.agentAssistSettings?.isCustomisedLogoEnabled?.isEnabled">
+                                    *ngIf="agentAssistFormGroup.get('agentAssistSettings').value?.isCustomisedLogoEnabled?.isEnabled">
                                     <div class="logo-h">Logo File</div>
                                     <div class="image-upload-block">
                                         <div class="upload-logo-block">
@@ -509,7 +511,7 @@
                                             <span class="image-size-text">SVG, PNG (max. 60x23px)</span>
                                         </div>
                                         <div class="uploaded-img"
-                                            *ngIf="(agentAssistFormGroup?.value?.agentAssistSettings?.isCustomisedLogoEnabled && agentAssistFormGroup?.value?.agentAssistSettings?.isCustomisedLogoEnabled?.fileName && agentAssistFormGroup?.value?.agentAssistSettings?.isCustomisedLogoEnabled?.fileName !== '')">
+                                            *ngIf="(agentAssistFormGroup.get('agentAssistSettings').value?.isCustomisedLogoEnabled && agentAssistFormGroup.get('agentAssistSettings').value?.isCustomisedLogoEnabled?.fileName && agentAssistFormGroup.get('agentAssistSettings').value?.isCustomisedLogoEnabled?.fileName !== '')">
                                             <img [src]="imgPreview">
                                             <!-- <div class="uploaded-img-delete" (click)="removeFile()">
                                             <i class="icon-sa-delete"></i>
@@ -534,7 +536,7 @@
                                             </svg>
                                         </div>
                                         <div class="content-block">
-                                            <h1>{{agentAssistFormGroup?.value?.agentAssistSettings?.isCustomisedLogoEnabled?.fileName
+                                            <h1>{{agentAssistFormGroup.get('agentAssistSettings').value?.isCustomisedLogoEnabled?.fileName
                                                 || uploadedImgDetails}}</h1>
                                             <p>{{(logoSize) | number : '1.1-1'}} KB</p>
                                             <h3 *ngIf="fileTypeFlag">Uploaded file format do not match with (SVG/PNG)
@@ -565,8 +567,8 @@
 
                     </div>
                     <!--AgentAssist Widget Disabled-->
-                    <div class="disable-state-error"
-                        *ngIf="!agentAssistFormGroup.value.agentAssistSettings?.agentAssistWidgetEnabled">
+                    <!-- *ngIf="!agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.agentAssistWidgetEnabled" -->
+                    <!-- <div class="disable-state-error">
                         <div class="disable-state-error-icon">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path
@@ -580,12 +582,12 @@
                             <p>When AgentAssist widget is disabled, it will be permanently shut off and no features will
                                 be visible to the agents</p>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="widgetenable-footer">
-                        <button class="kr-sg-button-secondary-two btn_lg" [disabled]="!agentAssistFormGroup.dirty"
-                            (click)="cancleAgentAssistSettingsNew('widget', clonedWidgetSettings)">{{'BUTTONS.CANCEL' |
+                        <button class="kr-sg-button-secondary-two btn_lg" [disabled]="agentAssistFormGroup.invalid"
+                            (click)="cancleAgentAssistSettingsNew()">{{'BUTTONS.CANCEL' |
                             translate}}</button>
-                        <button class="kr-sg-button-primary btn_lg" [disabled]="!agentAssistFormGroup.dirty"
+                        <button class="kr-sg-button-primary btn_lg" [disabled]="agentAssistFormGroup.invalid"
                             (click)="saveAgentAssistSettingsNew('widget')">{{'BUTTONS.SAVE' | translate}}</button>
                     </div>
                 </div>

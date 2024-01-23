@@ -3,9 +3,7 @@ import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { TranslateService } from '@ngx-translate/core';
-import { clone } from 'src/app/helpers/utils';
-import { map, catchError, finalize } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
@@ -29,7 +27,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   isUnifiedPlatform: boolean = false;
   disableButtons: boolean =  false;
-  clonedWidgetSettings: any;
   subs = new SubSink();
   uploadedImgDetails: any = '';
   progress: number;
@@ -43,18 +40,14 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   isLoading = false;
   isApiConfigured= true;
   iId = this.authService?.isLoadingOnSm && this.selAcc && this.selAcc?.instanceBots?.length ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-
+  channels = ['chat', 'voice', 'email'];
   landingPageTabs = {
     transcript: 'Transcription',
     assist: 'Assist',
     library: 'Library',
     mybot: 'My bot'
   }
-
-  
-
-  
-
+  clonedWidgetSettings:any = {};
   newRoleModalRef: any = {};
   modalRef: any;  
   agentAssistFormGroup: FormGroup;
@@ -71,7 +64,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     {type:'advance', desc:'Configure how you want to use Knowledge AI'}
   ]
   advancedModeScript: string = '';
-
+  selectedChannel = 'chat';
+  selectedKAIChannel = 'chat';
   constructor(
     public workflowService: workflowService,
     private service: ServiceInvokerService,
@@ -81,22 +75,16 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     private localstorage: LocalStoreService,
     private modalService: NgbModal,
     private fb: FormBuilder
-  ) { 
-    // agentAssistSettings Form object
-
-    
-    // KnowledgeFromObject
-
+  ) {
   }
 
   selectTab(tab, key){
     (((((this.agentAssistFormGroup as FormGroup)
     .get('agentAssistSettings') as FormGroup)
+    .get(this.selectedChannel) as FormGroup)
     .get('isWidgetLandingEnabled') as FormGroup)
-    .get(tab) as FormGroup)
     .get('tab') as FormControl)
     .patchValue(key);
-    this.agentAssistFormGroup.markAsDirty();
   }
 
   createOrUpdateAgSettingsForm(obj?){
@@ -105,85 +93,41 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       isUpdate = true;
     }
     this.agentAssistFormGroup = this.fb.group({
-      agentAssistSettings: this.fb.group({
-        agentAssistWidgetEnabled: [isUpdate ? (obj.agentAssistWidgetEnabled ?? false) : false],
-        isProactiveEnabled: [isUpdate ? (obj.isProactiveEnabled ?? false) : false],
-        isAgentCoachingEnabled: [isUpdate ? (obj.isAgentCoachingEnabled ?? false) : false],
-        isAgentResponseEnabled: [isUpdate ? (obj.isAgentResponseEnabled ?? false) : true],
-        summarization: this.fb.group({
-          isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
-          canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false]
-        }),
-        isAgentPlaybookEnabled: [isUpdate ? (obj.isAgentPlaybookEnabled ?? false) : false],
-        isWidgetLandingEnabled: this.fb.group({
-          isEnabled: [isUpdate ? (obj.isWidgetLandingEnabled?.isEnabled??false) : false],
-          chat: this.fb.group({
-            isEnabled: [isUpdate ? (obj.isWidgetLandingEnabled?.chat?.isEnabled??false) : false],
-            tab: [isUpdate ? (obj.isWidgetLandingEnabled?.chat?.tab??'assist') : 'assist']
-          }),
-          voice: this.fb.group({
-            isEnabled: [isUpdate ? (obj.isWidgetLandingEnabled?.voice?.isEnabled??false) : false],
-            tab: [isUpdate ? (obj.isWidgetLandingEnabled?.voice?.tab??'transcript') : 'transcript']
-          })
+      agentAssistSettings : this.fb.group({
+        isCustomisedLogoEnabled: this.fb.group({
+          isEnabled: [isUpdate ? (obj.isCustomisedLogoEnabled?.isEnabled??false) : false],
+          fileId: [isUpdate ? (obj.isCustomisedLogoEnabled?.fileId??'') : ''],
+          fileName: [isUpdate ? (obj.isCustomisedLogoEnabled?.fileName??'') : ''],
+          hash: [isUpdate ? (obj.isCustomisedLogoEnabled?.hash??'') : '']
         }),
         botEvents: this.fb.group({
           fallback: this.fb.group({
               isEnabled: [isUpdate ? (obj.botEvents?.fallback?.isEnabled??false) : false],
           })
         }),
-        isCustomisedLogoEnabled: this.fb.group({
-          isEnabled: [isUpdate ? (obj.isCustomisedLogoEnabled?.isEnabled??false) : false],
-          fileId: [isUpdate ? (obj.isCustomisedLogoEnabled?.fileId??'') : ''],
-          fileName: [isUpdate ? (obj.isCustomisedLogoEnabled?.fileName??'') : ''],
-          hash: [isUpdate ? (obj.isCustomisedLogoEnabled?.hash??'') : '']
-        })
+        chat: this.fb.group(this.commongSettingsForm(isUpdate, obj?.chat)),
+        voice: this.fb.group(this.commongSettingsForm(isUpdate, obj?.voice)),
+        email: this.fb.group(this.commongSettingsForm(isUpdate, obj?.email)),
       })
-    });
+    })
   }
 
   createOrUpdateSearchForm(obj?){
     let isUpdate = false;
     let searchObj: any = {};
     if(obj && Object.keys(obj)){
-      searchObj = obj.searchAssistConfig
+      // searchObj = obj[this.selectedKAIChannel].searchAssistConfig
       isUpdate = true;
     }
     this.knowledgeAIFormGroup = this.fb.group({
-      isSearchAssistEnabled: [isUpdate ? obj.isSearchAssistEnabled : false],
-      searchAssistConfig: this.fb.group({
-        criteria: ['alwaysShow'], //need to check
-        alwaysShow: [isUpdate ? (searchObj?.alwaysShow ?? false) : false],
-        isXODependant: [isUpdate ? (searchObj?.isXODependant ?? false) : false],
-        fallback: [isUpdate ? (searchObj?.fallback ?? false) : false],
-        suggestVal: [isUpdate ? (searchObj?.showAutoSuggestions ? 'On' : 'Off') : 'On'], 
-        showAutoSuggestions: [isUpdate ? (searchObj?.showAutoSuggestions ?? true) : true],
-        integrations : this.fb.group({
-          type: [ isUpdate ? (searchObj?.integrations?.type || 'basic') : 'basic']
-        })
-      })
+      chat: this.fb.group(this.commonSearchAssistForm(isUpdate, obj?.chat, obj?.chat?.searchAssistConfig)),
+      voice: this.fb.group(this.commonSearchAssistForm(isUpdate, obj?.voice, obj?.voice?.searchAssistConfig)),
+      email: this.fb.group(this.commonSearchAssistForm(isUpdate, obj?.email, obj?.email?.searchAssistConfig)),
     });
-    if(isUpdate){
-      let picked = (({ alwaysShow, isXODependant, fallback }) => ({ alwaysShow, isXODependant, fallback }))(searchObj || {});
-      let criteria = 'alwaysShow';
-      for(let key in picked){
-        if(picked[key]){
-          criteria = key;
-        }
-      }
-      ((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup)
-      .get('criteria') as FormControl)
-      .patchValue(criteria);
 
 
-      if(searchObj?.integrations?.type === 'advance') {
-        ((((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
-      .addControl('config', this.fb.group({
-        script: [searchObj.integrations?.config.script || '']
-      }))));
-      this.advancedModeScript = (searchObj.integrations?.config.script.length > 0) ? searchObj.integrations?.config.script : '';
-      }
-      
-    }
+/* Need to uncomment */
+
   }
 
   ngOnInit(): void {
@@ -207,18 +151,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.service.invoke("get.agentAssistSettings", params, body).subscribe(
       (res) => {
         if (res) {
+          this.clonedWidgetSettings = res;
           this.isLoading = false;
-          //backup
-          this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
-
-          
-
-          // this.setAgentAssistAndKnowledgeSettings(res.agentAssistSettings);
-    this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
-    this.createOrUpdateSearchForm(res.agentAssistSettings)
-
-
-          //why we need global variable
+          this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
+          this.createOrUpdateSearchForm(res.agentAssistSettings);
           this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
         }
       },
@@ -351,8 +287,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       .subscribe(
         (res) => {
           if (res) {
-              this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
-              this.disableButtons = false;
+            this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
+            this.disableButtons = false;
             this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
             this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
             this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
@@ -363,7 +299,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           this.notificationService.showError(
             err,
             this.translate.instant("SAVE_FALLBACK_ERROR_MSG")
-            
           );
         }
       );
@@ -399,32 +334,35 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.modalRef.componentInstance.data = this.advancedModeScript;
     this.modalRef.result.then(emitedValue => {
       this.advancedModeScript = emitedValue;
-      ((((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
+      ((((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
        .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
-      this.knowledgeAIFormGroup.get('searchAssistConfig').get('integrations').updateValueAndValidity();
-      if(this.knowledgeAIFormGroup?.value?.searchAssistConfig?.integrations?.type === 'advance' && emitedValue.length !== 0) {
+      ((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup).get('integrations').updateValueAndValidity();
+      if(this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value?.searchAssistConfig?.integrations?.type === 'advance' && emitedValue?.length !== 0) {
         this.knowledgeAIFormGroup.markAsDirty();
-        this.isApiConfigured = true;
+        // this.isApiConfigured = true;
+        this.advancedModeScript = '';
       } else {
-        this.isApiConfigured = false;
+        // this.isApiConfigured = false;
+        this.advancedModeScript = '';
       }
     });
   }
 
   // update the AutoSuggestions keys
   selectedSuggestionType(e, val) {
-    ((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup)
+    ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup)
     .get('showAutoSuggestions') as FormControl)
     .patchValue((val.type === 'On') ? true : false);
   }
 
   // open script editor for the Advanced Mode
   selectedIntegrationType(e, integrate) {
+    this.advancedModeScript = this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value?.searchAssistConfig?.integrations?.config?.script;
     this.isApiConfigured = true;
-    ((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
+    ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
     .removeControl('config');
     if(integrate.type === 'advance') {
-      ((this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup).get('integrations') as FormGroup)
+      ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
       .addControl('config', this.fb.group({
         script: ['',[Validators.required]],
       }));
@@ -439,24 +377,90 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       fallback: false,
       isXODependant: false
     };
-    obj[this.knowledgeAIFormGroup.value.searchAssistConfig.criteria] = true;
-    (this.knowledgeAIFormGroup.get('searchAssistConfig') as FormGroup)
+    obj[this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value.searchAssistConfig.criteria] = true;
+    ((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup)
+    .get('searchAssistConfig') as FormGroup)
     .patchValue(obj);
+    
+/*     (((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup)
+    .patchValue(obj); */
   }
 
   // cancel agentassist Settings
-  cancleAgentAssistSettingsNew(settingType, obj) {
-    if(settingType === 'widget') {
-      this.createOrUpdateAgSettingsForm(obj.agentAssistSettings);
-    }else {
-      this.createOrUpdateSearchForm(obj.agentAssistSettings);
-    }
+  cancleAgentAssistSettingsNew() {
+
   }
 
 
   // Destroy all the subscribed event
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  commongSettingsForm(isUpdate, obj){
+    return {
+      agentAssistWidgetEnabled: [isUpdate ? (obj.agentAssistWidgetEnabled ?? false) : false],
+      isProactiveEnabled: [isUpdate ? (obj.isProactiveEnabled ?? false) : false],
+      isAgentCoachingEnabled: [isUpdate ? (obj.isAgentCoachingEnabled ?? false) : false],
+      isAgentResponseEnabled: [isUpdate ? (obj.isAgentResponseEnabled ?? false) : true],
+      isAgentResponseCopyEnabled: [isUpdate ? (obj.isAgentResponseCopyEnabled ?? false) : true],
+      summarization: this.fb.group({
+        isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
+        canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false]
+      }),
+      isAgentPlaybookEnabled: [isUpdate ? (obj.isAgentPlaybookEnabled ?? false) : false],
+      isWidgetLandingEnabled: this.fb.group({
+        tab: [isUpdate ? (obj.isWidgetLandingEnabled?.tab??'assist') : 'assist']
+      }),
+    }
+  }
+
+  commonSearchAssistForm(isUpdate, obj, searchObj){
+    let criteria = 'alwaysShow';
+    if(isUpdate){
+      let picked = (({ alwaysShow, isXODependant, fallback }) => ({ alwaysShow, isXODependant, fallback }))(searchObj || {});
+      for(let key in picked){
+        if(picked[key]){
+          criteria = key;
+        }
+      };
+    }
+
+    let KAIObj =  {
+      isSearchAssistEnabled: [isUpdate ? (obj.isSearchAssistEnabled ?? false) : false],
+      searchAssistConfig: this.fb.group({
+        criteria: [isUpdate ? criteria : 'alwaysShow'], //need to check
+        alwaysShow: [isUpdate ? (searchObj?.alwaysShow ?? false) : false],
+        isXODependant: [isUpdate ? (searchObj?.isXODependant ?? false) : false],
+        fallback: [isUpdate ? (searchObj?.fallback ?? false) : false],
+        suggestVal: [isUpdate ? (searchObj?.showAutoSuggestions ? 'On' : 'Off') : 'On'], 
+        showAutoSuggestions: [isUpdate ? (searchObj?.showAutoSuggestions ?? true) : true],
+        integrations : this.fb.group({
+          type: [ isUpdate ? (searchObj?.integrations?.type || 'basic') : 'basic']
+        })
+      })
+    };
+
+    if(isUpdate && searchObj?.integrations?.type === 'advance'){
+      KAIObj["searchAssistConfig"]['integrations'] = this.fb.group({
+        type: ['advance'],
+        "config": this.fb.group({
+          "script": [searchObj.integrations?.config.script || '', [Validators.required]]
+        })
+        // script: [searchObj.integrations?.config.script || '', [Validators.required]]
+      })
+    }
+    return KAIObj;
+  }
+
+  chooseChannel(channel){
+    this.selectedChannel = channel;
+    this.agentAssistFormGroup.updateValueAndValidity();
+  }
+
+  chooseKAIChannel(channel){
+    this.selectedKAIChannel = channel;
+    this.knowledgeAIFormGroup.updateValueAndValidity();
   }
 
 }
