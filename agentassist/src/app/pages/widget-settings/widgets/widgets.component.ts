@@ -435,21 +435,23 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         fallback: [isUpdate ? (searchObj?.fallback ?? false) : false],
         suggestVal: [isUpdate ? (searchObj?.showAutoSuggestions ? 'On' : 'Off') : 'On'], 
         showAutoSuggestions: [isUpdate ? (searchObj?.showAutoSuggestions ?? true) : true],
-        integrations : this.fb.group({
-          type: [ isUpdate ? (searchObj?.integrations?.type || 'basic') : 'basic']
-        })
       })
     };
 
+    let integrations: FormGroup;
     if(isUpdate && searchObj?.integrations?.type === 'advance'){
-      KAIObj["searchAssistConfig"]['integrations'] = this.fb.group({
+      integrations = this.fb.group({
         type: ['advance'],
-        "config": this.fb.group({
-          "script": [searchObj.integrations?.config.script || '', [Validators.required]]
+        config: this.fb.group({
+          script: [searchObj.integrations?.config.script || '', [Validators.required]]
         })
-        // script: [searchObj.integrations?.config.script || '', [Validators.required]]
-      })
+      });
+    }else{
+      integrations = this.fb.group({
+        type: ['basic'],
+      });
     }
+    (KAIObj['searchAssistConfig'] as FormGroup).addControl('integrations', integrations);
     return KAIObj;
   }
 
