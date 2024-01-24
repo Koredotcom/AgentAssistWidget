@@ -371,7 +371,7 @@ export class AssistService {
     return template;
   }
 
-  dialogTypeInfoTemplate(uuids, index, ele) {
+  dialogTypeInfoTemplate(uuids, index, ele, data) {
     ele.userInput = (ele.userInput).replace(/'/g, "&#39;").replace(/"/g, "&quot;");;
     let template = `
     <div class="type-info-run-send" id="suggestionId-${uuids}">
@@ -382,14 +382,14 @@ export class AssistService {
         </div>
         <div class="action-links">
             <button class="send-run-btn" id="run-${uuids + index}" data-child-bot-id="${ele?.childBotId}" data-child-bot-name="${ele?.childBotName}"
-            data-dialog-run='${JSON.stringify(ele)}'>RUN</button>
+            data-dialog-run='${JSON.stringify(ele)}' data-triats="${JSON.stringify(data?.traits || [])}">RUN</button>
             <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids + index}">
                 <div class="elipse-icon" id="elipseIcon-${uuids + index}">
                     <i class="ast-overflow" id="overflowIcon-${uuids + index}"></i>
                 </div>
                 <div class="dropdown-content-elipse" id="runAgtBtn-${uuids + index}" data-dialog-run='${JSON.stringify(ele)}'>
                     <div class="list-option" id="agentSelect-${uuids + index}" data-child-bot-id="${ele?.childBotId}" data-child-bot-name="${ele?.childBotName}"
-                    data-dialog-run='${JSON.stringify(ele)}'>Run with Agent Inputs</div>
+                    data-dialog-run='${JSON.stringify(ele)}' data-triats="${JSON.stringify(data?.traits || [])}">Run with Agent Inputs</div>
                 </div>
         </div>
     </div>`;
