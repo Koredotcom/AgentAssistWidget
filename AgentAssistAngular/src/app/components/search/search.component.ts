@@ -80,10 +80,12 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   typeAHead = this.typeAHeadDeBounce((val, connectionDetails) => this.getAutoSearchApiResult(val, connectionDetails));
   onSearch(event: any) {
-    if (this.searchText?.length > 0) {
-      this.typeAHead(this.searchText, this.rootService.connectionDetails);
-    } else {
-      this.clearSearch();
+    if(this.rootService.settingsData?.searchAssistConfig?.showAutoSuggestions){
+      if (this.searchText?.length > 0) {
+        this.typeAHead(this.searchText, this.rootService.connectionDetails);
+      } else {
+        this.clearSearch();
+      }
     }
   }
 

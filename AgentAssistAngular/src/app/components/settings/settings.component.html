@@ -25,7 +25,7 @@
                             <div class="form-check form-switch xs">
                                 <input class="form-check-input" type="checkbox" role="switch" id="checkProActive" #proactiveMode
                                     [checked]="proactiveModeEnabled" (change)="proactiveToggle(proactiveMode.checked)"
-                                    [disabled]="connectionDetails?.source === projConstants.SMARTASSIST_SOURCE && connectionDetails.isProactiveAgentAssistEnabled === false">
+                                    [disabled]="!aaSettings?.isProactiveEnabled">
                             </div>
                         </div>
                     </div>
