@@ -1037,6 +1037,8 @@ export class AssistComponent implements OnInit {
       dynamicBlockDiv.append(welcomeMsgHtml);
       $(`#smallTalk-${uuids} .run-info-content`).append(actionLinkTemplate);
        this.welcomeMsgResponse = data;
+       this.commonService.hideSendOrCopyButtons(false, `.welcome-msg`, 'smallTalk')
+
     }
 
     let renderedMessage = !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';
