@@ -278,12 +278,12 @@ export class AppComponent implements OnInit, OnDestroy{
       if(res && res.agentAssistSettings && res.agentAssistSettings[params.channel]){
         this.widgetSettings = Object.assign(res.agentAssistSettings, res.agentAssistSettings[params.channel]);
       }else{
-        this.widgetSettings = this.rootService.defaultwidgetSettings.agentAssistSettings;
+        this.widgetSettings = this.rootService.defaultwidgetSettings;
       }
       this.rootService.settingsData = JSON.parse(JSON.stringify(this.widgetSettings));
       this.initiateSocketConnection(params);
     },(err)=> {
-      this.widgetSettings = this.rootService.defaultwidgetSettings.agentAssistSettings;
+      this.widgetSettings = this.rootService.defaultwidgetSettings;
       this.rootService.settingsData = JSON.parse(JSON.stringify(this.widgetSettings));
       this.initiateSocketConnection(params);
     });
