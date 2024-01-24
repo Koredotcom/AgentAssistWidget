@@ -30,10 +30,10 @@
     <nav class="deflectHeader navbar navbar-expand-lg navbar-light white">
         <div class="header-sec row m-0 col-12 p-0">
             <ng-container *ngIf="!workflowService.UnifiedPlatform">
-            <div class="today-history-config-tabs" *hasPermission="['BOTBUILDER_DASHBOARD_YES']">
+            <div class="today-history-config-tabs" *hasPermission="['admin']">
                 <div class="name-tab" [routerLink]="['/config']" routerLinkActive="active" >{{"LIVE_CHAT_AGENT.CONFIGURATION" | translate}}</div>
                 <div class="name-tab" [routerLink]="['/bt']" routerLinkActive="active" >{{"LIVE_CHAT_AGENT.AUTOMATIONS" | translate}}</div>
-                <div *ngIf="isCoachingDisable" class="name-tab" [routerLink]="['/dashboard']" routerLinkActive="active" >{{"LIVE_CHAT_AGENT.DASHBOARD" | translate}}</div>
+                <div *ngIf="isCoachingDisable" *hasPermission="['BOTBUILDER_DASHBOARD_YES']" class="name-tab" [routerLink]="['/dashboard']" routerLinkActive="active" >{{"LIVE_CHAT_AGENT.DASHBOARD" | translate}}</div>
             </div>
 
             <div class="logo-sec col-2 p-0">
