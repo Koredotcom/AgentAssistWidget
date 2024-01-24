@@ -70,6 +70,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   showLaunchConsole: boolean;
   showGuide: boolean = false;
+  isInviteDialog: boolean = false;
 
   constructor(
     public authService: AuthService,
@@ -204,7 +205,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.service.invoke('get.bt.roles', paramsEmail).subscribe(
       res => {
         this.botRoles = res;
-        this.openInviteDeveloperDialog();
+        if(this.isInviteDialog) {
+          this.openInviteDeveloperDialog();
+        }
       },
       err => {
         this.workflowService.showError(err, this.translate.instant("HEADER.FAILED_FETCH_BOT"));
@@ -267,6 +270,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   inviteDialog() {
     this.inviteDevelopers();
     this.workflowService.headerInitCalls$.next();
+    this.isInviteDialog = true;
   }
 
   openInviteDeveloperDialog() {
@@ -284,6 +288,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     }
     dialogRef.afterClosed().subscribe(res => {
+      this.isInviteDialog = false;
       let usersList = [];
       _.each(this.sharedToList?.users, function (val) {
         usersList.push({
