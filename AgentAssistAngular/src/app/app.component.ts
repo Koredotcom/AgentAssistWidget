@@ -272,60 +272,19 @@ export class AppComponent implements OnInit, OnDestroy{
 
   getAgentAssistSettings(params){
     let instanceBotId = params.fromSAT ? params.instanceBotId : params.botId;
-    this.serviceInvoker.invoke('get.settings', {instanceBotId : instanceBotId}, {},{ settings: 'true', botId : params.botId },params.agentassisturl).pipe(finalize(() => {this.widgetLoader = false})).subscribe((res)=> {
-      console.log(res, 'res ************');
-      if(res && res.agentAssistSettings){
-        this.rootService.settingsData = res.agentAssistSettings;
-        this.widgetSettings = res.agentAssistSettings;
+    // it should be removed.
+    this.serviceInvoker.invoke('get.settings', {instanceBotId : instanceBotId, channel : params.channel}, {},{ settings: 'true', botId : params.botId },params.agentassisturl).pipe(finalize(() => {this.widgetLoader = false})).subscribe((res)=> {
+      console.log(res, 'res ************'); 
+      if(res && res.agentAssistSettings && res.agentAssistSettings[params.channel]){
+        this.widgetSettings = Object.assign(res.agentAssistSettings, res.agentAssistSettings[params.channel]);
+      }else{
+        this.widgetSettings = this.rootService.defaultwidgetSettings.agentAssistSettings;
       }
+      this.rootService.settingsData = JSON.parse(JSON.stringify(this.widgetSettings));
       this.initiateSocketConnection(params);
     },(err)=> {
-      let res: any = {
-        agentAssistSettings: {
-          "isWidgetLandingEnabled": {
-              "chat": {
-                  "isEnabled": true,
-                  "tab": "assist"
-              },
-              "voice": {
-                  "isEnabled": true,
-                  "tab": "assist"
-              },
-              "isEnabled": true
-          },
-          "isCustomisedLogoEnabled": {
-              "isEnabled": false
-          },
-          "agentAssistWidgetEnabled": true,
-          "isProactiveEnabled": true,
-          "isAgentCoachingEnabled": false,
-          "isAgentResponseEnabled": true,
-          "isAgentPlaybookEnabled": false,
-          "isSearchAssistEnabled": true,
-          "searchAssistConfig": {
-            "isXODependant": false,
-            "alwaysShow": false,
-            "showAutoSuggestions": false,
-            "fallback": false,
-            "integrations": {
-                "type": "basic",
-                "config": {
-                    "script": ""
-                }
-            }
-          },
-          "botEvents": {
-            "fallback": {
-                "isEnabled": true
-            }
-          },
-          "summarization" : {
-            "isEnabled" : false,
-            "canSubmit" : false
-          }
-        }
-      }
-      this.widgetSettings = res.agentAssistSettings;
+      this.widgetSettings = this.rootService.defaultwidgetSettings.agentAssistSettings;
+      this.rootService.settingsData = JSON.parse(JSON.stringify(this.widgetSettings));
       this.initiateSocketConnection(params);
     });
 

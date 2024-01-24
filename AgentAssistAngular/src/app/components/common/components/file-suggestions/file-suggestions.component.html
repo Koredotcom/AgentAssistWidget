@@ -10,7 +10,7 @@
           </div>
           <div class="faq-actions" *ngIf="!hideActionButtons && file?.content" [ngClass]="{'faq-actions-top' : !file?.title}">
               <ng-container>
-                  <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, file, projConstants.ARTICLE)">
+                  <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, file, projConstants.ARTICLE)" *ngIf="!hideCopyButton">
                       <i class="krIocnsFont-copy"></i>
                   </button>
                   <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, file , projConstants.ARTICLE)" *ngIf="!hideSendButton">{{ 'SEND'  | translate }}</button>

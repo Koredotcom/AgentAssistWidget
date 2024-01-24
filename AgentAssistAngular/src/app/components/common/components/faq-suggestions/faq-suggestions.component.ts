@@ -26,6 +26,7 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
   moreClick = false;
   hideActionButtons : boolean = false;
   hideSendButton : boolean = false;
+  hideCopyButton : boolean = false;
 
   constructor(private handleSubjectService : HandleSubjectService, public rootService : RootService,
     private websocketService : WebSocketService, private commonService : CommonService){
@@ -63,6 +64,14 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
     //send Button
     if(!this.rootService.settingsData?.isAgentResponseEnabled){
       this.hideSendButton = true;
+    }
+
+    if(!this.rootService.settingsData?.isAgentResponseCopyEnabled){
+      this.hideCopyButton = true;
+    }
+
+    if(this.hideSendButton && this.hideCopyButton){
+      this.hideActionButtons = true;
     }
   }
   
