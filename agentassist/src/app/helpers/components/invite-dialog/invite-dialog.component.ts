@@ -15,13 +15,15 @@ export class InviteDialogComponent implements OnInit {
   emailList: {email: string, invalid: boolean}[] = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   isValidList = true;
-  roleType = 'Bot Developer';
-  rolesList = ['Master Admin', 'Bot Owner', 'Bot Developer', 'Bot Tester', 'Process Tester', 'Agent']
+  roleType = '';
+  rolesList:any = [];
+  selectedRoleObj: any = {};
 
   constructor(public dialogRef: MatDialogRef<InviteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
+    this.rolesList = this.data;
   }
 
   add(event: MatChipInputEvent) {
@@ -57,15 +59,11 @@ export class InviteDialogComponent implements OnInit {
       return re.test(String(email).toLowerCase());
   }
 
-  selectedRole(roleType) {
-    this.roleType = roleType;
-  }
-
 
   onSubmit(){
     let data: any = {};
     data['emailList'] = this.emailList;
-    data['role'] = this.roleType;
+    data['selectedRole'] = this.selectedRoleObj;
     this.dialogRef.close(data);
   }
 

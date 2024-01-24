@@ -37,12 +37,12 @@
             <div class="label-text">Role</div>
             <div class="kr-sg-dropdowns" ngbDropdown>
                 <div class="dropdown dropdown-open">
-                <button class="dropdown-toggle dropdown-input" ngbDropdownToggle >{{roleType}}</button>                    
+                <button class="dropdown-toggle dropdown-input" ngbDropdownToggle >{{roleType || "select a role"}}</button>                    
                     <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                         <perfect-scrollbar class="bots-scroll">
-                            <ng-container *ngFor="let role of rolesList; let i - index"> 
-                                <li ngbDropdownItem class="p-0" (click)="selectedRole(role)">
-                                    <a>{{role}}</a>
+                            <ng-container *ngFor="let roleObj of rolesList"> 
+                                <li ngbDropdownItem class="p-0" *ngIf="roleObj.role !== 'Bot Owner'" (click)="roleType = roleObj.role; selectedRoleObj = roleObj">
+                                    <a>{{roleObj.role}}</a>
                                 </li>
                             </ng-container>
                         </perfect-scrollbar>

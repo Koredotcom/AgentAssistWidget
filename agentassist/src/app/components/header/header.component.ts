@@ -204,6 +204,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.service.invoke('get.bt.roles', paramsEmail).subscribe(
       res => {
         this.botRoles = res;
+        this.openInviteDeveloperDialog();
       },
       err => {
         this.workflowService.showError(err, this.translate.instant("HEADER.FAILED_FETCH_BOT"));
@@ -266,10 +267,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   inviteDialog() {
     this.inviteDevelopers();
     this.workflowService.headerInitCalls$.next();
+  }
+
+  openInviteDeveloperDialog() {
     const dialogRef = this.dialog.open(InviteDialogComponent, {
       width: '660px',
       minHeight: '312px',
       panelClass: "invite-dev-switch-dialog",
+      data: this.botRoles
     });
     const params = {
       userId: this.authService.getUserId(),
@@ -290,7 +295,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         res.emailList = (res?.emailList).map(val => {
           return {
             emailId: val.email,
-            roleId: _.findWhere(this.botRoles, { role: res?.role })._id
+            roleId: _.findWhere(this.botRoles, { role: res?.selectedRole.role })._id
           }
         });
         usersList = usersList.concat(res.emailList);
