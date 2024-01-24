@@ -7,8 +7,8 @@
         <img src="assets/icons/header/switchAcc.svg">
         <span class="menu-name">{{ "HEADER.SWITCH_ACC" | translate }}</span>
     </button>
-    <button matIconButton mat-menu-item [disabled]="!isInvite" *hasPermission="['admin']">
-        <div class="invite-button" [ngClass]="{'disabled': isSharedDevError}" (click)="inviteDialog()">
+    <button matIconButton mat-menu-item [disabled]="!isInvite" *hasPermission="['admin']" (click)="inviteDialog()">
+        <div class="invite-button" [ngClass]="{'disabled': isSharedDevError}" >
             <img src="assets/icons/header/invite.svg" [ngStyle]="{'opacity': !isInvite?0.5:1}">
             <span class="menu-name">{{ "HEADER.INVITE" | translate }}</span>
         </div>
