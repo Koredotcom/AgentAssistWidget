@@ -352,11 +352,9 @@ export class HomeComponent implements OnInit {
     if (appState[_convId] && !appState[_convId][storageConst.CURRENT_TAB]) {
       let storageObject: any = {};
       
-      if(this.aaSettings.isWidgetLandingEnabled?.isEnabled ) {
-        if(this.aaSettings.isWidgetLandingEnabled?.isEnabled) {
-          storageObject[storageConst.CURRENT_TAB] = (this.titlecasePipe.transform(this.aaSettings.isWidgetLandingEnabled.tab) || this.projConstants.ASSIST);
-          activeTab = storageObject[storageConst.CURRENT_TAB];
-        }
+      if(this.aaSettings.isWidgetLandingEnabled?.tab ) {
+        storageObject[storageConst.CURRENT_TAB] = (this.titlecasePipe.transform(this.aaSettings.isWidgetLandingEnabled.tab) || this.projConstants.ASSIST);
+        activeTab = storageObject[storageConst.CURRENT_TAB];
       }else{
         storageObject[storageConst.CURRENT_TAB] = isChatOrCall === 'voice' ? this.projConstants.TRANSCRIPT : this.projConstants.ASSIST;
         activeTab = storageObject[storageConst.CURRENT_TAB];

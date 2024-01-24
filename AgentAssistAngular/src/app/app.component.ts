@@ -253,7 +253,6 @@ export class AppComponent implements OnDestroy {
   getAgentAssistSettings(params) {
     // api call
     let paramsCopy = {...params};
-    paramsCopy.channel = 'chat';
     let headersVal : any = {};
     let channel = ((paramsCopy?.channel && paramsCopy?.channel.trim() !== "''") ? paramsCopy?.channel : (paramsCopy.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
     paramsCopy.channel = channel;
@@ -274,56 +273,11 @@ export class AppComponent implements OnDestroy {
         }
     }
     $.ajax({
-      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${paramsCopy.instanceBotId}/agentassistsetting?e="chat"`,
+      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${paramsCopy.instanceBotId}/agentassistsetting?e=${paramsCopy.channel}`,
       type: 'get',
       headers: headersVal,
       dataType: 'json',
       success:  (data) => {
-        data = {
-          "orgId": "o-ab58660e-9058-5eb7-b3c7-45c76337c610",
-          "accountId": "643fc84acd33301a6a3ff5c7",
-          "iId": "st-fc6732d3-f54f-5b51-b15a-8a5e335158f7",
-          "agentAssistSettings": {
-            "isCustomisedLogoEnabled": {
-              "isEnabled": false,
-              "fileId": null,
-              "fileName": null,
-              "hash": null
-            },
-            "botEvents": {
-              "fallback": {
-                "isEnabled": false
-              }
-            },
-            "chat": {
-              "agentAssistWidgetEnabled": true,
-              "isProactiveEnabled": false,
-              "isAgentCoachingEnabled": true,
-              "isAgentResponseEnabled": true,
-              "isAgentResponseCopyEnabled": true, //new flag
-              "isAgentPlaybookEnabled": true,
-              "isWidgetLandingEnabled": {
-                "isEnabled": true,
-                "tab": "mybot" //new flag
-              },
-              "summarization": {
-                "isEnabled": true,
-                "canSubmit": true
-              },
-              "isSearchAssistEnabled": true,
-              "searchAssistConfig": {
-                "integrations": {
-                  "type": "basic"
-                },
-                "alwaysShow": true,
-                "isXODependant": false,
-                "fallback": false,
-                "showAutoSuggestions": true
-              },
-            },
-          },
-          "id": "aase-41ede32-4cc5-4b14-8b3a-8554abb16c6d"
-        }   
         if (data?.agentAssistSettings && data.agentAssistSettings[paramsCopy.channel]) {
           data.agentAssistSettings = Object.assign(data.agentAssistSettings, data.agentAssistSettings[paramsCopy.channel]);
           console.log(data, "data inside widget settings***********");
