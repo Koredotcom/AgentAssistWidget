@@ -52,7 +52,7 @@
         </div> 
     </div>
     <div class="footer-data">
-        <button class="kr-sg-button-primary btn_lg" [disabled]="(!isValidList || emailList.length == 0) && roleType !== ''" (click)="onSubmit()">{{ "HEADER.INVITE_BUTTON" | translate }}</button>
+        <button class="kr-sg-button-primary btn_lg" [disabled]="(!isValidList || emailList.length == 0) && roleType == ''" (click)="onSubmit()">{{ "HEADER.INVITE_BUTTON" | translate }}</button>
         <button class="kr-sg-button-secondary btn_lg" (click)="onCancel()">{{ "HEADER.CANCEL" | translate }}</button>
     </div>
 </div>
