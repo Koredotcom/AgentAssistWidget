@@ -7,7 +7,7 @@
         <img src="assets/icons/header/switchAcc.svg">
         <span class="menu-name">{{ "HEADER.SWITCH_ACC" | translate }}</span>
     </button>
-    <button matIconButton mat-menu-item [disabled]="!isInvite" *hasPermission="['admin']">
+    <button matIconButton mat-menu-item [disabled]="!isInvite">
         <div class="invite-button" [ngClass]="{'disabled': isSharedDevError}" (click)="inviteDialog()">
             <img src="assets/icons/header/invite.svg" [ngStyle]="{'opacity': !isInvite?0.5:1}">
             <span class="menu-name">{{ "HEADER.INVITE" | translate }}</span>
@@ -30,10 +30,10 @@
     <nav class="deflectHeader navbar navbar-expand-lg navbar-light white">
         <div class="header-sec row m-0 col-12 p-0">
             <ng-container *ngIf="!workflowService.UnifiedPlatform">
-            <div class="today-history-config-tabs" *hasPermission="['admin']">
+            <div class="today-history-config-tabs" >
                 <div class="name-tab" [routerLink]="['/config']" routerLinkActive="active" >{{"LIVE_CHAT_AGENT.CONFIGURATION" | translate}}</div>
                 <div class="name-tab" [routerLink]="['/bt']" routerLinkActive="active" >{{"LIVE_CHAT_AGENT.AUTOMATIONS" | translate}}</div>
-                <div *ngIf="isCoachingDisable" *hasPermission="['BOTBUILDER_DASHBOARD_YES']" class="name-tab" [routerLink]="['/dashboard']" routerLinkActive="active" >{{"LIVE_CHAT_AGENT.DASHBOARD" | translate}}</div>
+                <div *ngIf="isCoachingDisable"class="name-tab" [routerLink]="['/dashboard']" routerLinkActive="active" >{{"LIVE_CHAT_AGENT.DASHBOARD" | translate}}</div>
             </div>
 
             <div class="logo-sec col-2 p-0">
@@ -42,7 +42,7 @@
             <div class="content-sec col-10 p-0"> 
 
                
-                <div class="kr-sg-dropdowns d-none" ngbDropdown [placement]="'bottom-left'" *hasPermission="['admin']">
+                <div class="kr-sg-dropdowns d-none" ngbDropdown [placement]="'bottom-left'" >
                     <div class="dropdown dropdown-open">
                       <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>                 
                         <img src="assets/images/logos/fill.svg">
