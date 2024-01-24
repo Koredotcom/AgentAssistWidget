@@ -1029,7 +1029,7 @@ export class AssistComponent implements OnInit {
           this.updateNewMessageUUIDList(uuids);
         }, this.waitingTimeForUUID);
       }
-    }else{
+    }else if(data?.buttons?.length > 0){
       let dynamicBlockDiv = $('#dynamicBlock');
       let actionLinkTemplate = ``;
       let welcomeMsgHtml = this.assisttabService.prepareWelcomeMsgTemplate(uuids, this.interactiveLangaugeDetails);

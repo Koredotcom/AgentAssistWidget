@@ -340,8 +340,8 @@ export class HomeComponent implements OnInit {
   // update state based on local storage.
   updateUIState(_convId, _isCallConv) {
     const isChatOrCall = _isCallConv === 'true' ? 'voice' : 'chat';
-    if(this.aaSettings?.isWidgetLandingEnabled[isChatOrCall]?.tab === "mybot") {
-      this.aaSettings.isWidgetLandingEnabled[isChatOrCall].tab = "my Bot"
+    if(this.aaSettings?.isWidgetLandingEnabled?.tab === "mybot") {
+      this.aaSettings.isWidgetLandingEnabled.tab = "my Bot"
     }
     $('#dynamicBlock .empty-data-no-agents').addClass('hide');
     let appState = this.localStorageService.getLocalStorageState();
@@ -352,11 +352,9 @@ export class HomeComponent implements OnInit {
     if (appState[_convId] && !appState[_convId][storageConst.CURRENT_TAB]) {
       let storageObject: any = {};
       
-      if(this.aaSettings.isWidgetLandingEnabled?.isEnabled ) {
-        if(this.aaSettings.isWidgetLandingEnabled[isChatOrCall].isEnabled) {
-          storageObject[storageConst.CURRENT_TAB] = (this.titlecasePipe.transform(this.aaSettings.isWidgetLandingEnabled[isChatOrCall].tab) || this.projConstants.ASSIST);
-          activeTab = storageObject[storageConst.CURRENT_TAB];
-        }
+      if(this.aaSettings.isWidgetLandingEnabled?.tab ) {
+        storageObject[storageConst.CURRENT_TAB] = (this.titlecasePipe.transform(this.aaSettings.isWidgetLandingEnabled.tab) || this.projConstants.ASSIST);
+        activeTab = storageObject[storageConst.CURRENT_TAB];
       }else{
         storageObject[storageConst.CURRENT_TAB] = isChatOrCall === 'voice' ? this.projConstants.TRANSCRIPT : this.projConstants.ASSIST;
         activeTab = storageObject[storageConst.CURRENT_TAB];
