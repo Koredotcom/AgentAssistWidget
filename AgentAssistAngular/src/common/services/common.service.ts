@@ -939,7 +939,12 @@ export class CommonService {
         $(lastchild).find('.warning-template').removeClass('hide')
     }
 
-    if(this.isCallConversation == true){
+    if(this.isCallConversation === true){
+      $(lastchild).find('.copy-btn').addClass('hide')
+      $(lastchild).find('.send-run-btn').addClass('hide')
+    }    
+
+    if(!this.configObj.isAgentResponseEnabled && !this.isCallConversation){
       $(lastchild).find('.copy-btn').addClass('hide')
       $(lastchild).find('.send-run-btn').addClass('hide')
     }
