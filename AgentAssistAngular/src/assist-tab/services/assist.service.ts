@@ -371,7 +371,7 @@ export class AssistService {
     return template;
   }
 
-  dialogTypeInfoTemplate(uuids, index, ele, data) {
+  dialogTypeInfoTemplate(uuids, index, ele, data?) {
     ele.userInput = (ele.userInput).replace(/'/g, "&#39;").replace(/"/g, "&quot;");;
     let template = `
     <div class="type-info-run-send" id="suggestionId-${uuids}">

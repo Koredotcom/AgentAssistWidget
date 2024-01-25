@@ -198,7 +198,7 @@ export class CommonService {
     if (data.intentName && data.userInput) {
       agent_assist_request['query'] = data.userInput
     }
-    if(data.traits){
+    if(Array.isArray(data.traits) && data?.traits?.length){
       agent_assist_request['traits'] = data.traits
     }
     return agent_assist_request;
@@ -233,7 +233,7 @@ export class CommonService {
     if (data?.language) {
       agent_assist_agent_request_params['language'] = data.language; // Return the default value for null, undefined, or "''"
     }
-    if(data.traits){
+    if(Array.isArray(data.traits) && data?.traits?.length){
       agent_assist_agent_request_params['traits'] = data.traits
     }
     return agent_assist_agent_request_params;
