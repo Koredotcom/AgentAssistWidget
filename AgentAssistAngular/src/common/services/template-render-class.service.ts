@@ -193,9 +193,9 @@ export class TemplateRenderClassService {
         }
       }
 
-      if(!parsedPayload){
+      // if(!parsedPayload){
         elem.value = this.replaceCurlyWithEmptyString(res, elem.value);
-      }
+      // }
 
       let body = {};
       body['type'] = elem.type;
@@ -310,9 +310,9 @@ export class TemplateRenderClassService {
         }
       }
 
-      if(!parsedPayload){
+      // if(!parsedPayload){
         elem.value = this.replaceCurlyWithEmptyString(res, elem.value);
-      }
+      // }
 
 
       let body = {};
