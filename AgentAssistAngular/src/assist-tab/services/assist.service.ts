@@ -108,17 +108,19 @@ export class AssistService {
   parseWelcomeMsgResponse(uuids,welcomeMsgResponse){
     let template = '';
     let index = 0;
-    for(let item of welcomeMsgResponse?.buttons){
-      template += `<div class="agent-utt">
-      <div class="title-data" id="displayData-${uuids + index}">${item.value}</div>
-      <div class="action-links">
-      <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}" data-text-type="sentence">Send</button>
-      <div class="copy-btn" data-msg-id="${uuids + index}"  data-text-type="sentence" data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}">
-          <i class="ast-copy" data-msg-id="${uuids + index}"  data-text-type="sentence" data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}"></i>
-      </div>
-      </div>
-      </div>`;
-      index++;
+    if(welcomeMsgResponse?.buttons){
+      for(let item of welcomeMsgResponse?.buttons){
+        template += `<div class="agent-utt">
+        <div class="title-data" id="displayData-${uuids + index}">${item.value}</div>
+        <div class="action-links">
+        <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}" data-text-type="sentence">Send</button>
+        <div class="copy-btn" data-msg-id="${uuids + index}"  data-text-type="sentence" data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}">
+            <i class="ast-copy" data-msg-id="${uuids + index}"  data-text-type="sentence" data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}"></i>
+        </div>
+        </div>
+        </div>`;
+        index++;
+      }
     }
     return template;
   }
