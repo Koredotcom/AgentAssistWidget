@@ -923,9 +923,9 @@ export class AssistComponent implements OnInit {
             this.agentAssistResponse = Object.assign({}, data);
           }
         }, 10);
-        let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
+        let askToUserHtml = this.assisttabService.askUserTemplate(data, uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
   /// componentType === 'dialogAct' means its confirmation node or else not
-        let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
+        let tellToUserHtml = this.assisttabService.tellToUserTemplate(data, uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
         if (data.isPrompt) {
           runInfoContent.append(askToUserHtml);
           if (!this.proactiveModeStatus) {
@@ -2108,8 +2108,8 @@ export class AssistComponent implements OnInit {
           if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
             let runInfoContent = $(`#dropDownData-${previousId}`);
 
-            let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp, previousTaskPositionId,res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
-            let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp, previousTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+            let askToUserHtml = this.assisttabService.askUserTemplate(res, res._id, newTemp, previousTaskPositionId,res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+            let tellToUserHtml = this.assisttabService.tellToUserTemplate(res, res._id, newTemp, previousTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
 
             if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
               this.commonService.isAutomationOnGoing = true;
@@ -2174,7 +2174,7 @@ export class AssistComponent implements OnInit {
           let dynamicBlockDiv = $('#dynamicBlock');
           res.components?.forEach((ele, i) => {
             if(res.components?.length && res.components[0]?.data?.text !== '') {
-              let botResHtml = this.assisttabService.historySmallTalkTemplate(res.components[0], res._id);
+              let botResHtml = this.assisttabService.historySmallTalkTemplate(res,res.components[0], res._id);
               dynamicBlockDiv.append(botResHtml);
             }
           });

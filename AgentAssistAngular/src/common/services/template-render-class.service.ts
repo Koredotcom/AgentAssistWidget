@@ -28,6 +28,15 @@ export class TemplateRenderClassService {
     window['AgentChatInitializes'] = this.AgentChatInitialize;
   }
 
+  replaceCurlyWithEmptyString(data, value){
+    const match = value?.match(/\{([^}]+)\}/);
+    if (match) {
+      value = value.replace(/\{[^}]*\}/, '');    
+      data.promptTitle = match[1];
+    }
+    return value;
+  }
+
 
   formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse){
 
@@ -160,6 +169,9 @@ export class TemplateRenderClassService {
       "traceId": "873209019a5adc26",
       parsedPayload: null
     }
+
+    res.promptTitle = res.isPrompt ? 'Ask Customer' : 'Tell Customer';
+
     res?.buttons?.forEach((elem) => {
       let parsedPayload;
       if(elem.value){
@@ -181,7 +193,9 @@ export class TemplateRenderClassService {
         }
       }
 
-
+      if(!parsedPayload){
+        elem.value = this.replaceCurlyWithEmptyString(res, elem.value);
+      }
 
       let body = {};
       body['type'] = elem.type;
@@ -273,6 +287,10 @@ export class TemplateRenderClassService {
       "createdOnTimemillis": res._id,
       parsedPayload: null
     }
+
+    res.promptTitle = res.isPrompt ? 'Ask Customer' : 'Tell Customer';
+
+    
     res.components?.forEach((elem) => {
       let parsedPayload;
       if (elem.data?.text) {
@@ -290,6 +308,10 @@ export class TemplateRenderClassService {
           let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
           parsedPayload = withoutSpecials;
         }
+      }
+
+      if(!parsedPayload){
+        elem.value = this.replaceCurlyWithEmptyString(res, elem.value);
       }
 
 
