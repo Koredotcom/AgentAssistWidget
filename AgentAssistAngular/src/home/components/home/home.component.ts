@@ -1011,12 +1011,14 @@ setProactiveMode(){
     if(target.id.split('-')[0] === 'run'){
       if(target.dataset?.dialogRun){
         let data = JSON.parse(target.dataset?.dialogRun);
+        let traits = JSON.parse(target?.dataset?.traits || "[]");
         let runEventObj: any = {
           agentRunButton: false,
           intentName: data.name,
           childBotId : data?.childBotId || '',
           childBotName : data?.childBotName || '',
-          userInput : data.userInput
+          userInput : data.userInput,
+          traits : traits
         }
         this.handleSubjectService.setRunButtonClickEvent(runEventObj);
       }
@@ -1024,6 +1026,7 @@ setProactiveMode(){
     if(target.id.split('-')[0] === 'agentSelect'){
       if(target.dataset?.dialogRun){
         let data = JSON.parse(target.dataset?.dialogRun);
+        let traits = JSON.parse(target?.dataset?.traits || "[]");
         let runDialogueObject: any = {
           agentRunButton: true,
           name: data.name,
@@ -1033,7 +1036,8 @@ setProactiveMode(){
           childBotId : data?.childBotId || '',
           childBotName : data?.childBotName || '',
           botId : this.connectionDetails?.botId,
-          userInput : data.userInput
+          userInput : data.userInput,
+          traits : traits
         }
         this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
         this.commonService.agent_run_click(runDialogueObject, false);
