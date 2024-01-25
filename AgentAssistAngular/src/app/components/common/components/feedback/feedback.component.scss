@@ -40,14 +40,14 @@
                     border: 1px solid var(--themeBorderColor);
                     background: var(--themeBgWhiteColor);
                     display: flex;
-                    width: 28px;
-                    height: 28px;
+                    width: 20px;
+                    height: 20px;
                     padding: 0;
                     justify-content: center;
                     align-items: center;
                     gap: 6px;
                     color: var(--primaryTextColor);
-                    font-size: 16px;
+                    font-size: 12px;
                     cursor: pointer;
                     transition: 0.2s all ease;
                     // &[aria-expanded="true"]{
@@ -155,7 +155,7 @@
         p{
             width: 100%;
             color: var(--Gray-500, #667085);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 400;
             line-height: 20px;
             margin: 0;
@@ -163,7 +163,7 @@
     }
     .send-btn-feedback{
         flex-shrink: 0;
-        height: 30px;
+        height: 25px;
         border-radius: 8px;
         border: 1px solid var(--Primary-600, #155EEF);
         background: var(--Primary-500, #2970FF);
@@ -173,7 +173,7 @@
         justify-content: center;
         cursor: pointer;
         color: var(--Base-White, #FFF);
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 500;
         line-height: 20px;
         &:disabled{
