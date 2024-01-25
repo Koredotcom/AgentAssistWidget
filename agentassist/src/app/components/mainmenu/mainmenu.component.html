@@ -45,8 +45,8 @@
 		<ng-container *ngIf="!configAccess">
 			<div class="group-links">
 				<div class="group-heading">EXPERIENCES</div>
-				<div class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active"
-					*hasPermission="['admin']">
+				<div *ngIf="workflowService.rolePermissions.isDashboardEnabled" class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active"
+					>
 					<img src="assets/icons/leftmenu/conv-logs.svg"><span class="link-name">{{'NAV.CONVERSATIONAL_LOGS' |
 						translate}}</span>
 				</div>
@@ -60,7 +60,7 @@
 					<span class="link-name">{{'NAV.USECASES' | translate}}</span>
 				</div>
 				<div class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active"
-					*hasPermission="['admin']">
+				*ngIf="workflowService.rolePermissions.isDashboardEnabled">
 					<img src="assets/icons/leftmenu/conv-logs.svg"><span class="link-name">{{'NAV.CONVERSATIONAL_LOGS' |
 						translate}}</span>
 				</div>

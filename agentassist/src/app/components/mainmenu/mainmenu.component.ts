@@ -116,7 +116,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
     });
   }
 
-  checkPermissions(){    
+  checkPermissions(){  
     if(this.currentBt?.permissions?.BOTBUILDER_TASKS?.length > 0 && this.currentBt?.permissions?.BOTBUILDER_TASKS?.indexOf('NO') != -1){
       this.configAccess = false;
       this.router.navigate(['/config/conversationalLogs']);
