@@ -29,26 +29,29 @@ export class AppComponent implements OnDestroy {
   iswidgetEnabled = false;
   isErrorMsg = false;
   sampleSettings = {
-    "isWidgetLandingEnabled": {
-        "chat": {
-            "isEnabled": true,
-            "tab": "assist"
-        },
-        "voice": {
-            "isEnabled": true,
-            "tab": "assist"
-        },
-        "isEnabled": true
-    },
     "isCustomisedLogoEnabled": {
-        "isEnabled": false
+      "isEnabled": false
+    },
+    "botEvents": {
+      "fallback": {
+        "isEnabled": true
+      }
+    },
+    "isWidgetLandingEnabled": {
+      "isEnabled": true,
+      "tab": "assist"
     },
     "agentAssistWidgetEnabled": true,
     "isProactiveEnabled": true,
     "isAgentCoachingEnabled": false,
     "isAgentResponseEnabled": true,
     "isAgentPlaybookEnabled": false,
+    "isAgentResponseCopyEnabled" : true,
     "isSearchAssistEnabled": true,
+    "summarization" : {
+      "isEnabled" : false,
+      "canSubmit" : false
+    },
     "searchAssistConfig": {
       "isXODependant": false,
       "alwaysShow": false,
@@ -60,15 +63,6 @@ export class AppComponent implements OnDestroy {
               "script": ""
           }
       }
-    },
-    "botEvents": {
-      "fallback": {
-          "isEnabled": true
-      }
-    },
-    "summarization" : {
-      "isEnabled" : false,
-      "canSubmit" : false
     }
   };
   constructor(private webSocketService: WebSocketService,
@@ -205,7 +199,9 @@ export class AppComponent implements OnDestroy {
   }
 
   initAgentAssist(chatConfig, params) {
-    console.log(this.service.configObj, "configobj");
+    // let paramsObj = this.service.configObj
+    // let channel = ((paramsObj?.channel && paramsObj?.channel.trim() !== "''") ? paramsObj?.channel : (paramsObj.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
+    // this.service.configObj['channel'] = channel;
      this.service.configObj['conversationId'] = this.service.configObj.conversationid || this.service.configObj.conversationId
     // constructed url in 3rd party agentdesktops
     if (this.service.configObj.token && this.service.configObj.botid && this.service.configObj.agentassisturl && this.service.configObj.conversationId && !this.service.configObj.fromSAT) {
@@ -258,6 +254,9 @@ export class AppComponent implements OnDestroy {
     // api call
     let paramsCopy = {...params};
     let headersVal : any = {};
+    let channel = ((paramsCopy?.channel && paramsCopy?.channel.trim() !== "''") ? paramsCopy?.channel : (paramsCopy.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
+    paramsCopy.channel = channel;
+    this.service.configObj['channel'] = channel;
     if(!this.service.configObj.fromSAT) {
         headersVal = {
             'Authorization': 'bearer' + ' ' + this.service.grantResponseObj?.authorization?.accessToken,
@@ -274,36 +273,47 @@ export class AppComponent implements OnDestroy {
         }
     }
     $.ajax({
-      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${paramsCopy.instanceBotId}/agentassistsetting`,
+      url: `${this.service.configObj.agentassisturl}/agentassist/api/v1/agentassist/${paramsCopy.instanceBotId}/agentassistsetting?e=${paramsCopy.channel}`,
       type: 'get',
       headers: headersVal,
       dataType: 'json',
       success:  (data) => {
-        this.aaSettings = data.agentAssistSettings;
-        this.service.configObj = {...this.service.configObj, ...this.aaSettings};
-        this.iswidgetEnabled = this.aaSettings['agentAssistWidgetEnabled'];
-        if(data.agentAssistSettings?.agentAssistWidgetEnabled) { 
-        this.initiateSocketConnection(paramsCopy);
-        this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
-        } else {
-          this.iswidgetEnabled = data?.agentAssistSettings?.agentAssistWidgetEnabled;
-          this.errorMsg = "AgentAssist Settings configuration are Disabled! Please reach out to AgentAssist Admin.";
-        };
-        this.isErrorMsg = true;
+        if (data?.agentAssistSettings && data.agentAssistSettings[paramsCopy.channel]) {
+          data.agentAssistSettings = Object.assign(data.agentAssistSettings, data.agentAssistSettings[paramsCopy.channel]);
+          console.log(data, "data inside widget settings***********");
+          
+          this.aaSettings = data.agentAssistSettings;
+          this.service.configObj = { ...this.service.configObj, ...this.aaSettings };
+          this.iswidgetEnabled = this.aaSettings['agentAssistWidgetEnabled'];
+          if (data.agentAssistSettings?.agentAssistWidgetEnabled) {
+            this.initiateSocketConnection(paramsCopy);
+            this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
+          } else {
+            this.iswidgetEnabled = data?.agentAssistSettings?.agentAssistWidgetEnabled;
+            this.errorMsg = "AgentAssist Settings configuration are Disabled! Please reach out to AgentAssist Admin.";
+          };
+          this.isErrorMsg = true;
+        } else{
+          this.handleEmptyWidgetSettings(paramsCopy);
+        }
     },
       error: (err)=> {
-        if(Object.keys(connectionObj)){
-          const proAct = connectionObj['isProactiveAgentAssistEnabled'];
-          this.aaSettings.isProactiveEnabled = (proAct === undefined || proAct === 'undefined') ? true : proAct;
-        };
-        this.aaSettings = this.sampleSettings;
-        this.service.configObj = {...this.service.configObj, ...this.aaSettings};
-        this.iswidgetEnabled = true;
-        this.initiateSocketConnection(paramsCopy);
-        this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
-        this.isErrorMsg = true;
+        // if(Object.keys(connectionObj)){
+        //   const proAct = connectionObj['isProactiveAgentAssistEnabled'];
+        //   this.aaSettings.isProactiveEnabled = (proAct === undefined || proAct === 'undefined') ? true : proAct;
+        // };
+        this.handleEmptyWidgetSettings(paramsCopy);
       }
     });
+  }
+
+  handleEmptyWidgetSettings(paramsCopy){
+    this.aaSettings = this.sampleSettings;
+    this.service.configObj = {...this.service.configObj, ...this.aaSettings};
+    this.iswidgetEnabled = true;
+    this.initiateSocketConnection(paramsCopy);
+    this.handleSubjectService.setAgentAssistSettings(this.aaSettings);
+    this.isErrorMsg = true;
   }
 
 }

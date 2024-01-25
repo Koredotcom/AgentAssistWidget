@@ -296,7 +296,7 @@ export class AssistComponent implements OnInit {
       'sendMenuRequest': true,
       'uId': this.userBotSessionDetails?.userId || '',
       'sId': this.userBotSessionDetails?.sessionId || '',
-      'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT,
+      'experience' : this.commonService.configObj.channel,
     }
     if(customData && Object.keys(customData).length > 0 && this.commonService.configObj?.source !== this.projConstants.SMARTASSIST_SOURCE) {
       welcomeMessageParams['customData'] = customData
@@ -471,7 +471,7 @@ export class AssistComponent implements OnInit {
       "botId": botId,
       "conversationId": conversationId,
       "query": "",
-      'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
+      'experience': this.commonService.configObj.channel,
       "enable_override_userinput": false
     }
     if (this.commonService.OverRideMode && this.proactiveModeStatus) {
@@ -1029,7 +1029,7 @@ export class AssistComponent implements OnInit {
           this.updateNewMessageUUIDList(uuids);
         }, this.waitingTimeForUUID);
       }
-    }else{
+    }else if(data?.buttons?.length > 0){
       let dynamicBlockDiv = $('#dynamicBlock');
       let actionLinkTemplate = ``;
       let welcomeMsgHtml = this.assisttabService.prepareWelcomeMsgTemplate(uuids, this.interactiveLangaugeDetails);
@@ -1038,7 +1038,6 @@ export class AssistComponent implements OnInit {
       $(`#smallTalk-${uuids} .run-info-content`).append(actionLinkTemplate);
        this.welcomeMsgResponse = data;
        this.commonService.hideSendOrCopyButtons(false, `.welcome-msg`, 'smallTalk')
-
     }
 
     let renderedMessage = !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';
@@ -1455,7 +1454,7 @@ export class AssistComponent implements OnInit {
       "conversationId": this.connectionDetails.conversationId,
       "query": "",
       "enable_override_userinput": true,
-      'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
+      'experience': this.commonService.configObj.channel,
       "positionId": dialogId
     }
     if (!noEmit) {
@@ -1508,7 +1507,7 @@ export class AssistComponent implements OnInit {
       "conversationId": this.connectionDetails.conversationId,
       "query": "",
       "enable_override_userinput": false,
-      'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
+      'experience': this.commonService.configObj.channel,
       "positionId": dialogId
     }
     this.websocketService.emitEvents(EVENTS.enable_override_userinput, overRideObj);

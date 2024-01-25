@@ -52,6 +52,7 @@ export class WebSocketService {
     this.handleSubjectService.connectDetailsSubject.subscribe((urlParams : any) =>{
       if(urlParams && urlParams?.token){
         this.connectionDetails = urlParams;
+        // this.connectionDetails['channel'] = ((urlParams?.channel && urlParams?.channel.trim() !== "''") ? urlParams?.channel : (urlParams.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
         // this.socketConnection();
       }
     })
@@ -76,7 +77,7 @@ export class WebSocketService {
     if(requestParams){
       requestParams.isExtAD = this.connectionDetails.fromSAT ? false : true;
       requestParams.source = this.connectionDetails.source;
-      requestParams.experience = (this.connectionDetails.isCall && this.connectionDetails.isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
+      requestParams.experience = this.connectionDetails.channel;
     }
     if(this.loaderEvents[eventName]) {
       this.loaderOnTimer()
@@ -89,7 +90,7 @@ export class WebSocketService {
     let menu_request_params : any = {
       botId : this.connectionDetails.botId,
       conversationId : this.connectionDetails.conversationId,
-      experience : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
+      experience : this.connectionDetails.channel
     }
     if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
       menu_request_params['autoBotId'] = this.connectionDetails.autoBotId;

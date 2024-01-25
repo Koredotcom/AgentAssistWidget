@@ -80,7 +80,7 @@ export class CommonService {
             'query': data,
             'botId': connectionDetails?.botid,
             'agentId': '',
-            'experience': this.isCallConversation === true ? 'voice' : 'chat',
+            'experience':this.configObj.channel,
             // 'positionId': data.positionId
             'childBotId': this.childBotDetails?.childBotId || '',
             'childBotName': this.childBotDetails?.childBotName || '',
@@ -96,7 +96,7 @@ export class CommonService {
             'conversationId': connectionDetails?.conversationId,
             'query': data,
             'botId': connectionDetails?.botid,
-            'experience': this.isCallConversation === true ? 'voice' : 'chat',
+            'experience': this.configObj.channel,
             'positionId': data?.positionId,
             'childBotId': data?.childBotId || '',
             'childBotName': data?.childBotName || ''
@@ -173,7 +173,7 @@ export class CommonService {
       'query': data.value,
       'botId': data.botId,
       'agentId': '',
-      'experience': this.isCallConversation === true ? 'voice' : 'chat',
+      'experience': this.configObj.channel,
       'positionId': data.positionId
     }
     if (data.intentName) {
@@ -207,7 +207,7 @@ export class CommonService {
       'conversationId': data.conversationId,
       'query': data.value,
       'botId': data.botId,
-      'experience': this.isCallConversation === true ? 'voice' : 'chat',
+      'experience': this.configObj.channel,
       'positionId': data?.positionId,
       'childBotId': data?.childBotId || '',
       'childBotName': data?.childBotName || ''
@@ -1095,7 +1095,7 @@ export class CommonService {
           "query": JSON.parse(localStorage.getItem('innerTextValue')),
           "botId": connectionObj.botId,
           "agentId": "",
-          "experience": this.isCallConversation === true ? 'voice' : 'chat',
+          "experience": this.configObj.channel,
           "positionId": this.currentPositionId,
           "entities": [],
           "check": true,
@@ -1113,7 +1113,7 @@ export class CommonService {
           "conversationId": connectionObj.conversationId,
           "query": JSON.parse(localStorage.getItem('innerTextValue')),
           "botId": connectionObj.botId,
-          "experience": this.isCallConversation === true ? 'voice' : 'chat',
+          "experience": this.configObj.channel,
           "positionId": this.currentPositionIdOfMyBot,
           "autoBotId": connectionObj.autoBotId
       }
