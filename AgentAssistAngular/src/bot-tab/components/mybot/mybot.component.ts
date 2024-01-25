@@ -204,8 +204,8 @@ export class MybotComponent implements OnInit {
         this.myBotDataResponse = Object.assign({}, data);
       }
 
-      let askToUserHtml = this.mybotDataService.askUserTemplate(myBotuuids, sendMsgData, this.myBotDialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType);
-      let tellToUserHtml = this.mybotDataService.tellToUserTemplate(myBotuuids, sendMsgData, this.myBotDialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType);
+      let askToUserHtml = this.mybotDataService.askUserTemplate(data,myBotuuids, sendMsgData, this.myBotDialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType);
+      let tellToUserHtml = this.mybotDataService.tellToUserTemplate(data,myBotuuids, sendMsgData, this.myBotDialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType);
 
       let agentInputEntityName = ProjConstants.ENTER_DETAILS;
       if (data.entityDisplayName || data.entityName) {
@@ -250,7 +250,7 @@ export class MybotComponent implements OnInit {
                       <i class="ast-agent"></i>
                   </div>
                 <div class="run-info-content" >
-                  <div class="title">Tell Customer</div>
+                  <div class="title">${data.promptTitle}</div>
                   <div class="agent-utt">
                       <div class="title-data" id="displayData-${myBotuuids}">${data.buttons[0].value}</div>
                       <div class="action-links">
@@ -629,8 +629,8 @@ export class MybotComponent implements OnInit {
 
           if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
             let runInfoContent = $(`#dropDownData-${previousId}`);
-            let askToUserHtml = this.mybotDataService.askUserTemplate(res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
-            let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+            let askToUserHtml = this.mybotDataService.askUserTemplate(res,res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+            let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res,res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
 
 
             if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT)) {

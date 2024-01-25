@@ -146,7 +146,7 @@ export class AssistService {
     return template;
   }
 
-  askUserTemplate(uuids, newTemp?, positionID?,srcChannel=null, value='', componentType=null) {
+  askUserTemplate(data, uuids, newTemp?, positionID?,srcChannel=null, value='', componentType=null) {
     let template= '';
     if(componentType && componentType == 'dialogAct' && srcChannel != 'msteams' && srcChannel != 'rtm'){
       template = `
@@ -155,7 +155,7 @@ export class AssistService {
           <i class="ast-agent"></i>
       </div>
       <div class="run-info-content" >
-      <div class="title">Ask customer</div>
+      <div class="title">${data.promptTitle}</div>
       <div class="agent-utt">
       <div class="title-data" id="displayData-${uuids}">${value}</div>
           <div class="action-links">
@@ -176,7 +176,7 @@ export class AssistService {
           <i class="ast-agent"></i>
       </div>
       <div class="run-info-content" >
-      <div class="title">Ask customer</div>
+      <div class="title">${data.promptTitle}</div>
       <div class="agent-utt">
           <div class="title-data"><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
           <div class="action-links">
@@ -193,7 +193,7 @@ export class AssistService {
     return template
   }
 
-  tellToUserTemplate(uuids, newTemp?, positionID?, srcChannel=null, value='', componentType=null) {
+  tellToUserTemplate(data, uuids, newTemp?, positionID?, srcChannel=null, value='', componentType=null) {
     let template= '';
     if(componentType && componentType == 'dialogAct' && (srcChannel != 'msteams' && srcChannel != 'rtm') ){
       template = `
@@ -202,7 +202,7 @@ export class AssistService {
             <i class="ast-agent"></i>
         </div>
         <div class="run-info-content" >
-          <div class="title">Tell Customer</div>
+          <div class="title">${data.promptTitle}</div>
           <div class="agent-utt">
             <div class="title-data" id="displayData-${uuids}">${value}</div>
             <div class="action-links">
@@ -226,7 +226,7 @@ export class AssistService {
             <i class="ast-agent"></i>
         </div>
         <div class="run-info-content" >
-          <div class="title">Tell Customer</div>
+          <div class="title">${data.promptTitle}</div>
           <div class="agent-utt">
             <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
             <div class="action-links">
@@ -247,7 +247,7 @@ export class AssistService {
   }
 
   smallTalkTemplateForTemplatePayload(ele, uuids,data, res, newTemp?){
-    let tellOrAskCustomer = data.isPrompt ? 'Ask Customer' : 'Tell Customer';
+    // let tellOrAskCustomer = data.isPrompt ? 'Ask Customer' : 'Tell Customer';
     let template = `
     <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
         <div class="steps-run-data">
@@ -255,7 +255,7 @@ export class AssistService {
             <i class="ast-agent"></i>
         </div>
         <div class="run-info-content" >
-        <div class="title">${tellOrAskCustomer}</div>
+        <div class="title">${data.promptTitle}</div>
         <div class="agent-utt">
         </div>
         </div>
@@ -272,7 +272,7 @@ export class AssistService {
   return template;
   }
 
-  historySmallTalkTemplate(ele, _id){
+  historySmallTalkTemplate(data, ele, _id){
     let template = `
       <div class="collapse-acc-data before-none" id='smallTalk-${_id}'>
     <div class="steps-run-data">
@@ -280,7 +280,7 @@ export class AssistService {
         <i class="ast-agent"></i>
     </div>
     <div class="run-info-content" >
-    <div class="title">Tell Customer</div>
+    <div class="title">${data.promptTitle}</div>
     <div class="agent-utt">
         <div class="title-data" id="displayData-${_id}">${ele.data.text}</div>
         <div class="action-links">
