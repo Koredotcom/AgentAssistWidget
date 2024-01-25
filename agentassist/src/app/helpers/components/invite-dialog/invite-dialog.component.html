@@ -41,7 +41,7 @@
                     <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                         <perfect-scrollbar class="bots-scroll">
                             <ng-container *ngFor="let roleObj of rolesList"> 
-                                <li ngbDropdownItem class="p-0" *ngIf="roleObj.role !== 'Bot Owner'" (click)="roleType = roleObj.role; selectedRoleObj = roleObj">
+                                <li ngbDropdownItem class="p-0" *ngIf="roleObj.role !== ProjConstants.BotOwner" (click)="roleType = roleObj.role; selectedRoleObj = roleObj">
                                     <a>{{roleObj.role}}</a>
                                 </li>
                             </ng-container>
