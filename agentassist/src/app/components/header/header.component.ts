@@ -70,6 +70,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   showLaunchConsole: boolean;
   showGuide: boolean = false;
+  isInviteDialog: boolean = false;
 
   constructor(
     public authService: AuthService,
@@ -204,6 +205,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.service.invoke('get.bt.roles', paramsEmail).subscribe(
       res => {
         this.botRoles = res;
+        if(this.isInviteDialog) {
+          this.openInviteDeveloperDialog();
+        }
       },
       err => {
         this.workflowService.showError(err, this.translate.instant("HEADER.FAILED_FETCH_BOT"));
@@ -266,7 +270,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   inviteDialog() {
     this.inviteDevelopers();
     this.workflowService.headerInitCalls$.next();
-    const dialogRef = this.dialog.open(InviteDialogComponent);
+    this.isInviteDialog = true;
+  }
+
+  openInviteDeveloperDialog() {
+    const dialogRef = this.dialog.open(InviteDialogComponent, {
+      width: '660px',
+      minHeight: '312px',
+      panelClass: "invite-dev-switch-dialog",
+      data: this.botRoles
+    });
     const params = {
       userId: this.authService.getUserId(),
       streamId : this.workflowService.getCurrentBt(true)._id,
@@ -275,6 +288,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     }
     dialogRef.afterClosed().subscribe(res => {
+      this.isInviteDialog = false;
       let usersList = [];
       _.each(this.sharedToList?.users, function (val) {
         usersList.push({
@@ -282,19 +296,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
           roleId: val.roleInfo[0]._id
         });
       });
-      if (_.isArray(res)) {
-        res = res.map(val => {
+      if (_.isArray(res?.emailList)) {
+        res.emailList = (res?.emailList).map(val => {
           return {
             emailId: val.email,
-            roleId: _.findWhere(this.botRoles, { role: 'Bot Developer' })._id
+            roleId: _.findWhere(this.botRoles, { role: res?.selectedRole.role })._id
           }
         });
-        usersList = usersList.concat(res);
-        res = _.map(res, function (r) {
+        usersList = usersList.concat(res.emailList);
+        res.emailList = _.map(res?.emailList, function (r) {
           return _.pick(r, 'emailId');
         });
         const payloadEmails = {
-          emailIds: res
+          emailIds: res.emailList
         };
         const payload = {
           codevelopers: {
