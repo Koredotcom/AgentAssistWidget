@@ -323,6 +323,7 @@ export class AssistComponent implements OnInit {
     this.assistTabDialogforDashboard(dialog, intent);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = dialog.intentName;
+    connectionDetails.traits = dialog.traits || null;
     if (dialog.intentName && intent) {
       connectionDetails.intentName = dialog.intentName;
     }
@@ -644,7 +645,7 @@ export class AssistComponent implements OnInit {
           ele.name = ele.name || ele.usecaseName;
           ele.userInput = data.userInput;
           let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
-          let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, index, ele);
+          let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, index, ele, data);
           dialogSuggestions.innerHTML += dialogsHtml;
           if(ele?.childBotName){
             let dialogHeader = document.getElementById(`automation-${uuids + index}`);
