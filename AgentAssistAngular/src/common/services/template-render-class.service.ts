@@ -29,9 +29,9 @@ export class TemplateRenderClassService {
   }
 
   replaceCurlyWithEmptyString(data, value){
-    const match = value?.match(/\{([^}]+)\}/);
+    const match = value?.match(/\{_([^}]+)\_}/);
     if (match) {
-      value = value.replace(/\{[^}]*\}/, '');    
+      value = value.replace(/\{_[^}]*\_}/, '');    
       data.promptTitle = match[1];
     }
     return value;
