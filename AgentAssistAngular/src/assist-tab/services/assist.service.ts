@@ -11,6 +11,7 @@ export class AssistService {
   projConstants: any = ProjConstants;
   imageFilePath: string = ImageFilePath;
   imageFileNames: any = ImageFileNames;
+  traits = {};
   constructor(public sanitizeHtmlPipe: SanitizeHtmlPipe,
     public commonService : CommonService) { }
 
@@ -382,14 +383,22 @@ export class AssistService {
         </div>
         <div class="action-links">
             <button class="send-run-btn" id="run-${uuids + index}" data-child-bot-id="${ele?.childBotId}" data-child-bot-name="${ele?.childBotName}"
+<<<<<<< Updated upstream
             data-dialog-run='${JSON.stringify(ele)}' data-triats="${JSON.stringify(data?.traits || [])}">RUN</button>
+=======
+            data-dialog-run='${JSON.stringify(ele)}' data-traits='${uuids}'>RUN</button>
+>>>>>>> Stashed changes
             <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids + index}">
                 <div class="elipse-icon" id="elipseIcon-${uuids + index}">
                     <i class="ast-overflow" id="overflowIcon-${uuids + index}"></i>
                 </div>
                 <div class="dropdown-content-elipse" id="runAgtBtn-${uuids + index}" data-dialog-run='${JSON.stringify(ele)}'>
                     <div class="list-option" id="agentSelect-${uuids + index}" data-child-bot-id="${ele?.childBotId}" data-child-bot-name="${ele?.childBotName}"
+<<<<<<< Updated upstream
                     data-dialog-run='${JSON.stringify(ele)}' data-triats="${JSON.stringify(data?.traits || [])}">Run with Agent Inputs</div>
+=======
+                    data-dialog-run='${JSON.stringify(ele)}' data-traits='${uuids}'>Run with Agent Inputs</div>
+>>>>>>> Stashed changes
                 </div>
         </div>
     </div>`;

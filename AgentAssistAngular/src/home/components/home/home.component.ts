@@ -16,6 +16,7 @@ import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { EChartsOption } from 'echarts';
 import { ChecklistsComponent } from 'src/assist-tab/components/checklists/checklists.component';
 import { TitleCasePipe } from '@angular/common';
+import { AssistService } from 'src/assist-tab/services/assist.service';
   // import { ServiceInvokerService } from 'src/common/services/service-invoker.service';
 declare const $: any;
 @Component({
@@ -83,7 +84,8 @@ export class HomeComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private cdRef : ChangeDetectorRef,
     private randomUUIDPipe : RandomUUIDPipe,
-    private titlecasePipe:TitleCasePipe
+    private titlecasePipe:TitleCasePipe,
+    private aService: AssistService
   ) {}
     
 
@@ -1011,14 +1013,15 @@ setProactiveMode(){
     if(target.id.split('-')[0] === 'run'){
       if(target.dataset?.dialogRun){
         let data = JSON.parse(target.dataset?.dialogRun);
-        let traits = JSON.parse(target?.dataset?.traits || "[]");
+        // let traits = JSON.parse(target?.dataset?.traits || "[]");
+        let tId = target?.dataset?.traits;
         let runEventObj: any = {
           agentRunButton: false,
           intentName: data.name,
           childBotId : data?.childBotId || '',
           childBotName : data?.childBotName || '',
           userInput : data.userInput,
-          traits : traits
+          traits : this.aService?.traits[tId]
         }
         this.handleSubjectService.setRunButtonClickEvent(runEventObj);
       }

@@ -628,7 +628,7 @@ export class AssistComponent implements OnInit {
 
 
         if (data.suggestions.dialogs?.length > 0) {
-
+          this.assisttabService.traits[uuids] = data.traits;
           let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
           let dialogAreaHtml = this.assisttabService.getDialogAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames);
           automationSuggestions.innerHTML += dialogAreaHtml;
