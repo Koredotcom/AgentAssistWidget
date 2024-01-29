@@ -948,12 +948,14 @@ export class CommonService {
     if(this.isCallConversation === true){
       $(lastchild).find('.copy-btn').addClass('hide')
       $(lastchild).find('.send-run-btn').addClass('hide')
-    }    
-
-    if(!this.configObj.isAgentResponseEnabled && !this.isCallConversation){
-      $(lastchild).find('.copy-btn').addClass('hide')
-      $(lastchild).find('.send-run-btn').addClass('hide')
-    }
+    } else{
+      if(!this.configObj.isAgentResponseEnabled){
+        $(lastchild).find('.send-run-btn').addClass('hide')
+      }
+      if(!this.configObj.isAgentResponseCopyEnabled){
+        $(lastchild).find('.copy-btn').addClass('hide')
+      }
+    } 
   }
 
   //See more buttons update
