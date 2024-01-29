@@ -42,68 +42,84 @@
 	</ng-container>
 
 	<div class="list-group list-group-flush" *ngIf="type === 'config'">
-		<div class="group-links">
-			<div class="group-heading">EXPERIENCES</div>
-			<div class="link-router" [routerLink]="['usecases']" routerLinkActive="active" *hasPermission="['admin']">
-				<i class="icon-sa-union"></i>
-				<span class="link-name">{{'NAV.USECASES' | translate}}</span>
-			</div>
-			<div class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active"
-				*hasPermission="['admin']">
-				<img src="assets/icons/leftmenu/conv-logs.svg"><span class="link-name">{{'NAV.CONVERSATIONAL_LOGS' |
-					translate}}</span>
-			</div>
-			<div class="link-router" [routerLink]="['welcomeEvents']" routerLinkActive="active"
-				*hasPermission="['admin']">
-				<i class="icon-sa-survey"></i>
-				<span class="link-name">{{'NAV.WELCOMEEVENT' | translate}}</span>
-			</div>
-		</div>
-		<ng-container *ngIf="isCoachingDisable">
+		<ng-container *ngIf="!configAccess">
 			<div class="group-links">
-				<div class="group-heading">{{ 'NAV.COACH_TITLE' | translate }}</div>
-				<div class="link-router" [routerLink]="['coaching']" routerLinkActive="active"
-					*hasPermission="['admin']">
-					<i class="icon-coaching-menu-icon"></i>
-					<span class="link-name">{{'NAV.COACHING' | translate}}</span>
-					<span class="beta-tag">Beta</span>
-				</div>
-				<div class="link-router" [routerLink]="['guided-checklist']" routerLinkActive="active"
-					*hasPermission="['admin']">
-					<i class="icon-sa-play-book"></i>
-					<span class="link-name">{{'NAV.CHECKLIST.TITLE' | translate}}</span>
-					<span class="beta-tag">Beta</span>
+				<div class="group-heading">EXPERIENCES</div>
+				<div *ngIf="workflowService.rolePermissions.isDashboardEnabled" class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active"
+					>
+					<img src="assets/icons/leftmenu/conv-logs.svg"><span class="link-name">{{'NAV.CONVERSATIONAL_LOGS' |
+						translate}}</span>
 				</div>
 			</div>
 		</ng-container>
-
-		<div class="group-links">
-			<div class="group-heading">System SETUP</div>
-			<div class="link-router" [routerLink]="['channels']" routerLinkActive="active" *hasPermission="['admin']">
-				<i class="icon-sa-connections"></i><span class="link-name">{{'NAV.CHANNELS' |
-					translate}}</span>
-			</div>
-			<div class="link-router" [routerLink]="['languages']" routerLinkActive="active" *hasPermission="['admin']"
-				(click)="getAdvSettings()">
-				<img src="assets/icons/leftmenu/languages-speech.svg"><span class="link-name">Speech Recognition</span>
-			</div>
-			<div class="link-router" [routerLink]="['searchAssist']" routerLinkActive="active"
-				*hasPermission="['admin']" (click)="getAdvSettings()">
-				<i class="icon-sa-search"></i><span class="link-name">SearchAssist</span>
+		<ng-container *ngIf="configAccess">
+			<div class="group-links">
+				<div class="group-heading">EXPERIENCES</div>
+				<div class="link-router" [routerLink]="['usecases']" routerLinkActive="active" *hasPermission="['admin']">
+					<i class="icon-sa-union"></i>
+					<span class="link-name">{{'NAV.USECASES' | translate}}</span>
+				</div>
+				<div class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active"
+				*ngIf="workflowService.rolePermissions.isDashboardEnabled">
+					<img src="assets/icons/leftmenu/conv-logs.svg"><span class="link-name">{{'NAV.CONVERSATIONAL_LOGS' |
+						translate}}</span>
+				</div>
+				<div class="link-router" [routerLink]="['welcomeEvents']" routerLinkActive="active"
+					*hasPermission="['admin']">
+					<i class="icon-sa-survey"></i>
+					<span class="link-name">{{'NAV.WELCOMEEVENT' | translate}}</span>
+				</div>
 			</div>
 			<ng-container *ngIf="isCoachingDisable">
-				<div class="link-router" [routerLink]="['advanced-nlu']" routerLinkActive="active"
-					*hasPermission="['admin']">
-					<i class="icon-sa-settings"></i><span class="link-name">Advanced NLU</span>
+				<div class="group-links">
+					<div class="group-heading">{{ 'NAV.COACH_TITLE' | translate }}</div>
+					<div class="link-router" [routerLink]="['coaching']" routerLinkActive="active"
+						*hasPermission="['admin']">
+						<i class="icon-coaching-menu-icon"></i>
+						<span class="link-name">{{'NAV.COACHING' | translate}}</span>
+						<span class="beta-tag">Beta</span>
+					</div>
+					<div class="link-router" [routerLink]="['guided-checklist']" routerLinkActive="active"
+						*hasPermission="['admin']">
+						<i class="icon-sa-play-book"></i>
+						<span class="link-name">{{'NAV.CHECKLIST.TITLE' | translate}}</span>
+						<span class="beta-tag">Beta</span>
+					</div>
 				</div>
 			</ng-container>
-			<ng-container>
+	
+			<div class="group-links">
+				<div class="group-heading">System SETUP</div>
+				<div class="link-router" [routerLink]="['channels']" routerLinkActive="active" *hasPermission="['admin']">
+					<i class="icon-sa-connections"></i>
+					<span class="link-name">{{'NAV.CHANNELS' |translate}}</span>
+				</div>
 				<div class="link-router" [routerLink]="['widget-settings']" routerLinkActive="active"
 					*hasPermission="['admin']">
 					<img class="refreshIcon" src="assets/icons/AgentAssistWidgetSettingsIcon.svg"><span class="link-name">Widget Settings</span>
 				</div>
-			</ng-container>
-		</div>
+				<div class="link-router" [routerLink]="['languages']" routerLinkActive="active" *hasPermission="['admin']"
+					(click)="getAdvSettings()">
+					<img src="assets/icons/leftmenu/languages-speech.svg"><span class="link-name">Speech Recognition</span>
+				</div>
+				<div class="link-router" [routerLink]="['searchAssist']" routerLinkActive="active"
+					*hasPermission="['admin']" (click)="getAdvSettings()">
+					<i class="icon-sa-search"></i><span class="link-name">SearchAssist</span>
+				</div>
+				<ng-container *ngIf="isCoachingDisable">
+					<div class="link-router" [routerLink]="['advanced-nlu']" routerLinkActive="active"
+						*hasPermission="['admin']">
+						<i class="icon-sa-settings"></i><span class="link-name">Advanced NLU</span>
+					</div>
+				</ng-container>
+				<ng-container *ngIf="isCoachingDisable">
+					<div class="link-router" [routerLink]="['widget-settings']" routerLinkActive="active"
+						*hasPermission="['admin']">
+						<img class="refreshIcon" src="assets/icons/AgentAssistWidgetSettingsIcon.svg"><span class="link-name">Widget Settings</span>
+					</div>
+				</ng-container>
+			</div>
+		</ng-container>
 	</div>
 	<bt-mainmenu *ngIf="type === 'bt'">
 	</bt-mainmenu>
