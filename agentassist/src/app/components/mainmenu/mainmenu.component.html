@@ -91,8 +91,12 @@
 			<div class="group-links">
 				<div class="group-heading">System SETUP</div>
 				<div class="link-router" [routerLink]="['channels']" routerLinkActive="active" *hasPermission="['admin']">
-					<i class="icon-sa-connections"></i><span class="link-name">{{'NAV.CHANNELS' |
-						translate}}</span>
+					<i class="icon-sa-connections"></i>
+					<span class="link-name">{{'NAV.CHANNELS' |translate}}</span>
+				</div>
+				<div class="link-router" [routerLink]="['widget-settings']" routerLinkActive="active"
+					*hasPermission="['admin']">
+					<img class="refreshIcon" src="assets/icons/AgentAssistWidgetSettingsIcon.svg"><span class="link-name">Widget Settings</span>
 				</div>
 				<div class="link-router" [routerLink]="['languages']" routerLinkActive="active" *hasPermission="['admin']"
 					(click)="getAdvSettings()">

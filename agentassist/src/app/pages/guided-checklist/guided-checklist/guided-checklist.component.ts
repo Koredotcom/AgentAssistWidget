@@ -31,7 +31,7 @@ export class GuidedChecklistComponent implements OnInit {
   subs = new SubSink();
   publishInprogress = false;
   selAcc = this.local.getSelectedAccount();
-  isAgentPlayBookEnabled: boolean = false;
+  isAgentPlayBookEnabled: boolean = true;
   constructor(
     private modalService : NgbModal,
     private auth: AuthService,
@@ -46,7 +46,7 @@ export class GuidedChecklistComponent implements OnInit {
   ) { }
   @ViewChild('checklistCreation') checklistCreation: ElementRef;
   ngOnInit(): void {
-    this.getAgentAssistSettings();
+    // this.getAgentAssistSettings();
     window.addEventListener("message", (event:any) => {
       if(event.data.action === 'reloadChecklist') {
         this.getConfigDetails();
