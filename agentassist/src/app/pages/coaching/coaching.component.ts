@@ -52,7 +52,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   sortOrder : 'desc' | 'asc' = 'asc';
   showNoneIntent = false;
   configFeatures : any;
-  isAgentCoachingEnabled: boolean = false;
+  isAgentCoachingEnabled: boolean = true;
   loading: boolean = false;
   @ViewChild('noneIntent', { static: true }) noneIntent: SliderComponentComponent;
   constructor(
@@ -72,7 +72,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getAgentAssistSettings();
+    // this.getAgentAssistSettings();
     window.addEventListener("message", (event:any) => {
       if(event.data.action === 'reloadCoaching') {
         this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
