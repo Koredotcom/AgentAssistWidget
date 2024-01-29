@@ -40,6 +40,7 @@ export class OverlaysearchComponent implements OnInit {
   connectionDetails : any = {};
   answerPlaceableIDs : any = [];
   searchedResultData: any = {};
+  showActionLinks : boolean = this.commonService?.configObj?.isAgentResponseEnabled || false;
 
   constructor(public handleSubjectService: HandleSubjectService, public commonService: CommonService,
     public randomUUIDPipe: RandomUUIDPipe, public websocketService: WebSocketService, public cdRef : ChangeDetectorRef,
