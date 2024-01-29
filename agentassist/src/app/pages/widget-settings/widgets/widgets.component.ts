@@ -53,6 +53,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   agentAssistFormGroup: FormGroup;
   knowledgeAIFormGroup: FormGroup;
   agentAssistformDirty : boolean = false;
+  isV3= false;
   searchResultArr = [
       {type: 'alwaysShow', text: 'Always show', tooltip:'Display Knowledge AI results consistently, regardless of Bot Intents.'}, 
       {type: 'isXODependant', text: 'Show with XO results',tooltip:'Display Knowledge AI results when relevant Bot events (Dialog Tasks and FAQs) are detected.'}, 
@@ -66,6 +67,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   advancedModeScript: string = '';
   selectedChannel = 'chat';
   selectedKAIChannel = 'chat';
+  isCoachingDisable = true;
   constructor(
     public workflowService: workflowService,
     private service: ServiceInvokerService,
@@ -131,6 +133,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+      this.isCoachingDisable = isEnabled;
+    });
     this.createOrUpdateAgSettingsForm();
     this.createOrUpdateSearchForm();
     this.isUnifiedPlatform = this.workflowService?.isUnifiedPlatform();
@@ -295,6 +300,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           }
         },
         (err) => {
+          this.createOrUpdateAgSettingsForm(this.clonedWidgetSettings.agentAssistSettings);
           this.disableButtons = false;
           this.notificationService.showError(
             err,
@@ -318,6 +324,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         },
         (err) => {
           this.disableButtons = false;
+          this.createOrUpdateSearchForm(this.clonedWidgetSettings.agentAssistSettings)
           this.notificationService.showError(
             err,
             this.translate.instant("SAVE_FALLBACK_ERROR_MSG")
@@ -384,11 +391,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     
 /*     (((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup)
     .patchValue(obj); */
-  }
-
-  // cancel agentassist Settings
-  cancleAgentAssistSettingsNew() {
-
   }
 
 
@@ -463,6 +465,14 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   chooseKAIChannel(channel){
     this.selectedKAIChannel = channel;
     this.knowledgeAIFormGroup.updateValueAndValidity();
+  }
+
+  cancleAgentAssistSettingsNew(type?){
+    if(type === 'widget'){
+      this.createOrUpdateAgSettingsForm(this.clonedWidgetSettings.agentAssistSettings);
+    }else{
+      this.createOrUpdateSearchForm(this.clonedWidgetSettings.agentAssistSettings);
+    }
   }
 
 }
