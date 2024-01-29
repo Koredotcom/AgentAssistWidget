@@ -3,8 +3,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import {MatChipInputEvent} from '@angular/material/chips';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
-
 import * as _ from 'underscore';
+import { ProjConstants } from '../../constants/proj.cnts';
 
 @Component({
   selector: 'app-invite-dialog',
@@ -18,6 +18,8 @@ export class InviteDialogComponent implements OnInit {
   roleType = '';
   rolesList:any = [];
   selectedRoleObj: any = {};
+
+  ProjConstants = ProjConstants;
 
   constructor(public dialogRef: MatDialogRef<InviteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
