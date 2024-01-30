@@ -558,7 +558,8 @@ export class AssistComponent implements OnInit {
       this.commonService.userIntentInput = data.userInput;
       let htmls = this.assisttabService.agentUttInfoTemplate(data, responseId, this.imageFilePath, this.imageFileNames)
 
-      dynamicBlock.innerHTML = dynamicBlock.innerHTML + htmls;
+      // dynamicBlock.innerHTML = dynamicBlock.innerHTML + htmls;
+      $(dynamicBlock).append(htmls);
 
       if (data.type === 'intent' || data.type === 'text') {
         let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
@@ -1127,8 +1128,7 @@ export class AssistComponent implements OnInit {
 
   // handling seemoe button
   handleSeeMoreButton(responseId, array, type) {
-
-    if (array && responseId && type) {
+    if (array?.length && responseId && type) {
       let index = 0;
       for (let item of array) {
         let id = responseId + index;
@@ -1599,46 +1599,50 @@ export class AssistComponent implements OnInit {
       descElement = document.getElementById("snippetdesc-" + id);
     }
 
-    seeMoreElement.addEventListener('click', (event: any) => {
-      event.target.classList.add('hide');
-      seeLessElement.classList.remove('hide');
-      if(titleElement){
-        titleElement.classList.add('no-text-truncate');
-      }
-      if (data.type == this.projConstants.FAQ && seeMoreWrapper && data.answer && data.answer.length > 1) {
-          descElement.classList.add('hide');
-          seeMoreWrapper.classList.remove('hide');
-          seeLessElement.classList.add('show-less-btn');
-          seeLessElement.innerText = this.projConstants.CLOSE;
-          titleElement.innerText = data.question;
-          faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
-            ele.classList.add('hide')
+    if(seeMoreElement){
+      seeMoreElement.addEventListener('click', (event: any) => {
+        event.target.classList.add('hide');
+        seeLessElement.classList.remove('hide');
+        if(titleElement){
+          titleElement.classList.add('no-text-truncate');
+        }
+        if (data.type == this.projConstants.FAQ && seeMoreWrapper && data.answer && data.answer.length > 1) {
+            descElement.classList.add('hide');
+            seeMoreWrapper.classList.remove('hide');
+            seeLessElement.classList.add('show-less-btn');
+            seeLessElement.innerText = this.projConstants.CLOSE;
+            titleElement.innerText = data.question;
+            faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
+              ele.classList.add('hide')
+            });
+            setTimeout(() => {
+              this.updateSeeMoreButtonForFAQAgent(id, data.answer);
+            }, 100);
+  
+        } else {
+          descElement.classList.add('no-text-truncate');
+        }
+      });
+    }
+    if(seeLessElement){
+      seeLessElement.addEventListener('click', (event: any) => {
+        event.target.classList.add('hide');
+        seeMoreElement.classList.remove('hide');
+        if(titleElement){
+          titleElement.classList.remove('no-text-truncate');
+        }
+        if (data.type == this.projConstants.FAQ && seeMoreWrapper && data.answer && data.answer.length > 1) {
+            if(seeMoreWrapper) seeMoreWrapper.classList.add('hide');
+            descElement.classList.remove('hide');
+            titleElement.innerText = data.question + " 1/" + data.answer.length;
+            faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
+              ele.classList.remove('hide')
           });
-          setTimeout(() => {
-            this.updateSeeMoreButtonForFAQAgent(id, data.answer);
-          }, 100);
-
-      } else {
-        descElement.classList.add('no-text-truncate');
-      }
-    });
-    seeLessElement.addEventListener('click', (event: any) => {
-      event.target.classList.add('hide');
-      seeMoreElement.classList.remove('hide');
-      if(titleElement){
-        titleElement.classList.remove('no-text-truncate');
-      }
-      if (data.type == this.projConstants.FAQ && seeMoreWrapper && data.answer && data.answer.length > 1) {
-          if(seeMoreWrapper) seeMoreWrapper.classList.add('hide');
-          descElement.classList.remove('hide');
-          titleElement.innerText = data.question + " 1/" + data.answer.length;
-          faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
-            ele.classList.remove('hide')
-        });
-      } else {
-        if(descElement) descElement.classList.remove('no-text-truncate');
-      }
-    });
+        } else {
+          if(descElement) descElement.classList.remove('no-text-truncate');
+        }
+      });
+    }
   }
 
   //restore popup related click events
