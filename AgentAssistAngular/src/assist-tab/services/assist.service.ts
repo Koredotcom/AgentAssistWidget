@@ -79,7 +79,8 @@ export class AssistService {
 
       </div>
       `;
-    dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
+    // dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
+    $(dynamicBlock).append(dropdownHtml);
     if(isInitDialog){
       document.getElementById("dropDownData-"+uuids)?.classList?.add("onconnect");
     }
