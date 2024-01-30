@@ -73,6 +73,12 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // this.getAgentAssistSettings();
+    this.initApiCalls();
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
+      if (ele) {
+        this.initApiCalls();
+      }
+    });
     window.addEventListener("message", (event:any) => {
       if(event.data.action === 'reloadCoaching') {
         this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
