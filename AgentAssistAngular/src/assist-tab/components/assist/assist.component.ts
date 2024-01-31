@@ -490,7 +490,7 @@ export class AssistComponent implements OnInit {
     console.log("process agent assist response", data, this.proactiveModeStatus);
     this.smallTalkOverrideBtnId = null;
     let isTemplateRender = false;
-    data = this.commonService.confirmationNodeRenderDataTransform(data);
+    // data = this.commonService.confirmationNodeRenderDataTransform(data);
     if(this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.suggestions?.dialogs?.length > 0) {
       this.dialogTerminatedOrIntruppted();
     }
@@ -1705,7 +1705,7 @@ export class AssistComponent implements OnInit {
 
     resp = this.commonService.formatHistoryResponseForFAQ(resp);
     resp?.forEach((res, index) => {
-      res = this.commonService.confirmationNodeRenderForHistoryDataTransform(res);
+      // res = this.commonService.confirmationNodeRenderForHistoryDataTransform(res);
       if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && !res.agentAssistDetails?.faqResponse) {
         let uniqueID = res._id;
         let historyDataHtml = $('#dynamicBlock');

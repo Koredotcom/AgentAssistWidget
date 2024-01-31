@@ -237,37 +237,37 @@ export class TemplateRenderClassService {
       console.log(parsedPayload, "parsed payload inside template render");
 
     });
-    if (res.srcChannel && res.srcChannel !== 'msteams') {
-      if (res.componentType === 'dialogAct') {
-        let actualStringFromBE = '';
-        // if (res.buttons[0].value.includes('text')) {
-        //   let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
-        //   let str1 = JSON.parse(str);
-        //   actualStringFromBE = str1.text;
-        //   // arr = str1.text.split('\nYes, No');
-        // } else {
-        //   actualStringFromBE = res.buttons[0].value;
-        //   // arr = res.buttons[0].value.split('\nYes, No');
-        // }
-        // _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
+    // if (res.srcChannel && res.srcChannel !== 'msteams') {
+    //   if (res.componentType === 'dialogAct') {
+    //     let actualStringFromBE = '';
+    //     // if (res.buttons[0].value.includes('text')) {
+    //     //   let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
+    //     //   let str1 = JSON.parse(str);
+    //     //   actualStringFromBE = str1.text;
+    //     //   // arr = str1.text.split('\nYes, No');
+    //     // } else {
+    //     //   actualStringFromBE = res.buttons[0].value;
+    //     //   // arr = res.buttons[0].value.split('\nYes, No');
+    //     // }
+    //     // _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
 
-        if(res && res?.buttons && res?.buttons[0]?.value && !res?.buttons[0]?.value?.includes('text')){
-          actualStringFromBE = res.buttons[0].value;
-          _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
-        }
+    //     if(res && res?.buttons && res?.buttons[0]?.value && !res?.buttons[0]?.value?.includes('text')){
+    //       actualStringFromBE = res.buttons[0].value;
+    //       _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
+    //     }
 
-      } else if (res.entityType === "list_of_values" && !res.buttons[0].value.includes('payload')) {
-        let arr = [];
-        if (res.buttons[0].value.includes('text')) {
-          let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
-          let str1 = JSON.parse(str);
-          arr = str1.text.split('\n');
-        } else {
-          arr = res.buttons[0].value.split('\n');
-        }
-        _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);
-      }
-    }
+    //   } else if (res.entityType === "list_of_values" && !res.buttons[0].value.includes('payload')) {
+    //     let arr = [];
+    //     if (res.buttons[0].value.includes('text')) {
+    //       let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
+    //       let str1 = JSON.parse(str);
+    //       arr = str1.text.split('\n');
+    //     } else {
+    //       arr = res.buttons[0].value.split('\n');
+    //     }
+    //     _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);
+    //   }
+    // }
     return _msgsResponse;
   }
 
@@ -350,30 +350,30 @@ export class TemplateRenderClassService {
         _msgsResponse.parsedPayload = parsedPayload;
       }
     });
-    if(res.agentAssistDetails?.srcChannel && res.agentAssistDetails?.srcChannel !== 'msteams'){
-      if (res.agentAssistDetails?.componentType === 'dialogAct') {
-        let actualStringFromBE = '';
-        if (res.components[0].data.text.includes('text')) {
-          let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
-          let str1 = JSON.parse(str);
-          actualStringFromBE = str1.text;
-        } else {
-          actualStringFromBE = res.components[0].data.text;
-        }
-        _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
+    // if(res.agentAssistDetails?.srcChannel && res.agentAssistDetails?.srcChannel !== 'msteams'){
+    //   if (res.agentAssistDetails?.componentType === 'dialogAct') {
+    //     let actualStringFromBE = '';
+    //     if (res.components[0].data.text.includes('text')) {
+    //       let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
+    //       let str1 = JSON.parse(str);
+    //       actualStringFromBE = str1.text;
+    //     } else {
+    //       actualStringFromBE = res.components[0].data.text;
+    //     }
+    //     _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
 
-      } else if (res.agentAssistDetails?.newEntityType === "list_of_values" && !res.components[0].data.text.includes('payload')) {
-        let arr = [];
-        if (res.components[0].data.text.includes('text')) {
-          let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
-          let str1 = JSON.parse(str);
-          arr = str1.text.split('\n');
-        } else {
-          arr = res.components[0].data.text.split('\n');
-        }
-        _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);
-      }
-    }
+    //   } else if (res.agentAssistDetails?.newEntityType === "list_of_values" && !res.components[0].data.text.includes('payload')) {
+    //     let arr = [];
+    //     if (res.components[0].data.text.includes('text')) {
+    //       let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
+    //       let str1 = JSON.parse(str);
+    //       arr = str1.text.split('\n');
+    //     } else {
+    //       arr = res.components[0].data.text.split('\n');
+    //     }
+    //     _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);
+    //   }
+    // }
     return _msgsResponse;
   }
 

@@ -170,7 +170,7 @@ export class MybotComponent implements OnInit {
   //running dialogue and mybot data response code.
   processMybotDataResponse(data) {
     let isTemplateRender = false;
-    data = this.commonService.confirmationNodeRenderDataTransform(data);
+    // data = this.commonService.confirmationNodeRenderDataTransform(data);
     let results: any = this.templateRenderClassService.getResponseUsingTemplate(data, this.commonService.configObj);
     this.commonService.currentPositionIdOfMyBot = this.myBotDialogPositionId;
     let sendMsgData = encodeURI(JSON.stringify(results));
@@ -232,7 +232,7 @@ export class MybotComponent implements OnInit {
 
       }
 
-      if(data && data.componentType == 'dialogAct' && (data.srcChannel != 'msteams' && data.srcChannel != 'rtm')){
+      if(!this.commonService.smallTalkTemplateRenderCheck(data, results)){
         isTemplateRender = true;
       }else{
         isTemplateRender = false;
@@ -476,7 +476,7 @@ export class MybotComponent implements OnInit {
 
     let resp = response.length > 0 ? response : undefined;
     resp?.forEach((res, index) => {
-      res = this.commonService.confirmationNodeRenderForHistoryDataTransform(res);
+      // res = this.commonService.confirmationNodeRenderForHistoryDataTransform(res);
       if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
 
         let positionID = 'dg-'+ this.koreGenerateuuidPipe.transform();
@@ -685,10 +685,11 @@ export class MybotComponent implements OnInit {
               this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent);
             }
 
-            if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
-              // console.log("inside dialogact and channel");
+            // if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
+            //   // console.log("inside dialogact and channel");
 
-            }else{
+            // }
+            if(this.commonService.smallTalkHistoryRenderCheck(parsedPayload,res)){
               // let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
               // let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
               // a.innerHTML = a?.innerHTML + html;

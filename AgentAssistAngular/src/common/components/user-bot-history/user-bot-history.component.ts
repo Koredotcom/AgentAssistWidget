@@ -76,7 +76,7 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
 
   formatHistoryResponse(){
     for(let hisRes of this.historyResponse){
-      hisRes = this.commonService.confirmationNodeRenderForHistoryDataTransform(hisRes);
+      // hisRes = this.commonService.confirmationNodeRenderForHistoryDataTransform(hisRes);
       let result : any = this.templateRenderClassService.getResponseUsingTemplateForHistory(hisRes);
       hisRes.isTemplateRender = this.templateRenderCheck(hisRes,result);
       hisRes.template = this.getTemplateHtml(hisRes.isTemplateRender, result);
@@ -104,7 +104,10 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
   }
 
   templateRenderCheck(data,result){
-    if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
+    // if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
+    //   return true;
+    // }
+    if(result.parsedPayload){
       return true;
     }
     return false;
