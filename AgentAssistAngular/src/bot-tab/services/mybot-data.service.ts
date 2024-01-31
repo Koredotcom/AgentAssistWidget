@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { RawHtmlPipe } from 'src/common/pipes/raw-html.pipe';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 import { ProjConstants, ImageFileNames, ImageFilePath } from 'src/common/constants/proj.cnts';
+import { CommonService } from 'src/common/services/common.service';
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +11,8 @@ export class MybotDataService {
   imageFileNames: any = ImageFileNames;
   imageFilePath: string = ImageFilePath;
 
-    constructor(private sanitizeHtmlPipe: SanitizeHtmlPipe, private rawHtmPipe : RawHtmlPipe) { }
+    constructor(private sanitizeHtmlPipe: SanitizeHtmlPipe, private rawHtmPipe : RawHtmlPipe,
+        private commonService : CommonService) { }
 
     getMybotMsgResponse(myBotuuids, botId) {
         return {
@@ -94,9 +96,11 @@ export class MybotDataService {
         return dialogTaskAccordion;
     }
 
-    askUserTemplate(data,myBotuuids, newTemp, positionID,srcChannel=null, value='', componentType=null) {
+    askUserTemplate(result, data,myBotuuids, newTemp, positionID, value='', history=false) {
         let template= '';
-        if(componentType && componentType == 'dialogAct' && srcChannel != 'msteams' && srcChannel != 'rtm'){
+        let smallTalkRenderCheck = history ? this.commonService.smallTalkHistoryRenderCheck(result.parsedPayload, data) : this.commonService.smallTalkTemplateRenderCheck(data, result);
+
+        if(!smallTalkRenderCheck){
           template = `
           <div class="steps-run-data">
           <div class="icon_block">
@@ -105,7 +109,7 @@ export class MybotDataService {
           <div class="run-info-content" >
           <div class="title">${data.promptTitle}</div>
           <div class="agent-utt">
-          <div class="title-data" id="displayData-${myBotuuids}">${value}</div>
+          <div class="title-data" id="displayData-${myBotuuids}">${this.commonService.handleEmptyLine(value)}</div>
               <div class="action-links">
                   <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}" data-text-type="sentence">Send</button>
                   <div class="copy-btn" data-msg-id="${myBotuuids}" data-position-id="${positionID}" data-text-type="sentence">
@@ -141,9 +145,11 @@ export class MybotDataService {
         return template
     }
 
-    tellToUserTemplate(data,myBotuuids, newTemp, positionID, srcChannel=null, value='', componentType=null) {
+    tellToUserTemplate(result, data, myBotuuids, newTemp, positionID, value='', history=false) {
         let template= '';
-        if(componentType && componentType == 'dialogAct' && (srcChannel != 'msteams' && srcChannel != 'rtm') ){
+        let smallTalkRenderCheck = history ? this.commonService.smallTalkHistoryRenderCheck(result.parsedPayload, data) : this.commonService.smallTalkTemplateRenderCheck(data, result);
+
+        if(!smallTalkRenderCheck){
           template = `
           <div class="steps-run-data">
           <div class="icon_block">
@@ -152,7 +158,7 @@ export class MybotDataService {
           <div class="run-info-content" >
           <div class="title">${data.promptTitle}</div>
           <div class="agent-utt">
-          <div class="title-data" id="displayData-${myBotuuids}">${value}</div>
+          <div class="title-data" id="displayData-${myBotuuids}">${this.commonService.handleEmptyLine(value)}</div>
               <div class="action-links">
                   <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}" data-text-type="sentence">Send</button>
                   <div class="copy-btn" data-msg-id="${myBotuuids}" data-position-id="${positionID}" data-text-type="sentence">

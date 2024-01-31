@@ -1170,7 +1170,7 @@ export class CommonService {
     return newHtmlStr;
   }
 
-  handleEmptyLine(answer, quotflag){
+  handleEmptyLine(answer, quotflag=false){
     let eleanswer = '';
     if(answer != undefined && answer != null){
         eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
@@ -1202,6 +1202,21 @@ export class CommonService {
     }
     // eleanswer = this.replaceLtGt2(eleanswer)
     return eleanswer
+  }
+
+
+  smallTalkTemplateRenderCheck(data,result){
+    if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
+      return true;
+    }
+    return false;
+  }
+
+  smallTalkHistoryRenderCheck(parsedPayload,res){
+    if(parsedPayload && res.agentAssistDetails && ((res.agentAssistDetails?.componentType === 'dialogAct' && (res.agentAssistDetails?.srcChannel == 'msteams' || res.agentAssistDetails?.srcChannel == 'rtm')) || (res.agentAssistDetails?.componentType != 'dialogAct'))){
+      return true;
+    }
+    return false
   }
 
   agent_run_click(dialog, isSearchFlag) {

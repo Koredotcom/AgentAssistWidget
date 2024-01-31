@@ -204,8 +204,8 @@ export class MybotComponent implements OnInit {
         this.myBotDataResponse = Object.assign({}, data);
       }
 
-      let askToUserHtml = this.mybotDataService.askUserTemplate(data,myBotuuids, sendMsgData, this.myBotDialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType);
-      let tellToUserHtml = this.mybotDataService.tellToUserTemplate(data,myBotuuids, sendMsgData, this.myBotDialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType);
+      let askToUserHtml = this.mybotDataService.askUserTemplate(results,data,myBotuuids, sendMsgData, this.myBotDialogPositionId, data.buttons[0].value);
+      let tellToUserHtml = this.mybotDataService.tellToUserTemplate(results,data,myBotuuids, sendMsgData, this.myBotDialogPositionId, data.buttons[0].value);
 
       let agentInputEntityName = ProjConstants.ENTER_DETAILS;
       if (data.entityDisplayName || data.entityName) {
@@ -281,7 +281,7 @@ export class MybotComponent implements OnInit {
         let botResHtml = this.mybotDataService.smallTalkTemplateForTemplatePayload(ele, myBotuuids,data, results,newTemp);
         let titleData = ``;
         let actionLinkTemplate = ``;
-        if(this.smallTalkTemplateRenderCheck(data, results)){
+        if(this.commonService.smallTalkTemplateRenderCheck(data, results)){
             isTemplateRender = false;
             titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>`;
             let sendData = results?.parsedPayload ? newTemp : data.buttons[0].value;
@@ -364,19 +364,6 @@ export class MybotComponent implements OnInit {
 
   }
 
-  smallTalkTemplateRenderCheck(data,results){
-    if(results.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
-      return true;
-    }
-    return false;
-  }
-
-  smallTalkHistoryRenderCheck(parsedPayload,res){
-    if(parsedPayload && res.agentAssistDetails && ((res.agentAssistDetails?.componentType === 'dialogAct' && (res.agentAssistDetails?.srcChannel == 'msteams' || res.agentAssistDetails?.srcChannel == 'rtm')) || (res.agentAssistDetails?.componentType != 'dialogAct'))){
-      return true;
-    }
-    return false
-  }
 
   runDialogFormyBotTab(data) {
     this.mybotEmptyState = false;
@@ -603,7 +590,7 @@ export class MybotComponent implements OnInit {
             let botResHtml = this.mybotDataService.smallTalkTemplateForTemplatePayload(res, res._id,res, {parsedPayload : parsedPayload},newTemp);
             let titleData = ``;
             let actionLinkTemplate = ``;
-            if(this.smallTalkHistoryRenderCheck(parsedPayload,res)){
+            if(this.commonService.smallTalkHistoryRenderCheck(parsedPayload,res)){
                 // isTemplateRender = false;
                 titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>`;
                 let sendData = _msgsResponse?.parsedPayload ? newTemp : res.components[0].data.text;
@@ -629,8 +616,8 @@ export class MybotComponent implements OnInit {
 
           if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
             let runInfoContent = $(`#dropDownData-${previousId}`);
-            let askToUserHtml = this.mybotDataService.askUserTemplate(res,res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
-            let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res,res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+            let askToUserHtml = this.mybotDataService.askUserTemplate(_msgsResponse, res,res._id, newTemp, currentTaskPositionId, res.components[0].data.text, true);
+            let tellToUserHtml = this.mybotDataService.tellToUserTemplate(_msgsResponse, res,res._id, newTemp, currentTaskPositionId, res.components[0].data.text, true);
 
 
             if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT)) {

@@ -924,9 +924,9 @@ export class AssistComponent implements OnInit {
             this.agentAssistResponse = Object.assign({}, data);
           }
         }, 10);
-        let askToUserHtml = this.assisttabService.askUserTemplate(data, uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
+        let askToUserHtml = this.assisttabService.askUserTemplate(result, data, uuids, newTemp, this.dialogPositionId, data.buttons[0].value)
   /// componentType === 'dialogAct' means its confirmation node or else not
-        let tellToUserHtml = this.assisttabService.tellToUserTemplate(data, uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
+        let tellToUserHtml = this.assisttabService.tellToUserTemplate(result, data, uuids, newTemp, this.dialogPositionId, data.buttons[0].value)
         if (data.isPrompt) {
           runInfoContent.append(askToUserHtml);
           if (!this.proactiveModeStatus) {
@@ -940,7 +940,7 @@ export class AssistComponent implements OnInit {
           $(runInfoContent).append(tellToUserHtml);
           this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
         }
-        if(data && data.componentType == 'dialogAct' && (data.srcChannel != 'msteams' && data.srcChannel != 'rtm')){
+        if(!this.commonService.smallTalkTemplateRenderCheck(data, result)){
           console.log("inside dialogact and channel");
           isTemplateRender = true;
         }else{
@@ -969,13 +969,13 @@ export class AssistComponent implements OnInit {
           let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data, result,newTemp);
           let titleData = ``;
           let actionLinkTemplate = ``;
-          if(this.smallTalkTemplateRenderCheck(data, result)){
+          if(this.commonService.smallTalkTemplateRenderCheck(data, result)){
               isTemplateRender = false;
               titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
               let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
               actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
           }else{
-              titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`;
+              titleData = `<div class="title-data" id="displayData-${uuids}">${this.commonService.handleEmptyLine(ele.value)}</div>`;
               actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
               isTemplateRender = true;
               result.parsedPayload = null;
@@ -1006,14 +1006,14 @@ export class AssistComponent implements OnInit {
           let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(data.buttons[0], uuids, data, result,newTemp);
           let titleData = ``;
           let actionLinkTemplate = ``;
-          if(this.smallTalkTemplateRenderCheck(data, result)){
+          if(this.commonService.smallTalkTemplateRenderCheck(data, result)){
               isTemplateRender = false;
               titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
               let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
               actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
           }else{
               actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
-              titleData = `<div class="title-data" id="displayData-${uuids}">${data.buttons[0].value}</div>`
+              titleData = `<div class="title-data" id="displayData-${uuids}">${this.commonService.handleEmptyLine(data.buttons[0].value)}</div>`
               isTemplateRender = true;
               result.parsedPayload = null;
           }
@@ -1079,19 +1079,6 @@ export class AssistComponent implements OnInit {
     }
   }
 
-  smallTalkTemplateRenderCheck(data,result){
-    if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
-      return true;
-    }
-    return false;
-  }
-
-  smallTalkHistoryRenderCheck(parsedPayload,res){
-    if(parsedPayload && res.agentAssistDetails && ((res.agentAssistDetails?.componentType === 'dialogAct' && (res.agentAssistDetails?.srcChannel == 'msteams' || res.agentAssistDetails?.srcChannel == 'rtm')) || (res.agentAssistDetails?.componentType != 'dialogAct'))){
-      return true;
-    }
-    return false
-  }
 
   //dialog terminate code
   dialogTerminatedOrIntruppted() {
@@ -2085,7 +2072,7 @@ export class AssistComponent implements OnInit {
             let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(res, res._id,res, {parsedPayload : parsedPayload},newTemp);
             let titleData = ``;
             let actionLinkTemplate = ``;
-            if(this.smallTalkHistoryRenderCheck(parsedPayload,res)){
+            if(this.commonService.smallTalkHistoryRenderCheck(parsedPayload,res)){
                 // isTemplateRender = false;
                 titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>`;
                 let sendData = _msgsResponse?.parsedPayload ? newTemp : res.components[0].data.text;
@@ -2099,7 +2086,7 @@ export class AssistComponent implements OnInit {
                 a.appendChild(obj);
             }else{
                 // isTemplateRender = true;
-                titleData = `<div class="title-data" id="displayData-${res._id}">${res.components[0].data.text}</div>`;
+                titleData = `<div class="title-data" id="displayData-${res._id}">${this.commonService.handleEmptyLine(res.components[0].data.text)}</div>`;
                 actionLinkTemplate = this.smallTalkActionLinkTemplate(res._id, res.components[0].data.text);
                 dynamicBlockDiv.append(botResHtml);
                 $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
@@ -2112,8 +2099,8 @@ export class AssistComponent implements OnInit {
           if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
             let runInfoContent = $(`#dropDownData-${previousId}`);
 
-            let askToUserHtml = this.assisttabService.askUserTemplate(res, res._id, newTemp, previousTaskPositionId,res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
-            let tellToUserHtml = this.assisttabService.tellToUserTemplate(res, res._id, newTemp, previousTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+            let askToUserHtml = this.assisttabService.askUserTemplate(_msgsResponse, res, res._id, newTemp, previousTaskPositionId, res.components[0].data.text, true);
+            let tellToUserHtml = this.assisttabService.tellToUserTemplate(_msgsResponse, res, res._id, newTemp, previousTaskPositionId, res.components[0].data.text, true);
 
             if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
               this.commonService.isAutomationOnGoing = true;
@@ -2142,10 +2129,11 @@ export class AssistComponent implements OnInit {
               runInfoContent.append(tellToUserHtml);
               this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
             }
-            if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
-              // console.log("inside dialogact and channel");
+            // if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
+            //   // console.log("inside dialogact and channel");
 
-            }else{
+            // }
+            if(this.commonService.smallTalkHistoryRenderCheck(parsedPayload,res)){
               let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0]
               let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
               a.appendChild(obj);
