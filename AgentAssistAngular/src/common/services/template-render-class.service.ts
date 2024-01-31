@@ -38,119 +38,119 @@ export class TemplateRenderClassService {
   }
 
 
-  formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse){
+  // formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse){
 
-    let lastIndex = actualStringFromBE?.lastIndexOf('\n');
-    let mainText = actualStringFromBE?.substring(0, lastIndex);
-    let confirmationString = actualStringFromBE?.substring(lastIndex+1);
+  //   let lastIndex = actualStringFromBE?.lastIndexOf('\n');
+  //   let mainText = actualStringFromBE?.substring(0, lastIndex);
+  //   let confirmationString = actualStringFromBE?.substring(lastIndex+1);
 
-    _msgsResponse.message[0] = {
-      "type": "text",
-      "component": {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text": `${mainText}`,
-          "buttons": [
+  //   _msgsResponse.message[0] = {
+  //     "type": "text",
+  //     "component": {
+  //       "type": "template",
+  //       "payload": {
+  //         "template_type": "button",
+  //         "text": `${mainText}`,
+  //         "buttons": [
 
-          ]
-        }
-      },
-      "cInfo": {
-        "body": {
-          "type": "template",
-          "payload": {
-            "template_type": "button",
-            "text": `${mainText}`,
-            "buttons": [
+  //         ]
+  //       }
+  //     },
+  //     "cInfo": {
+  //       "body": {
+  //         "type": "template",
+  //         "payload": {
+  //           "template_type": "button",
+  //           "text": `${mainText}`,
+  //           "buttons": [
 
-            ]
-          }
-        }
-      }
-    }
-    _msgsResponse.parsedPayload = {
-      "type": "template",
-      "payload": {
-        "template_type": "button",
-        "text": `${mainText}`,
-        "buttons": [
+  //           ]
+  //         }
+  //       }
+  //     }
+  //   }
+  //   _msgsResponse.parsedPayload = {
+  //     "type": "template",
+  //     "payload": {
+  //       "template_type": "button",
+  //       "text": `${mainText}`,
+  //       "buttons": [
 
-        ]
-      }
-    }
+  //       ]
+  //     }
+  //   }
 
-    let list = [];
-    if(confirmationString){
-      let confirmationArray = confirmationString.split(',');
-      confirmationArray.forEach((ele, i) => {
-        if (ele && i !== confirmationArray.length - 1 && !(/^ *$/.test(ele))) {
-          let obj = {
-            "type": "postback",
-            "title": ele,
-            "payload": ele
-          }
-          list.push(obj)
-        }
-      })
-    }
-    _msgsResponse.message[0].component.payload.buttons = list;
-    _msgsResponse.message[0].cInfo.body.payload.buttons = list;
-    _msgsResponse.parsedPayload.payload.buttons = list;
-    return _msgsResponse;
-  }
+  //   let list = [];
+  //   if(confirmationString){
+  //     let confirmationArray = confirmationString.split(',');
+  //     confirmationArray.forEach((ele, i) => {
+  //       if (ele && i !== confirmationArray.length - 1 && !(/^ *$/.test(ele))) {
+  //         let obj = {
+  //           "type": "postback",
+  //           "title": ele,
+  //           "payload": ele
+  //         }
+  //         list.push(obj)
+  //       }
+  //     })
+  //   }
+  //   _msgsResponse.message[0].component.payload.buttons = list;
+  //   _msgsResponse.message[0].cInfo.body.payload.buttons = list;
+  //   _msgsResponse.parsedPayload.payload.buttons = list;
+  //   return _msgsResponse;
+  // }
 
-  formatMsgResponseForEnumeratedList(arr, _msgsResponse){
-    _msgsResponse.message[0] = {
-      "type": "text",
-      "component": {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text": `${arr[0]}`,
-          "buttons": [
-          ]
-        }
-      },
-      "cInfo": {
-        "body": {
-          "type": "template",
-          "payload": {
-            "template_type": "button",
-            "text": `${arr[0]}`,
-            "buttons": [
+  // formatMsgResponseForEnumeratedList(arr, _msgsResponse){
+  //   _msgsResponse.message[0] = {
+  //     "type": "text",
+  //     "component": {
+  //       "type": "template",
+  //       "payload": {
+  //         "template_type": "button",
+  //         "text": `${arr[0]}`,
+  //         "buttons": [
+  //         ]
+  //       }
+  //     },
+  //     "cInfo": {
+  //       "body": {
+  //         "type": "template",
+  //         "payload": {
+  //           "template_type": "button",
+  //           "text": `${arr[0]}`,
+  //           "buttons": [
 
-            ]
-          }
-        }
-      }
-    }
+  //           ]
+  //         }
+  //       }
+  //     }
+  //   }
 
-    let list = [];
-    arr.forEach((ele, i) => {
-      if (i !== 0 && i !== arr.length - 1 && ele !== '') {
-        let data = ele.substring(3, ele.length);
-        let obj = {
-          "type": "postback",
-          "title": data,
-          "payload": data
-        }
-        list.push(obj)
-      }
+  //   let list = [];
+  //   arr.forEach((ele, i) => {
+  //     if (i !== 0 && i !== arr.length - 1 && ele !== '') {
+  //       let data = ele.substring(3, ele.length);
+  //       let obj = {
+  //         "type": "postback",
+  //         "title": data,
+  //         "payload": data
+  //       }
+  //       list.push(obj)
+  //     }
 
-    })
-    _msgsResponse.message[0].component.payload.buttons = list;
-    _msgsResponse.message[0].cInfo.body.payload.buttons = list;
-    _msgsResponse.parsedPayload = {
-      "type": "template",
-      "payload": {
-        "template_type": "button",
-        "text": `${arr[0]}`,
-        "buttons": list
-      }
-    }
-    return _msgsResponse;
-  }
+  //   })
+  //   _msgsResponse.message[0].component.payload.buttons = list;
+  //   _msgsResponse.message[0].cInfo.body.payload.buttons = list;
+  //   _msgsResponse.parsedPayload = {
+  //     "type": "template",
+  //     "payload": {
+  //       "template_type": "button",
+  //       "text": `${arr[0]}`,
+  //       "buttons": list
+  //     }
+  //   }
+  //   return _msgsResponse;
+  // }
 
   getResponseUsingTemplate(res,configObj) {
     let _msgsResponse = {
