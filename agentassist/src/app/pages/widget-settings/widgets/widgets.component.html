@@ -12,7 +12,7 @@
     <div class="body-widget-data">
         <!--AgentAssist Widget-->
         <div id="accordion" class="agentassist-accordion-wrapper">
-            <div data-bs-toggle="collapse" href="#collapse2" data-bs-parent="#accordion" class="card_link collapsed" aria-expanded="false">
+            <div data-toggle="collapse" href="#collapse2" data-parent="#accordion" class="card_link collapsed" aria-expanded="false">
                 <div class="accordion-content-header">
                     <div class="team-with-profile">
                         <i class="icon-sa-arrow-down arrow-icon"></i>
@@ -282,7 +282,7 @@
         </div>
         <!--Knowledge AI Widget-->
         <div id="accordion" class="agentassist-accordion-wrapper">
-            <div data-bs-toggle="collapse" href="#collapse1" data-bs-parent="#accordion" class="card_link collapsed" aria-expanded="false">
+            <div data-toggle="collapse" href="#collapse1" data-parent="#accordion" class="card_link collapsed" aria-expanded="false">
                 <div class="accordion-content-header">
                     <div class="team-with-profile">
                         <i class="icon-sa-arrow-down arrow-icon"></i>
@@ -349,8 +349,8 @@
                                 <div class="kr-sg-radiobutton" *ngFor="let integrate of integration; let idxVal = index">
                                     <input id="val-{{idxVal}}" class="radio-custom" type="radio" [value]="integrate.type" name="type" formControlName="type" (click)="selectedIntegrationType($event, integrate)">
                                     <label for="val-{{idxVal}}" class="radio-custom-label">
-                                        <div class="mode-title">{{integrate.type}}</div>
-                                        <div class="mode-des"> {{integrate.desc}} </div>
+                                        <div class="mode-title">{{integrate.type | titlecase}}</div>
+                                        <div class="mode-des"> {{integrate.desc | titlecase}} </div>
                                     </label>
                                 </div>
                             </div>
