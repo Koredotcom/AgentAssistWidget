@@ -928,7 +928,15 @@ export class CommonService {
     if(this.isCallConversation == true){
       $(lastchild).find('.copy-btn').addClass('hide')
       $(lastchild).find('.send-run-btn').addClass('hide')
-    }
+    } else{
+      
+      if(this.configObj.isAgentResponseEnabled === false){
+        $(lastchild).find('.send-run-btn').addClass('hide')
+      }
+      if(this.configObj.isAgentResponseCopyEnabled === false){
+        $(lastchild).find('.copy-btn').addClass('hide')
+      }
+    } 
   }
 
   hideSendOrCopyButtons(parsedPayload, conatiner, smallTalk?, componentType?){
@@ -949,10 +957,10 @@ export class CommonService {
       $(lastchild).find('.copy-btn').addClass('hide')
       $(lastchild).find('.send-run-btn').addClass('hide')
     } else{
-      if(!this.configObj.isAgentResponseEnabled){
+      if(this.configObj.isAgentResponseEnabled === false){
         $(lastchild).find('.send-run-btn').addClass('hide')
       }
-      if(!this.configObj.isAgentResponseCopyEnabled){
+      if(this.configObj.isAgentResponseCopyEnabled === false){
         $(lastchild).find('.copy-btn').addClass('hide')
       }
     } 

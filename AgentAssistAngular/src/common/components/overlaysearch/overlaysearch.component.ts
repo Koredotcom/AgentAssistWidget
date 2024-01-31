@@ -40,8 +40,8 @@ export class OverlaysearchComponent implements OnInit {
   connectionDetails : any = {};
   answerPlaceableIDs : any = [];
   searchedResultData: any = {};
-  showSendBtn : boolean = this.commonService?.configObj?.isAgentResponseEnabled || false;
-  showCopyBtn : boolean = this.commonService?.configObj?.isAgentResponseCopyEnabled || false;
+  showSendBtn : boolean = (this.commonService?.configObj?.isAgentResponseEnabled === false) ? false : true;
+  showCopyBtn : boolean = (this.commonService?.configObj?.isAgentResponseCopyEnabled === false) ? false : true;
 
   constructor(public handleSubjectService: HandleSubjectService, public commonService: CommonService,
     public randomUUIDPipe: RandomUUIDPipe, public websocketService: WebSocketService, public cdRef : ChangeDetectorRef,

@@ -1842,8 +1842,8 @@ export class AssistComponent implements OnInit {
                     </div>
                 </div>`;
             a.append(faqActionHtml);
+            this.commonService.hideSendAndCopyBtnsforCallconversation(a);
             faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(ele.answer[0], false)}</div>`);
-            this.commonService.hideSendAndCopyBtnsforCallconversation(faqs);
 
             if(ele.answer && ele.answer.length > 1){
               this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID+index, uniqueID+index);
@@ -1928,8 +1928,8 @@ export class AssistComponent implements OnInit {
                 </div>`;
 
           a.append(faqActionHtml);
+          this.commonService.hideSendAndCopyBtnsforCallconversation(a);
           faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(res.components[0].data.text[0], false)}</div>`);
-          this.commonService.hideSendAndCopyBtnsforCallconversation(faqs);
 
           if(res.components[0].data.text && res.components[0].data.text.length > 1){
             this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID + index, uniqueID + index);
@@ -2180,6 +2180,7 @@ export class AssistComponent implements OnInit {
             if(res.components?.length && res.components[0]?.data?.text !== '') {
               let botResHtml = this.assisttabService.historySmallTalkTemplate(res,res.components[0], res._id);
               dynamicBlockDiv.append(botResHtml);
+              this.commonService.hideSendOrCopyButtons(parsedPayload, `#smallTalk-${res._id} .agent-utt`, 'smallTalk')
             }
           });
         }

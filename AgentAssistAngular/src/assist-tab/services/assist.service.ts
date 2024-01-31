@@ -543,6 +543,7 @@ export class AssistService {
       <button class="ghost-btn hide" id="seeLess-${ele}" data-see-less="true">Show less</button>
       `;
     faqstypeInfo.append(seeMoreButtonHtml);
+    this.commonService.hideSendAndCopyBtnsforCallconversation(a);
     setTimeout(() => {
         this.commonService.updateSeeMoreButtonForAssist(ele, this.projConstants.FAQ);
     }, 1000);
