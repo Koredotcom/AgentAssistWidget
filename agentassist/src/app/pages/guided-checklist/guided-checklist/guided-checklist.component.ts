@@ -47,6 +47,17 @@ export class GuidedChecklistComponent implements OnInit {
   @ViewChild('checklistCreation') checklistCreation: ElementRef;
   ngOnInit(): void {
     // this.getAgentAssistSettings();
+    this.getConfigDetails();
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
+      if (ele) {
+        this.getConfigDetails();
+        if(this.checkListType === 'primary'){
+          this.checkList1.getPrimaryList(true);
+        }else{
+          this.checkList2.getDynamicList(true);
+        }
+      }
+    });
     window.addEventListener("message", (event:any) => {
       if(event.data.action === 'reloadChecklist') {
         this.getConfigDetails();
