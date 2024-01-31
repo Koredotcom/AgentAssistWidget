@@ -100,6 +100,9 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
          .pipe(finalize(() => this.loading = false))
          .subscribe(res => {
            this.voicePreferences = {...res};
+           if(!this.voicePreferences.hasOwnProperty('aaTranscriptController')){
+              this.voicePreferences['aaTranscriptController'] = true;
+           }
            this.cd.detectChanges();
          }, err => {
            this.notificationService.showError(err, 'Failed to fetch voice preferences')
