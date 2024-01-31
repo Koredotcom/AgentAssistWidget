@@ -132,7 +132,7 @@ $font-xxxl: 30px;
 $mediaMedium: "(max-width: 991px)";
 $mediaSmall: "(max-width: 767px)";
 //MEDIA STARTS HERE
-
+.single-spa-agentassist{
 //Buttons Starts Here
 .smart-primary-btn{
 	@extend %buttonSolid;
@@ -537,6 +537,7 @@ input::placeholder{
     width: calc(100% - 227px);
 	&.is-unified-deflect-container{
 		width: calc(100% - 227px);
+		position: relative;
 		&.collapsed-unified-left-menu{
 			width: calc(100% - 63px);
 		}
@@ -892,4 +893,6 @@ input::placeholder{
 
 .uContainerWidth {
     width: 100% !important;
+}
+
 }

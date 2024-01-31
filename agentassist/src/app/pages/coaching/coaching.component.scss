@@ -980,6 +980,8 @@ input[type=number]::-webkit-outer-spin-button {
         margin: 0 !important;
         height: 31px;
         padding-left: 10px;
+        border: 0 !important;
+        padding: 0 0 0 10px !important;
     }
     .mat-form-field-label-wrapper{
         top: -13px;

@@ -13,48 +13,15 @@
 @import "~jsoneditor/dist/jsoneditor.min.css";
 
 html{
-    overflow: hidden;
-    min-width: 900px;
-    overflow-x: auto;
-    overflow-y: hidden;
+    // overflow: hidden;
+    // min-width: 900px;
+    // overflow-x: auto;
+    // overflow-y: hidden;
     -webkit-font-smoothing: antialiased;
-    &.if-load-in-unified-agentassist{
-        .loaderContainer{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 1;
-            &::before{
-                content: "";
-                position: absolute;
-                border: 4px solid #f8f9fa;
-                border-radius: 50%;
-                border-top: 4px solid #155EEF;
-                width: 40px;
-                height: 40px;
-                -webkit-animation: kr-spin 2s linear infinite;
-                animation: kr-spin 2s linear infinite;
-                top: auto;
-                opacity: 1 !important;
-            }
-            img{
-                display: none !important;
-            }
-            @-webkit-keyframes kr-spin {
-                0% { -webkit-transform: rotate(0deg); }
-                100% { -webkit-transform: rotate(360deg); }
-            }
-    
-            @keyframes kr-spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-        }
-    }
     &.cdk-global-scrollblock{
         overflow: hidden;
     }
-    body{
+    .single-spa-agentassist{
         overflow: hidden;
         font-size: $font-md;
         color: $primaryFontColor;
