@@ -282,7 +282,7 @@
 			this.bankingFeedbackTemplateEvents(messageHtml);
 			$(messageHtml).data(msgData);
 		} 
-		else if(!constantsTemplateTypes[msgData.message[0]?.component?.payload?.template_type]){
+		else if(msgData.message[0]?.component?.payload?.template_type && !constantsTemplateTypes[msgData.message[0]?.component?.payload?.template_type]){
 			if(msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && (msgData.message[0].component.payload?.text)) {
 				messageHtml = (msgData.message[0].component.payload?.text)
 				messageHtml = $(this.getChatTemplate("templateText")).tmpl({
@@ -3268,7 +3268,7 @@ var message= {
             return otpValidationTemplate;
         } else if (tempType === "bankingFeedbackTemplate") {
             return bankingFeedbackTemplate;
-        } else if(tempType = "templateText") {
+        } else if(tempType === "templateText") {
 			return templateText;
 		}
 		else {
