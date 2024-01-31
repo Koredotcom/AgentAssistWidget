@@ -51,6 +51,10 @@ export class SearchAssistComponent implements OnInit {
 
   ngAfterViewInit() {
     // this.getAgentAssistSettings();
+    this.getAccountId();
+    setTimeout(() => {
+      this.searchFormChangeMode(); 
+    });
   }
 
   getAgentAssistSettings() {
