@@ -42,7 +42,7 @@ export class AutomationComponent implements OnInit, OnDestroy {
   @ViewChild(NgbDropdown) private dropdown: NgbDropdown;
   constructor(
     private authService: AuthService,
-    private workflowService: workflowService,
+    public workflowService: workflowService,
     private notificationService: NotificationService,
     private modalService: NgbModal,
     private translate: TranslateService

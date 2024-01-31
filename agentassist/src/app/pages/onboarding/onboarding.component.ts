@@ -34,14 +34,15 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if(Object.keys(this.appService.selectedInstanceApp$.value)?.length) {
         if(this.authService.agentAssistAutomationBots.length > 0) {
-          this.router.navigate(['/config/usecases'], { skipLocationChange: true });
+          this.router.navigate(['/config/usecases']);
         } else {
           this.initDialog();
         }
       // this.showWarningMessage();
     }
-    if (this.appService.instanceApps.length && !this.appService.isMigrated) {
-      this.router.navigate(['home'], { skipLocationChange: true });
+    
+    if (this.appService.instanceApps.length > 0 && !this.appService.isMigrated) {
+      this.router.navigate(['home']);
     } else {
       this.initDialog();
     }

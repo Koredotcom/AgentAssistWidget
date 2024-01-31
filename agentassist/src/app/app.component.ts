@@ -14,7 +14,6 @@ import { AppService } from '@kore.services/app.service';
 import { ScriptLoaderService } from '@kore.services/scriptloader.service';
 import { MixPanelService } from './helpers/mixPanel.service';
 import { IframeService } from '@kore.services/iframe.service';
-import { singleSpaPropsSubject } from 'src/single-spa/single-spa-props';
 
 declare const $: any;
 @Component({

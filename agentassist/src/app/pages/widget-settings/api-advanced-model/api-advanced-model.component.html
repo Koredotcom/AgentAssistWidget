@@ -7,7 +7,7 @@
      <!-- <p class="define-script">Define script</p> -->
      <ace-editor
        [(text)]="apiScript"
-        #editor style="height:350px;" [mode]="'json'"
+        #editor style="height:350px;" 
         [options]="editorOptions"
         ></ace-editor>
     </div>
@@ -16,3 +16,4 @@
         <button class="kr-sg-button-primary btn_lg" [disabled]="apiScript?.length === 0" (click)="save()" >{{'BUTTONS.SAVE' | translate}}</button>
     </div>
 </div>
+

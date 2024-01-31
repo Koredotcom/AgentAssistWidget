@@ -29,10 +29,10 @@
                         
                     <div class="view-all-btn" *ngIf="viewType == VIEWTYPELIST.PARTIAL_VIEW" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.CUSTOMER_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
                 </ng-container>
-                <ng-container *ngIf="(viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) && (customerAspectData && customerAspectData.length > 0)">
+                <ng-container *ngIf="(viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) && (exhaustiveAspectData && exhaustiveAspectData.length > 0)">
                     <perfect-scrollbar class="customer-scroll-content-data" (psYReachEnd)="onReachEnd($event)">
                         <div class="body-customer-scroll-data">
-                            <div class="row-data customer-scroll-data" *ngFor="let data of customerAspectData">
+                            <div class="row-data customer-scroll-data" *ngFor="let data of exhaustiveAspectData">
                                 <div class="title-with-count">
                                     <img [src]="customerAspectTabvsImage[data.type]">
                                     <span class="title">{{data.name}} </span>    
