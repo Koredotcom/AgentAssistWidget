@@ -91,7 +91,6 @@ export class WelcomeeventComponent implements OnInit {
     let params : any = {
       streamId : this.workflowService.getCurrentBtSmt(true)._id,
     }
-    debugger;
     this.showSpinner = true;
     this.service.invoke('get.welcomeevent', params).subscribe(data => {
       // data = this.getMockData();
