@@ -89,8 +89,9 @@ export class WelcomeeventComponent implements OnInit {
   // get welcome task and use case data from backend api
   getWelcomeTaskData(){
     let params : any = {
-      streamId : this.streamId,
+      streamId : this.workflowService.getCurrentBtSmt(true)._id,
     }
+    debugger;
     this.showSpinner = true;
     this.service.invoke('get.welcomeevent', params).subscribe(data => {
       // data = this.getMockData();
