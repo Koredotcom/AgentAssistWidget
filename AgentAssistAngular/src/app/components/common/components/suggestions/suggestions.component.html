@@ -12,7 +12,7 @@
                     <!-- <span class="count-text">{{suggestionResponse.searchResponse?.dialogs?.length}}</span> -->
                 </div>
                 <div class="suggestion-body-search">
-                    <app-dialog-suggestion [searchResponse]="suggestionResponse.searchResponse"></app-dialog-suggestion>
+                    <app-dialog-suggestion [searchResponse]="suggestionResponse.searchResponse" [suggestionData]="suggestionResponse.data"></app-dialog-suggestion>
                     <div class="btn-more-solid">
                         <button class="btn_link" aria-label="button" (click)="openSearch()">{{'NOT_WHAT_LOOKING' | translate}}</button>
                     </div>

@@ -86,6 +86,9 @@ export class CommonService {
     if (dialog.userInput) {
       connectionDetails.userInput = dialog.userInput;
     }
+    if (dialog.traits && dialog.traits?.length > 0){
+      connectionDetails.traits = dialog.traits
+    }
     let assistRequestParams = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
     this.rootService.entitiestValueArray = [];
@@ -216,6 +219,9 @@ export class CommonService {
         connectionDetails.intentName = dialog.intentName;
         connectionDetails.childBotName = this.rootService.childBotDetails.childBotName;
         connectionDetails.childBotId = this.rootService.childBotDetails.childBotId;
+      }
+      if (dialog.traits && dialog.traits?.length > 0){
+        connectionDetails.traits = dialog.traits
       }
       let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
