@@ -65,7 +65,7 @@
                         <ng-container *ngFor="let triggertype of ruleForm.controls['triggers']['controls']; let i = index">
                             <div cdkDrag class="example-box">
                                 <div class="warning-icon" *ngIf="triggertype.invalid">
-                                    <img ngbTooltip ="Required Configuration Missing" placement="bottom-center" src="assets/icons/warning-ta.svg">
+                                    <img ngbTooltip ="Required Configuration Missing" placement="bottom-center" [src]="assetUrlProc('/icons/warning-ta.svg')">
                                 </div>
                                 <div class="drag-content" cdkDragHandle>
                                     <i class="icon-coaching--move1"></i>
@@ -104,7 +104,7 @@
                                     <i class="icon-sa-elipse"></i>
                                 </div> -->
                                 <div class="warning-icon" *ngIf="actionType.invalid">
-                                    <img ngbTooltip ="Required Configuration Missing" placement="bottom-center" src="assets/icons/warning-ta.svg">
+                                    <img ngbTooltip ="Required Configuration Missing" placement="bottom-center" [src]="assetUrlProc('/icons/warning-ta.svg')">
                                 </div>
                                 <app-nudge-agent class="comp" [form]="actionType" *ngIf="actionType?.controls?.type?.value == coachingCnst.NUDGE_AGENT" [index]="i+1" [length]="ruleForm.controls['actions']['controls']?.length" [createOrEdit]="createOrEdit" (deleteAction)="deleteAction($event)"></app-nudge-agent>
                                 <app-hint-agent class="comp" [form]="actionType" *ngIf="actionType?.controls?.type?.value == coachingCnst.HINT_AGENT" [index]="i+1" [length]="ruleForm.controls['actions']['controls']?.length" [createOrEdit]="createOrEdit" (deleteAction)="deleteAction($event)"></app-hint-agent>
@@ -124,7 +124,7 @@
                 <div class="block-data-triggers">
                     <div class="triggers-icon-block">
                         <div class="indication-icon">
-                            <img [src]="coachingAssignImg">
+                            <img src="{{coachingAssignImg}}">
                         </div>
                         <div class="title">Assign this to...</div>
                     </div>
@@ -161,7 +161,8 @@
                             <div class="content-choose-triggers" ngbDropdownItem (click)="selectTriggerClick(trigger.type)">
                                 <div class="icon_blk">
                                     <!-- <i class="{{trigger.icon}}"></i> -->
-                                    <img src="{{trigger.icon}}">
+                                    <!-- <img src="http://localhost:4200/{{ isUnifiedPlatform ? unifiedPath/trigger.icon : unifiedPath}}"> -->
+                                    <img [src]="isUnifiedPlatform ? unifiedPath + '/' + trigger.icon : trigger.icon" >
                                 </div>
                                 <div class="info-data-content">
                                     <div class="title-choose">{{trigger.title}}</div>
@@ -224,7 +225,8 @@
                             <div class="content-choose-triggers" ngbDropdownItem (click)="selectActionClick(action.type)">
                                 <div class="icon_blk">
                                     <!-- <i class="{{action.icon}}"></i> -->
-                                    <img src="{{action.icon}}">
+                                    <!-- <img src="http://localhost:4200/{{action.icon }}"> -->
+                                    <img [src]="isUnifiedPlatform ? unifiedPath + '/' + action.icon : action.icon" >
                                 </div>
                                 <div class="info-data-content">
                                     <div class="title-choose">{{action.title}}</div>
