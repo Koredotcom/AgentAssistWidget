@@ -15,6 +15,7 @@ import { SubSink } from 'subsink';
 export class DialogSuggestionComponent implements OnInit, OnDestroy{
 
   @Input() searchResponse : any;
+  @Input() suggestionData : any = {};
   @Output() updateMenuResponseLoader = new EventEmitter();
 
   subs = new SubSink();
@@ -80,6 +81,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
     dialog.intentName = dialog.name;
     dialog.userInput = dialog.name;
     dialog.agentRunButton = (searchType == this.projConstants.MYBOT) ? true : false;
+    dialog.traits = this.suggestionData?.traits || [];
     // let runDialogueObject = Object.assign({}, this.searchConentObject);
     // Object.assign(runDialogueObject, dialog);
     this.handleSubjectService.setRunButtonClickEvent(dialog);

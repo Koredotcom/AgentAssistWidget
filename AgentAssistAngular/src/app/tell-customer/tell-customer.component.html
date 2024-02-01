@@ -27,14 +27,14 @@
 
 <ng-template #askCustMsg let-automationData="smallTalkData">
     <div class="msg-node-cust"  [ngClass]="{'grayout-msgs-node' : isWelcomeMsg && (automation.grayOut || automationData.send)}">
-        <div class="send-copy-actions" *ngIf="!automationData.hideActionButtons">
+        <div class="send-copy-actions" *ngIf="!automation.hideActionButtons">
             <ng-container>
                 <button class="solidbtn" aria-label="button"
-                    (click)="handleSendCopyButton(projConstants.COPY, automationData)" *ngIf="!automationData.hideCopyButton">
+                    (click)="handleSendCopyButton(projConstants.COPY, automationData)" *ngIf="!automation.hideCopyButton">
                     <i class="krIocnsFont-copy"></i>
                 </button>
                 <button class="solidbtn" aria-label="button"
-                    (click)="handleSendCopyButton(projConstants.SEND, automationData)" *ngIf="!automationData.hideSendButton">{{ 'SEND'  | translate }}</button>
+                    (click)="handleSendCopyButton(projConstants.SEND, automationData)" *ngIf="!automation.hideSendButton">{{ 'SEND'  | translate }}</button>
             </ng-container>
             <!-- <ng-container *ngIf="automationData.send">
                 <button class="solidbtn" aria-label="button">{{ 'SENT'  | translate }}</button>

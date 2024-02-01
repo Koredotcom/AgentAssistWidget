@@ -186,6 +186,9 @@ export class RootService {
     if (this.isMyBotAutomationOnGoing) {
       agent_assist_agent_request_params['positionId'] = this.currentPositionIdOfMyBot;
     }
+    if(Array.isArray(data.traits) && data?.traits?.length){
+      agent_assist_agent_request_params['traits'] = data.traits
+    }
     return agent_assist_agent_request_params;
   }
 
@@ -568,6 +571,9 @@ export class RootService {
     }
     if (this.isAutomationOnGoing) {
       agent_assist_request['positionId'] = this.currentPositionId;
+    }
+    if(Array.isArray(data.traits) && data?.traits?.length){
+      agent_assist_request['traits'] = data.traits
     }
     return agent_assist_request;
   }

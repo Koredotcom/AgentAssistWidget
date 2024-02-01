@@ -24,7 +24,7 @@
     <div class="dialog-ended-wrapper" [ngClass]="{'grayout-msgs-node' : automationData?.endAutomation && automationData?.automationsArray?.length}">
         <div class="middle-info">
             <p>{{'DIALOG_TEXT' | translate}}</p>
-            <button class="btn_link">{{automationData.data.intentName}}</button>
+            <button class="btn_link" [title]="automationData?.data?.intentName">{{automationData?.data?.intentName}}</button>
             <p>{{'STARTED' | translate}}</p>
         </div>
         <div class="line_bar"></div>

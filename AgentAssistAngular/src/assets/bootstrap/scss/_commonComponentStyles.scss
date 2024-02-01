@@ -361,6 +361,10 @@ app-ask-customer, app-tell-customer, app-smalltalk, app-feedback, app-dialog, ap
             font-weight: 500;
             line-height: normal;
             letter-spacing: 0.7px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 110px;
         }
     }
     i{

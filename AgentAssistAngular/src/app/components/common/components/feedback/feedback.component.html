@@ -11,7 +11,7 @@
         <div class="dialog-ended-wrapper grayout-msgs-node">        
             <div class="middle-info">
                 <p>{{'DIALOG_TEXT' | translate}}</p>
-                <button class="btn_link">{{feedbackData?.dialogName}}</button>
+                <button class="btn_link" [title]="feedbackData?.dialogName">{{feedbackData?.dialogName}}</button>
                 <p>{{'ENDED' | translate}}</p>
             </div>
             <div class="line_bar"></div>
