@@ -175,10 +175,8 @@ export class AppComponent implements OnDestroy {
       console.log(e, "event", e.data.userDetails, "user details");
       this.localStorageService.userDetails = e.data.userDetails ? e.data.userDetails : null;
     } else if(e.data.type === 'AGENT') {
-      console.log(e.data);
       this.emitUserAgentMessage(e.data, 'agent_inp_msg');
     }else if(e.data.type === 'USER') {
-      console.log(e.data);
       this.emitUserAgentMessage(e.data, 'user_inp_msg');
     }
     
