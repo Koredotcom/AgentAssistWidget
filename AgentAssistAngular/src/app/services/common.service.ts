@@ -429,7 +429,10 @@ export class CommonService {
   }
 
   smallTalkTemplateRenderCheck(data, result) {
-    if (result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))) {
+    // if (result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))) {
+    //   return true;
+    // }
+    if(result.parsedPayload){
       return true;
     }
     return false;
@@ -631,7 +634,9 @@ export class CommonService {
   }
 
   formatAssistAutomation(automation) {
-    let templateRender = (!automation?.result?.parsedPayload || automation?.noTemplateRender || (automation?.componentType == 'dialogAct' && (automation?.srcChannel != 'msteams' && automation?.srcChannel != 'rtm'))) ? false : true
+    let templateRender = (!automation?.result?.parsedPayload || automation?.noTemplateRender) ? false : true
+
+    // let templateRender = (!automation?.result?.parsedPayload || automation?.noTemplateRender || (automation?.componentType == 'dialogAct' && (automation?.srcChannel != 'msteams' && automation?.srcChannel != 'rtm'))) ? false : true
     automation.templateRender = templateRender;
     console.log(automation.templateRender, 'template render');
 
@@ -656,7 +661,8 @@ export class CommonService {
 
   updateSendCopyParams(automation) {
     automation.showSend = (this.rootService.connectionDetails.isCallConversation || ((!automation.connectionDetails.source || automation.connectionDetails.source !== ProjConstants.SMARTASSIST_SOURCE) && automation.template)) ? false : true;
-    automation.showCopy = (this.rootService.connectionDetails.isCallConversation) ? false : ((!automation.template && automation.data?.componentType != 'dialogAct') ? true : false);
+    // automation.showCopy = (this.rootService.connectionDetails.isCallConversation) ? false : ((!automation.template && automation.data?.componentType != 'dialogAct') ? true : false);
+    automation.showCopy = (this.rootService.connectionDetails.isCallConversation) ? false : ((!automation.template) ? true : false);
     let sendData = null;
     if ((automation.data?.buttons && automation.data?.buttons[0]?.value)) {
       sendData = automation.data?.buttons[0].value

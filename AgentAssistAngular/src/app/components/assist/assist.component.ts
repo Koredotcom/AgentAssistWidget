@@ -263,7 +263,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     let renderResponse: any = {};
     // let isTemplateRender = false;
 
-    data = this.rootService.confirmationNodeRenderDataTransform(data);
+    // data = this.rootService.confirmationNodeRenderDataTransform(data);
 
     if (this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.suggestions?.dialogs?.length > 0) {
       this.dialogTerminatedOrIntruppted();
@@ -594,7 +594,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     resp?.forEach((res, index) => {     
       if(res.type == 'outgoing'){
         res = this.rootService.formatHistoryResonseToNormalRender(res);
-        res = this.rootService.confirmationNodeRenderForHistoryDataTransform(res);
+        // res = this.rootService.confirmationNodeRenderForHistoryDataTransform(res);
 
         if ((res.suggestions || res.ambiguityList) && res.faqResponse) {
   
