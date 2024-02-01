@@ -5,7 +5,7 @@
 <div class="overlay-suggestions fixed-overlay" [ngClass]="isNotLibraryTab? 'overlay-box':'overlay-box-libraray'" id="overLayAutoSearchDiv" *ngIf="showOverlay && dataSet.length > 0 && isVisible">
     <div class="suggestion-content" id="overLayAutoSearch">
         <perfect-scrollbar class="overlaysearch-scroll-bar-typehead" #overlaytypeaheadps id="overlayTypeaheadSearchScroll">
-        <ul class="filter-list" (mouseover)="cursorOverSet()">
+        <ul class="filter-list">
             <li style="cursor: pointer;" *ngFor="let item of dataSet; index as i;" (click)="setValue(item)">
                 {{ item }}
             </li>
