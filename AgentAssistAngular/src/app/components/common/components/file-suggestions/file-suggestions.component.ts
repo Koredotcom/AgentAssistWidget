@@ -43,11 +43,11 @@ export class FileSuggestionsComponent {
     this.hideActionButtons = (this.rootService.connectionDetails.isCallConversation) ? true : false;
 
     //send Button
-    if(!this.rootService.settingsData?.isAgentResponseEnabled){
+    if(this.rootService.settingsData?.isAgentResponseEnabled === false){
       this.hideSendButton = true;
     }
 
-    if(!this.rootService.settingsData?.isAgentResponseCopyEnabled){
+    if(this.rootService.settingsData?.isAgentResponseCopyEnabled === false){
       this.hideCopyButton = true;
     }
     

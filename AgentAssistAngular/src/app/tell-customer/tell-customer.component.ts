@@ -34,11 +34,11 @@ export class TellCustomerComponent {
        (this.automation?.templateRender && this.automation?.template && this.automation.connectionDetails?.source != this.projConstants.SMARTASSIST_SOURCE)) ? true : false;
 
     // only copy button
-    if(!this.rootService.settingsData?.isAgentResponseCopyEnabled || (this.automation?.templateRender && this.automation?.template && this.automation?.connectionDetails?.source == this.projConstants.SMARTASSIST_SOURCE)){
+    if((this.rootService.settingsData?.isAgentResponseCopyEnabled === false) || (this.automation?.templateRender && this.automation?.template && this.automation?.connectionDetails?.source == this.projConstants.SMARTASSIST_SOURCE)){
       this.automation.hideCopyButton = true; 
     }
 
-    if(!this.rootService.settingsData?.isAgentResponseEnabled){
+    if(this.rootService.settingsData?.isAgentResponseEnabled === false){
       this.automation.hideSendButton = true;
     }
 
