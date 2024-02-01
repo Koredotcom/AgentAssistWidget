@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { SubSink } from 'subsink';
 import { WelcomeEventsService } from '../welcome-events.service';
+import { workflowService } from '@kore.services/workflow.service';
 
 @Component({
   selector: 'app-on-connect-dialog',
@@ -32,7 +33,8 @@ export class OnConnectDialogComponent implements OnInit {
   onConnectStr =  'AA_ON_CONNECT_EVENT';
 
   constructor(private service: ServiceInvokerService, private cdRef: ChangeDetectorRef,
-    private welcomeEventService: WelcomeEventsService) { }
+    private welcomeEventService: WelcomeEventsService,
+    private workflowService : workflowService) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -73,7 +75,7 @@ export class OnConnectDialogComponent implements OnInit {
 
   getUseCaseData(botId, update = true) {
     const params: any = {
-      streamId: botId,
+      streamId: this.workflowService.getCurrentBtSmt(true)._id,
       search: '',
       filterby: '',
       status: '',

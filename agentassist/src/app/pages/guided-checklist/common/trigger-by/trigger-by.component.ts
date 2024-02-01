@@ -127,7 +127,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
         // this.selectSMBot({_id : this.onlyAdhreForm.value.botId});
       }else{
         /* Get the current bot in case of AgentAssist */
-        this.currentBot = this.workflowService.getCurrentBt(true);
+        this.currentBot = this.workflowService.getCurrentBtSmt(true)._id;
         if(this.currentBot.type === 'universalbot'){
           this.getLinkedBots();
           if(this.onlyAdhreForm.value.lBId){
