@@ -667,7 +667,75 @@ export class CommonService {
   }
 
   formatSearchResponse(response) {
-    let suggestions = response.suggestions
+    let suggestions = response.suggestions;
+    suggestions.searchassist = {
+      snippets: [
+        {
+          "content": [
+            {
+              "answer_fragment": "Active citation snippet description 1",
+              "sources": [
+                {
+                  "title": "action citation source 1",
+                  "url": "https://google.com"
+                }
+              ]
+            },
+            {
+              "answer_fragment": "Active citation snippet description 2", // snippet body (content)
+              "sources": [   // there can be multiple sources 
+                {
+                  "title": "action citation source 2",
+                  "url": "https://google.com"
+                }
+              ]
+            }
+          ],
+          "snippet_type": "generative_model",
+          "templateType": "active_citation_snippet"
+        },
+        {
+          "content": [                // Array of objects
+            {
+              "answer_fragment": "citation snippet content", // snippet body (content)
+              "sources": [   // there can be multiple sources 
+                {
+                  "title": "citation source 1",
+                  "url": "https://google.com"
+                }
+              ]
+            }
+          ],
+          "snippet_type": "generative_model",
+          "templateType": "citation_snippet"
+        },
+        {
+          "title": "paragraph snippet title",
+          "content": "paragraph snippet content", // string
+          "url": "https://google.com",
+          "source": "paragraph snippet source",
+          "snippet_type": "extractive_model",
+          "templateType": "paragraph_snippet"
+        },
+        {
+          "title": "list element title",
+          "content": ["list element 1", "list element 2", "list element 3", "list element 4"], // Array of strings
+          "url": "https://google.com",
+          "source": "list element source",
+          "snippet_type": "extractive_model",
+          "templateType": "list_element_snippet"
+        },
+        {
+          "title": "heading snippet title",
+          "content": ["heading snippet 1", "heading snippet 2", "heading snippet 3", "heading snippet 4"], // Array of strings
+          "url": "https://google.com",
+          "source": "heading element source",
+          "snippet_type": "extractive_model",
+          "templateType": "headings_snippet"
+        }
+
+      ]
+    };
     let searchResponse: any = {};
     searchResponse.dialogs = [];
     searchResponse.faqs = [];
@@ -675,7 +743,7 @@ export class CommonService {
     searchResponse.snippets = [];
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
-    let snippersArray = suggestions?.searchassist?.snippets || []
+    let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [])
     if (suggestions.searchassist && Object.keys(suggestions.searchassist).length > 0) {
       for(let source in suggestions.searchassist){
         if(source != "snippets"){
@@ -718,13 +786,16 @@ export class CommonService {
       }
       searchResponse.faqs.push(faqObject);
     }
-    if(suggestions?.searchassist?.snippets?.length > 0){
-      for(let snippet of snippersArray){
-        if(Array.isArray(snippet?.content)){
-          snippet.content = snippet.content.reduce((acc, obj) => acc += (obj.answer_fragment || ''), '')
-        }
-        searchResponse.snippets.push(snippet);
-      }
+    if(snippersArray?.length > 0){
+      // for(let snippet of snippersArray){
+      //   if(Array.isArray(snippet?.content)){
+      //     snippet.content = snippet.content.reduce((acc, obj) => acc += (obj.answer_fragment || ''), '')
+      //   }
+      //   searchResponse.snippets.push(snippet);
+      // }
+
+      searchResponse.snippets = Object.assign([], snippersArray);
+      
       for (let snippet of searchResponse.snippets) {
         snippet.showMoreButton = false;
         snippet.showLessButton = false;
@@ -738,6 +809,37 @@ export class CommonService {
     console.log(searchResponse, "searchresponse");
 
     return searchResponse;
+  }
+
+  formatSnippetResponse(snippetsArray){
+    let snippetResponeArray : any = [];
+    if(snippetsArray?.length > 0){
+      snippetsArray.forEach( (snippet : any) => {
+        if(snippet?.templateType){
+          if(snippet.templateType == 'active_citation_snippet' || snippet.templateType == 'citation_snippet'){
+            if(snippet?.content && Array.isArray(snippet?.content) && snippet?.content?.length > 0){
+              snippet.content.forEach((ansSnippet : any) => {
+                let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet)
+                obj.contentArray = [ansSnippet.answer_fragment]
+                obj.sources = ansSnippet?.sources || []
+                snippetResponeArray.push(obj);
+              });
+            }
+          }else{
+            if(snippet?.content && typeof (snippet?.content) === 'string'){
+              snippet.contentArray = [snippet.content];
+            }else if(snippet?.content){
+              snippet.contentArray = snippet.content || [];
+            }
+            snippet.sources = [{title : snippet.source, url : snippet.url}]
+            snippetResponeArray.push(snippet);
+          }
+        }
+      });
+    } 
+    console.log(snippetResponeArray, "snippet response array ************8");
+    
+    return snippetResponeArray;   
   }
 
   formatFAQResponse(faqArray){
