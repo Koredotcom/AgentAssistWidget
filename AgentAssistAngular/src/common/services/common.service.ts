@@ -822,6 +822,7 @@ export class CommonService {
                 let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet)
                 obj.contentArray = [ansSnippet.answer_fragment]
                 obj.sources = ansSnippet?.sources || []
+                obj.tempType = 'snippet'
                 snippetResponeArray.push(obj);
               });
             }
@@ -831,6 +832,7 @@ export class CommonService {
             }else if(snippet?.content){
               snippet.contentArray = snippet.content || [];
             }
+            snippet.tempType = 'snippet'
             snippet.sources = [{title : snippet.source, url : snippet.url}]
             snippetResponeArray.push(snippet);
           }

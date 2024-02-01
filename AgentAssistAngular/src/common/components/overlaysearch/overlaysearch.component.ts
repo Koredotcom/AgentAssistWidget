@@ -279,21 +279,25 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   handleSendCopyButton(actionType, faq_or_article_obj, selectType, faq) {
+    let sendObj = JSON.parse(JSON.stringify(faq_or_article_obj));
     let message = {};
+    if(sendObj?.tempType == 'snippet' && sendObj?.contentArray?.length > 0){
+      sendObj.content = sendObj.contentArray.join('<br>')
+    }
     if (actionType == this.projConstants.SEND) {
       message = {
         method: 'send',
         name: "agentAssist.SendMessage",
         conversationId: this.connectionDetails.conversationId,
 
-        payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
+        payload: selectType == this.projConstants.FAQ ? (sendObj.answer || sendObj.ans) : sendObj.content
       };
       if(selectType === 'Article') {
-        message['title'] = faq_or_article_obj.title;
-        message['contentId'] = faq_or_article_obj.contentId;
+        message['title'] = sendObj.title;
+        message['contentId'] = sendObj.contentId;
       } else {
         message['title'] = faq.displayName;
-        message['contentId'] = faq_or_article_obj.taskRefId
+        message['contentId'] = sendObj.taskRefId
       }
       window.parent.postMessage(message, '*');
     } else {
@@ -301,18 +305,18 @@ export class OverlaysearchComponent implements OnInit {
         method: 'copy',
         name: "agentAssist.CopyMessage",
         conversationId: this.connectionDetails.conversationId,
-        payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
+        payload: selectType == this.projConstants.FAQ ? (sendObj.answer || sendObj.ans) : sendObj.content
       };
       if(selectType === 'Article') {
-        message['title'] = faq_or_article_obj.title;
-        message['contentId'] = faq_or_article_obj.contentId;
+        message['title'] = sendObj.title;
+        message['contentId'] = sendObj.contentId;
       } else {
         message['title'] = faq.displayName;
-        message['contentId'] = faq_or_article_obj.taskRefId
+        message['contentId'] = sendObj.taskRefId
       }
       parent.postMessage(message, '*');
     }
-    this.faqArticleSendorCopyEvent(actionType, faq_or_article_obj, selectType, message)
+    this.faqArticleSendorCopyEvent(actionType, sendObj, selectType, message)
   }
 
   faqArticleSendorCopyEvent(actionType, faq_or_article_obj, selectType, message) {
