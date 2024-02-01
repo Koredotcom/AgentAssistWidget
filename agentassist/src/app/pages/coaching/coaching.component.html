@@ -3,7 +3,7 @@
         <div class="main-heading">Agent Coaching <span class="beta-tag">Beta</span></div>
         <div class="right-action-btns">
             <!-- tooltipClass="tooltip-global-styles" ngbTooltip="2 Rules ready for Publish"  -->
-            <button class="kr-sg-button-secondary-two btn_lg mr-2" (click)="publishCoaching()" [disabled]="publishInprogress"><i class="icon-coaching-publish mr-2"></i>Publish</button>
+            <button class="kr-sg-button-secondary-two btn_lg mr-2" *ngIf="!isUnifiedPlatform" (click)="publishCoaching()" [disabled]="publishInprogress"><i class="icon-coaching-publish mr-2"></i>Publish</button>
             <!-- <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button> -->
             <button class="kr-sg-button-primary btn_lg" (click)="openFLowCreation(flowCreation, {},'create')">+ New Rule</button>
         </div>
