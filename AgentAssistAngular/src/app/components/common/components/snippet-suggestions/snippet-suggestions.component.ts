@@ -67,8 +67,12 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   }
 
   handleSendCopyButton(actionType, snippetObj, selectType){
-    snippetObj.send = true;
-    this.commonService.handleSendCopyButton(actionType, snippetObj, selectType)
+    let snippet = JSON.parse(JSON.stringify(snippetObj));
+    if(snippet.contentArray.length > 0){
+      snippet.content = snippet.contentArray.join('<br>')
+    }
+    snippet.send = true;
+    this.commonService.handleSendCopyButton(actionType, snippet, selectType)
   }
 
   toggleShowMoreLess(snippet){

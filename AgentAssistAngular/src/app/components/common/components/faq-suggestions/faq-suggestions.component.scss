@@ -106,6 +106,9 @@
         .data-faq-paragraph{
             .text-info-more-data-link{
                 position: relative;
+                .text-info-more-data-block{
+                    position: relative;
+                }
             }
             p{
                 color: var(--primaryTextColorTwo);
@@ -119,6 +122,90 @@
                 overflow: hidden;
                 &.show-full-text{
                     display: block;
+                }
+                .snippet-list-style{
+                    position: relative;
+                    padding-left: 12px;
+                    &::before{
+                        content: "";
+                        position: absolute;
+                        left: 0;
+                        width: 4px;
+                        height: 4px;
+                        border-radius: 50%;
+                        background-color: #000;
+                        top: 50%;
+                        transform: translateY(-50%);
+                    }
+                }
+            }
+            .souces-names-wrapper{
+                display: flex;
+                align-items: flex-start;
+                gap: 3px;
+                margin-top: 10px;
+                h1{
+                    color: var(--Gray-300, #D0D5DD);
+                    font-size: 12px;
+                    font-style: italic;
+                    font-weight: 500;
+                    line-height: 18px;
+                    text-align: left;
+                    flex-shrink: 0;
+                }
+                .source-names{
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 8px;
+                    overflow: hidden;
+                    flex-wrap: wrap;
+                    .source-tag{
+                        display: flex;
+                        padding: 2px 8px;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 4px;
+                        border-radius: 16px;
+                        background: var(--Gray-100, #F2F4F7);
+                        transition: 0.2s all ease;
+                        max-width: 47%;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        &:hover{
+                            span{
+                                color: var(--Gray-modern-700, #364152);
+                            }
+                            a{
+                                color: var(--Gray-modern-700, #364152);
+                                text-decoration-line: underline;
+                            }
+                        }
+                        span{
+                            display: flex;
+                            width: 14px;
+                            height: 14px;
+                            padding: 0;
+                            justify-content: center;
+                            align-items: center;
+                            flex-shrink: 0;
+                            border-radius: 16px;
+                            background: var(--Gray-50, #F9FAFB);
+                            color: var(--Gray-700, #344054);
+                            font-size: 12px;
+                            font-weight: 400;
+                            line-height: 16px;
+                        }
+                        a{
+                            overflow: hidden;
+                            color: var(--Gray-modern-500, #697586);
+                            text-align: center;
+                            text-overflow: ellipsis;
+                            font-size: 12px;
+                            font-weight: 400;
+                            line-height: 18px;
+                        }
+                    }
                 }
             }
         }
