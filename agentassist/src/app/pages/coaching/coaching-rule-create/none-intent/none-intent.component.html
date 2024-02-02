@@ -1,7 +1,7 @@
 <div class="non-intent-wrapper">
     <div class="header-sec">
         <div class="left-sec">
-            <img src="assets/icons/coaching/coaching--message-check-square.svg">
+            <img [src]="assetUrlProc('/icons/coaching/coaching--message-check-square.svg')" >
             <span class="sub-title">None Intent</span>
             <span class="info-tip" placement="bottom-center" tooltipClass="tooltip-global-styles"
                 ngbTooltip="None intent utterances are used to prevent false positives while doing intent recognition">
@@ -53,7 +53,7 @@
                                 </ng-container>
                                 <ng-container *ngIf="dataloaded">
                                     <div class="img-block-empty">
-                                        <img [src]="selectedUtterSeach ? 'assets/icons/empty-search-add.svg' : 'assets/icons/Comments.svg'">
+                                        <img [src]="selectedUtterSeach ? assetUrlProc('/icons/empty-search-add.svg') : assetUrlProc('/icons/Comments.svg')">
                                     </div>
                                     <ng-container *ngIf="selectedUtterSeach">
                                         <h1>No results found</h1>
