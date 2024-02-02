@@ -9,6 +9,10 @@ import { AppService } from '@kore.services/app.service';
 
 export class AppDataResolver implements Resolve<any> {
 
+  unifiedObj: any = {
+    'sit-xo.kore.ai': true,
+    'dev-xo.kore.ai' : true,
+  }
 
   // verticalPosition: MatSnackBarVerticalPosition = 'top';
   constructor(private authService: AuthService, private appService: AppService) { }
@@ -17,7 +21,11 @@ export class AppDataResolver implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot) {
     return Observable.create(observer => {
       var _promise1 = this.authService.getApplictionControlsFromServer();
-      const instanceOb$ = this.appService.getInstaceApps();
+      if(!this.unifiedObj[window.location.host]) {
+        const instanceOb$ = this.appService.getInstaceApps();
+        instanceOb$.subscribe();
+      }
+      
       //const versionOb$ = this.appService.getAppVersion();
       _promise1.subscribe((res)=>{
         observer.next(res);
@@ -26,7 +34,7 @@ export class AppDataResolver implements Resolve<any> {
         this.authService.getProfile();
         this.authService.getAgentDesktopPermissions();
         observer.complete();
-        instanceOb$.subscribe();
+        
       },
       (errRes) => {
         observer.end();
