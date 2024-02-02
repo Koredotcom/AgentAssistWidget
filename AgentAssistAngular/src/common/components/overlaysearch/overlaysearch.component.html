@@ -17,7 +17,7 @@
                         </div>
                         <div class="list-desc-elements"  [id]="'snippetdescLib-' + i" >
                             <ng-container *ngFor="let content of snippet.contentArray">
-                                <div class="desc-text" *ngIf="content?.length > 0">
+                                <div class="desc-text" *ngIf="content?.length > 0" [class.bullet-list-span]="snippet?.contentArray?.length > 1">
                                     <span *ngIf="snippet?.contentArray?.length > 1"></span>
                                     <div [innerHTML]="commonService.handleEmptyLine(content)"></div>
                                 </div>

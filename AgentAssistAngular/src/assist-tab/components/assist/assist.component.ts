@@ -573,7 +573,7 @@ export class AssistComponent implements OnInit {
             {
               "content": [
                 {
-                  "answer_fragment": "Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 12,Active citation snippet description 2",
+                  "answer_fragment": "Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 12,Active citation snippet description 2, Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,",
                   "sources": [
                     {
                       "title": "action citation source 1",
@@ -1140,7 +1140,7 @@ export class AssistComponent implements OnInit {
 
     ele.contentArray.forEach((content) => {
       if(content.length > 0){
-        let temp = `<div class="desc-text">`;
+        let temp = ele?.contentArray?.length > 1 ? `<div class="desc-text bullet-list-span">` : `<div class="desc-text">`;
         if(ele?.contentArray?.length > 1){  
           temp += `<span></span>`;
         }
