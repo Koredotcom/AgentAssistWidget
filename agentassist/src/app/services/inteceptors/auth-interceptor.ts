@@ -50,7 +50,7 @@ export class AuthInterceptor implements HttpInterceptor {
     if(iid){
       _reqAdditions.setHeaders['iid'] = iid;
     }else{
-      _reqAdditions.setHeaders['iid'] = this.workflowService?.getCurrentBtSmt(true)?._id;
+      _reqAdditions.setHeaders['iid'] = this.workflowService?.getCurrentBtSmt(true)?._id || 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9';
     }
     _reqAdditions.setHeaders['app-language'] = this.localStoreService.appLanguage || 'en';
 
