@@ -26,8 +26,8 @@
                         <button class="ghost-btn" [id]="'snippetseeLess-' + i" *ngIf="snippet.showLessButton" (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.READ_LESS}}</button>
                     </div>
                     <div class="action-links" *ngIf="!commonService.isCallConversation && snippet?.content">
-                        <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, snippet, projConstants.ARTICLE)">{{projConstants.SEND}}</button>
-                        <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, snippet, projConstants.ARTICLE)">
+                        <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, snippet, projConstants.ARTICLE)" *ngIf="showSendBtn">{{projConstants.SEND}}</button>
+                        <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, snippet, projConstants.ARTICLE)" *ngIf="showCopyBtn">
                             <i class="ast-copy"></i>
                         </div>
                     </div>
@@ -113,8 +113,8 @@
 
                         </div>
                         <div class="action-links" *ngIf="!commonService.isCallConversation && (!faq.seeMoreWrapper && faq.answer && faq.answer.length > 0)">
-                            <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND,faq.answer[0], projConstants.FAQ, faq)">{{projConstants.SEND}}</button>
-                            <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY,faq.answer[0], projConstants.FAQ, faq)">
+                            <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND,faq.answer[0], projConstants.FAQ, faq)" *ngIf="showSendBtn">{{projConstants.SEND}}</button>
+                            <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY,faq.answer[0], projConstants.FAQ, faq)" *ngIf="showCopyBtn">
                                 <i class="ast-copy"></i>
                             </div>
                         </div>
@@ -144,8 +144,8 @@
                             <button class="ghost-btn" [id]="'articleseeLess-' + i" *ngIf="article.showLessButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_LESS}}</button>
                         </div>
                         <div class="action-links" *ngIf="!commonService.isCallConversation && article.content">
-                            <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND}}</button>
-                            <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
+                            <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)" *ngIf="showSendBtn">{{projConstants.SEND}}</button>
+                            <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)" *ngIf="showCopyBtn">
                                 <i class="ast-copy"></i>
                             </div>
                         </div>

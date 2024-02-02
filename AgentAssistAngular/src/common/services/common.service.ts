@@ -198,6 +198,9 @@ export class CommonService {
     if (data.intentName && data.userInput) {
       agent_assist_request['query'] = data.userInput
     }
+    if(Array.isArray(data.traits) && data?.traits?.length){
+      agent_assist_request['traits'] = data.traits
+    }
     return agent_assist_request;
   }
 
@@ -229,6 +232,9 @@ export class CommonService {
     }
     if (data?.language) {
       agent_assist_agent_request_params['language'] = data.language; // Return the default value for null, undefined, or "''"
+    }
+    if(Array.isArray(data.traits) && data?.traits?.length){
+      agent_assist_agent_request_params['traits'] = data.traits
     }
     return agent_assist_agent_request_params;
   }
@@ -922,7 +928,15 @@ export class CommonService {
     if(this.isCallConversation == true){
       $(lastchild).find('.copy-btn').addClass('hide')
       $(lastchild).find('.send-run-btn').addClass('hide')
-    }
+    } else{
+      
+      if(this.configObj.isAgentResponseEnabled === false){
+        $(lastchild).find('.send-run-btn').addClass('hide')
+      }
+      if(this.configObj.isAgentResponseCopyEnabled === false){
+        $(lastchild).find('.copy-btn').addClass('hide')
+      }
+    } 
   }
 
   hideSendOrCopyButtons(parsedPayload, conatiner, smallTalk?, componentType?){
@@ -939,10 +953,17 @@ export class CommonService {
         $(lastchild).find('.warning-template').removeClass('hide')
     }
 
-    if(this.isCallConversation == true){
+    if(this.isCallConversation === true){
       $(lastchild).find('.copy-btn').addClass('hide')
       $(lastchild).find('.send-run-btn').addClass('hide')
-    }
+    } else{
+      if(this.configObj.isAgentResponseEnabled === false){
+        $(lastchild).find('.send-run-btn').addClass('hide')
+      }
+      if(this.configObj.isAgentResponseCopyEnabled === false){
+        $(lastchild).find('.copy-btn').addClass('hide')
+      }
+    } 
   }
 
   //See more buttons update
@@ -1198,6 +1219,7 @@ export class CommonService {
       connectionDetails.positionId = dialog.positionId;
       connectionDetails.childBotId = dialog?.childBotId || '';
       connectionDetails.childBotName = dialog?.childBotName || '';
+      connectionDetails.traits = dialog?.traits || null;
 
       let agent_assist_agent_request_params = this.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.webSocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);

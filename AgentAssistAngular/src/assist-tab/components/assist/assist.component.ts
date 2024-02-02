@@ -297,6 +297,7 @@ export class AssistComponent implements OnInit {
       'uId': this.userBotSessionDetails?.userId || '',
       'sId': this.userBotSessionDetails?.sessionId || '',
       'experience' : this.commonService.configObj.channel,
+      'jToken': this.connectionDetails.token
     }
     if(customData && Object.keys(customData).length > 0 && this.commonService.configObj?.source !== this.projConstants.SMARTASSIST_SOURCE) {
       welcomeMessageParams['customData'] = customData
@@ -323,6 +324,7 @@ export class AssistComponent implements OnInit {
     this.assistTabDialogforDashboard(dialog, intent);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = dialog.intentName;
+    connectionDetails.traits = dialog.traits || null;
     if (dialog.intentName && intent) {
       connectionDetails.intentName = dialog.intentName;
     }
@@ -557,7 +559,8 @@ export class AssistComponent implements OnInit {
       this.commonService.userIntentInput = data.userInput;
       let htmls = this.assisttabService.agentUttInfoTemplate(data, responseId, this.imageFilePath, this.imageFileNames)
 
-      dynamicBlock.innerHTML = dynamicBlock.innerHTML + htmls;
+      // dynamicBlock.innerHTML = dynamicBlock.innerHTML + htmls;
+      $(dynamicBlock).append(htmls);
 
       if (data.type === 'intent' || data.type === 'text') {
         let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
@@ -644,7 +647,7 @@ export class AssistComponent implements OnInit {
           ele.name = ele.name || ele.usecaseName;
           ele.userInput = data.userInput;
           let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
-          let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, index, ele);
+          let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, index, ele, data);
           dialogSuggestions.innerHTML += dialogsHtml;
           if(ele?.childBotName){
             let dialogHeader = document.getElementById(`automation-${uuids + index}`);
@@ -922,9 +925,9 @@ export class AssistComponent implements OnInit {
             this.agentAssistResponse = Object.assign({}, data);
           }
         }, 10);
-        let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
+        let askToUserHtml = this.assisttabService.askUserTemplate(data, uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
   /// componentType === 'dialogAct' means its confirmation node or else not
-        let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
+        let tellToUserHtml = this.assisttabService.tellToUserTemplate(data, uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
         if (data.isPrompt) {
           runInfoContent.append(askToUserHtml);
           if (!this.proactiveModeStatus) {
@@ -1029,7 +1032,7 @@ export class AssistComponent implements OnInit {
           this.updateNewMessageUUIDList(uuids);
         }, this.waitingTimeForUUID);
       }
-    }else{
+    }else if(data?.buttons?.length > 0){
       let dynamicBlockDiv = $('#dynamicBlock');
       let actionLinkTemplate = ``;
       let welcomeMsgHtml = this.assisttabService.prepareWelcomeMsgTemplate(uuids, this.interactiveLangaugeDetails);
@@ -1037,6 +1040,7 @@ export class AssistComponent implements OnInit {
       dynamicBlockDiv.append(welcomeMsgHtml);
       $(`#smallTalk-${uuids} .run-info-content`).append(actionLinkTemplate);
        this.welcomeMsgResponse = data;
+       this.commonService.hideSendOrCopyButtons(false, `.welcome-msg`, 'smallTalk')
     }
 
     let renderedMessage = !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';
@@ -1125,8 +1129,7 @@ export class AssistComponent implements OnInit {
 
   // handling seemoe button
   handleSeeMoreButton(responseId, array, type) {
-
-    if (array && responseId && type) {
+    if (array?.length && responseId && type) {
       let index = 0;
       for (let item of array) {
         let id = responseId + index;
@@ -1597,46 +1600,50 @@ export class AssistComponent implements OnInit {
       descElement = document.getElementById("snippetdesc-" + id);
     }
 
-    seeMoreElement.addEventListener('click', (event: any) => {
-      event.target.classList.add('hide');
-      seeLessElement.classList.remove('hide');
-      if(titleElement){
-        titleElement.classList.add('no-text-truncate');
-      }
-      if (data.type == this.projConstants.FAQ && seeMoreWrapper && data.answer && data.answer.length > 1) {
-          descElement.classList.add('hide');
-          seeMoreWrapper.classList.remove('hide');
-          seeLessElement.classList.add('show-less-btn');
-          seeLessElement.innerText = this.projConstants.CLOSE;
-          titleElement.innerText = data.question;
-          faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
-            ele.classList.add('hide')
+    if(seeMoreElement){
+      seeMoreElement.addEventListener('click', (event: any) => {
+        event.target.classList.add('hide');
+        seeLessElement.classList.remove('hide');
+        if(titleElement){
+          titleElement.classList.add('no-text-truncate');
+        }
+        if (data.type == this.projConstants.FAQ && seeMoreWrapper && data.answer && data.answer.length > 1) {
+            descElement.classList.add('hide');
+            seeMoreWrapper.classList.remove('hide');
+            seeLessElement.classList.add('show-less-btn');
+            seeLessElement.innerText = this.projConstants.CLOSE;
+            titleElement.innerText = data.question;
+            faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
+              ele.classList.add('hide')
+            });
+            setTimeout(() => {
+              this.updateSeeMoreButtonForFAQAgent(id, data.answer);
+            }, 100);
+  
+        } else {
+          descElement.classList.add('no-text-truncate');
+        }
+      });
+    }
+    if(seeLessElement){
+      seeLessElement.addEventListener('click', (event: any) => {
+        event.target.classList.add('hide');
+        seeMoreElement.classList.remove('hide');
+        if(titleElement){
+          titleElement.classList.remove('no-text-truncate');
+        }
+        if (data.type == this.projConstants.FAQ && seeMoreWrapper && data.answer && data.answer.length > 1) {
+            if(seeMoreWrapper) seeMoreWrapper.classList.add('hide');
+            descElement.classList.remove('hide');
+            titleElement.innerText = data.question + " 1/" + data.answer.length;
+            faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
+              ele.classList.remove('hide')
           });
-          setTimeout(() => {
-            this.updateSeeMoreButtonForFAQAgent(id, data.answer);
-          }, 100);
-
-      } else {
-        descElement.classList.add('no-text-truncate');
-      }
-    });
-    seeLessElement.addEventListener('click', (event: any) => {
-      event.target.classList.add('hide');
-      seeMoreElement.classList.remove('hide');
-      if(titleElement){
-        titleElement.classList.remove('no-text-truncate');
-      }
-      if (data.type == this.projConstants.FAQ && seeMoreWrapper && data.answer && data.answer.length > 1) {
-          if(seeMoreWrapper) seeMoreWrapper.classList.add('hide');
-          descElement.classList.remove('hide');
-          titleElement.innerText = data.question + " 1/" + data.answer.length;
-          faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
-            ele.classList.remove('hide')
-        });
-      } else {
-        if(descElement) descElement.classList.remove('no-text-truncate');
-      }
-    });
+        } else {
+          if(descElement) descElement.classList.remove('no-text-truncate');
+        }
+      });
+    }
   }
 
   //restore popup related click events
@@ -1836,8 +1843,8 @@ export class AssistComponent implements OnInit {
                     </div>
                 </div>`;
             a.append(faqActionHtml);
+            this.commonService.hideSendAndCopyBtnsforCallconversation(a);
             faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(ele.answer[0], false)}</div>`);
-            this.commonService.hideSendAndCopyBtnsforCallconversation(faqs);
 
             if(ele.answer && ele.answer.length > 1){
               this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID+index, uniqueID+index);
@@ -1922,8 +1929,8 @@ export class AssistComponent implements OnInit {
                 </div>`;
 
           a.append(faqActionHtml);
+          this.commonService.hideSendAndCopyBtnsforCallconversation(a);
           faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(res.components[0].data.text[0], false)}</div>`);
-          this.commonService.hideSendAndCopyBtnsforCallconversation(faqs);
 
           if(res.components[0].data.text && res.components[0].data.text.length > 1){
             this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID + index, uniqueID + index);
@@ -2106,8 +2113,8 @@ export class AssistComponent implements OnInit {
           if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
             let runInfoContent = $(`#dropDownData-${previousId}`);
 
-            let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp, previousTaskPositionId,res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
-            let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp, previousTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+            let askToUserHtml = this.assisttabService.askUserTemplate(res, res._id, newTemp, previousTaskPositionId,res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+            let tellToUserHtml = this.assisttabService.tellToUserTemplate(res, res._id, newTemp, previousTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
 
             if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
               this.commonService.isAutomationOnGoing = true;
@@ -2172,8 +2179,9 @@ export class AssistComponent implements OnInit {
           let dynamicBlockDiv = $('#dynamicBlock');
           res.components?.forEach((ele, i) => {
             if(res.components?.length && res.components[0]?.data?.text !== '') {
-              let botResHtml = this.assisttabService.historySmallTalkTemplate(res.components[0], res._id);
+              let botResHtml = this.assisttabService.historySmallTalkTemplate(res,res.components[0], res._id);
               dynamicBlockDiv.append(botResHtml);
+              this.commonService.hideSendOrCopyButtons(parsedPayload, `#smallTalk-${res._id} .agent-utt`, 'smallTalk')
             }
           });
         }

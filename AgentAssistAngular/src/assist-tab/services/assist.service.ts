@@ -79,7 +79,8 @@ export class AssistService {
 
       </div>
       `;
-    dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
+    // dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
+    $(dynamicBlock).append(dropdownHtml);
     if(isInitDialog){
       document.getElementById("dropDownData-"+uuids)?.classList?.add("onconnect");
     }
@@ -108,17 +109,19 @@ export class AssistService {
   parseWelcomeMsgResponse(uuids,welcomeMsgResponse){
     let template = '';
     let index = 0;
-    for(let item of welcomeMsgResponse?.buttons){
-      template += `<div class="agent-utt">
-      <div class="title-data" id="displayData-${uuids + index}">${item.value}</div>
-      <div class="action-links">
-      <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}" data-text-type="sentence">Send</button>
-      <div class="copy-btn" data-msg-id="${uuids + index}"  data-text-type="sentence" data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}">
-          <i class="ast-copy" data-msg-id="${uuids + index}"  data-text-type="sentence" data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}"></i>
-      </div>
-      </div>
-      </div>`;
-      index++;
+    if(welcomeMsgResponse?.buttons){
+      for(let item of welcomeMsgResponse?.buttons){
+        template += `<div class="agent-utt">
+        <div class="title-data" id="displayData-${uuids + index}">${item.value}</div>
+        <div class="action-links">
+        <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}" data-text-type="sentence">Send</button>
+        <div class="copy-btn" data-msg-id="${uuids + index}"  data-text-type="sentence" data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}">
+            <i class="ast-copy" data-msg-id="${uuids + index}"  data-text-type="sentence" data-msg-data="${this.sanitizeHtmlPipe.transform(item.value)}"></i>
+        </div>
+        </div>
+        </div>`;
+        index++;
+      }
     }
     return template;
   }
@@ -146,7 +149,7 @@ export class AssistService {
     return template;
   }
 
-  askUserTemplate(uuids, newTemp?, positionID?,srcChannel=null, value='', componentType=null) {
+  askUserTemplate(data, uuids, newTemp?, positionID?,srcChannel=null, value='', componentType=null) {
     let template= '';
     if(componentType && componentType == 'dialogAct' && srcChannel != 'msteams' && srcChannel != 'rtm'){
       template = `
@@ -155,7 +158,7 @@ export class AssistService {
           <i class="ast-agent"></i>
       </div>
       <div class="run-info-content" >
-      <div class="title">Ask customer</div>
+      <div class="title">${data.promptTitle}</div>
       <div class="agent-utt">
       <div class="title-data" id="displayData-${uuids}">${value}</div>
           <div class="action-links">
@@ -176,7 +179,7 @@ export class AssistService {
           <i class="ast-agent"></i>
       </div>
       <div class="run-info-content" >
-      <div class="title">Ask customer</div>
+      <div class="title">${data.promptTitle}</div>
       <div class="agent-utt">
           <div class="title-data"><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
           <div class="action-links">
@@ -193,7 +196,7 @@ export class AssistService {
     return template
   }
 
-  tellToUserTemplate(uuids, newTemp?, positionID?, srcChannel=null, value='', componentType=null) {
+  tellToUserTemplate(data, uuids, newTemp?, positionID?, srcChannel=null, value='', componentType=null) {
     let template= '';
     if(componentType && componentType == 'dialogAct' && (srcChannel != 'msteams' && srcChannel != 'rtm') ){
       template = `
@@ -202,7 +205,7 @@ export class AssistService {
             <i class="ast-agent"></i>
         </div>
         <div class="run-info-content" >
-          <div class="title">Tell Customer</div>
+          <div class="title">${data.promptTitle}</div>
           <div class="agent-utt">
             <div class="title-data" id="displayData-${uuids}">${value}</div>
             <div class="action-links">
@@ -226,7 +229,7 @@ export class AssistService {
             <i class="ast-agent"></i>
         </div>
         <div class="run-info-content" >
-          <div class="title">Tell Customer</div>
+          <div class="title">${data.promptTitle}</div>
           <div class="agent-utt">
             <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
             <div class="action-links">
@@ -247,7 +250,7 @@ export class AssistService {
   }
 
   smallTalkTemplateForTemplatePayload(ele, uuids,data, res, newTemp?){
-    let tellOrAskCustomer = data.isPrompt ? 'Ask Customer' : 'Tell Customer';
+    // let tellOrAskCustomer = data.isPrompt ? 'Ask Customer' : 'Tell Customer';
     let template = `
     <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
         <div class="steps-run-data">
@@ -255,7 +258,7 @@ export class AssistService {
             <i class="ast-agent"></i>
         </div>
         <div class="run-info-content" >
-        <div class="title">${tellOrAskCustomer}</div>
+        <div class="title">${data.promptTitle}</div>
         <div class="agent-utt">
         </div>
         </div>
@@ -272,7 +275,7 @@ export class AssistService {
   return template;
   }
 
-  historySmallTalkTemplate(ele, _id){
+  historySmallTalkTemplate(data, ele, _id){
     let template = `
       <div class="collapse-acc-data before-none" id='smallTalk-${_id}'>
     <div class="steps-run-data">
@@ -280,7 +283,7 @@ export class AssistService {
         <i class="ast-agent"></i>
     </div>
     <div class="run-info-content" >
-    <div class="title">Tell Customer</div>
+    <div class="title">${data.promptTitle}</div>
     <div class="agent-utt">
         <div class="title-data" id="displayData-${_id}">${ele.data.text}</div>
         <div class="action-links">
@@ -371,7 +374,7 @@ export class AssistService {
     return template;
   }
 
-  dialogTypeInfoTemplate(uuids, index, ele) {
+  dialogTypeInfoTemplate(uuids, index, ele, data?) {
     ele.userInput = (ele.userInput).replace(/'/g, "&#39;").replace(/"/g, "&quot;");;
     let template = `
     <div class="type-info-run-send" id="suggestionId-${uuids}">
@@ -382,14 +385,14 @@ export class AssistService {
         </div>
         <div class="action-links">
             <button class="send-run-btn" id="run-${uuids + index}" data-child-bot-id="${ele?.childBotId}" data-child-bot-name="${ele?.childBotName}"
-            data-dialog-run='${JSON.stringify(ele)}'>RUN</button>
+            data-dialog-run='${JSON.stringify(ele)}' data-traits='${JSON.stringify(data?.traits || [])}'>RUN</button>
             <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids + index}">
                 <div class="elipse-icon" id="elipseIcon-${uuids + index}">
                     <i class="ast-overflow" id="overflowIcon-${uuids + index}"></i>
                 </div>
                 <div class="dropdown-content-elipse" id="runAgtBtn-${uuids + index}" data-dialog-run='${JSON.stringify(ele)}'>
                     <div class="list-option" id="agentSelect-${uuids + index}" data-child-bot-id="${ele?.childBotId}" data-child-bot-name="${ele?.childBotName}"
-                    data-dialog-run='${JSON.stringify(ele)}'>Run with Agent Inputs</div>
+                    data-dialog-run='${JSON.stringify(ele)}' data-traits='${JSON.stringify(data?.traits || [])}'>Run with Agent Inputs</div>
                 </div>
         </div>
     </div>`;
@@ -540,6 +543,7 @@ export class AssistService {
       <button class="ghost-btn hide" id="seeLess-${ele}" data-see-less="true">Show less</button>
       `;
     faqstypeInfo.append(seeMoreButtonHtml);
+    this.commonService.hideSendAndCopyBtnsforCallconversation(a);
     setTimeout(() => {
         this.commonService.updateSeeMoreButtonForAssist(ele, this.projConstants.FAQ);
     }, 1000);
