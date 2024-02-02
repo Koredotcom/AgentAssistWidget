@@ -64,9 +64,11 @@ export class TypeaheadComponent implements OnInit {
   onSearch(event: any) {   
     if(this.searchText.length > 0 && this.aaSettings?.searchAssistConfig?.showAutoSuggestions) {
       this.typeAHead(this.searchText, this.connectionData);
+      this.isVisible = true;
     } else {
       this.filterSet = [];
       this.typeahead.emit('');
+      this.isVisible = false;
     }
     
   }
@@ -118,7 +120,6 @@ export class TypeaheadComponent implements OnInit {
                     if (data.querySuggestions.length>0) {
                       this.showOverlay = true;
                       this.dataSet = data.querySuggestions;
-                      this.showList();
                     }
                 },
                 error: function (err) {
@@ -132,11 +133,13 @@ export class TypeaheadComponent implements OnInit {
   hideList() {
     if(this.isCursorOverFilterSet != true) {
       this.isVisible = false;
+      this.showOverlay = false;
     }    
   }
 
   showList() {
     if(this.searchText.length > 0){
+      this.showOverlay = true;
       this.isVisible = true;
     }
   }
@@ -153,6 +156,7 @@ export class TypeaheadComponent implements OnInit {
     this.filterSet.push(value);
     this.isCursorOverFilterSet = false;
     this.hideList();
+    this.isVisible = false;
     if(isEntered){
       this.typeaheadEntered.emit(this.searchText)
     }else{
