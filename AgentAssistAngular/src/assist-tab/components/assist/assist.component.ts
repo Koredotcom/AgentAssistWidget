@@ -568,74 +568,74 @@ export class AssistComponent implements OnInit {
 
       if (data.suggestions) {
 
-        data.suggestions.searchassist = {
-          snippets: [
-            {
-              "content": [
-                {
-                  "answer_fragment": "Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 12,Active citation snippet description 2, Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,",
-                  "sources": [
-                    {
-                      "title": "action citation source 1",
-                      "url": "https://google.com"
-                    }
-                  ]
-                },
-                {
-                  "answer_fragment": "Active citation snippet description 2", // snippet body (content)
-                  "sources": [   // there can be multiple sources 
-                    {
-                      "title": "action citation source 2",
-                      "url": "https://google.com"
-                    }
-                  ]
-                }
-              ],
-              "snippet_type": "generative_model",
-              "templateType": "active_citation_snippet"
-            },
-            {
-              "content": [                // Array of objects
-                {
-                  "answer_fragment": "citation snippet content", // snippet body (content)
-                  "sources": [   // there can be multiple sources 
-                    {
-                      "title": "citation source 1",
-                      "url": "https://google.com"
-                    }
-                  ]
-                }
-              ],
-              "snippet_type": "generative_model",
-              "templateType": "citation_snippet"
-            },
-            {
-              "title": "paragraph snippet title",
-              "content": "paragraph snippet content", // string
-              "url": "https://google.com",
-              "source": "paragraph snippet source",
-              "snippet_type": "extractive_model",
-              "templateType": "paragraph_snippet"
-            },
-            {
-              "title": "list element title",
-              "content": ["list element 1", "list element 2", "list element 3", "list element 4, list element 1", "list element 2", "list element 3", "list element 4"], // Array of strings
-              "url": "https://google.com",
-              "source": "list element source",
-              "snippet_type": "extractive_model",
-              "templateType": "list_element_snippet"
-            },
-            {
-              "title": "heading snippet title",
-              "content": ["heading snippet 1", "heading snippet 2", "heading snippet 3", "heading snippet 4"], // Array of strings
-              "url": "https://google.com",
-              "source": "heading element source",
-              "snippet_type": "extractive_model",
-              "templateType": "headings_snippet"
-            }
+        // data.suggestions.searchassist = {
+        //   snippets: [
+        //     {
+        //       "content": [
+        //         {
+        //           "answer_fragment": "Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 12,Active citation snippet description 2, Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,",
+        //           "sources": [
+        //             {
+        //               "title": "action citation source 1",
+        //               "url": "https://google.com"
+        //             }
+        //           ]
+        //         },
+        //         {
+        //           "answer_fragment": "Active citation snippet description 2", // snippet body (content)
+        //           "sources": [   // there can be multiple sources 
+        //             {
+        //               "title": "action citation source 2",
+        //               "url": "https://google.com"
+        //             }
+        //           ]
+        //         }
+        //       ],
+        //       "snippet_type": "generative_model",
+        //       "templateType": "active_citation_snippet"
+        //     },
+        //     {
+        //       "content": [                // Array of objects
+        //         {
+        //           "answer_fragment": "citation snippet content", // snippet body (content)
+        //           "sources": [   // there can be multiple sources 
+        //             {
+        //               "title": "citation source 1",
+        //               "url": "https://google.com"
+        //             }
+        //           ]
+        //         }
+        //       ],
+        //       "snippet_type": "generative_model",
+        //       "templateType": "citation_snippet"
+        //     },
+        //     {
+        //       "title": "paragraph snippet title",
+        //       "content": "paragraph snippet content", // string
+        //       "url": "https://google.com",
+        //       "source": "paragraph snippet source",
+        //       "snippet_type": "extractive_model",
+        //       "templateType": "paragraph_snippet"
+        //     },
+        //     {
+        //       "title": "list element title",
+        //       "content": ["list element 1", "list element 2", "list element 3", "list element 4, list element 1", "list element 2", "list element 3", "list element 4"], // Array of strings
+        //       "url": "https://google.com",
+        //       "source": "list element source",
+        //       "snippet_type": "extractive_model",
+        //       "templateType": "list_element_snippet"
+        //     },
+        //     {
+        //       "title": "heading snippet title",
+        //       "content": ["heading snippet 1", "heading snippet 2", "heading snippet 3", "heading snippet 4"], // Array of strings
+        //       "url": "https://google.com",
+        //       "source": "heading element source",
+        //       "snippet_type": "extractive_model",
+        //       "templateType": "headings_snippet"
+        //     }
     
-          ]
-        };
+        //   ]
+        // };
 
         if(data.suggestions?.searchassist?.snippets?.length > 0){
 
