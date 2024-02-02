@@ -3,8 +3,8 @@
   <div class="faq-suggestions-wrapper"  [ngClass]="{'grayout-msgs-node' : snippet?.send}">
     <div class="faq-s-header">
       <div class="titles-info-heading">
-        <h1 class="text-truncate" *ngIf="!snippet.page_url && snippet.title">{{snippet.title}}</h1>
-        <h1 class="text-truncate" *ngIf="snippet.page_url && snippet.title"> <a class="moreText" role="link" [href]="snippet.page_url" target="_blank" >{{snippet.title}}</a></h1>
+        <h1 class="text-truncate" *ngIf="snippet.title">{{snippet.title}}</h1>
+        <!-- <h1 class="text-truncate" *ngIf="snippet.page_url && snippet.title"> <a class="moreText" role="link" [href]="snippet.page_url" target="_blank" >{{snippet.title}}</a></h1> -->
 
         <div class="sent-msg-text" *ngIf="snippet.send">{{ 'SENT'  | translate }} </div>
 
@@ -24,7 +24,11 @@
     <div class="faq-body-content">
       <div class="data-faq-paragraph">     
         <div class="text-info-more-data-link">
-          <p [ngClass]="{'show-full-text' : !snippet.showMoreButton}" #snippetContent [innerHTML]="rootService.handleEmptyLine(snippet.content)"></p>
+          <p [ngClass]="{'show-full-text' : !snippet.showMoreButton}" #snippetContent>
+            <ng-container *ngFor="let content of snippet.contentArray; let ii = index">
+              <div *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content)"></div>
+            </ng-container>
+          </p>
           <div class="more-links-actions">
             <a class="moreText" role="button" aria-expanded="false" *ngIf="(snippetContent?.scrollHeight > 36)">
               <span class="more-text" *ngIf="snippet?.showMoreButton" (click)="toggleShowMoreLess(snippet)">{{'MORE_TEXT' | translate}}</span>

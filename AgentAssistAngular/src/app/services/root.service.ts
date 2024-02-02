@@ -237,10 +237,78 @@ export class RootService {
   }
 
   formatSearchResponse(response) {
+    response.suggestions.searchassist = {
+      snippets: [
+        {
+          "content": [
+            {
+              "answer_fragment": "Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 1,Active citation snippet description 12,Active citation snippet description 2",
+              "sources": [
+                {
+                  "title": "action citation source 1",
+                  "url": "https://google.com"
+                }
+              ]
+            },
+            {
+              "answer_fragment": "Active citation snippet description 2", // snippet body (content)
+              "sources": [   // there can be multiple sources 
+                {
+                  "title": "action citation source 2",
+                  "url": "https://google.com"
+                }
+              ]
+            }
+          ],
+          "snippet_type": "generative_model",
+          "templateType": "active_citation_snippet"
+        },
+        {
+          "content": [                // Array of objects
+            {
+              "answer_fragment": "citation snippet content", // snippet body (content)
+              "sources": [   // there can be multiple sources 
+                {
+                  "title": "citation source 1",
+                  "url": "https://google.com"
+                }
+              ]
+            }
+          ],
+          "snippet_type": "generative_model",
+          "templateType": "citation_snippet"
+        },
+        {
+          "title": "paragraph snippet title",
+          "content": "paragraph snippet content", // string
+          "url": "https://google.com",
+          "source": "paragraph snippet source",
+          "snippet_type": "extractive_model",
+          "templateType": "paragraph_snippet"
+        },
+        {
+          "title": "list element title",
+          "content": ["list element 1", "list element 2", "list element 3", "list element 4, list element 1", "list element 2", "list element 3", "list element 4"], // Array of strings
+          "url": "https://google.com",
+          "source": "list element source",
+          "snippet_type": "extractive_model",
+          "templateType": "list_element_snippet"
+        },
+        {
+          "title": "heading snippet title",
+          "content": ["heading snippet 1", "heading snippet 2", "heading snippet 3", "heading snippet 4"], // Array of strings
+          "url": "https://google.com",
+          "source": "heading element source",
+          "snippet_type": "extractive_model",
+          "templateType": "headings_snippet"
+        }
+
+      ]
+    };
     let suggestions = response.suggestions
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
-    let snippersArray = suggestions?.searchassist?.snippets || [];
+    let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [])
     let filesArray = suggestions?.searchassist?.files || [];
     let searchResponse: any = {};
     if(dialoguesArray.length || faqArray.length || snippersArray.length || filesArray.length || Object.keys(suggestions?.searchassist)?.length){
@@ -307,18 +375,21 @@ export class RootService {
         searchResponse.faqs.push(faqObject);
       }
       if (suggestions?.searchassist?.snippets?.length > 0) {
-        for (let snippet of snippersArray) {
-          if(Array.isArray(snippet?.content)){
-            snippet.content = snippet.content.reduce((acc, obj) => {
-              if(obj.answer_fragment){
-                acc += obj.answer_fragment;
-                return acc;
-              }
-            }, '')
-          }
-          if(snippet.title || snippet.content){
-            searchResponse.snippets.push(snippet);
-          }
+        // for (let snippet of snippersArray) {
+          // if(Array.isArray(snippet?.content)){
+          //   snippet.content = snippet.content.reduce((acc, obj) => {
+          //     if(obj.answer_fragment){
+          //       acc += obj.answer_fragment;
+          //       return acc;
+          //     }
+          //   }, '')
+          // }
+        //   if(snippet.title || snippet.content){
+        //     searchResponse.snippets.push(snippet);
+        //   }
+        // }
+        if(snippersArray?.length > 0){
+          searchResponse.snippets = Object.assign([], snippersArray);
         }
         for (let snippet of searchResponse.snippets) {
           snippet.showMoreButton = true;
@@ -339,6 +410,37 @@ export class RootService {
       }
     }
     return searchResponse;
+  }
+
+  formatSnippetResponse(snippetsArray){
+    let snippetResponeArray : any = [];
+    if(snippetsArray?.length > 0){
+      snippetsArray.forEach( (snippet : any) => {
+        if(snippet?.templateType){
+          if(snippet.templateType == 'active_citation_snippet' || snippet.templateType == 'citation_snippet'){
+            if(snippet?.content && Array.isArray(snippet?.content) && snippet?.content?.length > 0){
+              snippet.content.forEach((ansSnippet : any) => {
+                let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet)
+                obj.contentArray = [ansSnippet.answer_fragment]
+                obj.sources = ansSnippet?.sources || []
+                snippetResponeArray.push(obj);
+              });
+            }
+          }else{
+            if(snippet?.content && typeof (snippet?.content) === 'string'){
+              snippet.contentArray = [snippet.content];
+            }else if(snippet?.content){
+              snippet.contentArray = snippet.content || [];
+            }
+            snippet.sources = [{title : snippet.source, url : snippet.url}]
+            snippetResponeArray.push(snippet);
+          }
+        }
+      });
+    } 
+    console.log(snippetResponeArray, "snippet response array ************8");
+
+    return snippetResponeArray;   
   }
 
   checkEmptyObjectsInArray(arr) {
