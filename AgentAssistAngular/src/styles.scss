@@ -843,6 +843,7 @@ html, body{
     text-align: justify;
     word-break: break-word;
     display: -webkit-box;
+    position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
     display: none;
@@ -2355,6 +2356,7 @@ border: 1px solid transparent !important;
     text-align: justify;
     word-break: break-word;
     display: -webkit-box;
+    position: relative;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
     display: none;
