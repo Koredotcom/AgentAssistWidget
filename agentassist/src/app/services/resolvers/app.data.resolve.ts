@@ -9,10 +9,7 @@ import { AppService } from '@kore.services/app.service';
 
 export class AppDataResolver implements Resolve<any> {
 
-  unifiedObj: any = {
-    'sit-xo.kore.ai': true,
-    'dev-xo.kore.ai' : true,
-  }
+  unifiedXOConstant = 'xo.kore';
 
   // verticalPosition: MatSnackBarVerticalPosition = 'top';
   constructor(private authService: AuthService, private appService: AppService) { }
@@ -21,7 +18,7 @@ export class AppDataResolver implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot) {
     return Observable.create(observer => {
       var _promise1 = this.authService.getApplictionControlsFromServer();
-      if(!this.unifiedObj[window.location.host]) {
+      if(!window.location.href.includes(this.unifiedXOConstant)) {
         const instanceOb$ = this.appService.getInstaceApps();
         instanceOb$.subscribe();
       }
