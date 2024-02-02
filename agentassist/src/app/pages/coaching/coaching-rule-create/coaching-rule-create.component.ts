@@ -17,6 +17,9 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { CreateRuleComponent } from './create-rule/create-rule.component';
 import { IframeService } from '@kore.services/iframe.service';
 import { IMAGE_PATHS } from '../../guided-checklist/checklist.const';
+import { assetUrl } from 'src/single-spa/asset-url';
+
+
 @Component({
   selector: 'app-coaching-rule-create',
   templateUrl: './coaching-rule-create.component.html',
@@ -37,6 +40,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   modalRef : any;
   formTouched : boolean = false;
   selAcc = this.local.getSelectedAccount();
+  assetUrlProc = assetUrl;
 
   coachingCnst : any = COACHINGCNST
   triggerClick : boolean = false;
@@ -52,6 +56,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   settingsChange : boolean = false;
 
   coachingAssignImg = IMAGE_PATHS.COACHING_ASSIGN_IMG
+  isUnifiedPlatform =false;
+  unifiedPath = '';
 
   // triggerFormControlsArray : any = [];
 
@@ -104,7 +110,12 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     })
   }
   ngOnInit(): void {
-  }
+    this.isUnifiedPlatform = this.workflowService.isUnifiedPlatform();
+    if(this.isUnifiedPlatform) {
+      this.unifiedPath = window.location.origin + '/koreagentassist-xo-frame';
+
+    }
+      }
 
   ngOnDestroy(): void {
     this.coachingService.updateLockOnRule(false, this.currentRule, this.selAcc);

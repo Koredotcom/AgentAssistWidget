@@ -14,6 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CoachingConfirmationComponent } from '../../coaching-confirmation/coaching-confirmation.component';
 import { FilterPipe } from 'src/app/helpers/filters/filter.pipe';
 import { CoachingService } from '../../coaching.service';
+import { assetUrl } from 'src/single-spa/asset-url';
 
 @Component({
   selector: 'app-none-intent',
@@ -36,6 +37,7 @@ export class NoneIntentComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   selAcc = this.local.getSelectedAccount();
   coachingCnst: any = COACHINGCNST;
+  assetUrlProc = assetUrl;
 
   clickAddUtter = false;
   loading: boolean = false;
