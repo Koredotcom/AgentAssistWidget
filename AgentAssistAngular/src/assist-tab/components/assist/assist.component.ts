@@ -1091,7 +1091,7 @@ export class AssistComponent implements OnInit {
       ele.sources.forEach((source, index) => {
         if(source.url){
           let sourceTemp = `<div class="source-tag"><span>${index + 1}</span>
-          <a [href]="${source.url}" target="_blank">${source.title ? source.title : 'Know More'}</a>
+          <a href="${this.commonService.handleEmptyLine(source.url, true)}" title="${this.commonService.handleEmptyLine(source.title, true)}" target="_blank">${source.title ? source.title : 'Know More'}</a>
         </div>`;
         snippetSourceElements += sourceTemp;
         }

@@ -73,7 +73,10 @@
             border-radius: 16px;
             background: var(--Gray-100, #F2F4F7);
             transition: 0.2s all ease;
+            max-width: 47%;
+            text-overflow: ellipsis;
             overflow: hidden;
+            white-space: nowrap;
             &:hover{
                 span{
                     color: var(--Gray-modern-700, #364152);

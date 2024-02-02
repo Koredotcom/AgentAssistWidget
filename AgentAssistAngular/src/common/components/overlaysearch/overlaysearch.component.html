@@ -29,7 +29,7 @@
                                 <ng-container *ngFor="let source of snippet.sources;let ii = index">
                                     <div class="source-tag" *ngIf="source.url">
                                         <span>{{ii+1}}</span>
-                                        <a [href]="source.url" target="_blank">{{source?.title || 'Know More'}}</a>
+                                        <a [href]="source.url" target="_blank" [title]="source.title">{{source?.title || 'Know More'}}</a>
                                     </div>
                                     
                                 </ng-container>
