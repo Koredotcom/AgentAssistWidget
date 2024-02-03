@@ -64,19 +64,21 @@
                                 <p>Automates Intent identification,  Entity extraction and transcripts generation.</p>
                             </div>
                         </div>
-                        <div class="toggle-info-data m-0">
-                            <label class="kr-sg-toggle">
-                                <input type="checkbox" formControlName="isAgentCoachingEnabled">
-                                <div class="slider">
-                                    <span class="enabled"></span>
-                                    <span class="disabled"></span>
+                        <ng-container *ngIf="isCoachingDisable">
+                            <div class="toggle-info-data m-0">
+                                <label class="kr-sg-toggle">
+                                    <input type="checkbox" formControlName="isAgentCoachingEnabled">
+                                    <div class="slider">
+                                        <span class="enabled"></span>
+                                        <span class="disabled"></span>
+                                    </div>
+                                </label>
+                                <div class="content-data-toggle">
+                                    <h1>Agent Coaching</h1>
+                                    <p>Access real-time coaching features.</p>
                                 </div>
-                            </label>
-                            <div class="content-data-toggle">
-                                <h1>Agent Coaching</h1>
-                                <p>Access real-time coaching features.</p>
                             </div>
-                        </div>
+                        </ng-container>
                         <div class="toggle-info-data m-0">
                             <label class="kr-sg-toggle">
                                 <input type="checkbox" formControlName="isAgentResponseEnabled">
@@ -111,19 +113,21 @@
                                 </div> 
                             </div>
                         </div>
-                        <div class="toggle-info-data m-0">
-                            <label class="kr-sg-toggle">
-                                <input type="checkbox" formControlName="isAgentPlaybookEnabled">
-                                <div class="slider">
-                                    <span class="enabled"></span>
-                                    <span class="disabled"></span>
+                        <ng-container *ngIf="isCoachingDisable">
+                            <div class="toggle-info-data m-0">
+                                <label class="kr-sg-toggle">
+                                    <input type="checkbox" formControlName="isAgentPlaybookEnabled">
+                                    <div class="slider">
+                                        <span class="enabled"></span>
+                                        <span class="disabled"></span>
+                                    </div>
+                                </label>
+                                <div class="content-data-toggle">
+                                    <h1>Agent Playbook</h1>
+                                    <p>Configure guided checklist / Playbook features. </p>   
                                 </div>
-                            </label>
-                            <div class="content-data-toggle">
-                                <h1>Agent Playbook</h1>
-                                <p>Configure guided checklist / Playbook features. </p>   
                             </div>
-                        </div>
+                        </ng-container>
                         <div class="widget-landing" formGroupName="isWidgetLandingEnabled">
                             <div class="toggle-info-data m-0">
                                 <label class="kr-sg-toggle">

@@ -43,7 +43,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   isLoading = false;
   isApiConfigured= true;
   iId = this.authService?.isLoadingOnSm && this.selAcc && this.selAcc?.instanceBots?.length ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-
+  isCoachingDisable = true;
   landingPageTabs = {
     transcript: 'Transcription',
     assist: 'Assist',
@@ -192,6 +192,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.isUnifiedPlatform = this.workflowService?.isUnifiedPlatform();
     this.isLoading = true;
     this.getAgentAssistSettingsNew();
+    this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+      this.isCoachingDisable = isEnabled;
+    });
   }
 
   // Get AgentAssist Settings in the Get API Call
