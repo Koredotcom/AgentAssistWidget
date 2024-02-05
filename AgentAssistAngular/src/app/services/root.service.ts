@@ -354,7 +354,7 @@ export class RootService {
               snippet.content.forEach((ansSnippet : any) => {
                 let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet)
                 obj.contentArray = [ansSnippet.answer_fragment]
-                obj.sources = ansSnippet?.sources || []
+                obj.sources = (ansSnippet?.sources || []).filter(obj => obj.url);
                 snippetResponeArray.push(obj);
               });
             }
@@ -364,14 +364,14 @@ export class RootService {
             }else if(snippet?.content){
               snippet.contentArray = snippet.content || [];
             }
-            snippet.sources = [{title : snippet.source, url : snippet.url}]
+            if(snippet.url){
+              snippet.sources = [{title : snippet.source, url : snippet.url}]
+            }
             snippetResponeArray.push(snippet);
           }
         }
       });
     } 
-    console.log(snippetResponeArray, "snippet response array ************8");
-
     return snippetResponeArray;   
   }
 

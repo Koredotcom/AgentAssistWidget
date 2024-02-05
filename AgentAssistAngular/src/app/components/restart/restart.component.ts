@@ -40,22 +40,17 @@ export class RestartComponent {
   restart(){
     let entityArray = [];
     if(this.restartCheck == this.projConstants.RESTART_INPUTS){
-      console.log(this.entityList, "entity list");
       this.entityList.forEach(element => {
         if(element.entityName && element.entityValue){
           entityArray.push({name : element.entityName, value : element.entityValue});
         }
       });
     }
-    console.log(this.rootService.entitiestValueArray, 'entities value array');
-    
     this.handlePopupEvent.emit({ status: true,  type: this.projConstants.RESTART, inputType : this.restartCheck, entityList : entityArray });
   }
 
   changeRestartType(type){
     this.restartCheck = type;
-    console.log(this.restartCheck, 'restart check');
-    
   }
 
   cancel(){

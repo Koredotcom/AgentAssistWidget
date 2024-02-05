@@ -78,7 +78,6 @@ export class FooterComponent implements OnInit, OnDestroy{
     let botId = userBotConversationDetails?.botId || params?.botId;
     let userId = userBotConversationDetails?.userId;
     let sessionId = userBotConversationDetails?.sessionId; 
-    console.log(userBotConversationDetails, "user bot conversation details***");
     if((userBotConversationDetails?.botId || this.rootService.connectionDetails?.botId) && userBotConversationDetails?.userId && userBotConversationDetails?.sessionId) {
       this.serviceInvoker.invoke('get.userBotHistory', { botId: botId, convId: params.conversationId, userId, sessionId }, {}, { userBotHistory: 'true', botId : botId }, params.agentassisturl).subscribe((data)=> {
         if(data && data.messages?.length > 0){
