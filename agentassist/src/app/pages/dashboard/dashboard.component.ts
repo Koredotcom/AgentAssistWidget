@@ -8,6 +8,8 @@ import { SubSink } from 'subsink';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { AuthService } from '@kore.services/auth.service';
 import { IDashboardFilter } from './dashboard-filters/dateFilter.model';
+import { Router } from '@angular/router';
+import { workflowService } from '@kore.services/workflow.service';
 
 
 @Component({
@@ -44,13 +46,24 @@ export class DashboardComponent implements OnInit {
   public DASHBORADCOMPONENTTYPE = DASHBORADCOMPONENTTYPE;
   public VIEWTYPE = VIEWTYPE;
 
-  constructor(public dashboardService : DashboardService, public cdRef : ChangeDetectorRef, private service : ServiceInvokerService, private authService : AuthService) { }
+
+  constructor(public dashboardService : DashboardService, public cdRef : ChangeDetectorRef, private service : ServiceInvokerService, private authService : AuthService,
+    private router: Router, private workflowService : workflowService) { }
 
   ngOnInit(): void {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
     this.subscribeEvents();
     // this.updateKPIData();
   }
+
+  checkPermissions(){
+    if(!this.workflowService.rolePermissions.isDashboardEnabled && this.workflowService.rolePermissions.isTaskEnabled){
+      this.router.navigate(['/config/usecases']);
+    }else if(!this.workflowService.rolePermissions.isTaskEnabled && !this.workflowService.rolePermissions.isDashboardEnabled){
+      this.router.navigate(['/config/blank']);
+    }
+  }
+
 
   ngOnChanges(changes : any){
     if( changes.filters) {
@@ -83,6 +96,7 @@ export class DashboardComponent implements OnInit {
         this.payload = this.filterData;
         this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
         this.updateKPIData();
+        this.checkPermissions();
       }
     });
   }

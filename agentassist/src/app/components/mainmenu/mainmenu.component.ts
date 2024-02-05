@@ -46,7 +46,6 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   voicePreferences: VoicePreferencesModel;
   filteredSmartABots : any = {};
   isCoachingDisable = true;
-  configAccess : boolean = true;
   @ViewChild('wUpdateBot', { static: false }) private wUpdateBot;
   @ViewChild('wSContent', { static: false }) private wSContent;
   @ViewChild(NgbDropdown) private dropdown: NgbDropdown;
@@ -116,12 +115,11 @@ export class MainmenuComponent implements OnInit, OnDestroy {
     });
   }
 
-  checkPermissions(){  
-    if(this.currentBt?.permissions?.BOTBUILDER_TASKS?.length > 0 && this.currentBt?.permissions?.BOTBUILDER_TASKS?.indexOf('NO') != -1){
-      this.configAccess = false;
+  checkPermissions(){
+    if(!this.workflowService.rolePermissions.isTaskEnabled && this.workflowService.rolePermissions.isDashboardEnabled){
       this.router.navigate(['/config/conversationalLogs']);
-    }else{
-      this.configAccess = true;
+    }else if(!this.workflowService.rolePermissions.isTaskEnabled && !this.workflowService.rolePermissions.isDashboardEnabled){
+      this.router.navigate(['/config/blank']);
     }
   }
 
