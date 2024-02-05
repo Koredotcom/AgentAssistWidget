@@ -77,6 +77,8 @@ export class workflowService {
   isChatsOptionsUpdated = false;
   hideTestFlow: boolean;
   UnifiedPlatform = false;
+  private isPlatformDashboard;
+  private currentAppData;
 
   constructor(
     private service: ServiceInvokerService,
@@ -216,6 +218,25 @@ export class workflowService {
   // To send setup status to subscribe componenent
   sendSetupStatus(conditionType: string) {
     this.setupProcessAppSource.next(conditionType);
+  }
+
+  setCurrentAppData(data) {
+    this.currentAppData = data;
+  }
+  getCurrentAppData(){
+    return this.currentAppData;
+  }
+  
+  setIsPlatformDashboardView(val){
+    this.isPlatformDashboard = val;
+  }
+
+  getIsPlatformDashboardView(){
+    return this.isPlatformDashboard;
+  }
+
+  setIsUnifiedPlatform(status){
+    this.UnifiedPlatform = status;
   }
   
   redirectPlatform(streamId: string, selectedAccount: string, btLanguage: string, ucType: 'dialog' | 'conversation', dgId: string, state: 'indevelopment' | 'published', appLanguage: string) {
