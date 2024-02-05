@@ -562,8 +562,6 @@ export class MybotComponent {
   }
 
   processUserMessagesForHistory(data) { 
-    console.log(this.mybotResponseArray, "mybot response array ***********");
-       
     if (this.mybotResponseArray?.length >= 1 && this.mybotResponseArray[this.mybotResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
       && this.mybotResponseArray[this.mybotResponseArray.length - 1]?.data?.isPrompt) {
       this.mybotResponseArray = this.commonService.processUserMessagesForSmalltalk(data, this.mybotResponseArray, true, false, 'history');

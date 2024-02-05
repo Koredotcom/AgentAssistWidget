@@ -147,7 +147,6 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     });
 
     this.subs.sink = this.handleSubjectService.callConversationSuggestions$.subscribe((response: any) => {
-      console.log("------------resposne of agent request", response)
       if (response?.data && Object.keys(response?.data).length > 0) {
         this.processAssistResponse(response);
       }
@@ -191,12 +190,6 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
     this.transcriptArray.push({ data: data, timeStr: timeStr, type: ProjConstants.INCOMING, uuid: uuid });
     this.transcriptArray = structuredClone(this.transcriptArray);
-
-    console.log(this.transcriptArray, 'transcript array');
-    
-
-    // this.scrollToBottom();
-    // this.updateNewMessageUUIDList(uuid, IdReferenceConst.OTHER_BUBBLE);
   }
 
   processAgentMessages(data) {
@@ -207,24 +200,13 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
     this.transcriptArray.push({ data: data, timeStr: timeStr, type: ProjConstants.OUTGOING, uuid: uuid });
     this.transcriptArray = structuredClone(this.transcriptArray);
-
-    console.log(this.transcriptArray, 'transcript array');
-    
-    // this.scrollToBottom();
-    // this.updateNewMessageUUIDList(uuid, IdReferenceConst.CURRENTUSER_BUBBLE);
   }
 
   processAssistResponse(response){
-
-    // let data = this.rootService.confirmationNodeRenderDataTransform(response.data);
-    let data = response?.data;;
-  
+    let data = response?.data;
     if (this.connectionDetails.isCallConversation === true && data.suggestions) {
-
       let bulbCount = (data.suggestions.dialogs?.length || 0) + (data.suggestions.faqs?.length || 0) + (data.suggestions.searchassist?.snippets?.length || 0) + (this.rootService.formatSearchResponse(data)?.articles?.length || 0);
-
       let userBubbleIndex = this.transcriptArray.findLastIndex((data) => data.type == ProjConstants.INCOMING);
-
       this.transcriptArray[userBubbleIndex].count = bulbCount;
       this.transcriptArray[userBubbleIndex].suggestionUUID = response.uuid;
     }
@@ -237,12 +219,9 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     if(document.getElementById(RenderResponseType.SUGGESTIONS + '-' + trans.suggestionUUID)){
       document.getElementById(RenderResponseType.SUGGESTIONS + '-' + trans.suggestionUUID).scrollIntoView();
     }
-    // this.designAlterService.scrollToEle(`automationSuggestions-${trans.data.suggestionUUID}`)
   }
 
   minMaxButtonClick(){
-    console.log("min max button click");
-    
     this.maxMinButtonClick.emit(true);
   }
 

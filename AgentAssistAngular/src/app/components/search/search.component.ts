@@ -109,7 +109,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
 
   getAutoSearchApiResult(value, params) {
-    // this.querySuggestions = [];
     const { botId, conversationId, channel } = this.rootService.getConnectionDetails();
     let payload = {
       "query": value,
@@ -118,21 +117,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
       "experience" : channel
     }
     this.serviceInvoker.invoke('post.autoSearch', { botId: botId, convId: conversationId }, payload, { autoSearch: 'true', botId: botId }, params.agentassisturl).subscribe((res) => {
-      // console.log(res, 'res********from autho search');
-      // res = {
-      //   "originalQuery": "book",
-      //   "querySuggestions": [
-      //     "book ticket",
-      //     "book flight",
-      //     "Hotel Booking"
-      //   ],
-      //   "typeAheads": [
-      //     "book flight",
-      //     "booking",
-      //     "book ticket"
-      //   ]
-      // }
-
       this.querySuggestions = res?.querySuggestions;
       this.typeAHeads = res?.typeAheads;
       if(this.typeAHeads?.length){

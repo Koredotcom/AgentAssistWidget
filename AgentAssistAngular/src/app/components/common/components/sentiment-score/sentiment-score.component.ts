@@ -146,8 +146,6 @@ export class SentimentScoreComponent {
       ]
     }
     this.showSentiChart = true;
-    // console.log(chartData, "chartData");
-    
   }
 
   updatePolarity(avg){

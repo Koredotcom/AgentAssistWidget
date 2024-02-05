@@ -146,8 +146,6 @@ export class TemplateRenderClassService {
   prepareTemplateBodyForHistory(elem, parsedPayload){
     let body = {};
     body['type'] = elem.cT;
-    // console.log(parsedPayload, 'parsed payload **');
-    
     if (!parsedPayload) {
       body['component'] = {
         "type": elem.cT,
@@ -236,8 +234,6 @@ export class TemplateRenderClassService {
       parsedPayload: null
     }
     res?.buttons?.forEach((elem) => {
-      // console.log(elem, "element *********");
-      
       let parsedPayload;
       if(elem.value){
         elem.value = elem.value.replace(/(^(&quot\;)|(&quot\;)$)/g, '');

@@ -59,8 +59,6 @@ export class FileSuggestionsComponent {
 
   handleSearchResponse(searchResponse){
     this.filesList = [];
-    console.log(searchResponse, "search respone*************");
-    
     if(searchResponse && searchResponse.files){
       this.filesList = searchResponse.files;
       this.viewLessClick();
