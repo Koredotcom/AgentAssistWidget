@@ -14,6 +14,7 @@ import { AppService } from '@kore.services/app.service';
 import { ScriptLoaderService } from '@kore.services/scriptloader.service';
 import { MixPanelService } from './helpers/mixPanel.service';
 import { IframeService } from '@kore.services/iframe.service';
+import { singleSpaPropsSubject } from 'src/single-spa/single-spa-props';
 
 declare const $: any;
 @Component({
@@ -71,6 +72,13 @@ export class AppComponent implements OnDestroy {
     if(window.location.href.includes('smartassist')){
       document.getElementsByTagName('html')[0].classList.add('init-smartassist');
     }
+    console.log("agentassist-xo-frame loaded", new Date())
+    this.sspaSubscriptionRef =  singleSpaPropsSubject.subscribe((res:any)=>{
+      this.workflowService.setCurrentAppData(res);
+      this.workflowService.setIsPlatformDashboardView(res.module?.headerMenu === 'analytics')
+      this.workflowService.setIsUnifiedPlatform(true);
+      this.isUnifiedPlatform = this.workflowService.isUnifiedPlatform();
+    })
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     const self = this;
     this.iFrameUrl = `${this.workflowService.resolveHostUrl()}/botstore/store?product=SmartAssist-App#from=SmartAssist`;
@@ -168,9 +176,12 @@ export class AppComponent implements OnDestroy {
         _self.router.navigate([landingRoute], {skipLocationChange:true});
       }
     });
-    if(this.isUnifiedPlatform){
+    if(this.workflowService.getIsPlatformDashboardView()){
+      let currentAppData = this.workflowService.getCurrentAppData();
+        this.router.navigate([currentAppData?.appMeta?.moduleRoute], {skipLocationChange:true,queryParams:{tab:currentAppData?.module?.sideNavItem}});
+    }else if(this.isUnifiedPlatform){
       this.router.navigate([landingRoute],{skipLocationChange:true});
-      }
+    }
     
   }
 
