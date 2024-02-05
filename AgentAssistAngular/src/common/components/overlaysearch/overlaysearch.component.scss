@@ -64,6 +64,7 @@
         align-items: flex-start;
         gap: 8px;
         overflow: hidden;
+        flex-wrap: wrap;
         .source-tag{
             display: flex;
             padding: 2px 8px;
@@ -73,11 +74,12 @@
             border-radius: 16px;
             background: var(--Gray-100, #F2F4F7);
             transition: 0.2s all ease;
-            // max-width: 47%;
-            flex : auto;
+            min-width: 47%;
+            flex : 1;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
+            max-width: max-content;
             &:hover{
                 span{
                     color: var(--Gray-modern-700, #364152);
