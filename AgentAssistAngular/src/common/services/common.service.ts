@@ -990,7 +990,7 @@ export class CommonService {
 
     if((!this.configObj.source || this.configObj.source !== ProjConstants.SMARTASSIST_SOURCE) && parsedPayload){
         $(lastchild).find('.send-run-btn').addClass('hide')
-        $(lastchild).find('.warning-template').removeClass('hide')
+        // $(lastchild).find('.warning-template').removeClass('hide')
     }
 
     if(this.isCallConversation === true){
