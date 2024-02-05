@@ -843,6 +843,7 @@ html, body{
     text-align: justify;
     word-break: break-word;
     display: -webkit-box;
+    position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
     display: none;
@@ -1415,6 +1416,125 @@ border: 1px solid transparent !important;
     cursor: pointer;
     z-index: 1;
     position: relative;
+}
+
+.agent-assist-chat-container .body-data-container .list-desc-elements{
+    display: -webkit-box;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    list-style-type: disc;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-align: justify;
+    word-break: break-word; 
+    margin-top: 6px;
+    .desc-text{
+        font-weight: 400;
+        font-size: 10px;
+        line-height: 12px;
+        width: 100%;
+        word-break: break-all;
+        // margin: 0 !important;
+        // display: flex !important;
+        // // display: -webkit-box;
+        // align-items: flex-start;
+
+        &.bullet-list-span{
+            padding-left: 10px;
+            span{
+                display: block;
+            }
+        }
+        span{
+            width: 4px;
+            height: 4px;
+            background: #979797;
+            position: relative;
+            top: 4px;
+            margin-right: 5px;
+            border-radius: 100%;
+            flex-shrink: 0;
+            position: absolute;
+            left: 0;
+            display: none;
+        }
+    }
+}
+
+.agent-assist-chat-container .body-data-container .souces-names-wrapper{
+    display: flex;
+    align-items: flex-start;
+    gap: 3px;
+    margin-top: 10px;
+    h1{
+        color: var(--Gray-300, #D0D5DD);
+        font-size: 12px;
+        font-style: italic;
+        font-weight: 500;
+        line-height: 18px;
+        text-align: left;
+        flex-shrink: 0;
+    }
+    .source-names{
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        overflow: hidden;
+        flex-wrap: wrap;
+        .source-tag{
+            display: flex;
+            padding: 2px 8px;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            border-radius: 16px;
+            background: var(--Gray-100, #F2F4F7);
+            transition: 0.2s all ease;
+            min-width: 47%;
+            flex : 1;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: max-content;
+            &:hover{
+                span{
+                    color: var(--Gray-modern-700, #364152);
+                }
+                a{
+                    color: var(--Gray-modern-700, #364152);
+                    text-decoration-line: underline;
+                }
+            }
+            span{
+                display: flex;
+                width: 14px;
+                height: 14px;
+                padding: 0;
+                justify-content: center;
+                align-items: center;
+                flex-shrink: 0;
+                border-radius: 16px;
+                background: var(--Gray-50, #F9FAFB);
+                color: var(--Gray-700, #344054);
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 16px;
+            }
+            a{
+                overflow: hidden;
+                color: var(--Gray-modern-500, #697586);
+                text-align: center;
+                text-overflow: ellipsis;
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 18px;
+            }
+        }
+    }
 }
 
 
@@ -2242,6 +2362,7 @@ border: 1px solid transparent !important;
     text-align: justify;
     word-break: break-word;
     display: -webkit-box;
+    position: relative;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
     display: none;
@@ -3707,6 +3828,9 @@ input.no-autofill-bkg:-webkit-autofill {
     white-space: normal !important;
     text-overflow : unset !important;
     display: block !important;
+    .desc-text{
+        display: block !important;
+    }
 }
 
 .display-block {

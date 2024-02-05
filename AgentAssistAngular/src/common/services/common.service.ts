@@ -667,7 +667,7 @@ export class CommonService {
   }
 
   formatSearchResponse(response) {
-    let suggestions = response.suggestions
+    let suggestions = response.suggestions;
     let searchResponse: any = {};
     searchResponse.dialogs = [];
     searchResponse.faqs = [];
@@ -675,7 +675,7 @@ export class CommonService {
     searchResponse.snippets = [];
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
-    let snippersArray = suggestions?.searchassist?.snippets || []
+    let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [])
     if (suggestions.searchassist && Object.keys(suggestions.searchassist).length > 0) {
       for(let source in suggestions.searchassist){
         if(source != "snippets"){
@@ -718,13 +718,16 @@ export class CommonService {
       }
       searchResponse.faqs.push(faqObject);
     }
-    if(suggestions?.searchassist?.snippets?.length > 0){
-      for(let snippet of snippersArray){
-        if(Array.isArray(snippet?.content)){
-          snippet.content = snippet.content.reduce((acc, obj) => acc += (obj.answer_fragment || ''), '')
-        }
-        searchResponse.snippets.push(snippet);
-      }
+    if(snippersArray?.length > 0){
+      // for(let snippet of snippersArray){
+      //   if(Array.isArray(snippet?.content)){
+      //     snippet.content = snippet.content.reduce((acc, obj) => acc += (obj.answer_fragment || ''), '')
+      //   }
+      //   searchResponse.snippets.push(snippet);
+      // }
+
+      searchResponse.snippets = Object.assign([], snippersArray);
+      
       for (let snippet of searchResponse.snippets) {
         snippet.showMoreButton = false;
         snippet.showLessButton = false;
@@ -738,6 +741,39 @@ export class CommonService {
     console.log(searchResponse, "searchresponse");
 
     return searchResponse;
+  }
+
+  formatSnippetResponse(snippetsArray){
+    let snippetResponeArray : any = [];
+    if(snippetsArray?.length > 0){
+      snippetsArray.forEach( (snippet : any) => {
+        if(snippet?.templateType){
+          if(snippet.templateType == 'active_citation_snippet' || snippet.templateType == 'citation_snippet'){
+            if(snippet?.content && Array.isArray(snippet?.content) && snippet?.content?.length > 0){
+              snippet.content.forEach((ansSnippet : any) => {
+                let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet)
+                obj.contentArray = [ansSnippet.answer_fragment]
+                obj.sources = ansSnippet?.sources || []
+                obj.tempType = 'snippet'
+                snippetResponeArray.push(obj);
+              });
+            }
+          }else{
+            if(snippet?.content && typeof (snippet?.content) === 'string'){
+              snippet.contentArray = [snippet.content];
+            }else if(snippet?.content){
+              snippet.contentArray = snippet.content || [];
+            }
+            snippet.tempType = 'snippet'
+            snippet.sources = [{title : snippet.source, url : snippet.url}]
+            snippetResponeArray.push(snippet);
+          }
+        }
+      });
+    } 
+    console.log(snippetResponeArray, "snippet response array ************8");
+    
+    return snippetResponeArray;   
   }
 
   formatFAQResponse(faqArray){
@@ -1028,8 +1064,10 @@ export class CommonService {
     if(type === ProjConstants.FAQ && answer.length > 1){
       $(seeMoreElement).removeClass('hide');
       $(seeLessElement).addClass('hide');
-    }else if(titleElement && descElement && divElement) {
-      titleElement.classList.add('no-text-truncate');
+    }else if(descElement && divElement) {
+      if(titleElement){
+        titleElement.classList.add('no-text-truncate');
+      }
       descElement.classList.add('no-text-truncate');
       let divSectionHeight = descElement.clientHeight || 0;
       if (divSectionHeight > (24 + faqSourceTypePixel)) {
@@ -1043,47 +1081,56 @@ export class CommonService {
           snippetviewMsg.classList.remove('hide');
         }
       }
-      titleElement.classList.remove('no-text-truncate');
+      if(titleElement){
+        titleElement.classList.remove('no-text-truncate');
+      }
       descElement.classList.remove('no-text-truncate');
     }
   }
 
   updateSeeMoreButtonForAgent(id, faq_or_article_obj, type, answer=[]) {
     let faqSourceTypePixel = 5;
-    let titleElement = $("#titleLib-" + id);
-    let descElement = $("#descLib-" + id);
-    let sectionElement = $('#faqSectionLib-' + id);
-    let divElement = $('#faqDivLib-' + id);
-    let seeMoreElement = $('#seeMore-' + id);
-    let seeLessElement = $('#seeLess-' + id);
+    let titleElement = document.getElementById("titleLib-" + id);
+    let descElement = document.getElementById("descLib-" + id);
+    let sectionElement = document.getElementById('faqSectionLib-' + id);
+    let divElement = document.getElementById('faqDivLib-' + id);
+    let seeMoreElement = document.getElementById('seeMore-' + id);
+    let seeLessElement = document.getElementById('seeLess-' + id);
     let snippetsendMsg;
     let viewLinkElement;
     if (type == ProjConstants.SNIPPET) {
-      titleElement = $("#snippettitleLib-" + id);
-      descElement = $("#snippetdescLib-" + id);
-      sectionElement = $('#snippetSectionLib-' + id);
-      divElement = $('#snippetDivLib-' + id);
-      seeMoreElement = $('#snippetseeMore-' + id);
-      snippetsendMsg = $('#snippetViewMsgLib-' + id);
+      titleElement = document.getElementById("snippettitleLib-" + id);
+      descElement = document.getElementById("snippetdescLib-" + id);
+      sectionElement = document.getElementById('snippetSectionLib-' + id);
+      divElement = document.getElementById('snippetDivLib-' + id);
+      seeMoreElement = document.getElementById('snippetseeMore-' + id);
+      snippetsendMsg = document.getElementById('snippetViewMsgLib-' + id);
     }
     if (type == ProjConstants.ARTICLE) {
-      titleElement = $("#articletitleLib-" + id);
-      descElement = $("#articledescLib-" + id);
-      sectionElement = $('#articleSectionLib-' + id);
-      divElement = $('#articleDivLib-' + id);
-      seeMoreElement = $('#articleseeMore-' + id);
-      viewLinkElement = $('#articleViewLinkLib-' + id);
+      titleElement = document.getElementById("articletitleLib-" + id);
+      descElement = document.getElementById("articledescLib-" + id);
+      sectionElement = document.getElementById('articleSectionLib-' + id);
+      divElement = document.getElementById('articleDivLib-' + id);
+      seeMoreElement = document.getElementById('articleseeMore-' + id);
+      viewLinkElement = document.getElementById('articleViewLinkLib-' + id);
     }
     if(type === ProjConstants.FAQ && answer.length > 1){
       faq_or_article_obj.showLessButton = false;
       faq_or_article_obj.showMoreButton = true;
-    }else if(titleElement && descElement && sectionElement && divElement) {
-      $(titleElement).css({ "overflow": "inherit", "white-space": "normal", "text-overflow": "unset" });
-      $(descElement).css({ "overflow": "inherit", "text-overflow": "unset", "display": "block", "white-space": "normal" });
-      let faqSectionHeight = $(sectionElement).css("height");
-      let divSectionHeight = $(descElement).css("height") || '0px';
-      faqSectionHeight = parseInt(faqSectionHeight?.slice(0, faqSectionHeight.length - 2));
-      divSectionHeight = parseInt(divSectionHeight?.slice(0, divSectionHeight.length - 2));
+    }else if(descElement && divElement) {
+      if(titleElement){
+        // $(titleElement).css({ "overflow": "inherit", "white-space": "normal", "text-overflow": "unset" });
+        titleElement.classList.add('no-text-truncate');
+      }
+      descElement.classList.add('no-text-truncate');
+      // $(descElement).css({ "overflow": "inherit", "text-overflow": "unset", "display": "block", "white-space": "normal" });
+      // let faqSectionHeight = $(sectionElement).css("height");
+      // let divSectionHeight = $(descElement).css("height") || '0px';
+      let divSectionHeight = descElement.clientHeight || 0;
+      console.log(divSectionHeight, "div seciton height", faqSourceTypePixel);
+      
+      // faqSectionHeight = parseInt(faqSectionHeight?.slice(0, faqSectionHeight.length - 2));
+      // divSectionHeight = parseInt(divSectionHeight?.slice(0, divSectionHeight.length - 2));
       if (divSectionHeight > (24 + faqSourceTypePixel)) {
         faq_or_article_obj.showLessButton = faq_or_article_obj.showLessButton ? faq_or_article_obj.showLessButton : false;
         faq_or_article_obj.showMoreButton = faq_or_article_obj.showLessButton ? false : true;
@@ -1097,8 +1144,14 @@ export class CommonService {
           snippetsendMsg.classList.remove('hide');
         }
       }
-      $(titleElement).css({ "overflow": "hidden", "white-space": "nowrap", "text-overflow": "ellipsis" });
-      $(descElement).css({ "overflow": "hidden", "text-overflow": "ellipsis", "display": "-webkit-box" });
+      if(titleElement){
+        titleElement.classList.remove('no-text-truncate');
+
+        // $(titleElement).css({ "overflow": "hidden", "white-space": "nowrap", "text-overflow": "ellipsis" });
+      }
+      descElement.classList.remove('no-text-truncate');
+
+      // $(descElement).css({ "overflow": "hidden", "text-overflow": "ellipsis", "display": "-webkit-box" });
     }
   }
   HandleClickAndSendRequest(tab, connectionObj, e) {

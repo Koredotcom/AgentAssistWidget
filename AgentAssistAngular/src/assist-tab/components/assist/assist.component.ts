@@ -570,64 +570,19 @@ export class AssistComponent implements OnInit {
       if (data.suggestions) {
 
         if(data.suggestions?.searchassist?.snippets?.length > 0){
+
+          data.suggestions.searchassist.snippets = this.commonService.formatSnippetResponse(data.suggestions?.searchassist?.snippets);
+
           let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
           automationSuggestions.classList.remove('hide');
           let dialogAreaHtml = this.assisttabService.getSnippetAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames)
           automationSuggestions.innerHTML += dialogAreaHtml;
+
           data.suggestions?.searchassist?.snippets?.forEach((ele, index) => {
-
-              if(Array.isArray(ele?.content)){
-                ele.content = ele.content.reduce((acc, obj) => acc += (obj.answer_fragment || ''), '')
-              }
-
-              let articleSuggestions = document.getElementById(`snippetsSuggestions-${responseId}`);
-
-              let articleHtml = `
-              <div class="type-info-run-send" id="snippetDiv-${uuids+index}">
-                  <div class="left-content" id="snippetSection-${uuids+index}">
-                      <div class="title-text" title="${ele.title}" id="snippettitle-${uuids+index}">${ele.title}</div>
-                  </div>
-
-              </div>`;
-
-              articleSuggestions.innerHTML += articleHtml;
-              let articles = $(`.type-info-run-send #snippetSection-${uuids+index}`);
-
-              let a = $(`#snippetDiv-${uuids + index}`);
-
-              ele.content = this.removeTagFromString.transform(ele.content);
-
-              let answerSanitized = this.commonService.handleEmptyLine(ele.content, true);
-              let snippetActionHtml = `<div class="action-links">
-                              <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}">Send</button>
-                              <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}">
-                                  <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}"></i>
-                              </div>
-                          </div>`;
-              if (ele.content) {
-                a.append(snippetActionHtml);
-                this.commonService.hideSendAndCopyBtnsforCallconversation(a)
-              }
-
-                      let articleActionHtml = `
-                      <button class="know-more-btn hide" id="snippetviewMsg-${uuids+index}" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
-
-                  `;
-                  articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index}">${this.commonService.handleEmptyLine(ele.content, false)}</div>`);
-                  articles.append(articleActionHtml);
-                  let articlestypeInfo = $(`.type-info-run-send #snippetSection-${uuids + index}`);
-                  let seeMoreButtonHtml = `
-              <button class="ghost-btn hide" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">${this.projConstants.READ_MORE}</button>
-              <button class="ghost-btn hide" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">${this.projConstants.READ_LESS}</button>
-              `;
-                  articlestypeInfo.append(seeMoreButtonHtml);
-                  setTimeout(() => {                    
-                      this.commonService.updateSeeMoreButtonForAssist(uuids + index, ProjConstants.SNIPPET);
-                  }, 1000);
+             this.handleIndividualSnippetResponse(ele, uuids, index, responseId);
           });          
           this.handleSeeMoreButton(responseId, data.suggestions.searchassist.snippets, this.projConstants.SNIPPET);
         }
-
 
         if (data.suggestions.dialogs?.length > 0) {
 
@@ -1057,6 +1012,104 @@ export class AssistComponent implements OnInit {
     }
     this.commonService.removingSendCopyBtnForCall(this.connectionDetails);
     this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
+  }
+
+  handleIndividualSnippetResponse(ele, uuids, index, responseId){
+
+    let articleSuggestions = document.getElementById(`snippetsSuggestions-${responseId}`);
+
+    let articleHtml = `
+    <div class="type-info-run-send" id="snippetDiv-${uuids+index}">
+        <div class="left-content" id="snippetSection-${uuids+index}">
+        </div>
+    </div>`;
+
+    articleSuggestions.innerHTML += articleHtml;
+
+    let articles = $(`.type-info-run-send #snippetSection-${uuids+index}`);
+    
+    let a = $(`#snippetDiv-${uuids + index}`);
+
+    if(ele.title){
+      let titleTemplate = `<div class="title-text" title="${ele.title}" id="snippettitle-${uuids+index}">${ele.title}</div>`;
+      articles.append(titleTemplate);
+    }
+
+    console.log(ele.contentArray, "conntent array");
+    
+
+    if(ele.contentArray?.length > 0){
+      let contentListDiv = `<div class="list-desc-elements" id="snippetdesc-${uuids + index}">
+      </div>`;
+      articles.append(contentListDiv);
+      ele.contentArray.forEach(content => {
+        if(content){
+          content = this.removeTagFromString.transform(content);
+          content = this.commonService.handleEmptyLine(content, true);
+        }
+      });
+    }
+
+    let answerSanitized = this.commonService.handleEmptyLine(ele.contentArray.join("<br>"), true);
+
+    let snippetActionHtml = `<div class="action-links">
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}">Send</button>
+                    <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}">
+                        <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}"></i>
+                    </div>
+                </div>`;
+
+    if (ele.contentArray?.length > 0) {
+      a.append(snippetActionHtml);
+      this.commonService.hideSendAndCopyBtnsforCallconversation(a)
+    }
+
+    let snippetdescElements = '';
+    let snippetSourceElements = '';
+
+    let articleDescElementsRef = $(`.type-info-run-send #snippetSection-${uuids+index} .list-desc-elements`);
+
+
+    ele.contentArray.forEach((content) => {
+      if(content.length > 0){
+        let temp = ele?.contentArray?.length > 1 ? `<div class="desc-text bullet-list-span">` : `<div class="desc-text">`;
+        if(ele?.contentArray?.length > 1){  
+          temp += `<span></span>`;
+        }
+        temp += `<div>${content}</div></div>`;
+        snippetdescElements += temp;
+      }
+    });
+    articleDescElementsRef.append(snippetdescElements);
+
+    if(ele?.sources?.length > 0){
+      let sourceTemp = `<div class="souces-names-wrapper"><h1>Sources :</h1><div class="source-names"></div>`;
+      articles.append(sourceTemp);
+
+      let articleSourceElementsRef = $(`.type-info-run-send #snippetSection-${uuids+index} .souces-names-wrapper .source-names`);
+
+      ele.sources.forEach((source, index) => {
+        if(source.url){
+          let sourceTemp = `<div class="source-tag"><span>${index + 1}</span>
+          <a href="${this.commonService.handleEmptyLine(source.url, true)}" title="${this.commonService.handleEmptyLine(source.title, true)}" target="_blank">${source.title ? source.title : 'Know More'}</a>
+        </div>`;
+        snippetSourceElements += sourceTemp;
+        }
+      });
+
+      articleSourceElementsRef.append(snippetSourceElements);
+    }
+
+    let articlestypeInfo = $(`.type-info-run-send #snippetSection-${uuids + index}`);
+    let seeMoreButtonHtml = `
+<button class="ghost-btn hide" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">${this.projConstants.READ_MORE}</button>
+<button class="ghost-btn hide" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">${this.projConstants.READ_LESS}</button>
+`;
+    articlestypeInfo.append(seeMoreButtonHtml);
+    setTimeout(() => {                    
+        this.commonService.updateSeeMoreButtonForAssist(uuids + index, ProjConstants.SNIPPET);
+    }, 1000);
+
   }
 
   smallTalkActionLinkTemplate(uuids,sendData){
