@@ -753,7 +753,7 @@ export class CommonService {
               snippet.content.forEach((ansSnippet : any) => {
                 let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet)
                 obj.contentArray = [ansSnippet.answer_fragment]
-                obj.sources = ansSnippet?.sources || []
+                obj.sources = (ansSnippet?.sources || []).filter(obj => obj.url);
                 obj.tempType = 'snippet'
                 snippetResponeArray.push(obj);
               });
@@ -764,8 +764,10 @@ export class CommonService {
             }else if(snippet?.content){
               snippet.contentArray = snippet.content || [];
             }
-            snippet.tempType = 'snippet'
-            snippet.sources = [{title : snippet.source, url : snippet.url}]
+            snippet.tempType = 'snippet';
+            if(snippet.url){
+              snippet.sources = [{title : snippet.source, url : snippet.url}]
+            }
             snippetResponeArray.push(snippet);
           }
         }
