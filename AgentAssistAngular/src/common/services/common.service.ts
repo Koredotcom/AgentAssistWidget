@@ -565,27 +565,27 @@ export class CommonService {
     ;
   }
 
-  confirmationNodeRenderDataTransform(data){
-    if((data.componentType == 'dialogAct' || data.entityType == 'list_of_values')  && data.buttons && data.buttons.length > 0){
-      if(!data.applyDefaultTemplate){
-        data.componentType = '';
-        data.entityType = '';
-      }
-    }
-    return data;
-  }
+  // confirmationNodeRenderDataTransform(data){
+  //   if((data.componentType == 'dialogAct' || data.entityType == 'list_of_values')  && data.buttons && data.buttons.length > 0){
+  //     if(!data.applyDefaultTemplate){
+  //       data.componentType = '';
+  //       data.entityType = '';
+  //     }
+  //   }
+  //   return data;
+  // }
 
-  confirmationNodeRenderForHistoryDataTransform(res){
-    if(res && res.agentAssistDetails && (res.agentAssistDetails.componentType == 'dialogAct' || res.agentAssistDetails.entityType == 'list_of_values' || res.agentAssistDetails.newEntityType == 'list_of_values')  && res.components && res.components.length > 0 && res.components[0].data && res.components[0].data.text){
+  // confirmationNodeRenderForHistoryDataTransform(res){
+  //   if(res && res.agentAssistDetails && (res.agentAssistDetails.componentType == 'dialogAct' || res.agentAssistDetails.entityType == 'list_of_values' || res.agentAssistDetails.newEntityType == 'list_of_values')  && res.components && res.components.length > 0 && res.components[0].data && res.components[0].data.text){
 
-      if(!res.agentAssistDetails.applyDefaultTemplate){
+  //     if(!res.agentAssistDetails.applyDefaultTemplate){
 
-        res.agentAssistDetails.componentType = '';
-        res.agentAssistDetails.newEntityType = '';
-      }
-    }
-    return res;
-  }
+  //       res.agentAssistDetails.componentType = '';
+  //       res.agentAssistDetails.newEntityType = '';
+  //     }
+  //   }
+  //   return res;
+  // }
 
   // send and copy button related code
   preparePostMessageForSendAndCopy(evt, data, eventName, connectionDetails) {
@@ -981,9 +981,13 @@ export class CommonService {
       lastchild = $(conatiner);
     }
 
-    if (!parsedPayload && componentType != 'dialogAct') {
-        $(lastchild).find('.copy-btn').removeClass('hide')
+    // if (!parsedPayload && componentType != 'dialogAct') {
+    //     $(lastchild).find('.copy-btn').removeClass('hide')
+    // }
+    if(!parsedPayload){
+      $(lastchild).find('.copy-btn').removeClass('hide')
     }
+
     if((!this.configObj.source || this.configObj.source !== ProjConstants.SMARTASSIST_SOURCE) && parsedPayload){
         $(lastchild).find('.send-run-btn').addClass('hide')
         $(lastchild).find('.warning-template').removeClass('hide')
@@ -1223,7 +1227,7 @@ export class CommonService {
     return newHtmlStr;
   }
 
-  handleEmptyLine(answer, quotflag){
+  handleEmptyLine(answer, quotflag=false){
     let eleanswer = '';
     if(answer != undefined && answer != null){
         eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
@@ -1255,6 +1259,27 @@ export class CommonService {
     }
     // eleanswer = this.replaceLtGt2(eleanswer)
     return eleanswer
+  }
+
+
+  smallTalkTemplateRenderCheck(data,result){
+    // if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
+    //   return true;
+    // }
+    if(result.parsedPayload){
+      return true
+    }
+    return false;
+  }
+
+  smallTalkHistoryRenderCheck(parsedPayload,res){
+    // if(parsedPayload && res.agentAssistDetails && ((res.agentAssistDetails?.componentType === 'dialogAct' && (res.agentAssistDetails?.srcChannel == 'msteams' || res.agentAssistDetails?.srcChannel == 'rtm')) || (res.agentAssistDetails?.componentType != 'dialogAct'))){
+    //   return true;
+    // }
+    if(parsedPayload){
+      return true;
+    }
+    return false
   }
 
   agent_run_click(dialog, isSearchFlag) {

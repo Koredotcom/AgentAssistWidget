@@ -149,9 +149,10 @@ export class AssistService {
     return template;
   }
 
-  askUserTemplate(data, uuids, newTemp?, positionID?,srcChannel=null, value='', componentType=null) {
+  askUserTemplate(result, data, uuids, newTemp?, positionID?, value='', history = false) {
     let template= '';
-    if(componentType && componentType == 'dialogAct' && srcChannel != 'msteams' && srcChannel != 'rtm'){
+    let smallTalkRenderCheck = history ? this.commonService.smallTalkHistoryRenderCheck(result.parsedPayload, data) : this.commonService.smallTalkTemplateRenderCheck(data, result);
+    if(!smallTalkRenderCheck){
       template = `
       <div class="steps-run-data">
       <div class="icon_block">
@@ -160,7 +161,7 @@ export class AssistService {
       <div class="run-info-content" >
       <div class="title">${data.promptTitle}</div>
       <div class="agent-utt">
-      <div class="title-data" id="displayData-${uuids}">${value}</div>
+      <div class="title-data" id="displayData-${uuids}">${this.commonService.handleEmptyLine(value)}</div>
           <div class="action-links">
               <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}" data-text-type="sentence">Send</button>
               <div class="copy-btn" data-msg-id="${uuids}" data-position-id="${positionID}" data-text-type="sentence">
@@ -196,9 +197,11 @@ export class AssistService {
     return template
   }
 
-  tellToUserTemplate(data, uuids, newTemp?, positionID?, srcChannel=null, value='', componentType=null) {
+  tellToUserTemplate(result, data, uuids, newTemp?, positionID?, value='',history=false) {
     let template= '';
-    if(componentType && componentType == 'dialogAct' && (srcChannel != 'msteams' && srcChannel != 'rtm') ){
+    let smallTalkRenderCheck = history ? this.commonService.smallTalkHistoryRenderCheck(result.parsedPayload, data) : this.commonService.smallTalkTemplateRenderCheck(data, result);
+
+    if(!smallTalkRenderCheck){
       template = `
       <div class="steps-run-data">
         <div class="icon_block">
@@ -207,7 +210,7 @@ export class AssistService {
         <div class="run-info-content" >
           <div class="title">${data.promptTitle}</div>
           <div class="agent-utt">
-            <div class="title-data" id="displayData-${uuids}">${value}</div>
+            <div class="title-data" id="displayData-${uuids}">${this.commonService.handleEmptyLine(value)}</div>
             <div class="action-links">
                 <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}" data-text-type="sentence">Send</button>
                 <div class="copy-btn" data-msg-id="${uuids}" data-position-id="${positionID}" data-text-type="sentence">
