@@ -186,7 +186,7 @@ export class MybotComponent {
 
 
   processMybotDataResponse(data) {
-    data = this.rootService.confirmationNodeRenderDataTransform(data);
+    // data = this.rootService.confirmationNodeRenderDataTransform(data);
     let results: any = this.templateRenderClassService.getResponseUsingTemplate(data);
     let msgStringify = JSON.stringify(results);
     let newTemp = encodeURI(msgStringify);
@@ -380,7 +380,10 @@ export class MybotComponent {
 
 
   smallTalkTemplateRenderCheck(data, results) {
-    if (results.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))) {
+    // if (results.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))) {
+    //   return true;
+    // }
+    if (results.parsedPayload) {
       return true;
     }
     return false;
@@ -428,7 +431,7 @@ export class MybotComponent {
     resp?.forEach((res, index) => {
 
       res = this.rootService.formatHistoryResonseToNormalRender(res);
-      res = this.rootService.confirmationNodeRenderForHistoryDataTransform(res);
+      // res = this.rootService.confirmationNodeRenderForHistoryDataTransform(res);
       // this.removeOrAddOverRideDivForPreviousResponse(true);
 
 
