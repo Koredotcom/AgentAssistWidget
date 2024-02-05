@@ -240,7 +240,7 @@ export class RootService {
     let suggestions = response.suggestions
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
-    let snippersArray = suggestions?.searchassist?.snippets || [];
+    let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [])
     let filesArray = suggestions?.searchassist?.files || [];
     let searchResponse: any = {};
     if(dialoguesArray.length || faqArray.length || snippersArray.length || filesArray.length || Object.keys(suggestions?.searchassist)?.length){
@@ -307,18 +307,21 @@ export class RootService {
         searchResponse.faqs.push(faqObject);
       }
       if (suggestions?.searchassist?.snippets?.length > 0) {
-        for (let snippet of snippersArray) {
-          if(Array.isArray(snippet?.content)){
-            snippet.content = snippet.content.reduce((acc, obj) => {
-              if(obj.answer_fragment){
-                acc += obj.answer_fragment;
-                return acc;
-              }
-            }, '')
-          }
-          if(snippet.title || snippet.content){
-            searchResponse.snippets.push(snippet);
-          }
+        // for (let snippet of snippersArray) {
+          // if(Array.isArray(snippet?.content)){
+          //   snippet.content = snippet.content.reduce((acc, obj) => {
+          //     if(obj.answer_fragment){
+          //       acc += obj.answer_fragment;
+          //       return acc;
+          //     }
+          //   }, '')
+          // }
+        //   if(snippet.title || snippet.content){
+        //     searchResponse.snippets.push(snippet);
+        //   }
+        // }
+        if(snippersArray?.length > 0){
+          searchResponse.snippets = Object.assign([], snippersArray);
         }
         for (let snippet of searchResponse.snippets) {
           snippet.showMoreButton = true;
@@ -339,6 +342,37 @@ export class RootService {
       }
     }
     return searchResponse;
+  }
+
+  formatSnippetResponse(snippetsArray){
+    let snippetResponeArray : any = [];
+    if(snippetsArray?.length > 0){
+      snippetsArray.forEach( (snippet : any) => {
+        if(snippet?.templateType){
+          if(snippet.templateType == 'active_citation_snippet' || snippet.templateType == 'citation_snippet'){
+            if(snippet?.content && Array.isArray(snippet?.content) && snippet?.content?.length > 0){
+              snippet.content.forEach((ansSnippet : any) => {
+                let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet)
+                obj.contentArray = [ansSnippet.answer_fragment]
+                obj.sources = ansSnippet?.sources || []
+                snippetResponeArray.push(obj);
+              });
+            }
+          }else{
+            if(snippet?.content && typeof (snippet?.content) === 'string'){
+              snippet.contentArray = [snippet.content];
+            }else if(snippet?.content){
+              snippet.contentArray = snippet.content || [];
+            }
+            snippet.sources = [{title : snippet.source, url : snippet.url}]
+            snippetResponeArray.push(snippet);
+          }
+        }
+      });
+    } 
+    console.log(snippetResponeArray, "snippet response array ************8");
+
+    return snippetResponeArray;   
   }
 
   checkEmptyObjectsInArray(arr) {
@@ -455,27 +489,27 @@ export class RootService {
     }
   }
 
-  confirmationNodeRenderDataTransform(data) {
-    data.expectedFormat = data.entityType;
-    if ((data.componentType == 'dialogAct' || data.entityType == 'list_of_values') && data.buttons && data.buttons.length > 0) {
-      if (!data.applyDefaultTemplate) {
-        data.componentType = '';
-        data.entityType = '';
-      }
-    }
-    return data;
-  }
+  // confirmationNodeRenderDataTransform(data) {
+  //   data.expectedFormat = data.entityType;
+  //   if ((data.componentType == 'dialogAct' || data.entityType == 'list_of_values') && data.buttons && data.buttons.length > 0) {
+  //     if (!data.applyDefaultTemplate) {
+  //       data.componentType = '';
+  //       data.entityType = '';
+  //     }
+  //   }
+  //   return data;
+  // }
 
-  confirmationNodeRenderForHistoryDataTransform(res) {
-    res.expectedFormat = res.entityType || res.newEntityType;
-    if (res && (res.componentType == 'dialogAct' || res.entityType == 'list_of_values' || res.newEntityType == 'list_of_values') && res.buttons && res.buttons.length > 0 && res.buttons[0].data && res.buttons[0].value) {
-      if (!res?.applyDefaultTemplate) {
-        res.componentType = '';
-        res.newEntityType = '';
-      }
-    }
-    return res;
-  }
+  // confirmationNodeRenderForHistoryDataTransform(res) {
+  //   res.expectedFormat = res.entityType || res.newEntityType;
+  //   if (res && (res.componentType == 'dialogAct' || res.entityType == 'list_of_values' || res.newEntityType == 'list_of_values') && res.buttons && res.buttons.length > 0 && res.buttons[0].data && res.buttons[0].value) {
+  //     if (!res?.applyDefaultTemplate) {
+  //       res.componentType = '';
+  //       res.newEntityType = '';
+  //     }
+  //   }
+  //   return res;
+  // }
 
   handleEmptyLine(answer, quotflag?) {
     let eleanswer = '';
