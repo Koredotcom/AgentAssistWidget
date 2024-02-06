@@ -266,6 +266,9 @@ export class AssistComponent implements OnInit, OnDestroy {
     // let isTemplateRender = false;
 
     // data = this.rootService.confirmationNodeRenderDataTransform(data);
+    if(data){
+      data.expectedFormat = data.entityType;
+    }
 
     if (this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.suggestions?.dialogs?.length > 0) {
       this.dialogTerminatedOrIntruppted();

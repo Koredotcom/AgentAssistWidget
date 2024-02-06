@@ -459,7 +459,7 @@ export class RootService {
     result.buttons.forEach((element, index) => {
       element.value = res.components[index]?.data?.text
     });
-
+    result.expectedFormat = res.entityType || res.newEntityType;
     return result;
   }
 

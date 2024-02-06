@@ -189,6 +189,9 @@ export class MybotComponent {
 
   processMybotDataResponse(data) {
     // data = this.rootService.confirmationNodeRenderDataTransform(data);
+    if(data){
+      data.expectedFormat = data.entityType;
+    }
     let results: any = this.templateRenderClassService.getResponseUsingTemplate(data);
     let msgStringify = JSON.stringify(results);
     let newTemp = encodeURI(msgStringify);
