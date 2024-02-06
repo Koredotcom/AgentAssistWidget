@@ -50,7 +50,7 @@ export class WebSocketService {
     private handleSubjectService : HandleSubjectService, private templateRenderClassService : TemplateRenderClassService) {
   }
 
-  socketConnection(){    
+  socketConnection(isR=false){    
     let finalUrl = this.rootService.getConnectionDetails().agentassisturl + '/koreagentassist';
     const config = {
       url: finalUrl,
@@ -68,6 +68,13 @@ export class WebSocketService {
     
     this._agentAsisstSocket =  io(config.url, config.options);
     this._agentAsisstSocket.connect();
+
+    if(!isR){
+      this.socketConnectionEst();
+    }
+  }
+
+  socketConnectionEst(){
     this._agentAsisstSocket.on("connect", () => {
       // if(!window._agentAssistSocketEventListener){
         this.listenEvents();
@@ -271,9 +278,11 @@ export class WebSocketService {
     });
 
     this._agentAsisstSocket.on(EVENTS.disconnect, (reason) => {
-      console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ disconnect event:", reason)
+      console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ disconnect event:", reason);
       this._agentAsisstSocket.disconnect(true);
       this._agentAsisstSocket.close();
+      this._agentAsisstSocket = null;
+      this.socketConnection(true);
       this._agentAsisstSocket.connect();
     });
     
