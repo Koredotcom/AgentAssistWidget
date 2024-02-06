@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { EVENTS } from 'src/app/helpers/events';
@@ -11,7 +11,7 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.scss']
 })
-export class FeedbackComponent implements AfterViewInit {
+export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
   @Input() feedbackData : any = {};
   @Input() agentassistArrayIndex : number;
   @Input() agentassistResponseArray : number;
@@ -38,6 +38,10 @@ export class FeedbackComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.createForm();
+  }
+
+  ngAfterViewChecked(): void {
+    this.cdRef.detectChanges();
   }
 
   subscribeValChanges(){

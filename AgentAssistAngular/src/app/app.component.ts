@@ -65,7 +65,7 @@ export class AppComponent implements OnInit, OnDestroy{
       this.connectionDetails = this.rootService.getConnectionDetails();
 
       window.addEventListener('message', this.receiveMessage.bind(this), false);
-      if (Object.keys(this.connectionDetails).length > 1) {
+      if (Object.keys(this.connectionDetails)?.length > 1) {
         this.initAgentAssist(this.connectionDetails);
       }
       var message = {

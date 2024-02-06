@@ -150,9 +150,11 @@ export class MybotComponent {
         this.dialogTerminatedOrIntrupptedInMyBot();
         if (this.interruptRun) {
           this.interruptRun = false;
-          let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
-          index = index < 0 ? 0 : index;
-          this.commonService.dialogueRunClick(this.interruptDialog,index, true)
+          if(this.interruptDialogList && this.interruptDialogList?.length > 0){
+            let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
+            index = index < 0 ? 0 : index;
+            this.commonService.dialogueRunClick(this.interruptDialog,index, true)
+          }
         }
         if(this.showRestart){
           this.handlePopupEvent({type : this.projConstants.RESTART, status : false});
@@ -310,11 +312,13 @@ export class MybotComponent {
         this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId)
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
-        let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
-        if (index < 0) {
-          this.interruptDialog.from = this.projConstants.INTERRUPT;
-          this.interruptDialogList.push(this.interruptDialog);
-          this.commonService.updateInterruptDialogList(this.interruptDialogList, this.projConstants.MYBOT)
+        if(this.interruptDialogList && this.interruptDialogList?.length > 0){
+          let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
+          if (index < 0) {
+            this.interruptDialog.from = this.projConstants.INTERRUPT;
+            this.interruptDialogList.push(this.interruptDialog);
+            this.commonService.updateInterruptDialogList(this.interruptDialogList, this.projConstants.MYBOT)
+          }
         }
       }
       if(!this.showInterruptPopup){

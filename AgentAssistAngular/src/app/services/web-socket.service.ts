@@ -101,7 +101,7 @@ export class WebSocketService {
       'sId': this.rootService.userBotConversationDetails?.sessionId || '',
       'experience' : this.rootService.connectionDetails?.channel,
     }
-    if(customData && Object.keys(customData).length > 0 && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
+    if(customData && Object.keys(customData)?.length > 0 && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
       welcomeMessageParams['customData'] = customData
     }
     // Check with Sarada regarding how to get the connectionDetails

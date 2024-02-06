@@ -68,13 +68,16 @@ export class ListviewComponent implements AfterViewInit{
   }
 
 
-  cancelOverride(automation){
-    if(this.rootService.activeTab != this.projConstants.MYBOT){
-      this.inputName = this.projConstants.AWAITING;
-      automation.toggleOverride = false;
-      automation.entityValue = '';
-      if(this.rootService.OverRideMode && this.rootService.proactiveModeStatus && !this.rootService.manualAssistOverrideMode){
-        this.handleOverridBtnClick(automation.connectionDetails, automation.dialogId, automation.toggleOverride);
+  cancelOverride(){
+    if(this.entityList?.length > 0){
+      let automation = this.entityList[this.entityList.length - 1];
+      if(this.rootService.activeTab != this.projConstants.MYBOT){
+        this.inputName = this.projConstants.AWAITING;
+        automation.toggleOverride = false;
+        automation.entityValue = '';
+        if(this.rootService.OverRideMode && this.rootService.proactiveModeStatus && !this.rootService.manualAssistOverrideMode){
+          this.handleOverridBtnClick(automation.connectionDetails, automation.dialogId, automation.toggleOverride);
+        }
       }
     }
   }
@@ -88,10 +91,10 @@ export class ListviewComponent implements AfterViewInit{
        this.mybotInputValue(automation)
     }
   }
-  
 
   
   closeListView(flag){
+    this.cancelOverride();
     this.handlePopupEvent.emit({ status: flag,  type: this.projConstants.LISTVIEW });
   }
 

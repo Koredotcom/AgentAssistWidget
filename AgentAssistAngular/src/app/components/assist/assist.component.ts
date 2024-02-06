@@ -103,7 +103,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     });
 
     this.subs.sink = this.websocketService.agentAssistResponse$.subscribe((response: any) => {
-      if (response && Object.keys(response).length > 0) {
+      if (response && Object.keys(response)?.length > 0) {
         if (this.rootService.checkAutoBotIdDefined(this.connectionDetails?.autoBotId)) {
           this.connectionDetails['autoBotId'] = response?.autoBotId ? response.autoBotId : undefined;
         }
@@ -160,9 +160,11 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.dialogTerminatedOrIntruppted();        
         if (this.interruptRun) {
           this.interruptRun = false;
-          let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
-          index = index < 0 ? 0 : index;
-          this.commonService.dialogueRunClick(this.interruptDialog,index, false)
+          if(this.interruptDialogList && this.interruptDialogList?.length > 0){
+            let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
+            index = index < 0 ? 0 : index;
+            this.commonService.dialogueRunClick(this.interruptDialog,index, false)
+          }
         }
         if(this.showRestart){
           this.handlePopupEvent({type : this.projConstants.RESTART, status : false});
@@ -278,7 +280,7 @@ export class AssistComponent implements OnInit, OnDestroy {
       this.assistResponseArray = [...this.assistResponseArray];
     }
 
-    if (!data.suggestions || (data.suggestions && Object.keys(data.suggestions).length == 0)) {
+    if (!data.suggestions || (data.suggestions && Object.keys(data.suggestions)?.length == 0)) {
       data.suggestions = false;
     }
 
@@ -357,7 +359,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);
         this.assistResponseArray = [...this.assistResponseArray];
       }
-    }else if(data?.buttons?.length > 0  && Object.keys(this.welcomeMsgResponse).length == 0){
+    }else if(data?.buttons?.length > 0  && Object.keys(this.welcomeMsgResponse)?.length == 0){
       renderResponse = this.commonService.formatWelcomeMessageResponse(data);
       this.welcomeMsgResponse = data;
       this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);
@@ -513,11 +515,13 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
-        let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
-        if (index < 0) {
-          this.interruptDialog.from = this.projConstants.INTERRUPT;
-          this.interruptDialogList.push(this.interruptDialog);
-          this.commonService.updateInterruptDialogList(this.interruptDialogList, this.projConstants.ASSIST);
+        if(this.interruptDialogList && this.interruptDialogList?.length > 0){
+          let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
+          if (index < 0) {
+            this.interruptDialog.from = this.projConstants.INTERRUPT;
+            this.interruptDialogList.push(this.interruptDialog);
+            this.commonService.updateInterruptDialogList(this.interruptDialogList, this.projConstants.ASSIST);
+          }
         }
       }
       if(!this.showInterruptPopup){

@@ -45,7 +45,7 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
 
   subscribeEvents(){
     this.handleSubjectService.faqsearchResponse$.subscribe((response)=> {
-      if(response && Object.keys(response).length > 0 && this.from == ProjConstants.ASSIST){
+      if(response && Object.keys(response)?.length > 0 && this.from == ProjConstants.ASSIST){
         this.searchResponse = response;
         this.handleResponse();
       }

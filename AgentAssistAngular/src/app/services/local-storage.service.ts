@@ -22,7 +22,7 @@ export class LocalStorageService {
     
     let appState = this.getLocalStorageState();
     let conversationId = this.rootService.getConnectionDetails().conversationId;
-    if(appState && Object.keys(appState).length > 0 && appState[conversationId]){
+    if(appState && Object.keys(appState)?.length > 0 && appState[conversationId]){
       // if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.AUTOMATION_GOING_ON])){
       //   appState[conversationId][storageConst.AUTOMATION_GOING_ON] = storageObject[storageConst.AUTOMATION_GOING_ON];
       // }

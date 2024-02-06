@@ -62,13 +62,13 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     });
 
     this.subs.sink = this.websocketService.userMessageResponse$.subscribe((response: any) => {
-      if (response && Object.keys(response).length > 0) {
+      if (response && Object.keys(response)?.length > 0) {
         this.processUserMessage(response);
       }
     });
 
     this.subs.sink = this.websocketService.agentMessageResponse$.subscribe((response: any) => {
-      if (response && Object.keys(response).length > 0) {
+      if (response && Object.keys(response)?.length > 0) {
         // this.prepareConversation();
         this.processAgentMessages(response);
       }
@@ -148,7 +148,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
     this.subs.sink = this.handleSubjectService.callConversationSuggestions$.subscribe((response: any) => {
       console.log("------------resposne of agent request", response)
-      if (response?.data && Object.keys(response?.data).length > 0) {
+      if (response?.data && Object.keys(response?.data)?.length > 0) {
         this.processAssistResponse(response);
       }
     });
