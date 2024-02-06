@@ -66,9 +66,9 @@ export class WebSocketService {
     
     this._agentAsisstSocket =  io(config.url, config.options);
     this._agentAsisstSocket.connect();
+    this.listenEvents();
     this._agentAsisstSocket.on("connect", () => {
       // if(!window._agentAssistSocketEventListener){
-        this.listenEvents();
         this.commonEmitEvents(true);
       //   window._agentAssistSocketEventListener = true;
       // }
