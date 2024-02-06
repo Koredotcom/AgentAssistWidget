@@ -4,7 +4,7 @@
     </app-exhaustive-representation>
 </app-slider-component>
 
-<div class="dashboard-wraaper-container" id="pdfTable" #pdfTable>
+<div class="dashboard-wraaper-container dashboard-wraaper-container-isunified" id="pdfTable" #pdfTable>
     <div class="header-titles">
         <app-dashboard-filters (exportPdf)="exportPdf($event)"></app-dashboard-filters>
     </div>
@@ -72,7 +72,7 @@
                                     <perfect-scrollbar>
                                         <div class="scroll-data mx-h-280">
                                             <li ngbDropdownItem class="channel-name m_b_2" *ngFor="let type of customerAspectDropdownList" (click)="changeCustomerAspectDropdown(type)">
-                                                <a  [ngClass]="{'selected': type === customerAspectDropdownSelection}">{{("DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_" + type) | translate}}</a>
+                                                <a  [ngClass]="{'selected': type === customerAspectDropdownSelection}" title='{{("DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_" + type) | translate}}'>{{("DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_" + type) | translate}}</a>
                                             </li>
                                         </div>
                                     </perfect-scrollbar>

@@ -1,3 +1,5 @@
+import { assetUrl } from "src/single-spa/asset-url";
+
 export const DASHBORADCOMPONENTTYPE = {
     AGENT_FEEDBACK : 'AGENT_FEEDBACK',
     AGENT_ASPECT : 'AGENT_ASPECT',
@@ -33,9 +35,9 @@ export const actualvsDisplayTitle = {
     CUSTOMER_ASPECT_DROPDOWN_LIST : ['all','agent', 'agentassist'],
     CUSTOMER_ASPECT_TABS_LIST : ['all', 'article', 'faq', 'dialog'],
     CUSTOMER_ASPECT_TYPE_VS_IMAGE : {
-        'article' : 'assets/icons/dashboard/articles.svg',
-        'faq' : 'assets/icons/dashboard/faqs.svg',
-        'dialog' : 'assets/icons/dashboard/automation.svg'
+        'article' : assetUrl('/icons/dashboard/articles.svg'),
+        'faq' : assetUrl('/icons/dashboard/faqs.svg'),
+        'dialog' : assetUrl('/icons/dashboard/automation.svg')
     }
 }
 

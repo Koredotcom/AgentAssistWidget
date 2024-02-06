@@ -521,3 +521,522 @@
 .single-spa-agentassist .icon-sa-call:before {
   content: "\e92d";
 }
+
+
+
+/* Analytics icons */
+
+
+
+
+.single-spa-anlagentassist [class^="icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon-agentassist' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.single-spa-anlagentassist [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon-agentassist' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.single-spa-anlagentassist .icon-sa-play-book:before {
+  content: "\e98f";
+}
+.single-spa-anlagentassist .icon-ast_thumbsup:before {
+  content: "\e984";
+}
+.single-spa-anlagentassist .icon-ast_sortdown:before {
+  content: "\e985";
+}
+.single-spa-anlagentassist .icon-ast_sortup:before {
+  content: "\e986";
+}
+.single-spa-anlagentassist .icon-ast_sortupdown:before {
+  content: "\e987";
+}
+.single-spa-anlagentassist .icon-ast_key:before {
+  content: "\e988";
+}
+.single-spa-anlagentassist .icon-ast_alpha:before {
+  content: "\e989";
+}
+.single-spa-anlagentassist .icon-ast_export:before {
+  content: "\e98a";
+}
+.single-spa-anlagentassist .icon-ast_calendar:before {
+  content: "\e98b";
+}
+.single-spa-anlagentassist .icon-ast_channels:before {
+  content: "\e98c";
+}
+.single-spa-anlagentassist .icon-ast_checkright:before {
+  content: "\e98d";
+}
+.single-spa-anlagentassist .icon-sat_thumsdown:before {
+  content: "\e98e";
+}
+.single-spa-anlagentassist .icon-coaching-publish:before {
+  content: "\e982";
+}
+.single-spa-anlagentassist .icon-coaching-menu-icon:before {
+  content: "\e983";
+}
+.single-spa-anlagentassist .icon-coaching--clock-refresh:before {
+  content: "\e957";
+}
+.single-spa-anlagentassist .icon-coaching--delete:before {
+  content: "\e958";
+}
+.single-spa-anlagentassist .icon-coaching--edit:before {
+  content: "\e959";
+}
+.single-spa-anlagentassist .icon-coaching--email-manager .path1:before {
+  content: "\e95a";
+  color: rgb(16, 24, 40);
+  opacity: 0.12;
+}
+.single-spa-anlagentassist .icon-coaching--email-manager .path2:before {
+  content: "\e95b";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--faq .path1:before {
+  content: "\e95c";
+  color: rgb(16, 24, 40);
+  opacity: 0.12;
+}
+.single-spa-anlagentassist .icon-coaching--faq .path2:before {
+  content: "\e95d";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--hint-agent .path1:before {
+  content: "\e95e";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.single-spa-anlagentassist .icon-coaching--hint-agent .path2:before {
+  content: "\e95f";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--hint-agent .path3:before {
+  content: "\e960";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--left-arrow:before {
+  content: "\e961";
+}
+.single-spa-anlagentassist .icon-coaching--message-chat-square .path1:before {
+  content: "\e962";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.single-spa-anlagentassist .icon-coaching--message-chat-square .path2:before {
+  content: "\e963";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--message-check-square .path1:before {
+  content: "\e964";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.single-spa-anlagentassist .icon-coaching--message-check-square .path2:before {
+  content: "\e965";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--move:before {
+  content: "\e966";
+}
+.single-spa-anlagentassist .icon-coaching--move1:before {
+  content: "\e967";
+}
+.single-spa-anlagentassist .icon-coaching--nudge-agent .path1:before {
+  content: "\e968";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.single-spa-anlagentassist .icon-coaching--nudge-agent .path2:before {
+  content: "\e969";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--plus:before {
+  content: "\e96a";
+}
+.single-spa-anlagentassist .icon-coaching--search:before {
+  content: "\e96b";
+}
+.single-spa-anlagentassist .icon-coaching--settings:before {
+  content: "\e96c";
+}
+.single-spa-anlagentassist .icon-coaching--tag:before {
+  content: "\e96d";
+}
+.single-spa-anlagentassist .icon-coaching--thendo:before {
+  content: "\e96e";
+}
+.single-spa-anlagentassist .icon-coaching--trigger-dialog .path1:before {
+  content: "\e96f";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.single-spa-anlagentassist .icon-coaching--trigger-dialog .path2:before {
+  content: "\e970";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--trigger-dialog .path3:before {
+  content: "\e971";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--trigger-dialog .path4:before {
+  content: "\e972";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--trigger-speech1 .path1:before {
+  content: "\e973";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.single-spa-anlagentassist .icon-coaching--trigger-speech1 .path2:before {
+  content: "\e974";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--trigger-speech:before {
+  content: "\e975";
+}
+.single-spa-anlagentassist .icon-coaching--trigger-variable .path1:before {
+  content: "\e976";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.single-spa-anlagentassist .icon-coaching--trigger-variable .path2:before {
+  content: "\e977";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--when:before {
+  content: "\e978";
+}
+.single-spa-anlagentassist .icon-coaching--adherence-set:before {
+  content: "\e979";
+}
+.single-spa-anlagentassist .icon-coaching--ai:before {
+  content: "\e97a";
+}
+.single-spa-anlagentassist .icon-coaching--aleart-manager .path1:before {
+  content: "\e97b";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.single-spa-anlagentassist .icon-coaching--aleart-manager .path2:before {
+  content: "\e97c";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--announce:before {
+  content: "\e97d";
+}
+.single-spa-anlagentassist .icon-coaching-assign-this .path1:before {
+  content: "\e97e";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.single-spa-anlagentassist .icon-coaching-assign-this .path2:before {
+  content: "\e97f";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.single-spa-anlagentassist .icon-coaching--award:before {
+  content: "\e980";
+}
+.single-spa-anlagentassist .icon-coaching--check:before {
+  content: "\e981";
+}
+.single-spa-anlagentassist .icon-sa-welcome-chat:before {
+  content: "\e951";
+}
+.single-spa-anlagentassist .icon-sa-welcome-delete:before {
+  content: "\e952";
+}
+.single-spa-anlagentassist .icon-sa-welcome-voice:before {
+  content: "\e953";
+}
+.single-spa-anlagentassist .icon-sa-call-welcome:before {
+  content: "\e954";
+}
+.single-spa-anlagentassist .icon-sa-welcome-edit:before {
+  content: "\e955";
+}
+.single-spa-anlagentassist .icon-sa-welcome-bulb:before {
+  content: "\e956";
+}
+.single-spa-anlagentassist .icon-sa-conv-info:before {
+  content: "\e93c";
+}
+.single-spa-anlagentassist .icon-sa-conv-keypad:before {
+  content: "\e93d";
+}
+.single-spa-anlagentassist .icon-sa-conv-mybot:before {
+  content: "\e93e";
+}
+.single-spa-anlagentassist .icon-sa-conv-refreshten:before {
+  content: "\e93f";
+}
+.single-spa-anlagentassist .icon-sa-conv-search:before {
+  content: "\e940";
+}
+.single-spa-anlagentassist .icon-sa-conv-speed:before {
+  content: "\e941";
+}
+.single-spa-anlagentassist .icon-sa-conv-thumb-down:before {
+  content: "\e942";
+}
+.single-spa-anlagentassist .icon-sa-conv-thumbup:before {
+  content: "\e943";
+}
+.single-spa-anlagentassist .icon-sa-conv-thumbupdown:before {
+  content: "\e944";
+}
+.single-spa-anlagentassist .icon-sa-conv-time:before {
+  content: "\e945";
+}
+.single-spa-anlagentassist .icon-sa-conv-user:before {
+  content: "\e946";
+}
+.single-spa-anlagentassist .icon-sa-conv-via-search:before {
+  content: "\e947";
+}
+.single-spa-anlagentassist .icon-sa-conv-volume:before {
+  content: "\e948";
+}
+.single-spa-anlagentassist .icon-sa-conv-agentassist:before {
+  content: "\e949";
+}
+.single-spa-anlagentassist .icon-sa-conv-agentselected:before {
+  content: "\e94a";
+}
+.single-spa-anlagentassist .icon-sa-conv-calendar:before {
+  content: "\e94b";
+}
+.single-spa-anlagentassist .icon-sa-conv-check:before {
+  content: "\e94c";
+}
+.single-spa-anlagentassist .icon-sa-conv-close:before {
+  content: "\e94d";
+}
+.single-spa-anlagentassist .icon-sa-conv-conversation-white:before {
+  content: "\e94e";
+}
+.single-spa-anlagentassist .icon-sa-conv-download:before {
+  content: "\e94f";
+}
+.single-spa-anlagentassist .icon-sa-conv-eye:before {
+  content: "\e950";
+}
+.single-spa-anlagentassist .icon-sa-ext-link:before {
+  content: "\e938";
+}
+.single-spa-anlagentassist .icon-sa-eye-open:before {
+  content: "\e939";
+}
+.single-spa-anlagentassist .icon-sa-eye:before {
+  content: "\e93a";
+}
+.single-spa-anlagentassist .icon-sa-copy:before {
+  content: "\e93b";
+}
+.single-spa-anlagentassist .icon-sa-info:before {
+  content: "\e937";
+}
+.single-spa-anlagentassist .icon-sa-square-bg:before {
+  content: "\e936";
+}
+.single-spa-anlagentassist .icon-sa-check-gray:before {
+  content: "\e934";
+}
+.single-spa-anlagentassist .icon-sa-video-play:before {
+  content: "\e931";
+}
+.single-spa-anlagentassist .icon-sa-check-round:before {
+  content: "\e932";
+}
+.single-spa-anlagentassist .icon-sa-help:before {
+  content: "\e933";
+}
+.single-spa-anlagentassist .icon-sa-waves:before {
+  content: "\e935";
+}
+.single-spa-anlagentassist .icon-sa-save:before {
+  content: "\e930";
+}
+.single-spa-anlagentassist .icon-sa-deflect-call:before {
+  content: "\e92f";
+}
+.single-spa-anlagentassist .icon-sa-split-down:before {
+  content: "\e92e";
+}
+.single-spa-anlagentassist .icon-sa-call-transfer:before {
+  content: "\e900";
+}
+.single-spa-anlagentassist .icon-sa-chat:before {
+  content: "\e901";
+}
+.single-spa-anlagentassist .icon-sa-close:before {
+  content: "\e902";
+}
+.single-spa-anlagentassist .icon-sa-comment:before {
+  content: "\e903";
+}
+.single-spa-anlagentassist .icon-sa-common-properties:before {
+  content: "\e904";
+}
+.single-spa-anlagentassist .icon-sa-connections:before {
+  content: "\e905";
+}
+.single-spa-anlagentassist .icon-sa-conv-input:before {
+  content: "\e906";
+}
+.single-spa-anlagentassist .icon-sa-delete:before {
+  content: "\e907";
+}
+.single-spa-anlagentassist .icon-sa-elipse:before {
+  content: "\e908";
+}
+.single-spa-anlagentassist .icon-sa-end-flow:before {
+  content: "\e909";
+}
+.single-spa-anlagentassist .icon-sa-goto-flow:before {
+  content: "\e90a";
+}
+.single-spa-anlagentassist .icon-sa-grid:before {
+  content: "\e90b";
+}
+.single-spa-anlagentassist .icon-sa-ivr-digital-menu:before {
+  content: "\e90c";
+}
+.single-spa-anlagentassist .icon-sa-ivr-menu:before {
+  content: "\e90d";
+}
+.single-spa-anlagentassist .icon-sa-list:before {
+  content: "\e90e";
+}
+.single-spa-anlagentassist .icon-sa-message:before {
+  content: "\e90f";
+}
+.single-spa-anlagentassist .icon-sa-minimize:before {
+  content: "\e910";
+}
+.single-spa-anlagentassist .icon-sa-minus:before {
+  content: "\e911";
+}
+.single-spa-anlagentassist .icon-sa-onboarding:before {
+  content: "\e912";
+}
+.single-spa-anlagentassist .icon-sa-play:before {
+  content: "\e913";
+}
+.single-spa-anlagentassist .icon-sa-publish:before {
+  content: "\e914";
+}
+.single-spa-anlagentassist .icon-sa-round-chat:before {
+  content: "\e915";
+}
+.single-spa-anlagentassist .icon-sa-round-check:before {
+  content: "\e916";
+}
+.single-spa-anlagentassist .icon-sa-script-node:before {
+  content: "\e917";
+}
+.single-spa-anlagentassist .icon-sa-search:before {
+  content: "\e918";
+}
+.single-spa-anlagentassist .icon-sa-service-node:before {
+  content: "\e919";
+}
+.single-spa-anlagentassist .icon-sa-settings:before {
+  content: "\e91a";
+}
+.single-spa-anlagentassist .icon-sa-sort:before {
+  content: "\e91b";
+}
+.single-spa-anlagentassist .icon-sa-split:before {
+  content: "\e91c";
+}
+.single-spa-anlagentassist .icon-sa-start-point:before {
+  content: "\e91d";
+}
+.single-spa-anlagentassist .icon-sa-survey:before {
+  content: "\e91e";
+}
+.single-spa-anlagentassist .icon-sa-testing-icon:before {
+  content: "\e91f";
+}
+.single-spa-anlagentassist .icon-sa-time:before {
+  content: "\e920";
+}
+.single-spa-anlagentassist .icon-sa-union:before {
+  content: "\e921";
+}
+.single-spa-anlagentassist .icon-sa-warning:before {
+  content: "\e922";
+}
+.single-spa-anlagentassist .icon-sa-window-maximize:before {
+  content: "\e923";
+}
+.single-spa-anlagentassist .icon-sa-testing:before {
+  content: "\e924";
+}
+.single-spa-anlagentassist .icon-sa-restore:before {
+  content: "\e925";
+}
+.single-spa-anlagentassist .icon-sa-agent:before {
+  content: "\e926";
+}
+.single-spa-anlagentassist .icon-sa-arrow-down:before {
+  content: "\e927";
+}
+.single-spa-anlagentassist .icon-sa-arrow-left:before {
+  content: "\e928";
+}
+.single-spa-anlagentassist .icon-sa-arrow-right:before {
+  content: "\e929";
+}
+.single-spa-anlagentassist .icon-sa-authentication:before {
+  content: "\e92a";
+}
+.single-spa-anlagentassist .icon-sa-automation:before {
+  content: "\e92b";
+}
+.single-spa-anlagentassist .icon-sa-bottasks:before {
+  content: "\e92c";
+}
+.single-spa-anlagentassist .icon-sa-call:before {
+  content: "\e92d";
+}

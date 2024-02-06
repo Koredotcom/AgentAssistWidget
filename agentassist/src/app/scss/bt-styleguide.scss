@@ -12,7 +12,7 @@ and open the template in the editor.
 /* -------------------- COMPONENTS STYLES STARTS HERE ---------------------*/
 
 /*---- TOGGLE STARTS HERE---*/
-.single-spa-agentassist{
+.single-spa-agentassist, .single-spa-anlagentassist{
 .font-weight-500{
     font-weight: 500;
 }
@@ -1729,8 +1729,8 @@ and open the template in the editor.
                     &::before{
                         content: "\e94c";
                         position: absolute;
-                        right: 10px;
-                        top: 13px;
+                        right: 0px;
+                        top: 5px;
                         color: #0D6EFD;
                         font-size: 13px;
                         font-family: 'icomoon-agentassist' !important;
