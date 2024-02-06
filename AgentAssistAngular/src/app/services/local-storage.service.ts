@@ -134,8 +134,14 @@ export class LocalStorageService {
 
         let experience = connectionDetails?.channel;
 
-        if(widgetSettings && widgetSettings?.isWidgetLandingEnabled && widgetSettings?.isWidgetLandingEnabled?.tab){
+/*         if(widgetSettings && widgetSettings?.isWidgetLandingEnabled && widgetSettings?.isWidgetLandingEnabled?.tab){
           appState[conversationId][storageConst.ACTIVE_TAB] = WidgetConst[widgetSettings?.isWidgetLandingEnabled?.tab];
+        } */
+
+        if(widgetSettings && widgetSettings?.isWidgetLandingEnabled && widgetSettings?.isWidgetLandingEnabled[experience] && widgetSettings?.isWidgetLandingEnabled[experience]?.tab){
+          appState[conversationId][storageConst.ACTIVE_TAB] = WidgetConst[widgetSettings?.isWidgetLandingEnabled[experience]?.tab];
+        }else{
+          appState[conversationId][storageConst.ACTIVE_TAB] = WidgetConst.assist;
         }
 
         this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];

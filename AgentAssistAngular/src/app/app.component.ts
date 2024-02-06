@@ -217,7 +217,14 @@ export class AppComponent implements OnInit, OnDestroy{
         'positionId' : this.rootService.isAutomationOnGoing ? this.rootService.currentPositionId : null
       }
       if(userInputData?.customData) {
-        agent_assist_request['customData'] = JSON.parse(JSON.stringify(userInputData?.customData));
+        try{
+          agent_assist_request['customData'] = JSON.parse(JSON.stringify(userInputData?.customData));
+        }catch(e){
+          console.error("Invalid Custom Data entered...!");
+        }
+      }
+      if(userInputData?.secureCustomData) {
+        agent_assist_request['secureCustomData'] = userInputData?.secureCustomData;
       }
       if (this.connectionDetails.isCallConversation === true) {
         this.handleSubjectService.setAgentOrTranscriptResponse(userInputData);
@@ -268,7 +275,7 @@ export class AppComponent implements OnInit, OnDestroy{
       if(res && res.agentAssistSettings && res.agentAssistSettings[params.channel]){
         this.widgetSettings = Object.assign(res.agentAssistSettings, res.agentAssistSettings[params.channel]);
       }else{
-        this.widgetSettings = this.rootService.defaultwidgetSettings;
+        this.widgetSettings = (Object.keys(res.agentAssistSettings || {}))?.length ? res.agentAssistSettings : this.rootService.defaultwidgetSettings;
       }
       this.rootService.settingsData = JSON.parse(JSON.stringify(this.widgetSettings));
       this.initiateSocketConnection(params);
