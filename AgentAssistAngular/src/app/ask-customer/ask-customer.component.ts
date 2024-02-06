@@ -66,6 +66,11 @@ export class AskCustomerComponent {
     if (changes?.automation?.currentValue?.toggleOverride) {
       this.inputName = this.translateService.instant("OVERRIDE");
     }
+    if(changes?.automation?.currentValue?.entityValue){
+      if(this.automation.entityValue && (typeof this.automation.entityValue == 'object') && Object.keys(this.automation.entityValue)?.length > 0){
+        this.automation.entityValue = JSON.stringify(this.automation.entityValue);
+      }
+    }
   }
 
   hideSendAndCopy(){
