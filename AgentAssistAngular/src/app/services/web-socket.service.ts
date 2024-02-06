@@ -184,6 +184,7 @@ export class WebSocketService implements OnDestroy {
     }
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_response, (data : any) => {
+      console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ data: 187", data)
       this.rootService.assistTabSessionId = '';
       if (data.sessionId) {
         this.rootService.assistTabSessionId = data?.sessionId;
@@ -199,6 +200,7 @@ export class WebSocketService implements OnDestroy {
       this.handleIsSendWelcomeRequest(data);
       let settimeoutTime = this.getTimeout();
       setTimeout(() => {
+        console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ settimeoutTime:", settimeoutTime)
         this.agentAssistResponse$.next(data);
         this.addOrRemoveLoader(false);
       }, settimeoutTime);
@@ -272,9 +274,10 @@ export class WebSocketService implements OnDestroy {
       this.responseResolutionCommentsResponse$.next(data);
       this.addOrRemoveLoader(false);
     })
-
+    
     this._agentAsisstSocket.on(EVENTS.disconnect, (data : any) =>{
-      this._agentAsisstSocket.disconnect(true);
+      console.log("🚀 ~ WebSocketService ~ disconnected socket:", data)
+      // this._agentAsisstSocket.disconnect(true);
     })
   }
 

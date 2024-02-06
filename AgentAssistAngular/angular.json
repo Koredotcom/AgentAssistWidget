@@ -60,7 +60,8 @@
               "src/agent-assistv2/agentAssistCustomTemplate.js",
               "src/agent-assistv2/KoreGraphAdapter.js",
               "src/agent-assistv2/socketConnection.js"
-            ]
+            ],
+            "sourceMap": false
           },
           "configurations": {
             "production": {
