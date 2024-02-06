@@ -379,7 +379,7 @@ export class RootService {
 
   checkEmptyObjectsInArray(arr) {
     arr = arr.filter(
-      obj => (Object.keys(obj)?.length > 0) && (obj.title || obj.content)
+      obj => (obj && Object.keys(obj)?.length > 0) && (obj.title || obj.content)
     );
     return arr;
   }
