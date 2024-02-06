@@ -182,7 +182,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
         //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
         // ]
         this.searchResponse = this.rootService.formatSearchResponse(response);
-        if(Object.keys(this.searchResponse)?.length > 0){
+        if(this.searchResponse && Object.keys(this.searchResponse)?.length > 0){
           this.searchResponse.totalSearchResults = (this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse?.articles?.length + this.searchResponse?.snippets?.length || 0);
           this.faqViewCount = (this.searchResponse.faqs && this.searchResponse.faqs?.length <= 2) ? this.searchResponse.faqs?.length : 2;
           this.articleViewCount = (this.searchResponse.articles && this.searchResponse.articles?.length <= 2) ? this.searchResponse.articles?.length : 2;

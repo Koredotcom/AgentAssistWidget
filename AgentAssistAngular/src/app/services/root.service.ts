@@ -245,7 +245,7 @@ export class RootService {
     let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [])
     let filesArray = suggestions?.searchassist?.files || [];
     let searchResponse: any = {};
-    if(dialoguesArray.length || faqArray.length || snippersArray.length || filesArray.length || Object.keys(suggestions?.searchassist)?.length){
+    if(dialoguesArray.length || faqArray.length || snippersArray.length || filesArray.length || (suggestions?.searchassist && Object.keys(suggestions?.searchassist)?.length)){
       searchResponse.dialogs = [];
       searchResponse.faqs = [];
       searchResponse.articles = [];
@@ -255,13 +255,13 @@ export class RootService {
         for (let source in suggestions.searchassist) {
           if (source != "snippets" && source != "file") {
             suggestions.searchassist[source] = this.checkEmptyObjectsInArray(suggestions.searchassist[source]);
-            if (Object.keys(suggestions.searchassist[source])?.length > 0) {
+            if (suggestions.searchassist[source] && Object.keys(suggestions.searchassist[source])?.length > 0) {
               searchResponse.articles.push.apply(searchResponse.articles, suggestions.searchassist[source]);
             }
           }
           if(source == "file"){
             suggestions.searchassist[source] = this.checkEmptyObjectsInArray(suggestions.searchassist[source]);
-            if (Object.keys(suggestions.searchassist[source])?.length > 0) {
+            if (suggestions.searchassist[source] && Object.keys(suggestions.searchassist[source])?.length > 0) {
               searchResponse.files.push.apply(searchResponse.files, suggestions.searchassist[source]);
             }
           }
