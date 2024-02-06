@@ -8,6 +8,7 @@ import { LocalStorageService } from './local-storage.service';
 import { HandleSubjectService } from './handle-subject.service';
 import * as $ from 'jquery';
 import { TemplateRenderClassService } from './template-render-class.service';
+import { SocketConnection } from './socket-connection.service';
 
 declare var $: any;
 @Injectable({
@@ -15,7 +16,7 @@ declare var $: any;
 })
 export class WebSocketService {
 
-  _agentAsisstSocket : any;
+  _agentAsisstSocket : SocketConnection;
   socketErrorCount = 0;
   agentMenuResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
   agentAssistResponse$: BehaviorSubject<any> = new BehaviorSubject([]);
@@ -50,28 +51,10 @@ export class WebSocketService {
     private handleSubjectService : HandleSubjectService, private templateRenderClassService : TemplateRenderClassService) {
   }
 
-  socketConnection(isR=false){    
-    let finalUrl = this.rootService.getConnectionDetails().agentassisturl + '/koreagentassist';
-    const config = {
-      url: finalUrl,
-      forceNew: true, 
-      options: {
-        path: '/agentassist/api/v1/chat',
-        autoConnect: false,
-        transports: ['websocket', 'polling', 'flashsocket'],
-        reconnection: true,
-        reconnectionDelay: 5000,
-        reconnectionAttempts: 13,
-        query: {'jToken': this.rootService.getConnectionDetails().token }
-      }
-    };
-    
-    this._agentAsisstSocket =  io(config.url, config.options);
+  socketConnection(){    
+    this._agentAsisstSocket = new SocketConnection(this.rootService);
     this._agentAsisstSocket.connect();
-
-    if(!isR){
-      this.socketConnectionEst();
-    }
+    this.socketConnectionEst();
   }
 
   socketConnectionEst(){
@@ -273,17 +256,12 @@ export class WebSocketService {
 
     this._agentAsisstSocket.on('error', (reason) => {
       console.log("🚀 ~ WebSocketService ~ error event", reason)
-        // this._agentAsisstSocket.disconnect(true);
-        // this._agentAsisstSocket.connect();
     });
 
     this._agentAsisstSocket.on(EVENTS.disconnect, (reason) => {
       console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ disconnect event:", reason);
       this._agentAsisstSocket.disconnect(true);
-      this._agentAsisstSocket.close();
-      this._agentAsisstSocket = null;
-      this.socketConnection(true);
-      // this._agentAsisstSocket.connect();
+      this._agentAsisstSocket.connect();
     });
     
     this._agentAsisstSocket.on("connect_error", (err) => {
