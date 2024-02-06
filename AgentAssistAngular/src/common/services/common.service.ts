@@ -691,6 +691,7 @@ export class CommonService {
         article.content = article.content ? article.content : '';
         article.contentId = article.contentId;
         article.userInput = response.userInput;
+        article.title = article.title ? article.title : '';
       }
     }
     for (let faq of faqArray) {
@@ -802,7 +803,7 @@ export class CommonService {
 
   checkEmptyObjectsInArray(arr){
     arr = arr.filter(
-        obj => !(obj && Object.keys(obj).length === 0)
+        obj => (obj && Object.keys(obj)?.length > 0 && (obj.title || obj.content))
     );
     return arr;
   }
