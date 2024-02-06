@@ -10,7 +10,7 @@ export class EmptyObjectCheckPipe implements PipeTransform {
       return false;
     }else if(value instanceof Array){
       return value.length;
-    }else if(typeof(value) == 'object' && !Object.keys(value).length){
+    }else if(typeof(value) == 'object' && !Object.keys(value)?.length){
       return false;
     }
     return true;

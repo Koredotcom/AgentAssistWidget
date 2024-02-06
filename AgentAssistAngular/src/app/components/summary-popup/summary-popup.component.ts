@@ -22,7 +22,6 @@ export class SummaryPopupComponent {
   constructor(public modal : NgbActiveModal, private translate : TranslateService, private rootService: RootService) { }
 
   ngOnInit(): void {
-    console.log(this.rootService.settingsData);
     this.submitEnabled = this.rootService?.settingsData?.summarization?.canSubmit;
     this.editedSummaryText = this.summaryText?.summary ? this.summaryText?.summary[0]: '';
   }

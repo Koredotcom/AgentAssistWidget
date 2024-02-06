@@ -118,39 +118,41 @@ export class RootService {
   }
 
   formatConnectionDetails(obj: any) {
-    let parmasObj: any = Object.assign({}, obj);
-    for (let key in parmasObj) {
-      if (key === "botid") {
-        parmasObj[ProjConstants.BOTID] = parmasObj[key];
-        delete parmasObj[key];
-      } else if (key == 'conversationid') {
-        parmasObj[ProjConstants.CONVESATIONID] = parmasObj[key];
-        delete parmasObj[key];
-      }
-      else if (key == "autoBotId") {
-        if (parmasObj[key] && (parmasObj[key] !== "undefined" && parmasObj[key] !== null)) {
-          parmasObj['autoBotId'] = parmasObj[key];
-        } else {
-          parmasObj['autoBotId'] = '';
+    if(obj && Object.keys(obj)?.length > 0){
+      let parmasObj: any = Object.assign({}, obj);
+      for (let key in parmasObj) {
+        if (key === "botid") {
+          parmasObj[ProjConstants.BOTID] = parmasObj[key];
+          delete parmasObj[key];
+        } else if (key == 'conversationid') {
+          parmasObj[ProjConstants.CONVESATIONID] = parmasObj[key];
+          delete parmasObj[key];
+        }
+        else if (key == "autoBotId") {
+          if (parmasObj[key] && (parmasObj[key] !== "undefined" && parmasObj[key] !== null)) {
+            parmasObj['autoBotId'] = parmasObj[key];
+          } else {
+            parmasObj['autoBotId'] = '';
+          }
+        }
+        else if (key == "isCall"){
+          if (parmasObj[key] && (parmasObj[key] !== "undefined" && parmasObj[key] !== null)) {
+            parmasObj['isCallConversation'] = (parmasObj[key] == "true") ? true : false
+          }
         }
       }
-      else if (key == "isCall"){
-        if (parmasObj[key] && (parmasObj[key] !== "undefined" && parmasObj[key] !== null)) {
-          parmasObj['isCallConversation'] = (parmasObj[key] == "true") ? true : false
-        }
+      if (parmasObj.fromSAT) {
+        parmasObj['userName'] = parmasObj?.endUserName !== 'Anonymous' ? parmasObj?.endUserName : 'user';
+      } else {
+        parmasObj.customData = JSON.parse(parmasObj.customData || parmasObj.customdata || "{}");
+        parmasObj['userName'] = parmasObj.customData?.userName || (parmasObj.customData?.fName && parmasObj.customData?.lName) ? (parmasObj.customData?.fName + " " + parmasObj.customData?.lName) : 'user'
       }
+  
+      let channel = ((parmasObj?.channel && parmasObj?.channel.trim() !== "''") ? parmasObj?.channel : (parmasObj.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
+      parmasObj['channel'] = channel;
+      
+      this.connectionDetails = parmasObj;
     }
-    if (parmasObj.fromSAT) {
-      parmasObj['userName'] = parmasObj?.endUserName !== 'Anonymous' ? parmasObj?.endUserName : 'user';
-    } else {
-      parmasObj.customData = JSON.parse(parmasObj.customData || parmasObj.customdata || "{}");
-      parmasObj['userName'] = parmasObj.customData?.userName || (parmasObj.customData?.fName && parmasObj.customData?.lName) ? (parmasObj.customData?.fName + " " + parmasObj.customData?.lName) : 'user'
-    }
-
-    let channel = ((parmasObj?.channel && parmasObj?.channel.trim() !== "''") ? parmasObj?.channel : (parmasObj.isCall === 'true' ? 'voice' : 'chat')) || 'chat';
-    parmasObj['channel'] = channel;
-    
-    this.connectionDetails = parmasObj;
   }
 
   prepareAgentAssistAgentRequestParams(data) {
@@ -249,17 +251,17 @@ export class RootService {
       searchResponse.articles = [];
       searchResponse.snippets = [];
       searchResponse.files = [];
-      if (suggestions.searchassist && Object.keys(suggestions.searchassist).length > 0) {
+      if (suggestions.searchassist && Object.keys(suggestions.searchassist)?.length > 0) {
         for (let source in suggestions.searchassist) {
           if (source != "snippets" && source != "file") {
             suggestions.searchassist[source] = this.checkEmptyObjectsInArray(suggestions.searchassist[source]);
-            if (Object.keys(suggestions.searchassist[source]).length > 0) {
+            if (Object.keys(suggestions.searchassist[source])?.length > 0) {
               searchResponse.articles.push.apply(searchResponse.articles, suggestions.searchassist[source]);
             }
           }
           if(source == "file"){
             suggestions.searchassist[source] = this.checkEmptyObjectsInArray(suggestions.searchassist[source]);
-            if (Object.keys(suggestions.searchassist[source]).length > 0) {
+            if (Object.keys(suggestions.searchassist[source])?.length > 0) {
               searchResponse.files.push.apply(searchResponse.files, suggestions.searchassist[source]);
             }
           }
@@ -354,7 +356,7 @@ export class RootService {
               snippet.content.forEach((ansSnippet : any) => {
                 let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet)
                 obj.contentArray = [ansSnippet.answer_fragment]
-                obj.sources = ansSnippet?.sources || []
+                obj.sources = (ansSnippet?.sources || []).filter(obj => obj.url);
                 snippetResponeArray.push(obj);
               });
             }
@@ -364,20 +366,20 @@ export class RootService {
             }else if(snippet?.content){
               snippet.contentArray = snippet.content || [];
             }
-            snippet.sources = [{title : snippet.source, url : snippet.url}]
+            if(snippet.url){
+              snippet.sources = [{title : snippet.source, url : snippet.url}]
+            }
             snippetResponeArray.push(snippet);
           }
         }
       });
     } 
-    console.log(snippetResponeArray, "snippet response array ************8");
-
     return snippetResponeArray;   
   }
 
   checkEmptyObjectsInArray(arr) {
     arr = arr.filter(
-      obj => !(obj && Object.keys(obj).length === 0)
+      obj => (Object.keys(obj)?.length > 0) && (obj.title || obj.content)
     );
     return arr;
   }

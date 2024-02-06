@@ -67,9 +67,6 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
   }
 
   templateRenderCheck(data,result){
-    // if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
-    //   return true;
-    // }
     if(result.parsedPayload){
       return true;
     }
@@ -81,7 +78,6 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
   }
 
   minMaxButtonClick(){
-    console.log("min max button click");
     this.maxMinButtonClick.emit(true);
   }
 }
