@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { ProjConstants, storageConst } from '../proj.const';
 import { io } from 'socket.io-client';
 import { EVENTS } from '../helpers/events';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { RootService } from './root.service';
 import { LocalStorageService } from './local-storage.service';
 import { HandleSubjectService } from './handle-subject.service';
@@ -13,7 +13,7 @@ declare var $: any;
 @Injectable({
   providedIn: 'root'
 })
-export class WebSocketService {
+export class WebSocketService implements OnDestroy {
 
   _agentAsisstSocket : any;
 
@@ -49,7 +49,16 @@ export class WebSocketService {
   constructor(private rootService : RootService, private localStorageService : LocalStorageService,
     private handleSubjectService : HandleSubjectService, private templateRenderClassService : TemplateRenderClassService) {
   }
-
+  ngOnDestroy(): void {
+    try{
+      this.socketUnsubscribe?.unsubscribe();
+      console.log("🚀 ~ WebSocketService ~ ngOnDestroy ~ this.socketUnsubscribe?.unsubscribe();:");
+    }catch(e){
+      console.error("unable to unsubscribe");
+      
+    }
+  }
+  socketUnsubscribe = new Subscription();
   socketConnection(){    
     let finalUrl = this.rootService.getConnectionDetails().agentassisturl + '/koreagentassist';
     const config = {
@@ -69,7 +78,7 @@ export class WebSocketService {
 
     console.log("🚀 ~ WebSocketService ~ socketConnection ~ socket connection method ln:70");
     
-    this._agentAsisstSocket.on("connect", () => {
+    this.socketUnsubscribe = this._agentAsisstSocket.on("connect", () => {
       // if(!window._agentAssistSocketEventListener){
         this.listenEvents();
         this.commonEmitEvents(true);
