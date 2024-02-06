@@ -53,7 +53,9 @@ export class WebSocketService {
   socketConnection(){    
     let finalUrl = this.rootService.getConnectionDetails().agentassisturl + '/koreagentassist';
     const config = {
-      url: finalUrl, options: {
+      url: finalUrl,
+      forceNew: true, 
+      options: {
         path: '/agentassist/api/v1/chat',
         autoConnect: false,
         transports: ['websocket', 'polling', 'flashsocket'],
@@ -172,6 +174,7 @@ export class WebSocketService {
     }
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_response, (data : any) => {
+      console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ agent_assist_response:", data)
       this.rootService.assistTabSessionId = '';
       if (data.sessionId) {
         this.rootService.assistTabSessionId = data?.sessionId;
@@ -262,19 +265,21 @@ export class WebSocketService {
     });
 
     this._agentAsisstSocket.on('error', (reason) => {
-      console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ error:", reason)
-        this._agentAsisstSocket.disconnect(true);
-        this._agentAsisstSocket.connect();
+      console.log("🚀 ~ WebSocketService ~ error event", reason)
+        // this._agentAsisstSocket.disconnect(true);
+        // this._agentAsisstSocket.connect();
     });
 
     this._agentAsisstSocket.on(EVENTS.disconnect, (reason) => {
-      console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ disconnect:", reason)
+      console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ disconnect event:", reason)
       this._agentAsisstSocket.disconnect(true);
+      this._agentAsisstSocket.close();
       this._agentAsisstSocket.connect();
     });
     
     this._agentAsisstSocket.on("connect_error", (err) => {
-      console.error("Error while connecting", err);
+      console.error("connect_error event", err);
+      console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ socketErrorCount:", this.socketErrorCount)
       if (this.socketErrorCount < 12) {
         this.socketErrorCount++;
         this._agentAsisstSocket.connect();
