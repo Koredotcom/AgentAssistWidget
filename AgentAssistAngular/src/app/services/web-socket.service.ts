@@ -270,11 +270,9 @@ export class WebSocketService {
     this._agentAsisstSocket.on(EVENTS.disconnect, (reason) => {
       console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ disconnect:", reason)
       this._agentAsisstSocket.disconnect(true);
-      // this._agentAsisstSocket.connect();
-  });
-
-
-
+      this._agentAsisstSocket.connect();
+    });
+    
     this._agentAsisstSocket.on("connect_error", (err) => {
       console.error("Error while connecting", err);
       if (this.socketErrorCount < 12) {
