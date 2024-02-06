@@ -219,6 +219,9 @@ export class AppComponent implements OnInit, OnDestroy{
       if(userInputData?.customData) {
         agent_assist_request['customData'] = JSON.parse(JSON.stringify(userInputData?.customData));
       }
+      if(userInputData?.secureCustomData) {
+        agent_assist_request['secureCustomData'] = userInputData?.secureCustomData;
+      }
       if (this.connectionDetails.isCallConversation === true) {
         this.handleSubjectService.setAgentOrTranscriptResponse(userInputData);
       } else {
