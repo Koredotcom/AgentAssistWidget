@@ -1,22 +1,23 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { FeebackConst, ProjConstants } from 'src/app/proj.const';
 import { RootService } from 'src/app/services/root.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-feedback',
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.scss']
 })
-export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
+export class FeedbackComponent implements AfterViewInit, AfterViewChecked, OnDestroy{
   @Input() feedbackData : any = {};
   @Input() agentassistArrayIndex : number;
   @Input() agentassistResponseArray : number;
   @Output() updateFeedbackProperties = new EventEmitter();
-
+  subs = new SubSink();
   feedbackForm : FormGroup;
   feedbackConst : any = FeebackConst;
   feedbackComment : string;
@@ -36,6 +37,10 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
 
   }
 
+  ngOnDestroy(): void {
+    this.subs.sink.unsubscribe();
+  }
+
   ngAfterViewInit(): void {
     this.createForm();
   }
@@ -45,7 +50,7 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
   }
 
   subscribeValChanges(){
-    this.feedbackForm?.valueChanges.subscribe((_change)=>{      
+    this.subs.sink = this.feedbackForm?.valueChanges.subscribe((_change)=>{      
       this.formTouched = true;
     })
   }

@@ -66,6 +66,9 @@ export class WebSocketService {
     
     this._agentAsisstSocket =  io(config.url, config.options);
     this._agentAsisstSocket.connect();
+
+    console.log("🚀 ~ WebSocketService ~ socketConnection ~ socket connection method ln:70");
+    
     this._agentAsisstSocket.on("connect", () => {
       // if(!window._agentAssistSocketEventListener){
         this.listenEvents();
@@ -259,6 +262,10 @@ export class WebSocketService {
     this._agentAsisstSocket.on(EVENTS.response_resolution_comments, (data : any) =>{
       this.responseResolutionCommentsResponse$.next(data);
       this.addOrRemoveLoader(false);
+    })
+
+    this._agentAsisstSocket.on(EVENTS.disconnect, (data : any) =>{
+      this._agentAsisstSocket.disconnect(true);
     })
   }
 

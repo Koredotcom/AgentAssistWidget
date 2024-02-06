@@ -36,7 +36,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   subscribeEvents(){
-    this.rootService.socketConnection$.subscribe(res => {
+    this.subs.sink = this.rootService.socketConnection$.subscribe(res => {
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();
         this.getLocalStorageParams();

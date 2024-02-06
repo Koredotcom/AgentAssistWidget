@@ -103,6 +103,9 @@ export class AssistComponent implements OnInit, OnDestroy {
     });
 
     this.subs.sink = this.websocketService.agentAssistResponse$.subscribe((response: any) => {
+
+      console.log("🚀 ~ this.subs.sink=this.websocketService.agentAssistResponse$.subscribe ~ response:", response)
+      
       if (response && Object.keys(response)?.length > 0) {
         if (this.rootService.checkAutoBotIdDefined(this.connectionDetails?.autoBotId)) {
           this.connectionDetails['autoBotId'] = response?.autoBotId ? response.autoBotId : undefined;
@@ -188,7 +191,7 @@ export class AssistComponent implements OnInit, OnDestroy {
       this.rootService.bulbClick = false;
     });
 
-    this.websocketService.responseResolutionCommentsResponse$.subscribe((data: any) => {
+    this.subs.sink = this.websocketService.responseResolutionCommentsResponse$.subscribe((data: any) => {
       if (data) {
         this.handleSubjectService.setSummaryPopup(data);
       }
