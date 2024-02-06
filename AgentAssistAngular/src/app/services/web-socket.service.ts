@@ -278,7 +278,11 @@ export class WebSocketService implements OnDestroy {
     this._agentAsisstSocket.on(EVENTS.disconnect, (data : any) =>{
       console.log("🚀 ~ WebSocketService ~ disconnected socket:", data)
       this._agentAsisstSocket.disconnect(true);
-    })
+    });
+
+    this._agentAsisstSocket.on("connect_error", (err) => {
+      console.error("Error while connecting connect_error connect_error", err);
+    });
   }
 
   handleOverrideMode(toggleOverride, dialogId){
