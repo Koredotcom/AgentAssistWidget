@@ -260,6 +260,12 @@ export class WebSocketService {
       this.responseResolutionCommentsResponse$.next(data);
       this.addOrRemoveLoader(false);
     })
+
+    this._agentAsisstSocket.on('connect_error', (data : any) =>{
+      // this.responseResolutionCommentsResponse$.next(data);
+      // this.addOrRemoveLoader(false);
+      console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ connect_error:", data)
+    })
   }
 
   handleOverrideMode(toggleOverride, dialogId){
