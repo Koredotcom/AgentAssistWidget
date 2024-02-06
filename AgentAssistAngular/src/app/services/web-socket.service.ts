@@ -16,7 +16,7 @@ declare var $: any;
 export class WebSocketService {
 
   _agentAsisstSocket : any;
-
+  socketErrorCount = 0;
   agentMenuResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
   agentAssistResponse$: BehaviorSubject<any> = new BehaviorSubject([]);
   agentAssistAgentResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
@@ -260,13 +260,17 @@ export class WebSocketService {
       this.responseResolutionCommentsResponse$.next(data);
       this.addOrRemoveLoader(false);
     })
-
-    this._agentAsisstSocket.on('connect_error', (data : any) =>{
-      // this.responseResolutionCommentsResponse$.next(data);
-      // this.addOrRemoveLoader(false);
-      console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ connect_error:", data)
-    })
+    this._agentAsisstSocket.on("connect_error", (err) => {
+      console.error("Error while connecting", err);
+      if (this.socketErrorCount < 12) {
+        this.socketErrorCount++;
+        this._agentAsisstSocket.connect();
+      } else {
+        console.error("Socket retry limit exceeded connect_error :: ");
+      }
+    });
   }
+  
 
   handleOverrideMode(toggleOverride, dialogId){
     let connectionDetails = this.rootService.connectionDetails;
