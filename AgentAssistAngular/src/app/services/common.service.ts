@@ -429,7 +429,10 @@ export class CommonService {
   }
 
   smallTalkTemplateRenderCheck(data, result) {
-    if (result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))) {
+    // if (result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))) {
+    //   return true;
+    // }
+    if(result.parsedPayload){
       return true;
     }
     return false;
@@ -465,8 +468,6 @@ export class CommonService {
         }
       }
     });
-    // console.log(assistResponseArray, "assist response arry *******", data);
-    
     return assistResponseArray;
   }
 
@@ -631,20 +632,12 @@ export class CommonService {
   }
 
   formatAssistAutomation(automation) {
-    let templateRender = (!automation?.result?.parsedPayload || automation?.noTemplateRender || (automation?.componentType == 'dialogAct' && (automation?.srcChannel != 'msteams' && automation?.srcChannel != 'rtm'))) ? false : true
+    let templateRender = (!automation?.result?.parsedPayload || automation?.noTemplateRender) ? false : true
     automation.templateRender = templateRender;
-    console.log(automation.templateRender, 'template render');
-
-    // if(automation?.result?.parsedPayload && automation?.templateRender)
     if (automation?.templateRender) {
       automation.template = this.rootService.getTemplateHtml(automation.templateRender, automation.result);
-      // console.log(automation.template, "template *************88888");
-
     }
-    // automation.agentInputId = this.randomUUIDPipe.transform();
-    // automation.agentInputEntityName = 'Enter Details';
     automation.showOverrideDiv = automation.hideOverrideDiv ? false : ((automation.data.isPrompt && automation.proactiveModeStatus ? true : false));
-
     this.updateSendCopyParams(automation);
     if (automation.data.newEntityDisplayName || automation.data.newEntityName) {
       automation.agentInputEntityName = automation.data.newEntityDisplayName ? automation.data.newEntityDisplayName : automation.data.newEntityName;
@@ -656,14 +649,11 @@ export class CommonService {
 
   updateSendCopyParams(automation) {
     automation.showSend = (this.rootService.connectionDetails.isCallConversation || ((!automation.connectionDetails.source || automation.connectionDetails.source !== ProjConstants.SMARTASSIST_SOURCE) && automation.template)) ? false : true;
-    automation.showCopy = (this.rootService.connectionDetails.isCallConversation) ? false : ((!automation.template && automation.data?.componentType != 'dialogAct') ? true : false);
+    automation.showCopy = (this.rootService.connectionDetails.isCallConversation) ? false : ((!automation.template) ? true : false);
     let sendData = null;
     if ((automation.data?.buttons && automation.data?.buttons[0]?.value)) {
       sendData = automation.data?.buttons[0].value
-    } 
-    // else if ((automation.data?.components && automation.data?.components[0] && automation.data?.components[0]?.data?.text)) {
-    //   sendData = automation.data?.components[0].data.text;
-    // }
+    }
     automation.sendData = automation.result?.parsedPayload ? automation.temp : sendData;
   }
 
@@ -674,19 +664,11 @@ export class CommonService {
       },
       tooltip: {
         show : false
-        // formatter : function (param){
-        //   console.log(param, "param");
-        //   return 'poloarity : ' + param.value;
-        // }
       },
       xAxis: {
         name: '',
         show : false,
         data : [1,2,3,4,5,6,7,8,9,10]
-        // axisLine: { onZero: true },
-        // splitLine: { show: false },
-        // splitArea: { show: false },
-        // nameGap : 0
       },
       
       yAxis: {
@@ -712,7 +694,6 @@ export class CommonService {
           itemStyle: {
             color: (param)  => {
               let color = 'green';
-              // console.log(param.value, "value", param)
               if(param.value < -0.25){
                 color = 'red';
               }else if(param.value >= -0.25 && param.value <= 0){
@@ -770,7 +751,6 @@ export class CommonService {
           itemStyle: {
             color: (param)  => {
               let color = 'green';
-              // console.log(param.value, "value", param)
               if(param.value < -0.25){
                 color = 'red';
               }else if(param.value >= -0.25 && param.value < 0){

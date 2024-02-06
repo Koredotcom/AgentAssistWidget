@@ -114,34 +114,27 @@ export class AppComponent implements OnInit, OnDestroy{
   }
 
   receiveMessage(e: any) {
-    console.log(e, "event from desktops *****");
     if (e.data.name === 'init_agentassist') {
-      console.log(e, 'data from smartAssist');
       let urlParams = e.data.urlParams;
       // this.service.configObj = urlParams;
       this.rootService.formatConnectionDetails(urlParams);
       this.connectionDetails = this.rootService.getConnectionDetails();
       this.initAgentAssist(this.connectionDetails);
     } else if (e.data.name === 'userBotConvos') {
-      console.log(e.data);
       if (e.data && e.data.sessionId && e.data.userId) {
         this.rootService.setUserBotConversationDataDetails(e.data);
       }
     } else if (e.data.name === 'setAgentInfo') {
-      console.log(e, 'event', e.data.agentDetails, 'agent details');
       this.localStorageService.agentDetails = e.data.agentDetails
         ? e.data.agentDetails
         : null;
     } else if (e.data.name === 'setUserInfo') {
-      console.log(e, 'event', e.data.userDetails, 'user details');
       this.localStorageService.userDetails = e.data.userDetails
         ? e.data.userDetails
         : null;
     } else if (e.data.type === 'AGENT') {
-      console.log(e.data);
       this.emitUserAgentMessage(e.data, 'agent_inp_msg');
     } else if (e.data.type === 'USER') {
-      console.log(e.data);
       this.emitUserAgentMessage(e.data, 'user_inp_msg');
     }
     this.eventListenerFromParent(e);
@@ -176,7 +169,6 @@ export class AppComponent implements OnInit, OnDestroy{
     }
     if (e.data.name === 'agentAssist.endOfConversation' && (e.data.conversationId || e.data.conversationid)) {
       let currentEndedConversationId = e.data.conversationId || e.data.conversationid;
-      console.log("inside end of conversaton", e.data, this.localStorageService.checkConversationIdStateInStorage([currentEndedConversationId]));    
       if (this.localStorageService.checkConversationIdStateInStorage([currentEndedConversationId])) {
         let request_resolution_comments = {
           conversationId: e.data?.conversationId,
@@ -272,9 +264,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
   getAgentAssistSettings(params){
     let instanceBotId = params.fromSAT ? params.instanceBotId : params.botId;
-    // it should be removed.
     this.serviceInvoker.invoke('get.settings', {instanceBotId : instanceBotId, channel : params.channel}, {},{ settings: 'true', botId : params.botId },params.agentassisturl).pipe(finalize(() => {this.widgetLoader = false})).subscribe((res)=> {
-      console.log(res, 'res ************'); 
       if(res && res.agentAssistSettings && res.agentAssistSettings[params.channel]){
         this.widgetSettings = Object.assign(res.agentAssistSettings, res.agentAssistSettings[params.channel]);
       }else{

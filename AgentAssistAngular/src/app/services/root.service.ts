@@ -356,7 +356,7 @@ export class RootService {
               snippet.content.forEach((ansSnippet : any) => {
                 let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet)
                 obj.contentArray = [ansSnippet.answer_fragment]
-                obj.sources = ansSnippet?.sources || []
+                obj.sources = (ansSnippet?.sources || []).filter(obj => obj.url);
                 snippetResponeArray.push(obj);
               });
             }
@@ -366,7 +366,9 @@ export class RootService {
             }else if(snippet?.content){
               snippet.contentArray = snippet.content || [];
             }
-            snippet.sources = [{title : snippet.source, url : snippet.url}]
+            if(snippet.url){
+              snippet.sources = [{title : snippet.source, url : snippet.url}]
+            }
             snippetResponeArray.push(snippet);
           }
         }
@@ -489,27 +491,27 @@ export class RootService {
     }
   }
 
-  confirmationNodeRenderDataTransform(data) {
-    data.expectedFormat = data.entityType;
-    if ((data.componentType == 'dialogAct' || data.entityType == 'list_of_values') && data.buttons && data.buttons.length > 0) {
-      if (!data.applyDefaultTemplate) {
-        data.componentType = '';
-        data.entityType = '';
-      }
-    }
-    return data;
-  }
+  // confirmationNodeRenderDataTransform(data) {
+  //   data.expectedFormat = data.entityType;
+  //   if ((data.componentType == 'dialogAct' || data.entityType == 'list_of_values') && data.buttons && data.buttons.length > 0) {
+  //     if (!data.applyDefaultTemplate) {
+  //       data.componentType = '';
+  //       data.entityType = '';
+  //     }
+  //   }
+  //   return data;
+  // }
 
-  confirmationNodeRenderForHistoryDataTransform(res) {
-    res.expectedFormat = res.entityType || res.newEntityType;
-    if (res && (res.componentType == 'dialogAct' || res.entityType == 'list_of_values' || res.newEntityType == 'list_of_values') && res.buttons && res.buttons.length > 0 && res.buttons[0].data && res.buttons[0].value) {
-      if (!res?.applyDefaultTemplate) {
-        res.componentType = '';
-        res.newEntityType = '';
-      }
-    }
-    return res;
-  }
+  // confirmationNodeRenderForHistoryDataTransform(res) {
+  //   res.expectedFormat = res.entityType || res.newEntityType;
+  //   if (res && (res.componentType == 'dialogAct' || res.entityType == 'list_of_values' || res.newEntityType == 'list_of_values') && res.buttons && res.buttons.length > 0 && res.buttons[0].data && res.buttons[0].value) {
+  //     if (!res?.applyDefaultTemplate) {
+  //       res.componentType = '';
+  //       res.newEntityType = '';
+  //     }
+  //   }
+  //   return res;
+  // }
 
   handleEmptyLine(answer, quotflag?) {
     let eleanswer = '';

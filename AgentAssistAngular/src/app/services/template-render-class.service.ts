@@ -29,125 +29,123 @@ export class TemplateRenderClassService {
     window['AgentChatInitializes'] = this.AgentChatInitialize;
   }
 
-  formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse){
+  // formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse){
 
-    let lastIndex = actualStringFromBE.lastIndexOf('\n');
-    let mainText = actualStringFromBE.substring(0, lastIndex);
-    let confirmationString = actualStringFromBE.substring(lastIndex+1);
+  //   let lastIndex = actualStringFromBE.lastIndexOf('\n');
+  //   let mainText = actualStringFromBE.substring(0, lastIndex);
+  //   let confirmationString = actualStringFromBE.substring(lastIndex+1);
 
-    _msgsResponse.message[0] = {
-      "type": "text",
-      "component": {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text": `${mainText}`,
-          "buttons": [
+  //   _msgsResponse.message[0] = {
+  //     "type": "text",
+  //     "component": {
+  //       "type": "template",
+  //       "payload": {
+  //         "template_type": "button",
+  //         "text": `${mainText}`,
+  //         "buttons": [
 
-          ]
-        }
-      },
-      "cInfo": {
-        "body": {
-          "type": "template",
-          "payload": {
-            "template_type": "button",
-            "text": `${mainText}`,
-            "buttons": [
+  //         ]
+  //       }
+  //     },
+  //     "cInfo": {
+  //       "body": {
+  //         "type": "template",
+  //         "payload": {
+  //           "template_type": "button",
+  //           "text": `${mainText}`,
+  //           "buttons": [
 
-            ]
-          }
-        }
-      }
-    }
-    _msgsResponse.parsedPayload = {
-      "type": "template",
-      "payload": {
-        "template_type": "button",
-        "text": `${mainText}`,
-        "buttons": [
+  //           ]
+  //         }
+  //       }
+  //     }
+  //   }
+  //   _msgsResponse.parsedPayload = {
+  //     "type": "template",
+  //     "payload": {
+  //       "template_type": "button",
+  //       "text": `${mainText}`,
+  //       "buttons": [
 
-        ]
-      }
-    }
+  //       ]
+  //     }
+  //   }
 
-    let list = [];
-    if(confirmationString){
-      let confirmationArray = confirmationString.split(',');
-      confirmationArray.forEach((ele, i) => {
-        if (ele && i !== confirmationArray.length - 1 && !(/^ *$/.test(ele))) {
-          let obj = {
-            "type": "postback",
-            "title": ele,
-            "payload": ele
-          }
-          list.push(obj)
-        }
-      })
-    }
-    _msgsResponse.message[0].component.payload.buttons = list;
-    _msgsResponse.message[0].cInfo.body.payload.buttons = list;
-    _msgsResponse.parsedPayload.payload.buttons = list;
-    return _msgsResponse;
-  }
+  //   let list = [];
+  //   if(confirmationString){
+  //     let confirmationArray = confirmationString.split(',');
+  //     confirmationArray.forEach((ele, i) => {
+  //       if (ele && i !== confirmationArray.length - 1 && !(/^ *$/.test(ele))) {
+  //         let obj = {
+  //           "type": "postback",
+  //           "title": ele,
+  //           "payload": ele
+  //         }
+  //         list.push(obj)
+  //       }
+  //     })
+  //   }
+  //   _msgsResponse.message[0].component.payload.buttons = list;
+  //   _msgsResponse.message[0].cInfo.body.payload.buttons = list;
+  //   _msgsResponse.parsedPayload.payload.buttons = list;
+  //   return _msgsResponse;
+  // }
 
-  formatMsgResponseForEnumeratedList(arr, _msgsResponse){
-    _msgsResponse.message[0] = {
-      "type": "text",
-      "component": {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text": `${arr[0]}`,
-          "buttons": [
-          ]
-        }
-      },
-      "cInfo": {
-        "body": {
-          "type": "template",
-          "payload": {
-            "template_type": "button",
-            "text": `${arr[0]}`,
-            "buttons": [
+  // formatMsgResponseForEnumeratedList(arr, _msgsResponse){
+  //   _msgsResponse.message[0] = {
+  //     "type": "text",
+  //     "component": {
+  //       "type": "template",
+  //       "payload": {
+  //         "template_type": "button",
+  //         "text": `${arr[0]}`,
+  //         "buttons": [
+  //         ]
+  //       }
+  //     },
+  //     "cInfo": {
+  //       "body": {
+  //         "type": "template",
+  //         "payload": {
+  //           "template_type": "button",
+  //           "text": `${arr[0]}`,
+  //           "buttons": [
 
-            ]
-          }
-        }
-      }
-    }
+  //           ]
+  //         }
+  //       }
+  //     }
+  //   }
 
-    let list = [];
-    arr.forEach((ele, i) => {
-      if (i !== 0 && i !== arr.length - 1 && ele !== '') {
-        let data = ele.substring(3, ele.length);
-        let obj = {
-          "type": "postback",
-          "title": data,
-          "payload": data
-        }
-        list.push(obj)
-      }
+  //   let list = [];
+  //   arr.forEach((ele, i) => {
+  //     if (i !== 0 && i !== arr.length - 1 && ele !== '') {
+  //       let data = ele.substring(3, ele.length);
+  //       let obj = {
+  //         "type": "postback",
+  //         "title": data,
+  //         "payload": data
+  //       }
+  //       list.push(obj)
+  //     }
 
-    })
-    _msgsResponse.message[0].component.payload.buttons = list;
-    _msgsResponse.message[0].cInfo.body.payload.buttons = list;
-    _msgsResponse.parsedPayload = {
-      "type": "template",
-      "payload": {
-        "template_type": "button",
-        "text": `${arr[0]}`,
-        "buttons": list
-      }
-    }    
-    return _msgsResponse;
-  }
+  //   })
+  //   _msgsResponse.message[0].component.payload.buttons = list;
+  //   _msgsResponse.message[0].cInfo.body.payload.buttons = list;
+  //   _msgsResponse.parsedPayload = {
+  //     "type": "template",
+  //     "payload": {
+  //       "template_type": "button",
+  //       "text": `${arr[0]}`,
+  //       "buttons": list
+  //     }
+  //   }    
+  //   return _msgsResponse;
+  // }
 
   prepareTemplateBodyForHistory(elem, parsedPayload){
     let body = {};
     body['type'] = elem.cT;
-    // console.log(parsedPayload, 'parsed payload **');
-    
     if (!parsedPayload) {
       body['component'] = {
         "type": elem.cT,
@@ -236,8 +234,6 @@ export class TemplateRenderClassService {
       parsedPayload: null
     }
     res?.buttons?.forEach((elem) => {
-      // console.log(elem, "element *********");
-      
       let parsedPayload;
       if(elem.value){
         elem.value = elem.value.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
@@ -263,37 +259,37 @@ export class TemplateRenderClassService {
 
     });
     
-    if (res.srcChannel && res.srcChannel !== 'msteams') {
-      if (res.componentType === 'dialogAct') {
-        let actualStringFromBE = '';
+    // if (res.srcChannel && res.srcChannel !== 'msteams') {
+    //   if (res.componentType === 'dialogAct') {
+    //     let actualStringFromBE = '';
 
-        // if (res && res?.buttons && res?.buttons[0]?.value?.includes('text')) {
-        //   let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
-        //   let str1 = JSON.parse(str);
-        //   actualStringFromBE = str1.text;
-        // } else if(res && res?.buttons && res?.buttons[0]?.value){
-        //   actualStringFromBE = res.buttons[0].value;
-        // }
+    //     // if (res && res?.buttons && res?.buttons[0]?.value?.includes('text')) {
+    //     //   let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
+    //     //   let str1 = JSON.parse(str);
+    //     //   actualStringFromBE = str1.text;
+    //     // } else if(res && res?.buttons && res?.buttons[0]?.value){
+    //     //   actualStringFromBE = res.buttons[0].value;
+    //     // }
 
-        if(res && res?.buttons && res?.buttons[0]?.value && !res?.buttons[0]?.value?.includes('text')){
-          actualStringFromBE = res.buttons[0].value;
-          _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
-        }
+    //     if(res && res?.buttons && res?.buttons[0]?.value && !res?.buttons[0]?.value?.includes('text')){
+    //       actualStringFromBE = res.buttons[0].value;
+    //       _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
+    //     }
 
-      } else if (res.entityType === "list_of_values" && !res.buttons[0].value.includes('payload')) {;
+    //   } else if (res.entityType === "list_of_values" && !res.buttons[0].value.includes('payload')) {;
       
         
-        let arr = [];
-        if (res.buttons[0]?.value?.includes('text')) {          
-          let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
-          let str1 = JSON.parse(str);
-          arr = str1.text.split('\n');
-        } else {          
-          arr = res.buttons[0].value.split('\n');
-        }
-        _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);
-      }
-    }
+    //     let arr = [];
+    //     if (res.buttons[0]?.value?.includes('text')) {          
+    //       let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
+    //       let str1 = JSON.parse(str);
+    //       arr = str1.text.split('\n');
+    //     } else {          
+    //       arr = res.buttons[0].value.split('\n');
+    //     }
+    //     _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);
+    //   }
+    // }
     return _msgsResponse;
   }
 
@@ -371,30 +367,30 @@ export class TemplateRenderClassService {
       }
     });
     
-    if(res?.srcChannel && res?.srcChannel !== 'msteams'){
-      if (res?.componentType === 'dialogAct') {
-        let actualStringFromBE = '';
-        if (res.components[0].data.text.includes('text')) {
-          let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
-          let str1 = JSON.parse(str);
-          actualStringFromBE = str1.text;
-        } else {
-          actualStringFromBE = res.components[0].data.text;
-        }
-        _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
+    // if(res?.srcChannel && res?.srcChannel !== 'msteams'){
+    //   if (res?.componentType === 'dialogAct') {
+    //     let actualStringFromBE = '';
+    //     if (res.components[0].data.text.includes('text')) {
+    //       let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
+    //       let str1 = JSON.parse(str);
+    //       actualStringFromBE = str1.text;
+    //     } else {
+    //       actualStringFromBE = res.components[0].data.text;
+    //     }
+    //     _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
 
-      } else if (res?.newEntityType === "list_of_values" && !res.components[0].data.text.includes('payload')) {
-        let arr = [];
-        if (res.components[0].data.text.includes('text')) {
-          let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
-          let str1 = JSON.parse(str);
-          arr = str1.text.split('\n');
-        } else {
-          arr = res.components[0].data.text.split('\n');
-        }
-        _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);
-      }
-    }
+    //   } else if (res?.newEntityType === "list_of_values" && !res.components[0].data.text.includes('payload')) {
+    //     let arr = [];
+    //     if (res.components[0].data.text.includes('text')) {
+    //       let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
+    //       let str1 = JSON.parse(str);
+    //       arr = str1.text.split('\n');
+    //     } else {
+    //       arr = res.components[0].data.text.split('\n');
+    //     }
+    //     _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);
+    //   }
+    // }
     return _msgsResponse;
   }
 
