@@ -553,8 +553,15 @@ export class CommonService {
     return assistResponseArray;
   }
 
+  checkEntityValueDataType(value){
+    if(value && Array.isArray(value) && value.length > 0){
+      return value[0];
+    }
+    return value;
+  }
+
   processUserMessagesForSmalltalk(data, assistResponseArray, hideOverrideDiv, toggleOverride, history?){    
-    assistResponseArray[assistResponseArray.length - 1].entityValue = data.entityValue || data.userInput;
+    assistResponseArray[assistResponseArray.length - 1].entityValue = this.checkEntityValueDataType(data.entityValue || data.userInput);
     if (data.userInput) {     
       assistResponseArray[assistResponseArray.length - 1].showSpinner = false;     
       assistResponseArray[assistResponseArray.length - 1].grayOut = true;
@@ -575,7 +582,7 @@ export class CommonService {
           arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = hideOverrideDiv;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = toggleOverride;
           let userInput = arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput;
-          arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = data.entityValue || data.userInput;
+          arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = this.checkEntityValueDataType(data.entityValue || data.userInput);
           arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput = userInput ? userInput : ProjConstants.YES;
           this.grayOutPreviousAutomation(assistResponseArray, arrEle.automationsArray.length, index);
           if(!showErrorPrompt){
