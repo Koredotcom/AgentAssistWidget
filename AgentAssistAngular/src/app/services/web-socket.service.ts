@@ -283,7 +283,7 @@ export class WebSocketService {
       this._agentAsisstSocket.close();
       this._agentAsisstSocket = null;
       this.socketConnection(true);
-      this._agentAsisstSocket.connect();
+      // this._agentAsisstSocket.connect();
     });
     
     this._agentAsisstSocket.on("connect_error", (err) => {
