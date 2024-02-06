@@ -199,11 +199,11 @@ export class WebSocketService implements OnDestroy {
       }
       this.handleIsSendWelcomeRequest(data);
       let settimeoutTime = this.getTimeout();
-      setTimeout(() => {
+      // setTimeout(() => {
         console.log("🚀 ~ WebSocketService ~ this._agentAsisstSocket.on ~ settimeoutTime:", settimeoutTime)
         this.agentAssistResponse$.next(data);
         this.addOrRemoveLoader(false);
-      }, settimeoutTime);
+      // }, settimeoutTime);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_menu_response, (data : any) => {
