@@ -248,13 +248,15 @@ export class MybotComponent {
     this.listViewEntityList = [];
     if(this.showListView && this.dialogName){
       let automationData = this.mybotResponseArray[this.mybotResponseArray.length-1];
-      for(let automation of automationData.automationsArray){
+      if(automationData.automationsArray){
+        for(let automation of automationData.automationsArray){
           automation.entityName = automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation.data.entityName;
         if(automation.entityName && automation?.data?.isPrompt){
           automation.entityValue = automation.entityValue ? automation.entityValue : automation.entityValue;
           // automation.disableInput = automation.entityValue ? true : false;
           this.listViewEntityList.push(automation);
         }
+      }
       }
     }
   }

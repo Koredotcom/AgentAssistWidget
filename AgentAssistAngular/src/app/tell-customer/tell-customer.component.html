@@ -19,7 +19,7 @@
         <div class="svg_img">
             <img src="assets/images/icons/askcust.svg" alt="Image">
         </div>
-        <p>{{'TELLCUSTOMER' | translate}}</p>
+        <p *ngIf="!rootService?.settingsData?.aaCustomLabels">{{'TELLCUSTOMER' | translate}}</p>
     </div>
     <ng-container [ngTemplateOutlet]="askCustMsg" [ngTemplateOutletContext]="{smallTalkData: automation}"></ng-container>
 </div>
