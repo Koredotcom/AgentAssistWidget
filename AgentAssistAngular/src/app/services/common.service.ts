@@ -129,7 +129,7 @@ export class CommonService {
   }
 
   handleSendCopyButton(actionType, faq_or_article_obj, selectType) {
-    let message = {};
+    let message : any = {};
     if (actionType == this.projConstants.SEND) {
       message = {
         method: 'send',
@@ -144,6 +144,7 @@ export class CommonService {
         message['title'] = faq_or_article_obj.displayName;
         message['contentId'] = faq_or_article_obj.taskRefId
       }
+      message.payload = this.rootService.handleEmptyLine(message.payload);
       window.parent.postMessage(message, '*');
     } else {
       message = {
@@ -159,7 +160,8 @@ export class CommonService {
         message['title'] = faq_or_article_obj.displayName;
         message['contentId'] = faq_or_article_obj.taskRefId
       }
-      message['type'] = (selectType == this.projConstants.FAQ) ? 'faq' : 'article'
+      message['type'] = (selectType == this.projConstants.FAQ) ? 'faq' : 'article';
+      message.payload = this.rootService.handleEmptyLine(message.payload);
       parent.postMessage(message, '*');
     }
     this.faqArticleSendorCopyEvent(selectType, message)
