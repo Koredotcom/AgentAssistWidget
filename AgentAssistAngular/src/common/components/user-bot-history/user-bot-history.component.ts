@@ -51,7 +51,6 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
               headers: headersVal,
               dataType: 'json',
               success:  (data) => {
-                console.log(data);
                 if(data && data.messages.length > 0) {
                   this.handleSubjectService.setUserHistoryData(data);
                   this.historyResponse = data.messages;

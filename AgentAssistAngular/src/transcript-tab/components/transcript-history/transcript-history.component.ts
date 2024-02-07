@@ -28,7 +28,6 @@ export class TranscriptHistoryComponent {
   ngOnInit(): void {
     // this.subscribeEvents();
     this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
-      console.log(response);
       if(response && response.isCall !== 'false') {
         this.userAgentConversationHistoryAPICall();
       }
@@ -61,7 +60,6 @@ export class TranscriptHistoryComponent {
           headers: headersVal,
           dataType: 'json',
           success:  (data) => {
-            console.log(data);
             if(data && data?.result?.length > 0) {
               this.historyResponse = data.result;
             }
@@ -84,9 +82,7 @@ export class TranscriptHistoryComponent {
 
   subscribeEvents(){
     let subscription1 = this.mockDataService.getHistoryData().subscribe((res : any) => {
-      console.log(res, "response");
       if(res && res.result){
-        console.log('testing: ',res, res.result);
         this.handleSubjectService.setUserAgentTranscriptionHistory(res);
         this.historyResponse = res.result;
       }

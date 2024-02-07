@@ -95,9 +95,7 @@ export class AppComponent implements OnDestroy {
         window.addEventListener("message", this.receiveMessage.bind(this), false);
         // let parentUrl = window.parent.location.hostname;
         let parentUrl = document.referrer;
-        console.log(parentUrl, "parent url")
         let index = this.templateChatConfig.chatConfig.urls.findIndex(e=>parentUrl.includes(e));
-        console.log(index, "index");
           if (!(index>-1)) {
             if(Object.keys(this.service.configObj).length > 0){
               this.initAgentAssist(this.templateChatConfig.chatConfig, params);
@@ -128,7 +126,6 @@ export class AppComponent implements OnDestroy {
     this.handleSubjectService.setLoader(true);
     // let botid = params?.autoBotId ? params?.autoBotId : params.botid;
     this.service.grantCall(params.token, params.botid, params.agentassisturl).then((res) => {
-      console.log(res, "sucess")
       // this.isGrantSuccess = true;
       this.service.grantResponseObj = res;
       this.getAgentAssistSettings(params);
@@ -157,22 +154,18 @@ export class AppComponent implements OnDestroy {
       this.wordTimeStamps = e.data.wordLevelTimeStamps
     }
     if(e.data.name === 'init_agentassist') {
-      console.log(e, "data from smartAssist");
         var chatConfig = this.templateChatConfig.chatConfig;
         let urlParams = e.data.urlParams;
         this.service.configObj = urlParams;
         this.initAgentAssist(chatConfig, urlParams);
     } else if(e.data.name === 'userBotConvos') {
-        console.log(e.data);
         if (e.data && (e.data.sessionId && e.data.userId)) {
           this.handleSubjectService.setUserBotConversationDataDetails(e.data);
         }
     }
     else if(e.data.name === 'setAgentInfo'){
-      console.log(e, "event", e.data.agentDetails, "agent details");
       this.localStorageService.agentDetails = e.data.agentDetails ? e.data.agentDetails : null;
     }else if(e.data.name === 'setUserInfo'){
-      console.log(e, "event", e.data.userDetails, "user details");
       this.localStorageService.userDetails = e.data.userDetails ? e.data.userDetails : null;
     } else if(e.data.type === 'AGENT') {
       this.emitUserAgentMessage(e.data, 'agent_inp_msg');
@@ -278,8 +271,6 @@ export class AppComponent implements OnDestroy {
       success:  (data) => {
         if (data?.agentAssistSettings && data.agentAssistSettings[paramsCopy.channel]) {
           data.agentAssistSettings = Object.assign(data.agentAssistSettings, data.agentAssistSettings[paramsCopy.channel]);
-          console.log(data, "data inside widget settings***********");
-          
           this.aaSettings = data.agentAssistSettings;
           this.service.configObj = { ...this.service.configObj, ...this.aaSettings };
           this.iswidgetEnabled = this.aaSettings['agentAssistWidgetEnabled'];

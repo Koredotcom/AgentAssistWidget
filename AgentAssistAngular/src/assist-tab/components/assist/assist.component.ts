@@ -97,7 +97,6 @@ export class AssistComponent implements OnInit {
     });
 
     let subscription2 = this.websocketService.agentAssistResponse$.subscribe((response: any) => {
-      console.log("------------resposne of agent request")
       if (response && Object.keys(response).length > 0) {
         if(this.commonService.checkAutoBotIdDefined(this.connectionDetails?.autoBotId)){
           this.connectionDetails['autoBotId'] = response?.autoBotId ? response.autoBotId: undefined;
@@ -107,8 +106,6 @@ export class AssistComponent implements OnInit {
         if(this.commonService.checkAutoBotIdDefined(this.commonService.configObj?.autoBotId)){
           this.commonService.configObj['autoBotId'] = response?.autoBotId;
         }
-
-        console.log("ater adding autobotid from response----------------------------,", this.connectionDetails, this.commonService.configObj)
         this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
         this.viewCustomTempAttachment()
       }
@@ -163,8 +160,6 @@ export class AssistComponent implements OnInit {
     });
 
     let subscription8 = this.websocketService.userMessageResponse$.subscribe((userMsgResponse: any) => {
-      console.log("user message response");
-
     });
 
     let subscription9 = this.handleSubjectService.activeTabSubject.subscribe((response) => {
@@ -202,12 +197,9 @@ export class AssistComponent implements OnInit {
     });
 
     let subscription13 = this.handleSubjectService.proactiveModeSubject.subscribe((response: any) => {
-      console.log("proactive mode subject", response);
       if (response != null && response != undefined) {
         this.proactiveModeStatus = response;
         let dropdownHeaderUuids = this.smallTalkOverrideBtnId ? this.smallTalkOverrideBtnId : this.dropdownHeaderUuids;
-        console.log(dropdownHeaderUuids, 'dropdown header uuids');
-
         if (response) {
           $(`.override-input-div`).removeClass('hide');
           this.handleCancelOverrideBtnClick(dropdownHeaderUuids, this.dialogPositionId);
@@ -340,7 +332,6 @@ export class AssistComponent implements OnInit {
   }
 
   assistTabDialogforDashboard(dialog, intent?) {
-    console.log('Sandeep Tester: ', dialog, intent, this.connectionDetails);
     let payloadForBE:any = Object.assign({}, this.connectionDetails);
     if (dialog.intentName && intent) {
       payloadForBE.intentName = dialog.intentName;
@@ -488,7 +479,6 @@ export class AssistComponent implements OnInit {
 
   uuids = this.koreGenerateuuidPipe.transform();
   processAgentAssistResponse(data, botId) {
-    console.log("process agent assist response", data, this.proactiveModeStatus);
     this.smallTalkOverrideBtnId = null;
     let isTemplateRender = false;
     // data = this.commonService.confirmationNodeRenderDataTransform(data);
@@ -684,7 +674,6 @@ export class AssistComponent implements OnInit {
           } else {
             let a = $(`#faqDiv-${uuids + index}`);
             let answerSanitized = (ele.answer[0]);
-            console.log('sandeep Answer Sanitized:',answerSanitized);
             // data-conent-id="${contentId}
             // if text only not template cond need to add
             answerSanitized = this.commonService.replaceDoubleQuot(answerSanitized);
@@ -696,7 +685,6 @@ export class AssistComponent implements OnInit {
             </div>`;
             a.append(faqActionHtml);
             this.commonService.hideSendAndCopyBtnsforCallconversation(a);
-            console.log('handle2: ', this.commonService.handleEmptyLine2(ele.answer[0]))
             faqs.append(`<div class="desc-text" id="desc-${uuids + index}">${this.commonService.handleEmptyLine2(ele.answer[0])}</div>`);
 
             if(ele.answer && ele.answer.length > 1){
@@ -735,7 +723,6 @@ export class AssistComponent implements OnInit {
           }
 
           data.suggestions.articles?.forEach((ele, index) => {
-            console.log("🚀 ~ file: assist.component.ts:816 ~ AssistComponent ~ data.suggestions.articles?.forEach ~ ele:", ele)
             let articleSuggestions = document.getElementById(`articleSuggestions-${responseId}`);
 
             let articleHtml = this.assisttabService.articleTypeInfoTemplate(uuids, index, ele);
@@ -897,7 +884,6 @@ export class AssistComponent implements OnInit {
           this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
         }
         if(!this.commonService.smallTalkTemplateRenderCheck(data, result)){
-          console.log("inside dialogact and channel");
           isTemplateRender = true;
         }else{
           isTemplateRender = false;
@@ -1034,10 +1020,6 @@ export class AssistComponent implements OnInit {
       let titleTemplate = `<div class="title-text" title="${ele.title}" id="snippettitle-${uuids+index}">${ele.title}</div>`;
       articles.append(titleTemplate);
     }
-
-    console.log(ele.contentArray, "conntent array");
-    
-
     if(ele.contentArray?.length > 0){
       let contentListDiv = `<div class="list-desc-elements" id="snippetdesc-${uuids + index}">
       </div>`;
@@ -2059,7 +2041,6 @@ export class AssistComponent implements OnInit {
           previousTaskPositionId = currentTaskPositionId;
           previousTaskName = currentTaskName;
           if (divExist.length >= 1) {
-            console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
           } else {
             historyData.append(userInputHtml);
             historyData.append(dropdownHtml);
@@ -2184,7 +2165,6 @@ export class AssistComponent implements OnInit {
               this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
             }
             // if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
-            //   // console.log("inside dialogact and channel");
 
             // }
             if(this.commonService.smallTalkHistoryRenderCheck(parsedPayload,res)){

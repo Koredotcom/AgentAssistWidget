@@ -99,7 +99,6 @@ export class WebSocketService {
     }
     // const channel = new BroadcastChannel('app-data');
     // channel.addEventListener('message', (event) => {
-    //     console.log("event recived", event.data);
     //     let agent_assist_request = {
     //         'conversationId': this.connectionDetails.conversationId,
     //         'query': this.sanitizeHTMLPipe.transform(event.data.value),
