@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
 import { EVENTS } from '../helpers/events';
@@ -27,6 +27,8 @@ export class AskCustomerComponent {
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
   inputName: string = this.translateService.instant("AWAITING");
+  @ViewChild('textRef', { static: false }) private textRef: ElementRef;
+
 
   constructor(public rootService: RootService, private websocketService: WebSocketService, private translateService : TranslateService,
     private commonService : CommonService) {
@@ -156,7 +158,7 @@ export class AskCustomerComponent {
     automation.send = true;
     let sendData = automation.sendData;
     if(!automation.templateRender){
-      sendData = this.rootService.handleEmptyLine(sendData);
+      sendData = (method == ProjConstants.COPY) ? this.textRef.nativeElement.innerText : this.rootService.handleEmptyLine(sendData, true);
     }
     this.commonService.handleSendCopyButtonForNodes(method, sendData, this.automation.dialogId);
     this.responseArray = this.commonService.grayOutPreviousAutomation(this.responseArray, this.automationIndex, this.responseArrayIndex);

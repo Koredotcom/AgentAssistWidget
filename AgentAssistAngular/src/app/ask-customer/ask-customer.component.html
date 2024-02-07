@@ -25,7 +25,7 @@
             </div>
             <div class="sent-msg-text" *ngIf="automation.send">{{ 'SENT'  | translate }}</div>
             <!-- <p>{{automation.data.buttons[0].value}}</p> -->
-            <p *ngIf="!automation.templateRender" [innerHTML]="rootService.handleEmptyLine(automation.value)"></p>
+            <p  #textRef *ngIf="!automation.templateRender" [innerHTML]="rootService.handleEmptyLine(automation.value)"></p>
             <ng-container *ngIf="automation.templateRender && automation.template">
                 <ul class="chat-container" attr.id="{{automation.uuid}}"
                                             [innerHTML]="automation.template | safeHtml"></ul>

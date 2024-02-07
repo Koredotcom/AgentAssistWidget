@@ -144,7 +144,7 @@ export class CommonService {
         message['title'] = faq_or_article_obj.displayName;
         message['contentId'] = faq_or_article_obj.taskRefId
       }
-      message.payload = this.rootService.handleEmptyLine(message.payload);
+      message.payload = this.rootService.handleEmptyLine(message.payload, true);
       window.parent.postMessage(message, '*');
     } else {
       message = {
@@ -161,7 +161,7 @@ export class CommonService {
         message['contentId'] = faq_or_article_obj.taskRefId
       }
       message['type'] = (selectType == this.projConstants.FAQ) ? 'faq' : 'article';
-      message.payload = this.rootService.handleEmptyLine(message.payload);
+      message.payload = this.rootService.handleEmptyLine(message.payload, true);
       parent.postMessage(message, '*');
     }
     this.faqArticleSendorCopyEvent(selectType, message)

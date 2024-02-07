@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { ProjConstants, RenderResponseType } from '../proj.const';
 import { CommonService } from '../services/common.service';
 import { RootService } from '../services/root.service';
@@ -19,6 +19,7 @@ export class TellCustomerComponent {
 
   projConstants : any = ProjConstants;
   renderResponseType: any = RenderResponseType;
+  @ViewChild('textRef', { static: false }) private textRef: ElementRef;
 
   constructor(public rootService : RootService, private commonService : CommonService){
     
@@ -59,7 +60,7 @@ export class TellCustomerComponent {
     automation.send = true;
     let sendData = this.isWelcomeMsg ? automation.value : automation.sendData;
     if(!automation.templateRender){
-      sendData = this.rootService.handleEmptyLine(sendData);
+      sendData = (method == ProjConstants.COPY) ? this.textRef.nativeElement.innerText : this.rootService.handleEmptyLine(sendData, true);
     }
     this.commonService.handleSendCopyButtonForNodes(method,sendData, this.automation?.dialogId);
     this.responseArray = this.commonService.grayOutPreviousAutomation(this.responseArray, this.automationIndex, this.responseArrayIndex);

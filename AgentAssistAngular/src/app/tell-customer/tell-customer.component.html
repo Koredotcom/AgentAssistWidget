@@ -41,7 +41,7 @@
             </ng-container> -->
         </div>
         <div class="sent-msg-text" *ngIf="automationData.send">{{ 'SENT'  | translate }}</div>
-        <p *ngIf="!automationData.templateRender" [innerHTML]="rootService.handleEmptyLine(automationData.value)"></p>
+        <p *ngIf="!automationData.templateRender" [innerHTML]="rootService.handleEmptyLine(automationData.value)" #textRef></p>
         <ng-container *ngIf="automationData.templateRender && automationData.template">
             <ul class="chat-container" attr.id="{{automationData.uuid}}"
                                         [innerHTML]="automationData.template | safeHtml"></ul>
