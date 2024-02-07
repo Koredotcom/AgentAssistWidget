@@ -66,9 +66,9 @@ export class WebSocketService {
     
     this._agentAsisstSocket =  io(config.url, config.options);
     this._agentAsisstSocket.connect();
+    this.listenEvents();
     this._agentAsisstSocket.on("connect", () => {
       // if(!window._agentAssistSocketEventListener){
-        this.listenEvents();
         this.commonEmitEvents(true);
       //   window._agentAssistSocketEventListener = true;
       // }
@@ -100,6 +100,7 @@ export class WebSocketService {
       'uId': this.rootService.userBotConversationDetails?.userId || '',
       'sId': this.rootService.userBotConversationDetails?.sessionId || '',
       'experience' : this.rootService.connectionDetails?.channel,
+      'jToken': this.rootService.getConnectionDetails().token
     }
     if(customData && Object.keys(customData)?.length > 0 && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
       welcomeMessageParams['customData'] = customData

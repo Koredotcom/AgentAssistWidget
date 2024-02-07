@@ -65,7 +65,7 @@ export class AppComponent implements OnInit, OnDestroy{
       this.connectionDetails = this.rootService.getConnectionDetails();
 
       window.addEventListener('message', this.receiveMessage.bind(this), false);
-      if (Object.keys(this.connectionDetails)?.length > 1) {
+      if (this.connectionDetails && Object.keys(this.connectionDetails)?.length > 1) {
         this.initAgentAssist(this.connectionDetails);
       }
       var message = {
@@ -218,6 +218,9 @@ export class AppComponent implements OnInit, OnDestroy{
       }
       if(userInputData?.customData) {
         agent_assist_request['customData'] = JSON.parse(JSON.stringify(userInputData?.customData));
+      }
+      if(userInputData?.secureCustomData) {
+        agent_assist_request['secureCustomData'] = userInputData?.secureCustomData;
       }
       if (this.connectionDetails.isCallConversation === true) {
         this.handleSubjectService.setAgentOrTranscriptResponse(userInputData);

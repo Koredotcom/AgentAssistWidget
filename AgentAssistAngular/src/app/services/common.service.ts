@@ -440,9 +440,9 @@ export class CommonService {
 
   formatRunningLastAutomationEntityNode(assistResponseArray, data, showErrorPrompt, renderResponse, dropdownHeaderUuids, tab, previousEntityNodes?) {
     assistResponseArray.map((arrEle, index) => {
-      if (arrEle.uuid && arrEle.uuid == dropdownHeaderUuids) {
+      if (arrEle?.uuid && arrEle?.uuid == dropdownHeaderUuids) {
         arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
-        if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
+        if (arrEle.automationsArray?.length > 0 && arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
           arrEle.automationsArray[arrEle.automationsArray.length - 1].showSpinner = false;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = (tab == this.projConstants.MYBOT) ? false : this.rootService.manualAssistOverrideMode;
@@ -530,7 +530,7 @@ export class CommonService {
     assistResponseArray.map(arrEle => {
       if (arrEle.uuid && arrEle.uuid == uuids && arrEle.type == this.renderResponseType.AUTOMATION) {
         arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
-        if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
+        if (arrEle.automationsArray?.length > 0 && arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
           arrEle.automationsArray[arrEle.automationsArray.length - 1].showSpinner = false;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = hideOverrideDiv;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = disableInput;
@@ -570,7 +570,7 @@ export class CommonService {
     assistResponseArray.map((arrEle, index) => {
       if (arrEle.uuid && arrEle.uuid == dropdownHeaderUuids) {
         arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
-        if (data.userInput && arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
+        if (data.userInput && arrEle.automationsArray?.length > 0 &&  arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
           arrEle.automationsArray[arrEle.automationsArray.length - 1].showSpinner = false;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = hideOverrideDiv;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = toggleOverride;
