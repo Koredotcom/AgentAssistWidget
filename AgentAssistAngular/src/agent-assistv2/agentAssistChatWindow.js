@@ -1559,6 +1559,7 @@
                         $('.chatInputBox').text($(e.target).attr('title') +': '+ selectedValue.toString());
                         // me.sendMessage($('.chatInputBox'),toShowText.toString());
                     }
+
                     if (e.currentTarget.classList && e.currentTarget.classList.length > 0 && e.currentTarget.classList[0] === 'quickReply') {
                         var _parentQuikReplyEle = e.currentTarget.parentElement.parentElement;
                         var _leftIcon = _parentQuikReplyEle.parentElement.parentElement.querySelectorAll('.quickreplyLeftIcon');
@@ -1700,59 +1701,60 @@
                 //         $('.closeElePreview').trigger('click');
                 //     }
                 // });
-                // _chatContainer.off('click', '.quickreplyLeftIcon').on('click', '.quickreplyLeftIcon', function (event) {
-                //     var _quickReplesDivs = event.currentTarget.parentElement.getElementsByClassName('buttonTmplContentChild');
-                //     if (_quickReplesDivs.length) {
-                //         var _scrollParentDiv = event.target.parentElement.getElementsByClassName('quick_replies_btn_parent');
-                //         var _totalWidth = _scrollParentDiv[0].scrollLeft;
-                //         var _currWidth = 0;
-                //         for (var i = 0; i < _quickReplesDivs.length; i++) {
-                //             _currWidth += (_quickReplesDivs[i].offsetWidth + 10);
-                //             if (_currWidth > _totalWidth) {
-                //                 //_scrollParentDiv[0].scrollLeft = (_totalWidth - _quickReplesDivs[i].offsetWidth+20);
-                //                 $(_scrollParentDiv).animate({
-                //                     scrollLeft: (_totalWidth - _quickReplesDivs[i].offsetWidth - 50)
-                //                 }, 'slow', function () {
-                //                     // deciding to enable left and right scroll icons
-                //                     var rightIcon = _scrollParentDiv[0].parentElement.querySelectorAll('.quickreplyRightIcon');
-                //                     rightIcon[0].classList.remove('hide');
-                //                     if (_scrollParentDiv[0].scrollLeft <= 0) {
-                //                         var leftIcon = _scrollParentDiv[0].parentElement.querySelectorAll('.quickreplyLeftIcon');
-                //                         leftIcon[0].classList.add('hide');
-                //                     }
-                //                 });
-                //                 break;
-                //             }
-                //         }
-                //     }
-                // });
-                // _chatContainer.off('click', '.quickreplyRightIcon').on('click', '.quickreplyRightIcon', function (event) {
-                //     var _quickReplesDivs = event.currentTarget.parentElement.getElementsByClassName('buttonTmplContentChild');
-                //     if (_quickReplesDivs.length) {
-                //         var _scrollParentDiv = event.target.parentElement.getElementsByClassName('quick_replies_btn_parent');
-                //         var _totalWidth = event.target.parentElement.offsetWidth;
-                //         var _currWidth = 0;
-                //         // calculation for moving element scroll
-                //         for (var i = 0; i < _quickReplesDivs.length; i++) {
-                //             _currWidth += (_quickReplesDivs[i].offsetWidth + 10);
-                //             if (_currWidth > _totalWidth) {
-                //                 //_scrollParentDiv[0].scrollLeft = _currWidth;
-                //                 $(_scrollParentDiv).animate({
-                //                     scrollLeft: (_scrollParentDiv[0].scrollLeft + _quickReplesDivs[i].offsetWidth + 20)
-                //                 }, 'slow', function () {
-                //                     // deciding to enable left and right scroll icons
-                //                     var leftIcon = _scrollParentDiv[0].parentElement.querySelectorAll('.quickreplyLeftIcon');
-                //                     leftIcon[0].classList.remove('hide');
-                //                     if ((_scrollParentDiv[0].scrollLeft + _totalWidth + 10) >= _scrollParentDiv[0].scrollWidth) {
-                //                         var rightIcon = _scrollParentDiv[0].parentElement.querySelectorAll('.quickreplyRightIcon');
-                //                         rightIcon[0].classList.add('hide');
-                //                     }
-                //                 });
-                //                 break;
-                //             }
-                //         }
-                //     }
-                // });
+                _chatContainer.off('click', '.quickreplyLeftIcon').on('click', '.quickreplyLeftIcon', function (event) {
+                    var _quickReplesDivs = event.currentTarget.parentElement.getElementsByClassName('buttonTmplContentChild');
+                    if (_quickReplesDivs.length) {
+                        var _scrollParentDiv = event.target.parentElement.getElementsByClassName('quick_replies_btn_parent');
+                        var _totalWidth = _scrollParentDiv[0].scrollLeft;
+                        var _currWidth = 0;
+                        for (var i = 0; i < _quickReplesDivs.length; i++) {
+                            _currWidth += (_quickReplesDivs[i].offsetWidth + 10);
+                            if (_currWidth > _totalWidth) {
+                                //_scrollParentDiv[0].scrollLeft = (_totalWidth - _quickReplesDivs[i].offsetWidth+20);
+                                $(_scrollParentDiv).animate({
+                                    scrollLeft: (_totalWidth - _quickReplesDivs[i].offsetWidth - 50)
+                                }, 'slow', function () {
+                                    // deciding to enable left and right scroll icons
+                                    var rightIcon = _scrollParentDiv[0].parentElement.querySelectorAll('.quickreplyRightIcon');
+                                    rightIcon[0].classList.remove('hide');
+                                    if (_scrollParentDiv[0].scrollLeft <= 0) {
+                                        var leftIcon = _scrollParentDiv[0].parentElement.querySelectorAll('.quickreplyLeftIcon');
+                                        leftIcon[0].classList.add('hide');
+                                    }
+                                });
+                                break;
+                            }
+                        }
+                    }
+                });
+                console.log('.quickreplyRightIcon');
+                _chatContainer.off('click', '.quickreplyRightIcon').on('click', '.quickreplyRightIcon', function (event) {
+                    var _quickReplesDivs = event.currentTarget.parentElement.getElementsByClassName('buttonTmplContentChild');
+                    if (_quickReplesDivs.length) {
+                        var _scrollParentDiv = event.target.parentElement.getElementsByClassName('quick_replies_btn_parent');
+                        var _totalWidth = event.target.parentElement.offsetWidth;
+                        var _currWidth = 0;
+                        // calculation for moving element scroll
+                        for (var i = 0; i < _quickReplesDivs.length; i++) {
+                            _currWidth += (_quickReplesDivs[i].offsetWidth + 10);
+                            if (_currWidth > _totalWidth) {
+                                //_scrollParentDiv[0].scrollLeft = _currWidth;
+                                $(_scrollParentDiv).animate({
+                                    scrollLeft: (_scrollParentDiv[0].scrollLeft + _quickReplesDivs[i].offsetWidth + 20)
+                                }, 'slow', function () {
+                                    // deciding to enable left and right scroll icons
+                                    var leftIcon = _scrollParentDiv[0].parentElement.querySelectorAll('.quickreplyLeftIcon');
+                                    leftIcon[0].classList.remove('hide');
+                                    if ((_scrollParentDiv[0].scrollLeft + _totalWidth + 10) >= _scrollParentDiv[0].scrollWidth) {
+                                        var rightIcon = _scrollParentDiv[0].parentElement.querySelectorAll('.quickreplyRightIcon');
+                                        rightIcon[0].classList.add('hide');
+                                    }
+                                });
+                                break;
+                            }
+                        }
+                    }
+                });
                 // _chatContainer.off('click', '.minimized').on('click', '.minimized,.minimized-title', function (event) {
                 //     if(me.config.multiPageApp && me.config.multiPageApp.enable){
                 //         me.setLocalStoreItem('kr-cw-state','open');
@@ -2358,11 +2360,39 @@
                             'helpers': helpers,
                             'extension': extension
                         });
+                        // setTimeout(function () {
+                        //     var evt = document.createEvent("HTMLEvents");
+                        //     evt.initEvent('resize', true, false);
+                        //     window.dispatchEvent(evt);
+                        // }, 150);
                         setTimeout(function () {
-                            var evt = document.createEvent("HTMLEvents");
-                            evt.initEvent('resize', true, false);
-                            window.dispatchEvent(evt);
-                        }, 150);
+                            $(`#carousel-one-by-one-${msgData.messageId}`).addClass("carousel" + carouselTemplateCount);
+                            var count = $(".carousel" + carouselTemplateCount).children().length;
+                            setTimeout(() => {
+                                if (count >= 1) {
+                                    var carouselOneByOne = new PureJSCarousel({
+                                        carousel: ".carousel" + carouselTemplateCount,
+                                        slide: '.slide',
+                                        oneByOne: true
+                                    });
+                                    $(`#carousel-one-by-one-${msgData.messageId}`).parent().show();
+                                    $(`#carousel-one-by-one-${msgData.messageId}`).attr('style', 'height: 100% !important');
+                                    carouselEles.push(carouselOneByOne);
+                                    console.log("xxxxxxxxxxxxxxxxx carousels", carouselEles)
+                                    for (var i = 0; i < carouselEles.length; i++) {
+                                        $(carouselEles[i].carousel).parent().show();
+                                    }
+                                }
+                                //window.dispatchEvent(new Event('resize'));
+                                var evt = document.createEvent("HTMLEvents");
+                                evt.initEvent('resize', true, false);
+                                window.dispatchEvent(evt);
+                                carouselTemplateCount += 1;
+                                _chatContainer.animate({
+                                    scrollTop: _chatContainer.prop("scrollHeight")
+                                }, 0);
+                            })
+                        });
                     }
                     else if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "carousel") {
                         messageHtml = $(me.getChatTemplate("carouselTemplate")).tmpl({
@@ -3612,7 +3642,7 @@
                             {{if msgData.createdOn}}<div aria-live="off" class="extra-info">${helpers.formatDate(msgData.createdOn)}</div>{{/if}} \
                             {{if msgData.icon}}<div aria-live="off" class="profile-photo"> <div class="user-account avtar marginT50" style="background-image:url(${msgData.icon})"></div> </div> {{/if}} \
                             {{if msgData.message[0].component.payload.text}} \
-                                <div class="buttonTmplContentHeading quickReply"> \
+                                <div class="buttonTmplContentHeading quickReply" > \
                                     {{if msgData.type === "bot_response"}} {{html helpers.convertMDtoHTML(msgData.message[0].component.payload.text, "bot")}} {{else}} {{html helpers.convertMDtoHTML(msgData.message[0].component.payload.text, "user")}} {{/if}} \
                                     {{if msgData.message[0].cInfo && msgData.message[0].cInfo.emoji}} \
                                         <span class="emojione emojione-${msgData.message[0].cInfo.emoji[0].code}">${msgData.message[0].cInfo.emoji[0].title}</span> \
@@ -3620,12 +3650,13 @@
                                 </div>\
                                 {{/if}} \
                                 {{if msgData.message[0].component.payload.quick_replies && msgData.message[0].component.payload.quick_replies.length}} \
-                                <div class="fa fa-chevron-left quickreplyLeftIcon hide"></div><div class="fa fa-chevron-right quickreplyRightIcon"></div>\
-                                    <div class="quick_replies_btn_parent"><div class="autoWidth">\
+                                    <div class="quick_replies_btn_parent"><div class="autoWidth carousel" id="carousel-one-by-one-${msgData.messageId}" style="height: 0px;">\
                                         {{each(key, msgItem) msgData.message[0].component.payload.quick_replies}} \
-                                            <div class="buttonTmplContentChild quickReplyDiv"> <span {{if msgItem.payload}}value="${msgItem.payload}"{{/if}} class="quickReply {{if msgItem.image_url}}with-img{{/if}}" type="${msgItem.content_type}">\
-                                                {{if msgItem.image_url}}<img src="${msgItem.image_url}">{{/if}} <span class="quickreplyText {{if msgItem.image_url}}with-img{{/if}}" value="${msgItem.payload}" type="${msgItem.content_type}">${msgItem.title}</span></span>\
-                                            </div> \
+                                            <div class="slide">\
+                                                <div class="buttonTmplContentChild quickReplyDiv"> <span {{if msgItem.payload}}value="${msgItem.payload}"{{/if}} class="quickReply {{if msgItem.image_url}}with-img{{/if}}" type="${msgItem.content_type}">\
+                                                    {{if msgItem.image_url}}<img src="${msgItem.image_url}">{{/if}} <span class="quickreplyText {{if msgItem.image_url}}with-img{{/if}}" value="${msgItem.payload}" type="${msgItem.content_type}">${msgItem.title}</span></span>\
+                                                </div> \
+                                            </div>\
                                         {{/each}} \
                                     </div>\
                                 </div>\
@@ -4155,7 +4186,7 @@
                 if(cfg.widgetSDKInstace){
                     this.addWidgetEvents(cfg);
                 };
-                if(!cfg.agentAssist){
+                if(cfg.agentAssist){
                     chatInitialize = new chatWindow(cfg);
                     chatInitialize.customTemplateObj = new customTemplate(cfg,chatInitialize);
                 }
