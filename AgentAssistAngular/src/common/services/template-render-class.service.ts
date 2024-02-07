@@ -170,7 +170,7 @@ export class TemplateRenderClassService {
       parsedPayload: null
     }
 
-    res.promptTitle = res.isPrompt ? 'Ask Customer' : 'Tell Customer';
+    res.promptTitle =  res.isPrompt ? 'Ask Customer' : 'Tell Customer';
 
     res?.buttons?.forEach((elem) => {
       let parsedPayload;
@@ -178,9 +178,6 @@ export class TemplateRenderClassService {
         elem.value = elem.value.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
       }
       let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
-      console.log(payloadType, "payload type", elem.value);
-
-
       try {
         if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
           let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
@@ -234,8 +231,6 @@ export class TemplateRenderClassService {
       }
       _msgsResponse.message[0] = body;
       _msgsResponse.parsedPayload = parsedPayload;
-      console.log(parsedPayload, "parsed payload inside template render");
-
     });
     // if (res.srcChannel && res.srcChannel !== 'msteams') {
     //   if (res.componentType === 'dialogAct') {

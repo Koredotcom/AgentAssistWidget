@@ -212,7 +212,6 @@ export class DesignAlterService {
           }
         }
       } catch (e) {
-        console.log(e);
       }
       return (childRec.top + paddingTop) > (parentRec.height + parentRec.top);
     }
@@ -226,7 +225,6 @@ export class DesignAlterService {
         var _container = _PanelEle.closest('.body-data-container');
         if (_container && _container.offset()) {
             _scrollHeight = _PanelEle.offset().top - _container.offset().top + _container.scrollTop();
-            console.log(_scrollHeight, "scroll height");
         }
     }
     return _scrollHeight;

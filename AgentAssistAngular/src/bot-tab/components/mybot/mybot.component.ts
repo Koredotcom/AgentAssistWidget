@@ -540,7 +540,6 @@ export class MybotComponent implements OnInit {
           previousTaskName = currentTaskName;
           previousTaskPositionId = currentTaskPositionId;
           if (divExist.length >= 1) {
-            console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
           } else {
             historyData.append(userInputHtml);
             historyData.append(dropdownHtml);
@@ -686,8 +685,6 @@ export class MybotComponent implements OnInit {
             }
 
             // if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
-            //   // console.log("inside dialogact and channel");
-
             // }
             if(this.commonService.smallTalkHistoryRenderCheck(parsedPayload,res)){
               // let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
