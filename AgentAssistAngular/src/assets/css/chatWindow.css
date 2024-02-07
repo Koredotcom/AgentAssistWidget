@@ -925,6 +925,17 @@
     border-top-right-radius: 10px;
 }
 
+.kore-chat-window .buttonTmplContent .buttonTmplContentBox a {
+    display: inline-block;
+    width: 100%;
+}
+
+
+.kore-chat-window .buttonTmplContent .buttonTmplContentHeading .isLink a {
+    color: var(--sdk-chat-window-btn-link-color) !important;
+    width: auto;
+}
+
 .kore-chat-window .buttonTmplContent .buttonTmplContentHeading.quickReply {
     display: table;
     font-size: 12px;
