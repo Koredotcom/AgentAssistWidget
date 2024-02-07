@@ -43,9 +43,9 @@ export class FooterComponent implements OnInit, OnDestroy{
 
   @HostListener('document:click', ['$event.target']) onMouseEnter(targetElement) {
     if(targetElement?.className?.includes('custom-backdrop-off-canvas')){
+      this.canvas = null;
       this.selectedTab = this.projConstants.ASSIST;
       this.changeTab(this.selectedTab);
-      this.canvas = null;
     }
   }
 
