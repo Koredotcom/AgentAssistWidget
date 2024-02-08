@@ -76,15 +76,7 @@ export class WebSocketService {
   }
 
   commonEmitEvents(shouldProcessResponse){
-    let customData = (this.rootService.connectionDetails?.customdata) || (this.rootService.connectionDetails?.customData);  
-    // if(customData && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
-    //   try {
-    //     customData = JSON.parse(customData);
-    //   } catch (e) {
-    //     customData = {};
-    //       throw e;
-    //   }
-    // }
+    let customData = this.rootService.connectionDetails?.customData;  
     const {botId, conversationId, isCall, autoBotId, interactiveLanguage, userName} = this.rootService.getConnectionDetails()
     let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
     let appState = this.localStorageService.getLocalStorageState();

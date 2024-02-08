@@ -33,12 +33,7 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
       if(res){
         this.connectionDetails = this.rootService.getConnectionDetails();
         this.getTranscriptHistory(this.connectionDetails);
-        if (this.connectionDetails.customdata) {
-          let decodedCustomData = decodeURI(this.connectionDetails.customdata);
-          if (decodedCustomData) {
-            this.parsedCustomData = JSON.parse(decodedCustomData);
-          }
-        }
+        this.parsedCustomData = Object.assign({},this.connectionDetails.customData);
       }
     });
   }
