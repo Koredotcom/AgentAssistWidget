@@ -108,9 +108,9 @@ export class AgentsDdComponent implements OnInit, OnDestroy, OnChanges {
             if (agentGroups.findIndex(f => f.id === ag.groupId) === -1) {
               agentGroups.push({
                 type: 'AGENTGROUP',
-                id: ag.groupId,
-                name: ag.groupName,
-                profImage: a.profImage
+                id: ag?.groupId,
+                name: ag?.groupName,
+                profImage: a?.profImage
               });
             }
           })
