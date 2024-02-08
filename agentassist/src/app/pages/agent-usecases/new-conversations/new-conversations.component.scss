@@ -922,3 +922,10 @@
 input.ng-invalid.ng-touched, input.err {
     border: 1px solid $warningRed;
 }
+
+.isToggleDisabled {
+    // display: none !important;
+    cursor:no-drop;
+    pointer-events: none;
+    opacity: 0.5;
+}

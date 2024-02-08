@@ -6,7 +6,7 @@
                 <div class="main-title text-truncate" title="{{inputData?.usecaseName || ('USECASES.NEW_UC' | translate)}}">{{inputData?.usecaseName || ('USECASES.NEW_UC' | translate)}}</div>
             </div>
             <label class="kr-sg-toggle" *ngIf="ucType === 'dialog'">
-                <input type="checkbox" [(ngModel)]="conv.isEnabled" #confToggle name="confToggle">
+                <input type="checkbox" [(ngModel)]="conv.isEnabled" #confToggle name="confToggle" (change)="convMainToggle(conv,conv.isEnabled)">
                 <div class="slider"><span class="enabled" *ngIf="conv.isEnabled !== false">{{ "USECASES.ENABLED" | translate}}</span><span *ngIf="conv.isEnabled === false" class="disabled">{{"USECASES.DISABLED" | translate}}</span></div>
             </label>
             <div class="close-link col-3 p-0"><img src="assets/images/close.svg" (click)="close()"></div>
@@ -464,9 +464,9 @@
                         <div class="trigger-and-permissions-sec">
                             <div class="d-flex align-items-center">
                                 <div class="title-with-toggle mr-3">{{"DURING_CHATS" | translate}}</div>
-                                <label class="kr-sg-toggle">
-                                    <input type="checkbox" [(ngModel)]="conv.triggerPoints.isChatEnabled" name="isChatEnabled">
-                                    <div class="slider"><span class="enabled" *ngIf="conv.triggerPoints.isChatEnabled">{{"DEFAULTS.ENABLED" | translate}}</span><span class="disabled" *ngIf="!conv.triggerPoints.isChatEnabled">{{"DEFAULTS.DISABLED" | translate}}</span></div>
+                                <label class="kr-sg-toggle" >
+                                    <input type="checkbox" [disabled]="!conv.isEnabled"  [(ngModel)]="conv.triggerPoints.isChatEnabled" name="isChatEnabled">
+                                    <div class="slider" [ngClass]="!conv.isEnabled ? 'isToggleDisabled' : ''"><span class="enabled" *ngIf="conv.triggerPoints.isChatEnabled">{{"DEFAULTS.ENABLED" | translate}}</span><span class="disabled" *ngIf="!conv.triggerPoints.isChatEnabled">{{"DEFAULTS.DISABLED" | translate}}</span></div>
                                 </label>
                             </div>
                             <div class="desc-text-info">{{"ENABLED_MANUALLY_AUTOMATICALLY_CHAT_CHANNEL" | translate}}</div>
@@ -474,8 +474,8 @@
                             <div class="d-flex align-items-center">
                                 <div class="title-with-toggle mr-3">{{"DURING_CALLS" | translate}}</div>
                                 <label class="kr-sg-toggle">
-                                    <input type="checkbox" [(ngModel)]="conv.triggerPoints.isVoiceEnabled" name="isVoiceEnabled">
-                                    <div class="slider"><span class="enabled" *ngIf="conv.triggerPoints.isVoiceEnabled">{{"DEFAULTS.ENABLED" | translate}}</span><span class="disabled" *ngIf="!conv.triggerPoints.isVoiceEnabled">{{"DEFAULTS.DISABLED" | translate}}</span></div>
+                                    <input type="checkbox" [disabled]="!conv.isEnabled" [(ngModel)]="conv.triggerPoints.isVoiceEnabled" name="isVoiceEnabled">
+                                    <div class="slider" [ngClass]="!conv.isEnabled ? 'isToggleDisabled' : ''"><span class="enabled" *ngIf="conv.triggerPoints.isVoiceEnabled">{{"DEFAULTS.ENABLED" | translate}}</span><span class="disabled" *ngIf="!conv.triggerPoints.isVoiceEnabled">{{"DEFAULTS.DISABLED" | translate}}</span></div>
                                 </label>
                             </div>
                             <div class="desc-text-info">{{"ENABLED_MANUALLY_AUTOMATICALLY_PHONE_CALL" | translate}}</div>
@@ -536,8 +536,8 @@
                             <div class="d-flex align-items-center">
                                 <div class="title-with-toggle mr-3">{{"LAUNCH_MENU" | translate}}</div>
                                 <label class="kr-sg-toggle">
-                                    <input type="checkbox" [(ngModel)]="conv.triggerPoints.isLaunchByMenuEnabled" name="isLaunchByMenuEnabled">
-                                    <div class="slider"><span class="enabled" *ngIf="conv.triggerPoints.isLaunchByMenuEnabled">{{"DEFAULTS.ENABLED" | translate}}</span><span class="disabled" *ngIf="!conv.triggerPoints.isLaunchByMenuEnabled">{{"DEFAULTS.DISABLED" | translate}}</span></div>
+                                    <input type="checkbox" [disabled]="!conv.isEnabled" [(ngModel)]="conv.triggerPoints.isLaunchByMenuEnabled" name="isLaunchByMenuEnabled">
+                                    <div class="slider" [ngClass]="!conv.isEnabled ? 'isToggleDisabled' : ''"><span class="enabled" *ngIf="conv.triggerPoints.isLaunchByMenuEnabled">{{"DEFAULTS.ENABLED" | translate}}</span><span class="disabled" *ngIf="!conv.triggerPoints.isLaunchByMenuEnabled">{{"DEFAULTS.DISABLED" | translate}}</span></div>
                                 </label>
                             </div>
                             <div class="desc-text-info">{{"ENABLED_LISTED_MENU_USECASES_AGENTASSIST_WINDOW_BROWSER" | translate}}</div>
