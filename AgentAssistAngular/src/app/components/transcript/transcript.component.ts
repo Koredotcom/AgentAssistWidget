@@ -52,12 +52,13 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();
         // this.getTranscriptData(this.connectionDetails);
-        if (this.connectionDetails.customData) {
-          let decodedCustomData = decodeURI(this.connectionDetails.customData);
-          if (decodedCustomData) {
-            this.parsedCustomData = JSON.parse(decodedCustomData);
-          }
-        }
+        this.parsedCustomData = Object.assign({},this.connectionDetails.customData);
+        // if (this.connectionDetails.customData) {
+        //   let decodedCustomData = decodeURI(this.connectionDetails.customData);
+        //   if (decodedCustomData) {
+        //     this.parsedCustomData = JSON.parse(decodedCustomData);
+        //   }
+        // }
       }
     });
 
