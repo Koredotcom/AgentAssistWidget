@@ -53,7 +53,7 @@ export class CommonService {
   assistHistory(params) {
     let serviceMethod = params.fromSAT ? 'get.assistHistorySA' : 'get.assistHistoryTP';
     let botId = this.rootService.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
-    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { historyAPiCall: 'true', botId: botId }, params.agentassisturl);
+    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { excludeAccountId: 'true', botId: botId }, params.agentassisturl);
   }
 
   assistFeedback(params) {
@@ -63,7 +63,7 @@ export class CommonService {
   mybotHistory(params) {
     let serviceMethod = params.fromSAT ? 'get.mybotHistorySA' : 'get.mybotHistoryTP';
     let botId = this.rootService.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
-    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { historyAPiCall: 'true', botId: botId }, params.agentassisturl)
+    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { excludeAccountId: 'true', botId: botId }, params.agentassisturl)
   }
 
   mybotFeedback(params) {
