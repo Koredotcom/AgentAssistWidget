@@ -8,6 +8,7 @@ import { LocalStorageService } from './local-storage.service';
 import { HandleSubjectService } from './handle-subject.service';
 import * as $ from 'jquery';
 import { TemplateRenderClassService } from './template-render-class.service';
+import { KoreGenerateuuidPipe } from '../pipes/kore-generateuuid.pipe';
 
 declare var $: any;
 @Injectable({
@@ -47,7 +48,7 @@ export class WebSocketService {
   count = 1;
 
   constructor(private rootService : RootService, private localStorageService : LocalStorageService,
-    private handleSubjectService : HandleSubjectService, private templateRenderClassService : TemplateRenderClassService) {
+    private handleSubjectService : HandleSubjectService, private templateRenderClassService : TemplateRenderClassService, private koregenerateUUIDPipe : KoreGenerateuuidPipe) {
   }
 
   socketConnection(){    
@@ -112,10 +113,12 @@ export class WebSocketService {
 
   emitEvents(eventName : string,requestParams : any) {
     const {fromSAT, source, isCall, autoBotId} = this.rootService.getConnectionDetails()
+    let uuids = this.koregenerateUUIDPipe.transform();
     if(requestParams){
       requestParams.isExtAD = fromSAT ? false : true;
       requestParams.source = source;
-      requestParams.experience = this.rootService.connectionDetails?.channel
+      requestParams.experience = this.rootService.connectionDetails?.channel;
+      requestParams.traceId = uuids;
     }
 
     if(this.loaderEvents[eventName]) {
