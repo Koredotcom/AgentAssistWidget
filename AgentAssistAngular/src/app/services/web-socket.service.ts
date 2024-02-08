@@ -76,7 +76,7 @@ export class WebSocketService {
   }
 
   commonEmitEvents(shouldProcessResponse){
-    let customData = (this.rootService.connectionDetails?.customdata) || (this.rootService.connectionDetails?.customData);  
+    let customData = this.rootService.connectionDetails?.customData;  
     // if(customData && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
     //   try {
     //     customData = JSON.parse(customData);

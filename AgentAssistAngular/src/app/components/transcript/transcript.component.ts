@@ -52,8 +52,8 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();
         // this.getTranscriptData(this.connectionDetails);
-        if (this.connectionDetails.customdata) {
-          let decodedCustomData = decodeURI(this.connectionDetails.customdata);
+        if (this.connectionDetails.customData) {
+          let decodedCustomData = decodeURI(this.connectionDetails.customData);
           if (decodedCustomData) {
             this.parsedCustomData = JSON.parse(decodedCustomData);
           }
