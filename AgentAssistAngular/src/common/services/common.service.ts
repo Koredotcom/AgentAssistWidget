@@ -1293,6 +1293,14 @@ export class CommonService {
 
   CustomTempClickEvents(tab, connectionObj) {
     let mythis = this;
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.quickreplyLeftIcon').on('click', '.quickreplyLeftIcon', function (event){
+      event.leftIcon = true;
+      mythis.templateRenderClassService.AgentChatInitialize.bindEvents(true, event);
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.quickreplyRightIcon').on('click', '.quickreplyRightIcon', function (event) {
+      event.leftIcon = false;
+      mythis.templateRenderClassService.AgentChatInitialize.bindEvents(true, event);
+    });
     $('.agent-assist-chat-container.kore-chat-window').on('click', '.botResponseAttachments', function (event) {
       window.open($(this).attr('fileid'), '_blank');
     });
