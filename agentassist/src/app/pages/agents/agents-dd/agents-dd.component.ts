@@ -93,7 +93,7 @@ export class AgentsDdComponent implements OnInit, OnDestroy, OnChanges {
 
   getAgents() {
     const _parmas = {
-      orgId: this.authService.getOrgId(),
+      orgId: this.authService?.getOrgId(),
       limit: -1
     }
 
