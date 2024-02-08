@@ -7,6 +7,7 @@ import { CommonService } from './common.service';
 import { HandleSubjectService } from './handle-subject.service';
 import { LocalStorageService } from './local-storage.service';
 declare var io: any;
+import { KoreGenerateuuidPipe } from '../pipes/kore-generateuuid.pipe';
 
 
 @Injectable()
@@ -44,6 +45,7 @@ export class WebSocketService {
 
   constructor(private handleSubjectService : HandleSubjectService,
     private sanitizeHTMLPipe : SanitizeHtmlPipe, private localStorageService : LocalStorageService,
+    private koregenerateUUIDPipe : KoreGenerateuuidPipe
   ) {
     this.subscribeEvents();
   }
@@ -74,10 +76,12 @@ export class WebSocketService {
   }
 
   emitEvents(eventName,requestParams) {
+    let uuids = this.koregenerateUUIDPipe.transform();
     if(requestParams){
       requestParams.isExtAD = this.connectionDetails.fromSAT ? false : true;
       requestParams.source = this.connectionDetails.source;
       requestParams.experience = this.connectionDetails.channel;
+      requestParams.traceId = uuids;
     }
     if(this.loaderEvents[eventName]) {
       this.loaderOnTimer()
