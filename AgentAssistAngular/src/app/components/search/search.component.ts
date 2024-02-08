@@ -116,7 +116,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
       "lang": "en",
       "experience" : channel
     }
-    this.serviceInvoker.invoke('post.autoSearch', { botId: botId, convId: conversationId }, payload, { excludeAccountId: 'false', botId: botId }, params.agentassisturl).subscribe((res) => {
+    this.serviceInvoker.invoke('post.autoSearch', { botId: botId, convId: conversationId }, payload, { botId: botId }, params.agentassisturl).subscribe((res) => {
       this.querySuggestions = res?.querySuggestions;
       this.typeAHeads = res?.typeAheads;
       if(this.typeAHeads?.length){

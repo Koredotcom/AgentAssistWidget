@@ -23,7 +23,7 @@ export class I1 implements HttpInterceptor {
             if(fromSAT){
                 headerObj.eAD = 'false';
                 headerObj.accountId = headerAccountId;
-            }else if(!modifiedReq.headers.has('excludeAccountId') || (modifiedReq.headers.get('excludeAccountId') != 'true')){
+            }else if(!modifiedReq.headers.has('excludeAccountId')){
                 headerObj.accountId = headerAccountId;
             }
             headerObj.Authorization = headerToken;
