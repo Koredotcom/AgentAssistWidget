@@ -267,7 +267,7 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
 //       ],
 //       "hasMore": true
 //    }
-    this.serviceInvoker.invoke('get.transcriptHistory', { convId: params.conversationId }, {}, { apicall: 'transcriptHistory', botId : params.botId }, params.agentassisturl).subscribe((data)=> {
+    this.serviceInvoker.invoke('get.transcriptHistory', { convId: params.conversationId }, {}, { excludeAccountId: 'false', botId : params.botId }, params.agentassisturl).subscribe((data)=> {
       if(data && data?.result?.length > 0) {
         this.historyResponse = data.result;
       }

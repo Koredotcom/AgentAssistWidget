@@ -23,15 +23,15 @@ export class I1 implements HttpInterceptor {
             if(fromSAT){
                 headerObj.eAD = 'false';
                 headerObj.accountId = headerAccountId;
-            }else if(!modifiedReq.headers.has('apicall') || (modifiedReq.headers.get('apicall') != 'historyAPiCall' && modifiedReq.headers.get('apicall') != 'userBotHistory')){
+            }else if(!modifiedReq.headers.has('excludeAccountId') || (modifiedReq.headers.get('excludeAccountId') != 'true')){
                 headerObj.accountId = headerAccountId;
             }
             headerObj.Authorization = headerToken;
 
-            if (modifiedReq.headers.has('apicall')) {
+            if (modifiedReq.headers.has('excludeAccountId')) {
                 // Delete the header
                 modifiedReq = modifiedReq.clone({
-                  headers: modifiedReq.headers.delete('apicall')
+                  headers: modifiedReq.headers.delete('excludeAccountId')
                 });
             }
            
