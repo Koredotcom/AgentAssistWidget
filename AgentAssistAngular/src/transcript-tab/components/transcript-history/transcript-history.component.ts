@@ -55,7 +55,7 @@ export class TranscriptHistoryComponent {
             }
         }
         $.ajax({
-          url: `${connectionDetails.agentassisturl}/agentassist/api/v1/agentassistconversations/${connectionDetails.conversationId}/conversation?page=1&&limit=1000`,
+          url: `${connectionDetails.agentassisturl}/agentassist/api/v1/agentassistconversations/${connectionDetails.conversationId}/conversation?page=0&&limit=200`,
           type: 'get',
           headers: headersVal,
           dataType: 'json',
