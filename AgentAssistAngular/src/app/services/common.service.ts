@@ -146,7 +146,6 @@ export class CommonService {
         message['title'] = faq_or_article_obj.displayName;
         message['contentId'] = faq_or_article_obj.taskRefId
       }
-      window.parent.postMessage(message, '*');
     } else {
       message = {
         method: 'copy',
@@ -161,9 +160,9 @@ export class CommonService {
         message['title'] = faq_or_article_obj.displayName;
         message['contentId'] = faq_or_article_obj.taskRefId
       }
-      message['type'] = (selectType == this.projConstants.FAQ) ? 'faq' : 'article'
-      parent.postMessage(message, '*');
     }
+    message['type'] = (selectType == this.projConstants.FAQ) ? 'faq' : 'article'
+    window.parent.postMessage(message, '*');
     this.faqArticleSendorCopyEvent(selectType, message, faq_or_article_obj)
   }
 
