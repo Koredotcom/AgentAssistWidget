@@ -23,7 +23,8 @@
     <div class="faq-body-content">
         <div class="data-faq-paragraph">            
             <div class="text-info-more-data-link">
-                <p [ngClass]="{'show-full-text' : !article.showMoreButton}" [innerHTML]="article?.content | removeTagFromString" #articleContent></p>
+                <!-- removeTagFromString -->
+                <p [ngClass]="{'show-full-text' : !article.showMoreButton}" [innerHTML]="article?.content | safeHtml" #articleContent></p>
                 <div class="more-links-actions">
                     <a class="moreText" role="link" *ngIf="articleContent.scrollHeight > 36">
                         <span class="more-text" *ngIf="article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'MORE_TEXT' | translate}}</span>
