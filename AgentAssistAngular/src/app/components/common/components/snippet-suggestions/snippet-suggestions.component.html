@@ -29,7 +29,7 @@
           <div class="text-info-more-data-block">
             <p [ngClass]="{'show-full-text' : !snippet.showMoreButton}" #snippetContent>
               <ng-container *ngFor="let content of snippet.contentArray; let ii = index">
-                <div *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content)"
+                <div *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content) | safeHtml"
                   [ngClass]="{'snippet-list-style' : snippet.contentArray.length > 1}"></div>
               </ng-container>
             </p>
