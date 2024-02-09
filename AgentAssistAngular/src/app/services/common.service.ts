@@ -452,9 +452,17 @@ export class CommonService {
     return '';
   }
 
+  changeParentAutomationSourceMsgId(arrEle, data){
+    if(arrEle.sourceMsgId == 'fromLibrary' && data.sourceMsgId){
+       arrEle.sourceMsgId = data.sourceMsgId;
+    }
+    return arrEle;
+  }
+
   formatRunningLastAutomationEntityNode(assistResponseArray, data, showErrorPrompt, renderResponse, dropdownHeaderUuids, tab, previousEntityNodes?) {
     assistResponseArray.map((arrEle, index) => {
       if (arrEle?.uuid && arrEle?.uuid == dropdownHeaderUuids) {
+        arrEle = this.changeParentAutomationSourceMsgId(arrEle, data);
         arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
         if (arrEle.automationsArray?.length > 0 && arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
           arrEle.automationsArray[arrEle.automationsArray.length - 1].showSpinner = false;
