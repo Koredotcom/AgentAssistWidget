@@ -313,7 +313,6 @@ export class AiConfigComponent implements OnInit, OnDestroy {
   }
 
   changed(event, name){
-    console.log(this.configArr)
     this.configArr.forEach((item)=>{
       if(item.name === name){
         item.enable = event.target.checked;
