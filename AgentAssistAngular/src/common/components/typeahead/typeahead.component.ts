@@ -86,7 +86,6 @@ export class TypeaheadComponent implements OnInit {
     }
   
      getAutoSearchApiResult(value, connectionDetails){
-        console.log(arguments[1],"this","get in auto search api", value)
         let payload = {
             "query": value,
             "maxNumOfResults": 3,

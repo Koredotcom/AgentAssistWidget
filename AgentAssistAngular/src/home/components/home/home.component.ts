@@ -204,7 +204,6 @@ export class HomeComponent implements OnInit {
     });
 
     let subscription6 = this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
-      console.log(res, "response");
       if(res && res.messages.length > 0){
         this.convHistoryResponse = res;
         this.showHistoryTab = !(this.commonService.isCallConversation) ? true : false;
@@ -228,7 +227,6 @@ export class HomeComponent implements OnInit {
     let subscription9 = this.handleSubjectService.agentAssistSettingsSubject.subscribe((settings: any) => {
       this.aaSettings = settings;
       this.localStorageService.initializeLocalStorageState(this.aaSettings);
-      console.log(this.commonService.configObj);
       this.updateUIState(this.connectionDetails.conversationId, this.connectionDetails.isCall);
       this.btnInit();
     })
@@ -468,7 +466,6 @@ export class HomeComponent implements OnInit {
       });
 
       window.addEventListener('agentAssist.endOfConversation', function (e) {
-        console.log("----endOfConversation event captured ", e)
       });
       window._agentAssisteventListenerAdded = true;
     }
@@ -712,8 +709,6 @@ setProactiveMode(){
     });
     setTimeout(() => {
       document.getElementById(scrollbuttonId).addEventListener('click', (event) => {
-        console.log("click event *************" );
-
         this.scrollToBottom(true);
       }, { once: true });
     }, 10);
@@ -735,7 +730,6 @@ setProactiveMode(){
 
   @HostListener('click', ['$event'])
   onClick(evt) {
-    // console.log('button', btn, 'number of clicks:', this.numberOfClicks++);
     let target: any = evt.target;
     if (target.id === 'sendMsg' || target.className === 'ast-ast-send' || target.className == 'send-icon') {
       let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);

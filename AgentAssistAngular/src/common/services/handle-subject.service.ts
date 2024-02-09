@@ -74,7 +74,6 @@ export class HandleSubjectService {
         delete parmasObj[key];
       }
       else if(key == "autoBotId"){
-        console.log("------- autobotid----xxxxxxxxxxxxxx", key)
         if(parmasObj[key] && (parmasObj[key] !== "undefined" && parmasObj[key] !== null)){
           parmasObj['autoBotId'] = parmasObj[key];
         }else{
@@ -82,7 +81,6 @@ export class HandleSubjectService {
         }
       }
     }
-    console.log("-----------parmasObj-----------", parmasObj)
     this.connectDetailsSubject.next(parmasObj);
   }
 

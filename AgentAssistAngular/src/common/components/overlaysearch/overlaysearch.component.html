@@ -149,7 +149,7 @@
                                 >{{article.title}}
                                 <!-- <i class="ast-carrotup rotate-carrot" [id]="'articlecheckLib-' + i" *ngIf="!article.content"></i> -->
                             </div>
-                            <div class="desc-text" [id]="'articledescLib-' + i" [innerHTML]="article.content | removeTagFromString | replaceTextWithTag : article.userInput">
+                            <div class="desc-text" [id]="'articledescLib-' + i">{{article.content | removeTagFromString | replaceTextWithTag : article.userInput}}
                                 <div class="link-view-full-article" [id]="'articleViewLinkLib-' + i" *ngIf="article.link"><a [href]="article.link" target="_blank">View Full Article</a></div>
                             </div>
                             <button class="ghost-btn" [id]="'articleseeMore-' + i" *ngIf="article.showMoreButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_MORE}}</button>

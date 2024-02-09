@@ -63,7 +63,6 @@ export class OverlaysearchComponent implements OnInit {
       this.showOverLay = false;
       this.searchResponse = {};
       if (searchObj && searchObj.value && searchObj.searchFrom == this.commonService.activeTab) {
-        console.log('inisde overlay component,,,,,,,,,,,,,,,,,,,', searchObj)
         this.searchConentObject = Object.assign({}, searchObj);
         setTimeout(() => {
           this.emitSearchRequest(searchObj, true);

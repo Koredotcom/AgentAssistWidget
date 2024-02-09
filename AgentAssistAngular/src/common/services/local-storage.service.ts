@@ -82,7 +82,6 @@ export class LocalStorageService {
       if(this.connectionDetails && this.connectionDetails.conversationId){
         let appState : any =  this.getLocalStorageState();
         let conversationId = this.connectionDetails.conversationId;
-        console.log(conversationId, "conversationid");
         appState[conversationId]= {};
         appState[conversationId][ProjConstants.ASSIST] = {};
         appState[conversationId][ProjConstants.MYBOT] = {};
@@ -97,7 +96,6 @@ export class LocalStorageService {
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] = false;
         appState[conversationId][storageConst.PROACTIVE_MODE] = aaSettings?.isProactiveEnabled;
         localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
-        console.log("initialize local storage");
       }
     }
   }
@@ -111,7 +109,6 @@ export class LocalStorageService {
   }
 
   checkConversationIdStateInStorage(convId){
-    console.log(convId, "conversation id");
     let appState = this.getLocalStorageState();
     if(appState[convId] && this.emptyObjectCheckPipe.transform(appState[convId])){
       return true;

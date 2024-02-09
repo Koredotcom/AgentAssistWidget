@@ -589,7 +589,6 @@ export class CommonService {
 
   // send and copy button related code
   preparePostMessageForSendAndCopy(evt, data, eventName, connectionDetails) {
-    console.log("🚀 ~ file: common.service.ts:541 ~ CommonService ~ preparePostMessageForSendAndCopy ~ connectionDetails:", connectionDetails)
     if(eventName == IdReferenceConst.COPYMSG){
       let ele = document.getElementById(`displayData-${evt.target.dataset.msgId}`) ? document.getElementById(`displayData-${evt.target.dataset.msgId}`) : document.getElementById(evt.target.dataset.msgId);
       data = (data && data !== '') ? data : (evt.target.parentNode.dataset.msgData && evt.target.parentNode.dataset.msgData !== '' ? evt.target.parentNode.dataset.msgData : ele.innerText)
@@ -622,7 +621,7 @@ export class CommonService {
       input: connectionDetails?.input || '',
       sessionId: connectionDetails.sessionId,
       contentId: connectionDetails.contentId,
-    };console.log('Sandeep Before send or copy event: ',data, connectionDetails, payloadForBE);
+    };
     this.webSocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE);
     this.highLightAndStoreFaqId(evt, data, connectionDetails);
   }
@@ -691,6 +690,7 @@ export class CommonService {
         article.content = article.content ? article.content : '';
         article.contentId = article.contentId;
         article.userInput = response.userInput;
+        article.title = article.title ? article.title : '';
       }
     }
     for (let faq of faqArray) {
@@ -738,8 +738,6 @@ export class CommonService {
       searchResponse.dialogs.push({ name: dialog.name, agentRunButton: false, childBotId : dialog?.childBotId || '',
         childBotName : dialog?.childBotName || '' });
     }
-    console.log(searchResponse, "searchresponse");
-
     return searchResponse;
   }
 
@@ -773,8 +771,6 @@ export class CommonService {
         }
       });
     } 
-    console.log(snippetResponeArray, "snippet response array ************8");
-    
     return snippetResponeArray;   
   }
 
@@ -802,7 +798,7 @@ export class CommonService {
 
   checkEmptyObjectsInArray(arr){
     arr = arr.filter(
-        obj => !(obj && Object.keys(obj).length === 0)
+        obj => (obj && Object.keys(obj)?.length > 0 && (obj.title || obj.content))
     );
     return arr;
   }
@@ -819,7 +815,6 @@ export class CommonService {
     if (response.results) {
       return response.results;
     } else {
-      console.log("error")
     }
   }
 
@@ -856,8 +851,6 @@ export class CommonService {
   }
 
   async renderingAgentHistoryMessage(connectionDetails) {
-    // console.log(this.configObj.autoBotId, connectionDetails.autoBotId,"agent history-----",this.configObj, connectionDetails);
-
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=mybot`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
     if(this.configObj.fromSAT) {
@@ -865,7 +858,6 @@ export class CommonService {
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
-        console.log("error", err)
         return err;
       });
     } else {
@@ -873,7 +865,6 @@ export class CommonService {
         .then(response => {
           return { messages: response, feedbackDetails: feedBackResult }
         }).catch(err => {
-          console.log("error", err)
           return err;
         });
 
@@ -883,7 +874,6 @@ export class CommonService {
     //   .then(response => {
     //     return { messages: response, feedbackDetails: feedBackResult }
     //   }).catch(err => {
-    //     console.log("error", err)
     //     return err;
     //   });
   }
@@ -915,7 +905,6 @@ export class CommonService {
   }
 
   async renderingHistoryMessage(connectionDetails) {
-    console.log("------- history ---", this.configObj)
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=assist`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
     if(this.configObj.fromSAT) {
@@ -923,7 +912,6 @@ export class CommonService {
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
-        console.log("error", err)
         return err;
       });
     } else {
@@ -931,7 +919,6 @@ export class CommonService {
         .then(response => {
           return { messages: response, feedbackDetails: feedBackResult }
         }).catch(err => {
-          console.log("error", err)
           return err;
         });
 
@@ -1133,8 +1120,6 @@ export class CommonService {
       // let faqSectionHeight = $(sectionElement).css("height");
       // let divSectionHeight = $(descElement).css("height") || '0px';
       let divSectionHeight = descElement.clientHeight || 0;
-      console.log(divSectionHeight, "div seciton height", faqSourceTypePixel);
-      
       // faqSectionHeight = parseInt(faqSectionHeight?.slice(0, faqSectionHeight.length - 2));
       // divSectionHeight = parseInt(divSectionHeight?.slice(0, divSectionHeight.length - 2));
       if (divSectionHeight > (24 + faqSourceTypePixel)) {
@@ -1308,6 +1293,14 @@ export class CommonService {
 
   CustomTempClickEvents(tab, connectionObj) {
     let mythis = this;
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.quickreplyLeftIcon').on('click', '.quickreplyLeftIcon', function (event){
+      event.leftIcon = true;
+      mythis.templateRenderClassService.AgentChatInitialize.bindEvents(true, event);
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.quickreplyRightIcon').on('click', '.quickreplyRightIcon', function (event) {
+      event.leftIcon = false;
+      mythis.templateRenderClassService.AgentChatInitialize.bindEvents(true, event);
+    });
     $('.agent-assist-chat-container.kore-chat-window').on('click', '.botResponseAttachments', function (event) {
       window.open($(this).attr('fileid'), '_blank');
     });

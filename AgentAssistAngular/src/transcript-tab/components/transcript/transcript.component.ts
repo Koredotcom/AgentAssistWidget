@@ -149,7 +149,6 @@ export class TranscriptComponent implements OnInit {
     });
 
     let subscription5 = this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
-      console.log(res, "response inside history");
       if(res && res.messages.length > 0){
         this.historyResponse = res.messages || [];
         this.prepareConversation();
@@ -264,10 +263,8 @@ export class TranscriptComponent implements OnInit {
 
   onScroll(){
     if(!this.scrollEventDone){
-      console.log("scroll event ******");
       let trascriptTextEle = document.getElementById('transcriptTabHistoryText');
       let scrollInView = !this.designAlterService.isScrolledIntoView(trascriptTextEle)
-      console.log(scrollInView);
       if(scrollInView){
         this.scrollEventDone = true;
         this.transcriptScrollTopText = 'Agent Joined the Conversation';
