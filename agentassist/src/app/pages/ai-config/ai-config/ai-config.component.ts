@@ -62,6 +62,9 @@ export class AiConfigComponent implements OnInit, OnDestroy {
           "temperature": 0.7,
           "max_tokens": 1068,
           "Instructions": "1. Structurally different samples\n2. Different entity combinations\n3. Some utterances without entities",
+          "top_p": 1,
+          "frequency_penalty": 0,
+          "presence_penalty": 0,
       }
   },
   {
@@ -69,6 +72,9 @@ export class AiConfigComponent implements OnInit, OnDestroy {
           "temperature": 0.7,
           "max_tokens": 1068,
           "Instructions": "1. Structurally different samples\n2. Different entity combinations\n3. Some utterances without entities",
+          "top_p": 1,
+          "frequency_penalty": 0,
+          "presence_penalty": 0,
       },
       "name": "aa_noneintent",
       "integration": "openai",
@@ -251,6 +257,15 @@ export class AiConfigComponent implements OnInit, OnDestroy {
         }
         this.id = res[0]._id;
         this.configArr = res[0].featureList?.length ? res[0].featureList  : this.configArr;
+        this.configArr.forEach((item)=>{
+          if(item.displayName === this.openAiObj.name) {}
+          let newKeys = {
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+          }
+          item.params = {...item.params, ...newKeys}
+        });
         this.integrations = res[0].integrations;
 
         (res[0].featureList || []).forEach((item)=>{
@@ -298,6 +313,7 @@ export class AiConfigComponent implements OnInit, OnDestroy {
   }
 
   changed(event, name){
+    console.log(this.configArr)
     this.configArr.forEach((item)=>{
       if(item.name === name){
         item.enable = event.target.checked;
