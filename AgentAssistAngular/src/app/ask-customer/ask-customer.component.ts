@@ -135,6 +135,7 @@ export class AskCustomerComponent {
     // connectionDetails.entities = this.commonService.isRestore ? JSON.parse(this.commonService.previousEntitiesValue) : this.commonService.entitiestValueArray
     connectionDetails.childBotId = this.automation.data.childBotId;
     connectionDetails.childBotName = this.automation.data.childBotName;
+    connectionDetails.sourceMsgId = this.automation.sourceMsgId || '';
     let assistRequestParams = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
     this.spinnerUpdate();
@@ -147,6 +148,7 @@ export class AskCustomerComponent {
     connectionDetails.positionId = this.automation.dialogId;
     connectionDetails.childBotName = this.rootService?.childBotDetails.childBotName;
     connectionDetails.childBotId = this.rootService?.childBotDetails.childBotId;
+    connectionDetails.sourceMsgId = this.automation.sourceMsgId || '';
     let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
     this.spinnerUpdate();
@@ -155,7 +157,7 @@ export class AskCustomerComponent {
   handleSendCopyButton(method, automation) {
     automation.send = true;
     let sendData = automation.sendData;
-    this.commonService.handleSendCopyButtonForNodes(method, sendData, this.automation.dialogId);
+    this.commonService.handleSendCopyButtonForNodes(method, sendData, this.automation);
     this.responseArray = this.commonService.grayOutPreviousAutomation(this.responseArray, this.automationIndex, this.responseArrayIndex);
     this.responseArray = structuredClone(this.responseArray);
   }

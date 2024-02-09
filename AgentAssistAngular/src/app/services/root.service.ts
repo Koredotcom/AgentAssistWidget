@@ -191,6 +191,9 @@ export class RootService {
     if(Array.isArray(data.traits) && data?.traits?.length){
       agent_assist_agent_request_params['traits'] = data.traits
     }
+
+    agent_assist_agent_request_params = this.addSourceMsgIdToRequestParams(data,agent_assist_agent_request_params)
+    
     return agent_assist_agent_request_params;
   }
 
@@ -242,7 +245,7 @@ export class RootService {
     let suggestions = response.suggestions
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
-    let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [])
+    let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [],response)
     let filesArray = suggestions?.searchassist?.files || [];
     let searchResponse: any = {};
     if(dialoguesArray.length || faqArray.length || snippersArray.length || filesArray.length || (suggestions?.searchassist && Object.keys(suggestions?.searchassist)?.length)){
@@ -272,6 +275,7 @@ export class RootService {
           article.content = article.content ? article.content : '';
           article.contentId = article.contentId;
           article.userInput = response.userInput;
+          article.sourceMsgId = response.sourceMsgId || '';
         }
         for (let file of searchResponse.files) {
           file.showMoreButton = true;
@@ -279,6 +283,7 @@ export class RootService {
           file.content = file.content ? file.content : '';
           file.contentId = file.contentId;
           file.userInput = response.userInput;
+          file.sourceMsgId = response.sourceMsgId || '';
         }
       }
       for (let faq of faqArray) {
@@ -292,7 +297,9 @@ export class RootService {
           answerRender: faq.answer || false,
           childBotId: faq.childBotId,
           childBotName: faq.childBotName,
-          answerCount: 1
+          answerCount: 1,
+          sourceMsgId : response.sourceMsgId || ''
+
         }
         if (faq.answer && faq.answer.length > 0) {
           for (let ans of faq.answer) {
@@ -339,14 +346,15 @@ export class RootService {
         }
         searchResponse.dialogs.push({
           name: dialog.name, agentRunButton: false, childBotId: dialog.childBotId,
-          childBotName: dialog.childBotName, entities: dialog.entities, userInput: dialog.userInput
+          childBotName: dialog.childBotName, entities: dialog.entities, userInput: dialog.userInput,
+          sourceMsgId : response.sourceMsgId || ''
         });
       }
     }
     return searchResponse;
   }
 
-  formatSnippetResponse(snippetsArray){
+  formatSnippetResponse(snippetsArray, response){
     let snippetResponeArray : any = [];
     if(snippetsArray?.length > 0){
       snippetsArray.forEach( (snippet : any) => {
@@ -357,6 +365,7 @@ export class RootService {
                 let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet)
                 obj.contentArray = [ansSnippet.answer_fragment]
                 obj.sources = (ansSnippet?.sources || []).filter(obj => obj.url);
+                obj.sourceMsgId = response.sourceMsgId || '';
                 snippetResponeArray.push(obj);
               });
             }
@@ -369,6 +378,7 @@ export class RootService {
             if(snippet.url){
               snippet.sources = [{title : snippet.source, url : snippet.url}]
             }
+            snippet.sourceMsgId = response.sourceMsgId || '';
             snippetResponeArray.push(snippet);
           }
         }
@@ -611,7 +621,21 @@ export class RootService {
     if(Array.isArray(data.traits) && data?.traits?.length){
       agent_assist_request['traits'] = data.traits
     }
+
+    agent_assist_request = this.addSourceMsgIdToRequestParams(data,agent_assist_request)
+
     return agent_assist_request;
+  }
+
+  addSourceMsgIdToRequestParams(data,requestParams){
+    if(data.sourceMsgId){
+      if(data.sourceMsgId == 'fromLibrary'){
+        requestParams['fromLibrary'] = true
+      }else{
+        requestParams['sourceMsgId'] = data.sourceMsgId
+      }
+    }
+    return requestParams;
   }
 
   // getTemplateHtml(isTemplateRender, result) {

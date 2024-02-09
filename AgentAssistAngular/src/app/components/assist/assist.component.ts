@@ -493,11 +493,12 @@ export class AssistComponent implements OnInit, OnDestroy {
   }
 
   handlePopupEvent(popupObject) {
+    let sourceMsgId =  this.commonService.getLastAutomationSourceMsgId(this.assistResponseArray)
     if (popupObject.type == this.projConstants.TERMINATE) {
       this.terminateClick = popupObject.status;
       if (this.terminateClick) {
         this.terminateClick = false;
-        this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
+        this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL, sourceMsgId : sourceMsgId }, this.dialogPositionId)
       } else if (popupObject.override) {
         this.terminateClick = false;
         this.overModeContinue(true);
@@ -515,7 +516,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.showInterruptPopup = false;
         // this.dialogTerminatedOrIntruppted();
         this.interruptRun = true;
-        this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
+        this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL, sourceMsgId : sourceMsgId }, this.dialogPositionId)
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
         if(this.interruptDialogList && this.interruptDialogList?.length > 0){
@@ -547,7 +548,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.showErrorPrompt = false;
         this.restartDialogName = this.dialogName;
         this.assistResponseArray[this.assistResponseArray.length - 1].restart = true;
-        this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
+        this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL, sourceMsgId : sourceMsgId }, this.dialogPositionId)
         // if(popupObject.inputType == this.projConstants.STARTOVER){
         // }else if(popupObject.inputType == this.projConstants.RESTART_INPUTS){
         // }

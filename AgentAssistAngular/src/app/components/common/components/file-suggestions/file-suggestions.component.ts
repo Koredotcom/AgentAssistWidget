@@ -32,7 +32,7 @@ export class FileSuggestionsComponent {
   }
 
   ngOnChanges(changes : SimpleChange){
-    if(this.searchResponse){
+    if(changes['searchResponse']?.currentValue){
       this.handleSearchResponse(this.searchResponse);
       this.hideSendAndCopy();
     }

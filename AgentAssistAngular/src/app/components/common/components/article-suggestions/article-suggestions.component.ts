@@ -34,7 +34,7 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
   }
 
   ngOnChanges(changes : SimpleChange){
-    if(this.searchResponse){
+    if(changes['searchResponse']?.currentValue){
       this.handleSearchResponse(this.searchResponse);
       this.hideSendAndCopy();
     }
