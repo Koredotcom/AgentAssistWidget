@@ -258,56 +258,9 @@ export class AssistComponent implements OnInit {
       }else{
         shouldProcessResponse = true;
       }
-      this.commonEmitEvents(shouldProcessResponse);
     }).catch((err) => {
       this.handleSubjectService.setLoader(false);
-      this.commonEmitEvents(shouldProcessResponse);
     });
-  }
-
-  commonEmitEvents(shouldProcessResponse){
-    let customData = (this.commonService.configObj?.customdata) || (this.commonService.configObj?.customData);
-    
-      if(customData && this.commonService.configObj?.source !== this.projConstants.SMARTASSIST_SOURCE) {
-        try {
-          customData = JSON.parse(customData);
-        } catch (e) {
-          customData = {};
-           throw e;
-        }
-    }
-    
-    let parsedCustomData: any = {};
-    let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
-    let welcomeMessageParams: any = {
-      'waitTime': 2000,
-      'id': this.connectionDetails.conversationId,
-      "isSendWelcomeMessage": shouldProcessResponse,
-      'agentassistInfo' : agent_user_details,
-      'botId': this.connectionDetails.botId,
-      'sendMenuRequest': true,
-      'uId': this.userBotSessionDetails?.userId || '',
-      'sId': this.userBotSessionDetails?.sessionId || '',
-      'experience' : this.commonService.configObj.channel,
-      'jToken': this.connectionDetails.token
-    }
-    if(customData && Object.keys(customData).length > 0 && this.commonService.configObj?.source !== this.projConstants.SMARTASSIST_SOURCE) {
-      welcomeMessageParams['customData'] = customData
-    }
-    if (this.connectionDetails.fromSAT) {
-      welcomeMessageParams['userName'] = this.connectionDetails?.endUserName !== 'Anonymous' ? this.connectionDetails?.endUserName : 'user';
-    } else {
-      welcomeMessageParams['userName'] = parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user'
-    }
-    if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
-      welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
-    } else {
-      welcomeMessageParams['autoBotId'] = '';
-    }
-    if (this.connectionDetails?.interactiveLanguage !== null && typeof this.connectionDetails?.interactiveLanguage !== 'undefined' && this.connectionDetails?.interactiveLanguage !== "''") {
-      welcomeMessageParams['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
-    }
-    this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }
 
 
