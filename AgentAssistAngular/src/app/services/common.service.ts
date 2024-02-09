@@ -83,6 +83,7 @@ export class CommonService {
     connectionDetails.entities = this.rootService.entitiestValueArray
     connectionDetails.childBotId = dialog.childBotId;
     connectionDetails.childBotName = dialog.childBotName;
+    connectionDetails.sourceMsgId = dialog.sourceMsgId || '';
     if (dialog.userInput) {
       connectionDetails.userInput = dialog.userInput;
     }
@@ -103,10 +104,11 @@ export class CommonService {
     payloadForBE.type = 'dialog';
     payloadForBE.input = dialog.userInput;
     payloadForBE.sessionId = this.rootService.assistTabSessionId;
+    payloadForBE = this.rootService.addSourceMsgIdToRequestParams(dialog,payloadForBE);
     this.websocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE)
   }
 
-  handleSendCopyButtonForNodes(actionType, sendData, positionId) {
+  handleSendCopyButtonForNodes(actionType, sendData, automation) {
     let message = {};
     if (actionType == ProjConstants.SEND) {
       message = {
@@ -125,7 +127,7 @@ export class CommonService {
       };
       parent.postMessage(message, '*');
     }
-    this.messageNodeSendorCopyEvent(actionType,sendData, positionId)
+    this.messageNodeSendorCopyEvent(actionType,sendData, automation)
   }
 
   handleSendCopyButton(actionType, faq_or_article_obj, selectType) {
@@ -162,10 +164,11 @@ export class CommonService {
       message['type'] = (selectType == this.projConstants.FAQ) ? 'faq' : 'article'
       parent.postMessage(message, '*');
     }
-    this.faqArticleSendorCopyEvent(selectType, message)
+    this.faqArticleSendorCopyEvent(selectType, message, faq_or_article_obj)
   }
 
-  messageNodeSendorCopyEvent(eventName, payload, positionId){
+  messageNodeSendorCopyEvent(eventName, payload, automation){
+    let positionId = automation?.dialogId;
     let payloadForBE : any = {
       usedType: (eventName == this.projConstants.SEND) ? this.projConstants.SEND_METHOD : this.projConstants.COPY_METHOD,
       name: (eventName == this.projConstants.SENDMSG) ? this.projConstants.SENDMSG : this.projConstants.COPYMSG,
@@ -176,11 +179,12 @@ export class CommonService {
       type: 'sentence',
       sessionId: (this.rootService.activeTab == this.projConstants.MYBOT) ? this.rootService.myBotTabSessionId : this.rootService.assistTabSessionId,
     };
+    payloadForBE = this.rootService.addSourceMsgIdToRequestParams(automation,payloadForBE);
     this.websocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE);
   }
 
 
-  faqArticleSendorCopyEvent(selectType, message) {
+  faqArticleSendorCopyEvent(selectType, message, faq_or_article_obj) {
     let data: any = {
       botId: this.rootService.connectionDetails.botId,
       conversationId: this.rootService.connectionDetails.conversationId,
@@ -194,7 +198,7 @@ export class CommonService {
       contentId : message.contentId,
       sessionId: (this.rootService.activeTab == this.projConstants.MYBOT || this.rootService.activeTab == this.projConstants.SEARCH) ? this.rootService.myBotTabSessionId : this.rootService.assistTabSessionId,
     };
-
+    data = this.rootService.addSourceMsgIdToRequestParams(faq_or_article_obj,data);
     if(this.rootService.activeTab == this.projConstants.SEARCH){
       data.input = this.rootService.searchedResultData.userInput;
     }
@@ -212,6 +216,7 @@ export class CommonService {
       connectionDetails.entities = this.rootService.mybotEntitiestValueArray
       connectionDetails.childBotName = this.rootService?.childBotDetails.childBotName;
       connectionDetails.childBotId = this.rootService?.childBotDetails.childBotId;
+      connectionDetails.sourceMsgId = dialog.sourceMsgId || '';
       if (this.rootService.connectionDetails?.interactiveLanguage && typeof this.rootService.connectionDetails?.interactiveLanguage == 'string' && this.rootService.connectionDetails?.interactiveLanguage != "''") {
         connectionDetails['language'] = this.rootService.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
       }
@@ -376,7 +381,8 @@ export class CommonService {
       dialogId: dialogId,
       dialogName: dialogName,
       connectionDetails: this.rootService.connectionDetails,
-      showAutomation: true
+      showAutomation: true,
+      sourceMsgId : res.sourceMsgId || ""
     }
     return renderResponse;
   }
@@ -438,6 +444,14 @@ export class CommonService {
     return false;
   }
 
+  getLastAutomationSourceMsgId(assistResponseArray){
+    if(assistResponseArray && assistResponseArray?.length > 0){
+      let lastAutomation = assistResponseArray[assistResponseArray.length -1];
+      return lastAutomation.sourceMsgId || '';
+    }
+    return '';
+  }
+
   formatRunningLastAutomationEntityNode(assistResponseArray, data, showErrorPrompt, renderResponse, dropdownHeaderUuids, tab, previousEntityNodes?) {
     assistResponseArray.map((arrEle, index) => {
       if (arrEle?.uuid && arrEle?.uuid == dropdownHeaderUuids) {
@@ -457,10 +471,12 @@ export class CommonService {
             arrEle.automationsArray[arrEle.automationsArray.length - 1].errorCount += 1;
             arrEle.automationsArray[arrEle.automationsArray.length - 1].grayOut = false;
           } else {
+            renderResponse.sourceMsgId = arrEle.sourceMsgId || '';
             arrEle.automationsArray[arrEle.automationsArray.length - 1].errorCount = 0;
             arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
           }
         } else {
+          renderResponse.sourceMsgId = arrEle.sourceMsgId || '';
           arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
         }
         if(previousEntityNodes?.length >= 1){
