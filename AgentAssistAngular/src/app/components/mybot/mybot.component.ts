@@ -298,11 +298,12 @@ export class MybotComponent {
 
 
   handlePopupEvent(popupObject) {
+    let sourceMsgId =  this.commonService.getLastAutomationSourceMsgId(this.mybotResponseArray)
     if (popupObject.type == this.projConstants.TERMINATE) {
       this.terminateClick = popupObject.status;
       if (this.terminateClick) {
         this.terminateClick = false;
-        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId)
+        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL, sourceMsgId : sourceMsgId }, this.myBotDialogPositionId)
       } 
       if(!this.terminateClick){
         this.closeOffCanvas();
@@ -314,7 +315,7 @@ export class MybotComponent {
         this.showInterruptPopup = false;
         // this.dialogTerminatedOrIntruppted();
         this.interruptRun = true;
-        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId)
+        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL, sourceMsgId : sourceMsgId }, this.myBotDialogPositionId)
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
         if(this.interruptDialogList && this.interruptDialogList?.length > 0){
@@ -345,7 +346,7 @@ export class MybotComponent {
         this.showErrorPrompt = false;
         this.mybotResponseArray[this.mybotResponseArray.length - 1].restart = true;
         this.restartDialogName = this.dialogName;
-        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.myBotDialogPositionId)
+        this.commonService.mybot_run_click({ intentName: this.projConstants.DISCARD_ALL, sourceMsgId : sourceMsgId }, this.myBotDialogPositionId)
         // if(popupObject.inputType == this.projConstants.STARTOVER){
         // }else if(popupObject.inputType == this.projConstants.RESTART_INPUTS){
         // }

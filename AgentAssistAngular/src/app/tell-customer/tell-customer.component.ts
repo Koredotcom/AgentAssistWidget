@@ -58,7 +58,7 @@ export class TellCustomerComponent {
   handleSendCopyButton(method,automation){
     automation.send = true;
     let sendData = this.isWelcomeMsg ? automation.value : automation.sendData;
-    this.commonService.handleSendCopyButtonForNodes(method,sendData, this.automation?.dialogId);
+    this.commonService.handleSendCopyButtonForNodes(method,sendData, this.automation);
     this.responseArray = this.commonService.grayOutPreviousAutomation(this.responseArray, this.automationIndex, this.responseArrayIndex);
     this.responseArray = structuredClone(this.responseArray);
     if(this.isWelcomeMsg){

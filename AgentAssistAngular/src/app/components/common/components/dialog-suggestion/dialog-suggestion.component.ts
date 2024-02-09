@@ -37,7 +37,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
   }
 
   ngOnChanges(changes : SimpleChange){
-    if(this.searchResponse){
+    if(changes['searchResponse']?.currentValue){
       this.handleSearchResponse(this.searchResponse);
     }
   }
@@ -70,6 +70,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
       dialogueDetails.agentRunButton = false;
       dialogueDetails["childBotId"] = dialogue["childBotId"] || "";
       dialogueDetails["childBotName"] = dialogue["childBotName"] || "";
+      dialogueDetails.sourceMsgId = 'fromLibrary';
       formattedMenuResponse[dialogue.dialogId] = dialogueDetails;
     }    
     return formattedMenuResponse;
