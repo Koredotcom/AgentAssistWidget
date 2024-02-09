@@ -65,10 +65,10 @@ export class WebSocketService {
       "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'], query: { 'jToken': this.connectionDetails.token }
     };
     this._agentAsisstSocket = io(`${this.connectionDetails.agentassisturl}/koreagentassist`, webSocketConnection);
+    this.listenEvents();
     this._agentAsisstSocket.on("connect", () => {
+      this.commonEmitEvents(true);
       if(!window._agentAssistSocketEventListener){
-        // this.commonEmitEvents();
-        this.listenEvents();
         this.socketConnectFlag$.next(true);
         window._agentAssistSocketEventListener = true;
       }
@@ -194,6 +194,51 @@ export class WebSocketService {
       this.responseResolutionCommentsResponse$.next(data);
       this.addOrRemoveLoader(false);
     })
+  }
+
+  commonEmitEvents(shouldProcessResponse){
+    let customData = (this.connectionDetails?.customdata) || (this.connectionDetails?.customData);
+    
+      if(customData && this.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
+        try {
+          customData = JSON.parse(customData);
+        } catch (e) {
+          customData = {};
+           throw e;
+        }
+    }
+    
+    let parsedCustomData: any = {};
+    let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
+    let welcomeMessageParams: any = {
+      'waitTime': 2000,
+      'id': this.connectionDetails.conversationId,
+      "isSendWelcomeMessage": shouldProcessResponse,
+      'agentassistInfo' : agent_user_details,
+      'botId': this.connectionDetails.botId,
+      'sendMenuRequest': true,
+      'uId': this.handleSubjectService.userBotConversationDetails?.userId || '',
+      'sId': this.handleSubjectService.userBotConversationDetails?.sessionId || '',
+      'experience' : this.connectionDetails.channel,
+      'jToken': this.connectionDetails.token
+    }
+    if(customData && Object.keys(customData).length > 0 && this.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
+      welcomeMessageParams['customData'] = customData
+    }
+    if (this.connectionDetails.fromSAT) {
+      welcomeMessageParams['userName'] = this.connectionDetails?.endUserName !== 'Anonymous' ? this.connectionDetails?.endUserName : 'user';
+    } else {
+      welcomeMessageParams['userName'] = parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user'
+    }
+    if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
+      welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
+    } else {
+      welcomeMessageParams['autoBotId'] = '';
+    }
+    if (this.connectionDetails?.interactiveLanguage !== null && typeof this.connectionDetails?.interactiveLanguage !== 'undefined' && this.connectionDetails?.interactiveLanguage !== "''") {
+      welcomeMessageParams['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
+    }
+    this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }
 
   loaderOnTimer() {
