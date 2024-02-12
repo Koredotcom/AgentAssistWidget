@@ -440,6 +440,15 @@
                 font-weight: 700;
                 line-height: 24px;
             }
+            .coaching-desc-text {
+                color: var(--gray-600, #475467);
+                font-size: 12px;
+                font-weight: 400;
+                line-height: normal;
+                min-height: 40px;
+                display: flex;
+                align-items: center;
+            }
             .right-action-btns{
                 gap: 15px;
                 position: absolute;

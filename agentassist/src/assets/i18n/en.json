@@ -2193,5 +2193,9 @@
     "WELCOME_EVENT_MESSAGES" : "messages",
     "WELCOME_EVENT_UPDATE" : "Update",
     "SELECT_PREFERRED_LANGUAGE" : "Select preferred Language",
-    "lbl_answers_configuration": "Answers Configuarion"
+    "lbl_answers_configuration": "Answers Configuarion",
+    "AGENT_COACHING_DESC" : "Create and Manage Agent Coaching Rules to be triggered during User-Agent Interactions",
+    "AGENT_PLAYBOOK_DESC" : "Create and Manage the adherence checklist to be triggered for an Agent in a conversation with the user",
+    "AGENT_WELCOME_EVENT" : "Configure the Welcome Event to be triggered for an Agent Interacting with the Virtual Assistant",
+    "AGENT_WIDGET_SETTINGS" : "Define widgets accessibility to Agents"
 }

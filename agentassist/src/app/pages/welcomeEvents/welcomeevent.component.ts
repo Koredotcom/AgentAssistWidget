@@ -31,6 +31,7 @@ export class WelcomeeventComponent implements OnInit {
   linkedBots : any[] = [];
   showSpinner : boolean = false;
   currentBt : any;
+  isUnifiedPlatform = false;
 
   @ViewChild('newWelcomeEvent', { static: true }) newWelcomeEvent: SliderComponentComponent;
   
@@ -45,6 +46,7 @@ export class WelcomeeventComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isUnifiedPlatform =this.workflowService.isUnifiedPlatform();
     this.subscribeEvents();
     this.updateDetailsOnBotUpdation(this.workflowService.getCurrentBt(true));
   }
