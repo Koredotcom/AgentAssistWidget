@@ -125,7 +125,8 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
         taskId: this.feedbackData.uuid,
         positionId: this.feedbackData.dialogPositionId,
         'experience': this.rootService.connectionDetails?.channel,
-        "interactionType": this.rootService.activeTab == ProjConstants.ASSIST ? 'assist' : 'mybot'
+        "interactionType": this.rootService.activeTab == ProjConstants.ASSIST ? 'assist' : 'mybot',
+        "sourceMsgId" : this.feedbackData.sourceMsgId || ''
       }
       this.websocketService.emitEvents(EVENTS.agent_feedback_request, agent_assist_feedback_request);
     }
@@ -143,8 +144,12 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
   }
 
   callAgentFeedbackUsage(){
-    this.websocketService.emitEvents(EVENTS.agent_usage_feedback, this.feedbackForm.value);
-    this.formTouched = false;
+    if(this.feedbackForm.value){
+      let feedbackFormObj = JSON.parse(JSON.stringify(this.feedbackForm.value));
+      feedbackFormObj.sourceMsgId = this.feedbackData.sourceMsgId || '';
+      this.websocketService.emitEvents(EVENTS.agent_usage_feedback, feedbackFormObj);
+      this.formTouched = false;
+    }
   }
 
 }

@@ -185,6 +185,11 @@ export class CommonService {
       type: 'sentence',
       sessionId: (this.rootService.activeTab == this.projConstants.MYBOT) ? this.rootService.myBotTabSessionId : this.rootService.assistTabSessionId,
     };
+    if(automation.data.isPrompt && automation.data.componentType){
+      payloadForBE.componentType = automation.data.componentType;
+    }else if(!automation.data.isPrompt){
+      payloadForBE.partialMessage = true;
+    }
     payloadForBE = this.rootService.addSourceMsgIdToRequestParams(automation,payloadForBE);
     this.websocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE);
   }
@@ -282,7 +287,8 @@ export class CommonService {
         submitForm: feedbackData?.feedback ? true : false,
         feedback: feedbackData?.feedback ? feedbackData.feedback : '',
         feedbackDetails: feedbackData?.feedbackDetails?.length ? feedbackData.feedbackDetails : [],
-        comment: feedbackData?.comment ? feedbackData?.comment : ''
+        comment: feedbackData?.comment ? feedbackData?.comment : '',
+        sourceMsgId : assistResponseArray[assistResponseArray.length - 1].sourceMsgId || ''
       }
       assistResponseArray.push(renderResponse);
     }
@@ -440,7 +446,8 @@ export class CommonService {
       value: data?.buttons[0]?.value,
       sendData: result?.parsedPayload ? newTemp : data?.buttons[0]?.value,
       dialogId: dialogPositionId,
-      responseType: this.renderResponseType.ASSISTRESPONSE
+      responseType: this.renderResponseType.ASSISTRESPONSE,
+      sourceMsgId : data.sourceMsgId || ''
     }
     renderResponse.template = this.rootService.getTemplateHtml(renderResponse.templateRender, result);
     return renderResponse;
