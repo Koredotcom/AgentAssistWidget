@@ -71,6 +71,8 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
       dialogueDetails["childBotId"] = dialogue["childBotId"] || "";
       dialogueDetails["childBotName"] = dialogue["childBotName"] || "";
       dialogueDetails.sourceMsgId = 'fromLibrary';
+      dialogueDetails.dialogId = dialogue.dialogId;
+      dialogueDetails.taskRefId = dialogue.taskRefId;
       formattedMenuResponse[dialogue.dialogId] = dialogueDetails;
     }    
     return formattedMenuResponse;
@@ -82,11 +84,25 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
     dialog.intentName = dialog.name;
     dialog.userInput = dialog.name;
     dialog.agentRunButton = (searchType == this.projConstants.MYBOT) ? true : false;
-    dialog.traits = this.suggestionData?.traits || [];
+    dialog.traits = this.suggestionData?.traits || [];    
+    if(!dialog.dialogId){
+      dialog = this.matchDialogIdfromMenuResponse(dialog)
+    }
     // let runDialogueObject = Object.assign({}, this.searchConentObject);
     // Object.assign(runDialogueObject, dialog);
     this.handleSubjectService.setRunButtonClickEvent(dialog);
     // this.handleSendCopyEvent(dialog, searchType);
+  }
+
+  matchDialogIdfromMenuResponse(dialog){    
+    let taskRefId = dialog.taskRefId;
+    if(taskRefId && this.menuResponse && Object.keys(this.menuResponse)?.length > 0){
+      let response : any = Object.values(this.menuResponse)?.find((obj : any) => obj.taskRefId === taskRefId);
+      if(response && response.dialogId){
+        dialog.dialogId = response.dialogId;
+      }
+    }
+    return dialog;
   }
 
   // handleSendCopyEvent(dialog, searchType){

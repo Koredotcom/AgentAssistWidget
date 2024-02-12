@@ -84,6 +84,13 @@ export class CommonService {
     connectionDetails.childBotId = dialog.childBotId;
     connectionDetails.childBotName = dialog.childBotName;
     connectionDetails.sourceMsgId = dialog.sourceMsgId || '';
+
+    if(dialog.taskRefId){
+      connectionDetails.taskRefId = dialog.taskRefId
+    }
+    if(dialog.dialogId){
+      connectionDetails.dialogId = dialog.dialogId
+    }
     if (dialog.userInput) {
       connectionDetails.userInput = dialog.userInput;
     }
@@ -216,6 +223,12 @@ export class CommonService {
       connectionDetails.childBotName = this.rootService?.childBotDetails.childBotName;
       connectionDetails.childBotId = this.rootService?.childBotDetails.childBotId;
       connectionDetails.sourceMsgId = dialog.sourceMsgId || '';
+      if(dialog.taskRefId){
+        connectionDetails.taskRefId = dialog.taskRefId
+      }
+      if(dialog.dialogId){
+        connectionDetails.dialogId = dialog.dialogId
+      }
       if (this.rootService.connectionDetails?.interactiveLanguage && typeof this.rootService.connectionDetails?.interactiveLanguage == 'string' && this.rootService.connectionDetails?.interactiveLanguage != "''") {
         connectionDetails['language'] = this.rootService.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
       }

@@ -192,6 +192,14 @@ export class RootService {
       agent_assist_agent_request_params['traits'] = data.traits
     }
 
+    if(data.taskRefId){
+      agent_assist_agent_request_params['taskRefId'] = data.taskRefId
+    }
+
+    if(data.dialogId){
+      agent_assist_agent_request_params['dialogId'] = data.dialogId
+    }
+
     agent_assist_agent_request_params = this.addSourceMsgIdToRequestParams(data,agent_assist_agent_request_params)
     
     return agent_assist_agent_request_params;
@@ -620,6 +628,14 @@ export class RootService {
     }
     if(Array.isArray(data.traits) && data?.traits?.length){
       agent_assist_request['traits'] = data.traits
+    }
+
+    if(data.taskRefId){
+      agent_assist_request['taskRefId'] = data.taskRefId
+    }
+
+    if(data.dialogId){
+      agent_assist_request['dialogId'] = data.dialogId
     }
 
     agent_assist_request = this.addSourceMsgIdToRequestParams(data,agent_assist_request)
