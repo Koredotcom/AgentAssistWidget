@@ -29,6 +29,7 @@ export class AppComponent implements OnInit, OnDestroy{
   widgetSettings : any;
   widgetLoader : boolean = true;
   showFeedback : boolean = false;
+  timeoutId : any;
 
   constructor(
     private webSocketService: WebSocketService,
@@ -80,7 +81,8 @@ export class AppComponent implements OnInit, OnDestroy{
       console.log(response, "response");
       if (response && Object.keys(response)?.length > 0) {
         this.showFeedback = true;
-        setTimeout(() => {
+        clearTimeout(this.timeoutId);
+        this.timeoutId = setTimeout(() => {
           this.showFeedback = false;
         }, 5000);
       }

@@ -23,7 +23,7 @@
   <app-nudges></app-nudges>
 </ng-container>
 
-<ng-container>
+<ng-container *ngIf="showFeedback">
   <div class="toast-custom-msg-container">
     <div class="toast-msg-custom">
       <div class="icon_block">
@@ -34,7 +34,7 @@
       <div class="toast-content-info">
         <h1>Thanks for the feedback</h1>
       </div>
-      <button class="close-toast-msg">
+      <button class="close-toast-msg" (click)="closeFeedback()">
         <i class="krIocnsFont-close-md"></i>
       </button>
     </div>
