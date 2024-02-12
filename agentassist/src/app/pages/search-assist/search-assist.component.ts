@@ -36,7 +36,7 @@ export class SearchAssistComponent implements OnInit {
   createFormStatus : boolean = undefined;
   searchAssistUrl : string = "https://searchassist-pilot.kore.ai/";
   searchAssistKeys: any = ['searchAssistbotId', 'domain', 'clientId', 'clientSecret'];
-  isSearchAssistEnabled: boolean = false;
+  isSearchAssistEnabled: boolean = true;
   loading = false;
   constructor(private localstorage: LocalStoreService, private service: ServiceInvokerService,
     private cdr: ChangeDetectorRef, private dialog: MatDialog,
@@ -45,12 +45,16 @@ export class SearchAssistComponent implements OnInit {
     private router: Router
     ) { }
   ngOnInit(): void {
-    this.loading = true;
+    // this.loading = true;
   }
     
 
   ngAfterViewInit() {
-    this.getAgentAssistSettings();
+    // this.getAgentAssistSettings();
+    this.getAccountId();
+    setTimeout(() => {
+      this.searchFormChangeMode(); 
+    });
   }
 
   getAgentAssistSettings() {
