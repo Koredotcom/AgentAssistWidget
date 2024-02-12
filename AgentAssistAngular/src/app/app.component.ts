@@ -28,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy{
   connectionDetails: any = {};
   widgetSettings : any;
   widgetLoader : boolean = true;
+  showFeedback : boolean = false;
 
   constructor(
     private webSocketService: WebSocketService,
@@ -73,6 +74,16 @@ export class AppComponent implements OnInit, OnDestroy{
         name: 'agent_assist',
       };
       window.parent.postMessage(message, '*');
+    });
+
+    this.subs.sink = this.webSocketService.agentFeedbackResponse$.subscribe((response: any) => {
+      console.log(response, "response");
+      if (response && Object.keys(response)?.length > 0) {
+        this.showFeedback = true;
+        setTimeout(() => {
+          this.showFeedback = false;
+        }, 5000);
+      }
     });
   }
 
@@ -281,6 +292,10 @@ export class AppComponent implements OnInit, OnDestroy{
       this.initiateSocketConnection(params);
     });
 
+  }
+
+  closeFeedback(){
+    this.showFeedback = false;
   }
 
 }
