@@ -2192,5 +2192,6 @@
     "WELCOME_EVENT_GREET_MSG" : "Welcome Messages",
     "WELCOME_EVENT_MESSAGES" : "messages",
     "WELCOME_EVENT_UPDATE" : "Update",
-    "SELECT_PREFERRED_LANGUAGE" : "Select preferred Language"
+    "SELECT_PREFERRED_LANGUAGE" : "Select preferred Language",
+    "lbl_answers_configuration": "Answers Configuarion"
 }
