@@ -3441,13 +3441,14 @@ var message= {
 	agentAssistCustomTemplate.prototype.bindEvents = function (messageHtml) {
 		chatInitialize=this.chatInitialize;
 		helpers=this.helpers;
-		$(messageHtml).find('.selectTemplateDropdowm').on('change', function (e) {
-			e.preventDefault();
-			e.stopPropagation();
-			$(".chatInputBox").text(this.value)
-			var k = $.Event('keydown', { which: 13 });
-			k.keyCode = 13
-			$('.chatInputBox').trigger(k);
+		$(".kore-chat-window").on('change', '.selectTemplateDropdowm', function (e) {
+			localStorage.setItem('innerTextValue', JSON.stringify(this.value));
+			// e.preventDefault();
+			// e.stopPropagation();
+			// $(".chatInputBox").text(this.value)
+			// var k = $.Event('keydown', { which: 13 });
+			// k.keyCode = 13
+			// $('.chatInputBox').trigger(k);
 
 		});
 		/* Inline form submit click function starts here*/
