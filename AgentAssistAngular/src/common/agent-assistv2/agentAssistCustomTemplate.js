@@ -3440,7 +3440,7 @@ var message= {
 	agentAssistCustomTemplate.prototype.bindEvents = function (messageHtml) {
 		chatInitialize=this.chatInitialize;
 		helpers=this.helpers;
-		$(".kore-chat-window").on('change', '.selectTemplateDropdowm', function (e) {
+		$(messageHtml).on('change', '.selectTemplateDropdowm', function (e) {
 			localStorage.setItem('innerTextValue', JSON.stringify(this.value));
 			// e.preventDefault();
 			// e.stopPropagation();
