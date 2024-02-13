@@ -10,6 +10,7 @@
     <div class="header-sec-top">
         <div class="left-actions">
             <div class="main-heading">Playbook</div>
+            <div class="playbook-desc-text" *ngIf="isUnifiedPlatform">{{'AGENT_PLAYBOOK_DESC' | translate}}</div>
             <ul class="nav nav-tabs d-none">
                 <li class="nav-item">
                   <a class="nav-link " data-toggle="tab" [ngClass]="{'active':checkListType == 'primary'}"  (click)="checkListType = 'primary'">STATIC</a>

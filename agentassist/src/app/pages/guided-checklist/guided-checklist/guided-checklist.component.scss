@@ -141,6 +141,15 @@
                     color: #101828;
                     text-align: left;
                 }
+                .playbook-desc-text {
+                    color: var(--gray-600, #475467);
+                    font-size: 12px;
+                    font-weight: 400;
+                    line-height: normal;
+                    min-height: 40px;
+                    display: flex;
+                    align-items: center;
+                }
                 .nav-tabs{
                     li{
                         a{

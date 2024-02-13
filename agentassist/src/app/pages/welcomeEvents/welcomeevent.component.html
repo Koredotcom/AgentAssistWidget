@@ -1,7 +1,7 @@
 <div class="welcome-events-wrapper">
     <div class="header-data">
         <div class="title">
-            <p>{{'WELCOME_EVENT_TITLE' | translate}}</p>
+            <p>{{ (isUnifiedPlatform ? 'AGENT_WELCOME_EVENT' : 'WELCOME_EVENT_TITLE') | translate}}</p>
             <i class="icon-sa-info" tooltipClass="tooltip-global-styles" placement="right" ngbTooltip="{{'WELCOME_EVENT_TOOLTIP' | translate}}"></i>
         </div>
         <div class="desc-text">{{'WELCOME_EVENT_DESC' | translate}}</div>
