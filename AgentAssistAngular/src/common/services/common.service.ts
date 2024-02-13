@@ -1359,6 +1359,10 @@ export class CommonService {
     $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_').on("click", '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_', function (e) {
       mythis.HandleClickAndSendRequest(tab, connectionObj, e)
     });
+
+    $('.card_body_acc_content.kore-chat-window').on('change', '.selectTemplateDropdowm',function (e) {      
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    }); 
   }
 
   getInitialSentiChartOptions(object): EChartsOption | any {
