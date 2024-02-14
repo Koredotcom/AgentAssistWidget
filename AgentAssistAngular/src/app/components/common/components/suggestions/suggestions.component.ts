@@ -87,17 +87,20 @@ export class SuggestionsComponent {
       searchObj.value = faq.displayName;
       searchObj.question = faq.question;
       // searchObj.searchFrom = this.commonService.activeTab;
-      this.emitSearchRequest(searchObj.value, false);
+      this.emitSearchRequest(searchObj.value, false, faq);
     }
   }
 
-  emitSearchRequest(value, isSearch) {
+  emitSearchRequest(value, isSearch, faq) {
     let connectionDetails: any = Object.assign({}, this.rootService.connectionDetails);
     connectionDetails.value = value;
     connectionDetails.isSearch = isSearch;
     // connectionDetails.positionId = searchObj?.positionId;
     if (connectionDetails.interactiveLanguage && typeof connectionDetails.interactiveLanguage == 'string' && connectionDetails.interactiveLanguage != "''") {
       connectionDetails['language'] = connectionDetails.interactiveLanguage; // Return the default value for null, undefined, or "''"
+    }
+    if(faq.sourceMsgId){
+      connectionDetails['sourceMsgId'] = faq.sourceMsgId;
     }
     let agent_assist_request_params = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request_params);

@@ -139,7 +139,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     this.getSearchResults({target : { value : suggestion}});
   }
 
-  emitSearchRequest(value, isSearch) {
+  emitSearchRequest(value, isSearch, faq?) {
     // this.showSpinner = true;
     let connectionDetails: any = Object.assign({}, this.rootService.connectionDetails);
     connectionDetails.value = value;
@@ -147,6 +147,9 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     // connectionDetails.positionId = searchObj?.positionId;
     if (connectionDetails.interactiveLanguage && typeof connectionDetails.interactiveLanguage == 'string' && connectionDetails.interactiveLanguage != "''") {
       connectionDetails['language'] = connectionDetails.interactiveLanguage; // Return the default value for null, undefined, or "''"
+    }
+    if(faq && faq.sourceMsgId){
+      connectionDetails['sourceMsgId'] = faq.sourceMsgId;
     }
     let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
@@ -248,7 +251,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
       searchObj.value = faq.displayName;
       searchObj.question = faq.question;
       // searchObj.searchFrom = this.commonService.activeTab;
-      this.emitSearchRequest(searchObj.value, false);
+      this.emitSearchRequest(searchObj.value, false, faq);
     }
   }
 
