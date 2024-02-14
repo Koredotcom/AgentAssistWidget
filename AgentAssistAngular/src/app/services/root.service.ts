@@ -316,7 +316,8 @@ export class RootService {
               taskRefId: faq.taskRefId,
               showMoreButton: true,
               showLessButton: false,
-              displayName: faq.displayName
+              displayName: faq.displayName,
+              sourceMsgId : response.sourceMsgId || ''
             }
             faqObject.answer.push(object);
           }
