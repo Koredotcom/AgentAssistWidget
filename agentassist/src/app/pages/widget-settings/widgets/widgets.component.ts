@@ -112,8 +112,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         }),
         urlOpenBehaviour : this.fb.group({
           urlOpenType: ['defaultBehaviour'],
-          defaultBehaviour: [isUpdate ? (obj.urlOpenBehaviour?.isEnabled??false) : false],
-          sendPostEvent: [isUpdate ? (obj.urlOpenBehaviour?.isEnabled??false) : false]
+          defaultBehaviour: [isUpdate ? (obj.urlOpenBehaviour?.defaultBehaviour ?? false) : false],
+          sendPostEvent: [isUpdate ? (obj.urlOpenBehaviour?.sendPostEvent ?? false) : false]
         }),
         chat: this.fb.group(this.commongSettingsForm(isUpdate, obj?.chat)),
         voice: this.fb.group(this.commongSettingsForm(isUpdate, obj?.voice)),
@@ -504,8 +504,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     obj[val] = true;
     obj.urlOpenType = val;
     (((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('urlOpenBehaviour') as FormGroup).patchValue(obj);
-    console.log(this.agentAssistFormGroup)
-
   }
 
 }
