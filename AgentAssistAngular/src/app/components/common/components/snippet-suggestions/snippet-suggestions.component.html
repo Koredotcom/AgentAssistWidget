@@ -3,14 +3,9 @@
     <div class="faq-s-header">
       <div class="titles-info-heading">
         <h1 class="text-truncate" *ngIf="snippet.title">{{snippet.title}}</h1>
-        <!-- <h1 class="text-truncate" *ngIf="snippet.page_url && snippet.title"> <a class="moreText" role="link" [href]="snippet.page_url" target="_blank" >{{snippet.title}}</a></h1> -->
-
         <div class="sent-msg-text" *ngIf="snippet.send">{{ 'SENT' | translate }} </div>
 
       </div>
-      <!-- <button class="solidbtn" *ngIf="snippet.page_url">
-        <a [href]="snippet.page_url" target="_blank">{{'KNOW_MORE' | translate}}</a>
-      </button> -->
       <div class="faq-actions" *ngIf="!hideActionButtons && snippet.contentArray.length > 0"
         [ngClass]="{'faq-actions-top' : !snippet.title}">
         <ng-container>
@@ -48,7 +43,7 @@
               <ng-container *ngFor="let source of snippet.sources;let ii = index">
                 <div class="source-tag" *ngIf="source.url">
                   <span>{{ii+1}}</span>
-                  <a [href]="source.url" target="_blank" ngbTooltip="{{source.title}}">{{source?.title || 'Know More'}}</a>
+                  <a (click)="openurlInBrowser(source.url)" ngbTooltip="{{source.title}}">{{source?.title || 'Know More'}}</a>
                 </div>
 
               </ng-container>

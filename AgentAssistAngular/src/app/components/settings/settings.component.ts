@@ -95,6 +95,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
   //   this.proactiveToggle(proactiveModeStatus);
   // }
 
+  openurlInBrowser(url){
+    this.rootService.openurlInBrowser(url);
+  }
+
   ngOnDestroy(){
     this.subs.unsubscribe();
   }

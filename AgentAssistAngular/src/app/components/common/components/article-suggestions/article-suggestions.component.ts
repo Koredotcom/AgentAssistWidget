@@ -90,6 +90,9 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
     this.viewCount = (this.articlesList && this.articlesList?.length <= 2) ? this.articlesList?.length : 2;
   }
 
+  openurlInBrowser(url){
+    this.rootService.openurlInBrowser(url);
+  }
 }
 
 

@@ -104,6 +104,10 @@ export class RootService {
               "script": ""
           }
       }
+    },
+    "urlBehaviour": {
+      "defaultBehaviour": true,
+      "sendEvent": false
     }
   }
 
@@ -674,5 +678,18 @@ export class RootService {
   }
 
 
+  openurlInBrowser(url){
+    if(this.settingsData?.urlBehaviour && this.settingsData?.urlBehaviour?.sendEvent){
+      let message = {
+        method: 'AgentAssist.UrlClickedMessage',
+        from: 'agent_assist',
+        url : url
+      };
+      console.log(message, "message***********");
+      window.parent.postMessage(message, '*');
+    }else{
+      window.open(url, '_blank');
+    }
+  }
 
 }
