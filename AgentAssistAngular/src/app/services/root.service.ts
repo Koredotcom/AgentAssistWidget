@@ -680,7 +680,7 @@ export class RootService {
 
 
   openurlInBrowser(url){
-    if(this.settingsData?.urlBehaviour && this.settingsData?.urlBehaviour?.sendEvent){
+    if(this.settingsData?.urlOpenBehaviour && this.settingsData?.urlOpenBehaviour?.sendPostEvent){
       let message = {
         method: 'AgentAssist.UrlClickedMessage',
         from: 'agent_assist',
