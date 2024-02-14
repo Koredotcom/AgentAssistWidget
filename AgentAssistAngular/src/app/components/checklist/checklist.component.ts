@@ -378,7 +378,9 @@ export class ChecklistComponent {
   selectNextStage() {
     let allStepsCompleteInStage = this.selectNextStep();
     if (allStepsCompleteInStage && this.checklists[this.selcLinx]?.stages[this.selsTinx + 1]) {
-      this.selectStage(this.selsTinx + 1);
+      if(this.checklists[this.selcLinx]?.stages[this.selsTinx + 1].name != 'Close' || this.isProceedToClose){
+        this.selectStage(this.selsTinx + 1);
+      }
     }
   }
 
