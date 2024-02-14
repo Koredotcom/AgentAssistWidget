@@ -1,6 +1,6 @@
 {
     "TRIGGER_LISTEN" : "Listening for triggers",
-    "ASSIST_EMPTY_MSG" : "AgentAssist is actively listing to your conversation and ready to assist automatically when triggered.",
+    "ASSIST_EMPTY_MSG" : "AgentAssist is actively listening to your conversation and ready to assist automatically when triggered.",
     "MYBOT_TRIGGET_LISTEN" : "No active My Bot tasks presently",
     "MYBOT_EMTPY_MSG" : "To start a task on My Bot, go to the search tab and select the \"Run with agent inputs\" option for your desired task.",
     "PROACTIVE_MODE": "Proactive Mode",
