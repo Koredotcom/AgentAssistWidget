@@ -87,4 +87,8 @@ export class FileSuggestionsComponent {
     this.moreClick = false;
     this.viewCount = (this.filesList && this.filesList?.length <= 2) ? this.filesList?.length : 2;
   }
+
+  openurlInBrowser(url){
+    this.rootService.openurlInBrowser(url);
+  }
 }

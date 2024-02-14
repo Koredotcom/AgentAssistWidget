@@ -93,4 +93,8 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     this.viewCount = (this.searchedSnippetList && this.searchedSnippetList?.length <= 2) ? this.searchedSnippetList?.length : 2;
   }
 
+  openurlInBrowser(url){
+    this.rootService.openurlInBrowser(url);
+  }
+
 }
