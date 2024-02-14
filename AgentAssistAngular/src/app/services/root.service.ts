@@ -105,9 +105,9 @@ export class RootService {
           }
       }
     },
-    "urlBehaviour": {
+    "urlOpenBehaviour": {
       "defaultBehaviour": true,
-      "sendEvent": false
+      "sendPostEvent": false
     }
   }
 
