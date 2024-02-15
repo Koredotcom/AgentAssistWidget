@@ -434,6 +434,10 @@
         .header-sec-top {
             padding: 20px 20px 10px 20px;
             flex-direction: column;
+            align-items: start !important;
+            button{
+                height: 40px !important;
+            }
             .main-heading{
                 color: var(--gray-900, #101828);
                 font-size: 16px;

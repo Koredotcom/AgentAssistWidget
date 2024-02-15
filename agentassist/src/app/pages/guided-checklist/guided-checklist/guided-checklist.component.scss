@@ -131,16 +131,20 @@
         .header-sec-top {
             padding: 20px 20px 8px;
             display: flex;
-            align-items: center;
+            align-items: start;
             gap: 16px;
+            button{
+                height: 40px !important;
+            }
             .left-actions {
-                .main-heading{
-                    font-size: 16px;
-                    font-weight: 700;
-                    line-height: 24px;
-                    color: #101828;
-                    text-align: left;
+                align-items: start;
+                flex-direction: column;
+                gap: 0px;
+                .heading-with-tabs{
+                  display: flex;
+                  gap: 15px;
                 }
+
                 .playbook-desc-text {
                     color: var(--gray-600, #475467);
                     font-size: 12px;
