@@ -53,7 +53,7 @@ export class AuthInterceptor implements HttpInterceptor {
       _reqAdditions.setHeaders['iid'] = this.workflowService?.getCurrentBtSmt(true)?._id || 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9';
     }
     _reqAdditions.setHeaders['app-language'] = this.localStoreService.appLanguage || 'en';
-    // _reqAdditions.setHeaders['isagentassist'] = true;
+    _reqAdditions.setHeaders['isagentassist'] = 'true';
 
     if (req.url.includes('/deflectai/apps') && req.method === 'POST') {
       _reqAdditions.setHeaders['bot-language'] = req.body.defaultLanguage || 'en';
