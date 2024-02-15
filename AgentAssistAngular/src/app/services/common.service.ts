@@ -234,9 +234,9 @@ export class CommonService {
       if(dialog.dialogId){
         connectionDetails.dialogId = dialog.dialogId
       }
-      if (this.rootService.connectionDetails?.interactiveLanguage && typeof this.rootService.connectionDetails?.interactiveLanguage == 'string' && this.rootService.connectionDetails?.interactiveLanguage != "''") {
-        connectionDetails['language'] = this.rootService.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
-      }
+      // if (this.rootService.connectionDetails?.interactiveLanguage && typeof this.rootService.connectionDetails?.interactiveLanguage == 'string' && this.rootService.connectionDetails?.interactiveLanguage != "''") {
+      //   connectionDetails['language'] = this.rootService.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
+      // }
       if (intent) {
         connectionDetails.intentName = dialog.intentName;
         connectionDetails.childBotName = this.rootService.childBotDetails.childBotName;

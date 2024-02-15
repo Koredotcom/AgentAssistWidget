@@ -119,6 +119,7 @@ export class WebSocketService {
       requestParams.source = source;
       requestParams.experience = this.rootService.connectionDetails?.channel;
       requestParams.traceId = uuids;
+      requestParams.language = this.rootService.connectionDetails?.interactiveLanguage;
     }
 
     if(this.loaderEvents[eventName]) {
