@@ -176,7 +176,8 @@
         width: 100%;
         align-items: center;
         z-index: 1;
-        height: calc(100vh - 190px);
+        height: calc(100vh - 184px);
+        top: 122px;
     }
     .header-sec-top {
         display: flex;
@@ -1154,6 +1155,5 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .init-loading{
     position: absolute;
-    left: 50%;
-    top: 50%;
+    height: 100%;
 }

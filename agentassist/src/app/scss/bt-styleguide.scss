@@ -3921,9 +3921,7 @@ $numbers: 1000;
 }
 
 
-.if-load-in-unified-agentassist, app-agentassist-root, .modal-ngb-wrapper-window, .flow-creation-full-modal{
-    // position: relative;
-    // Buttons
+
     ._btn {
         border-radius: 8px;
         border: 1px solid transparent;
@@ -4820,9 +4818,9 @@ $numbers: 1000;
             }
         }
     }
-    #toast-container{
-        top: 65px !important;
-    }
+    // #toast-container{
+    //     top: 65px !important;
+    // }
     .checklist-creation-wrapper-container {
         .heading-actions-block {
             .btn-actions {
@@ -4847,5 +4845,4 @@ $numbers: 1000;
             }
         }
     }
-}
 }

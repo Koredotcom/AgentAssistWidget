@@ -437,7 +437,7 @@ $mediaSmall: "(max-width: 767px)";
 %widthHundred{width:100%;}
 //Width Ends Here
 
-
+.single-spa-agentassist, .single-spa-anlagentassist{
 //Buttons Ends Here
 textarea::placeholder{
 	font-size: $font-md;
@@ -662,85 +662,403 @@ input::placeholder{
 }
 
 // Toast Messages
+// #toast-container{
+//     position: fixed;
+//     z-index: 100001;
+//     top: 8px;
+//     right: 10px;
+//     // left: auto;
+//     width: auto;	
+// 	.toast-success {
+// 		background-color: $whiteColor;
+// 		max-width: 500px;
+// 		min-width: 230px;
+// 		width: auto !important;
+// 		box-shadow: none !important;
+// 		color: #51A351 !important;
+// 		border: 1px solid #51A351;
+// 		border-left: 4px solid #51A351;
+// 		font-size: $font-md;
+// 		padding: 10px !important;
+// 		background-image: none !important;
+// 		padding-right: 25px !important;
+// 		.toast-close-button{
+// 		  color: #51A351 !important;
+// 		  height: 10px !important;
+// 		  position: absolute;
+// 		  width: 10px;
+// 		  right: 10px;
+// 		  padding: 0;
+// 		  border: 0;
+// 		  top: 5px;
+// 		}
+// 	}
+// 	.toast-error {
+// 	background-color: $whiteColor;
+// 	max-width: 500px;
+// 	min-width: 230px;
+// 	width: auto !important;
+// 	box-shadow: none !important;
+// 	color: $warningRed !important;
+// 	border: 1px solid $warningRed;
+// 	border-left: 4px solid $warningRed;
+// 	font-size: $font-md;
+// 	padding: 10px !important;
+// 	background-image: none !important;
+// 	padding-right: 25px !important;
+// 	.toast-close-button{
+// 		color: $warningRed !important;
+// 		height: 10px !important;
+// 		position: absolute;
+// 		width: 10px;
+// 		right: 10px;
+// 		padding: 0;
+// 		border: 0;
+// 		top: 5px;
+// 	}
+// 	}
+// 	.toast-warning {
+// 		background-color: $whiteColor;
+// 		max-width: 500px;
+// 		min-width: 230px;
+// 		width: auto !important;
+// 		box-shadow: none !important;
+// 		color: $orange !important;
+// 		border: 1px solid $orange;
+// 		border-left: 4px solid $orange;
+// 		font-size: $font-md;
+// 		padding: 10px !important;
+// 		padding-right: 25px !important;
+// 		// background-image: none !important;
+// 		.toast-close-button{
+// 			color: $orange !important;
+// 			height: 10px !important;
+// 			position: absolute;
+// 			width: 10px;
+// 			right: 10px;
+// 			padding: 0;
+// 			border: 0;
+// 			top: 5px;
+// 		}
+// 	}
+// }
+
+
 #toast-container{
     position: fixed;
     z-index: 100001;
     top: 8px;
     right: 10px;
-    // left: auto;
-    width: auto;	
-	.toast-success {
-		background-color: $whiteColor;
-		max-width: 500px;
-		min-width: 230px;
-		width: auto !important;
-		box-shadow: none !important;
-		color: #51A351 !important;
-		border: 1px solid #51A351;
-		border-left: 4px solid #51A351;
-		font-size: $font-md;
-		padding: 10px !important;
-		background-image: none !important;
-		padding-right: 25px !important;
-		.toast-close-button{
-		  color: #51A351 !important;
-		  height: 10px !important;
-		  position: absolute;
-		  width: 10px;
-		  right: 10px;
-		  padding: 0;
-		  border: 0;
-		  top: 5px;
-		}
-	}
-	.toast-error {
-	background-color: $whiteColor;
-	max-width: 500px;
-	min-width: 230px;
-	width: auto !important;
-	box-shadow: none !important;
-	color: $warningRed !important;
-	border: 1px solid $warningRed;
-	border-left: 4px solid $warningRed;
-	font-size: $font-md;
-	padding: 10px !important;
-	background-image: none !important;
-	padding-right: 25px !important;
-	.toast-close-button{
-		color: $warningRed !important;
-		height: 10px !important;
-		position: absolute;
-		width: 10px;
-		right: 10px;
-		padding: 0;
-		border: 0;
-		top: 5px;
-	}
-	}
-	.toast-warning {
-		background-color: $whiteColor;
-		max-width: 500px;
-		min-width: 230px;
-		width: auto !important;
-		box-shadow: none !important;
-		color: $orange !important;
-		border: 1px solid $orange;
-		border-left: 4px solid $orange;
-		font-size: $font-md;
-		padding: 10px !important;
-		padding-right: 25px !important;
-		// background-image: none !important;
-		.toast-close-button{
-			color: $orange !important;
-			height: 10px !important;
-			position: absolute;
-			width: 10px;
-			right: 10px;
-			padding: 0;
-			border: 0;
-			top: 5px;
-		}
-	}
+    width: auto;
+    .toast-success{
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        margin: 0 0 6px;
+        color: #FFFFFF;
+        box-shadow: 0px 10px 15px -3px rgba(16, 24, 40, 0.1), 0px 4px 6px -4px rgba(16, 24, 40, 0.1);
+        padding: 12px 32px 12px 45px !important;
+        border: 1px solid #BBF7D0;
+        border-radius: 6px;
+        background: #F0FDF4;
+        min-width: 250px;
+        max-width: 316px;
+        background-image: none !important;
+        &::before{
+            content: "\e984";
+            font-family: 'icomoon-agentassist' !important;
+            speak: never;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            /* Better Font Rendering =========== */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: absolute;
+            color: #22C55E;
+            left: 20px;
+            top: auto;
+            font-size: 14px;
+        }
+        .toast-close-button{
+            position: absolute;
+            top: auto;
+            right: 10px;
+            line-height: normal;
+            font-size: 10px;
+            cursor: pointer;
+            width: 12px;
+            height: 12px;
+            margin: 0;
+            opacity: 1 !important;
+			background-image: none;
+            &::before{
+                content: "\e902";
+                font-family: 'icomoon-agentassist' !important;
+                speak: never;
+                font-style: normal;
+                font-weight: normal;
+                font-variant: normal;
+                text-transform: none;
+                line-height: 1;
+                /* Better Font Rendering =========== */
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                position: absolute;
+                color: #22C55E;
+                top: 0;
+                left: 0;
+                font-size: 12px;
+				background-image: none;
+            }
+            span{
+                display: none;
+            }
+        }
+        .toast-message{
+            font-weight: 400;
+            font-size: 13px;
+            line-height: 20px;
+            color: #15803D;
+            font-feature-settings: 'salt' on;
+        }
+        .gradient-overlay-toast-message {
+            .close-toast{
+                color: #15803D !important;
+            }
+        }
+    }
+    .toast-warning{
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        margin: 0 0 6px;
+        color: #B45309;
+        box-shadow: 0px 10px 15px -3px rgba(16, 24, 40, 0.1), 0px 4px 6px -4px rgba(16, 24, 40, 0.1);
+        padding: 12px 32px 12px 45px !important;
+        border: 1px solid #FDE68A;
+        border-radius: 6px;
+        background: #FFFBEB;
+        min-width: 250px;
+        max-width: 316px;
+        background-image: none !important;
+        &::before{
+            content: "\e922";
+            font-family: 'icomoon-agentassist' !important;
+            speak: never;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            /* Better Font Rendering =========== */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: absolute;
+            color: #B45309;
+            left: 20px;
+            top: auto;
+            font-size: 12px;
+        }
+        .toast-close-button{
+            position: absolute;
+            top: auto;
+            right: 10px;
+            line-height: normal;
+            font-size: 10px;
+            cursor: pointer;
+            width: 12px;
+            height: 12px;
+            margin: 0;
+            opacity: 1 !important;
+			background-image: none;
+            &::before{
+                content: "\e902";
+                font-family: 'icomoon-agentassist' !important;
+                speak: never;
+                font-style: normal;
+                font-weight: normal;
+                font-variant: normal;
+                text-transform: none;
+                line-height: 1;
+                /* Better Font Rendering =========== */
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                position: absolute;
+                color: #B45309;
+                top: 0;
+                left: 0;
+                font-size: 12px;
+				background-image: none;
+            }
+            span{
+                display: none;
+            }
+        }
+        .toast-message{
+            font-weight: 400;
+            font-size: 13px;
+            line-height: 20px;
+            color: #B45309;
+            font-feature-settings: 'salt' on;
+        }
+    }
+    .toast-error{
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        margin: 0 0 6px;
+        color: #B91C1C;
+        box-shadow: 0px 10px 15px -3px rgba(16, 24, 40, 0.1), 0px 4px 6px -4px rgba(16, 24, 40, 0.1);
+        padding: 12px 32px 12px 45px !important;
+        border: 1px solid #FECACA;
+        border-radius: 6px;
+        background: #FEF2F2;
+        min-width: 250px;
+        max-width: 316px;
+        background-image: none !important;
+        &::before{
+            content: "\e98e";
+            font-family: 'icomoon-agentassist' !important;
+            speak: never;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            /* Better Font Rendering =========== */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: absolute;
+            color: #B91C1C;
+            left: 20px;
+            top: auto;
+            font-size: 14px;
+        }
+        .toast-close-button{
+            position: absolute;
+            top: auto;
+            right: 10px;
+            line-height: normal;
+            font-size: 10px;
+            cursor: pointer;
+            width: 12px;
+            height: 12px;
+            margin: 0;
+            opacity: 1 !important;
+			background-image: none;
+            &::before{
+                content: "\e902";
+                font-family: 'icomoon-agentassist' !important;
+                speak: never;
+                font-style: normal;
+                font-weight: normal;
+                font-variant: normal;
+                text-transform: none;
+                line-height: 1;
+                /* Better Font Rendering =========== */
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                position: absolute;
+                color: #B91C1C;
+                top: 0;
+                left: 0;
+                font-size: 12px;
+				background-image: none;
+            }
+            span{
+                display: none;
+            }
+        }
+        .toast-message{
+            font-weight: 400;
+            font-size: 13px;
+            line-height: 20px;
+            color: #B91C1C;
+            font-feature-settings: 'salt' on;
+        }
+    }
+    .toast-info{
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        margin: 0 0 6px;
+        color: #3537B0;
+        box-shadow: 0px 10px 15px -3px rgba(16, 24, 40, 0.1), 0px 4px 6px -4px rgba(16, 24, 40, 0.1);
+        padding: 12px 32px 12px 45px !important;
+        border: 1px solid #85B7FE;
+        border-radius: 6px;
+        background: #F3F8FF;
+        min-width: 250px;
+        max-width: 316px;
+        background-image: none !important;
+        &::before{
+            content: "\e937";
+            font-family: 'icomoon-agentassist' !important;
+            speak: never;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            /* Better Font Rendering =========== */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: absolute;
+            color: #3537B0;
+            left: 20px;
+            top: auto;
+            font-size: 14px;
+        }
+        .toast-close-button{
+            position: absolute;
+            top: auto;
+            right: 10px;
+            line-height: normal;
+            font-size: 10px;
+            cursor: pointer;
+            width: 12px;
+            height: 12px;
+            margin: 0;
+            opacity: 1 !important;
+			background-image: none;
+            &::before{
+                content: "\e902";
+                font-family: 'icomoon-agentassist' !important;
+                speak: never;
+                font-style: normal;
+                font-weight: normal;
+                font-variant: normal;
+                text-transform: none;
+                line-height: 1;
+                /* Better Font Rendering =========== */
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                position: absolute;
+                color: #3537B0;
+                top: 0;
+                left: 0;
+                font-size: 12px;
+				background-image: none;
+            }
+            span{
+                display: none;
+            }
+        }
+        .toast-message{
+            font-weight: 400;
+            font-size: 13px;
+            line-height: 20px;
+            color: #3537B0;
+            font-feature-settings: 'salt' on;
+        }
+    }
 }
 
 //ProTip 
@@ -895,4 +1213,5 @@ input::placeholder{
 
 .uContainerWidth {
     width: 100% !important;
+}
 }
