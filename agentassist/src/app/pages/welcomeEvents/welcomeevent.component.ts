@@ -110,6 +110,9 @@ export class WelcomeeventComponent implements OnInit {
 
   updateApi(postData){
     this.showSpinner = true;
+    if(this.isUnifiedPlatform) {
+      this.streamId = this.workflowService.getCurrentBtSmt(true)._id;
+    }
     this.service.invoke('post.welcomeevent', { streamId: this.streamId }, postData).subscribe((data) => {
       this.showSpinner = false;
 
