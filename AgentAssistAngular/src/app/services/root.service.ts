@@ -536,10 +536,10 @@ export class RootService {
   //   return res;
   // }
 
-  handleEmptyLine(answer, quotflag?) {
+  handleEmptyLine(answer, quotflag?, type?) {
     let eleanswer = '';
     if (typeof answer === 'string') {
-      eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
+      eleanswer = (type === 'faq') ? answer.replace(/(\r\n|\n|\r)/gm, "<br>") : answer;
       eleanswer = this.replaceLtGt(eleanswer, quotflag)
       eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
       if (quotflag) {
