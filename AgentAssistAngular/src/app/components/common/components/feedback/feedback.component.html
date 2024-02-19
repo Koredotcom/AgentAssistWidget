@@ -42,8 +42,8 @@
     </div>
     <div class="improve-feedback-block" [attr.id]="'helpImprove' + feedbackData.dialogPositionId" *ngIf="feedbackData?.feedback == feedbackConst.DISLIKE && feedbackData.arrowToggle">
         <div class="improve-options-text">
-            <button class="improve-lable-text" [ngClass]="{'active-improve-btn' : feedbackData.feedbackDetails.includes(suggestion)}"
-            aria-label="Button" (click)="addDislikeSuggestion(suggestion)"  *ngFor="let suggestion of dislikeList">{{suggestion}}</button>
+            <button class="improve-lable-text" [ngClass]="{'active-improve-btn' : feedbackData.feedbackDetails.includes(suggestion.value)}"
+            aria-label="Button" (click)="addDislikeSuggestion(suggestion.value)"  *ngFor="let suggestion of dislikeList | keyvalue:originalOrder; let i = index">{{$any(suggestion.key) | translate}}</button>
             <!-- <button class="improve-lable-text" aria-label="Button">Content error</button>
             <button class="improve-lable-text" aria-label="Button">Time taking</button>
             <button class="improve-lable-text" aria-label="Button">Incorrect intent</button>

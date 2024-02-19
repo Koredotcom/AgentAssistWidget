@@ -13,7 +13,7 @@ export const ProjConstants = {
     AGENTASSIST_RUN : 'Run with Agent Inputs',
     SEND : 'Send',
     COPY : 'Copy',
-    COPIED : 'Copied',
+    COPIED : 'COPIED',
     SHOW_MORE : 'Show more',
     SHOW_LESS : 'Show less',
     READ_MORE : 'Read more',
@@ -71,7 +71,19 @@ export const ProjConstants = {
     DOCUMENTATION_LINK : 'https://docs.kore.ai/agentassist/',
     FAQ_LINK : 'https://docs.kore.ai/agentassist/frequently-asked-questions/faq/',
     KOREACADEMY_LINK : 'https://academy.kore.ai/',
+    WRONG_SUGGESTION : "Wrong suggestions",
+    INCORRECT_INTENT : "Incorrect intent",
+    ACCIDENTAL_CLICK : "Accidental click",
+    TIME_TAKING : "Time taking",
+    OTHER : "Other",
     jToken : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjUzODYxNzgyMjMsImV4cCI6MTY2NTM4NjE3OTEyMywiYXVkIjoiIiwiaXNzIjoiY3MtZTRhMmI0YjYtM2RiZC01NWQwLWIwMjUtNDY2ZTVkMDRjOTgxIiwic3ViIjoiYy00NzJhNjYyLTQ5ZDYtNDM5Ny1hMjY1LTViNzE4ZDQ0MWNiNCIsImlzQW5vbnltb3VzIjpmYWxzZX0.1SN5BIEaQ4Rr6XpyKXR1AerNcIEmyDcnK6P0cpPkQzM"
+}
+
+export const supportLanguage = {
+    AWAITING : "AWAITING",
+    OVERRIDE : "OVERRIDE",
+    COPY : "COPY",
+    COPIED : "COPIED"
 }
 
 export const storageConst = {
