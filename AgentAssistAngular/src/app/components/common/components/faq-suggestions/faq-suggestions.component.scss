@@ -133,7 +133,7 @@
                         width: 4px;
                         height: 4px;
                         border-radius: 50%;
-                        background-color: #000;
+                        background-color: var(--primaryTextColor);
                         top: 50%;
                         transform: translateY(-50%);
                     }
@@ -145,7 +145,7 @@
                 gap: 3px;
                 margin-top: 10px;
                 h1{
-                    color: var(--Gray-300, #D0D5DD);
+                    color: var(--secondaryTextColorThree);
                     font-size: 12px;
                     font-style: italic;
                     font-weight: 500;
@@ -166,7 +166,7 @@
                         align-items: center;
                         gap: 4px;
                         border-radius: 16px;
-                        background: var(--Gray-100, #F2F4F7);
+                        background: var(--themeBgColor);
                         transition: 0.2s all ease;
                         min-width: 47%;
                         flex : 1;
@@ -175,10 +175,10 @@
                         white-space: nowrap;
                         &:hover{
                             span{
-                                color: var(--Gray-modern-700, #364152);
+                                color: var(--primaryTextColorTwo);
                             }
                             a{
-                                color: var(--Gray-modern-700, #364152);
+                                color: var(--primaryTextColorTwo);
                                 text-decoration-line: underline;
                             }
                         }
@@ -191,15 +191,15 @@
                             align-items: center;
                             flex-shrink: 0;
                             border-radius: 16px;
-                            background: var(--Gray-50, #F9FAFB);
-                            color: var(--Gray-700, #344054);
+                            background: var(--themebgColorVariation-1);
+                            color: var(--primaryTextColorTwo);
                             font-size: 12px;
                             font-weight: 400;
                             line-height: 16px;
                         }
                         a{
                             overflow: hidden;
-                            color: var(--Gray-modern-500, #697586);
+                            color: var(--secondaryTextColor);
                             text-align: center;
                             text-overflow: ellipsis;
                             font-size: 12px;

@@ -2,6 +2,8 @@ dist/**
 *.bak
 
 KoreAnalytics/node_modules/**
+AgentAssistAngular/node_modules/**
+AgentAssistAngular/.angular/**
 
 buildernew/dist/**
 agentassist-widget-sdk/UI/node_modules/**
