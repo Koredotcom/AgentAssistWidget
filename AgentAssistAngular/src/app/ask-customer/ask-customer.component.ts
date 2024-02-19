@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
 import { EVENTS } from '../helpers/events';
-import { ProjConstants, RenderResponseType } from '../proj.const';
+import { ProjConstants, RenderResponseType, supportLanguage } from '../proj.const';
 import { CommonService } from '../services/common.service';
 import { RootService } from '../services/root.service';
 import { WebSocketService } from '../services/web-socket.service';
@@ -26,7 +26,7 @@ export class AskCustomerComponent {
 
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
-  inputName: string = this.translateService.instant("AWAITING");
+  inputName: string = supportLanguage.AWAITING;
 
   constructor(public rootService: RootService, private websocketService: WebSocketService, private translateService : TranslateService,
     private commonService : CommonService) {
@@ -64,7 +64,7 @@ export class AskCustomerComponent {
 
   ngOnChanges(changes) {
     if (changes?.automation?.currentValue?.toggleOverride) {
-      this.inputName = this.translateService.instant("OVERRIDE");
+      this.inputName = supportLanguage.OVERRIDE;
     }
     if(changes?.automation?.currentValue?.entityValue){
       if(this.automation.entityValue && (typeof this.automation.entityValue == 'object') && Object.keys(this.automation.entityValue)?.length > 0){
@@ -94,7 +94,7 @@ export class AskCustomerComponent {
 
   confirmOverride() {
     if (!this.automation.toggleOverride && this.rootService.activeTab != this.projConstants.MYBOT) {
-      this.inputName = this.translateService.instant("OVERRIDE");
+      this.inputName = supportLanguage.OVERRIDE;
       this.automation.toggleOverride = true;
       if (!this.rootService.OverRideMode) {
         this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
@@ -104,7 +104,7 @@ export class AskCustomerComponent {
 
   cancelOverride() {
     if (this.rootService.activeTab != this.projConstants.MYBOT) {
-      this.inputName = this.translateService.instant("AWAITING");
+      this.inputName = supportLanguage.AWAITING;
       this.automation.toggleOverride = false;
       this.automation.entityValue = '';
       if(this.rootService.OverRideMode && this.rootService.proactiveModeStatus && !this.rootService.manualAssistOverrideMode){
