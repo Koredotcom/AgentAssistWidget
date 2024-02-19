@@ -185,9 +185,9 @@ export class CommonService {
       type: 'sentence',
       sessionId: (this.rootService.activeTab == this.projConstants.MYBOT) ? this.rootService.myBotTabSessionId : this.rootService.assistTabSessionId,
     };
-    if(automation.data.isPrompt && automation.data.componentType){
+    if(automation?.data?.isPrompt && automation?.data?.componentType){
       payloadForBE.componentType = automation.data.componentType;
-    }else if(!automation.data.isPrompt){
+    }else if(!automation?.data?.isPrompt){
       payloadForBE.partialMessage = true;
     }
     payloadForBE = this.rootService.addSourceMsgIdToRequestParams(automation,payloadForBE);
