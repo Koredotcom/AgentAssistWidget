@@ -59,7 +59,7 @@
     "CUSTOMER" : "Customer",
     "YOU" : "You",
     "TERMINATE_CONV" : "Terminate Dialog Task",
-    "TERMINATE_CONV_DESC" : "Are you sure you want to terminate the dialog task? AgentAsssit will no longer be able to make suggestions.",
+    "TERMINATE_CONV_DESC" : "Are you sure you want to terminate the dialog task? AgentAssist will no longer be able to make suggestions.",
     "YES_TERMINATE" : "Yes Terminate",
     "NO_CANCEL" : "No, Cancel",
     "OVERRIDE_CONTINUE" : "Continue with override mode",
