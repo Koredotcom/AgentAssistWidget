@@ -42,7 +42,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   closeSuggestions : boolean = true;
 
 
-  constructor(private rootService: RootService, private serviceInvoker: ServiceInvokerService,
+  constructor(public rootService: RootService, private serviceInvoker: ServiceInvokerService,
     private websocketService: WebSocketService, private handleSubjectService: HandleSubjectService,
     private cdr: ChangeDetectorRef) {
 
