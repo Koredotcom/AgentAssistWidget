@@ -48,7 +48,12 @@ export class WelcomeeventComponent implements OnInit {
   ngOnInit(): void {
     this.isUnifiedPlatform =this.workflowService.isUnifiedPlatform();
     this.subscribeEvents();
-    this.updateDetailsOnBotUpdation(this.workflowService.getCurrentBt(true));
+    if(this.isUnifiedPlatform) {
+      this.updateDetailsOnBotUpdation(this.workflowService.getCurrentBtSmt(true));
+    } else {
+      this.updateDetailsOnBotUpdation(this.workflowService.getCurrentBt(true));
+    }
+    
   }
 
   ngOnDestroy() {
@@ -91,7 +96,7 @@ export class WelcomeeventComponent implements OnInit {
   // get welcome task and use case data from backend api
   getWelcomeTaskData(){
     let params : any = {
-      streamId : this.workflowService.getCurrentBtSmt(true)._id,
+      streamId : this.streamId,
     }
     this.showSpinner = true;
     this.service.invoke('get.welcomeevent', params).subscribe(data => {
@@ -110,9 +115,7 @@ export class WelcomeeventComponent implements OnInit {
 
   updateApi(postData){
     this.showSpinner = true;
-    if(this.isUnifiedPlatform) {
-      this.streamId = this.workflowService.getCurrentBtSmt(true)._id;
-    }
+    this.streamId = this.currentBt;
     this.service.invoke('post.welcomeevent', { streamId: this.streamId }, postData).subscribe((data) => {
       this.showSpinner = false;
 
