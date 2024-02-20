@@ -6,7 +6,7 @@
         <div class="sent-msg-text" *ngIf="snippet.send">{{ 'SENT' | translate }} </div>
 
       </div>
-      <div class="faq-actions" *ngIf="!hideActionButtons && snippet.contentArray.length > 0"
+      <div class="faq-actions" *ngIf="!hideActionButtons && snippet.contentArray.length > 0 && !snippet.internalFlag"
         [ngClass]="{'faq-actions-top' : !snippet.title}">
         <ng-container>
           <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.ARTICLE)"

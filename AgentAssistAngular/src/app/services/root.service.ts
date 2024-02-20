@@ -379,6 +379,7 @@ export class RootService {
                 obj.contentArray = [ansSnippet.answer_fragment]
                 obj.sources = (ansSnippet?.sources || []).filter(obj => obj.url);
                 obj.sourceMsgId = response.sourceMsgId || '';
+                obj.internalFlag = snippet.internalFlag || false;
                 snippetResponeArray.push(obj);
               });
             }
