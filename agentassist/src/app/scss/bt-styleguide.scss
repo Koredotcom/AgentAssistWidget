@@ -1028,6 +1028,9 @@ and open the template in the editor.
                 background-color: $whiteColor;
                 margin-top: -3px;
             }
+            &::after{
+                display: none !important;
+            }
         }
         &:hover{
             &:not([disabled]):checked{
