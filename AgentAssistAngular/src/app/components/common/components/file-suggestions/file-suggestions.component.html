@@ -8,7 +8,7 @@
               <div class="sent-msg-text" *ngIf="file.send">{{ 'SENT'  | translate }}</div>
   
           </div>
-          <div class="faq-actions" *ngIf="!hideActionButtons && file?.content" [ngClass]="{'faq-actions-top' : !file?.title}">
+          <div class="faq-actions" *ngIf="!hideActionButtons && file?.content && !file.internalFlag" [ngClass]="{'faq-actions-top' : !file?.title}">
               <ng-container>
                   <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, file, projConstants.ARTICLE)" *ngIf="!hideCopyButton">
                       <i class="krIocnsFont-copy"></i>
