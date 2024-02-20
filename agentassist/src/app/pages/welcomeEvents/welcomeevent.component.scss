@@ -285,7 +285,8 @@
                         font-weight: 400;
                         line-height: 18px;
                         border: 0px;
-                        padding: 0px;
+                        padding: 0px 30px 0px 0px;
+                        box-shadow: none;
                         background-color: transparent;
                         display: flex;
                         align-items: center;
@@ -293,6 +294,10 @@
                     }
                     .kr-sg-dropdowns {
                         width: auto;
+                        .scroll-ul{
+                            max-height: 250px;
+                            overflow: auto;
+                        }
                     }
                 }
             }
