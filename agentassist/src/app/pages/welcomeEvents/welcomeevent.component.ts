@@ -115,7 +115,6 @@ export class WelcomeeventComponent implements OnInit {
 
   updateApi(postData){
     this.showSpinner = true;
-    this.streamId = this.streamId;
     this.service.invoke('post.welcomeevent', { streamId: this.streamId }, postData).subscribe((data) => {
       this.showSpinner = false;
 
