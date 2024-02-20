@@ -16,7 +16,7 @@
                     <span class="count-text">{{searchResponse?.dialogs?.length}}</span>
                 </div>
                 <div class="suggestion-body-search">
-                    <app-dialog-suggestion [searchResponse]="searchResponse"></app-dialog-suggestion>
+                    <app-dialog-suggestion [searchResponse]="searchResponse" [suggestionData]="rootService.searchedResultData"></app-dialog-suggestion>
                 </div>
             </div>
             <div class="sugestions-block" *ngIf="searchResponse?.faqs?.length">
