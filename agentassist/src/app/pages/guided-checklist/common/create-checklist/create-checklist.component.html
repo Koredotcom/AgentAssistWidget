@@ -101,7 +101,7 @@
                                     <div class="check-item" *ngFor="let item of channelList; let i = index">
                                         <input id="checkbox-{{i}}" type="checkbox" (click)="channelSelection($event,item)"
                                             [checked]="(checkListForm.value?.channels || [])?.indexOf(item) >= 0">
-                                        <span for="checkbox-{{i}}">{{item}}</span>
+                                        <span for="checkbox-{{i}}">{{item | titlecase}}</span>
                                     </div>
                                 </div>
                             </div>
