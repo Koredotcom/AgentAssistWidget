@@ -125,15 +125,15 @@
             line-height: 20px; 
         }
         .radio-custom-label{
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 1;
+            // display: -webkit-box;
+            // -webkit-box-orient: vertical;
+            // -webkit-line-clamp: 1;
             overflow: hidden;
-            color: var(--Gray-900, #101828);
+            // color: var(--Gray-900, #101828);
             text-overflow: ellipsis;
             font-size: 14px;
             font-weight: 400;
-            line-height: 20px; 
+            // line-height: 20px; 
         }
     }
     .connect-dialoge-info {
