@@ -381,6 +381,8 @@ export class RootService {
               obj['contentArray'] = [];
               obj['sources'] = [];
               snippet.content.forEach((ansSnippet : any, inx) => {
+                ansSnippet.answer_fragment = ansSnippet.answer_fragment;
+                console.log("🚀 ~ RootService ~ snippet.content.forEach ~ ansSnippet.answer_fragment:", ansSnippet.answer_fragment)
                 obj.contentArray.push(ansSnippet.answer_fragment);
                 obj.sources.push(...(ansSnippet?.sources || []).filter(item => {
                   item.sourceInx = inx;
@@ -555,10 +557,10 @@ export class RootService {
       if (quotflag) {
         eleanswer = this.replaceLtGt(eleanswer, quotflag)
       }
-      return eleanswer;
+      return eleanswer.replace(new RegExp("[<br />]+$"),'');
 
     }
-    return eleanswer
+    return eleanswer;
   }
 
   replaceLtGt(htmlString, quotflag) {
