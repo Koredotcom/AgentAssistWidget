@@ -436,3 +436,20 @@ app-ask-customer, app-tell-customer, app-smalltalk, app-feedback, app-dialog, ap
         color: #12B76A;
     }
 }
+
+
+.source-count-num{
+    min-width: 12px;
+    height: 12px;
+    padding: 0 2px;
+    border-radius: 16px;
+    background: var(--themeBgColor);
+    font-size: 10px;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    margin-left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}

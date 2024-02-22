@@ -120,6 +120,15 @@
                 -webkit-line-clamp: 3;
                 -webkit-box-orient: vertical;  
                 overflow: hidden;
+                .inner-text-snippet-selection{
+                    margin-bottom: 8px;
+                    &:last-child{
+                        margin: 0;
+                    }
+                    &.selection-on-snippet-color{
+                        background: #EFF4FF;
+                    }   
+                }
                 &.show-full-text{
                     display: block;
                 }
@@ -136,8 +145,8 @@
                         background-color: var(--primaryTextColor);
                         top: 50%;
                         transform: translateY(-50%);
-                    }
-                }
+                    }                              
+                }                
             }
             .souces-names-wrapper{
                 display: flex;
@@ -168,8 +177,8 @@
                         border-radius: 16px;
                         background: var(--themeBgColor);
                         transition: 0.2s all ease;
-                        min-width: 47%;
-                        flex : 1;
+                        // min-width: 47%;
+                        flex : 0 auto;
                         text-overflow: ellipsis;
                         overflow: hidden;
                         white-space: nowrap;
@@ -285,3 +294,31 @@
         }
     }
 }
+
+.line-with-text-heading{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    margin: 6px 0;
+    h2{
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 18px;
+        margin: 0;
+        flex-shrink: 0;
+        color: #F04438;
+    }
+    span{
+        width: 100%;
+        height: 1px;
+        background: var(--themeBorderColor);
+    }
+}
+
+::ng-deep .selection-on-snippet-color{
+    .source-count-num{
+        background: var(--themeColor);
+        color: var(--whiteTextColor);
+    }
+}   

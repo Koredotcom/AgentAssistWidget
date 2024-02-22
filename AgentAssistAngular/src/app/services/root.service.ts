@@ -374,13 +374,20 @@ export class RootService {
         if(snippet?.templateType){
           if(snippet.templateType == 'active_citation_snippet' || snippet.templateType == 'citation_snippet'){
             if(snippet?.content && Array.isArray(snippet?.content) && snippet?.content?.length > 0){
-              snippet.content.forEach((ansSnippet : any) => {
-                let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet)
-                obj.contentArray = [ansSnippet.answer_fragment]
-                obj.sources = (ansSnippet?.sources || []).filter(obj => obj.url);
+              let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet||{});
+              obj['contentArray'] = [];
+              obj['sources'] = [];
+              snippet.content.forEach((ansSnippet : any, inx) => {
+                obj.contentArray.push(ansSnippet.answer_fragment);
+                obj.sources.push(...(ansSnippet?.sources || []).filter(item => {
+                  item.sourceInx = inx;
+                  return item.url;
+                }));
                 obj.sourceMsgId = response.sourceMsgId || '';
-                snippetResponeArray.push(obj);
+                obj.internalFlag = snippet.internalFlag || false;
+                obj.isActCit = true;
               });
+              snippetResponeArray.push(obj);
             }
           }else{
             if(snippet?.content && typeof (snippet?.content) === 'string'){
