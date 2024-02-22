@@ -1,4 +1,4 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { ProjConstants } from 'src/app/proj.const';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -16,6 +16,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   @Input() maxButton;
   @Output() maxMinButtonClick = new EventEmitter();
+  @ViewChild('editableDiv') editableDiv: ElementRef;
 
   projConstants : any = ProjConstants;
 
@@ -44,7 +45,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   constructor(public rootService: RootService, private serviceInvoker: ServiceInvokerService,
     private websocketService: WebSocketService, private handleSubjectService: HandleSubjectService,
-    private cdr: ChangeDetectorRef) {
+    private cdr: ChangeDetectorRef, private renderer: Renderer2) {
 
   }
 
@@ -79,9 +80,15 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   typeAHead = this.typeAHeadDeBounce((val, connectionDetails) => this.getAutoSearchApiResult(val, connectionDetails));
-  onSearch(event: any) {
+  onSearch(event: any) { 
+    const editableDiv = this.editableDiv.nativeElement?.childNodes[0]
+    this.searchText = editableDiv?.textContent || ''; 
     if(this.rootService.settingsData?.searchAssistConfig?.showAutoSuggestions){
       if (this.searchText?.length > 0) {
+        let searchText = this.searchText?.trimStart()?.split(' ')?.pop();
+        if(searchText && searchText.charAt(searchText.length - 1) === this.autocompleteText.charAt(0)){
+          this.autocompleteText = this.autocompleteText.slice(1);
+        }
         this.typeAHead(this.searchText, this.rootService.connectionDetails);
       } else {
         this.clearSearch();
@@ -89,12 +96,31 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     }
   }
 
-  clearSearch(){
-    this.searchText = '';
-    this.autocompleteText = '';
+  focusEditableDiv(){
+    this.closeSuggestions = false;
+  }
+
+  closeSearch(){
+    this.updateEditableDiv('');
+    this.clearSearch();
+  }
+
+  clearSearch() {
+    this.searchText = ' ';
     this.searched = false;
     this.searchResponse = {};
-    // this.handleSubjectService.setSearchResponse(this.searchResponse);
+    this.autocompleteText = ' ';
+    this.addSpanElement();
+    this.autocompleteText = '';
+  }
+
+  addSpanElement(){
+    document.getElementById('spanElement1').textContent = '';
+    let span = document.getElementById('spanElement1').cloneNode(true) as HTMLElement;
+    span.classList.remove('d-none');
+    // span.id = 'spanElement';
+    this.renderer.appendChild(this.editableDiv.nativeElement, span);
+    this.cdr.detectChanges();
   }
 
   typeAHeadDeBounce(func, timeout = 300) {
@@ -119,24 +145,29 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     this.serviceInvoker.invoke('post.autoSearch', { botId: botId, convId: conversationId }, payload, { botId: botId }, params.agentassisturl).subscribe((res) => {
       this.querySuggestions = res?.querySuggestions;
       this.typeAHeads = res?.typeAheads;
-      if(this.typeAHeads?.length){
+      if(this.typeAHeads?.length && this.searchText?.length){
         let searchText = this.searchText?.trim()?.split(' ')?.pop();
-        let autoText = this.typeAHeads[0];
-        this.autocompleteText = autoText ? this.searchText.trim() + autoText.replace(searchText, '') : this.searchText;
+        let autoText = this.typeAHeads[0];   
+        this.autocompleteText = autoText ? autoText.replace(searchText, '') : '';
       }else{
         this.autocompleteText = '';
       }
+      console.log(this.autocompleteText, "auto complete text ");
     })
   }
 
-  onTabClick(event){
-    this.searchText = this.autocompleteText;
-  }
 
   selectSuggestion(suggestion){
     this.searchText = suggestion;
+    this.updateEditableDiv(suggestion);
     this.autocompleteText = '';
-    this.getSearchResults({target : { value : suggestion}});
+    this.getSearchResults(suggestion);
+  }
+
+  updateEditableDiv(value){
+    if(this.editableDiv.nativeElement?.childNodes[0]){
+      this.editableDiv.nativeElement.childNodes[0].textContent = value;
+    }
   }
 
   emitSearchRequest(value, isSearch, faq?) {
@@ -155,10 +186,16 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
   }
 
+  keypUpEnterEvent(event){
+    event.preventDefault();
+    this.getSearchResults(this.searchText);
+  }
 
-  getSearchResults(event) {
-    this.showSpinner = true;
-    this.setValue(event.target.value, true)
+  getSearchResults(value) {
+    if(value.length > 0){
+      this.showSpinner = true;
+      this.setValue(value, true)
+    }
   }
 
   setValue(value: any, isEntered = false) {
@@ -259,4 +296,38 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     // this.maxButton = !this.maxButton;
     this.maxMinButtonClick.emit(true);
   }
+
+  onKeyDown(event: KeyboardEvent) {
+    const editableDiv = this.editableDiv.nativeElement;
+    
+    if (event.key === 'Tab' && editableDiv && editableDiv.contains(document.activeElement)) {
+      // Prevent the default tab behavior
+      event.preventDefault();
+      
+      // Insert tab character or desired content
+      const tabCharacter = '\t';
+      document.execCommand('insertText', false, tabCharacter);
+
+      if(this.editableDiv.nativeElement?.childNodes[0]){
+        this.searchText = this.editableDiv.nativeElement.childNodes[0].textContent + this.autocompleteText;
+        this.updateEditableDiv(this.searchText);
+      }
+      this.autocompleteText = '';
+      this.removeAndAddSpanTag();
+      console.log(this.searchText, "inside tab", this.autocompleteText);
+    }
+  }
+
+  removeAndAddSpanTag(){
+    this.removeSpans();
+    this.addSpanElement();
+  }
+
+  removeSpans() {
+    const spans = this.editableDiv.nativeElement.querySelectorAll('span');
+    spans.forEach(span => {
+      this.renderer.removeChild(span.parentNode, span);  // Remove each span from its parent
+    });
+  }
+
 }

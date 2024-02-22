@@ -130,10 +130,22 @@
             background: var(--themeBgWhiteColor);
             border-radius: 8px;
             .form-control{
-                padding: 8px 40px 8px 40px;
+                padding: 7px 40px 7px 40px;
                 z-index: 1;
                 position: relative;
                 background: transparent;
+                resize: none;
+                min-height: 40px;
+                max-height: 100px;
+                overflow: auto;
+                p{
+                    display: inline-block;
+                    -webkit-user-modify: read-only;
+                    -moz-user-modify: read-only;
+                    color: var(--secondaryTextColor);
+                    // cursor: default;
+                    // pointer-events: none;
+                }
             }
             svg{
                 position: absolute;
@@ -168,6 +180,12 @@
                 position: absolute;
                 top: 0;
                 left: 0;
+                resize: none;
+                height: 100%;
+                min-height: 42px;
+                // &.leading-space-input{
+                //     text-indent: 27px;
+                // }
                 &::-moz-selection { /* Code for Firefox */
                     color: var(--secondaryTextColorTwo);
                     background: transparent;
