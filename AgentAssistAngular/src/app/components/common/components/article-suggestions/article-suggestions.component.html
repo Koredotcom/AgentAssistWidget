@@ -8,7 +8,7 @@
             <div class="sent-msg-text" *ngIf="article.send">{{ 'SENT'  | translate }}</div>
 
         </div>
-        <div class="faq-actions" *ngIf="!hideActionButtons && article?.content" [ngClass]="{'faq-actions-top' : !article?.title}">
+        <div class="faq-actions" *ngIf="!hideActionButtons && article?.content && !article.internalFlag" [ngClass]="{'faq-actions-top' : !article?.title}">
             <ng-container>
                 <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)" *ngIf="!hideCopyButton">
                     <i class="krIocnsFont-copy"></i>
@@ -30,7 +30,7 @@
                         <span class="more-text" *ngIf="article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'MORE_TEXT' | translate}}</span>
                         <span class="less-text" *ngIf="!article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'LESS_TEXT' | translate}}</span>
                     </a>
-                    <p *ngIf="articleContent.scrollHeight > 36 && article.link">|</p>
+                    <p *ngIf="articleContent.scrollHeight > 36 && article.link && !article.title">|</p>
                     <a class="moreText" role="link" (click)="openurlInBrowser(article.link)" *ngIf="article.link && !article.title">{{'VIEW_FULL_ARTICLE' | translate}}</a>
                 </div>
             </div>                       
