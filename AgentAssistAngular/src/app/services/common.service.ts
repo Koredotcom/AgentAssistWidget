@@ -771,7 +771,7 @@ export class CommonService {
       },
       tooltip: {
         formatter : function (param){
-          return 'poloarity : ' + param.value;
+          return 'Polarity : ' + param.value;
         }
       },
       xAxis: {
