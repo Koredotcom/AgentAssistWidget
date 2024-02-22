@@ -43,6 +43,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
   isSm = false;
   botId = this.workflowService.getCurrentBtSmt(true)._id;
   checkListCnst : any = CHECKLISTCNST
+  isUnifiedPlatform = false;
   constructor(
     private workflowService: workflowService,
     public clS: ChecklistService,
@@ -79,6 +80,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    this.isUnifiedPlatform =this.workflowService.isUnifiedPlatform();
     /* search */
     this.searchKey.valueChanges
       .pipe(
@@ -127,7 +129,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
         // this.selectSMBot({_id : this.onlyAdhreForm.value.botId});
       }else{
         /* Get the current bot in case of AgentAssist */
-        this.currentBot = this.workflowService.getCurrentBtSmt(true)._id;
+        this.currentBot = this.workflowService.getCurrentBtSmt(true);
         if(this.currentBot.type === 'universalbot'){
           this.getLinkedBots();
           if(this.onlyAdhreForm.value.lBId){
