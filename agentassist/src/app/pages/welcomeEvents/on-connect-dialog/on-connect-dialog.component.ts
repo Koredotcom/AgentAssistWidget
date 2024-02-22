@@ -163,7 +163,7 @@ export class OnConnectDialogComponent implements OnInit {
         if(key == 'linkedBotId' && this.currentBt.type == this.universalBot ){
           (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls['linkedBotId'].setValidators(validatorList);
         }else if(key != 'linkedBotId'){
-          (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls[key].setValidators(validatorList);
+          (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls[key];
         }
       } else {
         (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls[key].clearValidators();
