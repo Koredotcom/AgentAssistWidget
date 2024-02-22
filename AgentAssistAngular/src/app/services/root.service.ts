@@ -377,9 +377,12 @@ export class RootService {
               let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet||{});
               obj['contentArray'] = [];
               obj['sources'] = [];
-              snippet.content.forEach((ansSnippet : any) => {
+              snippet.content.forEach((ansSnippet : any, inx) => {
                 obj.contentArray.push(ansSnippet.answer_fragment);
-                obj.sources.push(...(ansSnippet?.sources || []).filter(obj => obj.url));
+                obj.sources.push(...(ansSnippet?.sources || []).filter(item => {
+                  item.sourceInx = inx;
+                  return item.url;
+                }));
                 obj.sourceMsgId = response.sourceMsgId || '';
                 obj.internalFlag = snippet.internalFlag || false;
                 obj.isActCit = true;

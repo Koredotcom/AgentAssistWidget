@@ -125,6 +125,9 @@
                     &:last-child{
                         margin: 0;
                     }
+                    &.selection-on-snippet-color{
+                        background: #EFF4FF;
+                    }   
                 }
                 &.show-full-text{
                     display: block;
@@ -142,8 +145,8 @@
                         background-color: var(--primaryTextColor);
                         top: 50%;
                         transform: translateY(-50%);
-                    }
-                }
+                    }                              
+                }                
             }
             .souces-names-wrapper{
                 display: flex;
@@ -174,8 +177,8 @@
                         border-radius: 16px;
                         background: var(--themeBgColor);
                         transition: 0.2s all ease;
-                        min-width: 47%;
-                        flex : 1;
+                        // min-width: 47%;
+                        flex : 0 auto;
                         text-overflow: ellipsis;
                         overflow: hidden;
                         white-space: nowrap;
@@ -312,3 +315,10 @@
         background: var(--themeBorderColor);
     }
 }
+
+::ng-deep .selection-on-snippet-color{
+    .source-count-num{
+        background: var(--themeColor);
+        color: var(--whiteTextColor);
+    }
+}   

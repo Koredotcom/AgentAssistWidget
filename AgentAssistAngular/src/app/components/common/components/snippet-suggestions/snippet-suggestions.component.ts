@@ -25,6 +25,7 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   internalInfo = [];
   moreClickInt = false;
   viewCountInt = 2;
+  sourceInx = null;
   constructor(private handleSubjectService : HandleSubjectService,
     public rootService : RootService, private commonService : CommonService){
 
@@ -110,4 +111,12 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     this.rootService.openurlInBrowser(url);
   }
 
+  hoverOnSource(sourceInx, type, i){
+    this.sourceInx =  i + type + sourceInx;
+    console.log("🚀 ~ SnippetSuggestionsComponent ~ hoverOnSource ~ i + type + sourceInx:", i + type + sourceInx)
+  }
+
+  handleAnsCount(inx){
+    return `<span class='source-count-num'> ${inx} </span>`;
+  }
 }
