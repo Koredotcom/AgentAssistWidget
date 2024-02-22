@@ -5,7 +5,7 @@
         <div class="titles-info-heading">
             <h1 class="text-truncate" *ngIf="!article.link && article.title">{{article.title}}</h1>
             <h1 class="text-truncate" *ngIf="article.link && article.title"> <a class="moreText" role="link" (click)="openurlInBrowser(article.link)" >{{article.title}}</a></h1>
-            <div class="sent-msg-text" *ngIf="article.send">{{ 'SENT'  | translate }}</div>
+            <div class="sent-msg-text" *ngIf="article.send">{{(article.send === 'send' ?  'SENT' : 'COPIED') | translate }}</div>
 
         </div>
         <div class="faq-actions" *ngIf="!hideActionButtons && article?.content && !article.internalFlag" [ngClass]="{'faq-actions-top' : !article?.title}">
@@ -15,9 +15,6 @@
                 </button>
                 <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, article , projConstants.ARTICLE)" *ngIf="!hideSendButton">{{ 'SEND'  | translate }}</button>
             </ng-container>
-            <!-- <ng-container *ngIf="article.send">
-                <button class="solidbtn" aria-label="button">{{ 'SENT'  | translate }}</button>
-            </ng-container> -->
         </div>
     </div>
     <div class="faq-body-content">

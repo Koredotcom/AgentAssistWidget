@@ -36,11 +36,8 @@
                 <button class="solidbtn" aria-label="button"
                     (click)="handleSendCopyButton(projConstants.SEND, automationData)" *ngIf="!automation.hideSendButton">{{ 'SEND'  | translate }}</button>
             </ng-container>
-            <!-- <ng-container *ngIf="automationData.send">
-                <button class="solidbtn" aria-label="button">{{ 'SENT'  | translate }}</button>
-            </ng-container> -->
         </div>
-        <div class="sent-msg-text" *ngIf="automationData.send">{{ 'SENT'  | translate }}</div>
+        <div class="sent-msg-text" *ngIf="automationData.send">{{(automationData.send === 'send' ?  'SENT' : 'COPIED') | translate }}</div>
         <p *ngIf="!automationData.templateRender" [innerHTML]="rootService.handleEmptyLine(automationData.value) | safeHtml"></p>
         <ng-container *ngIf="automationData.templateRender && automationData.template">
             <ul class="chat-container" attr.id="{{automationData.uuid}}"

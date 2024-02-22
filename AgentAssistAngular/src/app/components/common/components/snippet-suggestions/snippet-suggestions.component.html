@@ -3,8 +3,7 @@
     <div class="faq-s-header">
       <div class="titles-info-heading">
         <h1 class="text-truncate" *ngIf="snippet.title">{{snippet.title}}</h1>
-        <div class="sent-msg-text" *ngIf="snippet.send">{{ 'SENT' | translate }} </div>
-
+          <div *ngIf="snippet.send" class="sent-msg-text">{{(snippet.send === 'send' ?  'SENT' : 'COPIED') | translate }} </div>
       </div>
       <div class="faq-actions" *ngIf="!hideActionButtons && snippet.contentArray.length > 0 && !snippet.internalFlag"
         [ngClass]="{'faq-actions-top' : !snippet.title}">
