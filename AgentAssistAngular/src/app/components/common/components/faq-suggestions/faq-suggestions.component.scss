@@ -120,6 +120,12 @@
                 -webkit-line-clamp: 3;
                 -webkit-box-orient: vertical;  
                 overflow: hidden;
+                .inner-text-snippet-selection{
+                    margin-bottom: 8px;
+                    &:last-child{
+                        margin: 0;
+                    }
+                }
                 &.show-full-text{
                     display: block;
                 }
@@ -283,5 +289,26 @@
                 }
             }
         }
+    }
+}
+
+.line-with-text-heading{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    margin: 6px 0;
+    h2{
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 18px;
+        margin: 0;
+        flex-shrink: 0;
+        color: #F04438;
+    }
+    span{
+        width: 100%;
+        height: 1px;
+        background: var(--themeBorderColor);
     }
 }

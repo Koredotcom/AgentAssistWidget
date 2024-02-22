@@ -22,7 +22,9 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   hideActionButtons : boolean = false;
   hideSendButton : boolean = false;
   hideCopyButton : boolean = false;
-
+  internalInfo = [];
+  moreClickInt = false;
+  viewCountInt = 2;
   constructor(private handleSubjectService : HandleSubjectService,
     public rootService : RootService, private commonService : CommonService){
 
@@ -57,11 +59,12 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
       this.hideActionButtons = true;
     }
   }
-
   handleSearchResponse(searchResponse){
     this.searchedSnippetList = [];
     if (searchResponse && searchResponse.snippets) {
       this.searchedSnippetList = searchResponse.snippets;
+      this.internalInfo = this.searchedSnippetList.filter(item => item.internalFlag);
+      this.searchedSnippetList = this.searchedSnippetList.filter(item => !item.internalFlag);
       this.viewLessClick();
     }
   }
@@ -91,6 +94,16 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   viewLessClick(){
     this.moreClick = false;
     this.viewCount = (this.searchedSnippetList && this.searchedSnippetList?.length <= 2) ? this.searchedSnippetList?.length : 2;
+  }
+
+  viewMoreClickInt(){
+    this.moreClickInt = true;
+    this.viewCountInt = this.internalInfo?.length;
+  }
+
+  viewLessClickInt(){
+    this.moreClickInt = false;
+    this.viewCountInt = (this.internalInfo && this.internalInfo?.length <= 2) ? this.internalInfo?.length : 2;
   }
 
   openurlInBrowser(url){
