@@ -138,13 +138,22 @@
                 min-height: 40px;
                 max-height: 100px;
                 overflow: auto;
-                p{
+                span{
                     display: inline-block;
                     -webkit-user-modify: read-only;
                     -moz-user-modify: read-only;
                     color: var(--secondaryTextColor);
                     // cursor: default;
                     // pointer-events: none;
+                }
+                &[placeholder]:empty:before {
+                    content: attr(placeholder);
+                    position: absolute;
+                    color: var(--secondaryTextColorTwo);
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 24px;
+                    background-color: transparent;
                 }
             }
             svg{

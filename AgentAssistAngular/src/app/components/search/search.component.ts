@@ -1,4 +1,4 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { ProjConstants } from 'src/app/proj.const';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -85,9 +85,10 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     this.searchText = editableDiv?.textContent || ''; 
     if(this.rootService.settingsData?.searchAssistConfig?.showAutoSuggestions){
       if (this.searchText?.length > 0) {
+        this.addSpanElement();
         let searchText = this.searchText?.trimStart()?.split(' ')?.pop();
         if(searchText && searchText.charAt(searchText.length - 1) === this.autocompleteText.charAt(0)){
-          this.autocompleteText = this.autocompleteText.slice(1);
+          this.updateAutocompleteText(this.autocompleteText.slice(1));
         }
         this.typeAHead(this.searchText, this.rootService.connectionDetails);
       } else {
@@ -109,18 +110,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     this.searchText = ' ';
     this.searched = false;
     this.searchResponse = {};
-    this.autocompleteText = ' ';
-    this.addSpanElement();
-    this.autocompleteText = '';
-  }
-
-  addSpanElement(){
-    document.getElementById('spanElement1').textContent = '';
-    let span = document.getElementById('spanElement1').cloneNode(true) as HTMLElement;
-    span.classList.remove('d-none');
-    // span.id = 'spanElement';
-    this.renderer.appendChild(this.editableDiv.nativeElement, span);
-    this.cdr.detectChanges();
+    this.updateAutocompleteText('');
   }
 
   typeAHeadDeBounce(func, timeout = 300) {
@@ -147,10 +137,10 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
       this.typeAHeads = res?.typeAheads;
       if(this.typeAHeads?.length && this.searchText?.length){
         let searchText = this.searchText?.trim()?.split(' ')?.pop();
-        let autoText = this.typeAHeads[0];   
-        this.autocompleteText = autoText ? autoText.replace(searchText, '') : '';
+        let autoText = this.typeAHeads[0];  
+        this.updateAutocompleteText(autoText ? autoText.replace(searchText, '') : '');
       }else{
-        this.autocompleteText = '';
+        this.updateAutocompleteText('');
       }
       console.log(this.autocompleteText, "auto complete text ");
     })
@@ -160,14 +150,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   selectSuggestion(suggestion){
     this.searchText = suggestion;
     this.updateEditableDiv(suggestion);
-    this.autocompleteText = '';
+    this.updateAutocompleteText('');
     this.getSearchResults(suggestion);
-  }
-
-  updateEditableDiv(value){
-    if(this.editableDiv.nativeElement?.childNodes[0]){
-      this.editableDiv.nativeElement.childNodes[0].textContent = value;
-    }
   }
 
   emitSearchRequest(value, isSearch, faq?) {
@@ -312,13 +296,28 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
         this.searchText = this.editableDiv.nativeElement.childNodes[0].textContent + this.autocompleteText;
         this.updateEditableDiv(this.searchText);
       }
-      this.autocompleteText = '';
+      this.updateAutocompleteText('');
       this.removeAndAddSpanTag();
+      this.onSearch({});
       console.log(this.searchText, "inside tab", this.autocompleteText);
+    }else if (event.key === 'Enter'){
+      event.preventDefault();
+      this.getSearchResults(this.searchText);
     }
   }
 
-  removeAndAddSpanTag(){
+  updateAutocompleteText(value) {
+    this.autocompleteText = value;
+    if(this.autocompleteText.length > 0){
+      if (document.getElementById('spanElement1')) {
+        document.getElementById('spanElement1').textContent = value;
+      }
+    }else{
+      this.removeSpans();
+    }
+  }
+
+  removeAndAddSpanTag() {
     this.removeSpans();
     this.addSpanElement();
   }
@@ -329,5 +328,25 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
       this.renderer.removeChild(span.parentNode, span);  // Remove each span from its parent
     });
   }
+
+
+  addSpanElement() {
+    console.log("add span");
+    if (!document.getElementById('spanElement1') && this.searchText.length > 1) {
+      const spanElement = this.renderer.createElement('span');
+      // let span = document.getElementById('spanElement1').cloneNode(true) as HTMLElement;
+      spanElement.id = 'spanElement1';
+      spanElement.textContent = this.autocompleteText;
+      spanElement.contenteditable = false;
+      this.renderer.appendChild(this.editableDiv.nativeElement, spanElement);
+    }
+  }
+
+  updateEditableDiv(value) {
+    if (this.editableDiv.nativeElement?.childNodes[0]) {
+      this.editableDiv.nativeElement.childNodes[0].textContent = value;
+    }
+  }
+
 
 }
