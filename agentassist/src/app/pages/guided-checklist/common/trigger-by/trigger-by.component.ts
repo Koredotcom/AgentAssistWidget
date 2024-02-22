@@ -9,6 +9,7 @@ import { ChecklistService } from '../../checklist.service';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { CHECKLISTCNST } from '../../checklist.const';
+import { assetUrl } from 'src/single-spa/asset-url';
 
 @Component({
   selector: 'app-trigger-by',
@@ -43,6 +44,8 @@ export class TriggerByComponent implements OnInit, OnChanges {
   isSm = false;
   botId = this.workflowService.getCurrentBtSmt(true)._id;
   checkListCnst : any = CHECKLISTCNST
+  assetUrlProc = assetUrl;
+  
   constructor(
     private workflowService: workflowService,
     public clS: ChecklistService,

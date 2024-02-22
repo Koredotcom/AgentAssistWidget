@@ -12,6 +12,7 @@ import { AuthService } from '@kore.services/auth.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { assetUrl } from 'src/single-spa/asset-url';
 @Component({
   selector: 'app-utterance-adherence',
   templateUrl: './utterance-adherence.component.html',
@@ -44,6 +45,7 @@ export class UtteranceAdherenceComponent implements OnInit {
   selectAll = false;
   customUtt = false;
   public utteranceDropdown: NgbDropdown;
+  assetUrlProc = assetUrl;
 
   constructor(
     // private openAIService: OpenAIService,
