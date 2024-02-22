@@ -260,6 +260,9 @@ export class RootService {
     let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [],response)
     let filesArray = suggestions?.searchassist?.files || [];
     let searchResponse: any = {};
+    if(suggestions?.searchassist && Object.keys(suggestions?.searchassist)?.length == 1 && suggestions?.searchassist?.snippets && suggestions?.searchassist?.snippets?.length == 0){
+      suggestions.searchassist = {};
+    }
     if(dialoguesArray.length || faqArray.length || snippersArray.length || filesArray.length || (suggestions?.searchassist && Object.keys(suggestions?.searchassist)?.length)){
       searchResponse.dialogs = [];
       searchResponse.faqs = [];
