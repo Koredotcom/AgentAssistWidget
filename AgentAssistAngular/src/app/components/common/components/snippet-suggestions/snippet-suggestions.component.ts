@@ -71,11 +71,11 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   }
 
   handleSendCopyButton(actionType, snippetObj, selectType){
+    snippetObj.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     let snippet = JSON.parse(JSON.stringify(snippetObj));
     if(snippet.contentArray.length > 0){
-      snippet.content = snippet.contentArray.join('<br>')
+      snippet.content = snippet.contentArray.join('\n')
     }
-    snippet.send = true;
     this.commonService.handleSendCopyButton(actionType, snippet, selectType)
   }
 
@@ -113,7 +113,6 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
   hoverOnSource(sourceInx, type, i){
     this.sourceInx =  i + type + sourceInx;
-    console.log("🚀 ~ SnippetSuggestionsComponent ~ hoverOnSource ~ i + type + sourceInx:", i + type + sourceInx)
   }
 
   handleAnsCount(inx){

@@ -155,7 +155,7 @@ export class AskCustomerComponent {
   }
 
   handleSendCopyButton(method, automation) {
-    automation.send = true;
+    automation.send = method === this.projConstants.SEND ? 'send' : 'copied';
     let sendData = automation.sendData;
     this.commonService.handleSendCopyButtonForNodes(method, sendData, this.automation);
     this.responseArray = this.commonService.grayOutPreviousAutomation(this.responseArray, this.automationIndex, this.responseArrayIndex);

@@ -68,7 +68,7 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
   }
 
   handleSendCopyButton(actionType, articleObj, selectType){
-    articleObj.send = true;
+    articleObj.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     this.commonService.handleSendCopyButton(actionType, articleObj, selectType)
   }
 

@@ -66,7 +66,7 @@ export class FileSuggestionsComponent {
   }
 
   handleSendCopyButton(actionType, fileObj, selectType){
-    fileObj.send = true;
+    fileObj.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     this.commonService.handleSendCopyButton(actionType, fileObj, selectType)
   }
 

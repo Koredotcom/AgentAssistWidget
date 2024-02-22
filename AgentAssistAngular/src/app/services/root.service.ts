@@ -382,7 +382,6 @@ export class RootService {
               obj['sources'] = [];
               snippet.content.forEach((ansSnippet : any, inx) => {
                 ansSnippet.answer_fragment = ansSnippet.answer_fragment;
-                console.log("🚀 ~ RootService ~ snippet.content.forEach ~ ansSnippet.answer_fragment:", ansSnippet.answer_fragment)
                 obj.contentArray.push(ansSnippet.answer_fragment);
                 obj.sources.push(...(ansSnippet?.sources || []).filter(item => {
                   item.sourceInx = inx;
@@ -698,7 +697,6 @@ export class RootService {
         from: 'agent_assist',
         url : url
       };
-      console.log(message, "message***********");
       window.parent.postMessage(message, '*');
     }else{
       window.open(url, '_blank');

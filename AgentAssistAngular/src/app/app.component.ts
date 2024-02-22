@@ -78,7 +78,6 @@ export class AppComponent implements OnInit, OnDestroy{
     });
 
     this.subs.sink = this.webSocketService.agentFeedbackResponse$.subscribe((response: any) => {
-      console.log(response, "response");
       if (response && Object.keys(response)?.length > 0) {
         this.showFeedback = true;
         clearTimeout(this.timeoutId);
