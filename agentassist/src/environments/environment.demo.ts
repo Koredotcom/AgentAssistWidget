@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   tag:"dev",
-  API_SERVER_URL:'https://demo-smartassist.kore.ai',
+  API_SERVER_URL:'https://demo-agentassist.kore.ai',
   USE_SESSION_STORE:false,
   ON_PREMISE: false,
   SUPPORT_API_SERVER_URL:'https://uat-smartassist.kore.ai',
