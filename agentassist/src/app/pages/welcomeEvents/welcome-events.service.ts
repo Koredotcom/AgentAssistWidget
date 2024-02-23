@@ -45,7 +45,7 @@ export class WelcomeEventsService {
 
     formatOnconnectFormObject(selectedUseCase, selectedBot){
       return {
-        enabled: selectedUseCase?._id ? true : false,
+        enabled: selectedUseCase?.taskRefId ? true : false,
         usecaseId: selectedUseCase && selectedUseCase?._id ? selectedUseCase._id : '',
         refId: selectedUseCase?.refId || '',
         dialogId: selectedUseCase?.dialogId || '',
@@ -57,7 +57,7 @@ export class WelcomeEventsService {
     getOnConnectActiveTabFormGroup(data){
       return {
         "enabled": new FormControl(data?.enabled || false, Validators.required),
-        "usecaseId": new FormControl(data?.usecaseId || '', Validators.required),
+        "usecaseId": new FormControl(data?.usecaseId || ''),
         "refId": new FormControl(data?.refId || '', Validators.required),
         "dialogId": new FormControl(data?.dialogId || '', Validators.required),
         "taskRefId": new FormControl(data?.taskRefId || '', Validators.required),

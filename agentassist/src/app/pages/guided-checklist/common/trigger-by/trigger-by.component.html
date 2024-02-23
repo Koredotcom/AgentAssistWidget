@@ -192,7 +192,7 @@
                             </label>
                         </div>
                         <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'dialog', 'd-none': onlyAdhreForm?.value?.type !== 'dialog'}">
-                            <div class="label-text">Bot</div>
+                            <div class="label-text">{{isUnifiedPlatform ? 'App' : 'Bot'}} </div>
                             <ng-container *ngIf="!isSm;">
                                 <div class="kr-sg-dropdowns m-b-10" placement="bottom">
                                     <div class="dropdown dropdown-open">
