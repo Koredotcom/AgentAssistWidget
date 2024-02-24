@@ -381,16 +381,38 @@ export class RootService {
               obj['contentArray'] = [];
               obj['sources'] = [];
               snippet.content.forEach((ansSnippet : any, inx) => {
-                ansSnippet.answer_fragment = ansSnippet.answer_fragment;
-                obj.contentArray.push(ansSnippet.answer_fragment);
-                obj.sources.push(...(ansSnippet?.sources || []).filter(item => {
-                  item.sourceInx = inx;
-                  return item.url;
-                }));
+                // ansSnippet.answer_fragment = ansSnippet.answer_fragment;
+
+                //  obj.contentArray.push(ansSnippet.answer_fragment);
+
+
+
+                let ansObj = {
+                  ans: ansSnippet.answer_fragment,
+                  sources: ansSnippet?.sources || []
+                };
+
+                obj['contentArray'].push(ansObj);
+
                 obj.sourceMsgId = response.sourceMsgId || '';
                 obj.internalFlag = snippet.internalFlag || false;
                 obj.isActCit = true;
+
               });
+              let a = obj['contentArray'].map((entry, index) => {
+
+
+                obj.sources.push(...(entry?.sources || []).filter(item => {
+                  item.sourceInx = index+1;
+                  return item.url;
+                }));
+
+                const cssClass = `fragment-ext-${index+1}`;
+                console.log("🚀 ~ RootService ~ a ~ entry?.sources?.length:", entry?.sources?.length)
+                return `<span class="${cssClass}">${entry.ans.trim()} ${entry?.sources?.length ? `<span class="source-count-num">${index+1}</span>`: ''} </span>`;
+            }).join(' ');
+              // const finalParagraph = a.replace(/\n+/g, ' ');
+              obj['contentArray'] = [a]
               snippetResponeArray.push(obj);
             }
           }else{

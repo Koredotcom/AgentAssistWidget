@@ -1,3 +1,4 @@
+<!-- {{searchedSnippetList | json}} -->
 <ng-container *ngFor="let snippet of searchedSnippetList | slice : 0 : viewCount;let i = index">
   <div class="faq-suggestions-wrapper" [ngClass]="{'grayout-msgs-node' : snippet?.send}">
     <div class="faq-s-header">
@@ -24,8 +25,10 @@
           <div class="text-info-more-data-block">
             <p [ngClass]="{'show-full-text' : !snippet.showMoreButton}" #snippetContent1>
               <ng-container *ngFor="let content of snippet.contentArray; let ii = index">
-                <div class="inner-text-snippet-selection " *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content) + (snippet.isActCit ? handleAnsCount(ii+1) : '') | safeHtml"
-                  [ngClass]="{'snippet-list-style' : snippet.contentArray.length > 1, 'selection-on-snippet-color': sourceInx === i + 'ext' + ii}"></div>
+                <!-- + (snippet.isActCit ? handleAnsCount(ii+1) : '') -->
+                <!-- {{ i + 'ext' + ii+1}} -->
+                <div class="inner-text-snippet-selection " *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content)  | safeHtml"
+                  [ngClass]="{'snippet-list-style' : snippet.contentArray.length > 1}"></div>
               </ng-container>
             </p>
             <div class="more-links-actions">
@@ -41,11 +44,10 @@
             <h1>Sources :</h1>
             <div class="source-names">
               <ng-container *ngFor="let source of snippet.sources;let ii = index">
-                <div class="source-tag" *ngIf="source.url" (mouseover)="hoverOnSource(source.sourceInx, 'ext', i)" (mouseleave)="sourceInx = null">
-                  <span *ngIf="snippet.isActCit">{{source.sourceInx+1}}</span>
+                <div class="source-tag" *ngIf="source.url" (mouseover)="hoverOnSource(source.sourceInx, 'ext', i)" (mouseleave)="mouseLeave()">
+                  <span *ngIf="snippet.isActCit">{{source.sourceInx}}</span>
                   <a (click)="openurlInBrowser(source.url)" ngbTooltip="{{source.title}}">{{source?.title || 'Know More'}}</a>
                 </div>
-
               </ng-container>
             </div>
           </div>
@@ -93,7 +95,7 @@
           <div class="text-info-more-data-block">
             <p [ngClass]="{'show-full-text' : !snippet.showMoreButton}" #snippetContent2>
               <ng-container *ngFor="let content of snippet.contentArray; let ii = index">
-                <div [ngClass]="{'snippet-list-style' : snippet.contentArray.length > 1, 'selection-on-snippet-color': sourceInx === i + 'int' + ii}" class="inner-text-snippet-selection" *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content) + (snippet.isActCit ? handleAnsCount(ii+1) : '') | safeHtml"></div>
+                <div [ngClass]="{'snippet-list-style' : snippet.contentArray.length > 1}" class="inner-text-snippet-selection" *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content) | safeHtml"></div>
               </ng-container>
             </p>
             <div class="more-links-actions">

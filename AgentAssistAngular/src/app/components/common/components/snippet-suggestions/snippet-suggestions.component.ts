@@ -111,11 +111,20 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     this.rootService.openurlInBrowser(url);
   }
 
+  prevClass = '';
   hoverOnSource(sourceInx, type, i){
+    if(this.prevClass){
+      document.getElementsByClassName(this.prevClass)[0].classList.remove('selection-on-snippet-color');
+    }
     this.sourceInx =  i + type + sourceInx;
+    this.prevClass = 'fragment-ext-'+sourceInx;
+    document.getElementsByClassName('fragment-ext-'+sourceInx)[0].classList.add('selection-on-snippet-color');
   }
 
-  handleAnsCount(inx){
-    return `<span class='source-count-num'> ${inx} </span>`;
+  mouseLeave(){
+    this.sourceInx = null;
+    if(this.prevClass){
+      document.getElementsByClassName(this.prevClass)[0].classList.remove('selection-on-snippet-color');
+    }
   }
 }
