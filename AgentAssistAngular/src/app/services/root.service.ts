@@ -399,17 +399,33 @@ export class RootService {
                 obj.isActCit = true;
 
               });
+              let x = [];
               let a = obj['contentArray'].map((entry, index) => {
-
-
+                let className = '';
                 obj.sources.push(...(entry?.sources || []).filter(item => {
                   item.sourceInx = index+1;
-                  return item.url;
+                  let returnValue = item.url && (x.indexOf(item.title) == -1);
+                  if(returnValue){
+                    x.push(item.title);
+                  }
+                  if(x.indexOf(item.title) != -1){
+                    className += `fragment-ext-${x.indexOf(item.title)+1} `
+                  }
+                  return returnValue;
                 }));
 
-                const cssClass = `fragment-ext-${index+1}`;
-                console.log("🚀 ~ RootService ~ a ~ entry?.sources?.length:", entry?.sources?.length)
-                return `<span class="${cssClass}">${entry.ans.trim()} ${entry?.sources?.length ? `<span class="source-count-num">${index+1}</span>`: ''} </span>`;
+               
+                let temp = `<span class="${className}">${entry.ans.trim()}`;
+
+                for(let source of entry?.sources){
+                  if(source?.title && x.indexOf(source?.title) != -1){
+                    let srcCount = x.indexOf(source.title);
+                    temp += `<span class="source-count-num">${srcCount + 1}</span>`
+                  }
+                }
+                temp += '</span>';
+                
+                return temp;
             }).join(' ');
               // const finalParagraph = a.replace(/\n+/g, ' ');
               obj['contentArray'] = [a]

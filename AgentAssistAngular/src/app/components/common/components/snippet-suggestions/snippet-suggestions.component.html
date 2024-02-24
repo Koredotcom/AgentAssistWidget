@@ -44,8 +44,8 @@
             <h1>Sources :</h1>
             <div class="source-names">
               <ng-container *ngFor="let source of snippet.sources;let ii = index">
-                <div class="source-tag" *ngIf="source.url" (mouseover)="hoverOnSource(source.sourceInx, 'ext', i)" (mouseleave)="mouseLeave()">
-                  <span *ngIf="snippet.isActCit">{{source.sourceInx}}</span>
+                <div class="source-tag" *ngIf="source.url" (mouseover)="hoverOnSource(ii+1, 'ext', i)" (mouseleave)="mouseLeave()">
+                  <span *ngIf="snippet.isActCit">{{ii+1}}</span>
                   <a (click)="openurlInBrowser(source.url)" ngbTooltip="{{source.title}}">{{source?.title || 'Know More'}}</a>
                 </div>
               </ng-container>
@@ -111,8 +111,8 @@
             <h1>Sources :</h1>
             <div class="source-names">
               <ng-container *ngFor="let source of snippet.sources;let ii = index">
-                <div class="source-tag" *ngIf="source.url" (mouseover)="hoverOnSource(source.sourceInx, 'int', i)" (mouseleave)="sourceInx = null">
-                  <span *ngIf="snippet.isActCit">{{source.sourceInx+1}}</span>
+                <div class="source-tag" *ngIf="source.url" (mouseover)="hoverOnSource(ii+1, 'int', i)" (mouseleave)="sourceInx = null">
+                  <span *ngIf="snippet.isActCit">{{ii+1}}</span>
                   <a (click)="openurlInBrowser(source.url)" ngbTooltip="{{source.title}}">{{source?.title || 'Know More'}}</a>
                 </div>
 

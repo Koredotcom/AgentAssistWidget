@@ -114,17 +114,20 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   prevClass = '';
   hoverOnSource(sourceInx, type, i){
     if(this.prevClass){
-      document.getElementsByClassName(this.prevClass)[0].classList.remove('selection-on-snippet-color');
+      document.querySelectorAll(this.prevClass)?.forEach(el => el?.classList?.remove('selection-on-snippet-color'));
     }
-    this.sourceInx =  i + type + sourceInx;
-    this.prevClass = 'fragment-ext-'+sourceInx;
-    document.getElementsByClassName('fragment-ext-'+sourceInx)[0].classList.add('selection-on-snippet-color');
+    // this.sourceInx =  i + type + sourceInx;
+    this.prevClass = '.fragment-ext-' + sourceInx;
+    console.log(this.prevClass, 'prev class');
+    
+    document.querySelectorAll(this.prevClass)?.forEach(el => el?.classList?.add('selection-on-snippet-color'));
+    // document.getElementsByClassName('fragment-ext-'+sourceInx)[0].classList.add('selection-on-snippet-color');
   }
 
   mouseLeave(){
     this.sourceInx = null;
     if(this.prevClass){
-      document.getElementsByClassName(this.prevClass)[0].classList.remove('selection-on-snippet-color');
+      document.querySelectorAll(this.prevClass)?.forEach(el => el?.classList?.remove('selection-on-snippet-color'));
     }
   }
 }
