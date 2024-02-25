@@ -255,144 +255,6 @@ export class RootService {
 
   formatSearchResponse(response) {
     let suggestions = response.suggestions;
-/*     response.suggestions.searchassist = {
-      snippets: [
-        {
-            "title": "",
-            "content": [
-                {
-                    "answer_fragment": "To check the status of a case, you can follow these steps:\n\n1. Log in to your account on the platform.\n2. Navigate to the \"Cases\" or \"Resolution Center\" section.\n3. Look for the specific case you want to check.\n4. Click on the case to view its details.\n5. You will find information about the case status, such as whether it is open, closed, or under review.\n6. Additionally, you may find relevant details about the case, including any actions taken or updates provided.\n\nPlease note that the exact steps and terminology may vary depending on the platform you are using. It is recommended to refer to the platform's official documentation or support resources for more specific instructions.\n\n",
-                },
-                {
-                    "answer_fragment": " Source: Payment disputes\n",
-                    "sources": [
-                        {
-                            "title": "Guided Judgment for M2M service requests",
-                            "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1679",
-                            "chunk_id": "chk-38042175-0e5d-4819-b00d-78f5ccecdd88",
-                            "doc_id": "fc-559ce762-2b63-5dde-b17e-7b47247db359",
-                            "source_id": "fs-6497d7a7-8c14-5155-a14d-dd7d26bd12de",
-                            "source_type": "data",
-                            "image_url": ""
-                        }
-                    ]
-                },
-                {
-                    "answer_fragment": " Source: Guided Judgment for M2M service requests\n",
-                    "sources": [
-                        {
-                            "title": "Claims Risk Management (CRM) Risky, High Value (HASP) INR Claims, Returns and Reviews",
-                            "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1726",
-                            "chunk_id": "chk-797548ea-40b6-4f93-b67c-1880556b6d5d",
-                            "doc_id": "fc-c6324e9f-645b-587b-952e-2d1c90c3d194",
-                            "source_id": "fs-c7f89fa5-7224-5786-ae7c-4df3d089fcce",
-                            "source_type": "data",
-                            "image_url": ""
-                        }
-                    ]
-                },
-                {
-                    "answer_fragment": " Source: Claims Risk Management (CRM) Risky, High Value (HASP) INR Claims, Returns and Reviews\n",
-                    "sources": [
-                        {
-                            "title": "Guided Judgment for M2M service requests",
-                            "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1679",
-                            "chunk_id": "chk-acec9a86-889d-45af-86b1-70270f1b0cd0",
-                            "doc_id": "fc-af61b37a-e4c1-5e04-968f-43579cfbc4df",
-                            "source_id": "fs-59031202-f580-5ec9-81df-ef38a551c484",
-                            "source_type": "data",
-                            "image_url": ""
-                        }
-                    ]
-                },
-                {
-                    "answer_fragment": " Source: Guided Judgment for M2M service requests",
-                    "sources": [
-                        {
-                            "title": "",
-                            "url": "",
-                            "chunk_id": "",
-                            "doc_id": "",
-                            "source_id": "",
-                            "source_type": "",
-                            "image_url": ""
-                        }
-                    ]
-                }
-            ],
-            "snippet_type": "generative_model",
-            "templateType": "active_citation_snippet",
-            "internalFlag": false
-        },
-        {
-          "title": "",
-          "content": [
-              {
-                  "answer_fragment": "this info should not be shared",
-                  "sources": [
-                      {
-                          "title": "Payment disputes",
-                          "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1697",
-                          "chunk_id": "chk-f8999690-8827-4261-8905-60bc744d6fae",
-                          "doc_id": "fc-e4d0f4ec-5bb2-55a7-b9ec-62f48c6cfe1d",
-                          "source_id": "fs-6497d7a7-8c14-5155-a14d-dd7d26bd12de",
-                          "source_type": "data",
-                          "image_url": ""
-                      }
-                  ]
-              },
-              {
-                  "answer_fragment": "this info should not be shared has no source",
-              },
-              {
-                  "answer_fragment": "this info should not be shared",
-                  "sources": [
-                      {
-                          "title": "Claims Risk Management (CRM) Risky, High Value (HASP) INR Claims, Returns and Reviews",
-                          "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1726",
-                          "chunk_id": "chk-797548ea-40b6-4f93-b67c-1880556b6d5d",
-                          "doc_id": "fc-c6324e9f-645b-587b-952e-2d1c90c3d194",
-                          "source_id": "fs-c7f89fa5-7224-5786-ae7c-4df3d089fcce",
-                          "source_type": "data",
-                          "image_url": ""
-                      }
-                  ]
-              },
-              {
-                  "answer_fragment": "this info should not be shared",
-                  "sources": [
-                      {
-                          "title": "yo yo",
-                          "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1679",
-                          "chunk_id": "chk-acec9a86-889d-45af-86b1-70270f1b0cd0",
-                          "doc_id": "fc-af61b37a-e4c1-5e04-968f-43579cfbc4df",
-                          "source_id": "fs-59031202-f580-5ec9-81df-ef38a551c484",
-                          "source_type": "data",
-                          "image_url": ""
-                      }
-                  ]
-              },
-              {
-                  "answer_fragment": " Source: Guided Judgment for M2M service requests",
-                  "sources": [
-                      {
-                          "title": "",
-                          "url": "",
-                          "chunk_id": "",
-                          "doc_id": "",
-                          "source_id": "",
-                          "source_type": "",
-                          "image_url": ""
-                      }
-                  ]
-              }
-          ],
-          "snippet_type": "generative_model",
-          "templateType": "active_citation_snippet",
-          "internalFlag": true
-      }
-    ]
-    }; */
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
     let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [],response)
@@ -536,16 +398,21 @@ export class RootService {
               });
             }
           }else{
-            if(snippet?.content && typeof (snippet?.content) === 'string'){
-              snippet.contentArray = [snippet.content];
-            }else if(snippet?.content){
-              snippet.contentArray = snippet.content || [];
+            if(snippet?.content){
+              if(Array.isArray(snippet?.content)){
+                snippet.content = snippet?.content.join('\n');
+              }
+              snipObje.internalFlag = snippet.internalFlag || false;
+              let otherType  = {
+                ans: snippet.content,
+                internalFlag: snippet.internalFlag
+              }
+              if(snippet.url){
+                otherType['sources'] = [{title : snippet.source, url : snippet.url}];
+              }
+              snipObje.contentArray.push(otherType);
             }
-            if(snippet.url){
-              snippet.sources = [{title : snippet.source, url : snippet.url}]
-            }
-            snippet.sourceMsgId = response.sourceMsgId || '';
-            snippetResponeArray.push(snippet);
+            snipObje.sourceMsgId = response.sourceMsgId || '';
           }
         }
       });
