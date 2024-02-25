@@ -562,14 +562,14 @@ export class RootService {
                 uniqueSource.push(item.title);
               }
               if (uniqueSource.indexOf(item.title) != -1) {
-                className += `fragment-ext-${uniqueSource.indexOf(item.title) + 1}`;
+                className += `fragment-ext-${uniqueSource.indexOf(item.title) + 1} `;
               }
               return returnValue;
             })
           );
           
           if(entry.internalFlag){
-            let temp = `<span class="${className}">${entry.ans.trim()}`;
+            let temp = `<span class="${className}">${entry.ans} `;
             for (let source of entry?.sources) {
               if (source?.title && uniqueSource.indexOf(source?.title) != -1) {
                 let srcCount = uniqueSource.indexOf(source.title);
@@ -581,7 +581,7 @@ export class RootService {
             temp += '</span>';
             interlInfo+=temp;
           }else{
-            let temp = `<span class="${className}">${entry.ans.trim()}`;
+            let temp = `<span class="${className}">${entry.ans} `;
             for (let source of entry?.sources) {
               if (source?.title && uniqueSource.indexOf(source?.title) != -1) {
                 let srcCount = uniqueSource.indexOf(source.title);

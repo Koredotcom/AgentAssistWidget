@@ -158,7 +158,10 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   getSearchResults(event) {
     this.showSpinner = true;
-    this.setValue(event.target.value, true)
+    this.setValue(event.target.value, true);
+    setTimeout(() => {
+      this.showSpinner = false;
+    }, 15000);
   }
 
   setValue(value: any, isEntered = false) {

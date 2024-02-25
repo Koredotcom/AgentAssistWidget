@@ -26,8 +26,8 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   moreClickInt = false;
   viewCountInt = 2;
   // sourceInx = null;
-  extMore = true;
-  intMore = true;
+  extMore = false;
+  intMore = false;
   constructor(private handleSubjectService : HandleSubjectService,
     public rootService : RootService, private commonService : CommonService){
 
