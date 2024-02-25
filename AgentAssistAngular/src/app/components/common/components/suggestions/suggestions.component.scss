@@ -75,6 +75,20 @@
                     font-weight: 500;
                     line-height: 16px;
                 }
+                .by-n-ai{
+                    display: flex;
+                    align-items: center;
+                    color: #9AA4B2;
+                    gap: 2px;
+                    .snippet-by-label{
+                        color: #9AA4B2;
+                        font-family: Inter;
+                        font-size: 10px;
+                        font-style: italic;
+                        font-weight: 400;
+                        line-height: 16px;
+                    }
+                }
             }
             .suggestion-body-search{
                 padding: 4px 8px;

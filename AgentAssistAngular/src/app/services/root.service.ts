@@ -254,7 +254,145 @@ export class RootService {
   }
 
   formatSearchResponse(response) {
-    let suggestions = response.suggestions
+    let suggestions = response.suggestions;
+/*     response.suggestions.searchassist = {
+      snippets: [
+        {
+            "title": "",
+            "content": [
+                {
+                    "answer_fragment": "To check the status of a case, you can follow these steps:\n\n1. Log in to your account on the platform.\n2. Navigate to the \"Cases\" or \"Resolution Center\" section.\n3. Look for the specific case you want to check.\n4. Click on the case to view its details.\n5. You will find information about the case status, such as whether it is open, closed, or under review.\n6. Additionally, you may find relevant details about the case, including any actions taken or updates provided.\n\nPlease note that the exact steps and terminology may vary depending on the platform you are using. It is recommended to refer to the platform's official documentation or support resources for more specific instructions.\n\n",
+                },
+                {
+                    "answer_fragment": " Source: Payment disputes\n",
+                    "sources": [
+                        {
+                            "title": "Guided Judgment for M2M service requests",
+                            "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1679",
+                            "chunk_id": "chk-38042175-0e5d-4819-b00d-78f5ccecdd88",
+                            "doc_id": "fc-559ce762-2b63-5dde-b17e-7b47247db359",
+                            "source_id": "fs-6497d7a7-8c14-5155-a14d-dd7d26bd12de",
+                            "source_type": "data",
+                            "image_url": ""
+                        }
+                    ]
+                },
+                {
+                    "answer_fragment": " Source: Guided Judgment for M2M service requests\n",
+                    "sources": [
+                        {
+                            "title": "Claims Risk Management (CRM) Risky, High Value (HASP) INR Claims, Returns and Reviews",
+                            "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1726",
+                            "chunk_id": "chk-797548ea-40b6-4f93-b67c-1880556b6d5d",
+                            "doc_id": "fc-c6324e9f-645b-587b-952e-2d1c90c3d194",
+                            "source_id": "fs-c7f89fa5-7224-5786-ae7c-4df3d089fcce",
+                            "source_type": "data",
+                            "image_url": ""
+                        }
+                    ]
+                },
+                {
+                    "answer_fragment": " Source: Claims Risk Management (CRM) Risky, High Value (HASP) INR Claims, Returns and Reviews\n",
+                    "sources": [
+                        {
+                            "title": "Guided Judgment for M2M service requests",
+                            "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1679",
+                            "chunk_id": "chk-acec9a86-889d-45af-86b1-70270f1b0cd0",
+                            "doc_id": "fc-af61b37a-e4c1-5e04-968f-43579cfbc4df",
+                            "source_id": "fs-59031202-f580-5ec9-81df-ef38a551c484",
+                            "source_type": "data",
+                            "image_url": ""
+                        }
+                    ]
+                },
+                {
+                    "answer_fragment": " Source: Guided Judgment for M2M service requests",
+                    "sources": [
+                        {
+                            "title": "",
+                            "url": "",
+                            "chunk_id": "",
+                            "doc_id": "",
+                            "source_id": "",
+                            "source_type": "",
+                            "image_url": ""
+                        }
+                    ]
+                }
+            ],
+            "snippet_type": "generative_model",
+            "templateType": "active_citation_snippet",
+            "internalFlag": false
+        },
+        {
+          "title": "",
+          "content": [
+              {
+                  "answer_fragment": "this info should not be shared",
+                  "sources": [
+                      {
+                          "title": "Payment disputes",
+                          "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1697",
+                          "chunk_id": "chk-f8999690-8827-4261-8905-60bc744d6fae",
+                          "doc_id": "fc-e4d0f4ec-5bb2-55a7-b9ec-62f48c6cfe1d",
+                          "source_id": "fs-6497d7a7-8c14-5155-a14d-dd7d26bd12de",
+                          "source_type": "data",
+                          "image_url": ""
+                      }
+                  ]
+              },
+              {
+                  "answer_fragment": "this info should not be shared has no source",
+              },
+              {
+                  "answer_fragment": "this info should not be shared",
+                  "sources": [
+                      {
+                          "title": "Claims Risk Management (CRM) Risky, High Value (HASP) INR Claims, Returns and Reviews",
+                          "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1726",
+                          "chunk_id": "chk-797548ea-40b6-4f93-b67c-1880556b6d5d",
+                          "doc_id": "fc-c6324e9f-645b-587b-952e-2d1c90c3d194",
+                          "source_id": "fs-c7f89fa5-7224-5786-ae7c-4df3d089fcce",
+                          "source_type": "data",
+                          "image_url": ""
+                      }
+                  ]
+              },
+              {
+                  "answer_fragment": "this info should not be shared",
+                  "sources": [
+                      {
+                          "title": "yo yo",
+                          "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1679",
+                          "chunk_id": "chk-acec9a86-889d-45af-86b1-70270f1b0cd0",
+                          "doc_id": "fc-af61b37a-e4c1-5e04-968f-43579cfbc4df",
+                          "source_id": "fs-59031202-f580-5ec9-81df-ef38a551c484",
+                          "source_type": "data",
+                          "image_url": ""
+                      }
+                  ]
+              },
+              {
+                  "answer_fragment": " Source: Guided Judgment for M2M service requests",
+                  "sources": [
+                      {
+                          "title": "",
+                          "url": "",
+                          "chunk_id": "",
+                          "doc_id": "",
+                          "source_id": "",
+                          "source_type": "",
+                          "image_url": ""
+                      }
+                  ]
+              }
+          ],
+          "snippet_type": "generative_model",
+          "templateType": "active_citation_snippet",
+          "internalFlag": true
+      }
+    ]
+    }; */
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
     let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [],response)
@@ -371,65 +509,31 @@ export class RootService {
   }
 
   formatSnippetResponse(snippetsArray, response){
+    let snipObje:any = {};
+    snipObje['contentArray'] = [];
+    snipObje['sources'] = [];
+    snipObje['internalInfo'] = [];
     let snippetResponeArray : any = [];
     if(snippetsArray?.length > 0){
       snippetsArray.forEach( (snippet : any) => {
         if(snippet?.templateType){
           if(snippet.templateType == 'active_citation_snippet' || snippet.templateType == 'citation_snippet'){
-            if(snippet?.content && Array.isArray(snippet?.content) && snippet?.content?.length > 0){
-              let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet||{});
-              obj['contentArray'] = [];
-              obj['sources'] = [];
-              snippet.content.forEach((ansSnippet : any, inx) => {
-                // ansSnippet.answer_fragment = ansSnippet.answer_fragment;
-
-                //  obj.contentArray.push(ansSnippet.answer_fragment);
-
-
-
+            if (
+              snippet?.content &&
+              Array.isArray(snippet?.content) &&
+              snippet?.content?.length > 0
+            ) {
+              snippet.content.forEach((ansSnippet: any) => {
                 let ansObj = {
                   ans: ansSnippet.answer_fragment,
-                  sources: ansSnippet?.sources || []
+                  sources: ansSnippet?.sources || [],
+                  internalFlag: snippet.internalFlag
                 };
-
-                obj['contentArray'].push(ansObj);
-
-                obj.sourceMsgId = response.sourceMsgId || '';
-                obj.internalFlag = snippet.internalFlag || false;
-                obj.isActCit = true;
-
+                snipObje['contentArray'].push(ansObj);
+                snipObje.sourceMsgId = response.sourceMsgId || '';
+                snipObje.internalFlag = snippet.internalFlag || false;
+                snipObje.isActCit = true;
               });
-              let x = [];
-              let a = obj['contentArray'].map((entry, index) => {
-                let className = '';
-                obj.sources.push(...(entry?.sources || []).filter(item => {
-                  item.sourceInx = index+1;
-                  let returnValue = item.url && (x.indexOf(item.title) == -1);
-                  if(returnValue){
-                    x.push(item.title);
-                  }
-                  if(x.indexOf(item.title) != -1){
-                    className += `fragment-ext-${x.indexOf(item.title)+1} `
-                  }
-                  return returnValue;
-                }));
-
-               
-                let temp = `<span class="${className}">${entry.ans.trim()}`;
-
-                for(let source of entry?.sources){
-                  if(source?.title && x.indexOf(source?.title) != -1){
-                    let srcCount = x.indexOf(source.title);
-                    temp += `<span class="source-count-num">${srcCount + 1}</span>`
-                  }
-                }
-                temp += '</span>';
-                
-                return temp;
-            }).join(' ');
-              // const finalParagraph = a.replace(/\n+/g, ' ');
-              obj['contentArray'] = [a]
-              snippetResponeArray.push(obj);
             }
           }else{
             if(snippet?.content && typeof (snippet?.content) === 'string'){
@@ -445,6 +549,56 @@ export class RootService {
           }
         }
       });
+      let extInfo = '';
+      let interlInfo = ''
+      let uniqueSource = [];
+      snipObje['contentArray']
+        ?.forEach((entry) => {
+          let className = '';
+          snipObje.sources.push(
+            ...(entry?.sources || []).filter((item) => {
+              let returnValue = item.url && uniqueSource.indexOf(item.title) == -1;
+              if (returnValue) {
+                uniqueSource.push(item.title);
+              }
+              if (uniqueSource.indexOf(item.title) != -1) {
+                className += `fragment-ext-${uniqueSource.indexOf(item.title) + 1}`;
+              }
+              return returnValue;
+            })
+          );
+          
+          if(entry.internalFlag){
+            let temp = `<span class="${className}">${entry.ans.trim()}`;
+            for (let source of entry?.sources) {
+              if (source?.title && uniqueSource.indexOf(source?.title) != -1) {
+                let srcCount = uniqueSource.indexOf(source.title);
+                temp += `<span class="source-count-num">${
+                  srcCount + 1
+                }</span>`;
+              }
+            }
+            temp += '</span>';
+            interlInfo+=temp;
+          }else{
+            let temp = `<span class="${className}">${entry.ans.trim()}`;
+            for (let source of entry?.sources) {
+              if (source?.title && uniqueSource.indexOf(source?.title) != -1) {
+                let srcCount = uniqueSource.indexOf(source.title);
+                temp += `<span class="source-count-num">${
+                  srcCount + 1
+                }</span>`;
+              }
+            }
+            temp += '</span>';
+            extInfo+=temp;
+          }
+        });
+        if(interlInfo?.trim()){
+          snipObje['internalInfo'].push(interlInfo?.trim());
+        }
+        snipObje['contentArray'].push(extInfo?.trim());
+        snippetResponeArray.push(snipObje);
     } 
     return snippetResponeArray;   
   }

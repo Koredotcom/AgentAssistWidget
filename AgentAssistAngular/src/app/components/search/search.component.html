@@ -37,7 +37,9 @@
                         <img src="assets/images/icons/web-page.svg" alt="Snippet">
                     </div>
                     <h1 class="text-truncate">{{'SNIPPET' | translate}}</h1>
-                    <span class="count-text">{{searchResponse?.snippets?.length}}</span>
+                    <span class="by-n-ai"><span class="snippet-by-label">by</span><i class="krIocnsFont-Aimark"></i></span>
+
+                    <!-- <span class="count-text">{{searchResponse?.snippets?.length}}</span> -->
                 </div>
                 <div class="suggestion-body-search">
                     <app-snippet-suggestions [searchResponse]="searchResponse"></app-snippet-suggestions>
