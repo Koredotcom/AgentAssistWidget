@@ -1,5 +1,11 @@
 <div class="search-block-data-suggestions" [attr.id]="renderResponseType.SUGGESTIONS + '-' + suggestionResponse?.uuid">
-    <div class="suggestionslist-conntent-search">
+    <div class="suggestionslist-conntent-search" 
+        *ngIf="suggestionResponse.searchResponse?.dialogs?.length
+               || suggestionResponse.searchResponse?.faqs?.length
+               || suggestionResponse.searchResponse?.snippets?.length
+               || suggestionResponse.searchResponse?.articles?.length
+               || suggestionResponse.searchResponse?.files?.length
+        ">
         <ng-container>
             <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.dialogs?.length">
                 <div class="suggestion-header">
@@ -38,7 +44,8 @@
                         <img src="assets/images/icons/web-page.svg" alt="Snippet">
                     </div>
                     <h1 class="text-truncate">{{'SNIPPET' | translate}}</h1>
-                        <i class="krIocnsFont-info-circle help-tip-icon" [ngbTooltip]="tipContent" container="body" *ngIf="suggestionResponse?.data?.userInput"></i>
+                    <span class="by-n-ai"><span class="snippet-by-label">by</span><i class="krIocnsFont-Aimark"></i></span>
+                        <!-- <i class="krIocnsFont-info-circle help-tip-icon" [ngbTooltip]="tipContent" container="body" *ngIf="suggestionResponse?.data?.userInput"></i> -->
                         <!-- <span [ngbTooltip]="suggestionResponse?.data?.userInput" *ngIf="suggestionResponse?.data?.userInput"> : ({{suggestionResponse?.data?.userInput?.slice(0,10) + '...'}})</span> -->
                         <!-- <span class="count-text">{{suggestionResponse.searchResponse?.snippets?.length}}</span> -->
                 </div>

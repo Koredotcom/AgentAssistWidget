@@ -5,7 +5,7 @@
         <h1 class="text-truncate" *ngIf="snippet.title">{{snippet.title}}</h1>
           <div *ngIf="snippet.send" class="sent-msg-text">{{(snippet.send === 'send' ?  'SENT' : 'COPIED') | translate }} </div>
       </div>
-      <div class="faq-actions" *ngIf="!hideActionButtons && snippet.contentArray.length > 0 && !snippet.internalFlag"
+      <div class="faq-actions" *ngIf="!hideActionButtons && snippet.contentArray.length > 0"
         [ngClass]="{'faq-actions-top' : !snippet.title}">
         <ng-container>
           <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.ARTICLE)"
@@ -22,30 +22,57 @@
       <ng-container>
         <div class="text-info-more-data-link">
           <div class="text-info-more-data-block">
-            <p [ngClass]="{'show-full-text' : !snippet.showMoreButton}" #snippetContent1>
+            <p [ngClass]="{'show-full-text' : !extMore}" #snippetContent>
               <ng-container *ngFor="let content of snippet.contentArray; let ii = index">
-                <div class="inner-text-snippet-selection " *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content) + (snippet.isActCit ? handleAnsCount(ii+1) : '') | safeHtml"
-                  [ngClass]="{'snippet-list-style' : snippet.contentArray.length > 1, 'selection-on-snippet-color': sourceInx === i + 'ext' + ii}"></div>
+                <div class="inner-text-snippet-selection " *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content)  | safeHtml"
+                  [ngClass]="{'snippet-list-style' : snippet.contentArray.length > 1 && !snippet.isActCit}"></div>
               </ng-container>
             </p>
             <div class="more-links-actions">
-              <a class="moreText" role="button" aria-expanded="false" *ngIf="(snippetContent1?.scrollHeight > 36)">
-                <span class="more-text" *ngIf="snippet?.showMoreButton"
-                  (click)="toggleShowMoreLess(snippet)">{{'MORE_TEXT' | translate}}</span>
-                <span class="less-text" *ngIf="!snippet?.showMoreButton"
-                  (click)="toggleShowMoreLess(snippet)">{{'LESS_TEXT' | translate}}</span>
+              <a class="moreText" role="button" aria-expanded="false" *ngIf="(snippetContent?.scrollHeight > 72)">
+                <span class="more-text" *ngIf="extMore"
+                  (click)="extMore = !extMore">{{'MORE_TEXT' | translate}}</span>
+                <span class="less-text" *ngIf="!extMore"
+                  (click)="extMore = !extMore">{{'LESS_TEXT' | translate}}</span>
               </a>
             </div>
           </div>
+
+          <ng-container *ngIf="snippet.internalInfo?.length">
+            <div class="line-with-text-heading">
+              <h2>Internal Information</h2>
+              <span></span>
+            </div>
+            <div class="text-info-more-data-block">
+              <p [ngClass]="{'show-full-text' : !intMore}" #snippetContent1>
+                <ng-container *ngFor="let content of snippet.internalInfo; let ii = index">
+                  <div class="inner-text-snippet-selection " *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content)  | safeHtml"
+                    [ngClass]="{'snippet-list-style' : snippet.internalInfo.length > 1 && !snippet.isActCit}"></div>
+                </ng-container>
+              </p>
+              <div class="more-links-actions">
+                <a class="moreText" role="button" aria-expanded="false" *ngIf="(snippetContent1?.scrollHeight > 88)">
+                  <span class="more-text" *ngIf="intMore"
+                    (click)="intMore = !intMore">{{'MORE_TEXT' | translate}}</span>
+                  <span class="less-text" *ngIf="!intMore"
+                    (click)="intMore = !intMore">{{'LESS_TEXT' | translate}}</span>
+                </a>
+              </div>
+            </div>
+            <div class="line-with-text-heading" dir="rtl">
+              <h2>Internal Information</h2>
+              <span></span>
+            </div>
+          </ng-container>
+
           <div class="souces-names-wrapper" *ngIf="snippet?.sources?.length > 0">
             <h1>Sources :</h1>
             <div class="source-names">
               <ng-container *ngFor="let source of snippet.sources;let ii = index">
-                <div class="source-tag" *ngIf="source.url" (mouseover)="hoverOnSource(source.sourceInx, 'ext', i)" (mouseleave)="sourceInx = null">
-                  <span *ngIf="snippet.isActCit">{{source.sourceInx+1}}</span>
-                  <a (click)="openurlInBrowser(source.url)" ngbTooltip="{{source.title}}">{{source?.title || 'Know More'}}</a>
+                <div class="source-tag" *ngIf="source.url" (mouseover)="hoverOnSource(ii+1, 'ext', i)" (mouseleave)="mouseLeave()">
+                  <span *ngIf="snippet.isActCit">{{ii+1}}</span>
+                  <a (click)="openurlInBrowser(source.url)" title="{{source.title}}">{{source?.title || 'Know More'}}</a>
                 </div>
-
               </ng-container>
             </div>
           </div>
@@ -61,7 +88,7 @@
 </a>
 
 
-<ng-container *ngIf="internalInfo.length">
+<!-- <ng-container *ngIf="internalInfo.length">
 <div class="line-with-text-heading">
   <h2>Internal Information</h2>
   <span></span>
@@ -72,18 +99,9 @@
       <div class="titles-info-heading">
         <h1 class="text-truncate" *ngIf="snippet.title">{{snippet.title}}</h1>
         <div class="sent-msg-text" *ngIf="snippet.send">{{ 'SENT' | translate }} </div>
-
       </div>
       <div class="faq-actions" *ngIf="!hideActionButtons && snippet.contentArray.length > 0 && !snippet.internalFlag"
         [ngClass]="{'faq-actions-top' : !snippet.title}">
-<!--         <ng-container>
-          <button class="solidbtn" (click)="handleSendCopyButton(projConstants.COPY, snippet , projConstants.ARTICLE)"
-            *ngIf="!hideCopyButton">
-            <i class="krIocnsFont-copy"></i>
-          </button>
-          <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, snippet , projConstants.ARTICLE)"
-            *ngIf="!hideSendButton">{{ 'SEND' | translate }}</button>
-        </ng-container> -->
       </div>
     </div>
     <div class="faq-body-content">
@@ -93,7 +111,7 @@
           <div class="text-info-more-data-block">
             <p [ngClass]="{'show-full-text' : !snippet.showMoreButton}" #snippetContent2>
               <ng-container *ngFor="let content of snippet.contentArray; let ii = index">
-                <div [ngClass]="{'snippet-list-style' : snippet.contentArray.length > 1, 'selection-on-snippet-color': sourceInx === i + 'int' + ii}" class="inner-text-snippet-selection" *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content) + (snippet.isActCit ? handleAnsCount(ii+1) : '') | safeHtml"></div>
+                <div [ngClass]="{'snippet-list-style' : snippet.contentArray.length > 1}" class="inner-text-snippet-selection" *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content) | safeHtml"></div>
               </ng-container>
             </p>
             <div class="more-links-actions">
@@ -109,11 +127,10 @@
             <h1>Sources :</h1>
             <div class="source-names">
               <ng-container *ngFor="let source of snippet.sources;let ii = index">
-                <div class="source-tag" *ngIf="source.url" (mouseover)="hoverOnSource(source.sourceInx, 'int', i)" (mouseleave)="sourceInx = null">
-                  <span *ngIf="snippet.isActCit">{{source.sourceInx+1}}</span>
+                <div class="source-tag" *ngIf="source.url" (mouseover)="hoverOnSource(ii+1, 'int', i)" (mouseleave)="mouseLeave()">
+                  <span *ngIf="snippet.isActCit">{{ii+1}}</span>
                   <a (click)="openurlInBrowser(source.url)" ngbTooltip="{{source.title}}">{{source?.title || 'Know More'}}</a>
                 </div>
-
               </ng-container>
             </div>
           </div>
@@ -131,4 +148,4 @@
   <span class="more-text" (click)="viewMoreClickInt()" *ngIf="!moreClickInt">{{'SHOW_MORE_SNIPPET' | translate}}</span>
   <span class="less-text" (click)="viewLessClickInt()" *ngIf="moreClickInt">{{'SHOW_LESS_SNIPPET' | translate}}</span>
 </a>
-</ng-container>
+</ng-container> -->

@@ -13,7 +13,7 @@ import { SubSink } from 'subsink';
 export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
   @Input() searchResponse : any;
-
+  prevClass = '';
   subs = new SubSink();
   projConstants: any = ProjConstants;
   searchedSnippetList : any[] = [];
@@ -25,7 +25,9 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   internalInfo = [];
   moreClickInt = false;
   viewCountInt = 2;
-  sourceInx = null;
+  // sourceInx = null;
+  extMore = true;
+  intMore = true;
   constructor(private handleSubjectService : HandleSubjectService,
     public rootService : RootService, private commonService : CommonService){
 
@@ -37,6 +39,8 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
   ngOnChanges(changes : SimpleChange){
     if(changes['searchResponse']?.currentValue){
+      this.extMore = true;
+      this.intMore = true;
       this.handleSearchResponse(this.searchResponse);
       this.hideSendAndCopy();
     }
@@ -64,18 +68,17 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     this.searchedSnippetList = [];
     if (searchResponse && searchResponse.snippets) {
       this.searchedSnippetList = searchResponse.snippets;
-      this.internalInfo = this.searchedSnippetList.filter(item => item.internalFlag);
-      this.searchedSnippetList = this.searchedSnippetList.filter(item => !item.internalFlag);
+      // this.internalInfo = this.searchedSnippetList.filter(item => item.internalFlag);
+      // this.searchedSnippetList = this.searchedSnippetList.filter(item => !item.internalFlag);
       this.viewLessClick();
     }
   }
 
+
   handleSendCopyButton(actionType, snippetObj, selectType){
     snippetObj.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     let snippet = JSON.parse(JSON.stringify(snippetObj));
-    if(snippet.contentArray.length > 0){
-      snippet.content = snippet.contentArray.join('\n')
-    }
+    snippet.content = snippetObj?.sendCopyText;
     this.commonService.handleSendCopyButton(actionType, snippet, selectType)
   }
 
@@ -112,10 +115,16 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   }
 
   hoverOnSource(sourceInx, type, i){
-    this.sourceInx =  i + type + sourceInx;
+    if(this.prevClass){
+      document.querySelectorAll(this.prevClass)?.forEach(el => el?.classList?.remove('selection-on-snippet-color'));
+    }
+    this.prevClass = '.fragment-ext-' + sourceInx;
+    document.querySelectorAll(this.prevClass)?.forEach(el => el?.classList?.add('selection-on-snippet-color'));
   }
 
-  handleAnsCount(inx){
-    return `<span class='source-count-num'> ${inx} </span>`;
+  mouseLeave(){
+    if(this.prevClass){
+      document.querySelectorAll(this.prevClass)?.forEach(el => el?.classList?.remove('selection-on-snippet-color'));
+    }
   }
 }

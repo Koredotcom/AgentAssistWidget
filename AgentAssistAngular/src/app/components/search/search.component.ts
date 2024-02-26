@@ -1,4 +1,5 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { finalize } from 'rxjs';
 import { EVENTS } from 'src/app/helpers/events';
 import { ProjConstants } from 'src/app/proj.const';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -16,6 +17,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   @Input() maxButton;
   @Output() maxMinButtonClick = new EventEmitter();
+  @ViewChild('inputBox') inputBox: ElementRef;
 
   projConstants : any = ProjConstants;
 
@@ -40,7 +42,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   autocompleteText : string = '';
   showSpinner : boolean = true;
   closeSuggestions : boolean = true;
-
+  secondaryIp = true;
 
   constructor(public rootService: RootService, private serviceInvoker: ServiceInvokerService,
     private websocketService: WebSocketService, private handleSubjectService: HandleSubjectService,
@@ -82,8 +84,14 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   onSearch(event: any) {
     if(this.rootService.settingsData?.searchAssistConfig?.showAutoSuggestions){
       if (this.searchText?.length > 0) {
+        if(this.autocompleteText === this.searchText || this.autocompleteText.includes(this.searchText)){
+          this.secondaryIp = true;
+        }else{
+          this.secondaryIp = false;
+        }
         this.typeAHead(this.searchText, this.rootService.connectionDetails);
       } else {
+        this.secondaryIp = true;
         this.clearSearch();
       }
     }
@@ -116,7 +124,11 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
       "lang": "en",
       "experience" : channel
     }
-    this.serviceInvoker.invoke('post.autoSearch', { botId: botId, convId: conversationId }, payload, { botId: botId }, params.agentassisturl).subscribe((res) => {
+    this.serviceInvoker.invoke('post.autoSearch', { botId: botId, convId: conversationId }, payload, { botId: botId }, params.agentassisturl)
+    .pipe(finalize(()=>{
+      this.secondaryIp = true;
+    }))
+    .subscribe((res) => {
       this.querySuggestions = res?.querySuggestions;
       this.typeAHeads = res?.typeAheads;
       if(this.typeAHeads?.length){
@@ -131,6 +143,9 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   onTabClick(event){
     this.searchText = this.autocompleteText;
+    setTimeout(() => {
+      this.inputBox.nativeElement.focus();
+    },);
   }
 
   selectSuggestion(suggestion){
@@ -158,7 +173,10 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
   getSearchResults(event) {
     this.showSpinner = true;
-    this.setValue(event.target.value, true)
+    this.setValue(event.target.value, true);
+    setTimeout(() => {
+      this.showSpinner = false;
+    }, 15000);
   }
 
   setValue(value: any, isEntered = false) {

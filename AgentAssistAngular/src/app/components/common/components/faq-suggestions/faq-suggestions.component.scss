@@ -117,7 +117,7 @@
                 line-height: 18px;
                 margin: 0;
                 display: -webkit-box;
-                -webkit-line-clamp: 3;
+                -webkit-line-clamp: 4;
                 -webkit-box-orient: vertical;  
                 overflow: hidden;
                 .inner-text-snippet-selection{
@@ -317,6 +317,12 @@
 }
 
 ::ng-deep .selection-on-snippet-color{
+    background: #EFF4FF;
+    ul{
+        li{
+            background: #EFF4FF;
+        }
+    }
     .source-count-num{
         background: var(--themeColor);
         color: var(--whiteTextColor);
