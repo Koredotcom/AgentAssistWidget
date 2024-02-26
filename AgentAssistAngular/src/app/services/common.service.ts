@@ -213,6 +213,9 @@ export class CommonService {
     if(this.rootService.activeTab == this.projConstants.SEARCH){
       data.input = this.rootService.searchedResultData.userInput;
     }
+    if(faq_or_article_obj.subType){
+      data.subType = faq_or_article_obj.subType;
+    }
     this.websocketService.emitEvents(EVENTS.agent_send_or_copy, data);
   }
 
