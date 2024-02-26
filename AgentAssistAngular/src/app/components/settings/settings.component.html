@@ -171,6 +171,10 @@
                     <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="ge" type="radio" name="radioForLang" id="flexRadioDefault6">
                     <label class="form-check-label" for="flexRadioDefault6">Deutsch (German)</label>
                 </div>
+                <div class="form-check sm">
+                    <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="sp" type="radio" name="radioForLang" id="flexRadioDefault7">
+                    <label class="form-check-label" for="flexRadioDefault7">Español (Spanish)</label>
+                </div>
             </div>
         </ng-container>
         <ng-container *ngIf="setting === 'theme'">

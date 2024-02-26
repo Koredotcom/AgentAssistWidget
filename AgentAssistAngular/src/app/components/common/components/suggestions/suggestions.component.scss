@@ -3,7 +3,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    border-radius: 12px 12px 0px 0px;
+    border-radius: 6px 6px 0px 0px;
     background: var(--themebgColorVariation-1);
     .suggestionslist-conntent-search{
         padding: 8px 12px 0px 12px;
@@ -42,6 +42,7 @@
                     position: absolute;
                     right: 10px;
                     top: auto;
+                    color: var(--primaryTextColor);
                 }
                 .icon_block{
                     flex-shrink: 0;
@@ -63,7 +64,7 @@
                 .count-text{
                     flex-shrink: 0;
                     border-radius: 16px;
-                    background: var(--backgroundColorFormFocus);
+                    background: var(--backgroundColorMsgNode);
                     padding: 0px 8px;
                     height: 15px;
                     display: flex;                   

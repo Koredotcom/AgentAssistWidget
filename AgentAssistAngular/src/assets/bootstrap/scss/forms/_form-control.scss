@@ -22,8 +22,9 @@
   }
   &:focus {
     outline: 0;
-    border: 1px solid var(--primary-300, #84ADFF);
-    box-shadow: 0px 0px 0px 4px var(--backgroundColorFormFocus), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    border: 1px solid var(--Primary-300, #80ACEF);
+    box-shadow: 0px 0px 0px 4px #E1E1FE;
+    // box-shadow: 0px 0px 0px 4px var(--backgroundColorFormFocus), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
 
   &::-webkit-date-and-time-value {

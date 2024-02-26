@@ -173,7 +173,7 @@
         &:hover{
             .bubble-msg-with-img{
                 .bubble-msg{
-                    background-color: var(--backgroundColorFormFocus);
+                    background-color: var(--backgroundColorMsgNode);
                 }                
             }
         }
@@ -241,7 +241,7 @@
                 }
             }
             .bubble-msg{
-                background: var(--backgroundColorFormFocus);
+                background: var(--backgroundColorMsgNode);
                 border-radius: 8px 8px 2px 8px;
                 font-weight: 400;
                 font-size: 14px;
@@ -334,7 +334,7 @@
 .summery-info-transcript{
     border-radius: 8px;
     border: 1px solid var(--themeBorderColor);
-    background: var(--gray-modern-100, #EEF2F6);
+    background: var(--themebgColorVariation-2);
     margin: 8px 0;
     padding: 11px;
     .heading-text{

@@ -59,7 +59,7 @@
         <ng-container *ngIf="!automation.errorCount; else errCount">
             <p class="info-entity-text" *ngIf="automation.userInput == projConstants.NO">{{'AGENT_ENTERED' | translate}}</p>
             <p class="info-entity-text" *ngIf="automation.userInput == projConstants.YES">{{'ACCEPT_RESPONSE' | translate}}</p>
-            <p class="info-entity-text" *ngIf="automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p>
+            <p class="info-entity-text" *ngIf="automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName | translate}}</p>
         </ng-container>
         <ng-template #errCount>
             <p class="info-entity-text">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.expectedFormat}}  |  {{'OVERRIDE' | translate}}</p>
@@ -97,7 +97,7 @@
         <ng-container  *ngIf="!automation.errorCount; else errCount">
             <p class="info-entity-text" *ngIf="automation.userInput == projConstants.NO">{{'AGENT_ENTERED' | translate}}</p>
             <p class="info-entity-text" *ngIf="automation.userInput == projConstants.YES">{{'ACCEPT_RESPONSE' | translate}}</p>
-            <p class="info-entity-text" *ngIf="automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName}}</p>
+            <p class="info-entity-text" *ngIf="automation.userInput != projConstants.YES && automation.userInput != projConstants.NO">{{inputName | translate}}</p>
         </ng-container>
         <ng-template #errCount>
             <p class="info-entity-text">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.expectedFormat}}  |  {{'OVERRIDE' | translate}}</p>

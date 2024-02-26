@@ -39,10 +39,10 @@
   background: var(--backgroundThemeColor);
   color: var(--whiteTextColor);
   &:focus{
-    box-shadow: 0px 0px 0px 4px var(--backgroundColorFormFocus), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    box-shadow: 0px 0px 0px 4px var(--backgroundColorMsgNode), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
   &:active{
-    box-shadow: 0px 0px 0px 4px var(--backgroundColorFormFocus), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    box-shadow: 0px 0px 0px 4px var(--backgroundColorMsgNode), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
   &:hover{
     border: 1px solid var(--themeColor);
@@ -51,8 +51,8 @@
 }
 
 .secondaryBtn{
-  border: 1px solid var(--backgroundColorFormFocus);
-  background: var(--backgroundColorFormFocus);
+  border: 1px solid var(--backgroundColorMsgNode);
+  background: var(--backgroundColorMsgNode);
   color: var(--themeColor);
   &:focus{
     box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
@@ -75,7 +75,7 @@
     box-shadow: 0px 0px 0px 4px var(--borderSuggestions), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   }
   &:hover{
-    background: var(--gray-50, #F9FAFB);
+    background: var(--backgroundColorMsgNode);
   }
 }
 

@@ -48,14 +48,14 @@
   &:hover,
   &:focus {
     color: var(--primaryTextColorTwo);
-    background: var(--backgroundColorFormFocus);
+    background: var(--backgroundColorMsgNode);
   }
 
   &.active,
   &:active {
     color: var(--primaryTextColorTwo);
     text-decoration: none;
-    background: var(--backgroundColorFormFocus);
+    background: var(--backgroundColorMsgNode);
   }
 
   &.disabled,
@@ -95,7 +95,7 @@
     margin: 1px 0;
     white-space: normal;
     &.selected{
-      background: var(--backgroundColorFormFocus);
+      background: var(--backgroundColorMsgNode);
     }
     p{
       width: 100%;

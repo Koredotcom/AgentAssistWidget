@@ -1,3 +1,4 @@
+import { KeyValue } from '@angular/common';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,13 +22,13 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
   feedbackConst : any = FeebackConst;
   feedbackComment : string;
   formTouched : boolean = false;
-  dislikeList : any = [
-    this.translate.instant("WRONG_SUGGESTION"),
-    this.translate.instant("INCORRECT_INTENT"),
-    this.translate.instant("ACCIDENTAL_CLICK"),
-    this.translate.instant("TIME_TAKING"),
-    this.translate.instant("OTHER"),
-  ]
+  dislikeList : any = {
+    "WRONG_SUGGESTION" : ProjConstants.WRONG_SUGGESTION,
+    "INCORRECT_INTENT" : ProjConstants.INCORRECT_INTENT,
+    "ACCIDENTAL_CLICK" : ProjConstants.ACCIDENTAL_CLICK,
+    "TIME_TAKING" : ProjConstants.TIME_TAKING,
+    "OTHER" : ProjConstants.OTHER,
+  }
 
   constructor(private rootService : RootService,
     private websocketService : WebSocketService,
@@ -152,4 +153,7 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
     }
   }
 
+  originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+    return 0;
+  }
 }

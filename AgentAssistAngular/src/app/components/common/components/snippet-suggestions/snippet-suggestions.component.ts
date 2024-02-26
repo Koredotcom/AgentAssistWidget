@@ -13,7 +13,7 @@ import { SubSink } from 'subsink';
 export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
   @Input() searchResponse : any;
-
+  prevClass = '';
   subs = new SubSink();
   projConstants: any = ProjConstants;
   searchedSnippetList : any[] = [];
@@ -114,7 +114,6 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     this.rootService.openurlInBrowser(url);
   }
 
-  prevClass = '';
   hoverOnSource(sourceInx, type, i){
     if(this.prevClass){
       document.querySelectorAll(this.prevClass)?.forEach(el => el?.classList?.remove('selection-on-snippet-color'));
