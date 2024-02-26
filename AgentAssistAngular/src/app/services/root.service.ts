@@ -486,8 +486,10 @@ export class RootService {
         snipObje['internalInfo'] = [];
         if(interlInfo?.trim()){
           snipObje['internalInfo'].push(interlInfo?.trim());
-        };
-        snipObje['contentArray'].push(extInfo?.trim());
+        }
+        if(extInfo?.trim()){
+          snipObje['contentArray'].push(extInfo?.trim());
+        }
         snippetResponeArray.push(snipObje);
     } 
     return snippetResponeArray;   
