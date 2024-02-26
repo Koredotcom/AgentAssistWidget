@@ -254,7 +254,7 @@ export class RootService {
   }
 
   formatSearchResponse(response) {
-    let suggestions = response.suggestions
+    let suggestions = response.suggestions;
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
     let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [],response)
@@ -371,42 +371,122 @@ export class RootService {
   }
 
   formatSnippetResponse(snippetsArray, response){
+    let snipObje:any = {};
+    snipObje['contentArray'] = [];
+    snipObje['sources'] = [];
+    snipObje['internalInfo'] = [];
+    snipObje['sendCopyText'] = '';
     let snippetResponeArray : any = [];
     if(snippetsArray?.length > 0){
       snippetsArray.forEach( (snippet : any) => {
         if(snippet?.templateType){
           if(snippet.templateType == 'active_citation_snippet' || snippet.templateType == 'citation_snippet'){
-            if(snippet?.content && Array.isArray(snippet?.content) && snippet?.content?.length > 0){
-              let obj : any = (({snippet_type,templateType})=>({snippet_type,templateType}))(snippet||{});
-              obj['contentArray'] = [];
-              obj['sources'] = [];
-              snippet.content.forEach((ansSnippet : any, inx) => {
-                ansSnippet.answer_fragment = ansSnippet.answer_fragment;
-                obj.contentArray.push(ansSnippet.answer_fragment);
-                obj.sources.push(...(ansSnippet?.sources || []).filter(item => {
-                  item.sourceInx = inx;
-                  return item.url;
-                }));
-                obj.sourceMsgId = response.sourceMsgId || '';
-                obj.internalFlag = snippet.internalFlag || false;
-                obj.isActCit = true;
+            if (
+              snippet?.content &&
+              Array.isArray(snippet?.content) &&
+              snippet?.content?.length > 0
+            ) {
+              snippet.content.forEach((ansSnippet: any) => {
+                let ansObj = {
+                  ans: ansSnippet.answer_fragment,
+                  sources: ansSnippet?.sources || [],
+                  internalFlag: snippet.internalFlag
+                };
+                snipObje['contentArray'].push(ansObj);
+                snipObje.sourceMsgId = response.sourceMsgId || '';
+                snipObje.internalFlag = snippet.internalFlag || false;
+                snipObje.isActCit = true;
               });
-              snippetResponeArray.push(obj);
             }
           }else{
-            if(snippet?.content && typeof (snippet?.content) === 'string'){
-              snippet.contentArray = [snippet.content];
-            }else if(snippet?.content){
-              snippet.contentArray = snippet.content || [];
+            if(snippet?.content){
+              if(Array.isArray(snippet?.content)){
+                snippet.content = snippet?.content.join('\n');
+              }
+              snipObje.internalFlag = snippet.internalFlag || false;
+              let otherType  = {
+                ans: snippet.content,
+                internalFlag: snippet.internalFlag
+              }
+              if(snippet.url){
+                otherType['sources'] = [{title : snippet.source, url : snippet.url}];
+              }
+              snipObje.contentArray.push(otherType);
             }
-            if(snippet.url){
-              snippet.sources = [{title : snippet.source, url : snippet.url}]
-            }
-            snippet.sourceMsgId = response.sourceMsgId || '';
-            snippetResponeArray.push(snippet);
+            snipObje.sourceMsgId = response.sourceMsgId || '';
           }
         }
       });
+      let extInfo = '';
+      let interlInfo = ''
+      let uniqueSource = [];
+      snipObje['contentArray']
+        ?.forEach((entry) => {
+          let className = '';
+          snipObje.sources.push(
+            ...(entry?.sources || []).filter((item) => {
+              let returnValue = item.url && uniqueSource.indexOf(item.title) == -1;
+              if (returnValue) {
+                uniqueSource.push(item.title);
+              }
+              if (uniqueSource.indexOf(item.title) != -1) {
+                className += `fragment-ext-${uniqueSource.indexOf(item.title) + 1} `;
+              }
+              return returnValue;
+            })
+          );
+          
+          snipObje['sendCopyText'] += entry.ans;
+          let temp = `<span class="${className}">${entry.ans} `;
+          for (let source of entry?.sources) {
+            if (source?.title && uniqueSource.indexOf(source?.title) != -1) {
+              let srcCount = uniqueSource.indexOf(source.title);
+              temp += `<span class="source-count-num">${srcCount + 1}</span>`;
+            }
+          }
+          temp += '</span>';
+          if (entry.internalFlag) {
+            interlInfo += temp;
+          } else {
+            extInfo += temp;
+          }
+
+
+/*           if(entry.internalFlag){
+            let temp = `<span class="${className}">${entry.ans} `;
+            for (let source of entry?.sources) {
+              if (source?.title && uniqueSource.indexOf(source?.title) != -1) {
+                let srcCount = uniqueSource.indexOf(source.title);
+                temp += `<span class="source-count-num">${
+                  srcCount + 1
+                }</span>`;
+              }
+            }
+            temp += '</span>';
+            interlInfo+=temp;
+          }else{
+            let temp = `<span class="${className}">${entry.ans} `;
+            for (let source of entry?.sources) {
+              if (source?.title && uniqueSource.indexOf(source?.title) != -1) {
+                let srcCount = uniqueSource.indexOf(source.title);
+                temp += `<span class="source-count-num">${
+                  srcCount + 1
+                }</span>`;
+              }
+            }
+            temp += '</span>';
+            extInfo+=temp;
+          } */
+
+
+        });
+        snipObje['contentArray'] = [];
+        snipObje['internalInfo'] = [];
+        if(interlInfo?.trim()){
+          snipObje['internalInfo'].push(interlInfo?.trim());
+        };
+        snipObje['contentArray'].push(extInfo?.trim());
+        snippetResponeArray.push(snipObje);
     } 
     return snippetResponeArray;   
   }
