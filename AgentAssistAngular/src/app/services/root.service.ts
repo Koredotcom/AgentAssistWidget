@@ -436,7 +436,9 @@ export class RootService {
             })
           );
           
-          snipObje['sendCopyText'] += entry.ans;
+          if(!entry.internalFlag){
+            snipObje['sendCopyText'] += entry.ans;
+          }
           let temp = `<span class="${className}">${entry.ans} `;
           for (let source of entry?.sources) {
             if (source?.title && uniqueSource.indexOf(source?.title) != -1) {
