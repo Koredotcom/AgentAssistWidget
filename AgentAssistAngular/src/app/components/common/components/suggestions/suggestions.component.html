@@ -1,5 +1,11 @@
 <div class="search-block-data-suggestions" [attr.id]="renderResponseType.SUGGESTIONS + '-' + suggestionResponse?.uuid">
-    <div class="suggestionslist-conntent-search">
+    <div class="suggestionslist-conntent-search" 
+        *ngIf="suggestionResponse.searchResponse?.dialogs?.length
+               || suggestionResponse.searchResponse?.faqs?.length
+               || suggestionResponse.searchResponse?.snippets?.length
+               || suggestionResponse.searchResponse?.articles?.length
+               || suggestionResponse.searchResponse?.files?.length
+        ">
         <ng-container>
             <div class="sugestions-block" *ngIf="suggestionResponse.searchResponse?.dialogs?.length">
                 <div class="suggestion-header">

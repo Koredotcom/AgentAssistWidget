@@ -375,6 +375,7 @@ export class RootService {
     snipObje['contentArray'] = [];
     snipObje['sources'] = [];
     snipObje['internalInfo'] = [];
+    snipObje['sendCopyText'] = '';
     let snippetResponeArray : any = [];
     if(snippetsArray?.length > 0){
       snippetsArray.forEach( (snippet : any) => {
@@ -434,7 +435,7 @@ export class RootService {
               return returnValue;
             })
           );
-          
+          snipObje['sendCopyText'] += entry.ans;
           if(entry.internalFlag){
             let temp = `<span class="${className}">${entry.ans} `;
             for (let source of entry?.sources) {
@@ -461,6 +462,8 @@ export class RootService {
             extInfo+=temp;
           }
         });
+        snipObje['contentArray'] = [];
+        snipObje['internalInfo'] = [];
         if(interlInfo?.trim()){
           snipObje['internalInfo'].push(interlInfo?.trim());
         }
