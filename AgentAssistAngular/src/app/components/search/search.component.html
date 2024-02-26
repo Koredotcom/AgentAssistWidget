@@ -94,9 +94,9 @@
             <p>{{'SUGGESTED' | translate}}</p>
         </div>
         <div class="input-block">
-            <input type="text" class="form-control" aria-describedby="search" placeholder="{{'SEARCH' | translate}}" value="Edit" [(ngModel)]="searchText"
+            <input #inputBox type="text" class="form-control" aria-describedby="search" placeholder="{{'SEARCH' | translate}}" value="Edit" [(ngModel)]="searchText"
             (ngModelChange)="onSearch($event)" (keyup.enter)="getSearchResults($event)" (keydown.Tab)="onTabClick($event)" (focus)="closeSuggestions = false">
-            <input class="suggestion-input" [value]="autocompleteText" readonly>
+            <input *ngIf="secondaryIp" class="suggestion-input" [value]="autocompleteText" readonly>
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M8.33342 1.66675C4.65152 1.66675 1.66675 4.65152 1.66675 8.33342C1.66675 12.0153 4.65152 15.0001 8.33342 15.0001C9.87401 15.0001 11.2925 14.4775 12.4215 13.6L16.9108 18.0893C17.2363 18.4148 17.7639 18.4148 18.0893 18.0893C18.4148 17.7639 18.4148 17.2363 18.0893 16.9108L13.6 12.4215C14.4775 11.2925 15.0001 9.87401 15.0001 8.33342C15.0001 4.65152 12.0153 1.66675 8.33342 1.66675ZM3.33341 8.33342C3.33341 5.57199 5.57199 3.33341 8.33342 3.33341C11.0948 3.33341 13.3334 5.57199 13.3334 8.33342C13.3334 11.0948 11.0948 13.3334 8.33342 13.3334C5.57199 13.3334 3.33341 11.0948 3.33341 8.33342Z" fill="#667085"/>
             </svg>

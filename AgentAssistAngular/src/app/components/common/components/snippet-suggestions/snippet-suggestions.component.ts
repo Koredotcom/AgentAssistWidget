@@ -39,6 +39,8 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
   ngOnChanges(changes : SimpleChange){
     if(changes['searchResponse']?.currentValue){
+      this.extMore = true;
+      this.intMore = true;
       this.handleSearchResponse(this.searchResponse);
       this.hideSendAndCopy();
     }
