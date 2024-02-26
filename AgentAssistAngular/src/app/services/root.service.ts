@@ -283,7 +283,10 @@ export class RootService {
               searchResponse.files.push.apply(searchResponse.files, suggestions.searchassist[source]);
             }
           }
-        }
+          suggestions?.searchassist[source]?.forEach((item : any) => {
+            item.subType = source;
+          });
+        }    
         for (let article of searchResponse.articles) {
           article.showMoreButton = true;
           article.showLessButton = false;
@@ -291,6 +294,7 @@ export class RootService {
           article.contentId = article.contentId;
           article.userInput = response.userInput;
           article.sourceMsgId = response.sourceMsgId || '';
+          article.subType = article.subType;
         }
         for (let file of searchResponse.files) {
           file.showMoreButton = true;
@@ -299,6 +303,7 @@ export class RootService {
           file.contentId = file.contentId;
           file.userInput = response.userInput;
           file.sourceMsgId = response.sourceMsgId || '';
+          file.subType = file.subType;
         }
       }
       for (let faq of faqArray) {
@@ -351,6 +356,7 @@ export class RootService {
         for (let snippet of searchResponse.snippets) {
           snippet.showMoreButton = true;
           snippet.showLessButton = false;
+          snippet.subType = 'snippets';
         }
       }
   
