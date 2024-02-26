@@ -79,11 +79,13 @@ export class AppComponent implements OnInit, OnDestroy{
 
     this.subs.sink = this.webSocketService.agentFeedbackResponse$.subscribe((response: any) => {
       if (response && Object.keys(response)?.length > 0) {
-        this.showFeedback = true;
-        clearTimeout(this.timeoutId);
-        this.timeoutId = setTimeout(() => {
-          this.showFeedback = false;
-        }, 5000);
+        if(response.feedback == 'like' || (response.feedback == 'dislike' && this.rootService.isUpdateFeedBackDetailsFlag)){
+          this.showFeedback = true;
+          clearTimeout(this.timeoutId);
+          this.timeoutId = setTimeout(() => {
+            this.showFeedback = false;
+          }, 5000);
+        }
       }
     });
   }
