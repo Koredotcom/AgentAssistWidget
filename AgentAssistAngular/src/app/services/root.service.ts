@@ -435,8 +435,24 @@ export class RootService {
               return returnValue;
             })
           );
+          
           snipObje['sendCopyText'] += entry.ans;
-          if(entry.internalFlag){
+          let temp = `<span class="${className}">${entry.ans} `;
+          for (let source of entry?.sources) {
+            if (source?.title && uniqueSource.indexOf(source?.title) != -1) {
+              let srcCount = uniqueSource.indexOf(source.title);
+              temp += `<span class="source-count-num">${srcCount + 1}</span>`;
+            }
+          }
+          temp += '</span>';
+          if (entry.internalFlag) {
+            interlInfo += temp;
+          } else {
+            extInfo += temp;
+          }
+
+
+/*           if(entry.internalFlag){
             let temp = `<span class="${className}">${entry.ans} `;
             for (let source of entry?.sources) {
               if (source?.title && uniqueSource.indexOf(source?.title) != -1) {
@@ -460,7 +476,9 @@ export class RootService {
             }
             temp += '</span>';
             extInfo+=temp;
-          }
+          } */
+
+
         });
         snipObje['contentArray'] = [];
         snipObje['internalInfo'] = [];
