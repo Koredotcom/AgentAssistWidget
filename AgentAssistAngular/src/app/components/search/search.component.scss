@@ -138,6 +138,7 @@
                 min-height: 40px;
                 max-height: 100px;
                 overflow: auto;
+                white-space: nowrap;
                 span{
                     display: inline-block;
                     -webkit-user-modify: read-only;
@@ -161,6 +162,7 @@
                 left: 12px;
                 top: 12px;
                 z-index: 2;
+                background-color: #fff;
             }
             .clear-search{
                 position: absolute;

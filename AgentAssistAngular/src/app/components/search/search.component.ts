@@ -97,22 +97,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     }
   }
 
-  focusEditableDiv(){
-    this.closeSuggestions = false;
-  }
-
-  closeSearch(){
-    this.updateEditableDiv('');
-    this.clearSearch();
-  }
-
-  clearSearch() {
-    this.searchText = ' ';
-    this.searched = false;
-    this.searchResponse = {};
-    this.updateAutocompleteText('');
-  }
-
   typeAHeadDeBounce(func, timeout = 300) {
     let delay;
     return function (...args) {
@@ -331,7 +315,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
 
 
   addSpanElement() {
-    console.log("add span");
     if (!document.getElementById('spanElement1') && this.searchText.length > 1) {
       const spanElement = this.renderer.createElement('span');
       // let span = document.getElementById('spanElement1').cloneNode(true) as HTMLElement;
@@ -345,8 +328,19 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   updateEditableDiv(value) {
     if (this.editableDiv.nativeElement?.childNodes[0]) {
       this.editableDiv.nativeElement.childNodes[0].textContent = value;
+      this.searchText = value;
     }
   }
 
+  focusEditableDiv(){
+    this.closeSuggestions = false;
+  }
 
+  clearSearch() {
+    this.searchText = ' ';
+    this.searched = false;
+    this.searchResponse = {};
+    this.updateAutocompleteText('');
+    this.updateEditableDiv('');
+  }
 }
