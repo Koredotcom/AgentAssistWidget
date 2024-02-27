@@ -1,13 +1,13 @@
 <ng-container *ngFor="let conv of historyResponse">
-    <div class="transcipt-bot-bubble-comp" *ngIf="conv.from == 'User' && conv.message && conv.message !== ''">
+    <div class="transcipt-bot-bubble-comp" *ngIf="conv?.msgType === 'USER' && conv.components[0]?.data?.text">
         <div class="bot-bubble-content hover-show-copy">
             <div class="top-info">
                 <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName + this.parsedCustomData?.lName) ||
                     ('CUSTOMER' | translate)}}</div>
-                <div class="time-tamp"><time>{{conv.timestampValue | converTimestampToDate}}</time></div>
+                <div class="time-tamp"><time>{{conv.createdOn | date:'h:mm a'}}</time></div>
             </div>
             <div class="bubble-msg-with-img">
-                <div class="bubble-msg">{{conv.message}}</div>
+                <div class="bubble-msg">{{conv.components[0]?.data?.text}}</div>
                 <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
                     <sub>1</sub>
                     <i class="krIocnsFont-light-bulb"></i>
@@ -19,14 +19,14 @@
         </div>
     </div>
    
-    <div class="transcipt-agent-bubble-comp" *ngIf="conv.from == 'Agent' && conv.message && conv.message !== ''">
+    <div class="transcipt-agent-bubble-comp" *ngIf="conv?.msgType === 'AGENT' && conv.components[0]?.data?.text">
         <div class="agent-bubble-content hover-show-copy">
             <div class="top-info">
-                <div class="time-tamp"><time>{{conv.timestampValue | converTimestampToDate}}</time></div>
+                <div class="time-tamp"><time>{{conv.createdOn | date:'h:mm a'}}</time></div>
                 <div class="you-text">{{'YOU' | translate}}</div>
             </div>
             <div class="bubble-msg-with-img">
-                <div class="bubble-msg">{{conv.message}}</div>
+                <div class="bubble-msg">{{conv.components[0]?.data?.text}}</div>
                 <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
                     <sub>1</sub>
                     <i class="krIocnsFont-light-bulb"></i>
