@@ -446,10 +446,12 @@ export class RootService {
             snipObje['sendCopyText'] += entry.ans;
           }
           let temp = `<span class="${className}">${entry.ans} `;
-          for (let source of entry?.sources) {
-            if (source?.title && uniqueSource.indexOf(source?.title) != -1) {
-              let srcCount = uniqueSource.indexOf(source.title);
-              temp += `<span class="source-count-num">${srcCount + 1}</span>`;
+          if(Array.isArray(entry?.sources) && entry?.sources?.length){
+            for (let source of entry?.sources) {
+              if (source?.title && uniqueSource.indexOf(source?.title) != -1) {
+                let srcCount = uniqueSource.indexOf(source.title);
+                temp += `<span class="source-count-num">${srcCount + 1}</span>`;
+              }
             }
           }
           temp += '</span>';
