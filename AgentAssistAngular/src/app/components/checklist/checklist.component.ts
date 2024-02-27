@@ -249,7 +249,7 @@ export class ChecklistComponent {
 
   getCheckListData() {
     let botId = this.connectionDetails.fromSAT ? this.connectionDetails.instanceBotId : this.connectionDetails.botId;
-    this.subs.sink = this.serviceInvoker.invoke('get.checklist', { botId: botId }, {}, { botId: botId }, this.connectionDetails.agentassisturl).subscribe((data) => {
+    this.subs.sink = this.serviceInvoker.invoke('get.checklist', { botId: botId }, {}, { }, this.connectionDetails.agentassisturl).subscribe((data) => {
       if (data.checklists.length > 0) {
         this.checkListData = data;
         this.rootService.primaryChecklist = data.checklists.filter(check => check.type === "primary");

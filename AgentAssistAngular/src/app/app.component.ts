@@ -279,7 +279,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
   getAgentAssistSettings(params){
     let instanceBotId = params.fromSAT ? params.instanceBotId : params.botId;
-    this.serviceInvoker.invoke('get.settings', {instanceBotId : instanceBotId, channel : params.channel}, {},{ botId : params.botId },params.agentassisturl).pipe(finalize(() => {this.widgetLoader = false})).subscribe((res)=> {
+    this.serviceInvoker.invoke('get.settings', {instanceBotId : instanceBotId, channel : params.channel}, {},{ },params.agentassisturl).pipe(finalize(() => {this.widgetLoader = false})).subscribe((res)=> {
       if(res && res.agentAssistSettings && res.agentAssistSettings[params.channel]){
         this.widgetSettings = Object.assign(res.agentAssistSettings, res.agentAssistSettings[params.channel]);
       }else{

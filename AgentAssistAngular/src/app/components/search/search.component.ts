@@ -124,7 +124,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
       "lang": "en",
       "experience" : channel
     }
-    this.serviceInvoker.invoke('post.autoSearch', { botId: botId, convId: conversationId }, payload, { botId: botId }, params.agentassisturl)
+    this.serviceInvoker.invoke('post.autoSearch', { botId: botId, convId: conversationId }, payload, { }, params.agentassisturl)
     .pipe(finalize(()=>{
       this.secondaryIp = true;
     }))

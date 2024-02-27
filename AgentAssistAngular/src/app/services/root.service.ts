@@ -255,6 +255,20 @@ export class RootService {
 
   formatSearchResponse(response) {
     let suggestions = response.suggestions;
+    response.suggestions.searchassist = {
+      snippets: [
+        {
+            "title": "Shipping labels overview (USPS, UPS, and FedEx, refunds) - detailed information",
+            "content": "What are the weight and dimension limitations for FedEx? What are some general shipment guidelines? - Internal Information&lt;ul&gt;&lt;li&gt;Escalated situations should be handled with your leadership team or team leader directly. &nbsp;Do not&nbsp;refer these customers to FedEx&lt;/li&gt;&lt;/ul&gt;&lt;ul&gt;&lt;li&gt;Seller refunds from FedEx (paper checks)&lt;/li&gt;&lt;li&gt;All refunds to sellers, from FedEx, come back to eBay via a paper check&lt;/li&gt;&lt;li&gt;The refund is passed to the seller via their ebay seller account and ebay deposits the check&lt;/li&gt;&lt;li&gt;Credits back to the seller happen weekly&lt;/li&gt;&lt;li&gt;The timeline for these credits is up to 2 billing cycles&lt;/li&gt;&lt;li&gt;The credits (done via item level BCD files) &amp; check deposits are handled by Global Billing &amp; Payments&lt;/li&gt;&lt;/ul&gt;",
+            "url": "https://cskb.vip.ebay.com/cskbapp/art?page=content&id=GUIDE1007",
+            "source": "Shipping labels overview (USPS, UPS, and FedEx, refunds)",
+            "snippet_type": "extractive_model",
+            "templateType": "paragraph_snippet",
+            "internalFlag": true
+        }
+    ]
+    
+    }
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
     let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [],response)
