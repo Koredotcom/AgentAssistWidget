@@ -15,21 +15,21 @@
         </div>
     </div> -->
 
-    <div class="sentiment-data-analysis" ngbDropdown container="body" #sentiDrop="ngbDropdown">
+    <div class="sentiment-data-analysis" ngbDropdown container="body" #sentiDrop="ngbDropdown" title="Sentiment">
        <!-- <div class="awaiting-sentiment" *ngIf="!currentPolarity">{{'SENTIMENT_AWAITING' | translate}}</div> -->
        <ng-container *ngIf="currentPolarity">
            <button class="btn-sentiment-graph" ngbDropdownToggle>
-               <div class="chart-data-s" echarts [options]="initChartOption" [merge]="mergeSentiOptions"></div>
-               <div class="indication-chart" [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity]?.className">{{currentPolarity}}</div>
+               <!-- <div class="chart-data-s" echarts [options]="initChartOption" [merge]="mergeSentiOptions"></div> -->
+               <div class="indication-chart" [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity]?.className" [innerHtml]="currentPolarity + ' ' + coachingConst.POLARITY_VS_STYLES[currentPolarity]?.emoji"></div>
            </button>
            <div ngbDropdownMenu class="sentiment-drpdown">
                <button class="close-drop-sentiment" (click)="sentiDrop.close()">
                    <i class="krIocnsFont-close-md"></i>
                </button>
                <h1>{{'SENTI_ANALY' | translate}} <i class="krIocnsFont-info-circle"></i></h1>
-               <h2>+{{'POSITIVE' | translate}}</h2>
+               <!-- <h2>+{{'POSITIVE' | translate}}</h2> -->
                <div echarts [options]="chartOption" class="chart-data-content" [merge]="mergeSentiOptions"></div>
-               <h2>-{{'NEGATIVE' | translate}}</h2>
+               <!-- <h2>-{{'NEGATIVE' | translate}}</h2> -->
            </div>
        </ng-container>
     </div>

@@ -220,15 +220,18 @@ export const coachingConst = {
     POLARITY_VS_STYLES : {
         'Positive' : {
             className : 'positive-title',
-            icon : 'ast-thumbup'
+            icon : 'ast-thumbup',
+            emoji : '&#x1F604;'
         },
         'Neutral' : {
             className : 'neutral-title',
-            icon : 'ast-thumbup'
+            icon : 'ast-thumbup',
+            emoji : '&#x1F610;'
         },
         'Negative' : {
             className : 'negative-title',
-            icon : 'ast-thumbdown'
+            icon : 'ast-thumbdown',
+            emoji : '&#x1F641;'
         }
     }
 }

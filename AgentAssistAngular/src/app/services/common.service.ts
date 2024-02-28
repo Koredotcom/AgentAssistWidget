@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { EVENTS } from '../helpers/events';
 import { KoreGenerateuuidPipe } from '../pipes/kore-generateuuid.pipe';
 import { RandomUuidPipe } from '../pipes/random-uuid.pipe';
-import { ProjConstants, RenderResponseType, storageConst } from '../proj.const';
+import { coachingConst, ProjConstants, RenderResponseType, storageConst } from '../proj.const';
 import { HandleSubjectService } from './handle-subject.service';
 import { LocalStorageService } from './local-storage.service';
 import { RootService } from './root.service';
@@ -717,111 +717,136 @@ export class CommonService {
 
   getInitialSentiChartOptions(object): EChartsOption | any {
     return {
-      legend: {
-        show : false
-      },
-      tooltip: {
-        show : false
-      },
       xAxis: {
-        name: '',
-        show : false,
-        data : [1,2,3,4,5,6,7,8,9,10]
+        splitLine: { show: false },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { show: false }
       },
-      
       yAxis: {
-        show : false
+        type: 'value',
+        data: [-2, -1, 0, 1, 2],
+        nameLocation: 'middle',
+        axisLabel: { show: false },
+        axisTick: { show: false },
+        splitLine: { show: false },
+        axisLine: { show: false },
+        min: -2
+      },
+      legend: {
+        show: false
+      },
+      visualMap: {
+        show: false,
+        dimension: 1,
+        pieces: [
+          {
+            lt: -0.25,
+            color: 'red'
+          },
+          {
+            lt: 0,
+            gte: -0.25,
+            color: 'grey'
+          },
+          {
+            gt: 0,
+            color: 'green'
+          }
+        ],
+
       },
       grid: {
-        show : false,
-        bottom: 10,
-        top : 10
-        // bottom: 100
+        left: '0%',
+        bottom: '1%',
+        right: '0%',
+        top: '3%'
       },
       series: [
         {
-          name: 'bar',
-          type: 'bar',
-          emphasis: {
-            shadowBlur: 10,
-            shadowColor: 'rgba(0,0,0,0.3)'
-          },
-          barWidth: 2,
-          barCategoryGap : '0%',
-          data: [],
-          itemStyle: {
-            color: (param)  => {
-              let color = 'green';
-              if(param.value < -0.25){
-                color = 'red';
-              }else if(param.value >= -0.25 && param.value <= 0){
-                color = 'gray';
-              }else if(param.value > 0){
-                color = 'green'
-              }
-              return color;
-            }
+          data: [[0,0]],
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle: {
+           width : 2
           }
         }
-      ]
-    }
+      ],
+    };
   }
 
   getSentiAnalysisChartOptions(object): EChartsOption | any {
     return {
-      legend: {
-        show : false
-      },
-      tooltip: {
-        formatter : function (param){
-          return 'Polarity : ' + param.value;
-        }
-      },
       xAxis: {
-        name: '',
-        show : false,
-        data : [].constructor(100).map((item)=> item)
-        // axisLine: { onZero: true },
-        // splitLine: { show: false },
-        // splitArea: { show: false },
-        // nameGap : 0
+        splitLine: { show: false },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { show: false }
       },
-      
       yAxis: {
-        show : false
+        type: 'value',
+        data: [-2, 0, 2],
+        nameLocation: 'middle',
+        axisLabel: {
+          // formatter: val => this.showExtrems(val),
+          show: false
+        },
+        axisTick: { show: false },
+        splitLine: { show: false },
+        axisLine: { show: false },
+        min: -2
       },
-      grid: {
-        show : false,
-        bottom: 10,
-        top : 10
+      grid : {
+        left: '3%',
+        bottom: '3%',
+        right: '3%',
+        top: '7%',
+        containLabel : true
       },
+      visualMap: {
+        show: false,
+        dimension: 1,
+        pieces: [
+          {
+            lt: -0.25,
+            color: 'red',
+            label : '< (-0.25 Neg)'
+          },
+          {
+            lt: 0,
+            gte: -0.25,
+            color: 'grey',
+            label : '0 - (-0.25 Neu)'
+          },
+          {
+            gt: 0,
+            color: 'green',
+            label : '> 0 (Pos)'
+          }
+        ]
+      },
+
       series: [
         {
-          name: 'bar',
-          type: 'bar',
-          emphasis: {
-            shadowBlur: 10,
-            shadowColor: 'rgba(0,0,0,0.3)'
-          },
-          barWidth: 2,
-          barCategoryGap : '0%',
-          data: [],
-          itemStyle: {
-            color: (param)  => {
-              let color = 'green';
-              if(param.value < -0.25){
-                color = 'red';
-              }else if(param.value >= -0.25 && param.value < 0){
-                color = 'gray';
-              }else if(param.value > 0){
-                color = 'green'
-              }
-              return color;
-            }
+          data: [[0,0]],
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle: {
+            width : 2
           }
         }
-      ]
-    }
+      ],
+    };
   }
+
+  // showExtrems(val){
+  //   if(val == 0 || val == 2 || val == -2){
+  //     return coachingConst.SENTI_CHART_YAXIS_LIST[val];
+  //   }else {
+  //     return '';
+  //   }
+  // }
 
 }
