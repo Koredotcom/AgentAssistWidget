@@ -1,6 +1,9 @@
 
 .sentiment-data-analysis{
     width: 100%;
+    .sentiment-drpdown{
+        width: calc(100vw - 120px);
+    }
     .echart-container {
         display: flex;
         align-items: center;
