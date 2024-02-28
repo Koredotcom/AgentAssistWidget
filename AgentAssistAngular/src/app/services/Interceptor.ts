@@ -34,6 +34,13 @@ export class I1 implements HttpInterceptor {
                   headers: modifiedReq.headers.delete('excludeAccountId')
                 });
             }
+
+            if (modifiedReq.headers.has('botId')) {
+                // Delete botId
+                modifiedReq = modifiedReq.clone({
+                  headers: modifiedReq.headers.delete('botId')
+                });
+            }
            
         }
         const modified = modifiedReq.clone({setHeaders: headerObj});        
