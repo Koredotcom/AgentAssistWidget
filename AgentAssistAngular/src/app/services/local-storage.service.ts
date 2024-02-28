@@ -154,7 +154,7 @@ export class LocalStorageService {
   deleteLocalStorageState(convId : any){
     let appState = this.getLocalStorageState();
     if(appState && appState[convId]){
-      appState[convId] = {};
+      delete appState[convId];
       localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
     }
   }
