@@ -40,22 +40,23 @@ export class AskCustomerComponent {
 
   subscribeEvents(){
     this.subs.sink = this.rootService.assistTemplateClick$.subscribe(val => {
-      if(val){
-        this.automation.hideOverrideDiv = true;
-        this.automation.userInput = this.projConstants.NO;
-        this.grayOutCurrentAutomation();
-        this.spinnerUpdate();
+      if(val && ((this.automation.type == RenderResponseType.AUTOMATION && this.automationIndex === this.automationArrayLength -1) || (this.automation.type == RenderResponseType.SMALLTALK && this.responseArrayIndex === this.responseArray?.length))){
+        this.handleTemplateClick();
       }
     })
 
     this.subs.sink = this.rootService.mybotTemplateClick$.subscribe(val => {
-      if(val){
-        this.automation.hideOverrideDiv = true;
-        this.automation.userInput = this.projConstants.NO;
-        this.grayOutCurrentAutomation();
-        this.spinnerUpdate();
+      if(val && ((this.automation.type == RenderResponseType.AUTOMATION && this.automationIndex === this.automationArrayLength -1) || (this.automation.type == RenderResponseType.SMALLTALK && this.responseArrayIndex === this.responseArray?.length))){
+        this.handleTemplateClick();
       }
     })
+  }
+
+  handleTemplateClick(){
+    this.automation.hideOverrideDiv = true;
+    this.automation.userInput = this.projConstants.NO;
+    this.grayOutCurrentAutomation();
+    this.spinnerUpdate();
   }
 
   ngOnDestroy(){
@@ -167,6 +168,8 @@ export class AskCustomerComponent {
   }
 
   spinnerUpdate(){
+    console.log(this.automation, "spinner update ********");
+    
     this.automation.showSpinner = true;
     setTimeout(() => {
       if(this.automation.showSpinner){
