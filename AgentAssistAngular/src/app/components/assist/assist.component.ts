@@ -129,7 +129,7 @@ export class AssistComponent implements OnInit, OnDestroy {
           this.spinnerUpdate();
         }                
         if (runEventObj && !runEventObj?.agentRunButton && !this.rootService.isAutomationOnGoing) {
-          if (runEventObj.from == this.projConstants.INTERRUPT) {
+          if (runEventObj.from == this.projConstants.INTERRUPT && runEventObj.index >= 0) {
             this.interruptDialogList.splice(runEventObj.index, 1);
             this.commonService.updateInterruptDialogList(this.interruptDialogList, this.projConstants.ASSIST);
           }
@@ -160,11 +160,9 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.dialogTerminatedOrIntruppted();        
         if (this.interruptRun) {
           this.interruptRun = false;
-          if(this.interruptDialogList && this.interruptDialogList?.length > 0){
-            let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
-            index = index < 0 ? 0 : index;
-            this.commonService.dialogueRunClick(this.interruptDialog,index, false)
-          }
+          let index = (this.interruptDialogList || [])?.findIndex(obj => obj.name === this.interruptDialog.name);
+          // index = index < 0 ? 0 : index;
+          this.commonService.dialogueRunClick(this.interruptDialog,index, false);
         }
         if(this.showRestart){
           this.handlePopupEvent({type : this.projConstants.RESTART, status : false});
@@ -519,13 +517,11 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL, sourceMsgId : sourceMsgId }, this.dialogPositionId)
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
-        if(this.interruptDialogList && this.interruptDialogList?.length > 0){
-          let index = this.interruptDialogList.findIndex(obj => obj.name === this.interruptDialog.name);
-          if (index < 0) {
-            this.interruptDialog.from = this.projConstants.INTERRUPT;
-            this.interruptDialogList.push(this.interruptDialog);
-            this.commonService.updateInterruptDialogList(this.interruptDialogList, this.projConstants.ASSIST);
-          }
+        let index = (this.interruptDialogList || [])?.findIndex(obj => obj.name === this.interruptDialog.name);
+        if (index < 0) {
+          this.interruptDialog.from = this.projConstants.INTERRUPT;
+          this.interruptDialogList.push(this.interruptDialog);
+          this.commonService.updateInterruptDialogList(this.interruptDialogList, this.projConstants.ASSIST);
         }
       }
       if(!this.showInterruptPopup){
