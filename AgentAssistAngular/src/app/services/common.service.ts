@@ -53,21 +53,21 @@ export class CommonService {
   assistHistory(params) {
     let serviceMethod = params.fromSAT ? 'get.assistHistorySA' : 'get.assistHistoryTP';
     let botId = this.rootService.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
-    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { excludeAccountId: 'true' }, params.agentassisturl);
+    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { excludeAccountId: 'true', botId: botId }, params.agentassisturl);
   }
 
   assistFeedback(params) {
-    return this.serviceInvoker.invoke('get.assistFeedback', { tab: 'assist', conversationId: params.conversationId }, {}, {}, params.agentassisturl);
+    return this.serviceInvoker.invoke('get.assistFeedback', { tab: 'assist', conversationId: params.conversationId }, {}, { botId: params.botId}, params.agentassisturl);
   }
 
   mybotHistory(params) {
     let serviceMethod = params.fromSAT ? 'get.mybotHistorySA' : 'get.mybotHistoryTP';
     let botId = this.rootService.isEmptyStr(params.autoBotId) ? params.autoBotId : params.botId;
-    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { excludeAccountId: 'true' }, params.agentassisturl)
+    return this.serviceInvoker.invoke(serviceMethod, { botId: botId, convId: params.conversationId }, {}, { excludeAccountId: 'true', botId: botId }, params.agentassisturl)
   }
 
   mybotFeedback(params) {
-    return this.serviceInvoker.invoke('get.mybotFeedback', { tab: 'mybot', conversationId: params.conversationId }, {}, {}, params.agentassisturl);
+    return this.serviceInvoker.invoke('get.mybotFeedback', { tab: 'mybot', conversationId: params.conversationId }, {}, { botId: params.botId }, params.agentassisturl);
   }
 
   //dialogue click and agent response handling code.
