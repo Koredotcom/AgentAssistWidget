@@ -3441,8 +3441,8 @@ var message= {
 	agentAssistCustomTemplate.prototype.bindEvents = function (messageHtml) {
 		chatInitialize=this.chatInitialize;
 		helpers=this.helpers;
-		$('.card_body_acc_content.kore-chat-window').on('change', '.selectTemplateDropdowm', function (e) {
-			localStorage.setItem('innerTextValue', JSON.stringify(this.value));
+		// $('.card_body_acc_content.kore-chat-window').on('change', '.selectTemplateDropdowm', function (e) {
+			// localStorage.setItem('innerTextValue', JSON.stringify(this.value));
 			// e.preventDefault();
 			// e.stopPropagation();
 			// $(".chatInputBox").text(this.value)
@@ -3450,7 +3450,7 @@ var message= {
 			// k.keyCode = 13
 			// $('.chatInputBox').trigger(k);
 
-		});
+		// });
 		/* Inline form submit click function starts here*/
 		$(messageHtml).find(".formMainComponent").on('keydown',function(e){
 			if(e.keyCode==13){

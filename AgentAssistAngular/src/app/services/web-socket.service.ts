@@ -356,6 +356,7 @@ export class WebSocketService {
     });
 
     $('.card_body_acc_content.kore-chat-window').on('change', '.selectTemplateDropdowm',function (e) {
+      localStorage.setItem('innerTextValue', JSON.stringify(this.value));
       mythis.HandleClickAndSendRequest(tab, connectionObj, e)
     }); 
 
