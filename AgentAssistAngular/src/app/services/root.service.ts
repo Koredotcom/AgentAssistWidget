@@ -721,6 +721,8 @@ export class RootService {
     }
     if (data.childBotId) {
       agent_assist_request['childBotId'] = data.childBotId;
+    }
+    if (data.childBotName) { 
       agent_assist_request['childBotName'] = data.childBotName;
     }
     if (this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
