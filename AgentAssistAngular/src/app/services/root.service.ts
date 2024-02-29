@@ -18,6 +18,7 @@ export class RootService {
   assistTemplateClick$ : BehaviorSubject<any> = new BehaviorSubject(null);
   mybotTemplateClick$ : BehaviorSubject<any> = new BehaviorSubject(null);
   userBotHistory$ : Subject<any> = new Subject<any>();
+  userBotConversationDetailsSubject : BehaviorSubject<any> = new BehaviorSubject(null);
 
   public userBotConversationDetails: any;
 
@@ -223,6 +224,7 @@ export class RootService {
   setUserBotConversationDataDetails(data: any) {
     if (data && data.sessionId) {
       this.userBotConversationDetails = data;
+      this.userBotConversationDetailsSubject.next(data);
     }
   }
 
