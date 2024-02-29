@@ -37,7 +37,7 @@ export class FooterComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.getUserBotHistory(this.rootService.connectionDetails);
+    // this.getUserBotHistory(this.rootService.connectionDetails);
     // this.subscribeEvents();
   }
 
@@ -71,6 +71,12 @@ export class FooterComponent implements OnInit, OnDestroy{
         this.updateLocalStorageForTabSwitch(tab);
       }
     });
+
+    this.subs.sink = this.rootService.userBotConversationDetailsSubject.subscribe((res)=> {
+      if(res){
+        this.getUserBotHistory(this.rootService.connectionDetails);
+      }
+    })
   }
 
   getUserBotHistory(params){
