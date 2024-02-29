@@ -43,6 +43,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   showSpinner : boolean = true;
   closeSuggestions : boolean = true;
   secondaryIp = true;
+  prevScrollLeft: number = 0;
+
 
   constructor(public rootService: RootService, private serviceInvoker: ServiceInvokerService,
     private websocketService: WebSocketService, private handleSubjectService: HandleSubjectService,
@@ -146,6 +148,12 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     setTimeout(() => {
       this.inputBox.nativeElement.focus();
     },);
+  }
+
+  onInputScroll() {
+    const inputElement = this.inputBox.nativeElement;
+    // const isScrollingStarted = inputElement.scrollLeft > this.prevScrollLeft;
+    this.prevScrollLeft = inputElement.scrollLeft;
   }
 
   selectSuggestion(suggestion){
