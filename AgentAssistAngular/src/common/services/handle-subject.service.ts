@@ -25,6 +25,7 @@ export class HandleSubjectService {
   public userAgentTranscriptionConversationHistory$ = new BehaviorSubject<object>(null);
   public userBotConversationDetails;
   public agentAssistSettingsSubject = new BehaviorSubject<object>(null);
+  public userBotConversationDetailsSubject = new BehaviorSubject<object>(null);
 
   assistTabSessionId = '';
   myBotTabSessionId = '';
@@ -120,6 +121,7 @@ export class HandleSubjectService {
   setUserBotConversationDataDetails(data) {
     if (data && data.sessionId) {
       this.userBotConversationDetails = data;
+      this.userBotConversationDetailsSubject.next(data);
     }
   }
 
