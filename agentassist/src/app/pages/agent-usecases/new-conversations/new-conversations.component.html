@@ -541,6 +541,15 @@
                                 </label>
                             </div>
                             <div class="desc-text-info">{{"ENABLED_LISTED_MENU_USECASES_AGENTASSIST_WINDOW_BROWSER" | translate}}</div>
+
+                            <div class="d-flex align-items-center">
+                                <div class="title-with-toggle mr-3">{{"DURING_EMAILS" | translate}}</div>
+                                <label class="kr-sg-toggle">
+                                    <input type="checkbox" [disabled]="!conv.isEnabled" [(ngModel)]="conv.triggerPoints.isEmailEnabled" name="isEmailEnabled">
+                                    <div class="slider" ><span class="enabled" *ngIf="conv.triggerPoints.isEmailEnabled">{{"DEFAULTS.ENABLED" | translate}}</span><span class="disabled" *ngIf="!conv.triggerPoints.isEmailEnabled">{{"DEFAULTS.DISABLED" | translate}}</span></div>
+                                </label>
+                            </div>
+                            <div class="desc-text-info">{{"ENABLED_MANUALLY_AUTOMATICALLY_EMAIL_CHANNEL" | translate}}</div>
                         </div>
                     </div>
                 </div>
