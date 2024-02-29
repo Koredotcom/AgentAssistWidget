@@ -2,12 +2,12 @@
     <div *ngIf="!groupBy">
         <div class="qa-ans-table-header row col-12 align-items-center" *ngIf="ucType === 'dialog'">
             <div class="title col-2 d-flex align-items-center">{{"USECASES.USECASE" | translate}} <img class="d-none" src="assets/icons/sort-down.svg"></div>
-            <div class="title col-2"></div>
+            <div class="title col-1"></div>
             <div class="title col-2">{{"USECASES.FORCALLERS" | translate}}</div>
             <div class="title col-1"></div>
             <div class="title col-2">{{"USECASES.FORCHATS" | translate}}</div>
-            <!-- <div class="title col-2">{{"USECASES.FOREMAILS" | translate}}</div> -->
-            <div class="title col-2"></div>
+            <div class="title col-2">{{"USECASES.FOREMAILS" | translate}}</div>
+            <div class="title col-1"></div>
             <div class="title col-1">{{"CONVERSATIONAL_LOGS.STATUS" | translate}}</div>
         </div>
         <div class="qa-ans-table-header row col-12 align-items-center" *ngIf="ucType === 'faq'">
@@ -106,7 +106,7 @@
                 <div class="primary-text">{{conv.usecaseName}}</div>
                 <div class="sec-text" [style.color]="conv.categoryColor">{{conv.category}}</div>
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <!-- <div class="primary-text">{{conv.isAgentAssistOnly ? 'Agent Use Case' : 'Bot UseCase'}}</div> -->
                 <!-- <ng-container *ngIf="!conv.isAgentAssistOnly">
                     <img src="assets/icons/conversations/bot-usecase.svg" [container]="'body'" ngbTooltip="Customer Use Case">
@@ -118,8 +118,8 @@
             <div class="title- col-2">{{(conv.triggerPoints?.isVoiceEnabled && (this.conv.isAgentAssistOnly || this.conv.hasAgentAssistAccess) ? 'DEFAULTS.ENABLED' : 'DEFAULTS.DISABLED') | translate}}</div>
             <div class="col-1"></div>
             <div class="title- col-2">{{(conv.triggerPoints?.isChatEnabled && (this.conv.isAgentAssistOnly || this.conv.hasAgentAssistAccess) ? 'DEFAULTS.ENABLED' : 'DEFAULTS.DISABLED') | translate}}</div>
-            <!-- <div class="title- col-2">{{(conv.triggerPoints?.isEmailEnabled && (this.conv.isAgentAssistOnly || this.conv.hasAgentAssistAccess) ? 'DEFAULTS.ENABLED' : 'DEFAULTS.DISABLED') | translate}}</div> -->
-            <div class="col-2 skills-title">
+            <div class="title- col-2">{{(conv.triggerPoints?.isEmailEnabled && (this.conv.isAgentAssistOnly || this.conv.hasAgentAssistAccess) ? 'DEFAULTS.ENABLED' : 'DEFAULTS.DISABLED') | translate}}</div>
+            <div class="col-1 skills-title">
                 <!-- <span class="pr-1" [ngStyle]="{'color': item?.color}" *ngFor="let item of conv.skills">
                     {{item?.value}}
                 </span> -->
