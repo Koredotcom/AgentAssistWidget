@@ -29,7 +29,11 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     // this.subscribeEvents();
-    this.userBotConversationHistory();
+    this.handleSubjectService.userBotConversationDetailsSubject.subscribe((res)=> {
+      if(res){
+        this.userBotConversationHistory();
+      }
+    })
   }
 
   userBotConversationHistory() {
