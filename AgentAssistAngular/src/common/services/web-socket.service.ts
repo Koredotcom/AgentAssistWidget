@@ -237,8 +237,13 @@ export class WebSocketService {
     }
     if (this.connectionDetails?.interactiveLanguage !== null && typeof this.connectionDetails?.interactiveLanguage !== 'undefined' && this.connectionDetails?.interactiveLanguage !== "''") {
       welcomeMessageParams['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
+    };
+    let obj = {
+      "sttProvider" : "microsoft",
+      "sttLabel" : "my_azure-US",
+      "sttLanguage": "en-US",
     }
-    welcomeMessageParams['allQueryParams'] = {...this.connectionDetails};
+    welcomeMessageParams['allQueryParams'] = {...this.connectionDetails, ...obj};
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }
 
