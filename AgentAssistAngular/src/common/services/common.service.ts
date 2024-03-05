@@ -1360,7 +1360,8 @@ export class CommonService {
       mythis.HandleClickAndSendRequest(tab, connectionObj, e)
     });
 
-    $('.agent-assist-chat-container.kore-chat-window').on('change', '.selectTemplateDropdowm',function (e) {      
+    $('.agent-assist-chat-container.kore-chat-window').on('change', '.selectTemplateDropdowm',function (e) {     
+      localStorage.setItem('innerTextValue', JSON.stringify(this.value)); 
       mythis.HandleClickAndSendRequest(tab, connectionObj, e)
     }); 
   }
