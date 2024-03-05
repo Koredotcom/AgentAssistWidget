@@ -2192,7 +2192,7 @@
     "WELCOME_EVENT_GREET_MSG" : "Welcome Messages",
     "WELCOME_EVENT_MESSAGES" : "messages",
     "WELCOME_EVENT_UPDATE" : "Update",
-    "SELECT_PREFERRED_LANGUAGE" : "Select preferred Language",
+    "SELECT_PREFERRED_LANGUAGE" : "Select Preferred Language",
     "DURING_EMAILS": "During Emails",
     "ENABLED_MANUALLY_AUTOMATICALLY_EMAIL_CHANNEL": "If enabled, this use case can be manually or automatically triggered by the agent when they are engaged with a customer in a email based channel."
 }
