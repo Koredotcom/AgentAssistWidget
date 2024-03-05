@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { VoicePreferencesModel } from '../../settings.model';
 import { workflowService } from '@kore.services/workflow.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -67,7 +67,18 @@ export class VoicePreferencesComponent implements OnInit {
     private fb: FormBuilder
   ) { }
 
+  ngOnChanges(changes : SimpleChanges){
+    if(changes?.voicePreferences?.currentValue){
+      this.setVoicePreferenceData();
+    }
+    this.getDafaultWelcomeMsg();
+  }
+
   ngOnInit(): void {
+  
+  }
+
+  setVoicePreferenceData(){
     if(this.voicePreferences?.callControlParameters){      
       let callControlParameters = [];
       let params = this.voicePreferences?.callControlParameters;
@@ -101,8 +112,6 @@ export class VoicePreferencesComponent implements OnInit {
       this.dialects = this.selectedASRLanguage?.dialects.map(o => { return { name: o } }) || [];
       this.selectedDialect = this.dialects.find(f => f.name === this.voicePreferences.dialectPreference)?.name;
     })
-
-    this.getDafaultWelcomeMsg();
   }
 
   openCallControlParameter(newCallControlParameter) {
