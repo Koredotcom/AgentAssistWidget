@@ -314,6 +314,7 @@ export class AssistComponent implements OnInit {
     if (this.connectionDetails?.interactiveLanguage !== null && typeof this.connectionDetails?.interactiveLanguage !== 'undefined' && this.connectionDetails?.interactiveLanguage !== "''") {
       welcomeMessageParams['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
     }
+    welcomeMessageParams['allQueryParams'] = {...this.connectionDetails};
     this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }
 
