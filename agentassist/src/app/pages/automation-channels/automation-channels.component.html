@@ -25,15 +25,22 @@
         <!-- <app-bt-container hideMenu="true"></app-bt-container> -->
         <perfect-scrollbar class="scroll-chat-list">
             <div class="chat-data-input-containers">
-                <div class="title-main">Your bot is associated with AgentAssist.</div>
+                <!-- <div class="title-main">Your bot is associated with AgentAssist.</div> -->
                 <div class="input-box-data">
+                   <div class="input-box-icon">
+                      <i class="icon-sa-conv-mybot"></i>
+                   </div>
+                   <div class="input-box-info">
+                    <div class="channels-header-block">
+                       <h4>Bot Info</h4>
+                       <p>Your bot is associated with AgentAssist</p>
+                    </div>
                     <div class="row-data">
                         <div class="label-text">Bot Name</div>
                         <div class="kr-sg-input-text">
                             <input type="text" placeholder="Placeholder text" class="input-text" [(ngModel)]="chatList.botName" readonly>
                                 <button class="copy-btn" (click)="copyInputMessage(chatList.botName)" value="click to copy">
-                                <img src="assets/icons/copyblue.svg">
-                                Copy
+                                    <i class="icon-sa-copy"></i>
                                 </button> 
                         </div>
                     </div>
@@ -42,8 +49,7 @@
                         <div class="kr-sg-input-text">
                             <input type="text" placeholder="Placeholder text" class="input-text" [(ngModel)]="chatList.botId" readonly>
                                 <button class="copy-btn" (click)="copyInputMessage(chatList.botId)" value="click to copy">
-                                <img src="assets/icons/copyblue.svg">
-                                Copy
+                                    <i class="icon-sa-copy"></i>
                                 </button> 
                         </div>
                     </div>
@@ -52,8 +58,7 @@
                         <div class="kr-sg-input-text">
                             <input type="text" placeholder="Placeholder text" class="input-text" [(ngModel)]="chatList.cI" readonly>
                                 <button class="copy-btn" (click)="copyInputMessage(chatList.cI)" value="click to copy">
-                                <img src="assets/icons/copyblue.svg">
-                                Copy
+                                    <i class="icon-sa-copy"></i>
                                 </button> 
                         </div>
                     </div>
@@ -67,12 +72,10 @@
                                     <i class="icon-sa-eye" *ngIf="showOpenEyeIcon"></i>
                                     <i class="icon-sa-eye-open" *ngIf="!showOpenEyeIcon"></i>
                                 </div>
-                            </div>
-                            <button class="copy-btn" (click)="copyInputMessage(chatList.cS)" value="click to copy">
-                                <img src="assets/icons/copyblue.svg">
-                                Copy
-                            </button> 
-                              
+                                <button (click)="copyInputMessage(chatList.cS)" value="click to copy">
+                                    <i class="icon-sa-copy"></i>
+                                </button> 
+                            </div>     
                         </div>
                     </div>
                     <div class='init-loading' *ngIf="isLoading">
@@ -85,19 +88,50 @@
                             <span tooltipClass="tooltip-global-styles" ngbTooltip="Marking the bot is just to inform the config manager about which bot is being used in third party agent desktop. It doesn't affect the working of bot in any way" class="m-l-6"> <i class="icon-sa-help"></i></span>
                         </div>     
                     </div>
+                   </div>
                 </div>
                 <div class="input-box-data">
-                    <div class="text-heading">Webhook URL</div>
-                    <div class="sub-text">Configure the following Webhook URL in your external application.</div>
-                    <div class="row-data">
-                        <div class="kr-sg-input-text">
-                            <input type="text" placeholder="https://uat.kotr.ai.44334" class="input-text" [(ngModel)]="webhookUrl" readonly>
-                            <button class="copy-btn" (click)="copyInputMessage(webhookUrl)" value="click to copy">
-                                <img src="assets/icons/copyblue.svg">
-                                Copy
-                            </button> 
+                    <div class="input-box-icon">
+                        <i class="icon-sa-connections connection-icon"></i>
+                     </div>
+                     <div class="input-box-info">
+                        <div class="channels-header-block">
+                            <h4>Webhook URL</h4>
+                            <p>Configure the following Webhook URL in your external application.</p>
+                         </div>
+                         <div class="row-data">
+                            <div class="kr-sg-input-text">
+                                <input type="text" placeholder="https://uat.kotr.ai.44334" class="input-text" [(ngModel)]="webhookUrl" readonly>
+                                <button class="copy-btn" (click)="copyInputMessage(webhookUrl)" value="click to copy">
+                                    <i class="icon-sa-copy"></i>
+                                </button> 
+                            </div>
                         </div>
-                    </div>
+                     </div>
+                </div>
+                <div class="input-box-data">
+                    <div class="input-box-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="31" viewBox="0 0 30 31" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M24.375 12.6875C24.375 14.7586 22.6961 16.4375 20.625 16.4375C18.5539 16.4375 16.875 14.7586 16.875 12.6875C16.875 10.6164 18.5539 8.9375 20.625 8.9375C22.6961 8.9375 24.375 10.6164 24.375 12.6875ZM20.625 14.9375C21.8676 14.9375 22.875 13.9301 22.875 12.6875C22.875 11.4449 21.8676 10.4375 20.625 10.4375C19.3824 10.4375 18.375 11.4449 18.375 12.6875C18.375 13.9301 19.3824 14.9375 20.625 14.9375Z" fill="#2970FF"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M5.625 8.9375L10.3125 16.4375L15 8.9375L5.625 8.9375ZM12.3214 10.3661L10.3125 13.5804L8.30357 10.3661L12.3214 10.3661Z" fill="#2970FF"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M28.125 23.9375C28.125 25.4903 26.8653 26.75 25.3125 26.75L4.6875 26.75C3.13473 26.75 1.875 25.4903 1.875 23.9375L1.875 7.0625C1.875 5.50973 3.13474 4.25 4.6875 4.25L25.3125 4.25C26.8653 4.25 28.125 5.50973 28.125 7.0625L28.125 23.9375ZM25.3125 24.875C25.8297 24.875 26.25 24.4547 26.25 23.9375L26.25 21.125L22.5 21.125L22.5 24.875L25.3125 24.875ZM20.625 24.875L20.625 21.125L3.75 21.125L3.75 23.9375C3.75 24.4547 4.17027 24.875 4.6875 24.875L20.625 24.875ZM3.75 19.25L26.25 19.25L26.25 7.0625C26.25 6.54527 25.8297 6.125 25.3125 6.125L4.6875 6.125C4.17027 6.125 3.75 6.54526 3.75 7.0625L3.75 19.25Z" fill="#2970FF"/>
+                          </svg>
+                     </div>
+                     <div class="input-box-info">
+                        <div class="channels-header-block">
+                            <h4>Account Information</h4>
+                            <p>Configure the following Account information in your external application.</p>
+                         </div>
+                         <div class="row-data">
+                            <div class="label-text">Account ID</div>
+                            <div class="kr-sg-input-text">
+                                <input type="text" [value]="accountId" class="input-text" readonly>
+                                    <button class="copy-btn" value="click to copy" (click)="copyInputMessage(accountId)">
+                                        <i class="icon-sa-copy"></i>
+                                    </button> 
+                            </div>
+                        </div>
+                     </div>
                 </div>
             </div>
         </perfect-scrollbar>
@@ -123,7 +157,3 @@
         </div>
     </div>
 </ng-template>
-
-
-
-

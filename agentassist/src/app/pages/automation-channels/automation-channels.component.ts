@@ -9,6 +9,7 @@ import { AuthService } from '@kore.services/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
+import { LocalStoreService } from '@kore.services/localstore.service';
 
 @Component({
   selector: 'app-automation-channels',
@@ -32,7 +33,7 @@ export class AutomationChannelsComponent implements OnInit, OnDestroy {
   isLoading : boolean = false;
   currentBt : any = {};
   checkBotMarkEvent : any;
-
+  accountId = '';
   subs = new SubSink();
 
   constructor( public workflowService: workflowService,
@@ -40,13 +41,19 @@ export class AutomationChannelsComponent implements OnInit, OnDestroy {
     private service: ServiceInvokerService,
     private authService: AuthService,
     public modalService : NgbModal,
-    private translate : TranslateService
+    private translate : TranslateService,
+    private localStoreService: LocalStoreService,
+    private auth: AuthService
               ) { }
   
   ngOnInit(): void {  
     this.showVoiceSection = true;
     this.showChatSection = false;
     this.showEmailSection = false;
+    let selectedAccount = this.localStoreService.getSelectedAccount() || this.auth.getSelectedAccount();
+    if (selectedAccount) {
+      this.accountId = selectedAccount.accountId;
+    }
     this.getChatChannelData();
     this.subscribeEvents();
   }
