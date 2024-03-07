@@ -1,22 +1,24 @@
 <ng-container [ngTemplateOutlet]="dialogStarted" *ngIf="automationData?.automationsArray?.length"></ng-container>
 <ng-container *ngFor="let automation of automationData.automationsArray; let i = index; trackBy:assistRespType;">
     <ng-container *ngIf="automation.responseType == renderResponseType.ASSISTRESPONSE">
-        <ng-container *ngIf="automation.data.isPrompt">
-                <app-ask-customer [automation]="automation" [automationArrayLength]="automationData.automationsArray.length"
-                    [automationIndex]="i" [responseArray]="agentassistResponseArray"
+        <ng-container *ngIf="!automation.isWorkNote">
+            <ng-container *ngIf="automation.data.isPrompt">
+                    <app-ask-customer [automation]="automation" [automationArrayLength]="automationData.automationsArray.length"
+                        [automationIndex]="i" [responseArray]="agentassistResponseArray"
+                        [ngClass]="{'componentSlideUPAnimation' : ((automationData?.automationsArray?.length - 1 == i) && agentassistResponseArray?.length == agentassistArrayIndex)}"
+                        [responseArrayIndex]="agentassistArrayIndex" [assistAutomationData]="automationData"></app-ask-customer>
+            </ng-container>
+            <ng-container *ngIf="!automation.data.isPrompt">
+                    <app-tell-customer [automation]="automation" 
                     [ngClass]="{'componentSlideUPAnimation' : ((automationData?.automationsArray?.length - 1 == i) && agentassistResponseArray?.length == agentassistArrayIndex)}"
-                    [responseArrayIndex]="agentassistArrayIndex" [assistAutomationData]="automationData"></app-ask-customer>
-        </ng-container>
-        <ng-container *ngIf="!automation.data.isPrompt">
-                <app-tell-customer [automation]="automation" 
-                [ngClass]="{'componentSlideUPAnimation' : ((automationData?.automationsArray?.length - 1 == i) && agentassistResponseArray?.length == agentassistArrayIndex)}"
-                    [automationArrayLength]="automationData.automationsArray.length" [automationIndex]="i"
-                    [responseArray]="agentassistResponseArray" [responseArrayIndex]="agentassistArrayIndex" [assistAutomationData]="automationData">
-                </app-tell-customer>
+                        [automationArrayLength]="automationData.automationsArray.length" [automationIndex]="i"
+                        [responseArray]="agentassistResponseArray" [responseArrayIndex]="agentassistArrayIndex" [assistAutomationData]="automationData">
+                    </app-tell-customer>
+            </ng-container>
         </ng-container>
 
         <!-- work nptes -->
-        <ng-container *ngIf="true">
+        <ng-container *ngIf="automation.isWorkNote">
             <app-work-notes [automation]="automation" 
             [ngClass]="{'componentSlideUPAnimation' : ((automationData?.automationsArray?.length - 1 == i) && agentassistResponseArray?.length == agentassistArrayIndex)}"
                 [automationArrayLength]="automationData.automationsArray.length" [automationIndex]="i"

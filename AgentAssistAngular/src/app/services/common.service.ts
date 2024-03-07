@@ -702,6 +702,9 @@ export class CommonService {
     } else if (automation.data.entityDisplayName || automation.data.entityName) {
       automation.agentInputEntityName = automation.data.entityDisplayName ? automation.data.entityDisplayName : automation.data.entityName;
     }
+    if(automation?.result?.parsedPayload?.payload?.template_type == 'worknotesTemplate'){
+      automation.isWorkNote = true;
+    }
     return automation;
   }
 
