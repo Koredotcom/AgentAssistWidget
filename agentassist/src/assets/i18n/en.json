@@ -2168,7 +2168,7 @@
     "WELCOME_EVENT_DISABLED" : "Disabled",
     "WELCOME_EVENT_SELECTDIALOG" : "Select Dialog",
     "WELCOME_EVENT_UB_DIALOG_DESC" : "Make a choice among the bots",
-    "WELCOME_EVENT_DIALOG_DESC" : "select the dialogue task you are interested in",
+    "WELCOME_EVENT_DIALOG_DESC" : "select the dialog task you are interested in",
     "WELCOME_EVENT_SELECTUSECASE" : "Select UseCases",
     "WELCOME_EVENT_EXTRACT_INTENT" : "Extract intents from On Connect Dialog Task",
     "WELCOME_EVENT_CHAT" : "Chat",
