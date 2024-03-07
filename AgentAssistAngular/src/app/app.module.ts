@@ -54,6 +54,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
 import { WidgetDragDirective } from './helpers/widget-drag.directive';
 import { FileSuggestionsComponent } from './components/common/components/file-suggestions/file-suggestions.component';
+import { TitleCasePipe } from '@angular/common';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -127,7 +128,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       useClass: I1,
       multi: true
   },FormatAmpmPipe,RandomUuidPipe,RemoveTagFromStringPipe, ReplaceTextWithTagPipe, ConverTimestampToDatePipe,
-   KoreGenerateuuidPipe, NgbActiveModal, SafeHtmlPipe, SanitizeHtmlPipe],
+   KoreGenerateuuidPipe, NgbActiveModal, SafeHtmlPipe, SanitizeHtmlPipe, TitleCasePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
