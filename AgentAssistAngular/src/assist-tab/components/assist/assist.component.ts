@@ -1704,7 +1704,7 @@ export class AssistComponent implements OnInit {
                             <div class="user-img">
                                 <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
                             </div>
-                            <div class="text-user" >${res.agentAssistDetails.userInput}</div>
+                            <div class="text-user" >${res.agentAssistDetails?.userInput}</div>
                         </div>
                         <div class="dialog-task-run-sec" id="automationSuggestions-${uniqueID}">
                         </div>`;
@@ -1719,7 +1719,7 @@ export class AssistComponent implements OnInit {
                   <img src="${this.imageFilePath}${this.imageFileNames['DIALOG_TASK']}">
               </div>
               <div class="content-dialog-task-type" id="dialogSuggestions-${uniqueID}">
-                <div class="type-with-img-title">Dialog task (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.dialogs?.length : res.agentAssistDetails?.ambiguityList.dialogs?.length})</div>
+                <div class="type-with-img-title">Dialog task (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions?.dialogs?.length : res.agentAssistDetails?.ambiguityList?.dialogs?.length})</div>
               </div>
             </div>`;
           automationSuggestions.innerHTML += dialogAreaHtml;
@@ -1730,7 +1730,7 @@ export class AssistComponent implements OnInit {
                 <img src="${this.imageFilePath}${this.imageFileNames['FAQ_SUGGESTION']}">
             </div>
             <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
-                <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
+                <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions?.faqs?.length : res.agentAssistDetails?.ambiguityList?.faqs?.length})</div>
 
             </div>
         </div>`;
@@ -1844,14 +1844,14 @@ export class AssistComponent implements OnInit {
       if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && res.agentAssistDetails?.faqResponse && res.agentAssistDetails?.positionId) {
         historyFaqIDs?.forEach((ele, i) => {
           let eleid = ele.slice(0, ele.length - 1);
-          res.agentAssistDetails.suggestions?.faqs?.forEach((eles, j) => {
+          res.agentAssistDetails?.suggestions?.faqs?.forEach((eles, j) => {
             if ($(`#faqsSuggestions-${eleid} #title-${ele}`).text().trim() == eles.question) {
               let valOfDiv = $(`#faqsSuggestions-${eleid} #desc-${ele}`).text().trim();
               if (valOfDiv == '' && !valOfDiv)
                 this.assisttabService.historyFaqSuggestionsContainer(eleid, ele, res);
             }
           });
-          this.handleSeeMoreButtonForHistory(eleid, res.agentAssistDetails.suggestions?.faqs, this.projConstants.FAQ);
+          this.handleSeeMoreButtonForHistory(eleid, res.agentAssistDetails?.suggestions?.faqs, this.projConstants.FAQ);
         })
       }
 
@@ -1863,7 +1863,7 @@ export class AssistComponent implements OnInit {
                          <div class="user-img">
                              <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
                          </div>
-                         <div class="text-user" >${res.agentAssistDetails.userInput}</div>
+                         <div class="text-user" >${res.agentAssistDetails?.userInput}</div>
                      </div>
                      <div class="dialog-task-run-sec" id="automationSuggestions-${uniqueID}">
                      </div>`;
@@ -1876,7 +1876,7 @@ export class AssistComponent implements OnInit {
         <img src="${this.imageFilePath}${this.imageFileNames['FAQ_SUGGESTION']}">
     </div>
     <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
-        <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
+        <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions?.faqs?.length : res.agentAssistDetails.ambiguityList?.faqs?.length})</div>
 
     </div>
 </div>`;
@@ -1939,12 +1939,12 @@ export class AssistComponent implements OnInit {
 
         let historyData = $('#dynamicBlock');
         let userInputHtml;
-        if (res.agentAssistDetails.userInput && res?.agentAssistDetails?.positionId) {
+        if (res.agentAssistDetails?.userInput && res?.agentAssistDetails?.positionId) {
           userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
                             <div class="user-img">
                                 <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
                             </div>
-                            <div class="text-user" >${res.agentAssistDetails.userInput}</div>
+                            <div class="text-user" >${res.agentAssistDetails?.userInput}</div>
                         </div>`;
         }
         let dropdownHtml = `
@@ -2007,7 +2007,7 @@ export class AssistComponent implements OnInit {
 
           }
         }
-        if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue && res.agentAssistDetails.userInput) {
+        if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue && res.agentAssistDetails?.userInput) {
           let runInfoContent = $(`#dropDownData-${previousId}`);
           let userQueryHtml = `
                             <div class="steps-run-data">
@@ -2017,7 +2017,7 @@ export class AssistComponent implements OnInit {
                                 <div class="run-info-content" id="userInput-${res._id}">
                                     <div class="title">Customer Said - </div>
                                     <div class="agent-utt">
-                                        <div class="title-data">"${this.sanitizeHtmlPipe.transform(res.agentAssistDetails.userInput)}"</div>
+                                        <div class="title-data">"${this.sanitizeHtmlPipe.transform(res.agentAssistDetails?.userInput)}"</div>
                                     </div>
 
                                 </div>
@@ -2025,12 +2025,12 @@ export class AssistComponent implements OnInit {
           runInfoContent.append(userQueryHtml);
           let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
           let entityDisplayName = this.agentAssistResponse.newEntityDisplayName ? this.agentAssistResponse.newEntityDisplayName : this.agentAssistResponse.newEntityName;
-          if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-            let entityValueType = typeof res.agentAssistDetails.entityValue;
-            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : this.sanitizeHtmlPipe.transform(res.agentAssistDetails.entityValue);
+          if (res.agentAssistDetails?.entityValue && !res.agentAssistDetails?.isErrorPrompt && entityDisplayName) {
+            let entityValueType = typeof res.agentAssistDetails?.entityValue;
+            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails?.entityValue) : this.sanitizeHtmlPipe.transform(res.agentAssistDetails?.entityValue);
             entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
           } else {
-            if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
+            if (res.agentAssistDetails?.isErrorPrompt && entityDisplayName) {
               let entityType = this.agentAssistResponse.newEntityType;
               let entityHtmls = `<div class="order-number-info">${entityDisplayName} :
                                             <span style="color:red">Value unidentified</span>
@@ -2098,7 +2098,7 @@ export class AssistComponent implements OnInit {
               }
               this.localStorageService.setLocalStorageItem(storageObject);
             }
-            if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
+            if (res.agentAssistDetails?.isPrompt || res.agentAssistDetails?.entityRequest) {
               if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
                 $(`#overRideBtn-${previousId}`).removeClass('hide');
                 $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
