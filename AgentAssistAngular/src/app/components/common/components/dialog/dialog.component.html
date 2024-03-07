@@ -14,6 +14,17 @@
                     [responseArray]="agentassistResponseArray" [responseArrayIndex]="agentassistArrayIndex" [assistAutomationData]="automationData">
                 </app-tell-customer>
         </ng-container>
+
+        <!-- work nptes -->
+        <ng-container *ngIf="true">
+            <app-work-notes [automation]="automation" 
+            [ngClass]="{'componentSlideUPAnimation' : ((automationData?.automationsArray?.length - 1 == i) && agentassistResponseArray?.length == agentassistArrayIndex)}"
+                [automationArrayLength]="automationData.automationsArray.length" [automationIndex]="i"
+                [responseArray]="agentassistResponseArray" [responseArrayIndex]="agentassistArrayIndex" [assistAutomationData]="automationData">
+            </app-work-notes>
+        </ng-container>
+        <!-- work nptes -->
+
     </ng-container>
 </ng-container>
 <!-- <ng-container [ngTemplateOutlet]="dialogEnded"
