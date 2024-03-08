@@ -109,6 +109,24 @@ export class WebSocketService {
       welcomeMessageParams['language'] = interactiveLanguage; // Return the default value for null, undefined, or "''"
     }
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
+
+
+    let menu_request_params : any = {
+      botId,
+      conversationId,
+      experience : this.rootService.connectionDetails?.channel
+    }
+
+    if(autoBotId && autoBotId !== 'undefined') {
+      menu_request_params['autoBotId'] = autoBotId;
+    } else {
+      menu_request_params['autoBotId'] = '';
+    }
+
+    if (this.rootService.getConnectionDetails()?.interactiveLanguage && typeof this.rootService.getConnectionDetails()?.interactiveLanguage == 'string' && this.rootService.getConnectionDetails()?.interactiveLanguage != "''") {
+      menu_request_params['language'] = this.rootService.getConnectionDetails()?.interactiveLanguage; // Return the default value for null, undefined, or "''"
+    }
+    this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
   }
 
   emitEvents(eventName : string,requestParams : any) {
@@ -157,28 +175,14 @@ export class WebSocketService {
 
   listenEvents() {
     const {botId, conversationId, isCall, autoBotId} = this.rootService.getConnectionDetails()
-    let menu_request_params : any = {
-      botId,
-      conversationId,
-      experience : this.rootService.connectionDetails?.channel
-    }
-    if(autoBotId && autoBotId !== 'undefined') {
-      menu_request_params['autoBotId'] = autoBotId;
-    } else {
-      menu_request_params['autoBotId'] = '';
-    }
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_response, (data : any) => {
       this.rootService.assistTabSessionId = '';
       if (data.sessionId) {
         this.rootService.assistTabSessionId = data?.sessionId;
-      }
-      if (this.rootService.getConnectionDetails()?.interactiveLanguage && typeof this.rootService.getConnectionDetails()?.interactiveLanguage == 'string' && this.rootService.getConnectionDetails()?.interactiveLanguage != "''") {
-        menu_request_params['language'] = this.rootService.getConnectionDetails()?.interactiveLanguage; // Return the default value for null, undefined, or "''"
-      }
+      }     
       if (!this.isWelcomeResonse) {
         this.isWelcomeResonse = true;
-        this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
         this.sendCheckListOpened$.next(true);
       }
       this.handleIsSendWelcomeRequest(data);
