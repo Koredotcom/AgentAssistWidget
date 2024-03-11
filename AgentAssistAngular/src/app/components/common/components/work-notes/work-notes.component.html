@@ -1,1 +1,38 @@
-<p>work-notes works!</p>
+<div class="categorey-wrapper-new">
+    <div class="top-section">
+        <div class="svg_img">
+            <img src="assets/images/icons/message.svg" alt="Image">
+        </div>
+        <p>{{'ASSOCIATED_WORK_NOTES' | translate}}</p>
+    </div>
+    <ng-container *ngFor="let workNote of automation.elements; let i = index">
+        <div id="accordion" class="categorey-accordion-wrapper">
+            <div data-bs-toggle="collapse" [attr.href]="'#collapse-'+i+'-'+responseArrayIndex" data-parent="#accordion" class="categorey_link collapsed"
+                aria-expanded="false">
+                <div class="categorey-content-header-btn">
+                    <div class="categorey-title-block">
+                        <div class="categorey-title">
+                            {{workNote?.categoryTitle}}
+                        </div>
+                        <div class="categorey-divider"></div>
+                        <div class="categorey-des">
+                            {{workNote?.subCategoryTitle}}
+                        </div>
+                    </div><i class="krIocnsFont-chevron-down arrow-icon"></i>
+                </div>
+            </div>
+            <div id="collapse-{{i}}-{{responseArrayIndex}}" class="collapse">
+                <div class="categorey-content-body">
+                    <div class="categorey-content-header">
+                        {{workNote?.description}}
+                    </div>
+                    <div class="categorey-content-footer">
+                        {{workNote.feedbackMessage || 'Was it helpful?'}}
+                        <button (click)="workNoteFeedBack(true, workNote)" class="feedback-btn-thumb active-feedback-btn"><i class="krIocnsFont-thumbs-up-solid"></i></button>
+                        <button (click)="workNoteFeedBack(false, workNote)" class="feedback-btn-thumb"><i class="krIocnsFont-thumbs-down"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
