@@ -20,13 +20,13 @@
       <div class="faq-body-content">
           <div class="data-faq-paragraph">            
               <div class="text-info-more-data-link">
-                  <p [ngClass]="{'show-full-text' : !file.showMoreButton}" [innerHTML]="file?.content | safeHtml" #articleContent></p>
+                  <p [ngClass]="{'show-full-text' : !file.showMoreButton}" [style.--line-clamp]="rootService.numOfLines" [innerHTML]="file?.content | safeHtml" #articleContent></p>
                   <div class="more-links-actions">
-                      <a class="moreText" role="link" *ngIf="articleContent.scrollHeight > 36">
+                      <a class="moreText" role="link" *ngIf="articleContent.scrollHeight > (((rootService.numOfLines *22) + 12))">
                           <span class="more-text" *ngIf="file?.showMoreButton" (click)="toggleShowMoreLess(file)">{{'MORE_TEXT' | translate}}</span>
                           <span class="less-text" *ngIf="!file?.showMoreButton" (click)="toggleShowMoreLess(file)">{{'LESS_TEXT' | translate}}</span>
                       </a>
-                      <p *ngIf="articleContent.scrollHeight > 36 && file.link">|</p>
+                      <p *ngIf="articleContent.scrollHeight > (((rootService.numOfLines *22) + 12)) && file.link">|</p>
                       <a class="moreText" role="link" (click)="openurlInBrowser(file.link)" *ngIf="file.link && !file.title">{{'VIEW_FULL_FILE' | translate}}</a>
                   </div>
               </div>                       

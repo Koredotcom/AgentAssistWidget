@@ -70,6 +70,8 @@ export class RootService {
   widgetMaxButtonClick : boolean = true;
   notLookingForClick : boolean = false;
 
+  numOfLines = 1;
+
   defaultwidgetSettings : any = {
     "isCustomisedLogoEnabled": {
       "isEnabled": false

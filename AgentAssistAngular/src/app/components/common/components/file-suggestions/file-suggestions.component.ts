@@ -23,7 +23,7 @@ export class FileSuggestionsComponent {
   hideCopyButton : boolean = false;
 
   constructor(private handleSubjectService : HandleSubjectService,
-     private rootService : RootService, private commonService : CommonService){
+     public rootService : RootService, private commonService : CommonService){
 
   }
 
