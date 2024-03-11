@@ -47,6 +47,28 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     library: 'Library',
     mybot: 'My bot'
   }
+  multiLanguageList = {
+    en : 'English',
+    ar : 'Arabic',
+    ko : 'Korean',
+    jp : 'Japanese',
+    sp : 'Spanish',
+    ge : 'German',
+    ch : 'Chinese'
+  }
+  numberOfLineList = {
+    2 : "2 Minimum",
+    3 : '3',
+    4 : '4',
+    5 : '5',
+    6 : '6',
+    7 : '7',
+    8 : '8',
+    9 : '9',
+    10 : '10',
+    [-1] : 'Maximum'
+  }
+  lineList = Object.keys(this.numberOfLineList);
   clonedWidgetSettings:any = {};
   newRoleModalRef: any = {};
   modalRef: any;  
@@ -66,6 +88,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   integration = [
     {type:'basic', desc: 'Use default Knowledge AI Configurations'}, 
     {type:'advance', desc:'Configure how you want to use Knowledge AI'}
+  ]
+  dataFormat = [
+    {type:'Original', tooltip: 'Use default Knowledge AI Configurations', value : 'original'}, 
+    {type:'Plain string', tooltip:'Configure how you want to use Knowledge AI', value : 'plainString'}
   ]
   advancedModeScript: string = '';
   selectedChannel = 'chat';
@@ -92,6 +118,14 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     .patchValue(key);
   }
 
+  selectLanguage(key){
+    (((((this.agentAssistFormGroup as FormGroup)
+    .get('agentAssistSettings') as FormGroup))
+    .get('languageSettings') as FormGroup)
+    .get('language') as FormControl)
+    .patchValue(key);
+  }
+
   createOrUpdateAgSettingsForm(obj?){
     let isUpdate = false;
     if(obj && Object.keys(obj)){
@@ -114,6 +148,25 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           urlOpenType: ['defaultBehaviour'],
           defaultBehaviour: [isUpdate ? (obj.urlOpenBehaviour?.defaultBehaviour ?? false) : false],
           sendPostEvent: [isUpdate ? (obj.urlOpenBehaviour?.sendPostEvent ?? false) : false]
+        }),
+        agentActions : this.fb.group({
+          sharingFormat : [isUpdate ? (obj.agentActions?.sharingFormat ?? 'original') : 'original'],
+        }),
+        sentiment : this.fb.group({
+          enable: [isUpdate ? (obj.sentiment?.enable ?? false) : false]
+        }),
+        intentExecution : this.fb.group({
+          restartFunctionality : this.fb.group({
+            enable : [isUpdate ? (obj.intentExecution?.restartFunctionality?.enable ?? true) : true]
+          }),
+          entityView : this.fb.group({
+            enable : [isUpdate ? (obj.intentExecution?.entityView?.enable ?? true) : true]
+          })
+        }),
+        helpSupportEnabled : [isUpdate ? (obj.helpSupportEnabled ?? false) : false],
+        languageSettings : this.fb.group({
+          language : [isUpdate ? (obj.languageSettings?.language??'en') : 'en'],
+          allowAgentSwitch : [isUpdate ? (obj.languageSettings?.allowAgentSwitch??false) : false],
         }),
         chat: this.fb.group(this.commongSettingsForm(isUpdate, obj?.chat)),
         voice: this.fb.group(this.commongSettingsForm(isUpdate, obj?.voice)),
@@ -298,61 +351,63 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       orgId: this.authService?.getOrgId(),
       aasId: this.clonedWidgetSettings?.id
     };
-    const payload = {
-      "orgId": this.authService?.getOrgId(),
-      "accountId": this.localstorage?.getSelectedAccount()?.accountId,
-      "iId": this.iId,
-      "id": this.clonedWidgetSettings?.id,
-      updatedByAId: this.clonedWidgetSettings?.updatedByAId,
-      "agentAssistSettings" : {}
-    }
-    if(settingType === 'widget') {
-      payload.agentAssistSettings = this.agentAssistFormGroup.value.agentAssistSettings;
-      this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
-      .subscribe(
-        (res) => {
-          if (res) {
-            this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
-            this.disableButtons = false;
-            this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
-            this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
-            this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
-          }
-        },
-        (err) => {
-          this.createOrUpdateAgSettingsForm(this.clonedWidgetSettings.agentAssistSettings);
-          this.disableButtons = false;
-          this.notificationService.showError(
-            err,
-            this.translate.instant("SAVE_FALLBACK_ERROR_MSG")
-          );
-        }
-      );
-      // 
-    } else {
-      payload.agentAssistSettings = this.knowledgeAIFormGroup.value;
-      this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
-      .subscribe(
-        (res) => {
-          if (res) {
-              this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
-              this.disableButtons = false;
-            this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
-            this.createOrUpdateSearchForm(res.agentAssistSettings)
-            this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
-          }
-        },
-        (err) => {
-          this.disableButtons = false;
-          this.createOrUpdateSearchForm(this.clonedWidgetSettings.agentAssistSettings)
-          this.notificationService.showError(
-            err,
-            this.translate.instant("SAVE_FALLBACK_ERROR_MSG")
+    console.log(this.agentAssistFormGroup.value.agentAssistSettings, this.knowledgeAIFormGroup.value, "agentassist settings");
+    
+    // const payload = {
+    //   "orgId": this.authService?.getOrgId(),
+    //   "accountId": this.localstorage?.getSelectedAccount()?.accountId,
+    //   "iId": this.iId,
+    //   "id": this.clonedWidgetSettings?.id,
+    //   updatedByAId: this.clonedWidgetSettings?.updatedByAId,
+    //   "agentAssistSettings" : {}
+    // }
+    // if(settingType === 'widget') {
+    //   payload.agentAssistSettings = this.agentAssistFormGroup.value.agentAssistSettings;
+    //   this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
+    //   .subscribe(
+    //     (res) => {
+    //       if (res) {
+    //         this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
+    //         this.disableButtons = false;
+    //         this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
+    //         this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
+    //         this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
+    //       }
+    //     },
+    //     (err) => {
+    //       this.createOrUpdateAgSettingsForm(this.clonedWidgetSettings.agentAssistSettings);
+    //       this.disableButtons = false;
+    //       this.notificationService.showError(
+    //         err,
+    //         this.translate.instant("SAVE_FALLBACK_ERROR_MSG")
+    //       );
+    //     }
+    //   );
+    //   // 
+    // } else {
+    //   payload.agentAssistSettings = this.knowledgeAIFormGroup.value;
+    //   this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
+    //   .subscribe(
+    //     (res) => {
+    //       if (res) {
+    //           this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
+    //           this.disableButtons = false;
+    //         this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
+    //         this.createOrUpdateSearchForm(res.agentAssistSettings)
+    //         this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
+    //       }
+    //     },
+    //     (err) => {
+    //       this.disableButtons = false;
+    //       this.createOrUpdateSearchForm(this.clonedWidgetSettings.agentAssistSettings)
+    //       this.notificationService.showError(
+    //         err,
+    //         this.translate.instant("SAVE_FALLBACK_ERROR_MSG")
             
-          );
-        }
-      );
-    }
+    //       );
+    //     }
+    //   );
+    // }
   }
 
   // API Configuration for the SearchAssist in Advanced Mode
@@ -380,6 +435,12 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup)
     .get('showAutoSuggestions') as FormControl)
     .patchValue((val.type === 'On') ? true : false);
+  }
+
+  selectLines(key){
+    ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup)
+    .get('displayLines') as FormControl)
+    .patchValue(key);
   }
 
   // open script editor for the Advanced Mode
@@ -426,6 +487,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       isAgentCoachingEnabled: [isUpdate ? (obj.isAgentCoachingEnabled ?? false) : false],
       isAgentResponseEnabled: [isUpdate ? (obj.isAgentResponseEnabled ?? false) : true],
       isAgentResponseCopyEnabled: [isUpdate ? (obj.isAgentResponseCopyEnabled ?? false) : true],
+      transcripts : this.fb.group({
+        enable : [isUpdate ? (obj.transcripts?.isEnabled??false) : true],
+      }),
       summarization: this.fb.group({
         isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
         canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false]
@@ -457,6 +521,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         fallback: [isUpdate ? (searchObj?.fallback ?? false) : false],
         suggestVal: [isUpdate ? (searchObj?.showAutoSuggestions ? 'On' : 'Off') : 'On'], 
         showAutoSuggestions: [isUpdate ? (searchObj?.showAutoSuggestions ?? true) : true],
+        displayLines : [isUpdate ? (searchObj?.displayLines ?? 2) : 2]
       })
     };
 

@@ -148,6 +148,21 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="toggle-info-data m-0" *ngIf="selectedChannel == 'voice'" formGroupName="transcripts">
+                            <div class="content-data-toggle">
+                                <h1>Transcript Tab </h1>
+                                <p>Controls the accessibility of Transcript Tab.</p>
+                            </div>
+                            <div class="content-data-check">
+                                <label class="kr-sg-toggle">
+                                    <input type="checkbox" formControlName="enable">
+                                    <div class="slider">
+                                        <span class="enabled">Enabled</span>
+                                        <span class="disabled">Disabled</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
                     <!-- </ng-container> -->
                         <div class="toggle-info-data m-0" formGroupName="summarization">
                             <div class="content-data-toggle">
@@ -175,7 +190,7 @@
                         </div>
                         <div class="toggle-info-data m-0">
                             <div class="content-data-toggle">
-                                <h1>Widget Landing Tab {{selectedChannel}}</h1>
+                                <h1>Widget Landing Tab</h1>
                                 <p>Set the landing tab for the AgentAssist widget.</p>
                             </div>
                             <div class="widget-landing-check">
@@ -389,6 +404,25 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="search-results-block">
+                            <div class="search-results-title">Control expand behaviour of Answers</div>
+                            <div class="search-results-des">Customise the number of results displayed by default in the AgentAssist Widget by selecting from the dropdown list. </div>
+                            <div class="api-intigration-block">
+                                <div class="kr-sg-dropdowns" ngbDropdown>
+                                    <div class="dropdown dropdown-open">
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
+                                            {{knowledgeAIFormGroup?.get(selectedKAIChannel)?.value?.searchAssistConfig?.displayLines == -1 ? 'Maximum' : (knowledgeAIFormGroup?.get(selectedKAIChannel)?.value?.searchAssistConfig?.displayLines + ' lines')}}</button>
+                                        <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
+                                            <ng-container *ngFor="let key of lineList">
+                                                <li ngbDropdownItem class="p-0" (click)="selectLines(key)">
+                                                    <a>{{numberOfLineList[key]}}</a>
+                                                </li>
+                                            </ng-container>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!--AgentAssist Widget Disabled-->
                     <div class="disable-state-error" *ngIf="!knowledgeAIFormGroup.get(selectedKAIChannel)?.value?.isSearchAssistEnabled">
@@ -476,15 +510,44 @@
                     <!--AgentAssist Widget enabled-->
                     <!-- *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.agentAssistWidgetEnabled" -->
                     <div class="widgetenable-body">
-                        <div class="toggle-info-data m-0" formGroupName="botEvents">
+                        <div class="toggle-info-data m-0" formGroupName="sentiment">
                             <div class="content-data-toggle">
-                                <h1>Honour Bot Event - Intent not found</h1>
-                                <p>Configured Intent-not-found event will be triggered if AgentAssist is unable to
-                                    understand the user's intent.</p>
+                                <h1>Sentiment Analysis</h1>
+                                <p>Controls the accessibility of Real-Time Sentiment Analysis graph on top of the AgentAssist Widget.</p>
                             </div>
                             <div class="content-data-check">
-                                <label class="kr-sg-toggle" formGroupName="fallback">
-                                    <input type="checkbox" formControlName="isEnabled">
+                                <label class="kr-sg-toggle">
+                                    <input type="checkbox" formControlName="enable">
+                                    <div class="slider">
+                                        <span class="enabled">Enabled</span>
+                                        <span class="disabled">Disabled</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="toggle-info-data m-0" formGroupName = "intentExecution">
+                            <div class="content-data-toggle">
+                                <h1>List View for Dialog Task Execution</h1>
+                                <p>Manage the accessibility of List View features on the Widget, providing a comprehensive list view of all entity nodes within the dialog task.</p>
+                            </div>
+                            <div class="content-data-check" formGroupName="entityView">
+                                <label class="kr-sg-toggle">
+                                    <input type="checkbox" formControlName="enable">
+                                    <div class="slider">
+                                        <span class="enabled">Enabled</span>
+                                        <span class="disabled">Disabled</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="toggle-info-data m-0" formGroupName = "intentExecution">
+                            <div class="content-data-toggle">
+                                <h1>Dialog Task Restart Functionality</h1>
+                                <p>Provide agents with the flexibility to restart dialog tasks either from the beginning or with the captured input.</p>
+                            </div>
+                            <div class="content-data-check" formGroupName="restartFunctionality">
+                                <label class="kr-sg-toggle">
+                                    <input type="checkbox" formControlName="enable">
                                     <div class="slider">
                                         <span class="enabled">Enabled</span>
                                         <span class="disabled">Disabled</span>
@@ -511,7 +574,60 @@
                                 </div>
                             </div>
                         </ng-container>
-                        <ng-container *ngIf="isV3">
+
+                        <ng-container>
+                            <div class="search-results-block" formGroupName="agentActions">
+                                <div class="search-results-title">Data Format Preference</div>
+                                <div class="search-results-des">Controls the data format preference from Send & Copy button on AgentAssist Widget.</div>
+                                <div class="radio-group-block">
+                                    <div class="kr-sg-radiobutton p-0"
+                                        *ngFor="let open of dataFormat; let indx = index">
+                                        <input id="dataformat-{{indx}}" class="radio-custom" type="radio" [value]="open.value"
+                                            name="sharingFormat" formControlName="sharingFormat">
+                                        <label for="dataformat-{{indx}}" class="radio-custom-label">{{open.type}}
+                                            <span class="info-tip" placement="bottom-center"
+                                            tooltipClass="tooltip-global-styles" ngbTooltip={{open.tooltip}}><i
+                                                class="icon-sa-info"></i></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <div class="toggle-info-data m-0">
+                            <div class="content-data-toggle">
+                                <h1>Help & Support</h1>
+                                <p>Controls the accessibility of Help & Support on AgentAssist Widget.</p>
+                            </div>
+                            <div class="content-data-check">
+                                <label class="kr-sg-toggle">
+                                    <input type="checkbox" formControlName="helpSupportEnabled">
+                                    <div class="slider">
+                                        <span class="enabled">Enabled</span>
+                                        <span class="disabled">Disabled</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="toggle-info-data m-0" formGroupName="botEvents">
+                            <div class="content-data-toggle">
+                                <h1>Honour Bot Event - Intent not found</h1>
+                                <p>Configured Intent-not-found event will be triggered if AgentAssist is unable to
+                                    understand the user's intent.</p>
+                            </div>
+                            <div class="content-data-check">
+                                <label class="kr-sg-toggle" formGroupName="fallback">
+                                    <input type="checkbox" formControlName="isEnabled">
+                                    <div class="slider">
+                                        <span class="enabled">Enabled</span>
+                                        <span class="disabled">Disabled</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <ng-container >
                             <div class="toggle-info-data  m-0" formGroupName="isCustomisedLogoEnabled">
                                 <div class="content-data-toggle">
                                     <h1>Customise Logo</h1>
@@ -589,6 +705,35 @@
     
                             </div>
                         </ng-container>
+
+                        <div class="toggle-info-data m-0" formGroupName="languageSettings">
+                            <div class="content-data-toggle">
+                                <h1>Default Language for AgentAssist Widget</h1>
+                                <p>Provides manager the ability the select the default language option for all Agents on the AgentAssist Widget.</p>
+                                <div class="auto-sub">
+                                    <span class="action-text">Actions</span>
+                                    <div class="kr-sg-checkbox">
+                                        <input id="switchlang-12" class="checkbox-custom" type="checkbox"
+                                            formControlName="allowAgentSwitch">
+                                        <label for="switchlang-12" class="checkbox-custom-label">Allow Agents to switch between multiple available languages</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-landing-check">
+                                <div class="kr-sg-dropdowns" ngbDropdown>
+                                    <div class="dropdown dropdown-open">
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{multiLanguageList[agentAssistFormGroup.get('agentAssistSettings')?.value?.languageSettings?.language]}}</button>
+                                        <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
+                                            <ng-container *ngFor="let obj of multiLanguageList | keyvalue">
+                                                <li ngbDropdownItem class="p-0" (click)="selectLanguage(obj.key)">
+                                                    <a>{{obj.value}}</a>
+                                                </li>
+                                            </ng-container>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                     <!--AgentAssist Widget Disabled-->
