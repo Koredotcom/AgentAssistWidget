@@ -4,7 +4,7 @@
             <div class="icon_block">
                 <i class="icon-sa-welcome-chat"></i>
             </div>
-            <div class="utt-name">Utterance</div>
+            <div class="utt-name">{{'COACHING_ADHERENCE_UTTER' | translate}}</div>
             <!-- <div class="dropdown-adherence" ngbDropdown #utteranceTrigger="ngbDropdown">
                 <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>Utterance Trigger <i class="icon-sa-arrow-down"></i></button>
                 <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="utteranceTriggerMenu">
@@ -36,12 +36,12 @@
                     <div class="scrol-data">
                         <div class="add-utterences-drp">
                             <div class="label-text">
-                                <span>Utterances</span>
-                                <span class="pbl">Powered by LLM</span>
+                                <span>{{'COACHING_ADHERENCE_UTTERS' | translate}}</span>
+                                <span class="pbl">{{'COACHING_ADHERENCE_POWERED_BY' | translate}}</span>
                             </div>
                             <div class="dropdown-adherence" ngbDropdown #utteranceDropdown="ngbDropdown">
                                 <input type="text" class="drp-input-search"  ngbDropdownToggle [formControl]="searchKey">
-                                <div class="text_info">Type an utterance that the person might say.</div>
+                                <div class="text_info">{{'COACHING_ADHERENCE_TYPE_UTTER' | translate}}</div>
                                 <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="utteranceDropdownMenu">
                                     <div class="body-dropdown">
                                         <ng-container *ngIf="loaded; else loading">
@@ -64,9 +64,9 @@
                                             <div class="found-details-info" *ngIf="searchKey.value?.length > 0 && cs.metaForUtternace?.integration">
                                                 <div class="found-ai-count">
                                                     <i class="icon-coaching--ai"></i>
-                                                    <span>Found {{openAiUtteranceArray?.length}}</span>
+                                                    <span>{{'COACHING_NON_INTENT_FOUND' | translate}} {{openAiUtteranceArray?.length}}</span>
                                                 </div>
-                                                <div class="found-desc">Similar utterances with the same meaning</div>
+                                                <div class="found-desc">{{'COACHING_NON_INTENT_SIMILAR_UTTER' | translate}}</div>
                                                 <perfect-scrollbar>
                                                     <div class="found-items-scroll">
                                                         <ng-container *ngFor="let utter of openAiUtteranceArray;let i = index">
@@ -91,7 +91,7 @@
                                         <ng-template #loading>
                                             <ng-container>
                                                 <div class="ai-itassist-wrapper">
-                                                    <div class="label-heading"><i class="icon-coaching--ai"></i> Assistant</div>
+                                                    <div class="label-heading"><i class="icon-coaching--ai"></i> {{'COACHING_ADHERENCE_ASSISTANT' | translate}}</div>
                                                     <div class="no-data-loader">
                                                         <div class="sk-fading-circle">
                                                             <div class="sk-circle1 sk-circle"></div>
@@ -107,15 +107,15 @@
                                                             <div class="sk-circle11 sk-circle"></div>
                                                             <div class="sk-circle12 sk-circle"></div>
                                                         </div>
-                                                        <div class="thinking-text">Working...</div>
+                                                        <div class="thinking-text">{{'COACHING_NON_INTENT_WORKING' | translate}}...</div>
                                                     </div>
                                                 </div>
                                             </ng-container>
                                         </ng-template>
                                     </div>
                                     <div class="footer-add">
-                                        <button class="kr-sg-button-secondary btn_lg" (click)="clearAIsuggestions(utteranceDropdown)">Clear</button>
-                                        <button class="kr-sg-button-primary btn_lg" (click)="saveUtterances();clearAIsuggestions(utteranceDropdown)" [disabled]="addButtonClick">Add</button>
+                                        <button class="kr-sg-button-secondary btn_lg" (click)="clearAIsuggestions(utteranceDropdown)">{{'NEWUSER.CLEAR' | translate}}</button>
+                                        <button class="kr-sg-button-primary btn_lg" (click)="saveUtterances();clearAIsuggestions(utteranceDropdown)" [disabled]="addButtonClick">{{'USECASES.ADD' | translate}}</button>
                                     </div>
                                 </ul>
                             </div>
@@ -123,19 +123,19 @@
                         <div class="protip-hint-info" *ngIf="selectedUtterancesArray.length == 0 && selectedNewUtterances?.length == 0">
                             <i class="icon-sa-welcome-bulb"></i>
                             <div class="content-data-hint">
-                                <div class="title">New! Enhanced module</div>
-                                <div class="desc-hint">The utterance module is now enhanced with generative AI functionality that will simplify the need for utterance additions. </div>
+                                <div class="title">{{'COACHING_ADHERENCE_ENHANCED_MODULE' | translate}}</div>
+                                <div class="desc-hint">{{'COACHING_ADHERENCE_UTTER_MODULE' | translate}} </div>
                             </div>
                         </div>
                         <div class="saved-utterances" *ngIf="selectedUtterancesArray?.length > 0 || selectedNewUtterances?.length > 0">
-                            <div class="heading-saved">Saved Utterances</div>
+                            <div class="heading-saved">{{'COACHING_ADHERENCE_SAVE_UTTER' | translate}}</div>
                             <!-- Repeat Data -->
                             <ng-container *ngFor="let utter of selectedUtterancesArray; let iD = index">
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt">{{utter?.utterance}}</div>
                                     <div class="delete-saved-utt">
                                         <i class="icon-sa-copy"
-                                            [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
+                                            [ngbTooltip]="utter.copied ? utter.copied : ('BUTTONS.COPY' | translate)"
                                             (click)="copy(utter?.utterance, iD, selectedUtterancesArray);">
                                         </i>
                                         <i class="icon-sa-welcome-delete" (click)="deleteUtternce(utter, iD)"></i>
@@ -147,7 +147,7 @@
                                     <div class="saved-title-utt">{{utter?.utterance}}</div>
                                     <div class="delete-saved-utt">
                                         <i class="icon-sa-copy"
-                                            [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
+                                            [ngbTooltip]="utter.copied ? utter.copied : ('BUTTONS.COPY' | translate)"
                                             (click)="copy(utter?.utterance, iDx, selectedNewUtterances);">
                                         </i>
                                         <i class="icon-sa-welcome-delete" (click)="deleteUtternceNew(utter?.utterance, iDx)"></i>
@@ -178,7 +178,7 @@
                                 <div class="img-block-empty">
                                     <img src="assets/icons/empty-search-add.svg">
                                 </div>
-                                <p>No conversation history found.</p>
+                                <p>{{'COACHING_ADHERENCE_NO_CONVOS_HISTORY_FOUND' | translate}}</p>
                             </div>
                             <div class="chat-conv-utterance d-none">
                                 <div class="conversations-type">
@@ -224,8 +224,8 @@
         </div>
     </div>
     <div class="footer-actions">
-        <button class="kr-sg-button-secondary btn_lg" (click)="closeAdherence('utterance')">Cancel</button>
+        <button class="kr-sg-button-secondary btn_lg" (click)="closeAdherence('utterance')">{{'BUTTONS.CANCEL' | translate}}</button>
         <!-- [disabled]="selectedUtterancesArray?.length === 0 && selectedNewUtterances?.length === 0" -->
-        <button class="kr-sg-button-primary btn_lg" (click)="saveUtteranceStrings()" >Okay</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="saveUtteranceStrings()" >{{'BUTTONS.OKAY' | translate}}</button>
     </div>
 </div>

@@ -2,9 +2,9 @@
     <div class="header-sec">
         <div class="left-sec">
             <img src="assets/icons/coaching/coaching--message-check-square.svg">
-            <span class="sub-title">None Intent</span>
+            <span class="sub-title">{{'COACHING_NON_INTENT_TITLE' | translate}}</span>
             <span class="info-tip" placement="bottom-center" tooltipClass="tooltip-global-styles"
-                ngbTooltip="None intent utterances are used to prevent false positives while doing intent recognition">
+                ngbTooltip="{{'COACHNG_NON_INTENT_TOOLTIP_UTTER_RECOGN' | translate}}">
                 <i class="icon-sa-help"></i>
             </span>
         </div>
@@ -18,11 +18,11 @@
                 <!-- <p>None intent utterances are used to prevent false positives while doing intent recognition.</p> -->
                 <div class="seach-block">
                     <div class="kr-sg-input-text" *ngIf="newUtterances.length || selectedUtterances.length">
-                        <input type="text" placeholder="Search" class="input-text" [(ngModel)]="selectedUtterSeach">
+                        <input type="text" placeholder="{{'COMMON.SEARCH' | translate}}" class="input-text" [(ngModel)]="selectedUtterSeach">
                         <i class="icon-coaching--search"></i>
                         <!-- <span class="press-enter">Press Enter to confirm search</span> -->
                     </div>
-                    <button [ngClass]="{'w-100': !(newUtterances.length || selectedUtterances.length)}" *ngIf="!clickAddUtter" class="kr-sg-button-primary btn_lg" (click)="clickAddUtter = true;">Add Utterance(s)</button>
+                    <button [ngClass]="{'w-100': !(newUtterances.length || selectedUtterances.length)}" *ngIf="!clickAddUtter" class="kr-sg-button-primary btn_lg" (click)="clickAddUtter = true;">{{'COACHING_NON_INTENT_ADD_UTTERS' | translate}}</button>
                 </div>
             </div>
             <div class="added-uterances-blk">
@@ -56,11 +56,11 @@
                                         <img [src]="selectedUtterSeach ? 'assets/icons/empty-search-add.svg' : 'assets/icons/Comments.svg'">
                                     </div>
                                     <ng-container *ngIf="selectedUtterSeach">
-                                        <h1>No results found</h1>
-                                        <p>No results found for your query "{{selectedUtterSeach}}"</p>
+                                        <h1>{{'COACHING_NON_INTENT_NO_RESULT_FOUND' | translate}}</h1>
+                                        <p>{{'COACHING_NON_INTENT_NO_RESULT_FOUND_QUERY' | translate}} "{{selectedUtterSeach}}"</p>
                                     </ng-container>
                                     <ng-container *ngIf="!selectedUtterSeach">
-                                        <h1>There are no utterances added</h1>
+                                        <h1>{{'COACHING_NON_INTENT_NO_UTTER_ADDED' | translate}}</h1>
                                     </ng-container>
                                 </ng-container>
                             </div>
@@ -71,22 +71,22 @@
             </div>
         </div>
         <div class="add-utterance-block" [ngClass]="{'d-none': !clickAddUtter}">
-            <h1>Add Utterances</h1>
+            <h1>{{'COACHING_NON_INTENT_ADD_UTTER' | translate}}</h1>
             <div class="utt-radio-block">
                 <div class="radio-block-content" [ngClass]="{'active-check': utteranceType === coachingCnst.AIASSIST}">
                     <div class="kr-sg-radiobutton" 
-                    [ngbTooltip]="!openapiEnable ? 'Configure Open AI to use AI Assist to Add Utterances' : ''"
+                    [ngbTooltip]="!openapiEnable ? ('COACHING_NON_INTENT_WORKING' | translate) : ''"
                     [ngClass]="{'disable' : !openapiEnable}">
                         <input id="radio-1" name="radio" class="radio-custom" type="radio"
                          (change)="changeUtteranceSelectionType(coachingCnst.AIASSIST)" [checked]="utteranceType === coachingCnst.AIASSIST" 
                          [disabled]="!openapiEnable" >
                         <label for="radio-1" class="radio-custom-label">
-                            <div class="title">AI Assist</div>
-                            <div class="desc-text">Select rules and generate more utterances for the rule with AI</div>
+                            <div class="title">{{'COACHING_NON_INTENT_AI_ASSIST' | translate}}</div>
+                            <div class="desc-text">{{'COACHING_NON_INTENT_SELECT_RULES' | translate}}</div>
                         </label>
                     </div> 
                     <div class="add-rule-block" *ngIf="utteranceType === coachingCnst.AIASSIST">
-                        <div class="label-text">Add Rules</div>
+                        <div class="label-text">{{'COACHING_NON_INTENT_ADD_RULES' | translate}}</div>
                         <mat-form-field class="add-rules-chip-list">
                             <!-- <mat-label>Add Tags</mat-label> -->
                             <mat-chip-list #chipList>
@@ -94,7 +94,7 @@
                                     <span class="chip-name text-truncate mx-w-100" title="{{tag.name}}">{{tag.name}}</span>
                                     <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
                                 </mat-chip>
-                                <input placeholder="Select Rules" #tagInput [matChipInputFor]="chipList"
+                                <input placeholder="{{'COACHING_NON_INTENT_PLACEHOLDER_SELECT_RULE' | translate}}" #tagInput [matChipInputFor]="chipList"
                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
                                     [matAutocomplete]="auto"
                                     #trigger="matAutocompleteTrigger">
@@ -103,13 +103,13 @@
                                 <div class="content-scroll-ni">
                                     <div class="search-block">
                                         <div class="kr-sg-input-text">
-                                            <input type="text" placeholder="Search" class="input-text"  [(ngModel)]="tagRuleSearch" name="search">
+                                            <input type="text" placeholder="{{'COMMON.SEARCH' | translate}}" class="input-text"  [(ngModel)]="tagRuleSearch" name="search">
                                             <i class="icon-coaching--search"></i>
                                         </div>
                                     </div>
                                     <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
-                                        <div class="title">Tags</div>
-                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">{{ this.checkSelectedAllTags() ? 'Unselect All' : 'Select All' }}</div>
+                                        <div class="title">{{'COACHING_CREATE_RULE_TAGS' | translate}}</div>
+                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">{{ this.checkSelectedAllTags() ? ('COACHING_NON_INTENT_UNSELECT_ALL' | translate) : ('COACHING_NON_INTENT_SELECT_ALL' | translate) }}</div>
                                     </div>
                                     <ng-container *ngFor="let tag of filteredTagsDisplay | filter : [ tagRuleSearch, 'name'];let i = index">
                                         <ng-container *ngIf="tag?.name">
@@ -121,14 +121,14 @@
                                                     [checked]="tag.checked">
                                                 <div class="label-check text-truncate" for="checkbox-{{i}}">
                                                     <span>{{tag?.name}}</span>
-                                                    <div class="desc-text">{{tag?.value?.length}} rules</div>
+                                                    <div class="desc-text">{{tag?.value?.length}} {{('COACHING_NON_INTENT_RULES' | translate) | lowercase}}</div>
                                                 </div>
                                             </mat-option>
                                         </ng-container>
                                     </ng-container>
                                     <div class="tags-data" *ngIf="checkRulePresent() ? true  : false">
-                                        <div class="title">Rules</div>
-                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">{{ this.checkSelectedAllRules() ? 'Unselect All' : 'Select All' }}</div>
+                                        <div class="title">{{'COACHING_NON_INTENT_RULES' | translate}}</div>
+                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">{{ this.checkSelectedAllRules() ? ('COACHING_NON_INTENT_UNSELECT_ALL' | translate) : ('COACHING_NON_INTENT_SELECT_ALL' | translate) }}</div>
                                     </div>
                                     <ng-container *ngFor="let tag of filteredTagsDisplay  | filter : [ tagRuleSearch, 'name'];let i = index">
                                         <mat-option class="mat-option-ni" [title]="tag.name" *ngIf="tag.type == coachingCnst.RULE"
@@ -143,13 +143,13 @@
                                         </mat-option>
                                     </ng-container>
 
-                                    <mat-option class="d-none">avoid closing matautocomplete on search
+                                    <mat-option class="d-none">{{'COACHING_NON_INTENT_AVOID_SEARCH' | translate}}
 
                                     </mat-option>
                                 </div>
                                 <div class="footer-add-cler-ni">
-                                    <button class="kr-sg-button-secondary-two btn_lg" (click)="clearChipData()">Clear</button>
-                                    <button class="kr-sg-button-primary btn_lg" (click)="addRuleData()">Add</button>
+                                    <button class="kr-sg-button-secondary-two btn_lg" (click)="clearChipData()">{{'NEWUSER.CLEAR' | translate}}</button>
+                                    <button class="kr-sg-button-primary btn_lg" (click)="addRuleData()">{{'USECASES.ADD' | translate}}</button>
                                 </div>
                             </mat-autocomplete>
                         </mat-form-field>
@@ -161,13 +161,13 @@
                         <input id="radio-11" name="radio" class="radio-custom" type="radio"
                         (change)="changeUtteranceSelectionType(coachingCnst.MANUAL)" [checked]="utteranceType === coachingCnst.MANUAL">
                         <label for="radio-11" class="radio-custom-label">
-                            <div class="title">Input Utterances Manually</div>
-                            <div class="desc-text">Type Utterances and press enter to Add</div>
+                            <div class="title">{{'COACHING_NON_INTENT_INPUT_UTTER_MANUALLY' | translate}}</div>
+                            <div class="desc-text">{{'COACHING_NON_INTENT_UTTER_ENTER_ADD' | translate}}</div>
                         </label>
                     </div> 
                     <div class="add-rule-block" *ngIf="utteranceType === coachingCnst.MANUAL">
-                        <div class="label-text">Utterances</div>
-                        <input type="text" (keydown.enter)="onEnter()" [(ngModel)]="customUtterance" placeholder="Press enter to save utterances" class="input-text">
+                        <div class="label-text">{{'COACHING_NON_INTENT_UTTER' | translate}}</div>
+                        <input type="text" (keydown.enter)="onEnter()" [(ngModel)]="customUtterance" placeholder="{{'COACHING_NON_INTENT_PLACEHOLDER_ENTER_SAVE_UTTER' | translate}}" class="input-text">
                     </div> 
                 </div>
             </div>
@@ -175,7 +175,7 @@
         <div class="found-details-info" [ngClass]="{'d-none' : !clickSelectedUtter || utteranceType === coachingCnst.MANUAL}">
             <div class="seach-block">
                 <div class="kr-sg-input-text">
-                    <input type="text" placeholder="Search" class="input-text" [(ngModel)]="listedUtterSearch">
+                    <input type="text" placeholder="{{'COMMON.SEARCH' | translate}}" class="input-text" [(ngModel)]="listedUtterSearch">
                     <i class="icon-coaching--search"></i>
                 </div>
             </div>
@@ -185,15 +185,15 @@
                         <div class="found-text-block">
                             <div class="found-ai-count">
                                 <i class="icon-coaching--ai"></i>
-                                <span>Found {{ruleUtterances.length}}</span>
+                                <span>{{'COACHING_NON_INTENT_FOUND' | translate}} {{ruleUtterances.length}}</span>
                             </div>
-                            <div class="found-desc">Similar utterances with the same meaning</div>
+                            <div class="found-desc">{{'COACHING_NON_INTENT_SIMILAR_UTTER' | translate}}</div>
                        </div>
                         <div class="found-items-scroll">
                             <div class="select-all" *ngIf="ruleUtterances.length > 0">
                                 <div class="kr-sg-checkbox">
                                     <input id="one" class="checkbox-custom" type="checkbox" [checked]="checkSelectedUtterance() ? true : false" (change)="selectAllUtterances($event)">
-                                    <label for="one" class="checkbox-custom-label">SELECT ALL</label>
+                                    <label for="one" class="checkbox-custom-label">{{'PLACEHOLDERS.SELECT_ALL' | translate}}</label>
                                 </div>                            
                             </div>
                             <ng-container *ngFor="let item of ruleUtterances | filter: [ listedUtterSearch, 'name'] ; let i = index">
@@ -210,7 +210,7 @@
                         <div class="found-text-block">
                             <div class="found-ai-count">
                                 <i class="icon-coaching--ai"></i>
-                                <span>WORKING...</span>
+                                <span>{{('COACHING_NON_INTENT_WORKING' | translate) | uppercase}}...</span>
                             </div>
                        </div>
                         <div class="ai-working-loader">
@@ -222,9 +222,9 @@
         </div>
     </div>
     <div class="footer-wraper">
-        <button class="kr-sg-button-secondary btn_lg" (click)="closeSlider()">Cancel</button>
-        <button class="kr-sg-button-primary btn_lg" (click)="save()" [disabled]="newUtterances.length <= 0 && deletedUtterances.length <=0" *ngIf="!clickSelectedUtter">Save</button>
+        <button class="kr-sg-button-secondary btn_lg" (click)="closeSlider()">{{'BUTTONS.CANCEL' | translate}}</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="save()" [disabled]="newUtterances.length <= 0 && deletedUtterances.length <=0" *ngIf="!clickSelectedUtter">{{'BUTTONS.SAVE' | translate}}</button>
 
-        <button class="kr-sg-button-primary btn_lg" (click)="addSelectedUtteranceList()" [disabled]="!checkAddSelectedButtonState() ? true : false" *ngIf="clickSelectedUtter && utteranceType === coachingCnst.AIASSIST">Add Selected</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="addSelectedUtteranceList()" [disabled]="!checkAddSelectedButtonState() ? true : false" *ngIf="clickSelectedUtter && utteranceType === coachingCnst.AIASSIST">{{'COACHING_NON_INTENT_ADD_SELECTED' | translate}}</button>
     </div>
 </div>
