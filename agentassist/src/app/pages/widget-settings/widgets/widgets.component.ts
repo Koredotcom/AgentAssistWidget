@@ -383,64 +383,62 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     let params = {
       orgId: this.authService?.getOrgId(),
       aasId: this.clonedWidgetSettings?.id
-    };
-    console.log(this.agentAssistFormGroup.value.agentAssistSettings, this.knowledgeAIFormGroup.value, "agentassist settings");
-    
-    // const payload = {
-    //   "orgId": this.authService?.getOrgId(),
-    //   "accountId": this.localstorage?.getSelectedAccount()?.accountId,
-    //   "iId": this.iId,
-    //   "id": this.clonedWidgetSettings?.id,
-    //   updatedByAId: this.clonedWidgetSettings?.updatedByAId,
-    //   "agentAssistSettings" : {}
-    // }
-    // if(settingType === 'widget') {
-    //   payload.agentAssistSettings = this.agentAssistFormGroup.value.agentAssistSettings;
-    //   this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
-    //   .subscribe(
-    //     (res) => {
-    //       if (res) {
-    //         this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
-    //         this.disableButtons = false;
-    //         this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
-    //         this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
-    //         this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
-    //       }
-    //     },
-    //     (err) => {
-    //       this.createOrUpdateAgSettingsForm(this.clonedWidgetSettings.agentAssistSettings);
-    //       this.disableButtons = false;
-    //       this.notificationService.showError(
-    //         err,
-    //         this.translate.instant("SAVE_FALLBACK_ERROR_MSG")
-    //       );
-    //     }
-    //   );
-    //   // 
-    // } else {
-    //   payload.agentAssistSettings = this.knowledgeAIFormGroup.value;
-    //   this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
-    //   .subscribe(
-    //     (res) => {
-    //       if (res) {
-    //           this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
-    //           this.disableButtons = false;
-    //         this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
-    //         this.createOrUpdateSearchForm(res.agentAssistSettings)
-    //         this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
-    //       }
-    //     },
-    //     (err) => {
-    //       this.disableButtons = false;
-    //       this.createOrUpdateSearchForm(this.clonedWidgetSettings.agentAssistSettings)
-    //       this.notificationService.showError(
-    //         err,
-    //         this.translate.instant("SAVE_FALLBACK_ERROR_MSG")
+    };    
+    const payload = {
+      "orgId": this.authService?.getOrgId(),
+      "accountId": this.localstorage?.getSelectedAccount()?.accountId,
+      "iId": this.iId,
+      "id": this.clonedWidgetSettings?.id,
+      updatedByAId: this.clonedWidgetSettings?.updatedByAId,
+      "agentAssistSettings" : {}
+    }
+    if(settingType === 'widget') {
+      payload.agentAssistSettings = this.agentAssistFormGroup.value.agentAssistSettings;
+      this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
+      .subscribe(
+        (res) => {
+          if (res) {
+            this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
+            this.disableButtons = false;
+            this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
+            this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
+            this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
+          }
+        },
+        (err) => {
+          this.createOrUpdateAgSettingsForm(this.clonedWidgetSettings.agentAssistSettings);
+          this.disableButtons = false;
+          this.notificationService.showError(
+            err,
+            this.translate.instant("SAVE_FALLBACK_ERROR_MSG")
+          );
+        }
+      );
+      // 
+    } else {
+      payload.agentAssistSettings = this.knowledgeAIFormGroup.value;
+      this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
+      .subscribe(
+        (res) => {
+          if (res) {
+              this.notificationService.showSuccess(this.translate.instant("AGENTASSIST_SETTINGS_SAVED"));
+              this.disableButtons = false;
+            this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
+            this.createOrUpdateSearchForm(res.agentAssistSettings)
+            this.imgPreview = res?.agentAssistSettings?.isCustomisedLogoEnabled?.fileUrl;
+          }
+        },
+        (err) => {
+          this.disableButtons = false;
+          this.createOrUpdateSearchForm(this.clonedWidgetSettings.agentAssistSettings)
+          this.notificationService.showError(
+            err,
+            this.translate.instant("SAVE_FALLBACK_ERROR_MSG")
             
-    //       );
-    //     }
-    //   );
-    // }
+          );
+        }
+      );
+    }
   }
 
   // API Configuration for the SearchAssist in Advanced Mode
