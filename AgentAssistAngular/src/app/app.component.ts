@@ -96,6 +96,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
 
   initiateSocketConnection(params: any) {
+    this.rootService.updateSettingsProperties();
     this.localStorageService.initializeLocalStorageState(this.widgetSettings);
     this.isGrantSuccess = true;
     setTimeout(() => {

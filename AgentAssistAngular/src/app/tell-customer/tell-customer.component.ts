@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { ProjConstants, RenderResponseType } from '../proj.const';
 import { CommonService } from '../services/common.service';
 import { RootService } from '../services/root.service';
@@ -16,6 +16,8 @@ export class TellCustomerComponent {
   @Input() responseArray;
   @Input() responseArrayIndex;
   @Input() assistAutomationData;
+
+  @ViewChild('tellCust',{static: false}) private tellCustNode : ElementRef;
 
   projConstants : any = ProjConstants;
   renderResponseType: any = RenderResponseType;
@@ -58,6 +60,7 @@ export class TellCustomerComponent {
   handleSendCopyButton(method,automation){
     automation.send = method === this.projConstants.SEND ? 'send' : 'copied';
     let sendData = this.isWelcomeMsg ? automation.value : automation.sendData;
+    sendData = this.prepareSendText(sendData);
     this.commonService.handleSendCopyButtonForNodes(method,sendData, this.automation);
     this.responseArray = this.commonService.grayOutPreviousAutomation(this.responseArray, this.automationIndex, this.responseArrayIndex);
     this.responseArray = structuredClone(this.responseArray);
@@ -65,6 +68,24 @@ export class TellCustomerComponent {
       this.automation.buttons = this.automation.buttons.filter(element => element.value == automation.value);
       
     }
+  }
+
+  prepareSendText(sendData){
+    if(!this.automation.templateRender){
+      let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
+      // format = 'original'
+      if(format == 'plainString'){
+        sendData = this.extractText();
+      }else{
+        sendData = this.rootService.handleEmptyLine(sendData);
+      }
+    }
+    return sendData;
+  }
+
+  extractText() {
+    const textContent = this.rootService.extractTextFromElement(this.tellCustNode.nativeElement);
+    return textContent;
   }
 
 }

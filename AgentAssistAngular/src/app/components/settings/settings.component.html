@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="card-group">
-                    <div class="card" (click)="setting = 'help'">
+                    <div class="card" (click)="setting = 'help'" *ngIf="helpSupportSettings?.isEnabled !== false">
                         <div class="card-icon">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -91,7 +91,7 @@
         </ng-container>
         <ng-container *ngIf="setting === 'help'">
             <div class="card-group-help">
-                <a (click)="openurlInBrowser(projConstants.DOCUMENTATION_LINK)">
+                <a (click)="openurlInBrowser(projConstants.DOCUMENTATION_LINK, projConstants.SETTINGS_DOCUMENTATION)" *ngIf="helpSupportSettings?.documentation?.isEnabled !== false">
                     <div class="card help-cards">
                         <div class="card-icon">
                             <i class="krIocnsFont-image-01"></i>
@@ -107,7 +107,7 @@
                         </div>
                     </div>
                 </a>
-                <a (click)="openurlInBrowser(projConstants.FAQ_LINK)">
+                <a (click)="openurlInBrowser(projConstants.FAQ_LINK, projConstants.SETTINGS_FAQ)" *ngIf="helpSupportSettings?.faq?.isEnabled !== false">
                     <div class="card help-cards">
                         <div class="card-icon">
                             <i class="krIocnsFont-image-01"></i>
@@ -123,7 +123,7 @@
                         </div>
                     </div>
                 </a>
-                <a  (click)="openurlInBrowser(projConstants.KOREACADEMY_LINK)">
+                <a  (click)="openurlInBrowser(projConstants.KOREACADEMY_LINK, projConstants.SETTINGS_KOREACADEMY)" *ngIf="helpSupportSettings?.koreAcademy?.isEnabled !== false">
                     <div class="card help-cards">
                         <div class="card-icon">
                             <i class="krIocnsFont-image-01"></i>
@@ -144,35 +144,35 @@
         <ng-container *ngIf="setting === 'language'">
             <div class="language-settigs">
                 <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="en" type="radio" name="radioForLang" id="flexRadioDefault1">
+                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" [disabled]="!enableLangChange" value="en" type="radio" name="radioForLang" id="flexRadioDefault1">
                     <label class="form-check-label" for="flexRadioDefault1">English</label>
                 </div>
                 <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="jp" type="radio" name="radioForLang" id="flexRadioDefault2">
+                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="jp" type="radio" name="radioForLang" id="flexRadioDefault2">
                     <label class="form-check-label" for="flexRadioDefault2">スペイン語 (Japanese)</label>
                 </div>
                 <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="kr" type="radio" name="radioForLang" id="flexRadioDefault8">
-                    <label class="form-check-label" for="flexRadioDefault8">スペイン語 (Korean)</label>
+                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="kr" type="radio" name="radioForLang" id="flexRadioDefault3">
+                    <label class="form-check-label" for="flexRadioDefault3">スペイン語 (Korean)</label>
                 </div>
+                <!-- <div class="form-check sm">
+                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="chi" type="radio" name="radioForLang" id="flexRadioDefault8">
+                    <label class="form-check-label" for="flexRadioDefault8">日本語 (Chinese)</label>
+                </div> -->
                 <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="chi" type="radio" name="radioForLang" id="flexRadioDefault3">
-                    <label class="form-check-label" for="flexRadioDefault3">日本語 (Chinese)</label>
-                </div>
-                <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="fr" type="radio" name="radioForLang" id="flexRadioDefault4">
+                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="fr" type="radio" name="radioForLang" id="flexRadioDefault4">
                     <label class="form-check-label" for="flexRadioDefault4">Française (French)</label>
                 </div>
                 <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="ar" type="radio" name="radioForLang" id="flexRadioDefault5">
+                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="ar" type="radio" name="radioForLang" id="flexRadioDefault5">
                     <label class="form-check-label" for="flexRadioDefault5">عربي (Arabic)</label>
                 </div>
                 <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="ge" type="radio" name="radioForLang" id="flexRadioDefault6">
+                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="ge" type="radio" name="radioForLang" id="flexRadioDefault6">
                     <label class="form-check-label" for="flexRadioDefault6">Deutsch (German)</label>
                 </div>
                 <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)" [(ngModel)]="defLanguage" value="sp" type="radio" name="radioForLang" id="flexRadioDefault7">
+                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="sp" type="radio" name="radioForLang" id="flexRadioDefault7">
                     <label class="form-check-label" for="flexRadioDefault7">Español (Spanish)</label>
                 </div>
             </div>

@@ -22,7 +22,7 @@
             </div>
             <div class="sent-msg-text" *ngIf="automation.send">{{(automation.send === 'send' ?  'SENT' : 'COPIED') | translate }}</div>
             <!-- <p>{{automation.data.buttons[0].value}}</p> -->
-            <p *ngIf="!automation.templateRender" [innerHTML]="rootService.handleEmptyLine(automation.value) | safeHtml"></p>
+            <p *ngIf="!automation.templateRender" #askCustNode [innerHTML]="rootService.handleEmptyLine(automation.value) | safeHtml"></p>
             <ng-container *ngIf="automation.templateRender && automation.template">
                 <ul class="chat-container" attr.id="{{automation.uuid}}"
                                             [innerHTML]="automation.template | safeHtml"></ul>

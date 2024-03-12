@@ -70,9 +70,9 @@ export class RootService {
   widgetMaxButtonClick : boolean = true;
   notLookingForClick : boolean = false;
 
-  numOfLines = 1;
+  numOfLines = 4;
 
-  defaultwidgetSettings : any = {
+  defaultwidgetSettings: any = {
     "isCustomisedLogoEnabled": {
       "isEnabled": false
     },
@@ -90,11 +90,14 @@ export class RootService {
     "isAgentCoachingEnabled": false,
     "isAgentResponseEnabled": true,
     "isAgentPlaybookEnabled": false,
-    "isAgentResponseCopyEnabled" : true,
+    "isAgentResponseCopyEnabled": true,
     "isSearchAssistEnabled": true,
-    "summarization" : {
-      "isEnabled" : false,
-      "canSubmit" : false
+    "summarization": {
+      "isEnabled": false,
+      "canSubmit": false
+    },
+    "transcripts": {
+      "isEnabled": true,
     },
     "searchAssistConfig": {
       "isXODependant": false,
@@ -102,17 +105,54 @@ export class RootService {
       "showAutoSuggestions": false,
       "fallback": false,
       "integrations": {
-          "type": "basic",
-          "config": {
-              "script": ""
-          }
-      }
+        "type": "basic",
+        "config": {
+          "script": ""
+        }
+      },
+      "displayLines": 4
     },
     "urlOpenBehaviour": {
       "defaultBehaviour": true,
       "sendPostEvent": false
+    },
+    "sentiment": {
+      "isEnabled": true,
+    },
+    "intentExecution": {
+      "restartFunctionality": {
+        "isEnabled": true
+      },
+      "entityView": {
+        "isEnabled": true
+      }
+    },
+    "agentActions": {
+      "sharingFormat": "original"
+    },
+    "showHelp": {
+      "isEnabled": true,
+      "documentation": {
+        "isEnabled": true,
+        "resource": ""
+      },
+      "faq": {
+        "isEnabled": true,
+        "resource": ""
+      },
+      "koreAcademy": {
+        "isEnabled": true,
+      }
+    },
+    "languageSettings": {
+      "language": "en",
+      "allowAgentSwitch": false
     }
+
   }
+
+  showListView : boolean = true;
+  showRestart : boolean = true;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     private dirService : DirService) {
@@ -160,6 +200,12 @@ export class RootService {
       
       this.connectionDetails = parmasObj;
     }
+  }
+
+  updateSettingsProperties(){
+    this.showListView = (this.settingsData?.intentExecution?.entityView?.isEnabled === false) ? false : true;
+    this.showRestart = (this.settingsData?.intentExecution?.restartFunctionality?.isEnabled === false) ? false : true;
+    this.numOfLines = (this.settingsData?.searchAssistConfig?.displayLines) ? this.settingsData?.searchAssistConfig?.displayLines : 2
   }
 
   prepareAgentAssistAgentRequestParams(data) {
@@ -647,7 +693,7 @@ export class RootService {
     let eleanswer = '';
     if (typeof answer === 'string') {
       eleanswer = (type === 'faq') ? answer.replace(/(\r\n|\n|\r)/gm, "<br>") : answer;
-      eleanswer = this.replaceLtGt(eleanswer, quotflag)
+      // eleanswer = this.replaceLtGt(eleanswer, quotflag)
       eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
       if (quotflag) {
         eleanswer = this.replaceLtGt(eleanswer, quotflag)
@@ -666,6 +712,19 @@ export class RootService {
       newHtmlStr = newHtmlStr.replaceAll('"', "&quot;");
     }
     return newHtmlStr;
+  }
+
+
+  extractTextFromElement(element: HTMLElement): string {
+    let text = '';
+    const childNodes = element.childNodes;
+    for (let i = 0; i < childNodes.length; i++) {
+      const node = childNodes[i];
+      if (node.nodeType === Node.TEXT_NODE) {
+        text += node.textContent;
+      }
+    }
+    return text.trim();
   }
 
   checkAutoBotIdDefined(id) {
