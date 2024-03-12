@@ -743,60 +743,57 @@
         width: 100%;
         .help-support-block{
             width: 290px;
-            .kr-sg-checkbox{
-                .checkbox-custom-label{
+            display: flex;
+            .help-support-block-info{
+                .help-support-block-heading{
+                    color: var(--Gray-700, var(--Primary-Colors-Gray-700, #344054));
+                    font-size: 14px;
+                    font-weight: 500;
+                    line-height: 20px; 
+                    margin-bottom: 0px;
                     display: flex;
-                    &::before{
-                        flex-shrink: 0;
-                        margin-top: 4px;
-                    }
-                    .help-support-block-info{
-                        .help-support-block-heading{
-                            color: var(--Gray-700, var(--Primary-Colors-Gray-700, #344054));
-                            font-size: 14px;
-                            font-weight: 500;
-                            line-height: 20px; 
-                            margin-bottom: 0px;
-                            display: flex;
-                            align-items: center;
-                            gap: 5px;
-                            i{
-                                color: #667085;
-                                &::before{
-                                    color: #667085;
-                                }
-                            }
-                        }
-                        .help-support-block-des{
-                            color: var(--Gray-500, var(--Primary-Colors-Gray-500, #667085));
-                            font-size: 14px;
-                            font-weight: 400;
-                            line-height: 20px;
-                           
-                        }
-                        .kr-sg-input-text{
-                            position: relative;
-                            margin-top: 4px;
-                            .input-text{
-                                padding-right: 50px;
-                                text-overflow: ellipsis;
-                                white-space: nowrap;
-                                overflow: hidden;
-                            }
-                            .reset-url{
-                                color: var(--Primary-500, #2970FF);
-                                font-size: 10px;
-                                font-weight: 500;
-                                line-height: 12px; 
-                                position: absolute;
-                                top: 50%;
-                                transform: translateY(-50%);
-                                right: 12px;
-                            }
+                    align-items: center;
+                    gap: 5px;
+                    i{
+                        color: #667085;
+                        &::before{
+                            color: #667085;
                         }
                     }
                 }
+                .help-support-block-des{
+                    color: var(--Gray-500, var(--Primary-Colors-Gray-500, #667085));
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 20px;
+                   
+                }
+                .kr-sg-input-text{
+                    position: relative;
+                    margin-top: 4px;
+                    .input-text{
+                        padding-right: 50px;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                    }
+                    .reset-url{
+                        color: var(--Primary-500, #2970FF);
+                        font-size: 10px;
+                        font-weight: 500;
+                        line-height: 12px; 
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        right: 12px;
+                        cursor: pointer;
+                    }
+                }
+            }
+            .kr-sg-checkbox{
+                flex-shrink: 0;
             }
         }
     }
+
 }

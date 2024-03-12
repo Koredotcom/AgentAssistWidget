@@ -611,48 +611,21 @@
                                 </div>
                             </div>
                             <div class="help-support-wrapper" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value?.showHelp?.isEnabled">
-                                <div class="help-support-block" *ngFor="let obj of helpSupport">
-                                    <div class="kr-sg-checkbox" formGroupName="{{obj.value}}">
+                                <div class="help-support-block" *ngFor="let obj of helpSupport" formGroupName="{{obj.value}}">
+                                    <div class="kr-sg-checkbox p-0 m-0">
                                         <input id="{{obj.type}}" class="checkbox-custom" type="checkbox" formControlName="isEnabled">
                                         <label for="{{obj.type}}" class="checkbox-custom-label">
-                                            <div class="help-support-block-info" (click)="$event.stopPropagation()">
-                                                <h4 class="help-support-block-heading">{{obj.type}} <i class="icon-sa-info" placement="bottom-center"
-                                                    tooltipClass="tooltip-global-styles" ngbTooltip="{{obj.tooltip}}"></i></h4>
-                                                <div class="kr-sg-input-text" *ngIf="obj.value != 'koreAcademy'">
-                                                    <input type="text" placeholder="Url" class="input-text" formControlName="resource" (click)="$event.stopPropagation()">
-                                                    <span class="reset-url" (click)="resetClick(obj.type);$event.stopPropagation();">Reset</span>
-                                                </div>
-                                            </div>
                                         </label>
                                     </div>   
+                                    <div class="help-support-block-info">
+                                        <h4 class="help-support-block-heading">{{obj.type}} <i class="icon-sa-info" placement="bottom-center"
+                                            tooltipClass="tooltip-global-styles" ngbTooltip="{{obj.tooltip}}"></i></h4>
+                                        <div class="kr-sg-input-text" *ngIf="obj.value != 'koreAcademy'">
+                                            <input type="text" placeholder="Url" class="input-text" formControlName="resource" (click)="$event.stopPropagation()">
+                                            <span class="reset-url" (click)="resetClick(obj.type);$event.stopPropagation();">Reset</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <!-- <div class="help-support-block">
-                                    <div class="kr-sg-checkbox">
-                                        <input id="faq" class="checkbox-custom" type="checkbox">
-                                        <label for="faq" class="checkbox-custom-label">
-                                            <div class="help-support-block-info">
-                                                <h4 class="help-support-block-heading">FAQ <i class="icon-sa-info" placement="bottom-center"
-                                                    tooltipClass="tooltip-global-styles" ngbTooltip="Control accessibility to FAQ and customise URLs."></i></h4>
-                                                <div class="kr-sg-input-text">
-                                                    <input type="text" placeholder="Url" class="input-text" value="docs.kore.ai/agentassist/frequently-asked-questions/faq/">
-                                                    <span class="reset-url">Reset</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </div>   
-                                </div> -->
-                                <!-- <div class="help-support-block">
-                                    <div class="kr-sg-checkbox">
-                                        <input id="kor_academy" class="checkbox-custom" type="checkbox">
-                                        <label for="kor_academy" class="checkbox-custom-label">
-                                            <div class="help-support-block-info">
-                                                <h4 class="help-support-block-heading">Kore Academy <i class="icon-sa-info" placement="bottom-center"
-                                                    tooltipClass="tooltip-global-styles" ngbTooltip="Control accessibility to Kore Academy"></i></h4>
-                                                
-                                            </div>
-                                        </label>
-                                    </div>   
-                                </div> -->
                             </div>
                         </div>
 

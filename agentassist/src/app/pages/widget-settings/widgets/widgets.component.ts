@@ -176,11 +176,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           isEnabled : [isUpdate ? (obj.showHelp?.isEnabled ?? true) : true],
           documentation : this.fb.group({
             isEnabled : [isUpdate ? (obj.showHelp?.documentation?.isEnabled ?? true) : true],
-            resource : [isUpdate ? (obj.showHelp?.documentation?.resource ?? "document") : "document"],
+            resource : [isUpdate ? (obj.showHelp?.documentation?.resource ?? "document") : "document", [Validators.required, Validators.pattern('https?://.+')]],
           }),
           faq : this.fb.group({
             isEnabled : [isUpdate ? (obj.showHelp?.faq?.isEnabled ?? true) : true],
-            resource : [isUpdate ? (obj.showHelp?.faq?.resource ?? "faq") : "faq"],
+            resource : [isUpdate ? (obj.showHelp?.faq?.resource ?? "faq") : "faq", [Validators.required, Validators.pattern('https?://.+')]],
           }),
           koreAcademy : this.fb.group({
             isEnabled : [isUpdate ? (obj.showHelp?.koreAcademy?.isEnabled ?? true) : true]
