@@ -155,7 +155,7 @@
                             </div>
                             <div class="content-data-check">
                                 <label class="kr-sg-toggle">
-                                    <input type="checkbox" formControlName="isEnabled">
+                                    <input type="checkbox" formControlName="isEnabled" (click)="transcriptControlChange($event)">
                                     <div class="slider">
                                         <span class="enabled">Enabled</span>
                                         <span class="disabled">Disabled</span>
@@ -613,16 +613,16 @@
                             <div class="help-support-wrapper" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value?.showHelp?.isEnabled">
                                 <div class="help-support-block" *ngFor="let obj of helpSupport" formGroupName="{{obj.value}}">
                                     <div class="kr-sg-checkbox p-0 m-0">
-                                        <input id="{{obj.type}}" class="checkbox-custom" type="checkbox" formControlName="isEnabled">
+                                        <input id="{{obj.type}}" class="checkbox-custom" type="checkbox" formControlName="isEnabled" (click)="resetValidations($event.target.checked, obj.value)">
                                         <label for="{{obj.type}}" class="checkbox-custom-label">
                                         </label>
                                     </div>   
                                     <div class="help-support-block-info">
                                         <h4 class="help-support-block-heading">{{obj.type}} <i class="icon-sa-info" placement="bottom-center"
                                             tooltipClass="tooltip-global-styles" ngbTooltip="{{obj.tooltip}}"></i></h4>
-                                        <div class="kr-sg-input-text" *ngIf="obj.value != 'koreAcademy'">
+                                        <div class="kr-sg-input-text" *ngIf="obj.value != 'koreAcademy'"  [ngClass]="{'disabled': !agentAssistFormGroup.get('agentAssistSettings').value?.showHelp[obj.value]?.isEnabled}">
                                             <input type="text" placeholder="Url" class="input-text" formControlName="resource" (click)="$event.stopPropagation()">
-                                            <span class="reset-url" (click)="resetClick(obj.type);$event.stopPropagation();">Reset</span>
+                                            <span class="reset-url" (click)="resetClick(obj.value);$event.stopPropagation();">Reset</span>
                                         </div>
                                     </div>
                                 </div>

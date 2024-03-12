@@ -102,6 +102,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   selectedChannel = 'chat';
   selectedKAIChannel = 'chat';
   isCoachingDisable = true;
+  agentAssistSeedData : any = {};
   constructor(
     public workflowService: workflowService,
     private service: ServiceInvokerService,
@@ -155,10 +156,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           sendPostEvent: [isUpdate ? (obj.urlOpenBehaviour?.sendPostEvent ?? false) : false]
         }),
         agentActions : this.fb.group({
-          sharingFormat : [isUpdate ? (obj.agentActions?.sharingFormat ?? 'original') : 'original'],
+          sharingFormat : [isUpdate ? (obj.agentActions?.sharingFormat ?? 'plainString') : 'plainString'],
         }),
         sentiment : this.fb.group({
-          isEnabled: [isUpdate ? (obj.sentiment?.isEnabled ?? false) : false]
+          isEnabled: [isUpdate ? (obj.sentiment?.isEnabled ?? true) : true]
         }),
         intentExecution : this.fb.group({
           restartFunctionality : this.fb.group({
@@ -176,11 +177,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           isEnabled : [isUpdate ? (obj.showHelp?.isEnabled ?? true) : true],
           documentation : this.fb.group({
             isEnabled : [isUpdate ? (obj.showHelp?.documentation?.isEnabled ?? true) : true],
-            resource : [isUpdate ? (obj.showHelp?.documentation?.resource ?? "document") : "document", [Validators.required, Validators.pattern('https?://.+')]],
+            resource : [isUpdate ? (obj.showHelp?.documentation?.resource ?? this.agentAssistSeedData?.defaultDocLink) : this.agentAssistSeedData?.defaultDocLink],
           }),
           faq : this.fb.group({
             isEnabled : [isUpdate ? (obj.showHelp?.faq?.isEnabled ?? true) : true],
-            resource : [isUpdate ? (obj.showHelp?.faq?.resource ?? "faq") : "faq", [Validators.required, Validators.pattern('https?://.+')]],
+            resource : [isUpdate ? (obj.showHelp?.faq?.resource ?? this.agentAssistSeedData?.defaultFAQLink) : this.agentAssistSeedData?.defaultFAQLink],
           }),
           koreAcademy : this.fb.group({
             isEnabled : [isUpdate ? (obj.showHelp?.koreAcademy?.isEnabled ?? true) : true]
@@ -202,6 +203,13 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       (((this.agentAssistFormGroup.get('agentAssistSettings') as FormGroup).get('urlOpenBehaviour')as FormGroup)
       .get('urlOpenType') as FormControl)
       .patchValue(urlOpenType);
+    }
+
+    if(this.agentAssistFormGroup){
+      for(let obj of this.helpSupport){
+        let value = this.agentAssistFormGroup.get('agentAssistSettings')?.value?.showHelp[obj.value]?.isEnabled ?? true;
+        this.resetValidations(value, obj.value);
+      }
     }
   }
 
@@ -227,6 +235,13 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
       this.isCoachingDisable = isEnabled;
     });
+    this.subs.sink = this.workflowService.seedData$.subscribe(res => {
+      console.log(res, "res******** of seedData");
+      if(res && res?.agentAssistSeedData){
+        this.agentAssistSeedData = res?.agentAssistSeedData;
+      }
+    });
+    
     this.createOrUpdateAgSettingsForm();
     this.createOrUpdateSearchForm();
     this.isUnifiedPlatform = this.workflowService?.isUnifiedPlatform();
@@ -456,9 +471,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   selectLines(key){
-    ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup)
-    .get('displayLines') as FormControl)
-    .patchValue(key);
+    if(key){
+      ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup)
+      .get('displayLines') as FormControl)
+      .patchValue(parseFloat(key));
+    }
   }
 
   // open script editor for the Advanced Mode
@@ -506,7 +523,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       isAgentResponseEnabled: [isUpdate ? (obj.isAgentResponseEnabled ?? false) : true],
       isAgentResponseCopyEnabled: [isUpdate ? (obj.isAgentResponseCopyEnabled ?? false) : true],
       transcripts : this.fb.group({
-        isEnabled : [isUpdate ? (obj.transcripts?.isEnabled??false) : true],
+        isEnabled : [isUpdate ? (obj.transcripts?.isEnabled??true) : true],
       }),
       summarization: this.fb.group({
         isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
@@ -518,7 +535,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       }),
     }
     if(isUpdate && obj?.isWidgetLandingEnabled?.tab === "transcript" && !obj?.transcript?.isEnabled){
-      (settingsForm['isWidgetLandingEnabled'] as FormGroup).get('tab').patchValue('assist');
+      this.selectTab(this.selectedChannel ,'assist');
     }
     return settingsForm;
   }
@@ -593,9 +610,39 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     (((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('urlOpenBehaviour') as FormGroup).patchValue(obj);
   }
 
-  resetClick(type){
-    console.log(type, "reset click");
-    
+  resetValidations(value, key){
+    const FormGroup = (this.agentAssistFormGroup.get('agentAssistSettings.showHelp') as FormGroup);
+    if(FormGroup){
+      const resourceParentGroup = FormGroup.get(key) as FormGroup;
+      if(resourceParentGroup){        
+        const resourceFormControl = resourceParentGroup.get('resource');
+        if(resourceFormControl){          
+          if(value){
+            resourceFormControl.setValidators([Validators.required, Validators.pattern('https?://.+')]);
+          }else{
+            resourceFormControl.clearValidators();
+          }
+          resourceFormControl.updateValueAndValidity();
+        }
+      }
+    }
+  }
+
+  transcriptControlChange(event){
+    let selectedLandingTab = (this.agentAssistFormGroup as FormGroup).get('agentAssistSettings').value[this.selectedChannel]?.isWidgetLandingEnabled?.tab; 
+    if(!event.target.checked && selectedLandingTab === 'transcript'){
+      this.selectTab(this.selectedChannel ,'assist');
+    }
+  }
+
+  resetClick(key){
+    let defaultUrl = (key === 'documentation') ? this.agentAssistSeedData?.defaultDocLink : this.agentAssistSeedData?.defaultFAQLink;
+    ((((((this.agentAssistFormGroup as FormGroup)
+    .get('agentAssistSettings') as FormGroup))
+    .get('showHelp') as FormGroup)
+    .get(key) as FormGroup)
+    .get('resource') as FormControl)
+    .patchValue(defaultUrl);
   }
 
 }
