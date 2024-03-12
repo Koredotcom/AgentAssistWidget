@@ -50,11 +50,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   multiLanguageList = {
     en : 'English',
     ar : 'Arabic',
-    ko : 'Korean',
+    kr : 'Korean',
     jp : 'Japanese',
     sp : 'Spanish',
     ge : 'German',
-    ch : 'Chinese'
+    fr : 'French'
   }
   numberOfLineList = {
     2 : "2 Minimum",
@@ -90,8 +90,13 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     {type:'advance', desc:'Configure how you want to use Knowledge AI'}
   ]
   dataFormat = [
-    {type:'Original', tooltip: 'Use default Knowledge AI Configurations', value : 'original'}, 
-    {type:'Plain string', tooltip:'Configure how you want to use Knowledge AI', value : 'plainString'}
+    {type:'Plain string', tooltip:'Transmit as plain text', value : 'plainString'},
+    {type:'Original', tooltip: 'Transmit HTML tags exactly as they are received', value : 'original'}
+  ]
+  helpSupport = [
+    {type:'Documentation', tooltip: 'Control accessibility to doc and customise URLs.', value : 'documentation'}, 
+    {type:'FAQ', tooltip:'Control accessibility to FAQ and customise URLs.', value : 'faq'},
+    {type:'Kore Academy', tooltip:'Control accessibility to Kore Academy', value : 'koreAcademy'}
   ]
   advancedModeScript: string = '';
   selectedChannel = 'chat';
@@ -153,20 +158,33 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           sharingFormat : [isUpdate ? (obj.agentActions?.sharingFormat ?? 'original') : 'original'],
         }),
         sentiment : this.fb.group({
-          enable: [isUpdate ? (obj.sentiment?.enable ?? false) : false]
+          isEnabled: [isUpdate ? (obj.sentiment?.isEnabled ?? false) : false]
         }),
         intentExecution : this.fb.group({
           restartFunctionality : this.fb.group({
-            enable : [isUpdate ? (obj.intentExecution?.restartFunctionality?.enable ?? true) : true]
+            isEnabled : [isUpdate ? (obj.intentExecution?.restartFunctionality?.isEnabled ?? true) : true]
           }),
           entityView : this.fb.group({
-            enable : [isUpdate ? (obj.intentExecution?.entityView?.enable ?? true) : true]
+            isEnabled : [isUpdate ? (obj.intentExecution?.entityView?.isEnabled ?? true) : true]
           })
         }),
-        helpSupportEnabled : [isUpdate ? (obj.helpSupportEnabled ?? false) : false],
         languageSettings : this.fb.group({
           language : [isUpdate ? (obj.languageSettings?.language??'en') : 'en'],
           allowAgentSwitch : [isUpdate ? (obj.languageSettings?.allowAgentSwitch??false) : false],
+        }),
+        showHelp : this.fb.group({
+          isEnabled : [isUpdate ? (obj.showHelp?.isEnabled ?? true) : true],
+          documentation : this.fb.group({
+            isEnabled : [isUpdate ? (obj.showHelp?.documentation?.isEnabled ?? true) : true],
+            resource : [isUpdate ? (obj.showHelp?.documentation?.resource ?? "document") : "document"],
+          }),
+          faq : this.fb.group({
+            isEnabled : [isUpdate ? (obj.showHelp?.faq?.isEnabled ?? true) : true],
+            resource : [isUpdate ? (obj.showHelp?.faq?.resource ?? "faq") : "faq"],
+          }),
+          koreAcademy : this.fb.group({
+            isEnabled : [isUpdate ? (obj.showHelp?.koreAcademy?.isEnabled ?? true) : true]
+          })
         }),
         chat: this.fb.group(this.commongSettingsForm(isUpdate, obj?.chat)),
         voice: this.fb.group(this.commongSettingsForm(isUpdate, obj?.voice)),
@@ -481,14 +499,14 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   commongSettingsForm(isUpdate, obj){
-    return {
+    let settingsForm = {
       agentAssistWidgetEnabled: [isUpdate ? (obj.agentAssistWidgetEnabled ?? false) : false],
       isProactiveEnabled: [isUpdate ? (obj.isProactiveEnabled ?? false) : false],
       isAgentCoachingEnabled: [isUpdate ? (obj.isAgentCoachingEnabled ?? false) : false],
       isAgentResponseEnabled: [isUpdate ? (obj.isAgentResponseEnabled ?? false) : true],
       isAgentResponseCopyEnabled: [isUpdate ? (obj.isAgentResponseCopyEnabled ?? false) : true],
       transcripts : this.fb.group({
-        enable : [isUpdate ? (obj.transcripts?.isEnabled??false) : true],
+        isEnabled : [isUpdate ? (obj.transcripts?.isEnabled??false) : true],
       }),
       summarization: this.fb.group({
         isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
@@ -499,6 +517,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         tab: [isUpdate ? (obj.isWidgetLandingEnabled?.tab??'assist') : 'assist']
       }),
     }
+    if(isUpdate && obj?.isWidgetLandingEnabled?.tab === "transcript" && !obj?.transcript?.isEnabled){
+      (settingsForm['isWidgetLandingEnabled'] as FormGroup).get('tab').patchValue('assist');
+    }
+    return settingsForm;
   }
 
   commonSearchAssistForm(isUpdate, obj, searchObj){
@@ -521,7 +543,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         fallback: [isUpdate ? (searchObj?.fallback ?? false) : false],
         suggestVal: [isUpdate ? (searchObj?.showAutoSuggestions ? 'On' : 'Off') : 'On'], 
         showAutoSuggestions: [isUpdate ? (searchObj?.showAutoSuggestions ?? true) : true],
-        displayLines : [isUpdate ? (searchObj?.displayLines ?? 2) : 2]
+        displayLines : [isUpdate ? (searchObj?.displayLines ?? 4) : 4]
       })
     };
 
@@ -569,6 +591,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     obj[val] = true;
     obj.urlOpenType = val;
     (((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('urlOpenBehaviour') as FormGroup).patchValue(obj);
+  }
+
+  resetClick(type){
+    console.log(type, "reset click");
+    
   }
 
 }
