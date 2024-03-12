@@ -35,6 +35,7 @@ export class VoicePreferencesComponent implements OnInit {
   selectedASRLanguage: any;
   dialects: any[] = [];
   selectedDialect: any;
+  showTranscriptionBtn = false;
 
   voiceDataURI: string = "";
   voicePreviewInProgress: boolean = false;
@@ -75,7 +76,25 @@ export class VoicePreferencesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  
+    this.getChannelSpecificData();
+  }
+
+  getChannelSpecificData() {
+    const params = {
+      userId: this.authService.getUserId(),
+      streamId: this.workflowService.getCurrentBt(true)._id
+    };
+    this.workflowService.seedData$.subscribe(res => {
+    this.service.invoke('get.channelData', params).subscribe(channeType => {
+        res.deflectSeedData = channeType.deflectSeedData;
+        res.smartAssistSeedData = channeType.smartAssistSeedData;
+        res.agentAssistSeedData = channeType.agentAssistSeedData;
+        if(res.agentAssistSeedData.smartAssistVoiceChannel === "korevg") {
+          this.showTranscriptionBtn = true;
+        }
+        
+      })
+    })
   }
 
   setVoicePreferenceData(){

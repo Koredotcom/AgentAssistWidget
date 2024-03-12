@@ -141,6 +141,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
     this.updateCallFlowList = false;
     this.streamId = this.authService.getAgentAssistStreamId();
     this.instanceAppDetails = this.voiceService.instantAppData();
+    this.getChannelSpecificData();
     this.getFlows();
     this.subscribeEvents();
     this.route.queryParams.subscribe(params => {
@@ -191,6 +192,20 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
 
   newSipSetUp(event) {
     this.getListOfPhoneNumbers();
+  }
+
+  getChannelSpecificData() {
+    const params = {
+      userId: this.authService.getUserId(),
+      streamId: this.workflowService.getCurrentBt(true)._id
+    };
+    this.subs.sink = this.workflowService.seedData$.subscribe(res => {
+      this.voiceListSub = this.service.invoke('get.channelData', params).subscribe(channeType => {
+        res.deflectSeedData = channeType.deflectSeedData;
+        res.smartAssistSeedData = channeType.smartAssistSeedData;
+        res.agentAssistSeedData = channeType.agentAssistSeedData;
+      })
+    })
   }
 
   getListOfPhoneNumbers(searchTerm = '') {
