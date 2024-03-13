@@ -19,12 +19,13 @@
             </div>
             <p>{{'ASSIST' | translate}}</p>
         </button>
-        <button class="btn_footer"  *ngIf="connectionDetails?.isCallConversation" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.TRANSCRIPT}" (click)="changeTab(projConstants.TRANSCRIPT)">
+        <button class="btn_footer"   [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.TRANSCRIPT}" (click)="changeTab(projConstants.TRANSCRIPT)">
             <div class="svg_icon">
                 <i class="krIocnsFont-transcript"></i>
             </div>
             <p>{{'TRANSCRIPT' | translate}}</p>
         </button>
+        <!-- *ngIf="connectionDetails?.isCallConversation" -->
         <button class="btn_footer"  *ngIf="!connectionDetails?.isCallConversation && sourceDesktop != projConstants.SMARTASSIST_SOURCE && !hideUserBotHistory" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.TRANSCRIPT}" (click)="changeTab(projConstants.HISTORY)">
             <div class="svg_icon">
                 <i class="krIocnsFont-transcript"></i>
