@@ -5,6 +5,7 @@
                 <div class="left-title-info">
                     <div class="text-dropdown-info">
                         <h1>{{'ASSIST' | translate}}</h1>
+                        <span><app-sentiment-score></app-sentiment-score></span>
                         <span class="dialogs-number" *ngIf="interruptDialogList?.length">{{interruptDialogList?.length}}</span>
                        
                         <div ngbDropdown class="dropdown" #interruptDropdown="ngbDropdown" *ngIf="interruptDialogList?.length">
