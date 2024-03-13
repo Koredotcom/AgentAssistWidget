@@ -64,7 +64,7 @@ export class MybotComponent {
     return respType?.data?._id;
   };
 
-  constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
+  constructor(public rootService : RootService, private serviceInvoker : ServiceInvokerService,
     private websocketService : WebSocketService, private templateRenderClassService : TemplateRenderClassService,
     private koreGenerateuuidPipe : KoreGenerateuuidPipe, private randomUUIDPipe : RandomUuidPipe,
     private handleSubjectService : HandleSubjectService, private localStorageService : LocalStorageService,
