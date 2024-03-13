@@ -119,7 +119,10 @@ export class AppComponent implements OnDestroy {
       });
     // const browserLang = this.translate.getBrowserLang();
     // this.localstore.appLanguage = this.localstore.appLanguage || (browserLang.match(/ja/) ? browserLang : 'en');
-    const lang = this.localstore.appLanguage || this.authService.externalQp?.appLanguage;
+    let lang = this.authService.externalQp?.appLanguage || this.localstore.appLanguage;
+    if(window.location.href.includes('smartassist')) {
+      lang = this.localstore.appLanguage;
+    }
     if (lang) { this.translate.use(lang); }
 
     this.route.queryParamMap.subscribe(paramMap => {
