@@ -108,6 +108,7 @@ export class WebSocketService {
     if (interactiveLanguage !== null && typeof interactiveLanguage !== 'undefined' && interactiveLanguage !== "''") {
       welcomeMessageParams['language'] = interactiveLanguage; // Return the default value for null, undefined, or "''"
     }
+    welcomeMessageParams['allQueryParams'] = {...this.rootService.connectionDetails};
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }
 

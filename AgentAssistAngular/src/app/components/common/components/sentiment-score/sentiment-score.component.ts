@@ -1,3 +1,4 @@
+import { TitleCasePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { coachingConst } from 'src/app/proj.const';
@@ -28,7 +29,7 @@ export class SentimentScoreComponent {
   
 
   constructor(private rootService : RootService, private commonService : CommonService,
-    private websocketService : WebSocketService){
+    private websocketService : WebSocketService, private titlecasePipe : TitleCasePipe){
   }
 
   ngOnInit(){
@@ -82,6 +83,9 @@ export class SentimentScoreComponent {
       this.commonService.realtimeSentiData[this.connectionDetails.conversationId].push(polarity);
       this.formatRealtimeSentiChartData();
     }
+    if(data?.coarse){
+      this.currentPolarity = this.titlecasePipe.transform(data.coarse);
+    }
   }
 
   formatRealtimeSentiChartData(){
@@ -101,7 +105,7 @@ export class SentimentScoreComponent {
       })
       let average = polaritySum/this.commonService.realtimeSentiData[this.connectionDetails.conversationId].length;
       chartData.push([chartData.length, average]);
-      this.updatePolarity(average);
+      // this.updatePolarity(average);
     }
     
 
@@ -132,17 +136,17 @@ export class SentimentScoreComponent {
     this.showSentiChart = true;
   }
 
-  updatePolarity(avg){
-    let polarityStr = '';
-    if(avg > 0){
-      polarityStr = 'Positive'
-    }else if(avg == 0 || avg >= -0.25){
-      polarityStr = 'Neutral'
-    }else if(avg < -0.25){
-      polarityStr = 'Negative'
-    }
-    this.currentPolarity = polarityStr;
-  }
+  // updatePolarity(avg){
+  //   let polarityStr = '';
+  //   if(avg > 0){
+  //     polarityStr = 'Positive'
+  //   }else if(avg == 0 || avg >= -0.25){
+  //     polarityStr = 'Neutral'
+  //   }else if(avg < -0.25){
+  //     polarityStr = 'Negative'
+  //   }
+  //   this.currentPolarity = polarityStr;
+  // }
 
   setRealtimeIntialOptions(){
     this.chartOption = this.commonService.getSentiAnalysisChartOptions(this.sentiObject);

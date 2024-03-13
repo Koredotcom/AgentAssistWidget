@@ -527,8 +527,8 @@ export class CommonService {
       assistResponseArray.map(arrEle => {
         if(arrEle.restart){
           arrEle.restart = false;
-          if (arrEle?.automationsArray?.length >= 1) {
-            arrEle.automationsArray.forEach(automation => {
+          if (arrEle?.restartAutomationArray?.length >= 1) {
+            arrEle.restartAutomationArray.forEach(automation => {
               let entityName = automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation.data.entityName;
               if(automation?.data?.isPrompt && entityNameList[entityName]){
                 automation.showSpinner = false;
