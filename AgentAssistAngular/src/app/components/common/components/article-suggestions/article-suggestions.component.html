@@ -21,7 +21,7 @@
         <div class="data-faq-paragraph">            
             <div class="text-info-more-data-link">
                 <!-- removeTagFromString -->
-                <p [ngClass]="{'show-full-text' : !article.showMoreButton}" [style.--line-clamp]="rootService.numOfLines" [innerHTML]="article?.content | safeHtml" #articleContent></p>
+                <p #articleContent [ngClass]="{'show-full-text' : !article.showMoreButton}" [style.--line-clamp]="rootService.numOfLines" [innerHTML]="article?.content | safeHtml"></p>
                 <div class="more-links-actions">
                     <a class="moreText" role="link" *ngIf="articleContent.scrollHeight > (((rootService.numOfLines *22) + 12))">
                         <span class="more-text" *ngIf="article?.showMoreButton" (click)="toggleShowMoreLess(article)">{{'MORE_TEXT' | translate}}</span>

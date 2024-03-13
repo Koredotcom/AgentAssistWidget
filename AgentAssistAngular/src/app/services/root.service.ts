@@ -205,7 +205,7 @@ export class RootService {
   updateSettingsProperties(){
     this.showListView = (this.settingsData?.intentExecution?.entityView?.isEnabled === false) ? false : true;
     this.showRestart = (this.settingsData?.intentExecution?.restartFunctionality?.isEnabled === false) ? false : true;
-    this.numOfLines = (this.settingsData?.searchAssistConfig?.displayLines) ? this.settingsData?.searchAssistConfig?.displayLines : 2
+    this.numOfLines = (this.settingsData?.searchAssistConfig?.displayLines) ? this.settingsData?.searchAssistConfig?.displayLines : 4
   }
 
   prepareAgentAssistAgentRequestParams(data) {
@@ -695,9 +695,9 @@ export class RootService {
       eleanswer = (type === 'faq') ? answer.replace(/(\r\n|\n|\r)/gm, "<br>") : answer;
       // eleanswer = this.replaceLtGt(eleanswer, quotflag)
       eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
-      if (quotflag) {
-        eleanswer = this.replaceLtGt(eleanswer, quotflag)
-      }
+      // if (quotflag) {
+      eleanswer = this.replaceLtGt(eleanswer, quotflag)
+      // }
       return eleanswer.replace(new RegExp("[<br />]+$"),'');
 
     }
@@ -714,18 +714,21 @@ export class RootService {
     return newHtmlStr;
   }
 
-
   extractTextFromElement(element: HTMLElement): string {
     let text = '';
-    const childNodes = element.childNodes;
-    for (let i = 0; i < childNodes.length; i++) {
-      const node = childNodes[i];
-      if (node.nodeType === Node.TEXT_NODE) {
-        text += node.textContent;
-      }
-    }
+    const extractText = (node: Node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+            text += node.textContent;
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+            const childNodes = node.childNodes;
+            for (let i = 0; i < childNodes.length; i++) {
+                extractText(childNodes[i]);
+            }
+        }
+    };
+    extractText(element);
     return text.trim();
-  }
+}
 
   checkAutoBotIdDefined(id) {
     if (!id || id == 'undefined' || id == "null" || id == "") {

@@ -75,17 +75,10 @@ export class TellCustomerComponent {
       let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
       // format = 'original'
       if(format == 'plainString'){
-        sendData = this.extractText();
-      }else{
-        sendData = this.rootService.handleEmptyLine(sendData);
+        sendData = this.rootService.extractTextFromElement(this.tellCustNode.nativeElement);
       }
     }
     return sendData;
-  }
-
-  extractText() {
-    const textContent = this.rootService.extractTextFromElement(this.tellCustNode.nativeElement);
-    return textContent;
   }
 
 }

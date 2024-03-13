@@ -184,18 +184,11 @@ export class AskCustomerComponent {
 
   prepareSendText(sendData){
     if(!this.automation.templateRender){
-      let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString'
+      let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
       if(format == 'plainString'){
-        sendData = this.extractText();
-      }else{
-        sendData = this.rootService.handleEmptyLine(sendData);
+        sendData = this.rootService.extractTextFromElement(this.askCustNode.nativeElement);
       }
     }
     return sendData;
-  }
-
-  extractText(): void {
-    const textContent = this.rootService.extractTextFromElement(this.askCustNode.nativeElement);
-    console.log(textContent, "text conent");
   }
 }
