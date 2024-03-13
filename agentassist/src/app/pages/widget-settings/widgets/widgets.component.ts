@@ -86,8 +86,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       {type: 'defaultBehaviour', text: 'Default System Behaviour', tooltip: "The AgentAssist widget will use the system's default governing approach for URL opening."},
       {type: 'sendPostEvent', text: 'Post Event', tooltip:'The AgentAssist widget will open URLs based on the consumed "AgentAssist.UrlClickedMessage" post event.'}]
   integration = [
-    {type:'basic', desc: 'Use default Knowledge AI Configurations'}, 
-    {type:'advance', desc:'Configure how you want to use Knowledge AI'}
+    {type:'basic', desc: 'Use Default Knowledge AI Configurations'}, 
+    {type:'advance', desc:'Configure How You Want To Use Knowledge AI'}
   ]
   dataFormat = [
     {type:'Plain string', tooltip:'Transmit as plain text', value : 'plainString'},
@@ -236,9 +236,15 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       this.isCoachingDisable = isEnabled;
     });
     this.subs.sink = this.workflowService.seedData$.subscribe(res => {
-      console.log(res, "res******** of seedData");
       if(res && res?.agentAssistSeedData){
         this.agentAssistSeedData = res?.agentAssistSeedData;
+      }
+    });
+
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((bot)=>{
+      if(bot){
+        this.isLoading = true;
+        this.getAgentAssistSettingsNew();
       }
     });
     
