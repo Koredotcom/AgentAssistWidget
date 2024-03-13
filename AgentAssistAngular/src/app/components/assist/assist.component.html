@@ -5,9 +5,10 @@
                 <div class="left-title-info">
                     <div class="text-dropdown-info">
                         <h1>{{'ASSIST' | translate}}</h1>
-                        <span><app-sentiment-score></app-sentiment-score></span>
+                        <div class="sentiment-div-block">
+                            <app-sentiment-score></app-sentiment-score>
+                        </div>
                         <span class="dialogs-number" *ngIf="interruptDialogList?.length">{{interruptDialogList?.length}}</span>
-                       
                         <div ngbDropdown class="dropdown" #interruptDropdown="ngbDropdown" *ngIf="interruptDialogList?.length">
                             <button type="button" id="playbookDrp" ngbDropdownToggle>
                                 <i class="krIocnsFont-chevron-down arrow-icon"></i>
