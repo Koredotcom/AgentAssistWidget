@@ -1,15 +1,15 @@
 <div class="stage-creation-slider-data">
     <div class="tab-content-data">
         <div class="header-sec">
-            <div class="title">General Settings</div>
+            <div class="title">{{"GUIDED_CHECKLIST.CREATE_CHECKLIST.SETTINGS" | translate}}</div>
             <div class="close-slider" (click)="close()">
                 <i class="icon-sa-close"></i>
             </div>
         </div>
         <div class="tabs-info">
-            <button class="tab-btn" [ngClass]="{'active-btn': tab === 'basic'}" (click)="tab = 'basic'; basic=true" title="General Settings">General Settings</button>
-            <button class="tab-btn" [ngClass]="{'active-btn': tab === 'assignment'}" (click)="tab = 'assignment'; basic=true" title="Assignments">Assignments</button>
-            <button class="tab-btn" *ngIf="checkListType !== 'primary'" [ngClass]="{'active-btn': tab === 'trigger'}" (click)="tab = 'trigger'; loadtrigger= true; basic=false" title="Triggers">Triggers</button>
+            <button class="tab-btn" [ngClass]="{'active-btn': tab === 'basic'}" (click)="tab = 'basic'; basic=true" title="General Settings">{{"GUIDED_CHECKLIST.CREATE_CHECKLIST.SETTINGS" | translate}}</button>
+            <button class="tab-btn" [ngClass]="{'active-btn': tab === 'assignment'}" (click)="tab = 'assignment'; basic=true" title="Assignments">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.ASSIGNMENTS' | translate}}</button>
+            <button class="tab-btn" *ngIf="checkListType !== 'primary'" [ngClass]="{'active-btn': tab === 'trigger'}" (click)="tab = 'trigger'; loadtrigger= true; basic=false" title="Triggers">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.TRIGGERS' | translate}}</button>
         </div>
         <div class="body-data" [formGroup]="checkListForm">
             <perfect-scrollbar>
@@ -17,18 +17,18 @@
                     <div [ngClass]="{'d-none': tab !== 'basic'}" class="p-24">
                         <ng-container>
                             <div class="kr-sg-input-text m-b-12">
-                                <div class="label-text">Playbook Name</div>
-                                <input type="text" formControlName="name" maxlength="48" placeholder="Playbook Name"
+                                <div class="label-text">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.PLAYBOOKNAME' | translate}}</div>
+                                <input type="text" formControlName="name" maxlength="48" placeholder="{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.PLAYBOOKNAME' | translate}}"
                                     class="input-text">
                                 <div class="count-char">{{checkListForm.value?.name?.length}}/48</div>
                             </div>
                             <div class="kr-sg-input-text-area m-b-12">
-                                <div class="label-text">Description</div>
-                                <textarea formControlName="description" placeholder="Description" maxlength="200"
+                                <div class="label-text">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.DESC' | translate}}</div>
+                                <textarea formControlName="description" placeholder="{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.DESC' | translate}}" maxlength="200"
                                     class="input-text"></textarea>
                                 <div class="count-char">{{checkListForm.value?.description?.length}}/200</div>
                             </div>
-                            <div class="label-text">Type</div>
+                            <div class="label-text">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.TYPE' | translate}}</div>
                             <div class="kr-sg-dropdowns m-b-12" ngbDropdown placement="bottom">
                                 <div class="dropdown dropdown-open">
                                     <button class="dropdown-toggle dropdown-input" ngbDropdownToggle [disabled]="createOrUpdate !== 'create'" [ngClass]="{'disabled': createOrUpdate !== 'create'}">{{checkListForm.value?.type | titlecase}}</button>
@@ -51,15 +51,15 @@
                                 <input id="checkbox-4" class="checkbox-custom" type="checkbox">
                                 <label for="checkbox-4" class="checkbox-custom-label">Add Close Stage <i class="icon-sa-info"></i></label>
                             </div>     -->
-                            <div class="label-text m-b-5">Tags</div>
+                            <div class="label-text m-b-5">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.TAGS' | translate}}</div>
                             <mat-form-field class="example-chip-list m-b-15">
-                                <mat-label>Add Tags</mat-label>
+                                <mat-label>{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD_TAGS' | translate}}</mat-label>
                                 <mat-chip-list #chipList>
                                     <mat-chip *ngFor="let tag of checkListForm.value?.tags" [selectable]="true" [removable]="true" (removed)="remove(tag.name)">
                                         <span class="chip-name text-truncate mx-w-100" title="{{tag.name}}">{{tag.name}}</span>
                                         <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
                                     </mat-chip>
-                                    <input placeholder="Add Tags" #tagInput [matChipInputFor]="chipList"
+                                    <input placeholder="{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD_TAGS' | translate}}" #tagInput [matChipInputFor]="chipList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
                                         (matChipInputTokenEnd)="add($event)" [matAutocomplete]="auto" [formControl]="tagControl"
                                         #trigger="matAutocompleteTrigger">
@@ -78,7 +78,7 @@
                                     </div>
                                 </mat-autocomplete>
                             </mat-form-field>
-                            <div class="label-text">Step Progression</div>
+                            <div class="label-text">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.STEP_PROG' | translate}}</div>
                             <div class="kr-sg-dropdowns m-b-12" ngbDropdown>
                                 <div class="dropdown dropdown-open">
                                     <button class="dropdown-toggle dropdown-input"
@@ -87,16 +87,16 @@
                                     <ul class="dropdown-menu content-menu header_in_development_drpdown p-0"
                                         ngbDropdownMenu>
                                         <li ngbDropdownItem class="p-0" (click)="chekProgressionType('Sequential')">
-                                            <a>Sequential</a>
+                                            <a>{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.SEQUENTIAL' | translate}}</a>
                                         </li>
                                         <li ngbDropdownItem class="p-0" (click)="chekProgressionType('Random')">
-                                            <a>Random</a>
+                                            <a>{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.RANDOM' | translate}}</a>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="channels-tags">
-                                <div class="label-text">Channels</div>
+                                <div class="label-text">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.CHANNELS' | translate}}</div>
                                 <div class="channels-check">
                                     <div class="check-item" *ngFor="let item of channelList; let i = index">
                                         <input id="checkbox-{{i}}" type="checkbox" (click)="channelSelection($event,item)"
@@ -116,8 +116,8 @@
                                             [ngModelOptions]="{standalone: true}" (change)="changeAssigne()"
                                             id="radio-1a" name="radio" class="radio-custom" type="radio">
                                         <label for="radio-1a" class="radio-custom-label">
-                                            <div class="title">Trigger for all interactions</div>
-                                            <div class="desc-text">checklist shows for all interactions</div>
+                                            <div class="title">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.TRIGGERS_ALL_INTERACTIONS' | translate}}</div>
+                                            <div class="desc-text">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.CHECKLIST_ALL_INTERACTIONS' | translate}}</div>
                                         </label>
                                     </div>
                                 </div>
@@ -126,12 +126,12 @@
                                         <input [ngModelOptions]="{standalone: true}" value="a" [(ngModel)]="assignType"
                                             id="radio-1s" name="radio" class="radio-custom" type="radio">
                                         <label for="radio-1s" class="radio-custom-label">
-                                            <div class="title">Trigger for Selected Agent</div>
-                                            <div class="desc-text">Checklist shows only to selected Agents</div>
+                                            <div class="title">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.TRIGGERS_SELECTED_AGENT' | translate}}</div>
+                                            <div class="desc-text">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.CHECKLIST_SHOWS_ONLY_SELECTED_AGENTS' | translate}}</div>
                                         </label>
                                     </div>
                                     <div class="add-rule-block" *ngIf="false">
-                                        <div class="label-text">Add Rules</div>
+                                        <div class="label-text">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD_RULES' | translate}}</div>
                                         <mat-form-field class="add-rules-chip-list">
                                             <mat-chip-list #chipList>
                                                 <mat-chip *ngFor="let tag of []" [selectable]="true" [removable]="true"
@@ -140,7 +140,7 @@
                                                         title="{{tag?.name}}">{{tag?.name}}</span>
                                                     <span class="icon-sa-close" matChipRemove></span>
                                                 </mat-chip>
-                                                <input placeholder="Select Rules" #tagInput [matChipInputFor]="chipList"
+                                                <input placeholder="{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.PLACEHOLDER.SELECT_RULES' | translate}}" #tagInput [matChipInputFor]="chipList"
                                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                                     [matChipInputAddOnBlur]="false" [matAutocomplete]="auto"
                                                     #trigger="matAutocompleteTrigger">
@@ -149,14 +149,14 @@
                                                 <div class="content-scroll-ni">
                                                     <div class="search-block">
                                                         <div class="kr-sg-input-text">
-                                                            <input type="text" placeholder="Search" class="input-text"
+                                                            <input type="text" placeholder="{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.PLACEHOLDER.SEARCH' | translate}}" class="input-text"
                                                                 name="search">
                                                             <i class="icon-coaching--search"></i>
                                                         </div>
                                                     </div>
                                                     <div class="tags-data" *ngIf="true">
-                                                        <div class="title">Tags</div>
-                                                        <div class="select-all">'Select All'</div>
+                                                        <div class="title">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.TAGS' | translate}}</div>
+                                                        <div class="select-all">'{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.SELECTALL' | translate}}'</div>
                                                     </div>
                                                     <ng-container *ngFor="let tag of [];let i = index">
                                                         <ng-container>
@@ -167,15 +167,15 @@
                                                                 <div class="label-check text-truncate"
                                                                     for="checkbox-{{i}}">
                                                                     <span>{{tag?.name}}</span>
-                                                                    <div class="desc-text">{{tag?.value?.length}} rules
+                                                                    <div class="desc-text">{{tag?.value?.length}} {{'GUIDED_CHECKLIST.CREATE_CHECKLIST.RULES' | translate}}
                                                                     </div>
                                                                 </div>
                                                             </mat-option>
                                                         </ng-container>
                                                     </ng-container>
                                                     <div class="tags-data" *ngIf="true">
-                                                        <div class="title">Rules</div>
-                                                        <div class="select-all">'Select All'</div>
+                                                        <div class="title">{{('GUIDED_CHECKLIST.CREATE_CHECKLIST.RULES' | translate) | titlecase}}</div>
+                                                        <div class="select-all">'{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.SELECTALL' | translate}}'</div>
                                                     </div>
                                                     <ng-container *ngFor="let tag of [];let i = index">
                                                         <mat-option class="mat-option-ni"
@@ -190,15 +190,15 @@
                                                         </mat-option>
                                                     </ng-container>
 
-                                                    <mat-option class="d-none">avoid closing matautocomplete on search
+                                                    <mat-option class="d-none">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.AVOID_CLOSING_MATAAUTOCOMPLETE_ONSEARCH' | translate}}
 
                                                     </mat-option>
                                                 </div>
                                                 <div class="footer-add-cler-ni">
                                                     <button class="kr-sg-button-secondary-two btn_lg"
-                                                        (click)="clearChipData()">Clear</button>
+                                                        (click)="clearChipData()">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.CLEAR' | translate}}</button>
                                                     <button class="kr-sg-button-primary btn_lg"
-                                                        (click)="addRuleData()">Add</button>
+                                                        (click)="addRuleData()">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD' | translate}}</button>
                                                 </div>
                                             </mat-autocomplete>
                                         </mat-form-field>
@@ -210,12 +210,12 @@
                                         <input [ngModelOptions]="{standalone: true}" value="q" [(ngModel)]="assignType"
                                             id="radio-1sq" name="radio" class="radio-custom" type="radio">
                                         <label for="radio-1sq" class="radio-custom-label">
-                                            <div class="title">Trigger for Selected Queues</div>
-                                            <div class="desc-text">Checklist shows only for certain Queues</div>
+                                            <div class="title">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.TRIGGER_SLECTED_QUEUES' | translate}}</div>
+                                            <div class="desc-text">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.CHECKLIST_SHOWS_ONLY_FOR_CERTAIN_QUEUES' | translate}}</div>
                                         </label>
                                     </div>
                                     <div class="add-rule-block" *ngIf="false">
-                                        <div class="label-text">Add Rules</div>
+                                        <div class="label-text">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD_RULES' | translate}}</div>
                                         <mat-form-field class="add-rules-chip-list">
                                             <mat-chip-list #chipList>
                                                 <mat-chip *ngFor="let tag of tags" [selectable]="true"
@@ -224,7 +224,7 @@
                                                         title="{{tag.name}}">{{tag.name}}</span>
                                                     <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
                                                 </mat-chip>
-                                                <input placeholder="Select Rules" #tagInput [matChipInputFor]="chipList"
+                                                <input placeholder="{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.PLACEHOLDER.SELECT_RULES' | translate}}" #tagInput [matChipInputFor]="chipList"
                                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                                     [matChipInputAddOnBlur]="false" [matAutocomplete]="auto"
                                                     #trigger="matAutocompleteTrigger">
@@ -233,16 +233,16 @@
                                                 <div class="content-scroll-ni">
                                                     <div class="search-block">
                                                         <div class="kr-sg-input-text">
-                                                            <input type="text" placeholder="Search" class="input-text"
+                                                            <input type="text" placeholder="{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.PLACEHOLDER.SEARCH' | translate}}" class="input-text"
                                                                 [formControl]="tagControl" name="search">
                                                             <i class="icon-coaching--search"></i>
                                                         </div>
                                                     </div>
                                                     <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
-                                                        <div class="title">Tags</div>
+                                                        <div class="title">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.TAGS' | translate}}</div>
                                                         <div class="select-all"
                                                             (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">
-                                                            {{ selectAllTagFlag ? 'Unselect All' : 'Select All' }}</div>
+                                                            {{ selectAllTagFlag ? ('GUIDED_CHECKLIST.CREATE_CHECKLIST.UNSELECT_ALL' | translate) : ('GUIDED_CHECKLIST.CREATE_CHECKLIST.SELECTALL' | translate) }}</div>
                                                     </div>
                                                     <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
                                                         <ng-container *ngIf="tag?.name">
@@ -256,17 +256,17 @@
                                                                 <div class="label-check text-truncate"
                                                                     for="checkbox-{{i}}">
                                                                     <span>{{tag?.name}}</span>
-                                                                    <div class="desc-text">{{tag?.value?.length}} rules
+                                                                    <div class="desc-text">{{tag?.value?.length}} {{'GUIDED_CHECKLIST.CREATE_CHECKLIST.RULES' | translate}}
                                                                     </div>
                                                                 </div>
                                                             </mat-option>
                                                         </ng-container>
                                                     </ng-container>
                                                     <div class="tags-data" *ngIf="checkRulePresent() ? true  : false">
-                                                        <div class="title">Rules</div>
+                                                        <div class="title">{{('GUIDED_CHECKLIST.CREATE_CHECKLIST.RULES' | translate) | titlecase}}</div>
                                                         <div class="select-all"
                                                             (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">
-                                                            {{ selectAllRuleFlag ? 'Unselect All' : 'Select All' }}
+                                                            {{ selectAllRuleFlag ? ('GUIDED_CHECKLIST.CREATE_CHECKLIST.UNSELECT_ALL' | translate) : ('GUIDED_CHECKLIST.CREATE_CHECKLIST.SELECTALL' | translate) }}
                                                         </div>
                                                     </div>
                                                     <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
@@ -283,15 +283,15 @@
                                                         </mat-option>
                                                     </ng-container>
 
-                                                    <mat-option class="d-none">avoid closing matautocomplete on search
+                                                    <mat-option class="d-none">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.AVOID_CLOSING_MATAAUTOCOMPLETE_ONSEARCH' | translate}}
 
                                                     </mat-option>
                                                 </div>
                                                 <div class="footer-add-cler-ni">
                                                     <button class="kr-sg-button-secondary-two btn_lg"
-                                                        (click)="clearChipData()">Clear</button>
+                                                        (click)="clearChipData()">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.CLEAR' | translate}}</button>
                                                     <button class="kr-sg-button-primary btn_lg"
-                                                        (click)="addRuleData()">Add</button>
+                                                        (click)="addRuleData()">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD' | translate}}</button>
                                                 </div>
                                             </mat-autocomplete>
                                         </mat-form-field>
@@ -303,12 +303,12 @@
                                         <input [ngModelOptions]="{standalone: true}" value="s" [(ngModel)]="assignType"
                                             id="radio-1ssk" name="radio" class="radio-custom" type="radio">
                                         <label for="radio-1ssk" class="radio-custom-label">
-                                            <div class="title">Trigger for Selected Skills</div>
-                                            <div class="desc-text">Checklist shows only for certain Skills</div>
+                                            <div class="title">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.TRIGGER_SELECTED_SKILLS' | translate}}</div>
+                                            <div class="desc-text">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.CHECKLIST_SHOWS_ONLY_CERTAIN_SKILLS' | translate}}</div>
                                         </label>
                                     </div>
                                     <div class="add-rule-block" *ngIf="false">
-                                        <div class="label-text">Add Rules</div>
+                                        <div class="label-text">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD_RULES' | translate}}</div>
                                         <mat-form-field class="add-rules-chip-list">
                                             <mat-chip-list #chipList>
                                                 <mat-chip *ngFor="let tag of tags" [selectable]="true"
@@ -317,7 +317,7 @@
                                                         title="{{tag.name}}">{{tag.name}}</span>
                                                     <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
                                                 </mat-chip>
-                                                <input placeholder="Select Rules" #tagInput [matChipInputFor]="chipList"
+                                                <input placeholder="{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.PLACEHOLDER.SELECT_RULES' | translate}}" #tagInput [matChipInputFor]="chipList"
                                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                                     [matChipInputAddOnBlur]="false" [matAutocomplete]="auto"
                                                     #trigger="matAutocompleteTrigger">
@@ -326,16 +326,16 @@
                                                 <div class="content-scroll-ni">
                                                     <div class="search-block">
                                                         <div class="kr-sg-input-text">
-                                                            <input type="text" placeholder="Search" class="input-text"
+                                                            <input type="text" placeholder="{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.PLACEHOLDER.SEARCH' | translate}}" class="input-text"
                                                                 [formControl]="tagControl" name="search">
                                                             <i class="icon-coaching--search"></i>
                                                         </div>
                                                     </div>
                                                     <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
-                                                        <div class="title">Tags</div>
+                                                        <div class="title">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.TAGS' | translate}}</div>
                                                         <div class="select-all"
                                                             (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">
-                                                            {{ selectAllTagFlag ? 'Unselect All' : 'Select All' }}</div>
+                                                            {{ selectAllTagFlag ? ('GUIDED_CHECKLIST.CREATE_CHECKLIST.UNSELECT_ALL' | translate) : ('GUIDED_CHECKLIST.CREATE_CHECKLIST.SELECTALL' | translate) }}</div>
                                                     </div>
                                                     <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
                                                         <ng-container *ngIf="tag?.name">
@@ -349,17 +349,17 @@
                                                                 <div class="label-check text-truncate"
                                                                     for="checkbox-{{i}}">
                                                                     <span>{{tag?.name}}</span>
-                                                                    <div class="desc-text">{{tag?.value?.length}} rules
+                                                                    <div class="desc-text">{{tag?.value?.length}} {{'GUIDED_CHECKLIST.CREATE_CHECKLIST.RULES' | translate}}
                                                                     </div>
                                                                 </div>
                                                             </mat-option>
                                                         </ng-container>
                                                     </ng-container>
                                                     <div class="tags-data" *ngIf="checkRulePresent() ? true  : false">
-                                                        <div class="title">Rules</div>
+                                                        <div class="title">{{('GUIDED_CHECKLIST.CREATE_CHECKLIST.RULES' | translate) | titlecase}}</div>
                                                         <div class="select-all"
                                                             (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">
-                                                            {{ selectAllRuleFlag ? 'Unselect All' : 'Select All' }}
+                                                            {{ selectAllRuleFlag ? ('GUIDED_CHECKLIST.CREATE_CHECKLIST.UNSELECT_ALL' | translate) : ('GUIDED_CHECKLIST.CREATE_CHECKLIST.SELECTALL' | translate) }}
                                                         </div>
                                                     </div>
                                                     <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
@@ -376,15 +376,15 @@
                                                         </mat-option>
                                                     </ng-container>
 
-                                                    <mat-option class="d-none">avoid closing matautocomplete on search
+                                                    <mat-option class="d-none">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.AVOID_CLOSING_MATAAUTOCOMPLETE_ONSEARCH' | translate}}
 
                                                     </mat-option>
                                                 </div>
                                                 <div class="footer-add-cler-ni">
                                                     <button class="kr-sg-button-secondary-two btn_lg"
-                                                        (click)="clearChipData()">Clear</button>
+                                                        (click)="clearChipData()">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.CLEAR' | translate}}</button>
                                                     <button class="kr-sg-button-primary btn_lg"
-                                                        (click)="addRuleData()">Add</button>
+                                                        (click)="addRuleData()">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD' | translate}}</button>
                                                 </div>
                                             </mat-autocomplete>
                                         </mat-form-field>
@@ -402,9 +402,9 @@
             </perfect-scrollbar>
         </div>
         <div class="footer-actions">
-            <button class="kr-sg-button-secondary btn_lg" (click)="close()">Cancel</button>
-            <button class="kr-sg-button-primary btn_lg" [disabled]="!checkListForm.valid || loading" (click)="save()" *ngIf="createOrUpdate === 'create'">Save</button>
-            <button class="kr-sg-button-primary btn_lg" [disabled]="!checkListForm.valid || loading" (click)="update()" *ngIf="createOrUpdate === 'update'">Update</button>
+            <button class="kr-sg-button-secondary btn_lg" (click)="close()">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.CANCEL' | translate}}</button>
+            <button class="kr-sg-button-primary btn_lg" [disabled]="!checkListForm.valid || loading" (click)="save()" *ngIf="createOrUpdate === 'create'">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.SAVE' | translate}}</button>
+            <button class="kr-sg-button-primary btn_lg" [disabled]="!checkListForm.valid || loading" (click)="update()" *ngIf="createOrUpdate === 'update'">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.UPDATE' | translate}}</button>
         </div>
     </div>
 </div>

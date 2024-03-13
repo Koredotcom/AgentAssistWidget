@@ -16,14 +16,14 @@
                         <div class="shadow-freeze w-20"></div>
                         <div class="header-table-checklist">
                             <div class="titles-data w-20">
-                                <div class="title-header">name</div>
+                                <div class="title-header">{{'GUIDED_CHECKLIST.DYNAMIC.NAME' | translate}}</div>
                             </div>
-                            <div class="titles-data w-12">Actions</div>
-                            <div class="titles-data w-13">Type</div>
-                            <div class="titles-data w-15">Description</div>
-                            <div class="titles-data w-15">Triggers for</div>
-                            <div class="titles-data w-15">Last UPDATED</div>
-                            <div class="titles-data w-10">STATUS</div>
+                            <div class="titles-data w-12">{{'GUIDED_CHECKLIST.DYNAMIC.ACTIONS' | translate}}</div>
+                            <div class="titles-data w-13">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.TYPE' | translate}}</div>
+                            <div class="titles-data w-15">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.DESC' | translate}}</div>
+                            <div class="titles-data w-15">{{'GUIDED_CHECKLIST.DYNAMIC.TRIGGER_FOR' | translate}}</div>
+                            <div class="titles-data w-15">{{'GUIDED_CHECKLIST.DYNAMIC.LAST_UPDATED' | translate}}</div>
+                            <div class="titles-data w-10">{{'GUIDED_CHECKLIST.COMP.STATUS' | translate}}</div>
                         </div>
                         <ng-container *ngFor="let checkList of primaryCheckList">
                             <div class="body-data-table-wrapper-cl-dyn">
@@ -43,11 +43,11 @@
                                     </button>
                                 </div>
                                 <div class="title-text w-13">
-                                    <h1 title="Primary">{{(checkList.type === 'dynamic'? 'Conditional' : checkList.type) | titlecase}}</h1>
+                                    <h1 title="Primary">{{(checkList.type === 'dynamic' ? 'Conditional' : checkList.type) | titlecase}}</h1>
                                     <h2 title="with Close stage" *ngIf="checkList.type === 'dynamic'">{{checkList?.triggerBy?.type === 'dialog' ? checkList?.triggerBy?.type+' Execution' : checkList?.triggerBy?.type+' Based' | titlecase}}</h2>
                                 </div>
                                 <div class="title-text w-15">{{checkList.description}}</div>
-                                <div class="title-text w-15">All Agents</div>
+                                <div class="title-text w-15">{{'GUIDED_CHECKLIST.DYNAMIC.ALL_AGENTS' | translate}}</div>
                                 <div class="title-text w-15">{{checkList.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
                                 <div class="last-updated-toggle w-10">
                                     <label class="kr-sg-toggle">
@@ -69,8 +69,8 @@
                     <div class="img-block">
                         <img src="assets/images/coaching/empty-checklist.svg">
                     </div>
-                    <div class="empty-title">Create your first guided checklist</div>
-                    <div class="desc-text">Checklists allow agents to follow a guided path to success. <br/>Get started by creating your <span (click)="createChecklist();">first checklist</span></div>
+                    <div class="empty-title">{{'GUIDED_CHECKLIST.DYNAMIC.CREATE_FIRST_GUIDED_CHECKLIST' | translate}}</div>
+                    <div class="desc-text">{{'GUIDED_CHECKLIST.DYNAMIC.CHECKLIST_ALLOW_AGENTS' | translate}} <br/>{{'GUIDED_CHECKLIST.DYNAMIC.STARTED_BY_CREATING_YOUR' | translate}} <span (click)="createChecklist();">{{'GUIDED_CHECKLIST.DYNAMIC.FIRST_CHECKLIST' | translate}}</span></div>
                 </div>
             </div>
         </ng-container>
@@ -80,7 +80,7 @@
                     <div class="img-block">
                         <img src="assets/images/coaching/empty-coaching.png">
                     </div>
-                    <div class="empty-title">No Search Results found.</div>
+                    <div class="empty-title">{{'GUIDED_CHECKLIST.DYNAMIC.NO_SEARCH_RESULT_FOUND' | translate}}</div>
                    
                 </div>
             </div>
