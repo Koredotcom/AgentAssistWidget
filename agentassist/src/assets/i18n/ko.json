@@ -1777,5 +1777,6 @@
     "PLACE.NEW_WIDGET": "새로운 위젯",
     "PLACE.ENTER_URL_WEBPAGE": "위젯에 연동하실 시스템혹은 웹 페이지의 URL을 입력하세요.",
     "PLACE.WIDGET_FAILS_TO_LOAD": "위젯 로드가 실패하면 에러 메세지와 함께 해당 링크가 상담사에게 표시됩니다.",
-    "PLACE.PARAMETER_NAME": "패러미터 이름"
+    "PLACE.PARAMETER_NAME": "패러미터 이름",
+    "COACHING_MAIN.AGENT_COACHING" : "에이전트 코칭"
 }

@@ -48,7 +48,7 @@
             </button>
             <button class="kr-sg-button-secondary btn_lg" (click)="closeRuleScreen()">{{'BUTTONS.CANCEL' | translate}}</button>
             <!-- <button class="kr-sg-button-secondary-two btn_lg">Publish</button> -->
-            <button class="kr-sg-button-primary btn_lg" [disabled]="ruleForm.invalid || (createOrEdit == coachingCnst.EDIT && !formTouched) || loading" (click)="saveRule()">{{loading ? ('BUTTONS.SAVING' | translate) : ('BUTTONS.SAVING' | translate)}}</button>
+            <button class="kr-sg-button-primary btn_lg" [disabled]="ruleForm.invalid || (createOrEdit == coachingCnst.EDIT && !formTouched) || loading" (click)="saveRule()">{{loading ? ('BUTTONS.SAVING' | translate) : ('BUTTONS.SAVE' | translate)}}</button>
         </div>
     </div>
     <div class="flow-wrapper-body-scroll">
