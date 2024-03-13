@@ -693,10 +693,10 @@ export class RootService {
     let eleanswer = '';
     if (typeof answer === 'string') {
       eleanswer = (type === 'faq') ? answer.replace(/(\r\n|\n|\r)/gm, "<br>") : answer;
-      // eleanswer = this.replaceLtGt(eleanswer, quotflag)
       eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
-      // if (quotflag) {
       eleanswer = this.replaceLtGt(eleanswer, quotflag)
+      // if (quotflag) {
+      //   eleanswer = this.replaceLtGt(eleanswer, quotflag)
       // }
       return eleanswer.replace(new RegExp("[<br />]+$"),'');
 
