@@ -120,6 +120,7 @@ export class AppComponent implements OnDestroy {
     // const browserLang = this.translate.getBrowserLang();
     // this.localstore.appLanguage = this.localstore.appLanguage || (browserLang.match(/ja/) ? browserLang : 'en');
     let lang = this.authService.externalQp?.appLanguage || this.localstore.appLanguage;
+    console.log('app Component Data');
     if(window.location.href.includes('smartassist')) {
       lang = this.localstore.appLanguage;
     }
