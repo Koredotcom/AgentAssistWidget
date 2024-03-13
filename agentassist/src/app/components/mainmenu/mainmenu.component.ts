@@ -95,7 +95,6 @@ export class MainmenuComponent implements OnInit, OnDestroy {
     this.upBtSub = this.workflowService.updateBotDetails$.subscribe(
       (res: any) => {
         this.currentBt = res;
-        console.log("🚀 ~ MainmenuComponent ~ ngOnInit ~ this.currentBt:", this.currentBt)
         this.workflowService.setCurrentBt(this.currentBt);
         this.getChannelSpecificData();
         this.checkPermissions();
