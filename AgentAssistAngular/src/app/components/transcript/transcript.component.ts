@@ -19,7 +19,10 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
   @Input() maxButton;
   @Output() maxMinButtonClick = new EventEmitter();
-  @ViewChild('transcriptTabHistoryText', {static: false}) private transcriptTabHistoryText: ElementRef<HTMLDivElement>
+  @ViewChild('contentWrapper') contentWrapper: ElementRef;
+  @ViewChild('scrollableDiv') scrollableDiv: ElementRef;
+
+  // @ViewChild('transcriptTabHistoryText', {static: false}) private transcriptTabHistoryText: ElementRef<HTMLDivElement>
   
 
   subs = new SubSink();
@@ -220,8 +223,12 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     this.maxMinButtonClick.emit(true);
   }
 
-  onScroll() {
-    if (!this.userBotConversationShow && !this.hideUserBotHistory) {
+  wheeled = false;
+  onScroll(event) {
+    if(event.deltaY < 0 && !this.wheeled){
+      this.wheeled = true;
+    }
+/*     if (!this.userBotConversationShow && !this.hideUserBotHistory) {
       if(this.transcriptTabHistoryText){
         let scrollInView = this.isScrolledIntoView();
         if (scrollInView) {
@@ -229,18 +236,30 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
           this.transcriptScrollTopText = 'Agent Joined the Conversation';
         }
       }
-    }
+    } */
+
   }
 
-  isScrolledIntoView(){
+/*   isScrolledIntoView(){
     const rect = this.transcriptTabHistoryText.nativeElement.getBoundingClientRect();
     const topShown = rect.top >= 0;
     const bottomShown = rect.bottom <= window.innerHeight;
     return (topShown && bottomShown);
-  }
+  } */
 
   ngOnDestroy(){
     this.subs.unsubscribe();
+  }
+
+  showMessage = false;
+  onScrollTo(event){
+    if(event?.target?.scrollTop === 0){
+      this.showMessage = false;
+    }
+  }
+
+  checkOldData(e){
+    this.showMessage = true;
   }
   
 }
