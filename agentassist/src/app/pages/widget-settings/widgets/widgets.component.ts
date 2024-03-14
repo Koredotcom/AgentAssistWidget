@@ -47,6 +47,28 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     library: 'Library',
     mybot: 'My bot'
   }
+  multiLanguageList = {
+    en : 'English',
+    ar : 'Arabic',
+    kr : 'Korean',
+    jp : 'Japanese',
+    sp : 'Spanish',
+    ge : 'German',
+    fr : 'French'
+  }
+  numberOfLineList = {
+    2 : "2 Minimum",
+    3 : '3',
+    4 : '4',
+    5 : '5',
+    6 : '6',
+    7 : '7',
+    8 : '8',
+    9 : '9',
+    10 : '10',
+    [-1] : 'Maximum'
+  }
+  lineList = Object.keys(this.numberOfLineList);
   clonedWidgetSettings:any = {};
   newRoleModalRef: any = {};
   modalRef: any;  
@@ -60,14 +82,27 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       {type: 'fallback', text: 'Show as a Fallback event', tooltip:'Display Knowledge AI Results as a fallback when no Bot Intents are identified.'}
   ];
   AutoSuggestions = [{type:'On'}, {type: 'Off'}];
+  URLBehaviour = [
+      {type: 'defaultBehaviour', text: 'Default System Behaviour', tooltip: "The AgentAssist widget will use the system's default governing approach for URL opening."},
+      {type: 'sendPostEvent', text: 'Post Event', tooltip:'The AgentAssist widget will open URLs based on the consumed "AgentAssist.UrlClickedMessage" post event.'}]
   integration = [
-    {type:'basic', desc: 'Use default Knowledge AI Configurations'}, 
-    {type:'advance', desc:'Configure how you want to use Knowledge AI'}
+    {type:'basic', desc: 'Use Default Knowledge AI Configurations'}, 
+    {type:'advance', desc:'Configure How You Want To Use Knowledge AI'}
+  ]
+  dataFormat = [
+    {type:'Plain string', tooltip:'Transmit as plain text', value : 'plainString'},
+    {type:'Original', tooltip: 'Transmit HTML tags exactly as they are received', value : 'original'}
+  ]
+  helpSupport = [
+    {type:'Documentation', tooltip: 'Control accessibility to doc and customise URLs.', value : 'documentation'}, 
+    {type:'FAQ', tooltip:'Control accessibility to FAQ and customise URLs.', value : 'faq'},
+    {type:'Kore Academy', tooltip:'Control accessibility to Kore Academy', value : 'koreAcademy'}
   ]
   advancedModeScript: string = '';
   selectedChannel = 'chat';
   selectedKAIChannel = 'chat';
   isCoachingDisable = true;
+  agentAssistSeedData : any = {};
   constructor(
     public workflowService: workflowService,
     private service: ServiceInvokerService,
@@ -89,6 +124,14 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     .patchValue(key);
   }
 
+  selectLanguage(key){
+    (((((this.agentAssistFormGroup as FormGroup)
+    .get('agentAssistSettings') as FormGroup))
+    .get('languageSettings') as FormGroup)
+    .get('language') as FormControl)
+    .patchValue(key);
+  }
+
   createOrUpdateAgSettingsForm(obj?){
     let isUpdate = false;
     if(obj && Object.keys(obj)){
@@ -107,11 +150,67 @@ export class WidgetsComponent implements OnInit, OnDestroy {
               isEnabled: [isUpdate ? (obj.botEvents?.fallback?.isEnabled??false) : false],
           })
         }),
+        urlOpenBehaviour : this.fb.group({
+          urlOpenType: ['defaultBehaviour'],
+          defaultBehaviour: [isUpdate ? (obj.urlOpenBehaviour?.defaultBehaviour ?? false) : false],
+          sendPostEvent: [isUpdate ? (obj.urlOpenBehaviour?.sendPostEvent ?? false) : false]
+        }),
+        agentActions : this.fb.group({
+          sharingFormat : [isUpdate ? (obj.agentActions?.sharingFormat ?? 'plainString') : 'plainString'],
+        }),
+        sentiment : this.fb.group({
+          isEnabled: [isUpdate ? (obj.sentiment?.isEnabled ?? true) : true]
+        }),
+        intentExecution : this.fb.group({
+          restartFunctionality : this.fb.group({
+            isEnabled : [isUpdate ? (obj.intentExecution?.restartFunctionality?.isEnabled ?? true) : true]
+          }),
+          entityView : this.fb.group({
+            isEnabled : [isUpdate ? (obj.intentExecution?.entityView?.isEnabled ?? true) : true]
+          })
+        }),
+        languageSettings : this.fb.group({
+          language : [isUpdate ? (obj.languageSettings?.language??'en') : 'en'],
+          allowAgentSwitch : [isUpdate ? (obj.languageSettings?.allowAgentSwitch??false) : false],
+        }),
+        showHelp : this.fb.group({
+          isEnabled : [isUpdate ? (obj.showHelp?.isEnabled ?? true) : true],
+          documentation : this.fb.group({
+            isEnabled : [isUpdate ? (obj.showHelp?.documentation?.isEnabled ?? true) : true],
+            resource : [isUpdate ? (obj.showHelp?.documentation?.resource ?? this.agentAssistSeedData?.defaultDocLink) : this.agentAssistSeedData?.defaultDocLink],
+          }),
+          faq : this.fb.group({
+            isEnabled : [isUpdate ? (obj.showHelp?.faq?.isEnabled ?? true) : true],
+            resource : [isUpdate ? (obj.showHelp?.faq?.resource ?? this.agentAssistSeedData?.defaultFAQLink) : this.agentAssistSeedData?.defaultFAQLink],
+          }),
+          koreAcademy : this.fb.group({
+            isEnabled : [isUpdate ? (obj.showHelp?.koreAcademy?.isEnabled ?? true) : true]
+          })
+        }),
         chat: this.fb.group(this.commongSettingsForm(isUpdate, obj?.chat)),
         voice: this.fb.group(this.commongSettingsForm(isUpdate, obj?.voice)),
         email: this.fb.group(this.commongSettingsForm(isUpdate, obj?.email)),
       })
-    })
+    });
+    if(isUpdate) {
+      let picked = obj?.urlOpenBehaviour
+      let urlOpenType = 'defaultBehaviour';
+      for(let key in picked){
+        if(picked[key]){
+          urlOpenType = key;
+        }
+      }
+      (((this.agentAssistFormGroup.get('agentAssistSettings') as FormGroup).get('urlOpenBehaviour')as FormGroup)
+      .get('urlOpenType') as FormControl)
+      .patchValue(urlOpenType);
+    }
+
+    if(this.agentAssistFormGroup){
+      for(let obj of this.helpSupport){
+        let value = this.agentAssistFormGroup.get('agentAssistSettings')?.value?.showHelp[obj.value]?.isEnabled ?? true;
+        this.resetValidations(value, obj.value);
+      }
+    }
   }
 
   createOrUpdateSearchForm(obj?){
@@ -136,6 +235,19 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
       this.isCoachingDisable = isEnabled;
     });
+    this.subs.sink = this.workflowService.seedData$.subscribe(res => {
+      if(res && res?.agentAssistSeedData){
+        this.agentAssistSeedData = res?.agentAssistSeedData;
+      }
+    });
+
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((bot)=>{
+      if(bot){
+        this.isLoading = true;
+        this.getAgentAssistSettingsNew();
+      }
+    });
+    
     this.createOrUpdateAgSettingsForm();
     this.createOrUpdateSearchForm();
     this.isUnifiedPlatform = this.workflowService?.isUnifiedPlatform();
@@ -277,7 +389,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     let params = {
       orgId: this.authService?.getOrgId(),
       aasId: this.clonedWidgetSettings?.id
-    };
+    };    
     const payload = {
       "orgId": this.authService?.getOrgId(),
       "accountId": this.localstorage?.getSelectedAccount()?.accountId,
@@ -362,6 +474,14 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     .patchValue((val.type === 'On') ? true : false);
   }
 
+  selectLines(key){
+    if(key){
+      ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup)
+      .get('displayLines') as FormControl)
+      .patchValue(parseFloat(key));
+    }
+  }
+
   // open script editor for the Advanced Mode
   selectedIntegrationType(e, integrate) {
     this.advancedModeScript = this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value?.searchAssistConfig?.integrations?.config?.script;
@@ -400,12 +520,15 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   commongSettingsForm(isUpdate, obj){
-    return {
+    let settingsForm = {
       agentAssistWidgetEnabled: [isUpdate ? (obj.agentAssistWidgetEnabled ?? false) : false],
       isProactiveEnabled: [isUpdate ? (obj.isProactiveEnabled ?? false) : false],
       isAgentCoachingEnabled: [isUpdate ? (obj.isAgentCoachingEnabled ?? false) : false],
       isAgentResponseEnabled: [isUpdate ? (obj.isAgentResponseEnabled ?? false) : true],
       isAgentResponseCopyEnabled: [isUpdate ? (obj.isAgentResponseCopyEnabled ?? false) : true],
+      transcripts : this.fb.group({
+        isEnabled : [isUpdate ? (obj.transcripts?.isEnabled??true) : true],
+      }),
       summarization: this.fb.group({
         isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
         canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false]
@@ -415,6 +538,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         tab: [isUpdate ? (obj.isWidgetLandingEnabled?.tab??'assist') : 'assist']
       }),
     }
+    if(isUpdate && obj?.isWidgetLandingEnabled?.tab === "transcript" && !obj?.transcript?.isEnabled){
+      this.selectTab(this.selectedChannel ,'assist');
+    }
+    return settingsForm;
   }
 
   commonSearchAssistForm(isUpdate, obj, searchObj){
@@ -437,6 +564,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         fallback: [isUpdate ? (searchObj?.fallback ?? false) : false],
         suggestVal: [isUpdate ? (searchObj?.showAutoSuggestions ? 'On' : 'Off') : 'On'], 
         showAutoSuggestions: [isUpdate ? (searchObj?.showAutoSuggestions ?? true) : true],
+        displayLines : [isUpdate ? (searchObj?.displayLines ?? 4) : 4]
       })
     };
 
@@ -473,6 +601,52 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }else{
       this.createOrUpdateSearchForm(this.clonedWidgetSettings.agentAssistSettings);
     }
+  }
+
+  selectedURLOpeningBehaviourType(e, val) {
+    let obj = {
+      defaultBehaviour: false,
+      sendPostEvent: false,
+      urlOpenType: 'defaultBehaviour'
+    }
+    obj[val] = true;
+    obj.urlOpenType = val;
+    (((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('urlOpenBehaviour') as FormGroup).patchValue(obj);
+  }
+
+  resetValidations(value, key){
+    const FormGroup = (this.agentAssistFormGroup.get('agentAssistSettings.showHelp') as FormGroup);
+    if(FormGroup){
+      const resourceParentGroup = FormGroup.get(key) as FormGroup;
+      if(resourceParentGroup){        
+        const resourceFormControl = resourceParentGroup.get('resource');
+        if(resourceFormControl){          
+          if(value){
+            resourceFormControl.setValidators([Validators.required, Validators.pattern('https?://.+')]);
+          }else{
+            resourceFormControl.clearValidators();
+          }
+          resourceFormControl.updateValueAndValidity();
+        }
+      }
+    }
+  }
+
+  transcriptControlChange(event){
+    let selectedLandingTab = (this.agentAssistFormGroup as FormGroup).get('agentAssistSettings').value[this.selectedChannel]?.isWidgetLandingEnabled?.tab; 
+    if(!event.target.checked && selectedLandingTab === 'transcript'){
+      this.selectTab(this.selectedChannel ,'assist');
+    }
+  }
+
+  resetClick(key){
+    let defaultUrl = (key === 'documentation') ? this.agentAssistSeedData?.defaultDocLink : this.agentAssistSeedData?.defaultFAQLink;
+    ((((((this.agentAssistFormGroup as FormGroup)
+    .get('agentAssistSettings') as FormGroup))
+    .get('showHelp') as FormGroup)
+    .get(key) as FormGroup)
+    .get('resource') as FormControl)
+    .patchValue(defaultUrl);
   }
 
 }
