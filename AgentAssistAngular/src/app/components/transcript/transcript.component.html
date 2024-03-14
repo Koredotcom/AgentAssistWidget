@@ -1,4 +1,5 @@
-<div class="transcipt-wrapper-info" (wheel)="onScroll()">
+<!-- (wheel)="onScroll()" -->
+<div class="transcipt-wrapper-info">
     <div class="offcanvas-header">
         <p class="paragraph semibold">{{'TRANSCRIPT' | translate}}</p>
         <button class="maximize-btn" (click)="minMaxButtonClick()" 
@@ -10,10 +11,10 @@
     <div class="body-canvas-wrapper">
           <ng-container>
             <div class="transcipt-content-data">
-                <ng-container *ngIf="userBotConversationShow">
+                <!-- <ng-container *ngIf="userBotConversationShow">
                     <app-user-bot-history></app-user-bot-history>
-                </ng-container>
-                <div class="scroll-agent-joined-conv" #transcriptTabHistoryText *ngIf="!hideUserBotHistory">
+                </ng-container> -->
+                <div class="scroll-agent-joined-conv" #transcriptTabHistoryText>
                     <h6>{{transcriptScrollTopText}}</h6>
                 </div>
                 <!-- <ng-container [ngTemplateOutlet]="summeryTranscipt"></ng-container> -->

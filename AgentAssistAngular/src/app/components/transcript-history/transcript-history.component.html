@@ -18,7 +18,6 @@
             </div>
         </div>
     </div>
-   
     <div class="transcipt-agent-bubble-comp" *ngIf="(conv?.msgType === 'BOT') && conv.components[0]?.data?.text">
         <div class="agent-bubble-content hover-show-copy">
             <div class="top-info">
@@ -37,7 +36,9 @@
             </div>
         </div>
     </div>
-</ng-container>  
+</ng-container> 
+<hr>
+
 <ng-container *ngFor="let conv of userAgentHistory">
     <div class="transcipt-bot-bubble-comp" *ngIf="conv?.msgType === 'USER' && conv.components[0]?.data?.text">
         <div class="bot-bubble-content hover-show-copy">
@@ -78,3 +79,41 @@
         </div>
     </div>
 </ng-container>  
+<div class="summery-info-transcript">
+    <div class="heading-text">
+        <i class="krIocnsFont-Aimark"></i>
+        <h1>SUMMARY</h1>
+    </div>
+    <!-- <ul>
+        <li>Customer states that their loan repayment amount is  too high</li>
+        <li>Customer wants to see if there is a way to reduce loan repayment amount</li>
+    </ul> -->
+    <p class="summary">Customer states that their loan repayment amount is  too high</p>
+    <!-- <div class="summery-row-data">
+        <div class="row-block">
+            <h1>Queue:</h1>
+            <div class="event-details">
+                <p class="text-truncate">Policy Renewal, Accountdetails</p>
+            </div>
+        </div>
+        <div class="row-block">
+            <h1>Intent:</h1>
+            <div class="event-details">
+                <p class="text-truncate">Policy Renewal, Accountdetails</p>
+                <span class="more-tooltip">+1more</span>
+            </div>
+        </div>
+        <div class="row-block">
+            <h1>Wait time:</h1>
+            <div class="event-details">
+                <p class="text-truncate">4m 12s</p>
+            </div>
+        </div>
+        <div class="row-block">
+            <h1>Sentiment:</h1>
+            <div class="event-details">
+                <p class="text-truncate">Negative</p>
+            </div>
+        </div>
+    </div> -->
+</div>
