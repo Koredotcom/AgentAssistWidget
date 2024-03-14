@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
 import { EVENTS } from '../helpers/events';
@@ -21,6 +21,8 @@ export class AskCustomerComponent {
   @Input() responseArray;
   @Input() responseArrayIndex;
   @Input() assistAutomationData;
+
+  @ViewChild('askCustNode',{static: false}) private askCustNode : ElementRef;
 
   subs = new SubSink();
 
@@ -156,8 +158,8 @@ export class AskCustomerComponent {
   }
 
   handleSendCopyButton(method, automation) {
-    automation.send = method === this.projConstants.SEND ? 'send' : 'copied';
-    let sendData = automation.sendData;
+    automation.send = (method === this.projConstants.SEND) ? 'send' : 'copied';
+    let sendData = this.prepareSendText(automation.sendData);
     this.commonService.handleSendCopyButtonForNodes(method, sendData, this.automation);
     this.responseArray = this.commonService.grayOutPreviousAutomation(this.responseArray, this.automationIndex, this.responseArrayIndex);
     this.responseArray = structuredClone(this.responseArray);
@@ -178,5 +180,15 @@ export class AskCustomerComponent {
         this.automation.disableInput = false;
       }
     }, 10000);
+  }
+
+  prepareSendText(sendData){
+    if(!this.automation.templateRender){
+      let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
+      if(format == 'plainString'){
+        sendData = this.rootService.extractTextFromElement(this.askCustNode.nativeElement);
+      }
+    }
+    return sendData;
   }
 }

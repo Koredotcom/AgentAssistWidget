@@ -30,6 +30,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
   connectionDetails : any;
   proactiveModeEnabled: boolean = this.rootService.proactiveModeStatus;
   aaSettings : any = this.rootService.settingsData;
+  enableLangChange : boolean = true;
+  helpSupportSettings : any = this.rootService.settingsData?.showHelp || {};
 
   ngOnInit(): void {
     this.subscribeEvents(); 
@@ -46,10 +48,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   getLocalStorageParams(){
     let appState : any = this.localStorageService.getLocalStorageState();
-    let convState = appState[this.connectionDetails.conversationId];    
-    this.defLanguage = convState[storageConst.LANGUAGE] || storageConst.ENGLISH;
+    let convState = appState[this.connectionDetails.conversationId];   
+    if(convState && convState[storageConst.LANGUAGE]){
+      this.defLanguage = convState[storageConst.LANGUAGE];
+    } else {
+      this.defLanguage = this.rootService.settingsData?.languageSettings?.language ? (this.rootService.settingsData?.languageSettings?.language) : storageConst.ENGLISH;
+    }
     this.selectedTheme = convState[storageConst.THEME] || storageConst.AUTO;
-
+    this.enableLangChange = (this.rootService.settingsData?.languageSettings?.allowAgentSwitch === false) ? false : true;
     // this.setProactiveMode(convState);
   }
 
@@ -95,8 +101,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
   //   this.proactiveToggle(proactiveModeStatus);
   // }
 
-  openurlInBrowser(url){
-    this.rootService.openurlInBrowser(url);
+  openurlInBrowser(url, type){
+    let openUrl = this.helpSupportSettings[type]?.resource || url;
+    this.rootService.openurlInBrowser(openUrl);
   }
 
   ngOnDestroy(){
