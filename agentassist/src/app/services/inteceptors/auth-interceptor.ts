@@ -37,7 +37,7 @@ export class AuthInterceptor implements HttpInterceptor {
     };
 
     //setting AccountId header
-    let selectedAccount = this.localStoreService.getSelectedAccount() || this.auth.getSelectedAccount();
+    let selectedAccount = this.auth.getSelectedAccount() || this.localStoreService.getSelectedAccount();
     if (selectedAccount) {
       _reqAdditions.setHeaders.AccountId = selectedAccount.accountId;
     }
