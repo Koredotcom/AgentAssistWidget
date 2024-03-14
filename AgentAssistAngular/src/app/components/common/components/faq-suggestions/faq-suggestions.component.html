@@ -35,12 +35,12 @@
             </div>
             <div class="data-faq-paragraph">   
                 <div class="text-info-more-data-link">         
-                    <p #faqcontent [ngClass]="{'show-full-text' : !ansObj['showMoreButton']}"  [innerHtml]="rootService.handleEmptyLine(ansObj['ans'], false, 'faq') | safeHtml"></p>     
+                    <p #faqcontent [ngClass]="{'show-full-text' : !ansObj['showMoreButton']}"  [style.--line-clamp]="rootService.numOfLines" [innerHTML]="rootService.handleEmptyLine(ansObj['ans'], false, 'faq') | safeHtml"></p>     
                     <div class="more-links-actions">
                         <a class="moreText">
                             <!-- <span class="more-text" (click)="toggleShowMoreLess(faq)" *ngIf="faq.showMoreButton && faq.answer.length > 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))">Expand / </span> -->
-                            <span class="more-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && ansObj['showMoreButton'] && (faq.answer.length == 1 || faq.seeMoreWrapper)" >{{'MORE_TEXT' | translate}}</span>
-                            <span class="less-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > 36 && !ansObj['showMoreButton']">{{'LESS_TEXT' | translate}}</span>
+                            <span class="more-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > ((((rootService.numOfLines *22) + 12)) + 12) && ansObj['showMoreButton'] && (faq.answer.length == 1 || faq.seeMoreWrapper)" >{{'MORE_TEXT' | translate}}</span>
+                            <span class="less-text" (click)="toggleShowMoreLess(ansObj)" *ngIf="faqcontent.scrollHeight > (((rootService.numOfLines *22) + 12)) && !ansObj['showMoreButton']">{{'LESS_TEXT' | translate}}</span>
                         </a>
                     </div>
                     

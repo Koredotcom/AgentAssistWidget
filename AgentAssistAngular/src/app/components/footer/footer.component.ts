@@ -24,7 +24,7 @@ export class FooterComponent implements OnInit, OnDestroy{
   maxButton = true;
   sourceDesktop : string = this.rootService.connectionDetails.source;
   hideUserBotHistory : boolean = true;
-
+  showTranscript : boolean = false;
 
 
   constructor(private offcanvasService: NgbOffcanvas, private localStorageService : LocalStorageService,
@@ -61,12 +61,15 @@ export class FooterComponent implements OnInit, OnDestroy{
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();        
         this.updateActiveTab();
+        if(this.connectionDetails?.isCallConversation){
+          this.showTranscript = (this.rootService?.settingsData?.transcripts?.isEnabled === false) ? false : true;
+        }
       }
     });
 
     this.subs.sink = this.rootService.activeTab$.subscribe(tab => {
       if(tab){
-        this.selectedTab = tab;
+        this.selectedTab = (!this.showTranscript && tab === this.projConstants.TRANSCRIPT) ? this.projConstants.ASSIST : tab;
         this.actionOnButton(tab);
         this.updateLocalStorageForTabSwitch(tab);
       }

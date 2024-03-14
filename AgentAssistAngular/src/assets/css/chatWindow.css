@@ -1813,9 +1813,9 @@
 .kore-chat-window .tablechart .tablechartDiv table td,
 .kore-chat-window .tablechart .tablechartDiv table th {
     padding: 10px;
-    text-overflow: ellipsis;
+    /* text-overflow: ellipsis;
     overflow: hidden;
-    white-space: nowrap;
+    white-space: nowrap; */
     max-width: 200px !important;
     font-size: 14px;
     color: var(--sdk-chat-window-bot-bubble-font-clrr);
