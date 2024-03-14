@@ -19,7 +19,7 @@
             </div>
             <p>{{'ASSIST' | translate}}</p>
         </button>
-        <button class="btn_footer"   [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.TRANSCRIPT}" (click)="changeTab(projConstants.TRANSCRIPT)">
+        <button class="btn_footer" *ngIf="connectionDetails?.isCallConversation"  [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.TRANSCRIPT}" (click)="changeTab(projConstants.TRANSCRIPT)">
             <div class="svg_icon">
                 <i class="krIocnsFont-transcript"></i>
             </div>
