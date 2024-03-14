@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy{
     private handleSubjectService: HandleSubjectService,
     private sanitizeHTMLPipe : SanitizeHtmlPipe
   ) {
-    this.translate.setDefaultLang('en');
+    // this.translate.setDefaultLang('en');
   }
 
   ngOnInit() {

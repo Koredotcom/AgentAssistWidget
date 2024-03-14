@@ -138,10 +138,16 @@ export class LocalStorageService {
           appState[conversationId][storageConst.ACTIVE_TAB] = WidgetConst[widgetSettings?.isWidgetLandingEnabled?.tab];
         }
 
+        if(widgetSettings?.languageSettings?.language){
+          appState[conversationId][storageConst.LANGUAGE] = widgetSettings?.languageSettings?.language;
+        }
+
         this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];
         this.rootService.setActiveTab(appState[conversationId][storageConst.ACTIVE_TAB]);
 
         localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
+
+        this.translateService.setDefaultLang( appState[conversationId][storageConst.LANGUAGE]);
       }
     }else if(appState && appState[conversationId]){
       this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];
