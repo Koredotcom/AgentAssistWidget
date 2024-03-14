@@ -15,7 +15,12 @@
                     <app-user-bot-history></app-user-bot-history>
                 </ng-container> -->
                 <div class="scroll-agent-joined-conv" #transcriptTabHistoryText>
-                    <h6>{{transcriptScrollTopText}}</h6>
+                    <button>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M7.99967 12.6663V3.33301M7.99967 3.33301L3.33301 7.99967M7.99967 3.33301L12.6663 7.99967" stroke="white" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <h6>{{transcriptScrollTopText}}</h6>
+                    </button>
                 </div>
                 <!-- <ng-container [ngTemplateOutlet]="summeryTranscipt"></ng-container> -->
                 <app-transcript-history></app-transcript-history>
