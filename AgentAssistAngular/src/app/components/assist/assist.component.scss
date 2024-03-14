@@ -32,6 +32,9 @@
                         line-height: 20px;
                         margin: 0 0 2px 0;
                     }
+                    .sentiment-div-block{
+                        flex-shrink: 0;
+                    }
                     .dialogs-number{
                         border-radius: 3px;
                         background: var(--themeColor);
