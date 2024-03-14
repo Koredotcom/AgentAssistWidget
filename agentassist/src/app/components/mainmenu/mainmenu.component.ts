@@ -96,6 +96,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.currentBt = res;
         this.workflowService.setCurrentBt(this.currentBt);
+        this.getChannelSpecificData();
         this.checkPermissions();
       }
     );
@@ -257,15 +258,31 @@ export class MainmenuComponent implements OnInit, OnDestroy {
       this.workflowService.setCurrentBt(this.currentBt);
       this.smartABots = [bt];
     }
+
     // if (bt.visibility.namespace == 'private') {
     //   this.navigateToUc();
     // } else {
     //   this.navigateToLiveBoard();
     // }
     // this.navigateToUc();
+    this.getChannelSpecificData();
     this.workflowService.updateAvailBal$.next();
     this.workflowService.headerInitCalls$.next();
     this.changeBot(this.currentBt);
+  }
+
+  getChannelSpecificData() {
+    const params = {
+      userId: this.authService.getUserId(),
+      streamId: this.workflowService.getCurrentBt(true)._id
+    };
+    this.subs.sink = this.workflowService.seedData$.subscribe(res => {
+      this.subs.sink = this.service.invoke('get.channelData', params).subscribe(channeType => {
+        res.deflectSeedData = channeType.deflectSeedData;
+        res.smartAssistSeedData = channeType.smartAssistSeedData;
+        res.agentAssistSeedData = channeType.agentAssistSeedData;
+      })
+    })
   }
 
 
