@@ -47,7 +47,7 @@
       border-radius: 12px 12px 0px 0px;
       @include transition(var(--#{$prefix}offcanvas-transition));
       &.offCanvasWrapperContaier{
-        bottom: 58px;
+        bottom: 76px;
       }
       &.termincateOffCanvas{
         // bottom: 64px;
@@ -204,7 +204,7 @@ body{
     .offcanvas{
       &.offcanvas-bottom{
         &.offCanvasWrapperContaier{
-          height: calc(100% - 58px);
+          height: calc(100% - 76px);
           padding: 8px 8px 0px 8px;
           .canvas-auto-height{
             border: 1px solid var(--themeBorderColor);
