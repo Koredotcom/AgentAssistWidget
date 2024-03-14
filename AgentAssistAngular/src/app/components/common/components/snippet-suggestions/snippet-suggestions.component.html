@@ -22,14 +22,14 @@
       <ng-container>
         <div class="text-info-more-data-link">
           <div class="text-info-more-data-block">
-            <p [ngClass]="{'show-full-text' : !extMore}" #snippetContent>
+            <p [ngClass]="{'show-full-text' : !extMore}" #snippetContent [style.--line-clamp]="rootService.numOfLines">
               <ng-container *ngFor="let content of snippet.contentArray; let ii = index">
                 <div class="inner-text-snippet-selection " *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content)  | safeHtml"
                   [ngClass]="{'snippet-list-style' : snippet.contentArray.length > 1 && !snippet.isActCit}"></div>
               </ng-container>
             </p>
             <div class="more-links-actions">
-              <a class="moreText" role="button" aria-expanded="false" *ngIf="(snippetContent?.scrollHeight > 72)">
+              <a class="moreText" role="button" aria-expanded="false" *ngIf="(snippetContent?.scrollHeight > (((rootService.numOfLines *22) + 12)))">
                 <span class="more-text" *ngIf="extMore"
                   (click)="extMore = !extMore">{{'MORE_TEXT' | translate}}</span>
                 <span class="less-text" *ngIf="!extMore"
@@ -44,14 +44,14 @@
               <span></span>
             </div>
             <div class="text-info-more-data-block">
-              <p [ngClass]="{'show-full-text' : !intMore}" #snippetContent1>
+              <p [ngClass]="{'show-full-text' : !intMore}" #snippetContent1 [style.--line-clamp]="rootService.numOfLines">
                 <ng-container *ngFor="let content of snippet.internalInfo; let ii = index">
                   <div class="inner-text-snippet-selection " *ngIf="content?.length > 0" [innerHTML]="rootService.handleEmptyLine(content)  | safeHtml"
                     [ngClass]="{'snippet-list-style' : snippet.internalInfo.length > 1 && !snippet.isActCit}"></div>
                 </ng-container>
               </p>
               <div class="more-links-actions">
-                <a class="moreText" role="button" aria-expanded="false" *ngIf="(snippetContent1?.scrollHeight > 88)">
+                <a class="moreText" role="button" aria-expanded="false" *ngIf="(snippetContent1?.scrollHeight > (((rootService.numOfLines *22) + 12)))">
                   <span class="more-text" *ngIf="intMore"
                     (click)="intMore = !intMore">{{'MORE_TEXT' | translate}}</span>
                   <span class="less-text" *ngIf="!intMore"

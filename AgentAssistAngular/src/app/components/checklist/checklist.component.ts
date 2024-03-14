@@ -55,6 +55,9 @@ export class ChecklistComponent {
   showProceedToClose: boolean = false;
   isCloseCompleted = false;
   openAck = false;
+  showSendButton : boolean = true;
+  showCopyButton : boolean = true;
+  showActionButtons : boolean = true;
 
   constructor(
     private commonService: CommonService,
@@ -81,6 +84,7 @@ export class ChecklistComponent {
 
   ngOnInit() {
     this.subscribeEvents();
+    this.hideSendCopy();
   }
 
   ngOnChanges(){
@@ -125,6 +129,20 @@ export class ChecklistComponent {
         })
       }
     });
+  }
+
+  hideSendCopy(){
+    if(this.rootService.settingsData?.isAgentResponseCopyEnabled === false){
+      this.showCopyButton = false; 
+    }
+
+    if(this.rootService.settingsData?.isAgentResponseEnabled === false){
+      this.showSendButton = false;
+    }
+
+    if(!this.showCopyButton && !this.showSendButton){
+      this.showActionButtons = false;
+    }    
   }
 
   minimizeToggle() {

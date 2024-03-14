@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy{
     private handleSubjectService: HandleSubjectService,
     private sanitizeHTMLPipe : SanitizeHtmlPipe
   ) {
-    this.translate.setDefaultLang('en');
+    // this.translate.setDefaultLang('en');
   }
 
   ngOnInit() {
@@ -96,6 +96,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
 
   initiateSocketConnection(params: any) {
+    this.rootService.updateSettingsProperties();
     this.localStorageService.initializeLocalStorageState(this.widgetSettings);
     this.isGrantSuccess = true;
     setTimeout(() => {

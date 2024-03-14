@@ -122,11 +122,11 @@
                                 </button>
                             </div>
                             <div class="step-text-send-block">
-                                <div class="step-actions-send-copy" *ngIf="!step?.confirmButtons?.length">
-                                    <button class="solidbtn" (click)="sendOrCopy(i,ii,projConstants.COPY_METHOD,step.description)">
+                                <div class="step-actions-send-copy" *ngIf="!step?.confirmButtons?.length && showActionButtons">
+                                    <button class="solidbtn" (click)="sendOrCopy(i,ii,projConstants.COPY_METHOD,step.description)" *ngIf="showCopyButton">
                                         <i class="krIocnsFont-copy"></i>
                                     </button>
-                                    <button class="solidbtn" (click)="sendOrCopy(i,ii,projConstants.SEND_METHOD,step.description)">{{
+                                    <button class="solidbtn" (click)="sendOrCopy(i,ii,projConstants.SEND_METHOD,step.description)" *ngIf="showSendButton">{{
                                         'SEND' | translate }}</button>
                                 </div>
                                 <p>{{step.description}} </p>

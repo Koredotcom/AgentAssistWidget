@@ -33,10 +33,10 @@
                     </div>
                 </div>
                 <div class="actions-assist-header">
-                    <button class="solid-action" aria-label="button" [disabled]="!dialogName" (click)="handlePopupEvent({status : true, type : projConstants.LISTVIEW})">
+                    <button class="solid-action" aria-label="button" [disabled]="!dialogName" (click)="handlePopupEvent({status : true, type : projConstants.LISTVIEW})" *ngIf="rootService?.showListView">
                         <i class="krIocnsFont-list"></i>
                     </button>
-                    <button class="solid-action" aria-label="button" [disabled]="!dialogName" (click)="restartClickEvent()">
+                    <button class="solid-action" aria-label="button" [disabled]="!dialogName" (click)="restartClickEvent()" *ngIf="rootService?.showRestart">
                         <i class="krIocnsFont-refresh"></i>
                     </button>
                     <button class="solid-action stop-assist" aria-label="button" (click)="terminateDialog()" [disabled]="!dialogName">
