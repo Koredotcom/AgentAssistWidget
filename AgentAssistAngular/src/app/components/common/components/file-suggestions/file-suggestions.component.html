@@ -20,13 +20,13 @@
       <div class="faq-body-content">
           <div class="data-faq-paragraph">            
               <div class="text-info-more-data-link">
-                  <p #fileContent [ngClass]="{'show-full-text' : !file.showMoreButton}" [style.--line-clamp]="rootService.numOfLines" [innerHTML]="file?.content | safeHtml"></p>
+                  <p #fileContent [ngClass]="{'show-full-text' : !file.showMoreButton}" [style.--max-height.px]="(rootService.numOfLines * projConstants.SUGGESTION_LINEHEIGHT) + projConstants.SUGGESTION_ADDHEIGHT" [innerHTML]="file?.content | safeHtml"></p>
                   <div class="more-links-actions">
-                      <a class="moreText" role="link" *ngIf="fileContent.scrollHeight > (((rootService.numOfLines *22) + 12))">
+                      <a class="moreText" role="link" *ngIf="fileContent.scrollHeight > (((rootService.numOfLines*projConstants.SUGGESTION_LINEHEIGHT) + projConstants.SUGGESTION_MAXHEIGHT))">
                           <span class="more-text" *ngIf="file?.showMoreButton" (click)="toggleShowMoreLess(file)">{{'MORE_TEXT' | translate}}</span>
                           <span class="less-text" *ngIf="!file?.showMoreButton" (click)="toggleShowMoreLess(file)">{{'LESS_TEXT' | translate}}</span>
                       </a>
-                      <p *ngIf="fileContent.scrollHeight > (((rootService.numOfLines *22) + 12)) && file.link">|</p>
+                      <p *ngIf="fileContent.scrollHeight > (((rootService.numOfLines*projConstants.SUGGESTION_LINEHEIGHT) + projConstants.SUGGESTION_MAXHEIGHT)) && file.link">|</p>
                       <a class="moreText" role="link" (click)="openurlInBrowser(file.link)" *ngIf="file.link && !file.title">{{'VIEW_FULL_FILE' | translate}}</a>
                   </div>
               </div>                       
