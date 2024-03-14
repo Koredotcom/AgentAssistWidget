@@ -1,3 +1,4 @@
+{{automation | json}}
 <div class="categorey-wrapper-new">
     <div class="top-section">
         <div class="svg_img">
@@ -5,7 +6,7 @@
         </div>
         <p>{{'ASSOCIATED_WORK_NOTES' | translate}}</p>
     </div>
-    <ng-container *ngFor="let workNote of automation.elements; let i = index">
+    <ng-container *ngFor="let workNote of automationObj.elements; let i = index">
         <div id="accordion" class="categorey-accordion-wrapper">
             <div data-bs-toggle="collapse" [attr.href]="'#collapse-'+i+'-'+responseArrayIndex" data-parent="#accordion" class="categorey_link collapsed"
                 aria-expanded="false">
