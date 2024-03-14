@@ -91,7 +91,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   ]
   dataFormat = [
     {type:'Plain string', tooltip:'Transmit as plain text', value : 'plainString'},
-    {type:'Original Format', tooltip: 'Transmit HTML tags exactly as they are received', value : 'original'}
+    {type:'Original', tooltip: 'Transmit HTML tags exactly as they are received', value : 'original'}
   ]
   helpSupport = [
     {type:'Documentation', tooltip: 'Control accessibility to doc and customise URLs.', value : 'documentation'}, 
