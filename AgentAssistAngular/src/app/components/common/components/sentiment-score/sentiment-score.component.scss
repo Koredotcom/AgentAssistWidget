@@ -2,7 +2,12 @@
 .sentiment-data-analysis{
     width: 100%;
     .sentiment-drpdown{
-        width: calc(100vw - 120px);
+        // width: calc(100vw - 120px);
+        width: calc(100% - 45px);
+        left: 0 !important;
+        right: 0 !important;
+        transform: none !important;
+        margin-left: 20px;
     }
     .echart-container {
         display: flex;
