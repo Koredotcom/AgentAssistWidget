@@ -25,96 +25,40 @@
                     display: flex;
                     align-items: center;
                     gap: 6px;
-                    width: 100%;
-                    .left-text-drp-dialog{
-                        display: flex;
-                        align-items: center;
-                        gap: 6px;
-                        width: 100%;
-                        overflow: hidden;
-                        h1{
-                            color: var(--secondaryTextColor);
-                            font-size: 14px;
-                            font-weight: 600;
-                            line-height: 20px;
-                            margin: 0;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                        .dialogs-number{
-                            border-radius: 3px;
-                            background: var(--themeColor);
-                            flex-shrink: 0;
-                            padding: 0px 4px;
-                            color: var(--whiteTextColor);
-                            font-size: 12px;
-                            font-weight: 500;
-                            line-height: 18px;
-                            min-width: 16px;
-                            text-align: center;
-                        }
-                        .dropdown {
-                            flex-shrink: 0;
-                            .dropdown-toggle{
-                                padding: 0;
-                                border: 0;
-                                background: transparent;
-                                width: 16px;
-                                height: 16px;
-                                font-size: 16px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                            }
-                        }
+                    h1{
+                        color: var(--secondaryTextColor);
+                        font-size: 14px;
+                        font-weight: 600;
+                        line-height: 20px;
+                        margin: 0 0 2px 0;
                     }
-                    .actions-assist-header{
+                    .sentiment-div-block{
                         flex-shrink: 0;
-                        display: flex;
-                        align-items: center;
-                        gap: 4px;
-                        .sentiment-div-block{
-                            flex-shrink: 0;
-                        }
-                        .solid-action{
-                            border-radius: 3px;
-                            border: 0px solid var(--themeBorderColor);
-                            background: var(--themeBgWhiteColor);
-                            display: flex;
-                            width: 25px;
-                            height: 25px;
+                    }
+                    .dialogs-number{
+                        border-radius: 3px;
+                        background: var(--themeColor);
+                        flex-shrink: 0;
+                        padding: 0px 4px;
+                        color: var(--whiteTextColor);
+                        font-size: 12px;
+                        font-weight: 500;
+                        line-height: 18px;
+                        min-width: 16px;
+                        text-align: center;
+                    }
+                    .dropdown {
+                        flex-shrink: 0;
+                        .dropdown-toggle{
                             padding: 0;
-                            justify-content: center;
-                            align-items: center;
-                            gap: 6px;
-                            color: var(--primaryTextColor);
+                            border: 0;
+                            background: transparent;
+                            width: 16px;
+                            height: 16px;
                             font-size: 16px;
-                            cursor: pointer;
-                            &:disabled{
-                                opacity: 0.3;
-                                pointer-events: none;
-                            }
-                            &:hover{
-                                border: 1px solid var(--primary-300, #84ADFF);
-                                color: var(--themeColor);
-                            }
-                            &.stop-assist{
-                                border: 0px solid var(--error-200, #FECDCA);
-                                background: var(--themeBgWhiteColor);
-                                &:hover{
-                                    border: 1px solid var(--error-300, #FDA29B);
-                                    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10);
-                                }
-                            }
-                            &.minimize-btn{
-                                border: 0 !important;
-                            }
-                            span{
-                                width: 12px;
-                                height: 12px;
-                                background: var(--warningTextColor);
-                            }
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
                         }
                     }
                 }
@@ -129,12 +73,11 @@
                         line-height: 20px;
                         margin: 0;
                         display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 1;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        max-width: 100%;
-                        flex-shrink: 0;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 1;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 75%;
                     }
                     .entity-name-cstm{
                         display: -webkit-box;
@@ -149,20 +92,59 @@
                             line-height: 20px;
                             padding-left: 6px;
                             border-left: 1px solid var(--themeBorderColor);
-                            display: flex;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
+                            flex-shrink: 0;
                         }
                         b{
                             font-weight: 500;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
                         }
                     }
                 }
-            }            
+            }
+            .actions-assist-header{
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                .solid-action{
+                    border-radius: 3px;
+                    border: 0px solid var(--themeBorderColor);
+                    background: var(--themeBgWhiteColor);
+                    display: flex;
+                    width: 25px;
+                    height: 25px;
+                    padding: 0;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 6px;
+                    color: var(--primaryTextColor);
+                    font-size: 16px;
+                    cursor: pointer;
+                    &:disabled{
+                        opacity: 0.3;
+                        pointer-events: none;
+                    }
+                    &:hover{
+                        border: 1px solid var(--primary-300, #84ADFF);
+                        color: var(--themeColor);
+                    }
+                    &.stop-assist{
+                        border: 0px solid var(--error-200, #FECDCA);
+                        background: var(--themeBgWhiteColor);
+                        &:hover{
+                            border: 1px solid var(--error-300, #FDA29B);
+                            box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10);
+                        }
+                    }
+                    &.minimize-btn{
+                        border: 0 !important;
+                    }
+                    span{
+                        width: 12px;
+                        height: 12px;
+                        background: var(--warningTextColor);
+                    }
+                }
+            }
         }
     }
     .collapse-tab{
