@@ -21,6 +21,7 @@
             gap: 10px;
             .left-title-info{
                 width: 100%;
+                overflow: hidden;
                 .text-dropdown-info{
                     display: flex;
                     align-items: center;
@@ -70,11 +71,11 @@
                         line-height: 20px;
                         margin: 0;
                         display: -webkit-box;
-                    -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 1;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    max-width: 75%;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 1;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        max-width: 100%;
                     }
                     .entity-name-cstm{
                         display: -webkit-box;
@@ -89,10 +90,16 @@
                             line-height: 20px;
                             padding-left: 6px;
                             border-left: 1px solid var(--themeBorderColor);
-                            flex-shrink: 0;
+                            display: flex;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
                         }
                         b{
                             font-weight: 500;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
                         }
                     }
                 }
