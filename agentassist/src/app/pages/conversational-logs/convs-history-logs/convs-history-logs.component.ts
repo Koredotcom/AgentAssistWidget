@@ -58,7 +58,7 @@ export class ConvsHistoryLogsComponent implements OnInit {
       })
     )
     .subscribe(res=>{
-      res.result = res.userAgentMessages;
+      res.result = res.userAgentMessages.result;
       if(res?.result?.length){
         this.page = this.page+1;
         this.hasMore = res.hasMore;
