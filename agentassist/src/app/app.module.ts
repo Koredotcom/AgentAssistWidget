@@ -104,6 +104,8 @@ import { ConvsHistoryLogsComponent } from './pages/conversational-logs/convs-his
 import { AccWarningDialogComponent } from './helpers/components/acc-warning-dialog/acc-warning-dialog.component';
 import { XoMenuComponent } from './components/xo-menu/xo-menu.component';
 import { EmptyRouteComponent } from './empty-route/empty-route.component';
+import { BlankComponent } from './pages/blank/blank.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -180,7 +182,8 @@ import { EmptyRouteComponent } from './empty-route/empty-route.component';
     ConvsHistoryLogsComponent,
     AccWarningDialogComponent,
     XoMenuComponent,
-    EmptyRouteComponent
+    EmptyRouteComponent,
+    BlankComponent
   ],
   imports: [
     CommonModule,

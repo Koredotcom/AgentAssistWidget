@@ -7,8 +7,8 @@
         <img src="assets/icons/header/switchAcc.svg">
         <span class="menu-name">{{ "HEADER.SWITCH_ACC" | translate }}</span>
     </button>
-    <button matIconButton mat-menu-item [disabled]="!isInvite" *hasPermission="['admin']">
-        <div class="invite-button" [ngClass]="{'disabled': isSharedDevError}" (click)="inviteDialog()">
+    <button *ngIf="authService.isAdminUser" matIconButton mat-menu-item [disabled]="!isInvite" (click)="inviteDialog()">
+        <div class="invite-button" [ngClass]="{'disabled': isSharedDevError}" >
             <img src="assets/icons/header/invite.svg" [ngStyle]="{'opacity': !isInvite?0.5:1}">
             <span class="menu-name">{{ "HEADER.INVITE" | translate }}</span>
         </div>
@@ -33,7 +33,7 @@
             <div class="today-history-config-tabs" *hasPermission="['admin']">
                 <div class="name-tab" [routerLink]="['/config']" routerLinkActive="active" >{{"LIVE_CHAT_AGENT.CONFIGURATION" | translate}}</div>
                 <div class="name-tab" [routerLink]="['/bt']" routerLinkActive="active" >{{"LIVE_CHAT_AGENT.AUTOMATIONS" | translate}}</div>
-                <div *ngIf="isCoachingDisable" class="name-tab" [routerLink]="['/dashboard']" routerLinkActive="active" >{{"LIVE_CHAT_AGENT.DASHBOARD" | translate}}</div>
+                <div *ngIf="(workflowService.rolePermissions.isDashboardEnabled)" class="name-tab" [routerLink]="['/dashboard']" routerLinkActive="active" >{{"LIVE_CHAT_AGENT.DASHBOARD" | translate}}</div>
             </div>
 
             <div class="logo-sec col-2 p-0">

@@ -133,11 +133,48 @@
         }
         .input-box-data{
             margin: 12px 0 18px 0;
-            background: #F5F8FA;
-            border-radius: 10px;
-            display: inline-block;
+            border-radius: 5px;
+            background: var(--Cool-Gray-25, #FCFCFD);
+            display: flex;
             width: 100%;
             padding: 20px;
+            .input-box-icon{
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                i{
+                    font-size: 20px;
+                    color: $BlueColor;
+                    &.connection-icon{
+                        color: #E49A2B;
+                    }
+                }
+            }
+            .input-box-info{
+                width: 100%;
+                .channels-header-block{
+                    padding:0px 0px 15px 15px;
+                    border-bottom: 1px solid #E5E5E5;
+                    margin-bottom: 15px;
+                    h4{
+                        color: var(--Neutral-900, #171717);
+                        font-size: 16px;
+                        font-weight: 600;
+                        line-height: 24px; 
+                        margin-bottom: 0px;
+                    }
+                    p{
+                        color: var(--Gray-Modern-600, #4B5565);
+                        font-size: 12px;
+                        font-weight: 400;
+                        line-height: 18px; 
+                        margin: 4px 0px 0px;
+                    }
+                }
+            }
             .text-heading{
                 font-weight: 600;
                 font-size: 14px;
@@ -169,34 +206,48 @@
                 .kr-sg-input-text{
                     display: flex;
                     align-items: center;
+                    position: relative;
+                    .input-text{
+                        padding-right: 35px !important;
+                    }
                     .copy-btn{
-                        background: #FFFFFF;
-                        border: 1px solid #2B75E4;
-                        box-sizing: border-box;
-                        border-radius: 4px;
-                        height: 34px;
-                        display: flex;
-                        align-items: center;
-                        padding: 6px 12px;
-                        font-weight: 400;
+                        background: transparent;
+                        padding: 0px;
                         font-size: 14px;
-                        line-height: 20px;
-                        color: #2B75E4;
-                        flex-shrink: 0;
-                        margin-left: 20px;
+                        outline: 0px;
+                        color: #4A5578;
                         cursor: pointer;
-                        img{
-                            margin-right: 6px;
-                        }
+                        position: absolute;
+                        top: auto;
+                        border: 0;
+                        right: 12px;
+                        display: flex;
                     }
                 }
                 .eye-copy{
                     position: absolute;
-                    right: 110px;
+                    right: 12px;
                     top: auto;
                     z-index: 1;
-                    cursor: pointer;
                     font-size: 14px;
+                    display: flex;
+                    align-items: center;
+                    .eye{
+                        padding-right: 14px;
+                        border-right: 1px solid #5D6B98;
+                        display: flex;
+                        color: #4A5578;
+                    }
+                    button{
+                        background: transparent;
+                        padding: 0px 0px 0px 14px;
+                        font-size: 14px;
+                        outline: 0px;
+                        color: #4A5578;
+                        cursor: pointer;
+                        display: flex;
+                        border: 0px;
+                    }
                 }
             }
         }
