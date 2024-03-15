@@ -8,7 +8,7 @@
                         <span class="dialogs-number" *ngIf="interruptDialogList?.length">{{interruptDialogList?.length}}</span>
                     
                     
-                        <div ngbDropdown class="dropdown" #interruptDropdown="ngbDropdown" *ngIf="interruptDialogList?.length">
+                        <div ngbDropdown class="dropdown" #interruptDropdown="ngbDropdown" container="body" *ngIf="interruptDialogList?.length">
                             <button type="button" id="playbookDrp" ngbDropdownToggle>
                                 <i class="krIocnsFont-chevron-down arrow-icon"></i>
                             </button>
