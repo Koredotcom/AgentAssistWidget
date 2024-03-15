@@ -1,4 +1,5 @@
-<div class="transcipt-wrapper-info" (wheel)="onScroll()">
+<!-- (wheel)="onScroll()" -->
+<div class="transcipt-wrapper-info" (wheel)="onScroll($event)" >
     <div class="offcanvas-header">
         <p class="paragraph semibold">{{'TRANSCRIPT' | translate}}</p>
         <button class="maximize-btn" (click)="minMaxButtonClick()" 
@@ -7,17 +8,22 @@
             <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
         </button>
     </div>
-    <div class="body-canvas-wrapper">
+    <div class="body-canvas-wrapper" (scroll)="onScrollTo($event)">
           <ng-container>
             <div class="transcipt-content-data">
-                <ng-container *ngIf="userBotConversationShow">
+                <!-- <ng-container *ngIf="userBotConversationShow">
                     <app-user-bot-history></app-user-bot-history>
-                </ng-container>
-                <div class="scroll-agent-joined-conv" #transcriptTabHistoryText *ngIf="!hideUserBotHistory">
-                    <h6>{{transcriptScrollTopText}}</h6>
+                </ng-container> -->
+                <div class="scroll-agent-joined-conv" *ngIf="showMessage">
+                    <button>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M7.99967 12.6663V3.33301M7.99967 3.33301L3.33301 7.99967M7.99967 3.33301L12.6663 7.99967" stroke="white" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <h6>{{transcriptScrollTopText}}</h6>
+                    </button>
                 </div>
                 <!-- <ng-container [ngTemplateOutlet]="summeryTranscipt"></ng-container> -->
-                <app-transcript-history></app-transcript-history>
+                <app-transcript-history (checkOldData)="checkOldData($event)" [wheeled]="wheeled"></app-transcript-history>
                 <ng-container *ngFor="let trans of transcriptArray">
                     <div class="transcipt-bot-bubble-comp" *ngIf="trans.type == projConstants.INCOMING">
                         <div class="bot-bubble-content hover-show-copy">
@@ -67,7 +73,7 @@
 </div>
 
 
-<ng-template #summeryTranscipt>
+<!-- <ng-template #summeryTranscipt>
     <div class="summery-info-transcript">
         <div class="heading-text">
             <i class="krIocnsFont-Aimark"></i>
@@ -114,4 +120,4 @@
         <p>Account Upgrade</p>
         <p>Account Update</p>
     </div>
-</ng-template>
+</ng-template> -->
