@@ -227,6 +227,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
   onScroll(event) {
     if(event.deltaY < 0 && !this.wheeled){
       this.wheeled = true;
+      this.showMessage = false;
     }
 /*     if (!this.userBotConversationShow && !this.hideUserBotHistory) {
       if(this.transcriptTabHistoryText){

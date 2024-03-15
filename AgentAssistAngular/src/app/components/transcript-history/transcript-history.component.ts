@@ -42,7 +42,7 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
   }
 
   getTranscriptHistory(params){
-    this.serviceInvoker.invoke('get.transcriptHistory', { convId: params.conversationId, botId : params.botId, isSummaryRequired: true, sessionId: this.rootService.userBotConversationDetails?.sessionId }, {}, { botId : params.botId }, params.agentassisturl).subscribe((data)=> {
+    this.serviceInvoker.invoke('get.transcriptHistory', { convId: params.conversationId, botId : params.botId, isSummaryRequired: true, sessionId: this.rootService.userBotConversationDetails?.sessionId, experience:  this.rootService.connectionDetails?.channel}, {}, { botId : params.botId }, params.agentassisturl).subscribe((data)=> {
       if(data) {
         this.historyResponse = data.result;
         this.userBotHostory = data.userBotMessages?.result;
@@ -57,7 +57,7 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
                         item.components[0].data.text = a?.payload?.text;
                     }
                 }catch(e){
-                    item.unsupported = true
+                    
                 }
             }
         });
@@ -71,7 +71,6 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
                         item.components[0].data.text = a?.payload?.text;
                     }
                 }catch(e){
-                    item.unsupported = true
                 }
             }
         });
