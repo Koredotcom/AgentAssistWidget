@@ -4,26 +4,42 @@
             <div class="assist-header-content">
                 <div class="left-title-info">
                     <div class="text-dropdown-info">
-                        <h1>{{'MY_BOT' | translate}}</h1>
-                        <span class="dialogs-number" *ngIf="interruptDialogList?.length">{{interruptDialogList?.length}}</span>
-                    
-                    
-                        <div ngbDropdown class="dropdown" #interruptDropdown="ngbDropdown" *ngIf="interruptDialogList?.length">
-                            <button type="button" id="playbookDrp" ngbDropdownToggle>
-                                <i class="krIocnsFont-chevron-down arrow-icon"></i>
-                            </button>
-                            <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
-                                <div class="heading-text-scripts">{{'INTERRUPT_DIALOG' | translate}}</div>
-                                <div class="dialog-task-wrapper" *ngFor="let dialog of interruptDialogList; let i = index">
-                                    <div class="title-paragraph">
-                                        <p>{{dialog.name}}</p>
-                                    </div>
-                                    <div class="dialog-actions">
-                                        <button class="primary-btn"
-                                            (click)="dialogueRunClick(dialog, i, true);interruptDropdown.close()">{{'RUN' | translate}}</button>
+                        <div class="left-text-drp-dialog">
+                            <h1>{{'MY_BOT' | translate}}</h1>
+                            <span class="dialogs-number" *ngIf="interruptDialogList?.length">{{interruptDialogList?.length}}</span>
+                            <div ngbDropdown class="dropdown" #interruptDropdown="ngbDropdown" *ngIf="interruptDialogList?.length">
+                                <button type="button" id="playbookDrp" ngbDropdownToggle>
+                                    <i class="krIocnsFont-chevron-down arrow-icon"></i>
+                                </button>
+                                <div ngbDropdownMenu class="playbook-dropdown-content" aria-labelledby="playbookDrp">
+                                    <div class="heading-text-scripts">{{'INTERRUPT_DIALOG' | translate}}</div>
+                                    <div class="dialog-task-wrapper" *ngFor="let dialog of interruptDialogList; let i = index">
+                                        <div class="title-paragraph">
+                                            <p>{{dialog.name}}</p>
+                                        </div>
+                                        <div class="dialog-actions">
+                                            <button class="primary-btn"
+                                                (click)="dialogueRunClick(dialog, i, true);interruptDropdown.close()">{{'RUN' | translate}}</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>                        
+                        <div class="actions-assist-header">
+                            <button class="solid-action" aria-label="button" [disabled]="!dialogName" (click)="handlePopupEvent({status : true, type : projConstants.LISTVIEW})" *ngIf="rootService?.showListView">
+                                <i class="krIocnsFont-list"></i>
+                            </button>
+                            <button class="solid-action" aria-label="button" [disabled]="!dialogName" (click)="restartClickEvent()" *ngIf="rootService?.showRestart">
+                                <i class="krIocnsFont-refresh"></i>
+                            </button>
+                            <button class="solid-action stop-assist" aria-label="button" (click)="terminateDialog()" [disabled]="!dialogName">
+                                <span></span>
+                            </button>
+                            <button class="solid-action minimize-btn" aria-label="button" (click)="minMaxButtonClick()"
+                            [title]="maxButton ? ('MINIMIZE' | translate) : ('MAXIMIZE' | translate)">
+                                <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
+                                <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
+                            </button>
                         </div>
                     </div>
                 
@@ -31,22 +47,6 @@
                         <p *ngIf="dialogName">{{dialogName}}</p>
                         <span *ngIf="dialogName && currentRunningStep">{{'STEP' | translate}}: <b>{{currentRunningStep}}</b></span>
                     </div>
-                </div>
-                <div class="actions-assist-header">
-                    <button class="solid-action" aria-label="button" [disabled]="!dialogName" (click)="handlePopupEvent({status : true, type : projConstants.LISTVIEW})" *ngIf="rootService?.showListView">
-                        <i class="krIocnsFont-list"></i>
-                    </button>
-                    <button class="solid-action" aria-label="button" [disabled]="!dialogName" (click)="restartClickEvent()" *ngIf="rootService?.showRestart">
-                        <i class="krIocnsFont-refresh"></i>
-                    </button>
-                    <button class="solid-action stop-assist" aria-label="button" (click)="terminateDialog()" [disabled]="!dialogName">
-                        <span></span>
-                    </button>
-                    <button class="solid-action minimize-btn" aria-label="button" (click)="minMaxButtonClick()"
-                    [title]="maxButton ? ('MINIMIZE' | translate) : ('MAXIMIZE' | translate)">
-                        <i class="krIocnsFont-minimize" *ngIf="maxButton"></i>
-                        <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
-                    </button>
                 </div>
             </div>
         </div>
