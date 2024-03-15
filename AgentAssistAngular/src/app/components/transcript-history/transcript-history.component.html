@@ -44,7 +44,7 @@
         </ng-container>
     </ng-container>
     <ng-container *ngFor="let conv of userAgentHistory">
-        <ng-container *ngIf="!conv?.unsupported">
+        <!-- <ng-container *ngIf="!conv?.unsupported"> -->
             <div class="transcipt-bot-bubble-comp" *ngIf="conv?.msgType === 'USER' && conv.components[0]?.data?.text">
                 <div class="bot-bubble-content hover-show-copy">
                     <div class="top-info">
@@ -84,7 +84,7 @@
                     </div>
                 </div>
             </div>
-        </ng-container>
+        <!-- </ng-container> -->
     </ng-container>
 </ng-container>
 <div class="summery-info-transcript" *ngIf="summary.message && summary.status !== 400">

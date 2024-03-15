@@ -57,7 +57,7 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
                         item.components[0].data.text = a?.payload?.text;
                     }
                 }catch(e){
-                    item.unsupported = true
+                    
                 }
             }
         });
@@ -71,7 +71,6 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
                         item.components[0].data.text = a?.payload?.text;
                     }
                 }catch(e){
-                    item.unsupported = true
                 }
             }
         });
