@@ -70,7 +70,9 @@ export class RootService {
   widgetMaxButtonClick : boolean = true;
   notLookingForClick : boolean = false;
 
-  numOfLines = 4;
+  numOfLines : any = 4;
+  maxHeight : any;
+  scrollHeight : any;
 
   defaultwidgetSettings: any = {
     "isCustomisedLogoEnabled": {
@@ -205,7 +207,9 @@ export class RootService {
   updateSettingsProperties(){
     this.showListView = (this.settingsData?.intentExecution?.entityView?.isEnabled === false) ? false : true;
     this.showRestart = (this.settingsData?.intentExecution?.restartFunctionality?.isEnabled === false) ? false : true;
-    this.numOfLines = (this.settingsData?.searchAssistConfig?.displayLines) ? this.settingsData?.searchAssistConfig?.displayLines : 4
+    this.numOfLines = (this.settingsData?.searchAssistConfig?.displayLines) ? this.settingsData?.searchAssistConfig?.displayLines : 4;
+    this.maxHeight = (this.numOfLines !== -1) ? (this.numOfLines * ProjConstants.SUGGESTION_LINEHEIGHT) : 'max-content';
+    this.scrollHeight = (this.numOfLines !== -1) ?(this.numOfLines * ProjConstants.SUGGESTION_LINEHEIGHT) + ProjConstants.SUGGESTION_MAXHEIGHT : Number.MAX_VALUE;
   }
 
   prepareAgentAssistAgentRequestParams(data) {
