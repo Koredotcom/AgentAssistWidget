@@ -492,6 +492,25 @@
                                 </label>
                             </div>
                         </div>
+                        <ng-container>
+                            <div class="search-results-block" formGroupName="urlOpenBehaviour">
+                                <div class="search-results-title">URL opening behaviour</div>
+                                <div class="search-results-des">Control the URL opening behaviour in AgentAssist Widget.</div>
+                                <div class="radio-group-block">
+                                    <div class="kr-sg-radiobutton p-0"
+                                        *ngFor="let open of URLBehaviour; let indx = index">
+                                        <input id="url-{{indx}}" class="radio-custom" type="radio" [value]="open.type"
+                                            name="urlOpenType" formControlName="urlOpenType"
+                                            (change)="selectedURLOpeningBehaviourType($event, open.type)">
+                                        <label for="url-{{indx}}" class="radio-custom-label">{{open.text}}
+                                            <span class="info-tip" placement="bottom-center"
+                                            tooltipClass="tooltip-global-styles" ngbTooltip={{open.tooltip}}><i
+                                                class="icon-sa-info"></i></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
                         <ng-container *ngIf="isV3">
                             <div class="toggle-info-data  m-0" formGroupName="isCustomisedLogoEnabled">
                                 <div class="content-data-toggle">

@@ -80,6 +80,12 @@ export class workflowService {
   private isPlatformDashboard;
   private currentAppData;
 
+  // permission flags
+  rolePermissions = {
+    isTaskEnabled :false,
+    isDashboardEnabled: false
+  }
+
   constructor(
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
@@ -149,6 +155,13 @@ export class workflowService {
     console.log(bt);
     this.currentSelectedBotDetails = bt;
     this.currentBtDetails = bt;
+
+    this.setBotLevelPermissions(bt);
+  }
+
+  setBotLevelPermissions(bt) {
+    this.rolePermissions.isTaskEnabled = (bt.permissions.BOTBUILDER_TASKS[0] === 'FULL' || bt.permissions.BOTBUILDER_TASKS[0] === 'VIEW') ? true : false;
+    this.rolePermissions.isDashboardEnabled = bt.permissions.BOTBUILDER_DASHBOARD[0] === 'YES' ? true : false;
   }
 
   setEditInBotPlatform() {

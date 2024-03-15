@@ -31,6 +31,7 @@ export class GuidedChecklistComponent implements OnInit {
   subs = new SubSink();
   selAcc = this.local.getSelectedAccount();
   isUnifiedPlatform = false;
+  isAgentPlayBookEnabled: boolean = true;
   constructor(
     private modalService : NgbModal,
     private auth: AuthService,
@@ -45,6 +46,7 @@ export class GuidedChecklistComponent implements OnInit {
   @ViewChild('checklistCreation') checklistCreation: ElementRef;
   ngOnInit(): void {
     this.isUnifiedPlatform =this.workflowService.isUnifiedPlatform();
+    // this.getAgentAssistSettings();
     this.getConfigDetails();
     this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
       if (ele) {

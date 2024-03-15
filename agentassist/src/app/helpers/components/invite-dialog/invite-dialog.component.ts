@@ -1,8 +1,10 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import {MatChipInputEvent} from '@angular/material/chips';
-
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import * as _ from 'underscore';
+import { ProjConstants } from '../../constants/proj.cnts';
 
 @Component({
   selector: 'app-invite-dialog',
@@ -13,10 +15,17 @@ export class InviteDialogComponent implements OnInit {
   emailList: {email: string, invalid: boolean}[] = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   isValidList = true;
+  roleType = '';
+  rolesList:any = [];
+  selectedRoleObj: any = {};
 
-  constructor() { }
+  ProjConstants = ProjConstants;
+
+  constructor(public dialogRef: MatDialogRef<InviteDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
+    this.rolesList = this.data;
   }
 
   add(event: MatChipInputEvent) {
@@ -52,5 +61,16 @@ export class InviteDialogComponent implements OnInit {
       return re.test(String(email).toLowerCase());
   }
 
+
+  onSubmit(){
+    let data: any = {};
+    data['emailList'] = this.emailList;
+    data['selectedRole'] = this.selectedRoleObj;
+    this.dialogRef.close(data);
+  }
+
+  onCancel() {
+    this.dialogRef.close();
+  }
 
 }

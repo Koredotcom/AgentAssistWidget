@@ -1,143 +1,146 @@
 
 
-<div class="bots-wrapper" *ngIf="!isHideBotsList">
-    <div class="header-sec">
-        <div class="lef-sec">
-            <div class="title">Bots</div>
-            <div class="tab-name active-tab">Attached bots</div>
-        </div>
-        <div class="right-sec">
-            <div class="kr-sg-dropdowns add-a-bot-inside-dropdown" ngbDropdown [placement]="'bottom-right'">
-                <div class="dropdown dropdown-open">
-                    <button class="dropdown-toggle kr-sg-button-primary btn_lg" ngbDropdownToggle><i class="icon-sa-plus mr-2"></i> {{'ADD_BOT' | translate}}</button>
-                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                        <div class="bot-select-source">
-                            <div class="img-block">
-                                <img src="assets/icons/use-case/attachbot1.svg">
-                            </div>
-                            <div class="content-data" (click)="newBot('selectBot')">
-                                <div class="title">{{'ATTACH_BOT' | translate}}</div>
-                                <div class="desc-text">{{'USE_BOT' | translate}}</div>
-                            </div>
-                        </div>
-                        <!-- <div class="bot-select-source" (click)="choosePreBot()">
-                            <div class="img-block">
-                                <img src="assets/icons/use-case/attachbot2.svg">
-                            </div>
-                            <div class="content-data">
-                                <div class="title">Choose a template bot</div>
-                                <div class="desc-text">Choose a template from our store</div>
-                            </div>
-                        </div> -->
-                        <div class="bot-select-source" (click)="newBot('createNew')">
-                            <div class="img-block">
-                                <img src="assets/icons/use-case/attachbot3.svg">
-                            </div>
-                            <div class="content-data">
-                                <div class="title">{{'CREATE_BOT' | translate}}</div>
-                                <div class="desc-text">{{'DESIGN_BOT' | translate}}</div>
-                            </div>
-                        </div>
-                    </ul>
-                </div>
+<div *ngIf="workflowService?.rolePermissions?.isTaskEnabled">
+    <div class="bots-wrapper" *ngIf="!isHideBotsList">
+        <div class="header-sec">
+            <div class="lef-sec">
+                <div class="title">Bots</div>
+                <div class="tab-name active-tab">Attached bots</div>
             </div>
-        </div>
-    </div>
-    <ng-container *ngIf="bots.length; else emptyState">
-        <div class="sort-nav-section">
-            <div class="actions-sec">
-                <div class="kr-sg-dropdowns">                                        
+            <div class="right-sec">
+                <div class="kr-sg-dropdowns add-a-bot-inside-dropdown" ngbDropdown [placement]="'bottom-right'">
                     <div class="dropdown dropdown-open">
-                        <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">
-                            Sort by {{sortBy.label}}
-                        </button>                                            
-                        <ul class="dropdown-menu content-menu">
-                            <li *ngFor="let option of sortByOptions" (click)="sortBy = option"><a>{{option.label}}</a></li>
+                        <button class="dropdown-toggle kr-sg-button-primary btn_lg" ngbDropdownToggle><i class="icon-sa-plus mr-2"></i> {{'ADD_BOT' | translate}}</button>
+                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                            <div class="bot-select-source">
+                                <div class="img-block">
+                                    <img src="assets/icons/use-case/attachbot1.svg">
+                                </div>
+                                <div class="content-data" (click)="newBot('selectBot')">
+                                    <div class="title">{{'ATTACH_BOT' | translate}}</div>
+                                    <div class="desc-text">{{'USE_BOT' | translate}}</div>
+                                </div>
+                            </div>
+                            <!-- <div class="bot-select-source" (click)="choosePreBot()">
+                                <div class="img-block">
+                                    <img src="assets/icons/use-case/attachbot2.svg">
+                                </div>
+                                <div class="content-data">
+                                    <div class="title">Choose a template bot</div>
+                                    <div class="desc-text">Choose a template from our store</div>
+                                </div>
+                            </div> -->
+                            <div class="bot-select-source" (click)="newBot('createNew')">
+                                <div class="img-block">
+                                    <img src="assets/icons/use-case/attachbot3.svg">
+                                </div>
+                                <div class="content-data">
+                                    <div class="title">{{'CREATE_BOT' | translate}}</div>
+                                    <div class="desc-text">{{'DESIGN_BOT' | translate}}</div>
+                                </div>
+                            </div>
                         </ul>
                     </div>
                 </div>
-                <div class="sort-icon" [class.active-sort]="sortByOrder === 'desc'" (click)="sortByOrder === 'asc' ? sortByOrder = 'desc' : sortByOrder = 'asc'">
-                    <i class="icon-sa-sort"></i>
-                </div>
-                <ul class="nav nav-tabs grid-list-view">
-                    <li class="nav-item grid-view">
-                        <a class="nav-link active" data-toggle="tab" href="#gridview">
-                            <i class="icon-sa-grid"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item list-view">
-                        <a class="nav-link" data-toggle="tab" href="#listview">
-                        <i class="icon-sa-list"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="kr-sg-input-search">                               
-                <input type="text" placeholder="Search for a bot" class="input-search" [(ngModel)]="searchTerm">
-                <i class="icon-sa-search search-icon"></i>
             </div>
         </div>
-    
-        <perfect-scrollbar class="tab-scroll">
-            <div class="tab-content">
-                <div class="tab-pane active" id="gridview">
-                    <div class="grid-view-data-bots">
-                        <div class="bot-card" *ngFor="let bot of bots | filter: [ searchTerm, 'name'] | sort: sortBy.key : sortByOrder" (click)="navigatetoBotBuilder(bot)">
-                            <div class="img-block">
-                                <img [src]="bot?.icon ? bot?.icon : (this.workflowService.resolveHostUrl() + '/botbuilder/assets/images/brokenImageSmall.png')">
-                            </div>
-                            <div class="content-data">
-                                <div class="title">{{bot.name}}</div>
-                                <div class="tasks-count">{{bot.taskCount}} {{bot.taskCount === 1 ? ' Task': ' Tasks'}}</div>
-                            </div>
+        <ng-container *ngIf="bots.length; else emptyState">
+            <div class="sort-nav-section">
+                <div class="actions-sec">
+                    <div class="kr-sg-dropdowns">                                        
+                        <div class="dropdown dropdown-open">
+                            <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">
+                                Sort by {{sortBy.label}}
+                            </button>                                            
+                            <ul class="dropdown-menu content-menu">
+                                <li *ngFor="let option of sortByOptions" (click)="sortBy = option"><a>{{option.label}}</a></li>
+                            </ul>
                         </div>
-                        <div class="no-result" *ngIf="!(bots | filter: [ searchTerm, 'name'])?.length">No bots found.</div>
                     </div>
+                    <div class="sort-icon" [class.active-sort]="sortByOrder === 'desc'" (click)="sortByOrder === 'asc' ? sortByOrder = 'desc' : sortByOrder = 'asc'">
+                        <i class="icon-sa-sort"></i>
+                    </div>
+                    <ul class="nav nav-tabs grid-list-view">
+                        <li class="nav-item grid-view">
+                            <a class="nav-link active" data-toggle="tab" href="#gridview">
+                                <i class="icon-sa-grid"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item list-view">
+                            <a class="nav-link" data-toggle="tab" href="#listview">
+                            <i class="icon-sa-list"></i>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="tab-pane fade" id="listview">
-                    <div class="list-view-bot-data" *ngIf="(bots | filter: [ searchTerm, 'name'])?.length; else noResultsTemp">
-                        <div class="table-header row">
-                            <div class="col-7 title pl-20">Name</div>
-                            <div class="col-3 title">Task count</div>
-                            <div class="col-2 title">Status</div>
-                        </div>
-                        <ng-container>
-                            <div class="table-body-data row" *ngFor="let bot of bots | filter: [ searchTerm, 'name'] | sort: sortBy.key : sortByOrder" (click)="navigatetoBotBuilder(bot)">
-                                <div class="col-7 bot-details">
-                                    <div class="img-block">
-                                        <img [src]="bot.icon">
-                                    </div>
-                                    <div class="bot-info-title">{{bot.name}}</div>
+                <div class="kr-sg-input-search">                               
+                    <input type="text" placeholder="Search for a bot" class="input-search" [(ngModel)]="searchTerm">
+                    <i class="icon-sa-search search-icon"></i>
+                </div>
+            </div>
+        
+            <perfect-scrollbar class="tab-scroll">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="gridview">
+                        <div class="grid-view-data-bots">
+                            <div class="bot-card" *ngFor="let bot of bots | filter: [ searchTerm, 'name'] | sort: sortBy.key : sortByOrder" (click)="navigatetoBotBuilder(bot)">
+                                <div class="img-block">
+                                    <img [src]="bot?.icon ? bot?.icon : (this.workflowService.resolveHostUrl() + '/botbuilder/assets/images/brokenImageSmall.png')">
                                 </div>
-                                <div class="col-3 title">{{bot.taskCount}} {{bot.taskCount === 1 ? ' Task': ' Tasks'}}</div>
-                                <div class="col-2 title">{{bot.isPublished ? 'Published': 'In-Development'}}</div>
+                                <div class="content-data">
+                                    <div class="title">{{bot.name}}</div>
+                                    <div class="tasks-count">{{bot.taskCount}} {{bot.taskCount === 1 ? ' Task': ' Tasks'}}</div>
+                                </div>
                             </div>
-                        </ng-container>
+                            <div class="no-result" *ngIf="!(bots | filter: [ searchTerm, 'name'])?.length">No bots found.</div>
+                        </div>
                     </div>
-                    <ng-template #noResultsTemp>
-                        <div class="no-result" >No bots found.</div>
-                    </ng-template>
+                    <div class="tab-pane fade" id="listview">
+                        <div class="list-view-bot-data" *ngIf="(bots | filter: [ searchTerm, 'name'])?.length; else noResultsTemp">
+                            <div class="table-header row">
+                                <div class="col-7 title pl-20">Name</div>
+                                <div class="col-3 title">Task count</div>
+                                <div class="col-2 title">Status</div>
+                            </div>
+                            <ng-container>
+                                <div class="table-body-data row" *ngFor="let bot of bots | filter: [ searchTerm, 'name'] | sort: sortBy.key : sortByOrder" (click)="navigatetoBotBuilder(bot)">
+                                    <div class="col-7 bot-details">
+                                        <div class="img-block">
+                                            <img [src]="bot.icon">
+                                        </div>
+                                        <div class="bot-info-title">{{bot.name}}</div>
+                                    </div>
+                                    <div class="col-3 title">{{bot.taskCount}} {{bot.taskCount === 1 ? ' Task': ' Tasks'}}</div>
+                                    <div class="col-2 title">{{bot.isPublished ? 'Published': 'In-Development'}}</div>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <ng-template #noResultsTemp>
+                            <div class="no-result" >No bots found.</div>
+                        </ng-template>
+                    </div>
+                </div>
+            </perfect-scrollbar>
+        </ng-container>
+        <ng-template #emptyState>
+            <div class="emptyState-bot-wrapper">
+                <div class="empty-content">
+                    <div class="img-block">
+                        <img src="assets/icons/emptyplaceholders/empty-bots.svg">
+                    </div>
+                    <div class="info-data">
+                        <div class="title">Automate using  bots</div>
+                        <div class="desc-text">Click on “Add bot” and select a bot from our templates, from the bots attached to your account. You can even create a new bot from scratch.</div>
+                    </div>
                 </div>
             </div>
-        </perfect-scrollbar>
-    </ng-container>
-    <ng-template #emptyState>
-        <div class="emptyState-bot-wrapper">
-            <div class="empty-content">
-                <div class="img-block">
-                    <img src="assets/icons/emptyplaceholders/empty-bots.svg">
-                </div>
-                <div class="info-data">
-                    <div class="title">Automate using  bots</div>
-                    <div class="desc-text">Click on “Add bot” and select a bot from our templates, from the bots attached to your account. You can even create a new bot from scratch.</div>
-                </div>
-            </div>
-        </div>
-    </ng-template>
-  
-
+        </ng-template>
+      
+    
+    </div>
+    
+    <div *ngIf="isHideBotsList">
+        <app-bt-container></app-bt-container>
+    </div> 
 </div>
 
-<div *ngIf="isHideBotsList">
-    <app-bt-container></app-bt-container>
-</div>

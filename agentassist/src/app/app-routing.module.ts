@@ -17,6 +17,7 @@ import { SearchAssistComponent } from './pages/search-assist/search-assist.compo
 import { APP_BASE_HREF } from '@angular/common';
 import { EmptyRouteComponent } from './empty-route/empty-route.component';
 import { environment } from '@kore.environment';
+import { BlankComponent } from './pages/blank/blank.component';
 
 let isSmartassist = false;
 if(window.location.href.includes('smartassist')){
@@ -50,6 +51,7 @@ const routes: Routes = [
           { path: 'guided-checklist', loadChildren: () => import('./pages/guided-checklist/guided-checklist.module').then(m => m.GuidedChecklistModule)},
           { path: 'widget-settings', loadChildren: () => import('./pages/widget-settings/widget-settings.module').then(m => m.WidgetSettingsModule)},
           { path: 'advanced-nlu', loadChildren: () => import('./pages/ai-config/ai-config.module').then(m => m.AiConfigModule)},
+          { path: 'blank', component: BlankComponent },
           { path: '**', redirectTo: (isSmartassist ? 'coaching' : 'usecases') },
         ]
       },

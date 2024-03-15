@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { DashboardService } from '../dashboard.service';
 import { CHANNELS } from '../dashboard.cnst';
 import { AuthService } from '@kore.services/auth.service';
+import { workflowService } from '@kore.services/workflow.service';
 
 @Component({
   selector: 'app-dashboard-filters',
@@ -43,13 +44,15 @@ export class DashboardFiltersComponent implements OnInit {
     private translate: TranslateService,
     private route: ActivatedRoute,
     private dashboardService : DashboardService,
-    private authService : AuthService
+    private authService : AuthService,
+    private workflowService : workflowService
   ) { }
 
   ngOnInit(): void {
     this.botList = this.authService.smartAssistBots || [];
     this.selectedBot = this.authService.smartAssistBots[0].name;
     this.dashboardService.setSelectedBotDetails(this.authService.smartAssistBots[0]);
+    this.workflowService.setCurrentBt(this.authService.smartAssistBots[0]);
     this.calendarLocale = {
       applyLabel: this.translate.instant('BUTTONS.APPLY'),
       cancelLabel: this.translate.instant('BUTTONS.CANCEL'),
@@ -104,10 +107,12 @@ export class DashboardFiltersComponent implements OnInit {
   }
 
   changeBot(bot) {
+    this.workflowService.setCurrentBt(bot);
     this.filters = { ... this.filters, botId: bot._id}
     this.selectedBot = bot.name;
     this.dashboardService.setSelectedBotDetails(bot);
     this.updateFilters(this.filters);
+
   }
 
 }

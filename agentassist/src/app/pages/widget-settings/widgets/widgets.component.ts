@@ -60,6 +60,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       {type: 'fallback', text: 'Show as a Fallback event', tooltip:'Display Knowledge AI Results as a fallback when no Bot Intents are identified.'}
   ];
   AutoSuggestions = [{type:'On'}, {type: 'Off'}];
+  URLBehaviour = [
+      {type: 'defaultBehaviour', text: 'Default System Behaviour', tooltip: "The AgentAssist widget will use the system's default governing approach for URL opening."},
+      {type: 'sendPostEvent', text: 'Post Event', tooltip:'The AgentAssist widget will open URLs based on the consumed "AgentAssist.UrlClickedMessage" post event.'}]
   integration = [
     {type:'basic', desc: 'Use default Knowledge AI Configurations'}, 
     {type:'advance', desc:'Configure how you want to use Knowledge AI'}
@@ -107,11 +110,28 @@ export class WidgetsComponent implements OnInit, OnDestroy {
               isEnabled: [isUpdate ? (obj.botEvents?.fallback?.isEnabled??false) : false],
           })
         }),
+        urlOpenBehaviour : this.fb.group({
+          urlOpenType: ['defaultBehaviour'],
+          defaultBehaviour: [isUpdate ? (obj.urlOpenBehaviour?.defaultBehaviour ?? false) : false],
+          sendPostEvent: [isUpdate ? (obj.urlOpenBehaviour?.sendPostEvent ?? false) : false]
+        }),
         chat: this.fb.group(this.commongSettingsForm(isUpdate, obj?.chat)),
         voice: this.fb.group(this.commongSettingsForm(isUpdate, obj?.voice)),
         email: this.fb.group(this.commongSettingsForm(isUpdate, obj?.email)),
       })
-    })
+    });
+    if(isUpdate) {
+      let picked = obj?.urlOpenBehaviour
+      let urlOpenType = 'defaultBehaviour';
+      for(let key in picked){
+        if(picked[key]){
+          urlOpenType = key;
+        }
+      }
+      (((this.agentAssistFormGroup.get('agentAssistSettings') as FormGroup).get('urlOpenBehaviour')as FormGroup)
+      .get('urlOpenType') as FormControl)
+      .patchValue(urlOpenType);
+    }
   }
 
   createOrUpdateSearchForm(obj?){
@@ -473,6 +493,17 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }else{
       this.createOrUpdateSearchForm(this.clonedWidgetSettings.agentAssistSettings);
     }
+  }
+
+  selectedURLOpeningBehaviourType(e, val) {
+    let obj = {
+      defaultBehaviour: false,
+      sendPostEvent: false,
+      urlOpenType: 'defaultBehaviour'
+    }
+    obj[val] = true;
+    obj.urlOpenType = val;
+    (((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('urlOpenBehaviour') as FormGroup).patchValue(obj);
   }
 
 }

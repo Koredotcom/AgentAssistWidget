@@ -821,4 +821,13 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
     // console.info("Both: ", !this.conv.isAgentAssistOnly && this.conv.hasAgentAssistAccess);
   }
 
+  convMainToggle(conv,flag) {
+    if(!flag) {
+      conv.triggerPoints.isChatEnabled = false;
+      conv.triggerPoints.isVoiceEnabled = false;
+      conv.triggerPoints.isLaunchByMenuEnabled = false;
+      conv.triggerPoints.isEmailEnabled = false;
+    }
+  }
+
 }

@@ -36,6 +36,7 @@ export class AuthService {
   public isAgentDesktopEnabled$ = new BehaviorSubject(false);
   public isAgentCoachongEnable$ = new BehaviorSubject(true);
   public agentAssistAutomationBots: any = [];
+  public isAdminUser = false;
 
   constructor(
     private localstore: LocalStoreService,
@@ -168,6 +169,7 @@ export class AuthService {
       
       var _userInfo: any = {};
       _userInfo.appControls = res;
+      this.isAdminUser = (res.roles[0] === 'admin' ? true : false);
       if (_userInfo.appControls && _userInfo.appControls.associatedAccounts && _userInfo.appControls.associatedAccounts.length) {
         var accounts = _userInfo.appControls.associatedAccounts;
         var defaultAccountId = _userInfo.appControls.defaultAccountId || '';
