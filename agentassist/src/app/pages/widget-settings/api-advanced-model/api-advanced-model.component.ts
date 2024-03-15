@@ -41,8 +41,8 @@ export class ApiAdvancedModelComponent implements OnInit {
   
 
   save() {
-    this.emitScriptService.next(this.apiScript);
-         this.activeModal.close(this.apiScript);
+    // this.emitScriptService.next(this.apiScript);
+    this.activeModal.close(this.apiScript);
   } 
     
 

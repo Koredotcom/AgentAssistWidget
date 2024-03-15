@@ -56,6 +56,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
   configFeatures : any;
   isUnifiedPlatform = false;
   emptyCoachingImg = IMAGE_PATHS.EMPTY_COACHING_IMAGE;
+  isAgentCoachingEnabled: boolean = true;
+  loading: boolean = false;
   @ViewChild('noneIntent', { static: true }) noneIntent: SliderComponentComponent;
 
   constructor(

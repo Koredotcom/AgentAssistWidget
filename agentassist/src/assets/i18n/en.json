@@ -2168,7 +2168,7 @@
     "WELCOME_EVENT_DISABLED" : "Disabled",
     "WELCOME_EVENT_SELECTDIALOG" : "Select Dialog",
     "WELCOME_EVENT_UB_DIALOG_DESC" : "Make a choice among the bots",
-    "WELCOME_EVENT_DIALOG_DESC" : "select the dialogue task you are interested in",
+    "WELCOME_EVENT_DIALOG_DESC" : "select the dialog task you are interested in",
     "WELCOME_EVENT_SELECTUSECASE" : "Select UseCases",
     "WELCOME_EVENT_EXTRACT_INTENT" : "Extract intents from On Connect Dialog Task",
     "WELCOME_EVENT_CHAT" : "Chat",
@@ -2197,5 +2197,7 @@
     "AGENT_COACHING_DESC" : "Create and Manage Agent Coaching Rules to be triggered during User-Agent Interactions",
     "AGENT_PLAYBOOK_DESC" : "Create and Manage the adherence checklist to be triggered for an Agent in a conversation with the user",
     "AGENT_WELCOME_EVENT" : "Configure the Welcome Event to be triggered for an Agent Interacting with the Virtual Assistant",
-    "AGENT_WIDGET_SETTINGS" : "Define widgets accessibility to Agents"
+    "AGENT_WIDGET_SETTINGS" : "Define widgets accessibility to Agents",
+    "DURING_EMAILS": "During Emails",
+    "ENABLED_MANUALLY_AUTOMATICALLY_EMAIL_CHANNEL": "If enabled, this use case can be manually or automatically triggered by the agent when they are engaged with a customer in a email based channel."
 }

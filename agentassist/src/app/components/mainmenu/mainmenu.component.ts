@@ -96,6 +96,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.currentBt = res;
         this.workflowService.setCurrentBt(this.currentBt);
+        this.checkPermissions();
       }
     );
     this.swtchBot = this.workflowService.switchBt$.subscribe(
@@ -114,6 +115,14 @@ export class MainmenuComponent implements OnInit, OnDestroy {
     });
   }
 
+  checkPermissions(){
+    if(!this.workflowService.rolePermissions.isTaskEnabled && this.workflowService.rolePermissions.isDashboardEnabled){
+      this.router.navigate(['/config/conversationalLogs']);
+    }else if(!this.workflowService.rolePermissions.isTaskEnabled && !this.workflowService.rolePermissions.isDashboardEnabled){
+      this.router.navigate(['/config/blank']);
+    }
+  }
+
   getCurrentBotFromAutomationBotList(){
     let _id = this.localStoreService.getSelectedAccount()?.accountId || this.authService.getSelectedAccount()?.accountId;
   
@@ -128,7 +137,8 @@ export class MainmenuComponent implements OnInit, OnDestroy {
       });
       
       this.currentBt = this.workflowService.getCurrentBt(true) && Object.keys(this.workflowService.getCurrentBt(true)).length > 0 ? this.workflowService.getCurrentBt(true) : _.findWhere(this.authService.smartAssistBots, { _id: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id });
-      this.workflowService.setCurrentBt(this.currentBt);
+      // this.workflowService.setCurrentBt(this.currentBt);
+      this.changeBot(this.currentBt);
     }
     this.filterLinkedBotIds();
   }

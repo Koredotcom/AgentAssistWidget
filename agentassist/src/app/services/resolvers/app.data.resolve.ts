@@ -16,12 +16,18 @@ export class AppDataResolver implements Resolve<any> {
   // configNote = { duration: 600000, panelClass: ['background-logout'], verticalPosition: this.verticalPosition, data: { msg: "", action: "", stat: false } };
 
   resolve(route: ActivatedRouteSnapshot) {
+    let instanceOb$;
     return Observable.create(observer => {
       var _promise1 = this.authService.getApplictionControlsFromServer();
-      if(!window.location.href.includes(this.unifiedXOConstant)) {
-        const instanceOb$ = this.appService.getInstaceApps();
+
+      if(!window.location.href.includes(this.unifiedXOConstant) && this.authService.isAdminUser) {
+        instanceOb$ = this.appService.getInstaceApps();
         instanceOb$.subscribe();
       }
+
+      // if(this.authService.isAdminUser) {
+      //   instanceOb$ = this.appService.getInstaceApps();
+      // }
       
       //const versionOb$ = this.appService.getAppVersion();
       _promise1.subscribe((res)=>{
@@ -31,6 +37,9 @@ export class AppDataResolver implements Resolve<any> {
         this.authService.getProfile();
         this.authService.getAgentDesktopPermissions();
         observer.complete();
+        if(!window.location.href.includes(this.unifiedXOConstant) && this.authService.isAdminUser) {
+          instanceOb$.subscribe();
+        }
         
       },
       (errRes) => {
