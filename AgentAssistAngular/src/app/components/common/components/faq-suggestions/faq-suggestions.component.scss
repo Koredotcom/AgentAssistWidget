@@ -132,7 +132,7 @@
                 }
                 &.show-full-text{
                     display: block;
-                    max-height: 100000px; /* Set a large enough value */
+                    max-height: max-content; /* Set a large enough value */
                     overflow-y: auto;
                 }
                 .snippet-list-style{
@@ -224,7 +224,7 @@
         }
         .more-links-actions{
             position: absolute;
-            bottom: 3px;
+            bottom: 0px;
             right: 0;
             background: var(--themeBgWhiteColor);
             z-index: 2;
