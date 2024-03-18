@@ -33,7 +33,7 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
   showMessage = false;
   wheeled = false;
   userBotConversationShow: boolean = false;
-  transcriptScrollTopText: string = 'Scroll up for Bot Conversation History';
+  transcriptScrollTopText: string = 'Scroll up for conversation history';
   hideUserBotHistory : boolean = true;
 
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
