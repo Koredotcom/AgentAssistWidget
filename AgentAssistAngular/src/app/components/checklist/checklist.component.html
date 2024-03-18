@@ -122,7 +122,7 @@
                                 </button>
                             </div>
                             <div class="step-text-send-block">
-                                <div class="step-actions-send-copy" *ngIf="!step?.confirmButtons?.length && showActionButtons">
+                                <div class="step-actions-send-copy" *ngIf="!step?.confirmButtons?.length && showActionButtons && step?.isSendCopy">
                                     <button class="solidbtn" (click)="sendOrCopy(i,ii,projConstants.COPY_METHOD,step.description)" *ngIf="showCopyButton">
                                         <i class="krIocnsFont-copy"></i>
                                     </button>
