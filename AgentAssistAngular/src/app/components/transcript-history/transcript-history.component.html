@@ -1,99 +1,100 @@
-<ng-container *ngIf="wheeled">
+<app-loader *ngIf="widgetLoader" [type]="'widget'"></app-loader>
+    <ng-container *ngIf="wheeled">
 
-    <ng-container *ngFor="let conv of userBotHostory">
-        <ng-container *ngIf="!conv?.unsupported">
-            <div class="transcipt-bot-bubble-comp" *ngIf="conv?.msgType === 'USER' && conv.components[0]?.data?.text">
-                <div class="bot-bubble-content hover-show-copy">
-                    <div class="top-info">
-                        <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName +
-                            this.parsedCustomData?.lName) ||
-                            ('CUSTOMER' | translate)}}</div>
-                        <div class="time-tamp"><time>{{conv.createdOn | date:'h:mm a'}}</time></div>
+        <ng-container *ngFor="let conv of userBotHostory">
+            <ng-container *ngIf="!conv?.unsupported">
+                <div class="transcipt-bot-bubble-comp" *ngIf="conv?.msgType === 'USER' && conv.components[0]?.data?.text">
+                    <div class="bot-bubble-content hover-show-copy">
+                        <div class="top-info">
+                            <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName +
+                                this.parsedCustomData?.lName) ||
+                                ('CUSTOMER' | translate)}}</div>
+                            <div class="time-tamp"><time>{{conv.createdOn | date:'h:mm a'}}</time></div>
+                        </div>
+                        <div class="bubble-msg-with-img">
+                            <div class="bubble-msg">{{conv.components[0]?.data?.text}}</div>
+                            <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
+                                <sub>1</sub>
+                                <i class="krIocnsFont-light-bulb"></i>
+                            </div> -->
+                            <!-- <div class="copy-bubble">
+                                <i class="krIocnsFont-copy"></i>
+                            </div> -->
+                        </div>
                     </div>
-                    <div class="bubble-msg-with-img">
-                        <div class="bubble-msg">{{conv.components[0]?.data?.text}}</div>
-                        <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
+                </div>
+                <div class="transcipt-agent-bubble-comp"
+                    *ngIf="(conv?.msgType === 'BOT') && conv.components[0]?.data?.text">
+                    <div class="agent-bubble-content hover-show-copy">
+                        <div class="top-info">
+                            <div class="time-tamp"><time>{{conv.createdOn | date:'h:mm a'}}</time></div>
+                            <div class="you-text">{{'BOT' | translate}}</div>
+                        </div>
+                        <div class="bubble-msg-with-img">
+                            <div class="bubble-msg">{{conv.components[0]?.data?.text}}</div>
+                            <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
+                                <sub>1</sub>
+                                <i class="krIocnsFont-light-bulb"></i>
+                            </div> -->
+                            <!-- <div class="copy-bubble">
+                                <i class="krIocnsFont-copy"></i>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngFor="let conv of userAgentHistory">
+            <!-- <ng-container *ngIf="!conv?.unsupported"> -->
+                <div class="transcipt-bot-bubble-comp" *ngIf="conv?.msgType === 'USER' && conv.components[0]?.data?.text">
+                    <div class="bot-bubble-content hover-show-copy">
+                        <div class="top-info">
+                            <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName +
+                                this.parsedCustomData?.lName) ||
+                                ('CUSTOMER' | translate)}}</div>
+                            <div class="time-tamp"><time>{{conv.createdOn | date:'h:mm a'}}</time></div>
+                        </div>
+                        <div class="bubble-msg-with-img">
+                            <div class="bubble-msg">{{conv.components[0]?.data?.text}}</div>
+                            <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
                             <sub>1</sub>
                             <i class="krIocnsFont-light-bulb"></i>
                         </div> -->
-                        <!-- <div class="copy-bubble">
+                            <!-- <div class="copy-bubble">
                             <i class="krIocnsFont-copy"></i>
                         </div> -->
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="transcipt-agent-bubble-comp"
-                *ngIf="(conv?.msgType === 'BOT') && conv.components[0]?.data?.text">
-                <div class="agent-bubble-content hover-show-copy">
-                    <div class="top-info">
-                        <div class="time-tamp"><time>{{conv.createdOn | date:'h:mm a'}}</time></div>
-                        <div class="you-text">{{'BOT' | translate}}</div>
-                    </div>
-                    <div class="bubble-msg-with-img">
-                        <div class="bubble-msg">{{conv.components[0]?.data?.text}}</div>
-                        <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
+                <div class="transcipt-agent-bubble-comp"
+                    *ngIf="(conv?.msgType === 'AGENT') && conv.components[0]?.data?.text">
+                    <div class="agent-bubble-content hover-show-copy">
+                        <div class="top-info">
+                            <div class="time-tamp"><time>{{conv.createdOn | date:'h:mm a'}}</time></div>
+                            <div class="you-text">{{'YOU' | translate}}</div>
+                        </div>
+                        <div class="bubble-msg-with-img">
+                            <div class="bubble-msg">{{conv.components[0]?.data?.text}}</div>
+                            <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
                             <sub>1</sub>
                             <i class="krIocnsFont-light-bulb"></i>
                         </div> -->
-                        <!-- <div class="copy-bubble">
+                            <!-- <div class="copy-bubble">
                             <i class="krIocnsFont-copy"></i>
                         </div> -->
+                        </div>
                     </div>
                 </div>
-            </div>
+            <!-- </ng-container> -->
         </ng-container>
     </ng-container>
-    <ng-container *ngFor="let conv of userAgentHistory">
-        <!-- <ng-container *ngIf="!conv?.unsupported"> -->
-            <div class="transcipt-bot-bubble-comp" *ngIf="conv?.msgType === 'USER' && conv.components[0]?.data?.text">
-                <div class="bot-bubble-content hover-show-copy">
-                    <div class="top-info">
-                        <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName +
-                            this.parsedCustomData?.lName) ||
-                            ('CUSTOMER' | translate)}}</div>
-                        <div class="time-tamp"><time>{{conv.createdOn | date:'h:mm a'}}</time></div>
-                    </div>
-                    <div class="bubble-msg-with-img">
-                        <div class="bubble-msg">{{conv.components[0]?.data?.text}}</div>
-                        <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
-                        <sub>1</sub>
-                        <i class="krIocnsFont-light-bulb"></i>
-                    </div> -->
-                        <!-- <div class="copy-bubble">
-                        <i class="krIocnsFont-copy"></i>
-                    </div> -->
-                    </div>
-                </div>
-            </div>
-            <div class="transcipt-agent-bubble-comp"
-                *ngIf="(conv?.msgType === 'AGENT') && conv.components[0]?.data?.text">
-                <div class="agent-bubble-content hover-show-copy">
-                    <div class="top-info">
-                        <div class="time-tamp"><time>{{conv.createdOn | date:'h:mm a'}}</time></div>
-                        <div class="you-text">{{'YOU' | translate}}</div>
-                    </div>
-                    <div class="bubble-msg-with-img">
-                        <div class="bubble-msg">{{conv.components[0]?.data?.text}}</div>
-                        <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
-                        <sub>1</sub>
-                        <i class="krIocnsFont-light-bulb"></i>
-                    </div> -->
-                        <!-- <div class="copy-bubble">
-                        <i class="krIocnsFont-copy"></i>
-                    </div> -->
-                    </div>
-                </div>
-            </div>
-        <!-- </ng-container> -->
-    </ng-container>
-</ng-container>
-<div class="summery-info-transcript" *ngIf="summary.message && summary.status !== 400">
-    <div class="heading-text">
-        <i class="krIocnsFont-Aimark"></i>
-        <h1>SUMMARY</h1>
+    <div class="summery-info-transcript" *ngIf="summary.message && summary.status !== 400">
+        <div class="heading-text">
+            <i class="krIocnsFont-Aimark"></i>
+            <h1>{{'SUMMARY_TEXT' | translate | uppercase}}</h1>
+        </div>
+        <p class="summary">{{summary.message}}</p>
     </div>
-    <p class="summary">{{summary.message}}</p>
-</div>
     <!-- <ul>
             <li>Customer states that their loan repayment amount is  too high</li>
             <li>Customer wants to see if there is a way to reduce loan repayment amount</li>

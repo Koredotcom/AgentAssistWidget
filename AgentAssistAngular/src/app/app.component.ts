@@ -147,9 +147,9 @@ export class AppComponent implements OnInit, OnDestroy{
       this.localStorageService.userDetails = e.data.userDetails
         ? e.data.userDetails
         : null;
-    } else if (e.data.type === 'AGENT') {
+    } else if (e.data.type === 'AGENT' || e.author.data.type === 'AGENT') {
       this.emitUserAgentMessage(e.data, 'agent_inp_msg');
-    } else if (e.data.type === 'USER') {
+    } else if (e.data.type === 'USER' || e.author.data.type === 'USER') {
       this.emitUserAgentMessage(e.data, 'user_inp_msg');
     }
     this.eventListenerFromParent(e);
