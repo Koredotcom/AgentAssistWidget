@@ -24,7 +24,6 @@ import { FieldTypePipe } from './helpers/filters/field-type.pipe';
 import { ScrollSpyDirective } from './helpers/directives/scroll-spy.directive';
 import { AutoFocusDirective } from './helpers/directives/auto-focus.directive';
 import { ConfirmationDialogComponent } from './helpers/components/confirmation-dialog/confirmation-dialog.component';
-import { ConversationalLogsComponent } from './pages/conversational-logs/conversational-logs.component';
 import { HttpLoaderFactory, SharedModule } from './shared/shared.module';
 import { FileUploadModule } from 'ng2-file-upload';
 import { CanDeactivateGuard } from './helpers/guards/can-deactivate-guard.service';
@@ -54,7 +53,6 @@ import { UcDeleteConfirmComponent } from './helpers/components/uc-delete-confirm
 import { UcGroupbyComponent } from './pages/usecases/uc-main/uc-table-main/uc-table-view/uc-groupby/uc-groupby.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { InSetupComponent } from './pages/settings/in-setup/in-setup.component';
-import { AdvSettingsComponent } from './pages/settings/adv-settings/adv-settings.component';
 import { EmptyScreensComponent } from './pages/usecases/uc-main/uc-table-main/uc-table-view/empty-screens/empty-screens.component';
 import { ChatPersonalizationComponent } from './pages/settings/sdk-pref/chat-personalization/chat-personalization.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -70,7 +68,6 @@ import { HistoryComponent } from './pages/history/history.component';
 import { ConfigurationsComponent } from './pages/configurations/configurations.component';
 import { LangSwitchDialogComponent } from './helpers/components/lang-switch-dialog/lang-switch-dialog.component';
 
-import { AutomationChannelsComponent } from './pages/automation-channels/automation-channels.component';
 import { NewConversationComponent } from './pages/agent-assist/new-conversation/new-conversation.component';
 import { ConversationListComponent } from './pages/agent-assist/conversation-list/conversation-list.component';
 import { ConfigConversationComponent } from './pages/agent-assist/config-conversation/config-conversation.component';
@@ -81,7 +78,6 @@ import { DockStatusComponent } from './pages/dock-status/dock-status.component';
 import { BTContainerComponent } from './pages/bt-container/bt-container.component';
 import { BTMainmenuComponent } from '../app/components/bt-mainmenu/bt-mainmenu.component';
 import { AutomationComponent } from './pages/automation/automation.component';
-import { VoiceSettingsComponent } from './pages/voice-settings/voice-settings.component';
 import { AttachFlowComponent } from './pages/voice-settings/attach-flow/attach-flow.component';
 import { NewHoursOfOperationComponent } from './pages/agent-settings/new-hours-of-operation/new-hours-of-operation.component';
 import { UserManagementComponent } from './pages/agent-settings/user-management/user-management.component';
@@ -89,7 +85,6 @@ import { NewRoleComponent } from './pages/agent-settings/user-management/new-rol
 import { NewUserComponent } from './pages/agent-settings/user-management/new-user/new-user.component';
 import { UmTableComponent } from './pages/agent-settings/user-management/um-table/um-table.component';
 import { RmTableComponent } from './pages/agent-settings/user-management/rm-table/rm-table.component';
-import { LanguagesSpeechComponent } from './pages/languages-speech/languages-speech.component';
 import { LanguageSettingsComponent } from './pages/agent-settings/language-settings/language-settings.component';
 import { ExternalWidgetComponent } from './pages/agent-settings/external-widget/external-widget.component';
 import { AddWidgetComponent } from './pages/agent-settings/external-widget/add-widget/add-widget.component';
@@ -97,10 +92,8 @@ import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/onboarding-dialog.component';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm/sa-delete-confirm.component';
 import { AutomationIntentvsEntityStringPipe } from './helpers/filters/automation-intentvs-entity-string.pipe';
-import { ConvsHistoryLogsComponent } from './pages/conversational-logs/convs-history-logs/convs-history-logs.component';
 import { AccWarningDialogComponent } from './helpers/components/acc-warning-dialog/acc-warning-dialog.component';
 import { XoMenuComponent } from './components/xo-menu/xo-menu.component';
 import { EmptyRouteComponent } from './empty-route/empty-route.component';
@@ -117,7 +110,6 @@ import { BlankComponent } from './pages/blank/blank.component';
     FieldTypePipe,
     ScrollSpyDirective,
     ConfirmationDialogComponent,
-    ConversationalLogsComponent,
     ChatHistoryComponent,
     MarkdownEditorResizeSensorComponent,
     EditorUrlDialogComponent,
@@ -138,7 +130,6 @@ import { BlankComponent } from './pages/blank/blank.component';
     UcGroupbyComponent,
     WelcomeComponent,
     InSetupComponent,
-    AdvSettingsComponent,
     ChatPersonalizationComponent,
     InviteDialogComponent,
     RoundPipe,
@@ -150,7 +141,6 @@ import { BlankComponent } from './pages/blank/blank.component';
     HistoryComponent,
     ConfigurationsComponent,
     LangSwitchDialogComponent,
-    AutomationChannelsComponent,
     NewConversationComponent,
     ConversationListComponent,
     ConfigConversationComponent,
@@ -162,7 +152,6 @@ import { BlankComponent } from './pages/blank/blank.component';
     BTContainerComponent,
     BTMainmenuComponent,
     AutomationComponent,
-    VoiceSettingsComponent,
     AttachFlowComponent,
     NewHoursOfOperationComponent,
     UserManagementComponent,
@@ -170,16 +159,13 @@ import { BlankComponent } from './pages/blank/blank.component';
     NewUserComponent,
     UmTableComponent,
     RmTableComponent,
-    LanguagesSpeechComponent,
     LanguageSettingsComponent,
     ExternalWidgetComponent,
     AddWidgetComponent,
     OnboardingComponent,
     OnboardingDialogComponent,
-    SearchAssistComponent,
     SaDeleteConfirmComponent,
     // AutomationIntentvsEntityStringPipe,
-    ConvsHistoryLogsComponent,
     AccWarningDialogComponent,
     XoMenuComponent,
     EmptyRouteComponent,
