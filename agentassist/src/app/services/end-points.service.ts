@@ -1819,5 +1819,11 @@ export class EndPointsService {
       endpoint: this.API_SERVER_URL + '/attachment/file/:fileId/url?isAgentAssist=true',
       method: 'get'
     }
+
+    this.serviceList['get.channelData'] = {
+      endpoint: this.API_SERVER_URL + '/smartassist/users/:userId/streams/:streamId/channels/seedData',
+      method: 'get'
+    }
   }
+  
 }
