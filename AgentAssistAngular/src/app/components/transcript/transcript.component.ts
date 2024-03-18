@@ -24,20 +24,17 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
   // @ViewChild('transcriptTabHistoryText', {static: false}) private transcriptTabHistoryText: ElementRef<HTMLDivElement>
   
-
   subs = new SubSink();
   parsedCustomData : any;
   transcriptArray: any = [];
   connectionDetails : any = {};
-
   showEmptyScreen: boolean = true;
-
   projConstants : any = ProjConstants;
-
+  showMessage = false;
+  wheeled = false;
   userBotConversationShow: boolean = false;
   transcriptScrollTopText: string = 'Scroll up for Bot Conversation History';
   hideUserBotHistory : boolean = true;
-
 
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
     private websocketService : WebSocketService, private formatAMPMPipe : FormatAmpmPipe,
@@ -47,7 +44,6 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.subscribeEvents();
-    // this.sampleMessages();
   }
 
   subscribeEvents(){
@@ -223,7 +219,6 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     this.maxMinButtonClick.emit(true);
   }
 
-  wheeled = false;
   onScroll(event) {
     if(event.deltaY < 0 && !this.wheeled){
       this.wheeled = true;
@@ -252,15 +247,18 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     this.subs.unsubscribe();
   }
 
-  showMessage = false;
-  onScrollTo(event){
-    if(event?.target?.scrollTop === 0){
-      this.showMessage = false;
-    }
-  }
+  // onScrollTo(event){
+  //   if(event?.target?.scrollTop === 0){
+  //     this.showMessage = false;
+  //   }
+  // }
 
   checkOldData(e){
     this.showMessage = true;
+  }
+
+  scrollBar(e){
+    this.showMessage = e;
   }
   
 }
