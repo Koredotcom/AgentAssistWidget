@@ -8,14 +8,14 @@
             <i class="krIocnsFont-maximize" *ngIf="!maxButton"></i>
         </button>
     </div>
-    <div class="body-canvas-wrapper" (scroll)="onScrollTo($event)">
+    <div class="body-canvas-wrapper">
           <ng-container>
             <div class="transcipt-content-data">
                 <!-- <ng-container *ngIf="userBotConversationShow">
                     <app-user-bot-history></app-user-bot-history>
                 </ng-container> -->
                 <div class="scroll-agent-joined-conv" *ngIf="showMessage">
-                    <button>
+                    <button (click)="wheeled = true;showMessage = false;">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M7.99967 12.6663V3.33301M7.99967 3.33301L3.33301 7.99967M7.99967 3.33301L12.6663 7.99967" stroke="white" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>

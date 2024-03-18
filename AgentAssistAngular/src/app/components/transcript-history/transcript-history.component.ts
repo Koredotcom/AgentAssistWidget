@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { finalize } from 'rxjs';
 import { ProjConstants } from 'src/app/proj.const';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
@@ -22,6 +23,7 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
   summary:any = {};
   @Input() wheeled = false;
   @Output() checkOldData = new EventEmitter();
+  widgetLoader = true;
   constructor(private serviceInvoker: ServiceInvokerService,
     private rootService : RootService){
 
@@ -42,11 +44,18 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
   }
 
   getTranscriptHistory(params){
-    this.serviceInvoker.invoke('get.transcriptHistory', { convId: params.conversationId, botId : params.botId, isSummaryRequired: true, sessionId: this.rootService.userBotConversationDetails?.sessionId, experience:  this.rootService.connectionDetails?.channel}, {}, { botId : params.botId }, params.agentassisturl).subscribe((data)=> {
+    this.widgetLoader = true;
+    this.serviceInvoker.invoke('get.transcriptHistory', { convId: params.conversationId, botId : params.botId, isSummaryRequired: true, sessionId: this.rootService.userBotConversationDetails?.sessionId, experience:  this.rootService.connectionDetails?.channel}, {}, { botId : params.botId }, params.agentassisturl)
+    .pipe(
+      finalize(()=>{
+        this.widgetLoader = false;
+      })
+    )
+    .subscribe((data)=> {
       if(data) {
         this.historyResponse = data.result;
-        this.userBotHostory = data.userBotMessages?.result;
-        this.userAgentHistory = data.userAgentMessages?.result;
+        this.userBotHostory = data.userBotMessages?.result /* [] */;
+        this.userAgentHistory = data.userAgentMessages?.result /* [] */;
 
         (this.userBotHostory || [])
         .forEach((item)=>{
@@ -74,18 +83,23 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
                 }
             }
         });
-
-        this.summary = data.summary;
-        if((data.userBotMessages?.result || [])?.length || (data.userAgentMessages?.result || [])?.length){
+        
+        this.summary.message = this.extractConversationSummary(data.summary.message || '');
+        
+        if((this.userBotHostory || [])?.length || (this.userAgentHistory || [])?.length){
             this.checkOldData.emit(true);
         }
       }
     });
   }
 
+  extractConversationSummary(inputString=''){
+    const conversationSummaryRegex = /Conversation Summary: (.+?)(?=\n\n|\n?$)/s;
+    const match = inputString.match(conversationSummaryRegex);
+    return match ? match[1].trim() : inputString;
+  };
+  
   ngOnDestroy(){
     this.subs.unsubscribe();
   }
-
-  
 }
