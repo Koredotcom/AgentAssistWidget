@@ -75,14 +75,14 @@ export class FooterComponent implements OnInit, OnDestroy{
       }
     });
 
-    this.subs.sink = this.rootService.userBotConversationDetailsSubject.subscribe((res)=> {
-      if(res){
-        this.getUserBotHistory(this.rootService.connectionDetails);
-      }
-    })
+    // this.subs.sink = this.rootService.userBotConversationDetailsSubject.subscribe((res)=> {
+    //   if(res){
+    //     this.getUserBotHistory(this.rootService.connectionDetails);
+    //   }
+    // })
   }
 
-  getUserBotHistory(params){
+/*   getUserBotHistory(params){
     let userBotConversationDetails = this.rootService.getUserBotConvosDataDetails() || {};
     let botId = userBotConversationDetails?.botId || params?.botId;
     let userId = userBotConversationDetails?.userId;
@@ -100,7 +100,7 @@ export class FooterComponent implements OnInit, OnDestroy{
         this.rootService.setUserBotHistory(null);
       });
     }
-  }
+  } */
   
   updateLocalStorageForTabSwitch(tab){
     let storageObject: any = {};
