@@ -39,8 +39,8 @@ const routes: Routes = [
           appData: AppDataResolver
         }, children: [
           { path: '', redirectTo: (isSmartassist ? 'coaching' : 'usecases'), pathMatch: 'full' },
-          { path: 'agents', component: AgentsComponent },
-          { path: 'roleManagement', component: UserManagementComponent },
+          // { path: 'agents', component: AgentsComponent },
+          // { path: 'roleManagement', component: UserManagementComponent },
           { path: 'usecases', loadChildren: () => import('./pages/agent-usecases/agent-usecases.module').then(m => m.AgentUsecasesModule) },
           { path: 'welcomeEvents', loadChildren: () => import('./pages/welcomeEvents/welcomeevent.module').then(m => m.WelcomeeventModule) },
           { path: 'channels', loadChildren: () => import('./pages/channel-configurations/channel-configurations.module').then(m => m.ChannelConfigurationsModule) },
