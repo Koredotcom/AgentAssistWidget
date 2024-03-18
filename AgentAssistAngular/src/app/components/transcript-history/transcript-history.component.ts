@@ -83,9 +83,8 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
                 }
             }
         });
-        
+        this.summary = {...data.summary};
         this.summary.message = this.extractConversationSummary(data.summary.message || '');
-        
         if((this.userBotHostory || [])?.length || (this.userAgentHistory || [])?.length){
             this.checkOldData.emit(true);
         }
