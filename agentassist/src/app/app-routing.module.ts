@@ -44,7 +44,6 @@ const routes: Routes = [
           { path: 'usecases', loadChildren: () => import('./pages/agent-usecases/agent-usecases.module').then(m => m.AgentUsecasesModule) },
           { path: 'welcomeEvents', loadChildren: () => import('./pages/welcomeEvents/welcomeevent.module').then(m => m.WelcomeeventModule) },
           { path: 'channels', loadChildren: () => import('./pages/channel-configurations/channel-configurations.module').then(m => m.ChannelConfigurationsModule) },
-          { path: 'conversationalLogs', component: ConversationalLogsComponent },
           { path: 'conversationalLogs', loadChildren: () => import('./pages/conversational-logs/conversational-logs.module').then(m => m.ConversationalLogsModule) },
           { path: 'languages', loadChildren: () => import('./pages/asr-settings/asr-settings.module').then(m => m.AsrSettingsModule) },
           { path: 'searchAssist', loadChildren: () => import('./pages/searchAssistConfigure/search-assist.module').then(m => m.SearchAssistModule) },
