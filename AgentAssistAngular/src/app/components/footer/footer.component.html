@@ -26,12 +26,12 @@
             <p>{{'TRANSCRIPT' | translate}}</p>
         </button>
         <!-- *ngIf="connectionDetails?.isCallConversation" -->
-        <button class="btn_footer"  *ngIf="!connectionDetails?.isCallConversation && sourceDesktop != projConstants.SMARTASSIST_SOURCE && !hideUserBotHistory" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.TRANSCRIPT}" (click)="changeTab(projConstants.HISTORY)">
+        <!-- <button class="btn_footer"  *ngIf="!connectionDetails?.isCallConversation && sourceDesktop != projConstants.SMARTASSIST_SOURCE && !hideUserBotHistory" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.TRANSCRIPT}" (click)="changeTab(projConstants.HISTORY)">
             <div class="svg_icon">
                 <i class="krIocnsFont-transcript"></i>
             </div>
             <p>{{'HISTORY' | translate}}</p>
-        </button>
+        </button> -->
         <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.SETTINGS}" (click)="changeTab(projConstants.SETTINGS)">
             <div class="svg_icon">
                 <i class="krIocnsFont-settings"></i>
@@ -48,7 +48,7 @@
         <app-search [ngClass]="{'dis-none' : selectedTab !== projConstants.SEARCH}" class="h-100" (maxMinButtonClick)="minMaxButtonClick($event)" [maxButton]="maxButton"></app-search>
         <app-mybot [ngClass]="{'dis-none' : selectedTab !== projConstants.MYBOT}" class="h-100" (maxMinButtonClick)="minMaxButtonClick($event)" [maxButton]="maxButton"></app-mybot>
         <app-settings [ngClass]="{'dis-none' : selectedTab !== projConstants.SETTINGS}" class="h-100"></app-settings>
-        <app-user-bot-history [ngClass]="{'dis-none' : selectedTab !== projConstants.HISTORY}" (maxMinButtonClick)="minMaxButtonClick($event)" [maxButton]="maxButton"></app-user-bot-history>
+        <!-- <app-user-bot-history [ngClass]="{'dis-none' : selectedTab !== projConstants.HISTORY}" (maxMinButtonClick)="minMaxButtonClick($event)" [maxButton]="maxButton"></app-user-bot-history> -->
         <app-transcript [ngClass]="{'dis-none' : selectedTab !== projConstants.TRANSCRIPT}" class="h-100" (maxMinButtonClick)="minMaxButtonClick($event)" [maxButton]="maxButton"></app-transcript>
     </div>
 </ng-template>
