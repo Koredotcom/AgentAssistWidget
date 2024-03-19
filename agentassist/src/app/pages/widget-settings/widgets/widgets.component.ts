@@ -103,6 +103,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   selectedKAIChannel = 'chat';
   isCoachingDisable = true;
   agentAssistSeedData : any = {};
+  disableSaveButton : any = {
+    channel : false,
+    search : false,
+    general : false
+  }
   constructor(
     public workflowService: workflowService,
     private service: ServiceInvokerService,
@@ -385,7 +390,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   // save AgentAssistSettings
-  saveAgentAssistSettingsNew(settingType) {
+  saveAgentAssistSettingsNew(settingType, type) {
+    this.disableSaveButton[type] = true;
     let params = {
       orgId: this.authService?.getOrgId(),
       aasId: this.clonedWidgetSettings?.id
@@ -401,6 +407,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     if(settingType === 'widget') {
       payload.agentAssistSettings = this.agentAssistFormGroup.value.agentAssistSettings;
       this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
+      .pipe(finalize(() => this.disableSaveButton[type] = false))
       .subscribe(
         (res) => {
           if (res) {
@@ -424,6 +431,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     } else {
       payload.agentAssistSettings = this.knowledgeAIFormGroup.value;
       this.subs.sink = this.service.invoke("put.agentAssistSettings",params, payload)
+      .pipe(finalize(() => this.disableSaveButton[type] = false))
       .subscribe(
         (res) => {
           if (res) {

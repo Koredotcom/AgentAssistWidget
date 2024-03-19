@@ -288,11 +288,11 @@
                         </div>
                     </div>
                     <div class="widgetenable-footer">
-                        <button class="kr-sg-button-secondary-two btn_lg" [disabled]="agentAssistFormGroup.invalid"
+                        <button class="kr-sg-button-secondary-two btn_lg" [disabled]="disableSaveButton['channel']"
                             (click)="cancleAgentAssistSettingsNew('widget'); collapse2.collapse('hide')">{{'BUTTONS.CANCEL' |
                             translate}}</button>
-                        <button class="kr-sg-button-primary btn_lg" [disabled]="agentAssistFormGroup.invalid"
-                            (click)="saveAgentAssistSettingsNew('widget')">{{'BUTTONS.SAVE' | translate}}</button>
+                        <button class="kr-sg-button-primary btn_lg" [disabled]="agentAssistFormGroup.invalid || disableSaveButton['channel']"
+                            (click)="saveAgentAssistSettingsNew('widget', 'channel')">{{'BUTTONS.SAVE' | translate}}</button>
                     </div>
                 </div>
             </div>
@@ -442,11 +442,11 @@
                     </div>
                     <div class="widgetenable-footer">
                         <button class="kr-sg-button-secondary-two btn_lg"
-                            (click)="cancleAgentAssistSettingsNew()">{{'BUTTONS.CANCEL' |
+                            (click)="cancleAgentAssistSettingsNew()" [disabled]="disableSaveButton['search']">{{'BUTTONS.CANCEL' |
                             translate}}</button>
                         <button class="kr-sg-button-primary btn_lg"
-                            [disabled]="knowledgeAIFormGroup.invalid"
-                            (click)="saveAgentAssistSettingsNew('search')">Save</button>
+                            [disabled]="knowledgeAIFormGroup.invalid || disableSaveButton['search']"
+                            (click)="saveAgentAssistSettingsNew('search', 'search')">Save</button>
                     </div>
                 </div>
             </div>
@@ -773,11 +773,11 @@
                         </div>
                     </div> -->
                     <div class="widgetenable-footer">
-                        <button class="kr-sg-button-secondary-two btn_lg" [disabled]="agentAssistFormGroup.invalid"
+                        <button class="kr-sg-button-secondary-two btn_lg" [disabled]="disableSaveButton['general']"
                             (click)="cancleAgentAssistSettingsNew('widget')">{{'BUTTONS.CANCEL' |
                             translate}}</button>
-                        <button class="kr-sg-button-primary btn_lg" [disabled]="agentAssistFormGroup.invalid"
-                            (click)="saveAgentAssistSettingsNew('widget')">{{'BUTTONS.SAVE' | translate}}</button>
+                        <button class="kr-sg-button-primary btn_lg" [disabled]="agentAssistFormGroup.invalid || disableSaveButton['general']"
+                            (click)="saveAgentAssistSettingsNew('widget', 'general')">{{'BUTTONS.SAVE' | translate}}</button>
                     </div>
                 </div>
             </div>
