@@ -356,28 +356,25 @@ export class ChecklistComponent {
   stepComplete(cLinx, sTinx, sPinx) {
     //check previous stages step completion if the stage is close.
     // let close = this.checkCloseStage(cLinx, sTinx);
-    let close = true;
-    if (close) {
-      this.selsTinx = sTinx;
-      let id = this.checklists[cLinx]._id;
-      let stageId = this.checklists[cLinx].stages[sTinx]._id;
-      let stepId = this.checklists[cLinx].stages[sTinx].steps[sPinx]._id;
+    this.selsTinx = sTinx;
+    let id = this.checklists[cLinx]._id;
+    let stageId = this.checklists[cLinx].stages[sTinx]._id;
+    let stepId = this.checklists[cLinx].stages[sTinx].steps[sPinx]._id;
 
-      this.checklists[cLinx].stages[sTinx].steps[sPinx].ongoing = false;
-      this.checklists[cLinx].stages[sTinx].steps[sPinx].complete = true;
-      let checklistParams: any = this.commonService.prepareChecklistPayload(this.connectionDetails, 'checklist_step_closed', this.checkListData,
-        {
-          id,
-          stageId,
-          stepId,
-          "adheredBy": "manual" // coachingEngine / manual
-        },
-        true);
-      this.websocketService.emitEvents(EVENTS.checklist_step_closed, checklistParams);
-      this.selectNextStep();
-      this.selectNextStage();
-      this.checkAllStagesCompleted(id);
-    }
+    this.checklists[cLinx].stages[sTinx].steps[sPinx].ongoing = false;
+    this.checklists[cLinx].stages[sTinx].steps[sPinx].complete = true;
+    let checklistParams: any = this.commonService.prepareChecklistPayload(this.connectionDetails, 'checklist_step_closed', this.checkListData,
+      {
+        id,
+        stageId,
+        stepId,
+        "adheredBy": "manual" // coachingEngine / manual
+      },
+      true);
+    this.websocketService.emitEvents(EVENTS.checklist_step_closed, checklistParams);
+    this.selectNextStep();
+    this.selectNextStage();
+    this.checkAllStagesCompleted(id);
   };
 
   checkCloseStage(cLinx, sTinx) {
