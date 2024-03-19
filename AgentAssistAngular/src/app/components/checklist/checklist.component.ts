@@ -55,6 +55,9 @@ export class ChecklistComponent {
   showProceedToClose: boolean = false;
   isCloseCompleted = false;
   openAck = false;
+  showSendButton : boolean = true;
+  showCopyButton : boolean = true;
+  showActionButtons : boolean = true;
 
   constructor(
     private commonService: CommonService,
@@ -81,6 +84,7 @@ export class ChecklistComponent {
 
   ngOnInit() {
     this.subscribeEvents();
+    this.hideSendCopy();
   }
 
   ngOnChanges(){
@@ -125,6 +129,20 @@ export class ChecklistComponent {
         })
       }
     });
+  }
+
+  hideSendCopy(){
+    if(this.rootService.settingsData?.isAgentResponseCopyEnabled === false){
+      this.showCopyButton = false; 
+    }
+
+    if(this.rootService.settingsData?.isAgentResponseEnabled === false){
+      this.showSendButton = false;
+    }
+
+    if(!this.showCopyButton && !this.showSendButton){
+      this.showActionButtons = false;
+    }    
   }
 
   minimizeToggle() {
@@ -336,28 +354,27 @@ export class ChecklistComponent {
   }
 
   stepComplete(cLinx, sTinx, sPinx) {
-    let close = this.checkCloseStage(cLinx, sTinx);
-    if (close) {
-      this.selsTinx = sTinx;
-      let id = this.checklists[cLinx]._id;
-      let stageId = this.checklists[cLinx].stages[sTinx]._id;
-      let stepId = this.checklists[cLinx].stages[sTinx].steps[sPinx]._id;
+    //check previous stages step completion if the stage is close.
+    // let close = this.checkCloseStage(cLinx, sTinx);
+    this.selsTinx = sTinx;
+    let id = this.checklists[cLinx]._id;
+    let stageId = this.checklists[cLinx].stages[sTinx]._id;
+    let stepId = this.checklists[cLinx].stages[sTinx].steps[sPinx]._id;
 
-      this.checklists[cLinx].stages[sTinx].steps[sPinx].ongoing = false;
-      this.checklists[cLinx].stages[sTinx].steps[sPinx].complete = true;
-      let checklistParams: any = this.commonService.prepareChecklistPayload(this.connectionDetails, 'checklist_step_closed', this.checkListData,
-        {
-          id,
-          stageId,
-          stepId,
-          "adheredBy": "manual" // coachingEngine / manual
-        },
-        true);
-      this.websocketService.emitEvents(EVENTS.checklist_step_closed, checklistParams);
-      this.selectNextStep();
-      this.selectNextStage();
-      this.checkAllStagesCompleted(id);
-    }
+    this.checklists[cLinx].stages[sTinx].steps[sPinx].ongoing = false;
+    this.checklists[cLinx].stages[sTinx].steps[sPinx].complete = true;
+    let checklistParams: any = this.commonService.prepareChecklistPayload(this.connectionDetails, 'checklist_step_closed', this.checkListData,
+      {
+        id,
+        stageId,
+        stepId,
+        "adheredBy": "manual" // coachingEngine / manual
+      },
+      true);
+    this.websocketService.emitEvents(EVENTS.checklist_step_closed, checklistParams);
+    this.selectNextStep();
+    this.selectNextStage();
+    this.checkAllStagesCompleted(id);
   };
 
   checkCloseStage(cLinx, sTinx) {

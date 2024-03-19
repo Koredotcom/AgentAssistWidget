@@ -15,7 +15,7 @@
         </div>
     </div> -->
 
-    <div class="sentiment-data-analysis" ngbDropdown #sentiDrop="ngbDropdown" title="Sentiment">
+    <div class="sentiment-data-analysis" placement="bottom-center" ngbDropdown #sentiDrop="ngbDropdown" title="Sentiment">
        <!-- <div class="awaiting-sentiment" *ngIf="!currentPolarity">{{'SENTIMENT_AWAITING' | translate}}</div> -->
        <ng-container *ngIf="currentPolarity">
            <button class="btn-sentiment-graph" ngbDropdownToggle>

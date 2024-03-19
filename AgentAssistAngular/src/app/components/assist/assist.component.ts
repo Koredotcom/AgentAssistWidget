@@ -66,6 +66,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   showErrorPrompt : boolean = false;
   summaryPopupModal : any;
   showSpinner : boolean = true;
+  showSentiment : boolean = true;
 
   listViewEntityList : any = [];
 
@@ -191,6 +192,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.handleSubjectService.setSummaryPopup(data);
       }
     });
+    this.showSentiment = (this.rootService?.settingsData?.sentiment?.isEnabled === false) ? false : true;
   }
 
   spinnerUpdate(){

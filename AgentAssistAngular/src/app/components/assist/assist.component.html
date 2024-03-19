@@ -4,10 +4,9 @@
             <div class="assist-header-content">
                 <div class="left-title-info">
                     <div class="text-dropdown-info">
-                        <h1>{{'ASSIST' | translate}}</h1>
+                        <h1>{{'ASSIST' | translate}}</h1>                        
                         <span class="dialogs-number" *ngIf="interruptDialogList?.length">{{interruptDialogList?.length}}</span>
-                       
-                        <div ngbDropdown class="dropdown" #interruptDropdown="ngbDropdown" *ngIf="interruptDialogList?.length">
+                        <div ngbDropdown class="dropdown" #interruptDropdown="ngbDropdown" container="body" *ngIf="interruptDialogList?.length">
                             <button type="button" id="playbookDrp" ngbDropdownToggle>
                                 <i class="krIocnsFont-chevron-down arrow-icon"></i>
                             </button>
@@ -26,17 +25,20 @@
                     </div>
 
                     <div class="bottom-titles">
-                        <p *ngIf="dialogName" [title]="dialogName">{{dialogName}}</p>
+                        <p *ngIf="dialogName" [title]="dialogName" title="{{dialogName}}">{{dialogName}}</p>
                         <div class="entity-name-cstm">
-                            <span *ngIf="dialogName && currentRunningStep" [title]="currentRunningStep">{{'STEP' | translate}}: <b>{{currentRunningStep}}</b></span>
+                            <span *ngIf="dialogName && currentRunningStep" [title]="currentRunningStep">{{'STEP' | translate}}: <b title="{{currentRunningStep}}">{{currentRunningStep}}</b></span>
                         </div>
                     </div>
                 </div>
                 <div class="actions-assist-header">
-                    <button class="solid-action" aria-label="button" [disabled]="!dialogName" (click)="handlePopupEvent({status : true, type : projConstants.LISTVIEW})" title="{{'LIST_VIEW' | translate}}">
+                    <div class="sentiment-div-block" *ngIf="showSentiment">
+                        <app-sentiment-score></app-sentiment-score>
+                    </div>
+                    <button class="solid-action" aria-label="button" [disabled]="!dialogName" (click)="handlePopupEvent({status : true, type : projConstants.LISTVIEW})" title="{{'LIST_VIEW' | translate}}" *ngIf="rootService?.showListView">
                         <i class="krIocnsFont-list"></i>
                     </button>
-                    <button class="solid-action" aria-label="button" [disabled]="!dialogName" (click)="restartClickEvent()" title="{{'RESTART' | translate}}">
+                    <button class="solid-action" aria-label="button" [disabled]="!dialogName" (click)="restartClickEvent()" title="{{'RESTART' | translate}}" *ngIf="rootService?.showRestart">
                         <i class="krIocnsFont-refresh"></i>
                     </button>
                     <button class="solid-action stop-assist" aria-label="button" (click)="terminateDialog()" [disabled]="!dialogName" title="{{'TERMINATE' | translate}}">

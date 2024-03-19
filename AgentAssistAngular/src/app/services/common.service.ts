@@ -144,7 +144,8 @@ export class CommonService {
         method: 'send',
         name: ProjConstants.SENDMSG,
         conversationId: this.rootService.connectionDetails.conversationId,
-        payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
+        // payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
+        payload : faq_or_article_obj.sendContent
       };
       if(selectType === this.projConstants.ARTICLE) {
         message['title'] = faq_or_article_obj.title;
@@ -158,7 +159,8 @@ export class CommonService {
         method: 'copy',
         name: ProjConstants.COPYMSG,
         conversationId: this.rootService.connectionDetails.conversationId,
-        payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
+        // payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
+        payload : faq_or_article_obj.sendContent
       };
       if(selectType === this.projConstants.ARTICLE) {
         message['title'] = faq_or_article_obj.title;
