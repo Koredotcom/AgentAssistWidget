@@ -69,7 +69,7 @@ export class EndPointsService {
     }
     
     this.serviceList['get.transcriptHistory'] = {
-      endpoint : '/agentassist/api/v1/agentassistconversations/:convId/conversation?page=0&limit=500',
+      endpoint : '/agentassist/api/v1/agentassistconversations/:convId/conversation?page=0&limit=500&botId=:botId&sessionId=:sessionId&isSummaryRequired=:isSummaryRequired&experience=:experience',
       method : 'get',
       defaultEndPoint : false
     }

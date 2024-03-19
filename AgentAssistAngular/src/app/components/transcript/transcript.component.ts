@@ -19,22 +19,22 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
   @Input() maxButton;
   @Output() maxMinButtonClick = new EventEmitter();
-  @ViewChild('transcriptTabHistoryText', {static: false}) private transcriptTabHistoryText: ElementRef<HTMLDivElement>
-  
+  @ViewChild('contentWrapper') contentWrapper: ElementRef;
+  @ViewChild('scrollableDiv') scrollableDiv: ElementRef;
 
+  // @ViewChild('transcriptTabHistoryText', {static: false}) private transcriptTabHistoryText: ElementRef<HTMLDivElement>
+  
   subs = new SubSink();
   parsedCustomData : any;
   transcriptArray: any = [];
   connectionDetails : any = {};
-
   showEmptyScreen: boolean = true;
-
   projConstants : any = ProjConstants;
-
+  showMessage = false;
+  wheeled = false;
   userBotConversationShow: boolean = false;
-  transcriptScrollTopText: string = 'Scroll up for Bot Conversation History';
+  transcriptScrollTopText: string = 'Scroll up for conversation history';
   hideUserBotHistory : boolean = true;
-
 
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
     private websocketService : WebSocketService, private formatAMPMPipe : FormatAmpmPipe,
@@ -44,7 +44,6 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.subscribeEvents();
-    // this.sampleMessages();
   }
 
   subscribeEvents(){
@@ -220,8 +219,12 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
     this.maxMinButtonClick.emit(true);
   }
 
-  onScroll() {
-    if (!this.userBotConversationShow && !this.hideUserBotHistory) {
+  onScroll(event) {
+    if(event.deltaY < 0 && !this.wheeled){
+      this.wheeled = true;
+      this.showMessage = false;
+    }
+/*     if (!this.userBotConversationShow && !this.hideUserBotHistory) {
       if(this.transcriptTabHistoryText){
         let scrollInView = this.isScrolledIntoView();
         if (scrollInView) {
@@ -229,18 +232,33 @@ export class TranscriptComponent  implements OnInit, OnDestroy{
           this.transcriptScrollTopText = 'Agent Joined the Conversation';
         }
       }
-    }
+    } */
+
   }
 
-  isScrolledIntoView(){
+/*   isScrolledIntoView(){
     const rect = this.transcriptTabHistoryText.nativeElement.getBoundingClientRect();
     const topShown = rect.top >= 0;
     const bottomShown = rect.bottom <= window.innerHeight;
     return (topShown && bottomShown);
-  }
+  } */
 
   ngOnDestroy(){
     this.subs.unsubscribe();
+  }
+
+  // onScrollTo(event){
+  //   if(event?.target?.scrollTop === 0){
+  //     this.showMessage = false;
+  //   }
+  // }
+
+  checkOldData(e){
+    this.showMessage = true;
+  }
+
+  scrollBar(e){
+    this.showMessage = e;
   }
   
 }

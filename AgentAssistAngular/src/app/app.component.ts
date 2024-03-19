@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy{
     private handleSubjectService: HandleSubjectService,
     private sanitizeHTMLPipe : SanitizeHtmlPipe
   ) {
-    this.translate.setDefaultLang('en');
+    // this.translate.setDefaultLang('en');
   }
 
   ngOnInit() {
@@ -96,6 +96,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
 
   initiateSocketConnection(params: any) {
+    this.rootService.updateSettingsProperties();
     this.localStorageService.initializeLocalStorageState(this.widgetSettings);
     this.isGrantSuccess = true;
     setTimeout(() => {
@@ -146,9 +147,9 @@ export class AppComponent implements OnInit, OnDestroy{
       this.localStorageService.userDetails = e.data.userDetails
         ? e.data.userDetails
         : null;
-    } else if (e.data.type === 'AGENT') {
+    } else if (e.data.type === 'AGENT' || e.data?.author?.type === 'AGENT') {
       this.emitUserAgentMessage(e.data, 'agent_inp_msg');
-    } else if (e.data.type === 'USER') {
+    } else if (e.data.type === 'USER' || e.data?.author?.type === 'USER') {
       this.emitUserAgentMessage(e.data, 'user_inp_msg');
     }
     this.eventListenerFromParent(e);

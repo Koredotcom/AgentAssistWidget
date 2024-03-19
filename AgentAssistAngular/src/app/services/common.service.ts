@@ -144,7 +144,8 @@ export class CommonService {
         method: 'send',
         name: ProjConstants.SENDMSG,
         conversationId: this.rootService.connectionDetails.conversationId,
-        payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
+        // payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
+        payload : faq_or_article_obj.sendContent
       };
       if(selectType === this.projConstants.ARTICLE) {
         message['title'] = faq_or_article_obj.title;
@@ -158,7 +159,8 @@ export class CommonService {
         method: 'copy',
         name: ProjConstants.COPYMSG,
         conversationId: this.rootService.connectionDetails.conversationId,
-        payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
+        // payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
+        payload : faq_or_article_obj.sendContent
       };
       if(selectType === this.projConstants.ARTICLE) {
         message['title'] = faq_or_article_obj.title;
@@ -527,8 +529,8 @@ export class CommonService {
       assistResponseArray.map(arrEle => {
         if(arrEle.restart){
           arrEle.restart = false;
-          if (arrEle?.automationsArray?.length >= 1) {
-            arrEle.automationsArray.forEach(automation => {
+          if (arrEle?.restartAutomationArray?.length >= 1) {
+            arrEle.restartAutomationArray.forEach(automation => {
               let entityName = automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation.data.entityName;
               if(automation?.data?.isPrompt && entityNameList[entityName]){
                 automation.showSpinner = false;

@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChange } from '@angular/core';
+import { Component, ElementRef, Input, SimpleChange, ViewChild } from '@angular/core';
 import { ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -12,6 +12,9 @@ import { SubSink } from 'subsink';
 })
 export class FileSuggestionsComponent {
   @Input() searchResponse : any;
+
+  @ViewChild('fileContent',{static: false}) private fileContent : ElementRef;
+
   
   subs = new SubSink();
   projConstants: any = ProjConstants;
@@ -23,7 +26,7 @@ export class FileSuggestionsComponent {
   hideCopyButton : boolean = false;
 
   constructor(private handleSubjectService : HandleSubjectService,
-     private rootService : RootService, private commonService : CommonService){
+     public rootService : RootService, private commonService : CommonService){
 
   }
 
@@ -67,6 +70,8 @@ export class FileSuggestionsComponent {
 
   handleSendCopyButton(actionType, fileObj, selectType){
     fileObj.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
+    let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
+    fileObj.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(this.fileContent.nativeElement) : (fileObj.content);
     this.commonService.handleSendCopyButton(actionType, fileObj, selectType)
   }
 

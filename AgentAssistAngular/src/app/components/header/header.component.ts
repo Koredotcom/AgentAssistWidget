@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { coachingConst, ProjConstants } from 'src/app/proj.const';
-import { CommonService } from 'src/app/services/common.service';
+import { ProjConstants } from 'src/app/proj.const';
 import { RootService } from 'src/app/services/root.service';
-import { SubSink } from 'subsink';
-import { EChartsOption } from 'echarts';
-import { WebSocketService } from 'src/app/services/web-socket.service';
+
 
 @Component({
   selector: 'app-header',
@@ -13,15 +10,18 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
 })
 export class HeaderComponent {
 
-  assistLogo : string;
+  assistLogo : string = ProjConstants.LOGO_PATH;
+  showSentiment : boolean = true;
 
 
   constructor(private rootService : RootService){
-    if(this.rootService?.settingsData?.isCustomisedLogoEnabled?.isEnabled && this.rootService?.settingsData?.isCustomisedLogoEnabled?.fileUrl){
-      this.assistLogo = this.rootService?.settingsData?.isCustomisedLogoEnabled?.fileUrl;
-    }else{
-      this.assistLogo = ProjConstants.LOGO_PATH;
-    }
+    // if(this.rootService?.settingsData?.isCustomisedLogoEnabled?.isEnabled && this.rootService?.settingsData?.isCustomisedLogoEnabled?.fileUrl){
+    //   this.assistLogo = this.rootService?.settingsData?.isCustomisedLogoEnabled?.fileUrl;
+    // }else{
+      // this.assistLogo = ProjConstants.LOGO_PATH;
+    // }
+
+    this.showSentiment = (this.rootService?.settingsData?.sentiment?.isEnabled === false) ? false : true;
   }
 
  

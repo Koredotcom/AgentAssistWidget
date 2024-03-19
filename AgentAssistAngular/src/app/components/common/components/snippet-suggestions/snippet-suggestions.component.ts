@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, SimpleChange } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChange, ViewChild } from '@angular/core';
 import { ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -13,6 +13,8 @@ import { SubSink } from 'subsink';
 export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
   @Input() searchResponse : any;
+  @ViewChild('snippetContent',{static: false}) private snippetContent : ElementRef;
+
   prevClass = '';
   subs = new SubSink();
   projConstants: any = ProjConstants;
@@ -79,6 +81,8 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     snippetObj.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     let snippet = JSON.parse(JSON.stringify(snippetObj));
     snippet.content = snippetObj?.sendCopyText;
+    let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
+    snippetObj.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(this.snippetContent.nativeElement) : (snippet.content);
     this.commonService.handleSendCopyButton(actionType, snippet, selectType)
   }
 
