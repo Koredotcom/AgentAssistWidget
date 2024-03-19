@@ -354,7 +354,9 @@ export class ChecklistComponent {
   }
 
   stepComplete(cLinx, sTinx, sPinx) {
-    let close = this.checkCloseStage(cLinx, sTinx);
+    //check previous stages step completion if the stage is close.
+    // let close = this.checkCloseStage(cLinx, sTinx);
+    let close = true;
     if (close) {
       this.selsTinx = sTinx;
       let id = this.checklists[cLinx]._id;
