@@ -128,6 +128,8 @@ export class WebSocketService {
       menu_request_params['language'] = this.rootService.getConnectionDetails()?.interactiveLanguage; // Return the default value for null, undefined, or "''"
     }
     this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
+
+    this.sendCheckListOpened$.next(true);
   }
 
   emitEvents(eventName : string,requestParams : any) {
@@ -184,7 +186,6 @@ export class WebSocketService {
       }     
       if (!this.isWelcomeResonse) {
         this.isWelcomeResonse = true;
-        this.sendCheckListOpened$.next(true);
       }
       this.handleIsSendWelcomeRequest(data);
       let settimeoutTime = this.getTimeout();
