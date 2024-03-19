@@ -44,6 +44,16 @@
                 </div>
             </ng-container>
         </ng-container>
+        <ng-container>
+            <div class="transcipt-agent-joined-banner">
+                <div class="border-seperation"></div>
+                <div class="agent-joined-wrapper">
+                    <h1 class="agent-name">Agent joined the conversation</h1>
+                    <p class="time-stamp">Today at 2:45pm</p>
+                </div>
+                <div class="border-seperation"></div>
+            </div>
+        </ng-container>
         <ng-container *ngFor="let conv of userAgentHistory">
             <!-- <ng-container *ngIf="!conv?.unsupported"> -->
                 <div class="transcipt-bot-bubble-comp" *ngIf="conv?.msgType === 'USER' && conv.components[0]?.data?.text">
