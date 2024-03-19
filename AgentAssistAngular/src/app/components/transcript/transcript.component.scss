@@ -291,17 +291,20 @@
         text-align: center;      
         border-radius: 4px;
         flex-shrink: 0;
+        max-width: 60%;
         .agent-name{
             color: var(--secondaryTextColor);
             font-size: 12px;
             font-weight: 600;
             line-height: 18px;
+            margin: 0;
         }
         .time-stamp{
             color: var(--secondaryTextColorTwo);
             font-size: 12px;
             font-weight: 400;
             line-height: 18px;
+            margin: 0;
         }
     }
 }
@@ -316,6 +319,7 @@
         border-radius: 6px;
         background: var(--themeBgWhiteColor);
         padding: 8px;
+        height: 100%;
         @-webkit-keyframes fadeInUpScroll {
             0% {
                 opacity: 1;

@@ -116,6 +116,7 @@
     "NO_SEARCH_RESULT" : "No search result found",
     "SENTIMENT_AWAITING" : "Awaiting for sentiment",
     "POSITIVE" : "Pos",
-    "NEGATIVE" : "Neg"
+    "NEGATIVE" : "Neg",
+    "AGENT_JOINED_CONV": "Agent joined the conversation"
 
 }
