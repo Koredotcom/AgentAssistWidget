@@ -3,7 +3,7 @@ import { AuthService } from '@kore.services/auth.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { TranslateService } from '@ngx-translate/core';
-import { AgentSettingsService } from '../agent-settings/agent-settings.service';
+import { AgentSettingsService } from '../../agent-settings/agent-settings.service';
 import * as _ from 'underscore';
 @Component({
   selector: 'app-languages-speech',

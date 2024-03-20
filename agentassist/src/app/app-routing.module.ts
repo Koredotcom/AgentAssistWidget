@@ -7,17 +7,17 @@ import { SeedDataResolver } from '@kore.services/resolvers/seed.data.resolver';
 import { AgentsComponent } from './pages/agents/agents.component';
 import { HistoryComponent } from './pages/history/history.component';
 import { ConfigurationsComponent } from './pages/configurations/configurations.component';
-import { AutomationChannelsComponent } from './pages/automation-channels/automation-channels.component';
+import { AutomationChannelsComponent } from './pages/channel-configurations/automation-channels/automation-channels.component';
 import { BTContainerComponent } from './pages/bt-container/bt-container.component';
 import { AutomationComponent } from './pages/automation/automation.component';
 import { UserManagementComponent } from './pages/agent-settings/user-management/user-management.component';
-import { LanguagesSpeechComponent } from './pages/languages-speech/languages-speech.component';
+import { LanguagesSpeechComponent } from './pages/asr-settings/languages-speech/languages-speech.component';
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
-import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 import { APP_BASE_HREF } from '@angular/common';
 import { EmptyRouteComponent } from './empty-route/empty-route.component';
 import { environment } from '@kore.environment';
 import { BlankComponent } from './pages/blank/blank.component';
+import { SearchAssistModule } from './pages/searchAssistConfigure/search-assist.module';
 
 let isSmartassist = false;
 if(window.location.href.includes('smartassist')){
@@ -39,14 +39,14 @@ const routes: Routes = [
           appData: AppDataResolver
         }, children: [
           { path: '', redirectTo: (isSmartassist ? 'coaching' : 'usecases'), pathMatch: 'full' },
-          { path: 'agents', component: AgentsComponent },
-          { path: 'roleManagement', component: UserManagementComponent },
+          // { path: 'agents', component: AgentsComponent },
+          // { path: 'roleManagement', component: UserManagementComponent },
           { path: 'usecases', loadChildren: () => import('./pages/agent-usecases/agent-usecases.module').then(m => m.AgentUsecasesModule) },
           { path: 'welcomeEvents', loadChildren: () => import('./pages/welcomeEvents/welcomeevent.module').then(m => m.WelcomeeventModule) },
-          { path: 'channels', component: AutomationChannelsComponent },
-          { path: 'conversationalLogs', component: ConversationalLogsComponent },
-          { path: 'languages', component: LanguagesSpeechComponent },
-          { path: 'searchAssist', component: SearchAssistComponent},
+          { path: 'channels', loadChildren: () => import('./pages/channel-configurations/channel-configurations.module').then(m => m.ChannelConfigurationsModule) },
+          { path: 'conversationalLogs', loadChildren: () => import('./pages/conversational-logs/conversational-logs.module').then(m => m.ConversationalLogsModule) },
+          { path: 'languages', loadChildren: () => import('./pages/asr-settings/asr-settings.module').then(m => m.AsrSettingsModule) },
+          { path: 'searchAssist', loadChildren: () => import('./pages/searchAssistConfigure/search-assist.module').then(m => m.SearchAssistModule) },
           { path: 'coaching', loadChildren: () => import('./pages/coaching/coaching.module').then(m => m.CoachingModule)},
           { path: 'guided-checklist', loadChildren: () => import('./pages/guided-checklist/guided-checklist.module').then(m => m.GuidedChecklistModule)},
           { path: 'widget-settings', loadChildren: () => import('./pages/widget-settings/widget-settings.module').then(m => m.WidgetSettingsModule)},
