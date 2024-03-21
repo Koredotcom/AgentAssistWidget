@@ -257,6 +257,10 @@ export class RootService {
       agent_assist_agent_request_params['dialogId'] = data.dialogId
     }
 
+    if(data.isDiscard){
+      agent_assist_agent_request_params['isDiscard'] = data.isDiscard
+    }
+
     agent_assist_agent_request_params = this.addSourceMsgIdToRequestParams(data,agent_assist_agent_request_params)
     
     return agent_assist_agent_request_params;
@@ -816,6 +820,10 @@ export class RootService {
 
     if(data.dialogId){
       agent_assist_request['dialogId'] = data.dialogId
+    }
+
+    if(data.isDiscard){
+      agent_assist_request['isDiscard'] = data.isDiscard
     }
 
     agent_assist_request = this.addSourceMsgIdToRequestParams(data,agent_assist_request)
