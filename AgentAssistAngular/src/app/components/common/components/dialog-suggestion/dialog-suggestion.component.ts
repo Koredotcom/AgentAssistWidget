@@ -88,6 +88,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
     if(!dialog.dialogId){
       dialog = this.matchDialogIdfromMenuResponse(dialog)
     }
+    dialog.suggestionFrom = this.suggestionData.suggestionFrom || ProjConstants.MYBOT;
     // let runDialogueObject = Object.assign({}, this.searchConentObject);
     // Object.assign(runDialogueObject, dialog);
     this.handleSubjectService.setRunButtonClickEvent(dialog);
