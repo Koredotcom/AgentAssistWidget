@@ -1821,7 +1821,7 @@ export class EndPointsService {
     }
 
     this.serviceList['get.channelData'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/users/:userId/streams/:streamId/channels/seedData',
+      endpoint: this.API_SERVER_URL + '/smartassist/users/:userId/streams/:streamId/channels/seedData?isAgentAssist=true',
       method: 'get'
     }
   }
