@@ -4,19 +4,19 @@
 <ng-template #elseAgentCoaching>
     <div class="agents-container-wrapper" *ngIf="isAgentCoachingEnabled">
         <div class="header-sec-top">
-            <div class="main-heading">Agent Coaching <span class="beta-tag">Beta</span></div>
+            <div class="main-heading">{{'COACHING_MAIN.AGENT_COACHING' | translate}} <span class="beta-tag">{{'COACHING_MAIN.BETA' | translate}}</span></div>
             <div class="right-action-btns">
                 <!-- tooltipClass="tooltip-global-styles" ngbTooltip="2 Rules ready for Publish"  -->
-                <button class="kr-sg-button-secondary-two btn_lg mr-2" (click)="publishCoaching()" [disabled]="publishInprogress"><i class="icon-coaching-publish mr-2"></i>Publish</button>
+                <button class="kr-sg-button-secondary-two btn_lg mr-2" (click)="publishCoaching()" [disabled]="publishInprogress"><i class="icon-coaching-publish mr-2"></i>{{'COACHING_MAIN.PUBLISH' | translate}}</button>
                 <!-- <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button> -->
-                <button class="kr-sg-button-primary btn_lg" (click)="openFLowCreation(flowCreation, {},'create')">+ New Rule</button>
+                <button class="kr-sg-button-primary btn_lg" (click)="openFLowCreation(flowCreation, {},'create')">+ {{'COACHING_MAIN.NEW_RULE' | translate}}</button>
             </div>
         </div>
     
         <div class="tab-sec-details-wrapper">
             <div class="search-data-input">
                 <div class="kr-sg-input-inline-search">
-                    <input type="text" placeholder="Search" class="input-search" [formControl]="searchField" name="searchRule">
+                    <input type="text" placeholder="{{'COMMON.SEARCH' | translate}}" class="input-search" [formControl]="searchField" name="searchRule">
                     <i class="icon-sa-conv-search search-icon"></i>
                 </div>
             </div>
@@ -36,25 +36,25 @@
                                                 <div class="shadow-freeze w-20"></div>
                                                 <div class="header-table-agents">
                                                     <div class="titles-data w-20">
-                                                        <div class="title-header sort-header" (click)="sortOnClick()">Coaching Rule
+                                                        <div class="title-header sort-header" (click)="sortOnClick()">{{'COACHING_MAIN.COACHING_RULE' | translate}}
                                                             <img [src]="sortOrder == 'asc'? 'assets/icons/sort-up.svg' : 'assets/icons/use-case/SortDown.svg'" class="ml-1">
                                                         </div>
                                                     </div>
-                                                    <div class="titles-data w-12">Actions</div>
-                                                    <div class="titles-data w-24">Description</div>
-                                                    <div class="titles-data w-16">Tags</div>
+                                                    <div class="titles-data w-12">{{'COACHING_MAIN.ACTIONS' | translate}}</div>
+                                                    <div class="titles-data w-24">{{'COACHING_MAIN.DESCRIPTION' | translate}}</div>
+                                                    <div class="titles-data w-16">{{'COACHING_MAIN.TAGS' | translate}}</div>
                                                     <!-- <div class="titles-data w-16">Channels</div> -->
-                                                    <div class="titles-data w-18">Last UPDATED</div>
-                                                    <div class="titles-data w-10">Enabled</div>
+                                                    <div class="titles-data w-18">{{'COACHING_MAIN.LAST_UPDATED' | translate}}</div>
+                                                    <div class="titles-data w-10">{{'COACHING_MAIN.ENABLED' | translate}}</div>
                                                 </div>
                                                 <ng-container *ngFor="let rule of respData.results">
                                                     <div class="body-data-table-wrapper-coaching">
                                                         <div class="coaching-rule w-20">
                                                             <div class="title" [title]="rule.name" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{rule.name | titlecase}}" container="body">{{rule.name | titlecase}}</div>
-                                                            <div class="desc-text">All Agents</div>
+                                                            <div class="desc-text">{{'COACHING_MAIN.ALL_AGENTS' | translate}}</div>
                                                             <div class="voice-msg-icons">
-                                                                <i class="icon-sa-welcome-voice" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="voice" *ngIf="rule.channels.includes('voice')"></i>
-                                                                <i class="icon-sa-welcome-chat" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="chat" *ngIf="rule.channels.includes('chat')"></i>
+                                                                <i class="icon-sa-welcome-voice" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{'WELCOME_EVENT_VOICE' | translate}}" *ngIf="rule.channels.includes('voice')"></i>
+                                                                <i class="icon-sa-welcome-chat" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{'WELCOME_EVENT_VOICE' | translate}}" *ngIf="rule.channels.includes('chat')"></i>
                                                             </div>
                                                         </div>
                                                         <div class="actions-info w-12">
@@ -72,7 +72,7 @@
                                                             </ng-container>
                                                             <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="rule.tags?.length > 2">
                                                                 <div class="dropdown dropdown-open">
-                                                                  <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+ {{rule.tags?.length - 2}} More</button>
+                                                                  <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+ {{rule.tags?.length - 2}} {{'COACHING_MAIN.MORE' | translate}}</button>
                                                                   <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
                                                                     <ng-container *ngFor="let iTag of rule.tags | slice : 2">
                                                                         <li ngbDropdownItem class="mx-w-200">
@@ -95,7 +95,7 @@
                                                                 <div class="slider"></div>
                                                             </label>
                                                             <ng-template #alwaysEnabled>
-                                                                <span *ngIf="!rule.deletable" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="Always Enabled">Always Enabled</span>
+                                                                <span *ngIf="!rule.deletable" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{'COACHING_MAIN.ALWAYS_ENABLED' | translate}}">{{'COACHING_MAIN.ALWAYS_ENABLED' | translate}}</span>
                                                             </ng-template>
                                                         </div>
                                                     </div>
@@ -115,8 +115,8 @@
                         <div class="img-block">
                             <img src="assets/images/coaching/empty-coaching.png">
                         </div>
-                        <div class="empty-title">Create your first Coaching Experience</div>
-                        <div class="desc-text">Help agents deliver better customer service and improve overall customer satisfaction. Get started by clicking on the New Coaching  button above.</div>
+                        <div class="empty-title">{{'COACHING_MAIN.CREATE_YOUR_FIRST_COACHING_EXP' | translate}}</div>
+                        <div class="desc-text">{{'COACHING_MAIN.DESCRIPTION' | translate}}</div>
                         <!-- <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button> -->
                     </div>
                 </div>
@@ -127,7 +127,7 @@
                         <div class="img-block">
                             <img src="assets/images/coaching/empty-coaching.png">
                         </div>
-                        <div class="empty-title">No Search Results found.</div>
+                        <div class="empty-title">{{'COACHING_MAIN.NO_RESULTS' | translate}}</div>
                        
                     </div>
                 </div>

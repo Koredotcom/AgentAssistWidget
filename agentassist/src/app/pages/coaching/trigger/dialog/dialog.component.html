@@ -3,10 +3,10 @@
         <i class="icon-sa-elipse"></i>
     </div> -->
     <div class="and-or-btns">
-        <button class="and-or-btn active-btn">And</button>
-        <button class="and-or-btn">Or</button>
+        <button class="and-or-btn active-btn">{{'COACHING_DIALOG.AND' | translate}}</button>
+        <button class="and-or-btn">{{'COACHING_DIALOG.OR' | translate}}</button>
     </div>
-    <span class="utt-name-desc">Triggered when Dialog</span>
+    <span class="utt-name-desc">{{'COACHING_DIALOG.DIALOG_TRIGGER' | translate}}</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>
             <span class="choose-text">{{'{ select dialog }'}}</span>
@@ -37,7 +37,7 @@
             </li>
         </ul>
     </div>
-    <span class="utt-name-desc">is</span>
+    <span class="utt-name-desc">{{'COACHING_DIALOG.IS' | translate}}</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>
             <span class="choose-text">{{'{ select state }'}}</span>
@@ -57,36 +57,36 @@
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <perfect-scrollbar class="mx-h-220">
                 <li ngbDropdownItem class="list-item-li">
-                    <span class="title">Each Occurrence <span>1x</span></span>
+                    <span class="title">{{'COACHING_DIALOG.EACH_OCCUR' | translate}} <span>1x</span></span>
                     <i class="icon-sa-conv-check"></i>
                 </li>
                 <li ngbDropdownItem class="list-item-li">
-                    <span class="title">After 2 Occurrences <span>2x</span></span>
+                    <span class="title">{{'COACHING_DIALOG.AFTER' | translate}} 2 {{'COACHING_DIALOG.OCCUR' | translate}} <span>2x</span></span>
                     <i class="icon-sa-conv-check"></i>
                 </li>
                 <li ngbDropdownItem class="list-item-li">
-                    <span class="title">After 3 Occurrences <span>3x</span></span>
+                    <span class="title">{{'COACHING_DIALOG.AFTER' | translate}} 3 {{'COACHING_DIALOG.OCCUR' | translate}} <span>3x</span></span>
                     <i class="icon-sa-conv-check"></i>
                 </li>
                 <li ngbDropdownItem class="list-item-li">
-                    <span class="title">After 4 Occurrences <span>4x</span></span>
+                    <span class="title">{{'COACHING_DIALOG.AFTER' | translate}} 4 {{'COACHING_DIALOG.OCCUR' | translate}} <span>4x</span></span>
                     <i class="icon-sa-conv-check"></i>
                 </li>
                 <li ngbDropdownItem class="list-item-li">
-                    <span class="title">After 5 Occurrences <span>5x</span></span>
+                    <span class="title">{{'COACHING_DIALOG.AFTER' | translate}} 5 {{'COACHING_DIALOG.OCCUR' | translate}} <span>5x</span></span>
                     <i class="icon-sa-conv-check"></i>
                 </li>
             </perfect-scrollbar>
         </ul>
     </div>
     <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>in 30 seconds</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>{{'COACHING_DIALOG.IN' | translate}} 30 {{'COACHING_AGENT_HINT_SECS' | translate}}</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="seconds-input">
                 <div class="kr-sg-input-text">
-                    <input type="text" placeholder="Enter Seconds here" class="input-text">
+                    <input type="text" placeholder="{{'COACHING_AGENT_HINT_PLACEHOLDER_ENTER_SECS' | translate}}" class="input-text">
                 </div>
-                <div class="s-title">seconds</div>
+                <div class="s-title">{{'COACHING_AGENT_HINT_SECS' | translate}}</div>
             </div>
         </ul>
     </div>

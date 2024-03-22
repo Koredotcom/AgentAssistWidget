@@ -3,29 +3,29 @@
         <i class="icon-sa-elipse"></i>
     </div> -->
     <div class="and-or-btns">
-        <button class="and-or-btn active-btn">And</button>
-        <button class="and-or-btn">Or</button>
+        <button class="and-or-btn active-btn">{{'COACHING_DIALOG.AND' | translate}}</button>
+        <button class="and-or-btn">{{'COACHING_DIALOG.OR' | translate}}</button>
     </div>
-    <span class="utt-name-desc">Triggered when conversation variable </span>
+    <span class="utt-name-desc">{{'COACHING_VARIBLE.TRIGGERED'} | translate} </span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>
             <span class="choose-text">{{'{ variable }'}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <li ngbDropdownItem class="list-item-li">
-                <span class="title">Agent</span>
+                <span class="title">{{'SKILLS.AGENT' | translate}}</span>
                 <i class="icon-sa-conv-check"></i>
             </li>
             <li ngbDropdownItem class="list-item-li">
-                <span class="title">Customer</span>
+                <span class="title">{{'COACHING_VARIBLE.CUSTOMER' | translate}}</span>
                 <i class="icon-sa-conv-check"></i>
             </li>
         </ul>
     </div>
-    <span class="utt-name-desc">of type</span>
+    <span class="utt-name-desc">{{'COACHING_VARIBLE.OF_TYPE' | translate}}</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle text-choosen" ngbDropdownToggle>
-            <span class="choose-text">variable type</span>
+            <span class="choose-text">{{'COACHING_VARIBLE.VARIBLE_TYPE' | translate}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <ng-container *ngTemplateOutlet="variableName;"></ng-container>
@@ -38,19 +38,19 @@
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <perfect-scrollbar class="mx-h-220">
                 <li ngbDropdownItem class="list-item-li">
-                    <span class="title">Equals to</span>
+                    <span class="title">{{'COACHING_VARIBLE.EQUALS_TO' | translate}}</span>
                     <i class="icon-sa-conv-check"></i>
                 </li>
                 <li ngbDropdownItem class="list-item-li">
-                    <span class="title">Equals to</span>
+                    <span class="title">{{'COACHING_VARIBLE.EQUALS_TO' | translate}}</span>
                     <i class="icon-sa-conv-check"></i>
                 </li>
                 <li ngbDropdownItem class="list-item-li">
-                    <span class="title">Equals to</span>
+                    <span class="title">{{'COACHING_VARIBLE.EQUALS_TO' | translate}}</span>
                     <i class="icon-sa-conv-check"></i>
                 </li>
                 <li ngbDropdownItem class="list-item-li">
-                    <span class="title">Equals to</span>
+                    <span class="title">{{'COACHING_VARIBLE.EQUALS_TO' | translate}}</span>
                     <i class="icon-sa-conv-check"></i>
                 </li>
             </perfect-scrollbar>
@@ -63,7 +63,7 @@
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="range-inputs-between">
                 <div class="variable-value-input">
-                    <div class="label-text">Between</div>
+                    <div class="label-text">{{'COACHING_VARIBLE.BTW' | translate}}</div>
                     <div class="kr-sg-input-text">
                         <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
                             <i class="icon-sa-help"></i>
@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="variable-value-input">
-                    <div class="label-text">and</div>
+                    <div class="label-text">{{'COACHING_DIALOG.AND' | translate | lowercase}}</div>
                     <div class="kr-sg-input-text">
                         <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
                             <i class="icon-sa-help"></i>
@@ -90,25 +90,25 @@
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <li ngbDropdownItem class="list-item-li">
                 <span class="bg-action"></span>
-                <span class="title">Positive</span>
+                <span class="title">{{'COACHING_VARIBLE.POSITIVE' | translate}}</span>
             </li>
             <li ngbDropdownItem class="list-item-li">
                 <span class="bg-action neutral"></span>
-                <span class="title">Neutral</span>
+                <span class="title">{{'COACHING_VARIBLE.NEUTRAL' | translate}}</span>
             </li>
             <li ngbDropdownItem class="list-item-li">
                 <span class="bg-action alertbg"></span>
-                <span class="title">Alert</span>
+                <span class="title">{{'COACHING_VARIBLE.ALERT' | translate}}</span>
             </li>
             <li ngbDropdownItem class="list-item-li">
                 <span class="bg-action critical"></span>
-                <span class="title">Critical</span>
+                <span class="title">{{'COACHING_VARIBLE.CRITICAL' | translate}}</span>
             </li>
         </ul>
     </div>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle text-choosen" ngbDropdownToggle>
-            <span class="choose-text">variable type</span>
+            <span class="choose-text">{{'COACHING_VARIBLE.VARIBLE_TYPE' | translate}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <ng-container *ngTemplateOutlet="variableName;"></ng-container>
@@ -163,7 +163,7 @@
 <ng-template #variableName>
     <div class="variable-value-input with-check-icon">
         <div class="input-variable-sec">
-            <div class="label-text">Variable Name</div>
+            <div class="label-text">{{'COACHING_VARIBLE.VARIABLE_NAME' | translate}}</div>
             <div class="kr-sg-input-text">
                 <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
                     <i class="icon-sa-help"></i>
@@ -174,7 +174,7 @@
                 <textarea placeholder="Provide a body" class="input-text"></textarea>                                
             </div>
             <div class="count-char">6/42</div>
-            <div class="label-text m-t-20">Variable Name</div>
+            <div class="label-text m-t-20">{{'COACHING_VARIBLE.VARIABLE_NAME' | translate}}</div>
             <div class="kr-sg-input-text">
                 <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
                     <i class="icon-sa-help"></i>

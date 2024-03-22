@@ -35,7 +35,7 @@
                                     <div class="input-desc">Type an utterance that the customer might say...</div>
                                 </div> -->
                                 <div class="add-utterences-drp">
-                                    <div class="label-text">Utterances</div>
+                                    <div class="label-text">{{'GUIDED_CHECKLIST.TRIGGER_BY.UTTER' | translate}}</div>
                                     <div class="dropdown-adherence" ngbDropdown #utteranceDropdown="ngbDropdown">
                                         <input [formControl]="searchKey" type="text" class="drp-input-search"  ngbDropdownToggle>
                                         <!-- <div class="text_info" *ngIf="isChecklist">Type an utterance that the agent might say...</div>
@@ -60,9 +60,9 @@
                                                     <div class="found-details-info" *ngIf="searchKey.value?.length > 0 && clS.metaForUtternace?.integration">
                                                         <div class="found-ai-count">
                                                             <i class="icon-coaching--ai"></i>
-                                                            <span>Found {{openAiUtteranceArray?.length}}</span>
+                                                            <span>{{'GUIDED_CHECKLIST.TIRGGER_BY.FOUND' | translate}} {{openAiUtteranceArray?.length}}</span>
                                                         </div>
-                                                        <div class="found-desc">Similar utterances with the same meaning</div>
+                                                        <div class="found-desc">{{'GUIDED_CHECKLIST.TRIGGER_BY.SIMILAR_UTTER_WITH_SAME_MEANING' | translate}}</div>
                                                         <perfect-scrollbar>
                                                             <div class="found-items-scroll">
                                                                 <ng-container *ngFor="let utter of openAiUtteranceArray;let i = index">
@@ -88,7 +88,7 @@
                                                 <ng-template #loading>
                                                     <ng-container>
                                                         <div class="ai-itassist-wrapper">
-                                                            <div class="label-heading"><i class="icon-coaching--ai"></i> Assistant</div>
+                                                            <div class="label-heading"><i class="icon-coaching--ai"></i> {{'GUIDED_CHECKLIST.TRIGGER_BY.ASSISTANT' | translate}}</div>
                                                             <div class="no-data-loader">
                                                                 <div class="sk-fading-circle">
                                                                     <div class="sk-circle1 sk-circle"></div>
@@ -104,24 +104,24 @@
                                                                     <div class="sk-circle11 sk-circle"></div>
                                                                     <div class="sk-circle12 sk-circle"></div>
                                                                 </div>
-                                                                <div class="thinking-text">Working...</div>
+                                                                <div class="thinking-text">{{'GUIDED_CHECKLIST.TRIGGER_BY.WORKING' | translate}}...</div>
                                                             </div>
                                                         </div>
                                                     </ng-container>
                                                 </ng-template>
                                             </div>
                                             <div class="footer-add">
-                                                <button class="kr-sg-button-secondary btn_lg" (click)="clearAIsuggestions(utteranceDropdown)">Clear</button>
-                                                <button class="kr-sg-button-primary btn_lg" (click)="saveUtterances();clearAIsuggestions(utteranceDropdown)" [disabled]="addButtonClick">Add</button>
+                                                <button class="kr-sg-button-secondary btn_lg" (click)="clearAIsuggestions(utteranceDropdown)">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.CLEAR' | translate}}</button>
+                                                <button class="kr-sg-button-primary btn_lg" (click)="saveUtterances();clearAIsuggestions(utteranceDropdown)" [disabled]="addButtonClick">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD' | translate}}</button>
                                             </div>
                                         </ul>
                                     </div>
                                 </div>
                                 <!-- *ngIf="!(selectedUtterancesArray.length && selectedNewUtterances.length); else data" -->
-                                <div class="no-utt-found" *ngIf="!(selectedUtterancesArray.length || adherenceForm?.value?.adherence?.addUtterances?.length); else data">No utterances saved</div>
+                                <div class="no-utt-found" *ngIf="!(selectedUtterancesArray.length || adherenceForm?.value?.adherence?.addUtterances?.length); else data">{{'GUIDED_CHECKLIST.TRIGGER_BY.NO_UTTER_SAVED' | translate}}</div>
                                 <ng-template #data>
                                     <div class="saved-utt-block">
-                                        <div class="saved-header">Saved Utterances</div>
+                                        <div class="saved-header">{{'GUIDED_CHECKLIST.TRIGGER_BY.SAVED_UTTERS' | translate}}</div>
 
                                         <!-- <div class="percentage-colr">
                                             <span class="bgcolor"></span>
@@ -192,7 +192,7 @@
                             </label>
                         </div>
                         <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'dialog', 'd-none': onlyAdhreForm?.value?.type !== 'dialog'}">
-                            <div class="label-text">Bot</div>
+                            <div class="label-text">{{'GUIDED_CHECKLIST.TRIGGER_BY.BOT' | translate}}</div>
                             <ng-container *ngIf="!isSm;">
                                 <div class="kr-sg-dropdowns m-b-10" placement="bottom">
                                     <div class="dropdown dropdown-open">
@@ -202,7 +202,7 @@
                                 <ng-container *ngIf="currentBot.type === 'universalbot'">
                                     <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
                                         <div class="dropdown dropdown-open">
-                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.lBId] ? standardBotsOj[onlyAdhreForm.value?.lBId] : 'Select Option'}}</button>
+                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.lBId] ? standardBotsOj[onlyAdhreForm.value?.lBId] : ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
                                             <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                                 <perfect-scrollbar class="mx-h-200">
                                                     <li ngbDropdownItem class="p-0" *ngFor="let bot of standardBots" (click)="selectBot(bot, true)">
@@ -217,7 +217,7 @@
                                 <ng-container *ngIf="isSm">
                                     <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
                                         <div class="dropdown dropdown-open">
-                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.botId] ? standardBotsOj[onlyAdhreForm.value?.botId] : 'Select Option'}}</button>
+                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.botId] ? standardBotsOj[onlyAdhreForm.value?.botId] : ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
                                             <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                                 <perfect-scrollbar class="mx-h-200">
                                                     <li ngbDropdownItem class="p-0" *ngFor="let bot of standardBots" (click)="selectSMBot(bot, true)">
@@ -230,7 +230,7 @@
 
                                     <div class="kr-sg-dropdowns m-b-10" *ngIf="isUniversalSM" ngbDropdown placement="bottom">
                                         <div class="dropdown dropdown-open">
-                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ childBotsObj[onlyAdhreForm.value?.lBId] ? childBotsObj[onlyAdhreForm.value?.lBId] : 'Select Option'}}</button>
+                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ childBotsObj[onlyAdhreForm.value?.lBId] ? childBotsObj[onlyAdhreForm.value?.lBId] : ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
                                             <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                                 <perfect-scrollbar class="mx-h-200">
                                                     <li ngbDropdownItem class="p-0" *ngFor="let bot of childBots" (click)="selectSMChildBot(bot, true)">
@@ -242,10 +242,10 @@
                                     </div>
 
                                 </ng-container>
-                            <div class="label-text">Automation</div>
+                            <div class="label-text">{{'GUIDED_CHECKLIST.TRIGGER_BY.AUTOMATION' | translate}}</div>
                             <div class="kr-sg-dropdowns m-b-30" ngbDropdown placement="bottom">
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ useCases[onlyAdhreForm.value?.taskId] ? useCases[onlyAdhreForm.value?.taskId] : 'Select Option'}}</button>
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ useCases[onlyAdhreForm.value?.taskId] ? useCases[onlyAdhreForm.value?.taskId] : ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
                                     <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                         <perfect-scrollbar class="mx-h-200">
                                             <li ngbDropdownItem class="p-0" *ngFor="let uc of useCases | keyvalue" (click)="selectUc(uc)">
@@ -255,10 +255,10 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="label-text">Wait for Dialog Execution for...</div>
+                            <div class="label-text">{{'GUIDED_CHECKLIST.TRIGGER_BY.WAIT_FOR_DAILOG_EXECUTION' | translate}}...</div>
                             <div class="kr-sg-dropdowns m-b-30" ngbDropdown placement="bottom">
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{executeState[onlyAdhreForm.value?.when] ? executeState[onlyAdhreForm.value?.when] : 'Select Option'}}</button>
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{executeState[onlyAdhreForm.value?.when] ? executeState[onlyAdhreForm.value?.when] : ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
                                     <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                         <perfect-scrollbar class="mx-h-200">
                                             <li ngbDropdownItem class="p-0" *ngFor="let ec of executeState | keyvalue" (click)="dialogExec(ec)">
@@ -295,8 +295,8 @@
                         <div class="kr-sg-radiobutton">
                             <input [checked]="onlyAdhreForm?.value?.type === 'variable'" formControlName="type" value="variable" id="radio-1cv" name="type" class="radio-custom" type="radio" (change)="changeRadio('utterance')">
                             <label for="radio-1cv" class="radio-custom-label">
-                                <div class="title">By Variable Change</div>
-                                <div class="desc-text">Watch for a context variable change</div>
+                                <div class="title">{{'GUIDED_CHECKLIST.TRIGGER_BY.VARIABLE_CHANGE' | translate}}</div>
+                                <div class="desc-text">{{'GUIDED_CHECKLIST.TRIGGER_BY.WATCH_CONTEXT_VARIBALE_CHANGE' | translate}}</div>
                             </label>
                         </div>
                         <div class="radio-checked-content d-none">
@@ -306,14 +306,14 @@
                             <div class="two-column-layout m-b-35">
                                 <div class="kr-sg-dropdowns" ngbDropdown placement="bottom">
                                     <div class="dropdown dropdown-open">
-                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Features & Upsales</button>
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{'GUIDED_CHECKLIST.TRIGGER_BY.FEATURES_UPSALES' | translate}}</button>
                                         <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                             <perfect-scrollbar class="mx-h-200">
                                                 <li ngbDropdownItem class="p-0">
-                                                    <a>Sequential</a>
+                                                    <a>{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.SEQUENTIAL' | translate}}</a>
                                                 </li>
                                                 <li ngbDropdownItem class="p-0">
-                                                    <a>Random</a>
+                                                    <a>{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.RANDOM' | translate}}</a>
                                                 </li>
                                             </perfect-scrollbar>
                                         </ul>
@@ -323,18 +323,18 @@
                                     <input type="text" placeholder="Placeholder text" class="input-text">
                                 </div>
                             </div>
-                            <div class="label-text">Wait for Dialog Execution for...</div>
+                            <div class="label-text">{{'GUIDED_CHECKLIST.TRIGGER_BY.WAIT_FOR_DAILOG_EXECUTION' | translate}}...</div>
                             <div class="two-column-layout m-b-10">
                                 <div class="kr-sg-dropdowns" ngbDropdown placement="bottom">
                                     <div class="dropdown dropdown-open">
-                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Features & Upsales</button>
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{'GUIDED_CHECKLIST.TRIGGER_BY.FEATURES_UPSALES' | translate}}</button>
                                         <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                             <perfect-scrollbar class="mx-h-200">
                                                 <li ngbDropdownItem class="p-0">
-                                                    <a>Sequential</a>
+                                                    <a>{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.SEQUENTIAL' | translate}}</a>
                                                 </li>
                                                 <li ngbDropdownItem class="p-0">
-                                                    <a>Random</a>
+                                                    <a>{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.RANDOM' | translate}}</a>
                                                 </li>
                                             </perfect-scrollbar>
                                         </ul>
@@ -344,7 +344,7 @@
                                     <input type="text" placeholder="Placeholder text" class="input-text">
                                 </div>
                             </div>
-                            <div class="info-text-dilog">If adherence checker does not detect the selected automation being run by the agent in the next 3 minutes, this step will be marked incomplete.</div>
+                            <div class="info-text-dilog">{{'GUIDED_CHECKLIST.TRIGGER_BY.ADHERENCE_CHECKER_DOES_NOT_DETECT' | translate}}</div>
                         </div>
                     </div>
                 </div>
@@ -356,7 +356,7 @@
             <div class="img-block-empty">
                 <img src="assets/icons/empty-search-add.svg">
             </div>
-            <p>No conversation history found.</p>
+            <p>{{'GUIDED_CHECKLIST.TRIGGER_BY.NO_CONVOS_HISTORY_FOUND' | translate}}</p>
         </div>
     </div>
 </div>
