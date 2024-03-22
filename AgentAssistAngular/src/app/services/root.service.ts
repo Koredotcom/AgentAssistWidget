@@ -258,7 +258,7 @@ export class RootService {
     }
 
     if(data.isDiscard){
-      agent_assist_agent_request_params['isDiscard'] = data.isDiscard
+      agent_assist_agent_request_params['terminateTask'] = data.isDiscard
     }
 
     agent_assist_agent_request_params = this.addSourceMsgIdToRequestParams(data,agent_assist_agent_request_params)
@@ -823,7 +823,7 @@ export class RootService {
     }
 
     if(data.isDiscard){
-      agent_assist_request['isDiscard'] = data.isDiscard
+      agent_assist_request['terminateTask'] = data.isDiscard
     }
 
     agent_assist_request = this.addSourceMsgIdToRequestParams(data,agent_assist_request)
