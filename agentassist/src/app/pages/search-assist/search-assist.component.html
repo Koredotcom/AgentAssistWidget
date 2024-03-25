@@ -14,6 +14,11 @@
                         </label>
                     </div> -->
                 </div>
+                <div class="waring-info-banner">
+                  <span><i class="icon-sa-info"></i></span>
+                   <p>Ensure that the domain URL does not contains "https://" and does not have a forward slash "/" at the end.</p>
+                   <span class="close-warning"><i class="icon-sa-close"></i></span>
+                </div>
                 <div class="banner-success" *ngIf="createFormStatus">
                     <div class="icon_check">
                         <i class="icon-sa-check-gray"></i>
@@ -27,8 +32,8 @@
                     </div>
                 </div>
                 <div class="fail-banner" *ngIf="createFormStatus == false">
-                    <i class="icon-sa-warning"></i>
-                    <span>{{"SEARCHASSIST.FAILURE_BANNER" | translate}}</span>
+                    <i class="icon-sa-info"></i>
+                    <p>{{"SEARCHASSIST.FAILURE_BANNER" | translate}}</p>
                     <div class="close-banner" (click)="createFormStatus = undefined">
                         <i class="icon-sa-close"></i>
                     </div>
@@ -58,7 +63,7 @@
                             <div class="text-title">{{"SEARCHASSIST.CONNECTED_TITLE" | translate }}</div>
                         </div>
                         <div class="fail-case" *ngIf="createFormStatus == false">
-                            <i class="icon-sa-warning"></i>
+                            <i class="icon-sa-info"></i>
                             <span>{{"SEARCHASSIST.DISCONNECT_TITLE" | translate }}</span>
                         </div>
                     </div>
@@ -68,8 +73,7 @@
                                 <div class="col-12 column-data">
                                     <div class="kr-sg-input-text">
                                         <div class="label-text">{{ "SEARCHASSIST.DOMAIN_URL" | translate}}
-                                            <sup>*</sup>
-                                             <!-- <i class="icon-sa-help"></i> -->
+                                             <i class="icon-sa-help"></i>
                                         </div>
                                         <input type="text" id="domain" name="domain" placeholder="Enter Domain URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.domain" required autocomplete="off">
                                     </div>
@@ -77,28 +81,25 @@
                                 <div class="col-12 column-data">
                                     <div class="kr-sg-input-text">
                                         <div class="label-text">{{ "SEARCHASSIST.STREAM_ID" | translate}}
-                                            <sup>*</sup>
-                                            <!-- <i class="icon-sa-help"></i> -->
+                                            <i class="icon-sa-help"></i>
                                         </div>
                                         <input type="text" id="searchAssistbotId" name="searchAssistbotId" placeholder="Enter Stream ID" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.searchAssistbotId" required autocomplete="off">
                                     </div>
                                 </div>
                             </div>
-                            <div class="row row-data border-0">
+                            <div class="row row-data border-0 m-t-20">
                                 <div class="col-12 column-data">
                                     <div class="kr-sg-input-text">
                                         <div class="label-text">{{ "SEARCHASSIST.CLIENT_ID" | translate}}
-                                            <sup>*</sup>
-                                            <!-- <i class="icon-sa-help"></i> -->
+                                            <i class="icon-sa-help"></i>
                                         </div>
                                         <input type="text" id="clientId"  name="clientId" placeholder="Enter Client URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.clientId" required autocomplete="off">
                                     </div>
                                 </div>
-                                <div class="col-12 column-data">
+                                <div class="col-12 column-data m-0">
                                     <div class="kr-sg-input-text">
                                         <div class="label-text">{{ "SEARCHASSIST.CLIENT_SECRET" | translate}}
-                                            <sup>*</sup>
-                                             <!-- <i class="icon-sa-help"></i> -->
+                                             <i class="icon-sa-help"></i>
                                         </div>
                                         <div class="eye-copy">
                                             <div class="eye" placement="bottom-left" (click)="showOpenEyeIcon = !showOpenEyeIcon">
@@ -116,15 +117,26 @@
                         </form>
                     </div>
                     <div class="edit-save">
-                        <div class="goto-link" (click)="goToSearchAssistUrl()">
-                            <span>{{"SEARCHASSIST.GO_TO_SEARCHASSIST" | translate}}</span>
-                            <i class="icon-sa-ext-link"></i>
+                        <div class="po-active-mode-block">
+                          <i class="icon-sa-info" placement="bottom-left" container="body" ngbTooltip="Enable to show SearchAssist results in Assist Tab"></i>
+                          <p> Pro-Active mode</p>
+                          <label class="kr-sg-toggle">
+                            <input type="checkbox">
+                            <div class="slider">
+                            </div>
+                        </label>
                         </div>
-                        <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('edit')" *ngIf="(disableSearchForm && !createForm)" [disabled]= "!saveStatus" >{{ "SEARCHASSIST.EDIT" | translate}}</button>
-                        <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('cancel')" *ngIf="!disableSearchForm && !createForm" >{{ "SEARCHASSIST.CANCEL" | translate}}</button>
-                        <button class="kr-sg-button-primary btn_lg save-btn" *ngIf = "saveStatus" (click)="updateSearchConfDetails('save')" [disabled]="createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)" >{{ "SEARCHASSIST.TESTCONNECTION" | translate}}</button>
-                        <button class="kr-sg-button-primary btn_lg save-btn" *ngIf = "!saveStatus" [disabled]="createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)" >{{ "SEARCHASSIST.TESTING" | translate}}</button>
-                        <button class="kr-sg-button-danger btn_lg" (click)="deleteConfig()" *ngIf="!createForm" [disabled]= "!saveStatus">{{ "SEARCHASSIST.DELETE" | translate}}</button>
+                        <div class="edit-save-actions">
+                            <div class="goto-link" (click)="goToSearchAssistUrl()">
+                                <span>{{"SEARCHASSIST.GO_TO_SEARCHASSIST" | translate}}</span>
+                                <i class="icon-sa-ext-link"></i>
+                            </div>
+                            <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('edit')" *ngIf="(disableSearchForm && !createForm)" [disabled]= "!saveStatus" >{{ "SEARCHASSIST.EDIT" | translate}}</button>
+                            <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('cancel')" *ngIf="!disableSearchForm && !createForm" >{{ "SEARCHASSIST.CANCEL" | translate}}</button>
+                            <button class="kr-sg-button-primary btn_lg save-btn" *ngIf = "saveStatus" (click)="updateSearchConfDetails('save')" [disabled]="createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)" >{{ "SEARCHASSIST.TESTCONNECTION" | translate}}</button>
+                            <button class="kr-sg-button-primary btn_lg save-btn" *ngIf = "!saveStatus" [disabled]="createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)" >{{ "SEARCHASSIST.TESTING" | translate}}</button>
+                            <button class="kr-sg-button-danger btn_lg" (click)="deleteConfig()" *ngIf="!createForm" [disabled]= "!saveStatus">{{ "SEARCHASSIST.DELETE" | translate}}</button>
+                        </div>
                     </div>
                 </div>
             </div>
