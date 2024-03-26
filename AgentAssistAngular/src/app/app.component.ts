@@ -13,6 +13,7 @@ import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
 import { HandleSubjectService } from './services/handle-subject.service';
 import { finalize } from 'rxjs';
 import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
+import { environment } from 'src/env/envronment';
 
 
 @Component({
@@ -58,10 +59,21 @@ export class AppComponent implements OnInit, OnDestroy{
       this.localStorageService.userDetails = {};
     });
 
-    this.subs.sink = this.route.queryParams.subscribe((params) => {
+    this.subs.sink = this.route.queryParams.subscribe((paramsObj) => {
+      let params = {...paramsObj}
       if (!(Object.keys(params)?.length > 0)) {
         return;
       }
+
+      /* reading domain URL from API */
+      let hostWithProtocol = environment.SS_URL;
+      if(environment.accessFromDomain){
+        hostWithProtocol = window.location.protocol + "//" + window.location.host;
+      }else{
+        hostWithProtocol = environment.API_SERVER_URL;
+      };
+      params['agentassisturl'] = hostWithProtocol;
+      /* reading domain URL from API */
 
       this.rootService.formatConnectionDetails(params);
       this.connectionDetails = this.rootService.getConnectionDetails();
