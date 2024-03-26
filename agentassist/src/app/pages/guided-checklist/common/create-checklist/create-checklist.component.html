@@ -53,13 +53,13 @@
                             </div>     -->
                             <div class="label-text m-b-5">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.TAGS' | translate}}</div>
                             <mat-form-field class="example-chip-list m-b-15">
-                                <mat-label>{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD_TAGS' | translate}}</mat-label>
+                                <mat-label>{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.PLACEHOLDER.ADD_TAGS' | translate}}</mat-label>
                                 <mat-chip-list #chipList>
                                     <mat-chip *ngFor="let tag of checkListForm.value?.tags" [selectable]="true" [removable]="true" (removed)="remove(tag.name)">
                                         <span class="chip-name text-truncate mx-w-100" title="{{tag.name}}">{{tag.name}}</span>
                                         <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
                                     </mat-chip>
-                                    <input placeholder="{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD_TAGS' | translate}}" #tagInput [matChipInputFor]="chipList"
+                                    <input placeholder="{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.PLACEHOLDER.ADD_TAGS' | translate}}" #tagInput [matChipInputFor]="chipList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
                                         (matChipInputTokenEnd)="add($event)" [matAutocomplete]="auto" [formControl]="tagControl"
                                         #trigger="matAutocompleteTrigger">
