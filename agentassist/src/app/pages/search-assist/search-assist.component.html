@@ -14,7 +14,7 @@
                         </label>
                     </div> -->
                 </div>
-                <div class="waring-info-banner">
+                <div class="waring-info-banner" *ngIf="!isDomainValid">
                   <span><i class="icon-sa-info"></i></span>
                    <p>Ensure that the domain URL does not contains "https://" and does not have a forward slash "/" at the end.</p>
                    <span class="close-warning"><i class="icon-sa-close"></i></span>
@@ -75,7 +75,7 @@
                                         <div class="label-text">{{ "SEARCHASSIST.DOMAIN_URL" | translate}}
                                              <i class="icon-sa-help"></i>
                                         </div>
-                                        <input type="text" id="domain" name="domain" placeholder="Enter Domain URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.domain" required autocomplete="off">
+                                        <input type="text" id="domain" name="domain" placeholder="Enter Domain URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.domain" required autocomplete="off"(input)="domainValidator($event)">
                                     </div>
                                 </div>
                                 <div class="col-12 column-data">
@@ -133,7 +133,7 @@
                             </div>
                             <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('edit')" *ngIf="(disableSearchForm && !createForm)" [disabled]= "!saveStatus" >{{ "SEARCHASSIST.EDIT" | translate}}</button>
                             <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('cancel')" *ngIf="!disableSearchForm && !createForm" >{{ "SEARCHASSIST.CANCEL" | translate}}</button>
-                            <button class="kr-sg-button-primary btn_lg save-btn" *ngIf = "saveStatus" (click)="updateSearchConfDetails('save')" [disabled]="createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)" >{{ "SEARCHASSIST.TESTCONNECTION" | translate}}</button>
+                            <button class="kr-sg-button-primary btn_lg save-btn" *ngIf = "saveStatus" (click)="updateSearchConfDetails('save')" [disabled]="(createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)) || !isDomainValid" >{{ "SEARCHASSIST.TESTCONNECTION" | translate}}</button>
                             <button class="kr-sg-button-primary btn_lg save-btn" *ngIf = "!saveStatus" [disabled]="createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)" >{{ "SEARCHASSIST.TESTING" | translate}}</button>
                             <button class="kr-sg-button-danger btn_lg" (click)="deleteConfig()" *ngIf="!createForm" [disabled]= "!saveStatus">{{ "SEARCHASSIST.DELETE" | translate}}</button>
                         </div>
