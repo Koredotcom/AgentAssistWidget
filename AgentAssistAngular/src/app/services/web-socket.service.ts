@@ -223,6 +223,7 @@ export class WebSocketService {
     this._agentAsisstSocket.on(EVENTS.agent_assist_agent_response, (data : any)=>{
       let settimeoutTime = this.getTimeout();
       setTimeout(() => {
+        this.rootService.sentSearchResponse = false;
         this.rootService.myBotTabSessionId = '';
         if(data.sessionId) {
           this.rootService.myBotTabSessionId = data?.sessionId;
