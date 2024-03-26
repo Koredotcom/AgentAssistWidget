@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
+  production: true,
   tag:"dev",
   API_SERVER_URL:'https://demo-smartassist.kore.ai',
   USE_SESSION_STORE:false,
