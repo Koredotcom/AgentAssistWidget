@@ -28,7 +28,7 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
 
   stepButtons : any = {
     'confirmation' : "Confirmation:Yes/No",
-    // 'runDialog' : "Run Dialog"
+    'runDialog' : "Run Dialog"
   };
   selAcc = this.local.getSelectedAccount();
   botId = this.workflowService.getCurrentBtSmt(true)._id
