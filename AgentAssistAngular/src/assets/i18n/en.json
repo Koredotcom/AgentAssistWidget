@@ -117,6 +117,7 @@
     "SENTIMENT_AWAITING" : "Awaiting for sentiment",
     "POSITIVE" : "Pos",
     "NEGATIVE" : "Neg",
-    "ASSOCIATED_WORK_NOTES": "Associated Work Notes"
+    "ASSOCIATED_WORK_NOTES": "Associated Work Notes",
+    "AGENT_JOINED_CONV": "Agent joined the conversation"
 
 }

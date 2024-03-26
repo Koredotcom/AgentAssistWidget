@@ -45,7 +45,7 @@ export class TranscriptHistoryComponent implements OnInit, OnDestroy{
 
   getTranscriptHistory(params){
     this.widgetLoader = true;
-    this.serviceInvoker.invoke('get.transcriptHistory', { convId: params.conversationId, botId : params.botId, isSummaryRequired: true, sessionId: this.rootService.userBotConversationDetails?.sessionId, experience:  this.rootService.connectionDetails?.channel}, {}, { botId : params.botId }, params.agentassisturl)
+    this.serviceInvoker.invoke('get.transcriptHistory', { convId: params.conversationId, botId : params.botId, isSummaryRequired: true, sessionId: this.rootService.userBotConversationDetails?.sessionId || '', experience:  this.rootService.connectionDetails?.channel}, {}, { botId : params.botId }, params.agentassisturl)
     .pipe(
       finalize(()=>{
         this.widgetLoader = false;
