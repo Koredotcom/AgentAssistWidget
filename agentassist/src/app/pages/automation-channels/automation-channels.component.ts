@@ -35,6 +35,7 @@ export class AutomationChannelsComponent implements OnInit, OnDestroy {
   checkBotMarkEvent : any;
   accountId = '';
   subs = new SubSink();
+  widgetV3Url : string = '';
 
   constructor( public workflowService: workflowService,
     private notificationService: NotificationService,
@@ -133,6 +134,8 @@ export class AutomationChannelsComponent implements OnInit, OnDestroy {
     this.chatList = data.app;
     this.webhookUrl = data.webhookUrl;
     this.markDefaultBot = this.currentBt.connectedBot;
+    this.widgetV3Url = window.location.protocol + '//' + window.location.host + '/koreagentassist-sdk/UI/agentassist-iframe.html';
+     
    });
  }
 

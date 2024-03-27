@@ -36,6 +36,15 @@
                        <p>Your bot is associated with AgentAssist</p>
                     </div>
                     <div class="row-data">
+                        <div class="label-text">Widget URL</div>
+                        <div class="kr-sg-input-text">
+                            <input type="text" placeholder="Placeholder text" class="input-text" [(ngModel)]="widgetV3Url" readonly>
+                                <button class="copy-btn" (click)="copyInputMessage(widgetV3Url)" value="click to copy">
+                                    <i class="icon-sa-copy"></i>
+                                </button> 
+                        </div>
+                    </div>
+                    <div class="row-data">
                         <div class="label-text">Bot Name</div>
                         <div class="kr-sg-input-text">
                             <input type="text" placeholder="Placeholder text" class="input-text" [(ngModel)]="chatList.botName" readonly>
