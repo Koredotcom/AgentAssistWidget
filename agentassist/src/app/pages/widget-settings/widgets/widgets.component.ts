@@ -484,9 +484,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           if(this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value?.searchAssistConfig?.integrations?.type === 'advance' && emitedValue?.length !== 0) {
             this.knowledgeAIFormGroup.markAsDirty();
             // this.isApiConfigured = true;
+            this.currentAdvMode = '';
             this.advancedModeScript = '';
           } else {
             // this.isApiConfigured = false;
+            this.currentAdvMode = '';
             this.advancedModeScript = '';
           }
       });
@@ -499,9 +501,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         if(this.agentAssistFormGroup?.value?.agentAssistSettings?.dialogsDisplayNameParser?.mode === 'advance' && emitedValue?.length !== 0) {
           this.knowledgeAIFormGroup.markAsDirty();
           // this.isApiConfigured = true;
+          this.currentAdvMode = '';
           this.advanceDialogTaskModeScript = '';
         } else {
           // this.isApiConfigured = false;
+          this.currentAdvMode = '';
           this.advanceDialogTaskModeScript = '';
         }
       }
