@@ -81,202 +81,54 @@
     <ng-conatiner *ngIf="(viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW)">
         <perfect-scrollbar class="scroll-content" (psYReachEnd)="onReachEnd($event)">
             <div class="body-scroll-data">
-                <ng-container *ngIf="false">
-                    <div class="automations-tabs">
-                        <div class="tab-name active-tab">
-                            <img src="assets/icons/dashboard/automation.svg">
-                            <span>Automations</span>
-                        </div>
-                        <div class="tab-name">
-                            <img src="assets/icons/dashboard/articles.svg">
-                            <span>Answers & Web Pages</span>
-                        </div>
-                        <div class="tab-name">
-                            <img src="assets/icons/dashboard/faqs.svg">
-                            <span>FAQs</span>
-                        </div>
-                        <div class="tab-name">
-                            <img src="assets/icons/dashboard/file.svg">
-                            <span>Files</span>
-                        </div>
-                    </div>
-                    <div class="agent-feedback-data-info">
-                        <div class="cards-data-boards agent-feedback-cards">
-                            <div class="card-sec max_width_100">
-                                <div class="inner-data-sec">
-                                    <div class="title-text-info">
-                                        <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_TOTAL_RESPONSE" | translate}}</span>
-                                    </div>
-                                    <div class="count-heading">{{agentFeedbackData.totalResp}}</div>
+                <div class="agent-feedback-data-info">
+                    <div class="cards-data-boards agent-feedback-cards">
+                        <div class="card-sec max_width_100">
+                            <div class="inner-data-sec">
+                                <div class="title-text-info">
+                                    <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_TOTAL_RESPONSE" | translate}}</span>
                                 </div>
-                            </div>
-                            <div class="card-sec max_width_100">
-                                <div class="inner-data-sec">
-                                    <div class="title-text-info">
-                                        <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</span>
-                                        <i class="icon-ast_thumbsup"></i>
-                                    </div>
-                                    <div class="count-heading">{{agentFeedbackData.helpfulResp | number: '1.0-0'}}%</div>
-                                </div>
-                            </div>
-                            <div class="card-sec max_width_100">
-                                <div class="inner-data-sec">
-                                    <div class="title-text-info">
-                                        <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</span>
-                                        <i class="icon-sat_thumsdown"></i>
-                                    </div>
-                                    <div class="count-heading">{{agentFeedbackData.nothelpfulResp | number: '1.0-0'}}%</div>
-                                </div>
+                                <div class="count-heading">{{agentFeedbackData.totalResp}}</div>
                             </div>
                         </div>
-                        <div class="table-agent-feedback">
-                            <div class="table-header row">
-                                <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_INTENT_NAME_COLUMN" | translate}}</div>
-                                <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</div>
-                                <div class="title col-4 text-right">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</div>
-                            </div>
-                            <ng-container>
-                                <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackTableData">
-                                    <div class="col-4 title">{{obj.intentName}}</div>
-                                    <div class="col-4 title">{{obj.likedPercent | number: '1.0-0'}}%</div>
-                                    <div class="col-4 title text-right">{{obj.dislikedPercent | number: '1.0-0'}}%</div>
+                        <div class="card-sec max_width_100">
+                            <div class="inner-data-sec">
+                                <div class="title-text-info">
+                                    <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</span>
+                                    <i class="icon-ast_thumbsup"></i>
                                 </div>
-
-
-                            </ng-container>
-                        </div>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="true">
-                    <div class="feedback-helpfull-not-help-wrapper accordion" id="accordionExample">
-                        <div class="help-wrapper">
-                            <div>Helpful 👍</div>
-                            <p>578 (<span>65%</span>)</p>
-                        </div>
-                        <div class="accordion_item">
-                            <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#nothelpfull">
-                                <div class="arrow_icon">
-                                    <i class="icon-sa-arrow-down"></i>
-                                </div>
-                                <h2>Not Helpful 👎</h2>
-                                <p>578 (<span>65%</span>)</p>
-                            </button>
-                            <div id="nothelpfull" class="accordion-collapse collapse show" aria-labelledby="nothelpfull">
-                                <div class="accordion-body">
-                                    <div class="table-list-data-temp">
-                                        <div class="table-header-list">
-                                            <div class="heading-table">rESPONSE</div>
-                                            <div class="heading-table">cOUNTS</div>
-                                            <div class="heading-table text-right">ADDITIONAL COMMENTS</div>
-                                        </div>
-                                        <ng-container>
-                                            <div class="table-row-body-data">
-                                                <div class="table-title">WrongSuggestion</div>
-                                                <div class="table-title count-data">
-                                                    <i class="icon-sa-eye"></i>
-                                                    <span>59  (9%)</span>
-                                                </div>
-                                                <div class="table-title additional-cmnt">
-                                                    <i class="icon-sa-eye"></i>
-                                                    <span>59  (9%)</span>
-                                                </div>
-                                            </div>
-                                            <div class="table-row-body-data">
-                                                <div class="table-title">WrongSuggestion</div>
-                                                <div class="table-title count-data">
-                                                    <i class="icon-sa-eye"></i>
-                                                    <span>59  (9%)</span>
-                                                </div>
-                                                <div class="table-title additional-cmnt">
-                                                    <i class="icon-sa-eye"></i>
-                                                    <span>59  (9%)</span>
-                                                </div>
-                                            </div>
-                                        </ng-container>
-                                    </div>
-                                </div>
+                                <div class="count-heading">{{agentFeedbackData.helpfulResp | number: '1.0-0'}}%</div>
                             </div>
                         </div>
-                        <div class="accordion_item">
-                            <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#responses">
-                                <div class="arrow_icon">
-                                    <i class="icon-sa-arrow-down"></i>
+                        <div class="card-sec max_width_100">
+                            <div class="inner-data-sec">
+                                <div class="title-text-info">
+                                    <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</span>
+                                    <i class="icon-sat_thumsdown"></i>
                                 </div>
-                                <h2>Response</h2>
-                                <p>6 Comments</p>
-                            </button>
-                            <div id="responses" class="accordion-collapse collapse show" aria-labelledby="responses">
-                            <div class="accordion-body">
-                                <div class="table-list-data-temp">
-                                    <div class="kr-sg-input-search">                               
-                                        <input type="text" placeholder="Search Agent Name, Agent ID or Conversation ID" class="input-search">
-                                        <i class="icon-sa-search search-icon"></i>
-                                    </div>
-                                    <div class="table-header-list">
-                                        <div class="heading-table">Conversation id</div>
-                                        <div class="heading-table">DATE & TIME</div>
-                                        <div class="heading-table text-right">AGENT ID</div>
-                                    </div>
-                                    <ng-container>
-                                        <div class="table-row-body-data convdetails-table">
-                                            <div class="table-title">
-                                                <div class="conv-id">5623773773673</div>
-                                            </div>
-                                            <div class="table-title">
-                                                <span class="date-time">October 8th 2022, 2:16 pm</span>
-                                            </div>
-                                            <div class="table-title agent-id">
-                                                <div class="agent-pic">
-                                                    <img src="assets/images/avatar.svg">
-                                                </div>
-                                                <div class="agent-details">
-                                                    <h1>Charlie Abraham</h1>
-                                                    <p>AG59504034</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="table-row-body-data convdetails-table">
-                                            <div class="table-title">
-                                                <div class="conv-id">5623773773673</div>
-                                            </div>
-                                            <div class="table-title">
-                                                <span class="date-time">October 8th 2022, 2:16 pm</span>
-                                            </div>
-                                            <div class="table-title agent-id">
-                                                <div class="agent-pic">
-                                                    <img src="assets/images/avatar.svg">
-                                                </div>
-                                                <div class="agent-details">
-                                                    <h1>Charlie Abraham</h1>
-                                                    <p>AG59504034</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="table-row-body-data convdetails-table">
-                                            <div class="table-title">
-                                                <div class="response-data">Response time was slower than expected, would </div>
-                                            </div>
-                                            <div class="table-title">
-                                                <div class="conv-id">5623773773673</div>
-                                            </div>
-                                            <div class="table-title agent-id">
-                                                <div class="agent-pic">
-                                                    <img src="assets/images/avatar.svg">
-                                                </div>
-                                                <div class="agent-details">
-                                                    <span class="date-time">October 8th 2022, 2:16 pm</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </ng-container>
-                                </div>
-                            </div>
+                                <div class="count-heading">{{agentFeedbackData.nothelpfulResp | number: '1.0-0'}}%</div>
                             </div>
                         </div>
                     </div>
-                </ng-container>
+                    <div class="table-agent-feedback">
+                        <div class="table-header row">
+                            <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_INTENT_NAME_COLUMN" | translate}}</div>
+                            <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</div>
+                            <div class="title col-4 text-right">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</div>
+                        </div>
+                        <ng-container>
+                            <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackTableData">
+                                <div class="col-4 title">{{obj.intentName}}</div>
+                                <div class="col-4 title">{{obj.likedPercent | number: '1.0-0'}}%</div>
+                                <div class="col-4 title text-right">{{obj.dislikedPercent | number: '1.0-0'}}%</div>
+                            </div>
+
+
+                        </ng-container>
+                    </div>
+                </div>
             </div>
         </perfect-scrollbar>
     </ng-conatiner>
+
 </div>
