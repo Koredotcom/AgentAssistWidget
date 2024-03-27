@@ -134,7 +134,7 @@ export class AutomationChannelsComponent implements OnInit, OnDestroy {
     this.chatList = data.app;
     this.webhookUrl = data.webhookUrl;
     this.markDefaultBot = this.currentBt.connectedBot;
-    this.widgetV3Url = window.location.protocol + '//' + window.location.host + '/koreagentassist-sdk/UI/agentassist-iframe.html';
+    this.widgetV3Url = window.location.protocol + '//' + window.location.host + '/koreagentassist-sdk-v3/UI/agentassist-iframe.html';
      
    });
  }
