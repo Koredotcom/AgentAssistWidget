@@ -639,9 +639,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         type: ['basic'],
       });
     }
-    (KAIObj['searchAssistConfig'] as FormGroup).addControl('integrations', integrations);
-    console.log(KAIObj, "KAI object *************");
-    
+    (KAIObj['searchAssistConfig'] as FormGroup).addControl('integrations', integrations);   
     return KAIObj;
   }
 
