@@ -291,6 +291,64 @@
                         }
                     }
                 }
+                .dialog-task-block {
+                    padding: 16px 0px;
+                    border-bottom: 1px solid var(--Primary-Colors-Gray-100, #F2F4F7);
+                    .dialog-task-title {
+                        color: var(--Gray-700, var(--Primary-Colors-Gray-700, #344054));
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 20px; 
+                    }
+                    .dialog-task-des {
+                        color: var(--Gray-500, var(--Primary-Colors-Gray-500, #667085));
+                        font-size: 14px;
+                        font-weight: 400;
+                        line-height: 20px;
+                    }
+                    .dialog-customData-block {
+                        display: flex;
+                        gap: 12px;
+                        margin-top: 4px;
+                        .kr-sg-radiobutton {
+                            width: 396px;
+                            padding: 16px;
+                            border-radius: 8px;
+                            border: 1px solid var(--Gray-200, #eaecf0);
+                            background: var(--Base-White, #fff);
+                            .task-title {
+                                color: var(--Gray-700, var(--Primary-Colors-Gray-700, #344054));
+                                font-size: 14px;
+                                font-weight: 500;
+                                line-height: 20px;
+                            }
+                            .task-des {
+                                color: var(--Gray-500, var(--Primary-Colors-Gray-500, #667085));
+                                font-size: 14px;
+                                font-weight: 400;
+                                line-height: 20px;
+                            }
+                            &:hover {
+                                border-color: var(--Primary-600, #155eef);
+                                .mode-title {
+                                    color: var(--Primary-600, #155eef);
+                                }
+                                .mode-des {
+                                    color: var(--Primary-600, #155eef);
+                                }
+                            }
+                            &.checked {
+                                border-color: var(--Primary-600, #155eef);
+                                .mode-title {
+                                    color: var(--Primary-600, #155eef);
+                                }
+                                .mode-des {
+                                    color: var(--Primary-600, #155eef);
+                                }
+                            }
+                        }
+                    }
+                }
                 .widgetenable-body {
                     display: flex;
                     flex-direction: column;

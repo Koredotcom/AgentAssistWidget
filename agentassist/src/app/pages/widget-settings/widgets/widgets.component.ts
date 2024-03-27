@@ -39,6 +39,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   imgPreview: any;
   isLoading = false;
   isApiConfigured= true;
+  currentAdvMode = '';
   iId = this.authService?.isLoadingOnSm && this.selAcc && this.selAcc?.instanceBots?.length ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
   channels = ['chat', 'voice', 'email'];
   landingPageTabs = {
@@ -89,6 +90,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     {type:'basic', desc: 'Use Default Knowledge AI Configurations'}, 
     {type:'advance', desc:'Configure How You Want To Use Knowledge AI'}
   ]
+  dialogTaskConfig = [
+    {type: 'default', title: 'Default System Behaviour', desc: 'Use Default System Behaviour'},
+    {type: 'advance', title: 'Advance Mode', desc: 'Define your custom script logic'}
+  ]
   dataFormat = [
     {type:'Plain string', tooltip:'Transmit as plain text', value : 'plainString'},
     {type:'Original Format', tooltip: 'Transmit HTML tags exactly as they are received', value : 'original'}
@@ -99,6 +104,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     {type:'Kore Academy', tooltip:'Control accessibility to Kore Academy', value : 'koreAcademy'}
   ]
   advancedModeScript: string = '';
+  advanceDialogTaskModeScript: string = '';
   selectedChannel = 'chat';
   selectedKAIChannel = 'chat';
   isCoachingDisable = true;
@@ -178,6 +184,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           language : [isUpdate ? (obj.languageSettings?.language??'en') : 'en'],
           allowAgentSwitch : [isUpdate ? (obj.languageSettings?.allowAgentSwitch??false) : false],
         }),
+        dialogsDisplayNameParser : this.fb.group({
+          mode : [isUpdate ? (obj.dialogsDisplayNameParser?.mode ??'default'): 'default']
+        }),
         showHelp : this.fb.group({
           isEnabled : [isUpdate ? (obj.showHelp?.isEnabled ?? true) : true],
           documentation : this.fb.group({
@@ -208,6 +217,13 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       (((this.agentAssistFormGroup.get('agentAssistSettings') as FormGroup).get('urlOpenBehaviour')as FormGroup)
       .get('urlOpenType') as FormControl)
       .patchValue(urlOpenType);
+
+      if(obj.dialogsDisplayNameParser?.mode === 'advance') {
+        ((this.agentAssistFormGroup.get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup).addControl('config', this.fb.group({
+          script: [obj.dialogsDisplayNameParser.config.script || '']
+        }))
+        this.advanceDialogTaskModeScript = (obj.dialogsDisplayNameParser?.config?.script.length > 0) ? obj.dialogsDisplayNameParser?.config?.script : '';
+      }
     }
 
     if(this.agentAssistFormGroup){
@@ -458,21 +474,36 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   // API Configuration for the SearchAssist in Advanced Mode
   apiAdvancedMode() {
     this.modalRef = this.modalService.open(ApiAdvancedModelComponent, { centered: true, keyboard: false, windowClass: 'api-advance-mode', backdrop: 'static' });
-    this.modalRef.componentInstance.data = this.advancedModeScript;
-    this.modalRef.result.then(emitedValue => {
-      this.advancedModeScript = emitedValue;
-      ((((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
-       .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
-      ((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup).get('integrations').updateValueAndValidity();
-      if(this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value?.searchAssistConfig?.integrations?.type === 'advance' && emitedValue?.length !== 0) {
-        this.knowledgeAIFormGroup.markAsDirty();
-        // this.isApiConfigured = true;
-        this.advancedModeScript = '';
-      } else {
-        // this.isApiConfigured = false;
-        this.advancedModeScript = '';
+    if(this.currentAdvMode === 'advance') {
+      this.modalRef.componentInstance.data = this.advancedModeScript;
+      this.modalRef.result.then(emitedValue => {
+        this.advancedModeScript = emitedValue;
+          ((((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
+        .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
+          ((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup).get('integrations').updateValueAndValidity();
+          if(this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value?.searchAssistConfig?.integrations?.type === 'advance' && emitedValue?.length !== 0) {
+            this.knowledgeAIFormGroup.markAsDirty();
+            // this.isApiConfigured = true;
+          }
+          this.currentAdvMode = '';
+          this.advancedModeScript = '';
+      });
+    } else if(this.currentAdvMode === 'advancemode') {
+      this.modalRef.componentInstance.data = this.advanceDialogTaskModeScript;
+      this.modalRef.result.then(emitedValue => {
+        this.advanceDialogTaskModeScript = emitedValue;
+        (((((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup)
+        .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
+        if(this.agentAssistFormGroup?.value?.agentAssistSettings?.dialogsDisplayNameParser?.mode === 'advance' && emitedValue?.length !== 0) {
+          this.knowledgeAIFormGroup.markAsDirty();
+          // this.isApiConfigured = true;
+        } 
+        this.currentAdvMode = '';
+        this.advanceDialogTaskModeScript = '';
       }
-    });
+      )};
+      
+    
   }
 
   // update the AutoSuggestions keys
@@ -490,6 +521,20 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // open script editor for the DialogTask Display Name config Mode
+  dialogConfigType(e, configType) {
+    this.advanceDialogTaskModeScript = this.agentAssistFormGroup?.value?.agentAssistSettings?.dialogsDisplayNameParser?.config?.script;
+    this.isApiConfigured = true;
+    (((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup).removeControl('config');
+    if(configType.type === 'advance') {
+      this.currentAdvMode =  'advancemode';
+      (((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup).addControl('config',this.fb.group({
+        script: ['',[Validators.required]],
+      }));
+      this.apiAdvancedMode();
+    }
+  }
+
   // open script editor for the Advanced Mode
   selectedIntegrationType(e, integrate) {
     this.advancedModeScript = this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value?.searchAssistConfig?.integrations?.config?.script;
@@ -497,6 +542,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
     .removeControl('config');
     if(integrate.type === 'advance') {
+      this.currentAdvMode = integrate.type;
       ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
       .addControl('config', this.fb.group({
         script: ['',[Validators.required]],
@@ -589,7 +635,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         type: ['basic'],
       });
     }
-    (KAIObj['searchAssistConfig'] as FormGroup).addControl('integrations', integrations);
+    (KAIObj['searchAssistConfig'] as FormGroup).addControl('integrations', integrations);   
     return KAIObj;
   }
 
