@@ -5,8 +5,8 @@
             <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator | titlecase}}</button>
         </ng-container>
     </div>
-    <span class="utt-name-desc" *ngIf="!selUser || selUser == 'customer'">A </span>
-    <span class="utt-name-desc" *ngIf="selUser && selUser == 'agent'">An </span>
+    <span class="utt-name-desc" *ngIf="!selUser || selUser == 'customer'">{{'COACHING_UTTER.A' | translate}}</span>
+    <span class="utt-name-desc" *ngIf="selUser && selUser == 'agent'">{{'COACHING_UTTER.AN' | translate}} </span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selUser}">
             <span class="choose-text">{{selUser ? (selUser | titlecase) : '{ select person }'}}</span>
@@ -20,7 +20,7 @@
             </ng-container>
         </ul>
     </div>
-    <span class="utt-name-desc">uses any of these </span>
+    <span class="utt-name-desc">{{'COACHING_UTTER.USES_ANY_THESE' | translate}} </span>
     <div class="dropdown-custom-flows" container="body">
         <button class="dropdown-toggle btn-toggle text-choosen" (click)="openAdherence()">
             <span class="choose-text"> {{(form?.value?.when?.utteranceCount || form.value?.default) ? ((form?.value?.when?.utteranceCount ? form?.value?.when?.utteranceCount : '') + ' utterance(s)') : '{ set utterances }'}}</span>
@@ -34,8 +34,8 @@
                 <ng-container *ngFor="let occ of occurances;let i = index">
                     <li ngbDropdownItem class="list-item-li" (click)="clickOcc(occ)">
                         <!-- <span class="title">Each Occurrence  -->
-                            <span *ngIf="i == 0" class="title">{{occ}} time</span>
-                            <span *ngIf="i != 0" class="title">{{occ}} times</span>
+                            <span *ngIf="i == 0" class="title">{{occ}} {{'COACHING_SPEECH_ANALYSIS.TIME' | translate}}</span>
+                            <span *ngIf="i != 0" class="title">{{occ}} {{'COACHING_SPEECH_ANALYSIS.TIMES' | translate}}</span>
                         <!-- </span> -->
                         <i [ngClass]="{'icon-sa-conv-check': occ === selOcc}"></i>
                     </li>
@@ -45,18 +45,18 @@
     </div>
 
     <div class="dropdown-occurences in-conversations-dropdown" ngbDropdown [placement]="'bottom'" container="body" #utteranceTimer="ngbDropdown">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="!selectedConvType">in conversation</button>
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_ANYTIME">in conversation</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="!selectedConvType">{{'COACHING_SPEECH_ANALYSIS.IN_CONVERSATION' | translate}}</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_ANYTIME">{{'COACHING_SPEECH_ANALYSIS.IN_CONVERSATION' | translate}}</button>
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME" (click)="selectedList.period = inconvList.period;selectedList.nSeconds = inconvList.nSeconds">{{inconvList.period === 'withIn' ? '' : 'in'}} {{inconvList.period.toLowerCase()}} {{inconvList.nSeconds}} second(s)</button>
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT" (click)="selectedList.period = inconvList.period;selectedList.nMessages = inconvList.nMessages">{{inconvList.period === 'withIn' ? '' : 'in'}} {{inconvList.period.toLowerCase()}} {{inconvList.nMessages}} message(s)</button>
        
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <li ngbDropdownItem class="list-item-li" (click)="clickOnType(coachingCnst.TRIGGER_ANYTIME)">
-                <span class="title">Any time in conversation</span>
+                <span class="title">{{'COACHING_SPEECH_ANALYSIS.TIME_CONVERSATION' | translate}}</span>
                 <i class="icon-sa-conv-check" *ngIf="selectedConvType == coachingCnst.TRIGGER_ANYTIME"></i>
             </li>
             <li class="list-item-li" data-toggle="collapse" href="#bytime" (click)="clickOnType(coachingCnst.TRIGGER_BYTIME);">
-                <span class="title">By time</span>
+                <span class="title">{{'COACHING_SPEECH_ANALYSIS.BY_TIME' | translate}}</span>
                 <i class="icon-sa-conv-check" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME" (click)="onEnterTime(selectedList.nSeconds);utteranceTimer.close()"></i>
             </li>
 
@@ -76,15 +76,15 @@
                     </div>
                     <div class="seconds-input">
                         <div class="kr-sg-input-text">
-                            <input type="number" digitOnly placeholder="Enter Seconds" class="input-text" (keyup.enter)="onEnterTime(selectedList.nSeconds);utteranceTimer.close()" [(ngModel)]="selectedList.nSeconds">
+                            <input type="number" digitOnly placeholder="{{'COACHING_SPEECH_ANALYSIS.ENTER_SECS' | translate}}" class="input-text" (keyup.enter)="onEnterTime(selectedList.nSeconds);utteranceTimer.close()" [(ngModel)]="selectedList.nSeconds">
                         </div>
-                        <div class="s-title">seconds</div>
+                        <div class="s-title">{{'COACHING_AGENT_HINT_SECS'| translate}}</div>
                     </div>
                 </div>
             </div>
            
             <li class="list-item-li" data-toggle="collapse" href="#numofmsg" (click)="clickOnType(coachingCnst.TRIGGER_BYMEESAGECOUNT);">
-                <span class="title">By number of messages</span>
+                <span class="title">{{'COACHING_UTTER.NUMBER_OF_MSGS' | translate}}</span>
                 <i class="icon-sa-conv-check" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT" (click)="onEnterMessages(selectedList.nMessages);utteranceTimer.close()"></i>
             </li>
 
@@ -104,9 +104,9 @@
                     </div>
                     <div class="seconds-input">
                         <div class="kr-sg-input-text">
-                            <input type="number" digitOnly placeholder="Enter Message Count" class="input-text" (keyup.enter)="onEnterMessages(selectedList.nMessages);utteranceTimer.close()" [(ngModel)]="selectedList.nMessages">
+                            <input type="number" digitOnly placeholder="{{'COACHING_ADHERENCE_SELECTION.ENTER_MSG_COUNT' | translate}}" class="input-text" (keyup.enter)="onEnterMessages(selectedList.nMessages);utteranceTimer.close()" [(ngModel)]="selectedList.nMessages">
                         </div>
-                        <div class="s-title">messages</div>
+                        <div class="s-title">{{'COACHING_UTTER.MEGS' | translate}}</div>
                     </div>
                 </div>
             </div>

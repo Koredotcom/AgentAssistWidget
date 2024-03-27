@@ -1,5 +1,5 @@
 <div class="utterance-triggers">
-    <span class="utt-name-desc">Email </span>
+    <span class="utt-name-desc">{{'EMAIL_CHANNEL.TITLE' | translate}} </span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
          <!-- <button class="dropdown-toggle btn-toggle">
             <span class="choose-text">{{'{ select people }'}}</span>
@@ -9,18 +9,18 @@
 
             <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!title}" ngbDropdownToggle
                 (click)="emailTitle = title">
-                <span class="choose-text">{{ emailList.length ? emailList.length + ' people' : '{ select people }' }}</span>
+                <span class="choose-text">{{ emailList.length ? emailList.length + ('COACHING_EMAIL_MANAGER' | translate) : '{ select people }' }}</span>
             </button>
             <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
 
                 <div class="variable-value-input with-check-icon">
                     <div class="input-variable-sec">
-                        <div class="label-text">Add people</div>
+                        <div class="label-text">{{'COACHING_EMAIL_MANAGER.ADD_PEOPLE' | translate}}</div>
                         <div class="kr-sg-input-text">
                             <!-- <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
                                 <i class="icon-sa-help"></i>
                             </span> -->
-                            <input type="text" placeholder="Enter Comma Seperated Email Id's" class="input-text" [(ngModel)]="emailListString">
+                            <input type="text" placeholder="{{'COACHING_EMAIL_MANAGER.EMAILS_LIST' | translate}}" class="input-text" [(ngModel)]="emailListString">
                         </div>
                     </div>
                     <div class="check-icon-block m-t-20" (click)="submitEmails();emailListDropdown.close()">
@@ -45,7 +45,7 @@
         </ul>
     </div>
 
-    <span class="utt-name-desc">with this subject</span>
+    <span class="utt-name-desc">{{'COACHING_EMAIL_MANAGER.SUBJECT' | translate}}</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #emailtitleB="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!title}" ngbDropdownToggle (click)="emailTitle = title">
             <span class="choose-text">{{ title ? title : '{ set subject }' }}</span>
@@ -54,12 +54,12 @@
 
             <div class="variable-value-input with-check-icon">
                 <div class="input-variable-sec">
-                    <div class="label-text">Subject</div>
+                    <div class="label-text">{{'AGENTS_DEFAULTS.OFF_WORKING_HRS_SUBJECT' | translate}}</div>
                     <div class="kr-sg-input-text">
                         <!-- <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
                             <i class="icon-sa-help"></i>
                         </span> -->
-                        <input type="text" placeholder="Email subject"
+                        <input type="text" placeholder="{{'COACHING_EMAIL_MANAGER.EMAIL_SUB' | translate}}"
                             class="input-text" maxlength="42" [(ngModel)]="emailTitle">
                     </div>
                     <div class="count-char">{{emailTitle.length}}/42</div>
@@ -71,7 +71,7 @@
         </ul>
     </div>
 
-    <span class="utt-name-desc">and body</span>
+    <span class="utt-name-desc">{{'COACHING_EMAIL_MANAGER.AND_BODY' | translate}}</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #emailbody="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!bodyMsg}" ngbDropdownToggle (click)="emailBody = bodyMsg">
             <span class="choose-text">{{bodyMsg ? bodyMsg : '{ set body }'}}</span>
@@ -90,7 +90,7 @@
     <div class="variable-value-input with-check-icon">
         <div class="input-variable-sec">
             <div class="kr-sg-input-text-area">
-                <textarea placeholder="Provide a body" maxlength="1000" [(ngModel)]="emailBody" class="input-text"></textarea>
+                <textarea placeholder="{{'COACHING_EMAIL_MANAGER.PROVIDE_BODY' | translate}}" maxlength="1000" [(ngModel)]="emailBody" class="input-text"></textarea>
             </div>
             <div class="count-char">{{emailBody.length}}/1000</div>
         </div>

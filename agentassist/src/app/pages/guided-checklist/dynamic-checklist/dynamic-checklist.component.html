@@ -2,7 +2,7 @@
     <ng-container >
         <div class="search-data-input">
             <div class="kr-sg-input-inline-search">
-                <input type="text" placeholder="Search" class="input-search" [formControl]="searchField">
+                <input type="text" placeholder="{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.PLACEHOLDER.SEARCH' | translate}}" class="input-search" [formControl]="searchField">
                 <i class="icon-sa-conv-search search-icon"></i>
             </div>
         </div>
@@ -16,22 +16,22 @@
                         <div class="shadow-freeze w-20"></div>
                         <div class="header-table-checklist">
                             <div class="titles-data w-20">
-                                <div class="title-header">name</div>
+                                <div class="title-header">{{'GUIDED_CHECKLIST.DYNAMIC.NAME' | translate}}</div>
                             </div>
-                            <div class="titles-data w-12">Actions</div>
-                            <div class="titles-data w-15">Description</div>
-                            <div class="titles-data w-14">Triggers for</div>
-                            <div class="titles-data w-14">Triggers BY</div>
-                            <div class="titles-data w-15">Last UPDATED</div>
-                            <div class="titles-data w-10">Enable</div>
+                            <div class="titles-data w-12">{{'GUIDED_CHECKLIST.DYNAMIC.ACTIONS' | translate}}</div>
+                            <div class="titles-data w-15">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.DESC' | translate}}</div>
+                            <div class="titles-data w-14">{{'GUIDED_CHECKLIST.DYNAMIC.TRIGGER_FOR' | translate}}</div>
+                            <div class="titles-data w-14">{{'GUIDED_CHECKLIST.DYNAMIC.TRIGGER_BY' | translate}}</div>
+                            <div class="titles-data w-15">{{'GUIDED_CHECKLIST.DYNAMIC.LAST_UPDATED' | translate}}</div>
+                            <div class="titles-data w-10">{{'GUIDED_CHECKLIST.DYNAMIC.ENABLE' | translate}}</div>
                         </div>
                         <ng-container *ngFor="let dyn of dynamicList">
                             <div class="body-data-table-wrapper-cl">
                                 <div class="cheklist w-20">
                                     <div class="title" [title]="dyn.name" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{dyn.name | titlecase}}" container="body">{{dyn.name | uppercase}}</div>
                                     <div class="voice-msg-icons">
-                                        <i class="icon-sa-welcome-voice" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="voice" *ngIf="dyn.channels.includes('voice')"></i>
-                                        <i class="icon-sa-welcome-chat" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="chat" *ngIf="dyn.channels.includes('chat')"></i>
+                                        <i class="icon-sa-welcome-voice" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{'GUIDED_CHECKLIST.STAGESLIST.TOOLTIP.VOICE' | translate}}" *ngIf="dyn.channels.includes('voice')"></i>
+                                        <i class="icon-sa-welcome-chat" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{'GUIDED_CHECKLIST.STAGESLIST.TOOLTIP.CHAT' | translate}}" *ngIf="dyn.channels.includes('chat')"></i>
                                     </div>
                                 </div>
                                 <div class="actions-info w-12">
@@ -43,7 +43,7 @@
                                     </button>
                                 </div>
                                 <div class="title-text w-15">{{dyn.description}}</div>
-                                <div class="title-text w-14">All Agents</div>
+                                <div class="title-text w-14">{{'GUIDED_CHECKLIST.DYNAMIC.ALL_AGENTS' | translate}}</div>
                                 <div class="title-text w-14">{{dyn.triggerBy?.type}}</div>
                                 <div class="title-text w-15">{{dyn.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
                                 <div class="last-updated-toggle w-10">
@@ -66,8 +66,8 @@
                     <div class="img-block">
                         <img src="assets/images/coaching/empty-checklist.svg">
                     </div>
-                    <div class="empty-title">Create your first guided checklist</div>
-                    <div class="desc-text">Checklists allow agents to follow a guided path to success. <br/>Get started by creating your <span (click)="createChecklist();">first checklist</span></div>
+                    <div class="empty-title">{{'GUIDED_CHECKLIST.DYNAMIC.CREATE_FIRST_GUIDED_CHECKLIST' | translate}}</div>
+                    <div class="desc-text">{{'GUIDED_CHECKLIST.DYNAMIC.CHECKLIST_ALLOW_AGENTS' | translate}} <br/>{{'GUIDED_CHECKLIST.DYNAMIC.STARTED_BY_CREATING_YOUR' | translate}} <span (click)="createChecklist();">{{'GUIDED_CHECKLIST.DYNAMIC.FIRST_CHECKLIST' | translate}}</span></div>
                 </div>
             </div>
         </ng-container>
@@ -77,7 +77,7 @@
                     <div class="img-block">
                         <img src="assets/images/coaching/empty-coaching.png">
                     </div>
-                    <div class="empty-title">No Search Results found.</div>
+                    <div class="empty-title">{{'GUIDED_CHECKLIST.DYNAMIC.NO_SEARCH_RESULT_FOUND' | translate}}</div>
                    
                 </div>
             </div>

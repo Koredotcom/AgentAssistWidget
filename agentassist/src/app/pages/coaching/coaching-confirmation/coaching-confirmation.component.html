@@ -7,12 +7,12 @@
             <i class="icon-sa-welcome-delete"></i>
         </div>
         <div class="info-titles">
-            <div class="title">Discard Changes</div>
-            <div class="desc-text">Changes will not be saved. Do you want to proceed?</div>
+            <div class="title">{{"COMMON.DISCARD_CHANGES" | translate}}</div>
+            <div class="desc-text">{{"COACHING_CONFORMATION_DESC_TEXT | translate"}}?</div>
         </div>
     </div>
     <div class="btn-actions-footer">
-        <button class="kr-sg-button-danger btn_lg" (click)="discardChanges(true)">Discard</button>
-        <button class="kr-sg-button-secondary btn_lg" (click)="discardChanges(false)">Cancel</button>
+        <button class="kr-sg-button-danger btn_lg" (click)="discardChanges(true)">{{"BUTTONS.DISCARD" |translate}}</button>
+        <button class="kr-sg-button-secondary btn_lg" (click)="discardChanges(false)">{{"BUTTONS.CANCEL"}}</button>
     </div>
 </div>

@@ -7,7 +7,7 @@
       <div class="border-divider"></div>
       <div class="kr-sg-input-text">
         <!-- [formControl]="name" -->
-        <input type="text" maxlength="100" placeholder="new playbook" class="input-text"
+        <input type="text" maxlength="100" placeholder="{{'GUIDED_CHECKLIST.STAGESLIST.PLACEHOLDER.NEW_PLAYBOOK' | translate}}" class="input-text"
           [(ngModel)]="currentCheckList.name" disabled />
       </div>
     </div>
@@ -17,7 +17,7 @@
         <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="currentCheckList.tags?.length > 1">
           <div class="dropdown dropdown-open">
             <button class="dropdown-toggle dropdown-input before-none"
-              ngbDropdownToggle>+{{currentCheckList.tags?.length - 1}} More
+              ngbDropdownToggle>+{{currentCheckList.tags?.length - 1}} {{'GUIDED_CHECKLIST.STAGESLIST.MORE' | translate}}
             </button>
             <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
               <ng-container *ngFor="let tag of currentCheckList.tags.slice(1, currentCheckList.tags.length)">
@@ -31,12 +31,12 @@
       </div>
       
       <div class="channels-info" *ngIf="currentCheckList.channels?.length > 0">
-        <span class="title">Channels</span>
+        <span class="title">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.CHANNELS' | translate}}</span>
         <button class="speak-chat-icon" *ngIf="currentCheckList.channels?.indexOf('voice') >=0">
-            <i class="icon-sa-welcome-voice" ngbTooltip ="voice"></i>
+            <i class="icon-sa-welcome-voice" ngbTooltip ="{{'GUIDED_CHECKLIST.STAGESLIST.TOOLTIP.VOICE' | translate}}"></i>
         </button>
         <button class="speak-chat-icon" *ngIf="currentCheckList.channels?.indexOf('chat') >= 0">
-            <i class="icon-sa-message"  ngbTooltip ="chat"></i>
+            <i class="icon-sa-message"  ngbTooltip ="{{'GUIDED_CHECKLIST.STAGESLIST.TOOLTIP.CHAT' | translate}}"></i>
         </button>
       </div>
       
@@ -56,9 +56,9 @@
       <button class="settings-actions" (click)="openSettings()">
           <i class="icon-sa-settings"></i>
       </button>
-      <button class="kr-sg-button-secondary btn_lg" (click)="closeCheckListScreen()">Cancel</button>
+      <button class="kr-sg-button-secondary btn_lg" (click)="closeCheckListScreen()">{{'GUIDED_CHECKLIST.CREATE_CHECKLIST.CANCEL' | translate}}</button>
       <!-- <button class="kr-sg-button-secondary-two btn_lg">Publish</button> -->
-      <button class="kr-sg-button-primary btn_lg" (click)="closeCheckListScreen()">Done</button>
+      <button class="kr-sg-button-primary btn_lg" (click)="closeCheckListScreen()">{{'GUIDED_CHECKLIST.STAGESLIST.DONE' | translate}}</button>
   </div>
 
   </div>
@@ -74,7 +74,7 @@
                   <input id="checkbox-42" class="checkbox-custom" type="checkbox">
                   <label for="checkbox-42" class="checkbox-custom-label">Set as close stage</label>
                 </div>     -->
-                <input type="text" [(ngModel)]="item.runTimeName" (keyup.enter)="saveStage(item)" class="add-title-input" placeholder="New group" />
+                <input type="text" [(ngModel)]="item.runTimeName" (keyup.enter)="saveStage(item)" class="add-title-input" placeholder="{{'GUIDED_CHECKLIST.STAGESLIST.PLACEHOLDER.NEW_GROUP' | translate}}" />
                 <div class="hover-actions">
                   <!-- <div class="choose-bg-color-dropdown" ngbDropdown>
                     <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
@@ -135,7 +135,7 @@
                   <div class="drag-item">
                     <i class="icon-coaching--move1"></i>
                   </div>
-                  <input type="text" placeholder="New Step" />
+                  <input type="text" placeholder="{{'GUIDED_CHECKLIST.STAGESLIST.PLACEHOLDER.NEW_STEP' | translate}}" />
                   <div class="delete-item">
                     <i class="icon-sa-welcome-delete"></i>
                   </div>
@@ -145,7 +145,7 @@
                 <button [disabled]="!item.name" [ngClass]="{'disabled': !item.name}"
                   (click)="item.newStep = true; stepCreate(item, i)">
                   <i class="icon-coaching--plus"></i>
-                  <span>Add Step</span>
+                  <span>{{'GUIDED_CHECKLIST.STAGESLIST.ADDSTEP' | translate}}</span>
                 </button>
               </div>
             </div>
@@ -165,7 +165,7 @@
               <div class="line-block"></div>
               <button (click)="addStages(i)">
                 <i class="icon-coaching--plus"></i>
-                <span>Add Stage</span>
+                <span>{{'GUIDED_CHECKLIST.STAGESLIST.ADDSTAGE' | translate}}</span>
               </button>
               <div class="line-block"></div>
             </div>

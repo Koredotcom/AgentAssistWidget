@@ -1,5 +1,5 @@
 <div class="utterance-triggers">
-    <span class="utt-name-desc">Nudge agent with this  </span>
+    <span class="utt-name-desc">{{'COACHING_AGENT_NUDGE' | translate}}  </span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!selMsgType}" ngbDropdownToggle>
             <span class="choose-text">{{selMsgType ? selMsgType : '{ Choose }'}}</span>
@@ -15,7 +15,7 @@
         </ul>
     </div>
 
-    <span class="utt-name-desc">message</span>
+    <span class="utt-name-desc">{{'COACHING_AGENT_NUDGE_MESSAGE' | translate}}</span>
 
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #nudgeMessage="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!showNudgeMsg}" (click)="nudgeMsg = showNudgeMsg">
@@ -24,12 +24,12 @@
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="variable-value-input with-check-icon">
                 <div class="input-variable-sec">
-                    <div class="label-text">Nudge Message</div>
+                    <div class="label-text">{{'COACHING_AGENT_NUDGE_NUDGE_MSG' | translate}}</div>
                     <div class="kr-sg-input-text">
                         <!-- <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
                             <i class="icon-sa-help"></i>
                         </span> -->
-                        <input type="text" placeholder="Enter Nudge Message"
+                        <input type="text" placeholder="{{'COACHING_AGENT_NUDGE_ENTER_NUDGE_MSG' | translate}}"
                             class="input-text" maxlength="42" [(ngModel)]="nudgeMsg">
                     </div>
                     <div class="count-char">{{nudgeMsg.length}}/42</div>
@@ -45,7 +45,7 @@
             <span class="choose-text"> {{(form?.value?.adherence?.utteranceCount) ? form?.value?.adherence?.utteranceCount + ' utterance(s)' : '+ Add Adherence'}}</span>
         </button> -->
         <div class="add-trgigger-dropdown" ngbDropdown placement="bottom">
-            <button class="add-triggers-btn" ngbDropdownToggle> + Add Adherence</button>
+            <button class="add-triggers-btn" ngbDropdownToggle> + {{'COACHING_AGENT_HINT_ADD_ADHERENCE' | translate}}</button>
             <div class="drop-add-trigger" ngbDropdownMenu>
                 <ng-container *ngTemplateOutlet="addAdherenceTemplate;"></ng-container> 
             </div>
@@ -71,7 +71,7 @@
     <div class="add-triggers">
         <!-- <div class="line-indicator"></div> -->
         <div class="choose-triggers-block">
-            <div class="heading-title">Choose a Trigger</div>
+            <div class="heading-title">{{'COACHING_AGENT_HINT_CHOOSE_TRIGGER' | translate}}</div>
             <div class="choose-t-block-bg">
                 <div class="choose-t-block">
                     <ng-container *ngFor="let adherence of allAdherences">

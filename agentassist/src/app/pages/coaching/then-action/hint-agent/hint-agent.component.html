@@ -1,5 +1,5 @@
 <div class="utterance-triggers">
-    <span class="utt-name-desc">Hint agent with this </span>
+    <span class="utt-name-desc">{{'COACHING_AGENT_HINT' | translate}} </span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!selMsgType}" ngbDropdownToggle>
             <span class="choose-text">{{selMsgType ? selMsgType : '{ Choose }'}}</span>
@@ -15,7 +15,7 @@
         </ul>
     </div>
 
-    <span class="utt-name-desc">message with this title</span>
+    <span class="utt-name-desc">{{'COACHING_AGENT_HINT_MESSAGE_WITH_TITLE' | translate}}</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #hinttitle="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!title}" ngbDropdownToggle (click)="hintTitle = title">
             <span class="choose-text">{{ title ? title : '{ Choose }' }}</span>
@@ -24,12 +24,12 @@
             
             <div class="variable-value-input with-check-icon">
                 <div class="input-variable-sec">
-                    <div class="label-text">Title</div>
+                    <div class="label-text">{{'AGENTASSIST.COL_TITLE' | translate}}</div>
                     <div class="kr-sg-input-text">
                         <!-- <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
                             <i class="icon-sa-help"></i>
                         </span> -->
-                        <input type="text" placeholder="Enter hint title"
+                        <input type="text" placeholder="{{'COACHING_AGENT_HINT_PLACEHOLDER_ENTER_HINT_TITLE' | translate}}"
                             class="input-text" maxlength="42" [(ngModel)]="hintTitle">
                     </div>
                     <div class="count-char">{{hintTitle.length}}/42</div>
@@ -41,7 +41,7 @@
         </ul>
     </div>
 
-    <span class="utt-name-desc">and body</span>
+    <span class="utt-name-desc">{{'COACHING_AGENT_HINT_AND_BODY' | translate}}</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #hintBody="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!bodyMsg}" ngbDropdownToggle (click)="desc = bodyMsg">
             <span class="choose-text">{{bodyMsg ? bodyMsg : '{ Choose }'}}</span>
@@ -51,7 +51,7 @@
         </ul>
     </div>
 
-    <span class="utt-name-desc">that</span>
+    <span class="utt-name-desc">{{'COACHING_AGENT_HINT_THAT' | translate}}</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!closeType}">
             <span class="choose-text">{{ closeTypes[closeType] ? closeTypes[closeType] : '{ Choose }' }}</span>
@@ -66,15 +66,15 @@
         </ul>
     </div>
     <ng-container *ngIf="closeType == coachingCnst.AUTO_CLOSE">
-        <span class="utt-name-desc">after</span>
+        <span class="utt-name-desc">{{'COACHING_AGENT_HINT_AFTER' | translate}}</span>
         <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #closeTimer="ngbDropdown">
-            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!time}" (click)="variableTime = time">{{time}} seconds</button>
+            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!time}" (click)="variableTime = time">{{time}} {{'COACHING_AGENT_HINT_SECS' | translate}}</button>
             <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
                 <div class="seconds-input">
                     <div class="kr-sg-input-text">
-                        <input type="number" digitOnly placeholder="Enter Seconds here" (keyup.enter)="onEnterTime(variableTime);closeTimer.close()" class="input-text" [(ngModel)]="variableTime">
+                        <input type="number" digitOnly placeholder="{{'COACHING_AGENT_HINT_PLACEHOLDER_ENTER_SECS' | translate}}" (keyup.enter)="onEnterTime(variableTime);closeTimer.close()" class="input-text" [(ngModel)]="variableTime">
                     </div>
-                    <div class="s-title">seconds</div>
+                    <div class="s-title">{{'COACHING_AGENT_HINT_SECS' | translate}}</div>
                 </div>
             </ul>
         </div>
@@ -85,7 +85,7 @@
             <span class="choose-text"> {{(form?.value?.adherence?.utteranceCount) ? form?.value?.adherence?.utteranceCount + ' utterance(s)' : '+ Add Adherence'}}</span>
         </button> -->
         <div class="add-trgigger-dropdown" ngbDropdown placement="bottom">
-            <button class="add-triggers-btn" ngbDropdownToggle> + Add Adherence</button>
+            <button class="add-triggers-btn" ngbDropdownToggle> + {{'COACHING_AGENT_HINT_ADD_ADHERENCE' | translate}}</button>
             <div class="drop-add-trigger" ngbDropdownMenu>
                 <ng-container *ngTemplateOutlet="addAdherenceTemplate;"></ng-container> 
             </div>
@@ -102,9 +102,9 @@
 <ng-template #body>
     <div class="variable-value-input with-check-icon">
         <div class="input-variable-sec">
-            <div class="label-text">Body</div>
+            <div class="label-text">{{'COACHING_AGENT_HINT_BODY' | translate}}</div>
             <div class="kr-sg-input-text-area">
-                <textarea placeholder="Enter hint body" maxlength="300" [(ngModel)]="desc" class="input-text"></textarea>
+                <textarea placeholder="{{'COACHING_AGENT_HINT_PLACEHOLDER_ENTER_HINT_BODY' | translate}}" maxlength="300" [(ngModel)]="desc" class="input-text"></textarea>
             </div>
             <div class="count-char">{{desc.length}}/300</div>
         </div>
@@ -130,7 +130,7 @@
     <div class="add-triggers">
         <!-- <div class="line-indicator"></div> -->
         <div class="choose-triggers-block">
-            <div class="heading-title">Choose a Trigger</div>
+            <div class="heading-title">{{'COACHING_AGENT_HINT_CHOOSE_TRIGGER' | translate}}</div>
             <div class="choose-t-block-bg">
                 <div class="choose-t-block">
                     <ng-container *ngFor="let adherence of allAdherences">
