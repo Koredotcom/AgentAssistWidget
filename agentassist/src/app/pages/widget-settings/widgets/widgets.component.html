@@ -754,6 +754,23 @@
                             </div>
                         </div>
 
+                        <div class=" dialog-task-block" formGroupName="dialogsDisplayNameParser">
+                            <div class="dialog-task-title">Dialog Task Display Name Configurations</div>
+                            <div class="dialog-task-des">control Dialog task display name in the AgentAssist Widget</div>
+                            <div class="dialog-customData-block">
+                                <div class="kr-sg-radiobutton"
+                                    *ngFor="let configType of dialogTaskConfig; let dialogIdxVal = index">
+                                    <input id="value-{{dialogIdxVal}}" class="radio-custom" type="radio"
+                                        [value]="configType.type" name="mode" formControlName="mode"
+                                        (click)="dialogConfigType($event, configType); $event.stopPropagation()">
+                                    <label for="value-{{dialogIdxVal}}" class="radio-custom-label">
+                                        <div class="task-title">{{configType.title | titlecase}}</div>
+                                        <div class="task-des"> {{configType.desc}} </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <!--AgentAssist Widget Disabled-->
                     <!-- *ngIf="!agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.agentAssistWidgetEnabled" -->
@@ -791,7 +808,7 @@
         </div>
         <div class="error-toast-body">Please add your API Configuration script in order to use Advance Mode</div>
         <div class="error-toast-footer">
-            <span (click)="apiAdvancedMode()">Configure Now</span>
+            <span (click)="apiAdvancedMode(currentAdvMode)">Configure Now</span>
         </div>
     </div>
 </div>
