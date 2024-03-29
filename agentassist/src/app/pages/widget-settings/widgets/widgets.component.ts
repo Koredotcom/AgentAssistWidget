@@ -491,15 +491,25 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     } else if(this.currentAdvMode === 'advancemode') {
       this.modalRef.componentInstance.data = this.advanceDialogTaskModeScript;
       this.modalRef.result.then(emitedValue => {
-        this.advanceDialogTaskModeScript = emitedValue;
-        (((((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup)
-        .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
-        if(this.agentAssistFormGroup?.value?.agentAssistSettings?.dialogsDisplayNameParser?.mode === 'advance' && emitedValue?.length !== 0) {
-          this.knowledgeAIFormGroup.markAsDirty();
-          // this.isApiConfigured = true;
-        } 
-        this.currentAdvMode = '';
-        this.advanceDialogTaskModeScript = '';
+        try {
+          if(JSON.parse(emitedValue)) {
+            console.log(typeof(emitedValue));
+            emitedValue = JSON.stringify(emitedValue);
+            this.advanceDialogTaskModeScript = emitedValue;
+            (((((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup)
+            .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
+            if(this.agentAssistFormGroup?.value?.agentAssistSettings?.dialogsDisplayNameParser?.mode === 'advance' && emitedValue?.length !== 0) {
+              this.knowledgeAIFormGroup.markAsDirty();
+              this.isApiConfigured = true;
+            } 
+            this.currentAdvMode = '';
+            this.advanceDialogTaskModeScript = '';
+            }
+        } catch (err) {
+          this.isApiConfigured = false;
+          console.log(this.currentAdvMode);
+        }
+        
       }
       )};
       

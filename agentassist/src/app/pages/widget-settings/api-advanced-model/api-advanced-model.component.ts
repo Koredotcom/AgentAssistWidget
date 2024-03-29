@@ -30,7 +30,13 @@ export class ApiAdvancedModelComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.data != '') {
-      this.apiScript = this.data;
+      try {
+        if(JSON.parse(this.data)) {
+          this.apiScript = JSON.parse(this.data);
+        }
+      } catch (err) {
+        this.apiScript = this.data;
+      }
     }
     
   }
