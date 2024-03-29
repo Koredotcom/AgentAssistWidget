@@ -493,7 +493,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       this.modalRef.result.then(emitedValue => {
         try {
           if(JSON.parse(emitedValue)) {
-            console.log(typeof(emitedValue));
             emitedValue = JSON.stringify(emitedValue);
             this.advanceDialogTaskModeScript = emitedValue;
             (((((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup)
@@ -507,7 +506,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
             }
         } catch (err) {
           this.isApiConfigured = false;
-          console.log(this.currentAdvMode);
+          this.advanceDialogTaskModeScript = emitedValue;
         }
         
       }
