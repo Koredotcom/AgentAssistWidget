@@ -32,7 +32,9 @@ export class ConvsHistoryLogsComponent implements OnInit {
   isLoading = true;
   ngOnInit(): void {
     // this.getclickedConversationHistory();
-    this.getConvUserBot();
+    // this.getConvUserBot();
+    this.getclickedConversationHistory();
+    
   }
 
   close() {
