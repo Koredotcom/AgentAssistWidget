@@ -11,14 +11,37 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
   styleUrls: ['./work-notes.component.scss']
 })
 export class WorkNotesComponent implements OnInit{
-
   constructor(
     private http: HttpClient  ,
     private rootService: RootService,
     private websocketService: WebSocketService
   ){}
 
+
+  // @Input() listView : boolean;
+  @Input() automation: any;
+  @Input() automationArrayLength;
+  @Input() automationIndex;
+  @Input() responseArray;
+  @Input() responseArrayIndex;
+  @Input() assistAutomationData;
+  @Input() feedBackForWn;
+  feedback:any = {};
+  
+  automationObj: any = {};
+
   ngOnInit(): void {
+    console.log("feedBackForWn", this.feedBackForWn);
+    this.feedback = (this.feedBackForWn || []).reduce((acc, item)=>{
+      if(item.type === 'worknote'){
+        acc[item.positionId] = item.feedback;
+      }
+      return acc ;
+    }, {});
+    
+    console.log("🚀 ~ WorkNotesComponent ~ this.feedback= ~ this.feedback:", this.feedback)
+
+
     try{
       let automation
       if(this.automation.data.buttons[0].value){
@@ -34,16 +57,9 @@ export class WorkNotesComponent implements OnInit{
     }
   }
 
-  @Input() automation: any;
-  // @Input() listView : boolean;
-  @Input() automationArrayLength;
-  @Input() automationIndex;
-  @Input() responseArray;
-  @Input() responseArrayIndex;
-  @Input() assistAutomationData;
-  automationObj: any = {};
-
   workNoteFeedBack(isPosOrNeg, wn){
+    this.feedback[wn.worknoteId] = null;
+    wn.feedback = isPosOrNeg ? "like" : "dislike"
     this.http.post(this.automationObj?.feedbackWebhookURL, {
       type: "feedback",
       isExternalWn: true,
@@ -70,12 +86,13 @@ export class WorkNotesComponent implements OnInit{
       "conversationId" : this.rootService.connectionDetails.conversationId,
       "event" : EVENTS.agent_usage_feedback,
       "interactionType": this.rootService.activeTab == ProjConstants.ASSIST ? 'assist' : 'mybot',
-      "positionId" : this.automation?.data?.positionId,
+      "positionId" : wn.worknoteId,
       "taskId" : /* workNoteId */ wn.worknoteId,
       "taskName" : /* workNoteName */ wn.categoryTitle,
       "comment" : /* workNoteDescription */ wn.description,
       "feedback" : isPosOrNeg ? "like" : "dislike",
-      "feedbackDetails" : []
+      "feedbackDetails" : [],
+      "type": 'worknote' 
     };
     this.websocketService.emitEvents(EVENTS.agent_usage_feedback, feedBack);
   }
