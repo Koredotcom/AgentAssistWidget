@@ -31,7 +31,6 @@ export class WorkNotesComponent implements OnInit{
   automationObj: any = {};
 
   ngOnInit(): void {
-    console.log("feedBackForWn", this.feedBackForWn);
     this.feedback = (this.feedBackForWn || []).reduce((acc, item)=>{
       if(item.type === 'worknote'){
         acc[item.positionId] = item.feedback;
@@ -39,8 +38,6 @@ export class WorkNotesComponent implements OnInit{
       return acc ;
     }, {});
     
-    console.log("🚀 ~ WorkNotesComponent ~ this.feedback= ~ this.feedback:", this.feedback)
-
 
     try{
       let automation
@@ -59,7 +56,11 @@ export class WorkNotesComponent implements OnInit{
 
   workNoteFeedBack(isPosOrNeg, wn){
     this.feedback[wn.worknoteId] = null;
-    wn.feedback = isPosOrNeg ? "like" : "dislike"
+    wn.feedback = isPosOrNeg ? "like" : "dislike";
+    this.postTheFeedback(isPosOrNeg, wn);
+    if(!this.automationObj?.feedbackWebhookURL){
+      return;
+    }
     this.http.post(this.automationObj?.feedbackWebhookURL, {
       type: "feedback",
       isExternalWn: true,
@@ -77,7 +78,6 @@ export class WorkNotesComponent implements OnInit{
         }
       } ).subscribe((data)=>{
     });
-    this.postTheFeedback(isPosOrNeg, wn)
   }
 
   postTheFeedback(isPosOrNeg, wn){
