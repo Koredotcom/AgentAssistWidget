@@ -97,6 +97,9 @@ export class CommonService {
     if (dialog.traits && dialog.traits?.length > 0){
       connectionDetails.traits = dialog.traits
     }
+    if(dialog.intentName === this.projConstants.DISCARD_ALL && !intent){
+      connectionDetails.isDiscard = true;
+    }
     let assistRequestParams = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
     this.rootService.entitiestValueArray = [];
@@ -249,6 +252,9 @@ export class CommonService {
       }
       if (dialog.traits && dialog.traits?.length > 0){
         connectionDetails.traits = dialog.traits
+      }
+      if(dialog.intentName === this.projConstants.DISCARD_ALL && !intent){
+        connectionDetails.isDiscard = true;
       }
       let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
