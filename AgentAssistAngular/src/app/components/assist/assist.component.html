@@ -100,7 +100,7 @@
     <ng-container *ngIf="terminateClick && dialogName">
         <app-terminate (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
     </ng-container>
-    <ng-container *ngIf="showInterruptPopup && dialogName">
+    <ng-container *ngIf="showInterruptPopup">
         <app-interrupt (handlePopupEvent)="handlePopupEvent($event)" [currentDialog]="dialogName"></app-interrupt>
     </ng-container>
     <ng-container *ngIf="(showListView) && dialogName">
