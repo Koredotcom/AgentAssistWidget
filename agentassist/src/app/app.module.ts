@@ -100,7 +100,6 @@ import { FormsModule } from '@angular/forms';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm/sa-delete-confirm.component';
 import { AutomationIntentvsEntityStringPipe } from './helpers/filters/automation-intentvs-entity-string.pipe';
-import { ConvsHistoryLogsComponent } from './pages/conversational-logs/convs-history-logs/convs-history-logs.component';
 import { AccWarningDialogComponent } from './helpers/components/acc-warning-dialog/acc-warning-dialog.component';
 import { XoMenuComponent } from './components/xo-menu/xo-menu.component';
 import { BlankComponent } from './pages/blank/blank.component';
@@ -178,7 +177,6 @@ import { BlankComponent } from './pages/blank/blank.component';
     SearchAssistComponent,
     SaDeleteConfirmComponent,
     // AutomationIntentvsEntityStringPipe,
-    ConvsHistoryLogsComponent,
     AccWarningDialogComponent,
     XoMenuComponent,
     BlankComponent

@@ -58,6 +58,7 @@ import { AceEditorModule } from 'ng2-ace-editor';
 import { PlaceHolderDirective } from '../helpers/directives/placeholder.directive';
 import { LookupPipe } from '../helpers/filters/lookup.pipe';
 import { UbEmptyScreensComponent } from '../pages/usecases/uc-main/uc-table-main/uc-table-view/ub-empty-screens/ub-empty-screens.component';
+import { ConvsHistoryLogsComponent } from '../pages/conversational-logs/convs-history-logs/convs-history-logs.component';
 
 const COMPONENTS = [
   SliderComponentComponent,
@@ -109,7 +110,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConversationConfigComponent,
     ConnectToBotComponent,
     StrictFilterPipe,
-    JsEditorComponent
+    JsEditorComponent,
+    ConvsHistoryLogsComponent
   ],
   imports: [
     CommonModule,
@@ -175,7 +177,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConnectToBotComponent,
     StrictFilterPipe,
     AceEditorModule,
-    JsEditorComponent
+    JsEditorComponent,
+    ConvsHistoryLogsComponent
   ],
 })
 export class SharedModule { }
