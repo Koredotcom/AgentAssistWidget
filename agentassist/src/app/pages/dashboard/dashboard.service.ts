@@ -11,6 +11,7 @@ export class DashboardService {
   public agentAspectView: string = VIEWTYPE.WORDCLOUD;
   public dashboardfilterUpdated$ = new Subject();
   public dashboardSelectedBot;
+  public feedbackIntentPageSelectionUpdated$ = new Subject();
 
 
   constructor() { }
@@ -105,6 +106,16 @@ export class DashboardService {
 
   getDashboardFilterUpdated(){
     return this.dashboardfilterUpdated$.asObservable();
+  }
+
+  setFeedbackIntentPageSelection(data){
+    this.feedbackIntentPageSelectionUpdated$.next(data)
+  }
+
+  getFeedbackIntentPageSelection(){
+    console.log("get feedback intent");
+    
+    return this.feedbackIntentPageSelectionUpdated$.asObservable();
   }
 
   setSelectedBotDetails(botDetails) {
