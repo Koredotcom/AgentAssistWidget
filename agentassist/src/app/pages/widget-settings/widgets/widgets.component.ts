@@ -45,7 +45,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   landingPageTabs = {
     transcript: 'Transcription',
     assist: 'Assist',
-    library: 'Library',
+    library: 'Search',
     mybot: 'My bot'
   }
   multiLanguageList = {
