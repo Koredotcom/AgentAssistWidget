@@ -608,12 +608,12 @@ export class CommonService {
   }
 
   checkEntityValueDataType(entities, entityName, value){
-    if(entities && Object.keys(entities)?.length > 0 && entities[entityName]){
-      return entities[entityName];
-    }
-    if(value && Array.isArray(value) && value.length > 0){
-      return value[0];
-    }
+    // if(entities && Object.keys(entities)?.length > 0 && entities[entityName]){
+    //   return entities[entityName];
+    // }
+    // if(value && Array.isArray(value) && value.length > 0){
+    //   return value[0];
+    // }
     return value;
   }
 
