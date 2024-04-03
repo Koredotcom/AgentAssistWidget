@@ -82,7 +82,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
     this.rootService.setActiveTab(searchType);
     dialog.positionId = this.randomUUIDPipe.transform('positionId');
     dialog.intentName = dialog.name;
-    dialog.userInput = dialog.name;
+    dialog.userInput = dialog.userInput;
     dialog.agentRunButton = (searchType == this.projConstants.MYBOT) ? true : false;
     dialog.traits = this.suggestionData?.traits || [];    
     if(!dialog.dialogId){
