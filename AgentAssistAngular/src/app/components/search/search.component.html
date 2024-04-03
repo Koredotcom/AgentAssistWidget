@@ -85,7 +85,11 @@
             </div>
         </ng-container>
         <ng-container *ngIf="(searchResponse | json) == '{}' && searched">
-            <div class="empty-search">{{'NO_SEARCH_RESULT' | translate}}</div>
+            <div class="empty-search-container-wrapper">
+                <img src="assets/images/icons/search-empty.png">
+                <h1>No Search Result Found</h1>
+                <p>"Could you rephrase your question or ask something else?"</p>
+            </div>
         </ng-container>
     </div>
     <div class="search-block-input">
