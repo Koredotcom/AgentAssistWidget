@@ -29,15 +29,19 @@ export class ApiAdvancedModelComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if(this.data != '') {
-      try {
-        if(JSON.parse(this.data)) {
-          this.apiScript = JSON.parse(this.data);
+    if(this.data?.value !== '') {
+      if(this.data?.emitType === 'advancemode') {
+        try {
+          if(JSON.parse(this.data?.value)) {
+            this.apiScript = this.data.value;
+          }
+        } catch (err) {
         }
-      } catch (err) {
-        this.apiScript = this.data;
+      } else if(this.data?.emitType === 'advance'){
+        this.apiScript = this.data.value
       }
     }
+    
     
   }
 
@@ -53,7 +57,7 @@ export class ApiAdvancedModelComponent implements OnInit {
     
 
   cancel() {
-    this.activeModal.close(this.data);
+    this.activeModal.close(this.data?.value);
   }
 
 }
