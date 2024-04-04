@@ -158,13 +158,8 @@ export class AssistComponent implements OnInit, OnDestroy {
         if(this.showListView){
           this.handlePopupEvent({type : this.projConstants.LISTVIEW, status : false});
         }
-        this.dialogTerminatedOrIntruppted();        
-        if (this.interruptRun) {
-          this.interruptRun = false;
-          let index = (this.interruptDialogList || [])?.findIndex(obj => obj.name === this.interruptDialog.name);
-          // index = index < 0 ? 0 : index;
-          this.commonService.dialogueRunClick(this.interruptDialog,index, false);
-        }
+        this.dialogTerminatedOrIntruppted();  
+        this.interruptDialogCheck();      
         if(this.showRestart){
           this.handlePopupEvent({type : this.projConstants.RESTART, status : false});
           this.commonService.restartDialogueRunClick(this.restartDialogName, false);
@@ -200,6 +195,15 @@ export class AssistComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.showSpinner = false;
     }, 10000);
+  }
+
+  interruptDialogCheck(){
+    if (this.interruptRun) {
+      this.interruptRun = false;
+      let index = (this.interruptDialogList || [])?.findIndex(obj => obj.name === this.interruptDialog.name);
+      // index = index < 0 ? 0 : index;
+      this.commonService.dialogueRunClick(this.interruptDialog,index, false);
+    }
   }
 
   getAssistData(params) {
@@ -516,7 +520,11 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.showInterruptPopup = false;
         // this.dialogTerminatedOrIntruppted();
         this.interruptRun = true;
-        this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL, sourceMsgId : sourceMsgId }, this.dialogPositionId)
+        if(this.rootService.isAutomationOnGoing){
+          this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL, sourceMsgId : sourceMsgId }, this.dialogPositionId)
+        }else{
+          this.interruptDialogCheck();
+        }
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
         let index = (this.interruptDialogList || [])?.findIndex(obj => obj.name === this.interruptDialog.name);
