@@ -426,7 +426,7 @@ export class RootService {
         }
         searchResponse.dialogs.push({
           name: dialog.name, agentRunButton: false, childBotId: dialog.childBotId,
-          childBotName: dialog.childBotName, entities: dialog.entities, userInput: dialog.userInput,
+          childBotName: dialog.childBotName, entities: dialog.entities, userInput: response.userInput,
           sourceMsgId : response.sourceMsgId || ''
         });
       }
