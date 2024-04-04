@@ -26,7 +26,7 @@ export class RestartComponent {
     if(this.assistResponseArray.length){
       this.entityList  = [];
       this.automationData = this.assistResponseArray[this.assistResponseArray.length-1];
-      this.automationData.restartAutomationArray = JSON.parse(JSON.stringify(this.automationData?.automationsArray));
+      // this.automationData.restartAutomationArray = JSON.parse(JSON.stringify(this.automationData?.automationsArray));
       for(let automation of this.automationData?.restartAutomationArray){
          automation.entityName = automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation.data.entityName;
         if(automation.entityName && automation?.data?.isPrompt){

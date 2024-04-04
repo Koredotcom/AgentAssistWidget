@@ -12,6 +12,7 @@ export class DialogComponent {
   @Input() automationData : any;
   @Input() agentassistArrayIndex : number;
   @Input() agentassistResponseArray : any;
+  @Input() feedBackForWn:any = [];
 
   renderResponseType : any = RenderResponseType;
 

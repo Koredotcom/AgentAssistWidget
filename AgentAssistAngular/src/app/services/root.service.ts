@@ -12,7 +12,7 @@ declare const agentAssistHelpers: any;
   providedIn: 'root'
 })
 export class RootService {
-
+  accountId = '';
   socketConnection$: BehaviorSubject<any> = new BehaviorSubject(null);
   activeTab$: BehaviorSubject<any> = new BehaviorSubject(null);
   assistTemplateClick$ : BehaviorSubject<any> = new BehaviorSubject(null);

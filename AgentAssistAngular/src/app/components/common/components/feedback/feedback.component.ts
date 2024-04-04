@@ -63,7 +63,8 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
         "taskName" : new FormControl(this.feedbackData.dialogName),
         "comment" : new FormControl(this.feedbackData.comment),
         "feedback" : new FormControl(this.feedbackData.feedback,[Validators.required]),
-        "feedbackDetails" : new FormControl(this.feedbackData.feedbackDetails)
+        "feedbackDetails" : new FormControl(this.feedbackData.feedbackDetails),
+        "type": new FormControl('dialog')
       }
     );
     

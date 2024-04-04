@@ -69,7 +69,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   showSentiment : boolean = true;
 
   listViewEntityList : any = [];
-
+  feedBackForWn:any = [];
   assistRespType(index, respType) {
     return respType?.data?._id;
   };
@@ -654,6 +654,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   
         if ((!res.suggestions && !res.ambiguityList && !res.ambiguity)) {
           if (res.endOfTask && previousId) {
+            this.feedBackForWn = JSON.parse(JSON.stringify(feedBackResult));
             let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
   
             this.filterAutomationByPositionId();
