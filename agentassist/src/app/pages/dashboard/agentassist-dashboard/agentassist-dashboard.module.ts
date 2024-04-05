@@ -11,6 +11,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from '../dashboard.component';
 import { AutomationIntentvsEntityStringPipe } from 'src/app/helpers/filters/automation-intentvs-entity-string.pipe';
+import { WidgetUsageComponent } from '../widget-usage/widget-usage.component';
 
 const routes: Routes = [
   { path: '', component:  DashboardComponent}
@@ -18,7 +19,8 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [DashboardComponent, AgentAspectComponent, CustomerAspectComponent, AutomationOverrideReportComponent, AutomationPerformanceComponent, AgentFeedbackComponent,ExhaustiveRepresentationComponent, DashboardFiltersComponent, AutomationIntentvsEntityStringPipe],
+  declarations: [DashboardComponent, AgentAspectComponent, CustomerAspectComponent, AutomationOverrideReportComponent, AutomationPerformanceComponent, AgentFeedbackComponent,ExhaustiveRepresentationComponent, DashboardFiltersComponent, AutomationIntentvsEntityStringPipe,
+    WidgetUsageComponent],
   imports: [
     CommonModule,
     SharedModule,

@@ -1,0 +1,44 @@
+<div class="charts-data-containers-wrapper row">
+    <div class="chart-box-info widget-usage col-12">
+        <div class="chart-inner-data">
+            <div class="heading-data-wrapper">
+                <div class="tag-title">ACCURACY</div>
+            </div>
+            <div class="toggle-compare">
+                <label class="kr-sg-toggle">
+                    <input type="checkbox" (click)="changeSlider()" [checked]="showCompare ? true : false">
+                    <div class="slider"></div>
+                </label>
+                <p>Compare</p>
+            </div>
+            <div class="main-heading-title">Average Widget Usage<i class="icon-sa-help" ngbTooltip='The average time widget is used by Agents. ' placement="bottom-left" tooltipClass="tooltip_dashboard"></i>
+            </div>
+            <div class="widget-usage">2m 5s</div>
+            <div class="usge-chart-div" echarts [options]="chartOptions"></div>
+        </div>
+    </div>
+    <div class="chart-box-info usage-suggestion col-4 d-none">
+        <div class="chart-inner-data">
+            <div class="title-text-info">
+                <span class="heading-text">Avg. Suggestions Used/Session</span>
+                <i class="icon-sa-help"></i>
+                <div class="value-data">
+                    <i class="icon-ast_sortup"></i>
+                    <span>2.3%</span>
+                </div>
+            </div>
+            <div class="count-heading">67%</div>
+        </div>
+        <div class="chart-inner-data">
+            <div class="title-text-info">
+                <span class="heading-text">Average Widget Usage</span>
+                <i class="icon-sa-help"></i>
+                <div class="value-data">
+                    <i class="icon-ast_sortup"></i>
+                    <span>2.3%</span>
+                </div>
+            </div>
+            <div class="count-heading">67%</div>
+        </div>
+    </div>
+</div>
