@@ -3,7 +3,7 @@
 
 
 
-<section class="agent-widget-wrapper-data" *ngIf="widgetSettings?.agentAssistWidgetEnabled; else disabledWidget">
+<section class="agent-widget-wrapper-data" *ngIf="widgetSettings?.agentAssistWidgetEnabled">
   <!-- <header>
     <app-header></app-header>
   </header> -->
@@ -44,6 +44,3 @@
     </div>
   </div>
 </ng-container>
-<ng-template #disabledWidget>
-  disabled
-</ng-template>
