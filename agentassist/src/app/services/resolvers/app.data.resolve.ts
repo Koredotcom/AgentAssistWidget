@@ -18,9 +18,8 @@ export class AppDataResolver implements Resolve<any> {
     let instanceOb$;
     return Observable.create(observer => {
       var _promise1 = this.authService.getApplictionControlsFromServer();
-      instanceOb$ = this.appService.getInstaceApps();
       if(this.authService.isAdminUser) {
-        
+        instanceOb$ = this.appService.getInstaceApps();
       }
       
       //const versionOb$ = this.appService.getAppVersion();
@@ -31,8 +30,8 @@ export class AppDataResolver implements Resolve<any> {
         this.authService.getProfile();
         this.authService.getAgentDesktopPermissions();
         observer.complete();
-        instanceOb$.subscribe();
         if(this.authService.isAdminUser) {
+          instanceOb$.subscribe();
         }
         
       },

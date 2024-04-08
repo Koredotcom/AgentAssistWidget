@@ -11,6 +11,7 @@ import { MixPanelWrapper } from '../helpers/mixpanel';
 import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
 import { MixPanelService } from '../helpers/mixPanel.service';
+import { AppService } from './app.service';
 
 declare const $: any;
 
@@ -37,6 +38,7 @@ export class AuthService {
   public isAgentCoachongEnable$ = new BehaviorSubject(true);
   public agentAssistAutomationBots: any = [];
   public isAdminUser = false;
+  public instanceBotDetails: any = {};
 
   constructor(
     private localstore: LocalStoreService,
@@ -45,7 +47,8 @@ export class AuthService {
     public workflowService: workflowService,
     private translate: TranslateService,
     private injector: Injector,
-    private mixPanel: MixPanelService
+    private mixPanel: MixPanelService,
+    private appService: AppService
   ) {
     if (window.location.hash && window.location.hash.indexOf('#id_token') == 0 && window.location.search && window.location.search.indexOf('?qp') == 0) {
       this.hasToken = true;
@@ -302,20 +305,37 @@ export class AuthService {
     let isAgentAssist:any = true;
     if(window.location.href.includes('smartassist')){
       isAgentAssist = '';
+      // make instance apicall here for smartassist
+      this.instanceBotDetails = this.appService.getInstaceApps();
+      this.service.invoke('get.smartassistAutomationBots', {instanceBotId:this.instanceBotDetails}).subscribe(res => {
+        if (res && res.length) {
+          this.workflowService.showAppCreationHeader(false);
+          this.smartAssistBots = res;
+          this.universalBot = this.getUniversalBotDetails(res);
+          this.agentAssistAutomationBots = this.getAgentAssistBotsDetails(res);
+        }
+        this.deflectApps.next(res);
+        this.workflowService.deflectApps(res);
+      }, errRes => {
+        this.deflectApps.next(errRes);
+      })
+    } else {
+      this.service.invoke('get.automationbots', {isAgentAssist}).subscribe(res => {
+        if (res && res.length) {
+          this.workflowService.showAppCreationHeader(false);
+          this.smartAssistBots = res;
+          this.universalBot = this.getUniversalBotDetails(res);
+          this.agentAssistAutomationBots = this.getAgentAssistBotsDetails(res);
+        }
+        this.deflectApps.next(res);
+        this.workflowService.deflectApps(res);
+      }, errRes => {
+        this.deflectApps.next(errRes);
+      })
     }
 
-    this.service.invoke('get.automationbots', {isAgentAssist}).subscribe(res => {
-      if (res && res.length) {
-        this.workflowService.showAppCreationHeader(false);
-        this.smartAssistBots = res;
-        this.universalBot = this.getUniversalBotDetails(res);
-        this.agentAssistAutomationBots = this.getAgentAssistBotsDetails(res);
-      }
-      this.deflectApps.next(res);
-      this.workflowService.deflectApps(res);
-    }, errRes => {
-      this.deflectApps.next(errRes);
-    })
+    
+    
   }
 
   public refreshToken() {
