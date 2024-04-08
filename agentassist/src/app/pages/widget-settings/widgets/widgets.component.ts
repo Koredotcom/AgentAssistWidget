@@ -473,9 +473,13 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   // API Configuration for the SearchAssist in Advanced Mode
   apiAdvancedMode() {
+    let scriptFrom = {'value': '',
+                      'emitType': ''};
     this.modalRef = this.modalService.open(ApiAdvancedModelComponent, { centered: true, keyboard: false, windowClass: 'api-advance-mode', backdrop: 'static' });
     if(this.currentAdvMode === 'advance') {
-      this.modalRef.componentInstance.data = this.advancedModeScript;
+      scriptFrom.value = this.advancedModeScript;
+      scriptFrom.emitType = this.currentAdvMode;
+      this.modalRef.componentInstance.data = scriptFrom;
       this.modalRef.result.then(emitedValue => {
         this.advancedModeScript = emitedValue;
           ((((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
@@ -487,19 +491,34 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           }
           this.currentAdvMode = '';
           this.advancedModeScript = '';
+          scriptFrom.value = '';
+          scriptFrom.emitType = '';
       });
     } else if(this.currentAdvMode === 'advancemode') {
-      this.modalRef.componentInstance.data = this.advanceDialogTaskModeScript;
+      scriptFrom.value = this.advanceDialogTaskModeScript;
+      scriptFrom.emitType = this.currentAdvMode;
+      this.modalRef.componentInstance.data = scriptFrom;
       this.modalRef.result.then(emitedValue => {
-        this.advanceDialogTaskModeScript = emitedValue;
-        (((((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup)
-        .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
-        if(this.agentAssistFormGroup?.value?.agentAssistSettings?.dialogsDisplayNameParser?.mode === 'advance' && emitedValue?.length !== 0) {
-          this.knowledgeAIFormGroup.markAsDirty();
-          // this.isApiConfigured = true;
-        } 
-        this.currentAdvMode = '';
-        this.advanceDialogTaskModeScript = '';
+        
+        try {
+          if(JSON.parse(emitedValue)) {
+            this.advanceDialogTaskModeScript = emitedValue;
+            (((((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup)
+            .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
+            if(this.agentAssistFormGroup?.value?.agentAssistSettings?.dialogsDisplayNameParser?.mode === 'advance' && emitedValue?.length !== 0) {
+              this.knowledgeAIFormGroup.markAsDirty();
+              this.isApiConfigured = true;
+            } 
+            this.currentAdvMode = '';
+            this.advanceDialogTaskModeScript = '';
+            scriptFrom.value = '';
+            scriptFrom.emitType = '';
+            }
+        } catch (err) {
+          this.isApiConfigured = false;
+          this.advanceDialogTaskModeScript = emitedValue;
+        }
+        
       }
       )};
       
