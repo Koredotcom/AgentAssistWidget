@@ -54,6 +54,16 @@ export class ApiAdvancedModelComponent implements OnInit {
     // this.emitScriptService.next(this.apiScript);
     this.activeModal.close(this.apiScript);
   } 
+
+  copyInputMessage(inputElement){
+    var dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = inputElement;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+    this.notificationService.notify("copied successfully", "success");
+  }
     
 
   cancel() {

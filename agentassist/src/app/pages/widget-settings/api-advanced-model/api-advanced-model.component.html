@@ -4,6 +4,7 @@
        <i class="icon-sa-close" (click)="cancel()"></i>
     </div>
     <div class="body-sec">
+        <div>Define Script</div>
      <!-- <p class="define-script">Define script</p> -->
      <ace-editor
        [(text)]="apiScript"
@@ -12,6 +13,10 @@
         ></ace-editor>
     </div>
     <div class="footer-sec">
+        <!-- <button  (click)="copyInputMessage(apiScript)">copy</button> -->
+        <div class="copy-btn" placement="bottom-left" (click)="copyInputMessage(apiScript)">
+            <i class="icon-sa-copy"></i>Copy
+        </div>
         <button class="kr-sg-button-secondary-two btn_lg" (click)="cancel()" >{{'BUTTONS.CANCEL' | translate}}</button>
         <button class="kr-sg-button-primary btn_lg" [disabled]="apiScript?.length === 0" (click)="save()" >{{'BUTTONS.SAVE' | translate}}</button>
     </div>
