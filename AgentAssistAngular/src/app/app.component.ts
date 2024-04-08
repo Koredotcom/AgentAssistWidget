@@ -135,6 +135,7 @@ export class AppComponent implements OnInit, OnDestroy{
       this.rootService.formatConnectionDetails(urlParams);
       this.connectionDetails = this.rootService.getConnectionDetails();
       this.initAgentAssist(this.connectionDetails);
+
     } else if (e.data.name === 'userBotConvos') {
       if (e.data && e.data.sessionId && e.data.userId) {
         this.rootService.setUserBotConversationDataDetails(e.data);
@@ -147,11 +148,21 @@ export class AppComponent implements OnInit, OnDestroy{
       this.localStorageService.userDetails = e.data.userDetails
         ? e.data.userDetails
         : null;
-    } else if (e.data.type === 'AGENT' || e.data?.author?.type === 'AGENT') {
+    } 
+
+    /* we need to remove conditions for below || e.data.type === 'AGENT' , 'USER' || e.data?.author?.type === 'AGENT' , 'USER' */
+
+    else if (e.data?.name === 'agentAssist.AgentMessage' || e.data.type === 'AGENT' || e.data?.author?.type === 'AGENT') {
       this.emitUserAgentMessage(e.data, 'agent_inp_msg');
-    } else if (e.data.type === 'USER' || e.data?.author?.type === 'USER') {
+    } else if (e.data?.name === 'agentAssist.CustomerMessage' || e.data.type === 'USER' || e.data?.author?.type === 'USER') {
       this.emitUserAgentMessage(e.data, 'user_inp_msg');
     }
+    
+    /* below are the events for internal transfer ex: cold / warm */
+    else if(e.data?.name === 'agentAssist.internalTransfer'){
+      this.webSocketService.emitEvents(EVENTS.internal_transfer, e.data);
+    };
+    
     this.eventListenerFromParent(e);
   }
 
@@ -193,7 +204,7 @@ export class AppComponent implements OnInit, OnDestroy{
           chatHistory: e.data?.payload?.chatHistory
         }
         if(this.widgetSettings?.summarization?.isEnabled) {
-        this.webSocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
+          this.webSocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
         }
         this.webSocketService.emitEvents(EVENTS.end_of_conversation, request_resolution_comments);
         this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
