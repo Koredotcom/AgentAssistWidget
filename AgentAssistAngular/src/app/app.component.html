@@ -45,16 +45,19 @@
   </div>
 </ng-container>
 
+
 <ng-template #disabledWidget>
-  <div class="widgets-disabled-card-wrapper">
-      <div class="widgets-info-disabled-content">
-        <div class="icon_block">
-          <i class="krIocnsFont-warning-solid"></i>
+    <ng-container *ngIf="!widgetLoader">
+    <div class="widgets-disabled-card-wrapper">
+        <div class="widgets-info-disabled-content">
+          <div class="icon_block">
+            <i class="krIocnsFont-warning-solid"></i>
+          </div>
+          <div class="content-info-widget">
+            <h1>Widget Disabled</h1>
+            <p>AgentAssist Settings configuration are Disabled! Please reach out to AgentAssist Admin.</p>
+          </div>
         </div>
-        <div class="content-info-widget">
-          <h1>Widget Disabled</h1>
-          <p>AgentAssist Settings configuration are Disabled! Please reach out to AgentAssist Admin.</p>
-        </div>
-      </div>
-  </div>
-</ng-template>
+    </div>
+  </ng-container>
+  </ng-template>
