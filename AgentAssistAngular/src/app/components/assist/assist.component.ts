@@ -294,7 +294,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     let uuids = this.koreGenerateuuidPipe.transform();
     let responseId = uuids;
 
-    if (!this.rootService.isAutomationOnGoing && data.intentName && !data.suggestions && !this.rootService.isInitialDialogOnGoing) {
+    if (!this.rootService.isAutomationOnGoing && data.intentName && (!data.suggestions && data.buttons?.length > 0) && !this.rootService.isInitialDialogOnGoing) {
       let isInitialTaskRanORNot;
       let appState = this.localStorageService.getLocalStorageState();
       if (appState[this.connectionDetails.conversationId]) {
