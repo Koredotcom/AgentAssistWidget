@@ -289,16 +289,16 @@ export class WidgetUsageComponent implements OnInit {
           alignWithLabel: true
         }
       },
-      legend: {
-        data: ['Current', 'Previous'],
-        bottom :10,
-        itemStyle: {
-          type: 'plain',
-          borderRadius: 10,
-          borderWidth: 2,
-          borderColor: '#333'
-      }
-      },
+    //   legend: {
+    //     data: ['Current', 'Previous'],
+    //     bottom :10,
+    //     itemStyle: {
+    //       type: 'plain',
+    //       borderRadius: 10,
+    //       borderWidth: 2,
+    //       borderColor: '#333'
+    //   }
+    //   },
       yAxis: {
         type: 'value'
       },

@@ -3,18 +3,36 @@
         <div class="chart-inner-data">
             <div class="heading-data-wrapper">
                 <div class="tag-title">ACCURACY</div>
-            </div>
-            <div class="toggle-compare">
-                <label class="kr-sg-toggle">
-                    <input type="checkbox" (click)="changeSlider()" [checked]="showCompare ? true : false">
-                    <div class="slider"></div>
-                </label>
-                <p>Compare</p>
+                <div class="toggle-compare">
+                    <label class="kr-sg-toggle">
+                        <input type="checkbox" (click)="changeSlider()" [checked]="showCompare ? true : false">
+                        <div class="slider"></div>
+                    </label>
+                    <p>Compare</p>
+                </div>
+                <div class="widget-usage">
+                    <h1>2m 5s</h1>
+                    <div class="value-data">
+                        <i class="icon-ast_sortup"></i>
+                        <span>2.3%</span>
+                    </div>
+                </div>
             </div>
             <div class="main-heading-title">Average Widget Usage<i class="icon-sa-help" ngbTooltip='The average time widget is used by Agents. ' placement="bottom-left" tooltipClass="tooltip_dashboard"></i>
             </div>
-            <div class="widget-usage">2m 5s</div>
             <div class="usge-chart-div" echarts [options]="chartOptions"></div>
+            <div class="legend-data-info">
+                <div class="legend-title">
+                    <span style="background: #F59E0B;"></span>
+                    <p>Today</p>
+                    <div>2m 5s</div>
+                </div>
+                <div class="legend-title">
+                    <span></span>
+                    <p>Last 24 hours</p>
+                    <div>3m 5s</div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="chart-box-info usage-suggestion col-4 d-none">
