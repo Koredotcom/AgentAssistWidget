@@ -190,7 +190,8 @@ export class workflowService {
 
   getCurrentBtSmt(automationBot?: boolean) {
     if (automationBot) {
-      if(!window.location.href.includes('smartassist')) {
+      let type = JSON.parse(localStorage.getItem('agentAssist'));
+      if(!(type?.basehref === 'smartassist')) {
         return { ...this.currentBtDetails };
       } else {
         let selAcc = this.local.getSelectedAccount();

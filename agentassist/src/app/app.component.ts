@@ -61,7 +61,8 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnInit() {
-    if(window.location.href.includes('smartassist')){
+    let type = JSON.parse(localStorage.getItem('agentAssist'));
+    if(type?.basehref === 'smartassist'){
       document.getElementsByTagName('html')[0].classList.add('init-smartassist');
     }
     // the lang to use, if the lang isn't available, it will use the current loader to get them
@@ -120,7 +121,7 @@ export class AppComponent implements OnDestroy {
     // const browserLang = this.translate.getBrowserLang();
     // this.localstore.appLanguage = this.localstore.appLanguage || (browserLang.match(/ja/) ? browserLang : 'en');
     let lang = this.authService.externalQp?.appLanguage || this.localstore.appLanguage;
-    if(window.location.href.includes('smartassist')) {
+    if(type?.basehref === 'smartassist') {
       lang = this.localstore.appLanguage;
     }
     if (lang) { this.translate.use(lang); }

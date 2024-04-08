@@ -33,7 +33,7 @@ export class AuthService {
   public fromToken_tokenId = null;
   public externalQp: any;
   userAccIdDetail: any;
-  public isLoadingOnSm = window.location.href.includes('smartassist') ? true : false;
+  public isLoadingOnSm = JSON.parse(localStorage.getItem('agentAssist')).basehref === 'smartassist' ? true : false;
   public isAgentDesktopEnabled$ = new BehaviorSubject(false);
   public isAgentCoachongEnable$ = new BehaviorSubject(true);
   public agentAssistAutomationBots: any = [];
@@ -303,37 +303,23 @@ export class AuthService {
 
   public getDeflectApps() {
     let isAgentAssist:any = true;
-    if(window.location.href.includes('smartassist')){
+    let type = JSON.parse(localStorage.getItem('agentAssist'));
+    if(type?.basehref === 'smartassist'){
       isAgentAssist = '';
-      // make instance apicall here for smartassist
-      this.instanceBotDetails = this.appService.getInstaceApps();
-      this.service.invoke('get.smartassistAutomationBots', {instanceBotId:this.instanceBotDetails}).subscribe(res => {
-        if (res && res.length) {
-          this.workflowService.showAppCreationHeader(false);
-          this.smartAssistBots = res;
-          this.universalBot = this.getUniversalBotDetails(res);
-          this.agentAssistAutomationBots = this.getAgentAssistBotsDetails(res);
-        }
-        this.deflectApps.next(res);
-        this.workflowService.deflectApps(res);
-      }, errRes => {
-        this.deflectApps.next(errRes);
-      })
-    } else {
-      this.service.invoke('get.automationbots', {isAgentAssist}).subscribe(res => {
-        if (res && res.length) {
-          this.workflowService.showAppCreationHeader(false);
-          this.smartAssistBots = res;
-          this.universalBot = this.getUniversalBotDetails(res);
-          this.agentAssistAutomationBots = this.getAgentAssistBotsDetails(res);
-        }
-        this.deflectApps.next(res);
-        this.workflowService.deflectApps(res);
-      }, errRes => {
-        this.deflectApps.next(errRes);
-      })
     }
 
+    this.service.invoke('get.automationbots', {isAgentAssist}).subscribe(res => {
+      if (res && res.length) {
+        this.workflowService.showAppCreationHeader(false);
+        this.smartAssistBots = res;
+        this.universalBot = this.getUniversalBotDetails(res);
+        this.agentAssistAutomationBots = this.getAgentAssistBotsDetails(res);
+      }
+      this.deflectApps.next(res);
+      this.workflowService.deflectApps(res);
+    }, errRes => {
+      this.deflectApps.next(errRes);
+    })
     
     
   }

@@ -17,7 +17,8 @@ import { SearchAssistComponent } from './pages/search-assist/search-assist.compo
 import { BlankComponent } from './pages/blank/blank.component';
 
 let isSmartassist = false;
-if(window.location.href.includes('smartassist')){
+let type = JSON.parse(localStorage.getItem('agentAssist'));
+if( type?.basehref === 'smartassist') {
   isSmartassist = true;
 }
 
