@@ -188,6 +188,30 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="toggle-info-data m-0" formGroupName="summarizationModel">
+                            <div class="content-data-toggle">
+                                <h1>Auto Summarization Model</h1>
+                                <p>Triggers the Automatic Summarization at the end of conversation.</p>
+                                <div class="radio-group-block">
+                                    <div class="kr-sg-radiobutton p-0"
+                                        *ngFor="let model of summaryModelType; let idx = index">
+                                        <input id="summarymodel-{{idx}}" class="radio-custom" type="radio" [value]="model.type"
+                                            name="summaryModel" formControlName="summaryModel"
+                                            (change)="selectedSummaryModelType($event, model)">
+                                        <label for="summarymodel-{{idx}}" class="radio-custom-label">{{model.text}}</label>
+                                    </div>
+                                    <div>
+                                        <ul>
+                                            <ng-container *ngFor="let dialog of currentSelectedBotDialogs | keyvalue">
+                                                <li ngbDropdownItem class="p-0" (click)="selectCustomBot(dialog)">
+                                                    <a>{{dialog.name}}</a>
+                                                </li>
+                                            </ng-container>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="toggle-info-data m-0">
                             <div class="content-data-toggle">
                                 <h1>Widget Landing Tab</h1>

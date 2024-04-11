@@ -83,6 +83,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       {type: 'fallback', text: 'Show as a Fallback event', tooltip:'Display Knowledge AI Results as a fallback when no Bot Intents are identified.'}
   ];
   AutoSuggestions = [{type:'On'}, {type: 'Off'}];
+  summaryModelType = [
+    {type:'koreSummary', text:'OOTB Kore Summarization', tooltip:'The default Kore summarization model will be used'}, 
+    {type:'customSummary',text:'Custom Dialog Task', tooltip:'Ensure that this dialog task has only one message node.This message node will hold summarization content.'}]
   URLBehaviour = [
       {type: 'defaultBehaviour', text: 'Default System Behaviour', tooltip: "The AgentAssist widget will use the system's default governing approach for URL opening."},
       {type: 'sendPostEvent', text: 'Post Event', tooltip:'The AgentAssist widget will open URLs based on the consumed "AgentAssist.UrlClickedMessage" post event.'}]
@@ -107,6 +110,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   advanceDialogTaskModeScript: string = '';
   selectedChannel = 'chat';
   selectedKAIChannel = 'chat';
+  currentSelectedBotDialogs: any = [];
+  selectedDialog: any;
   isCoachingDisable = true;
   agentAssistSeedData : any = {};
   disableSaveButton : any = {
@@ -253,6 +258,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getUseCases();
     this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
       this.isCoachingDisable = isEnabled;
     });
@@ -606,6 +612,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
         canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false]
       }),
+      summarizationModel:this.fb.group({
+
+      }),
       isAgentPlaybookEnabled: [isUpdate ? (obj.isAgentPlaybookEnabled ?? false) : false],
       isWidgetLandingEnabled: this.fb.group({
         tab: [isUpdate ? (obj.isWidgetLandingEnabled?.tab??'assist') : 'assist']
@@ -720,6 +729,38 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     .get(key) as FormGroup)
     .get('resource') as FormControl)
     .patchValue(defaultUrl);
+  }
+
+  getUseCases(){
+    // limit=:limit&offset=:offset&search=:search&filterby=:filterby&usecaseType=:usecaseType&status=:status&isAgentAssist=true
+    this.service.invoke('get.usecases', {
+      streamId: this.workflowService?.getCurrentBtSmt(true)._id,
+      search: '',
+      filterby: '',
+      status: '',
+      usecaseType: 'dialog',
+      offset: 0,
+      limit: -1,
+
+    }).subscribe((data) => {
+      this.currentSelectedBotDialogs = data.usecases;
+      // if (data) {
+      //   this.selectedDialog = (data?.usecases || []).reduce((acc, item)=>{
+      //     acc[item.dialogId] = item.usecaseName;
+      //     return acc;
+      //   }, {});
+      // }
+    });
+    
+  }
+
+  selectedSummaryModelType(event, model) {
+    console.log("🚀 ~ WidgetsComponent ~ selectedSummaryModelType ~ model:", model)
+    
+  }
+
+  selectCustomBot(dialog) {
+
   }
 
 }
