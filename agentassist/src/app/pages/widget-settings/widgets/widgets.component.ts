@@ -612,9 +612,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
         canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false]
       }),
-      summarizationModel:this.fb.group({
-
-      }),
       isAgentPlaybookEnabled: [isUpdate ? (obj.isAgentPlaybookEnabled ?? false) : false],
       isWidgetLandingEnabled: this.fb.group({
         tab: [isUpdate ? (obj.isWidgetLandingEnabled?.tab??'assist') : 'assist']
