@@ -278,9 +278,9 @@ export class AssistComponent implements OnInit, OnDestroy {
       this.dialogTerminatedOrIntruppted();
     }
 
-    // if (!this.rootService.isAutomationOnGoing && !this.proactiveModeStatus && !data.sendMenuRequest) {
-    //   return;
-    // }
+    if (!this.rootService.isAutomationOnGoing && !this.proactiveModeStatus && !data.sendMenuRequest) {
+      return;
+    }
 
     if (!data.sendMenuRequest) {
       this.assistResponseArray = this.commonService.removeOrAddOverRideDivForPreviousResponse(this.assistResponseArray,true);
