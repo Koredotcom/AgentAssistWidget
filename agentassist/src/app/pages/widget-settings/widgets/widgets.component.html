@@ -188,7 +188,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="toggle-info-data m-0" formGroupName="summarizationModel">
+                        <div class="toggle-info-data m-0" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.isEnabled">
                             <div class="content-data-toggle">
                                 <h1>Auto Summarization Model</h1>
                                 <p>Triggers the Automatic Summarization at the end of conversation.</p>
