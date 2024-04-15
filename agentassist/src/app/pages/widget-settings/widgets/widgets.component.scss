@@ -628,6 +628,7 @@
                         align-items: center;
                         margin-top: 4px;
                         .kr-sg-radiobutton {
+                            flex-wrap: wrap;
                             .radio-custom-label {
                                 color: var(--Gray-700, var(--Primary-Colors-Gray-700, #344054));
                                 font-size: 14px;
@@ -636,6 +637,94 @@
                                 display: flex;
                                 align-items: center;
                                 gap: 4px;
+                            }
+                        }
+                        .dailog-model-dropdown{
+                            width: 100%;
+                            padding-left: 30px;
+                            margin-top: 5px;
+                            .kr-sg-dropdowns{
+                                .content-menu{
+                                    max-height: 300px;
+                                    overflow: auto;
+                                    li{
+                                        a{
+                                            color: var(--Gray-500, var(--Primary-Colors-Gray-500, #667085));
+                                            font-size: 16px;
+                                            font-weight: 400;
+                                        }
+                                    }
+                                    .multi-dropdown-list{
+                                        display: flex;
+                                        padding: 10px 14px;
+                                        align-items: center;
+                                        gap: 8px;
+                                        align-self: stretch;
+                                        cursor: pointer;
+                                        transition: 0.2s all ease;
+                                        &:hover{
+                                            background: var(--Gray-50, #F9FAFB);
+                                        }
+                                        span{
+                                            color: var(--Gray-900, #101828);
+                                            font-family: Inter;
+                                            font-size: 16px;
+                                            font-style: normal;
+                                            font-weight: 400;
+                                            line-height: 24px;
+                                            width: 100%;
+                                            overflow: hidden;
+                                            white-space: nowrap;
+                                            text-overflow: ellipsis;
+                                        }
+                                        i{
+                                            color: #D0D5DD;
+                                            flex-shrink: 0;
+                                            transform: rotate(180deg);
+                                            font-size: 14px;
+                                        }
+                                        &[aria-expanded="true"]{
+                                            i{
+                                                transform: rotate(-90deg);
+                                            }
+                                        }
+                                        &.collapsed{
+
+                                        }
+                                    }
+                                    .multip-collapse-details{
+                                        button{
+                                            width: 100%;
+                                            padding: 10px 10px 10px 28px;
+                                            background: transparent;
+                                            border: 0;
+                                            text-align: left;
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 4px;
+                                            cursor: pointer;
+                                            span{
+                                                color: var(--Gray-500, var(--Primary-Colors-Gray-500, #667085));
+                                                font-size: 16px;
+                                                font-weight: 400;
+                                                line-height: 24px;
+                                                width: 100%;
+                                            }
+                                            i{
+                                                display: none;
+                                                flex-shrink: 0;
+                                                color: #155EEF;
+                                                font-size: 20px;
+                                            }
+                                            &.selected-btn{
+                                                background: var(--Gray-25, #FCFCFD);
+                                                i{
+                                                    display: block;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                         .info-tip{
