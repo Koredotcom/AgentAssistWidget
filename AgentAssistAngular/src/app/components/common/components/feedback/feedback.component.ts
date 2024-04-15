@@ -112,6 +112,7 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
       this.feedbackData.feedbackDetails.push(suggestion);
     }
     this.feedbackData.oldFeedback =  false;
+    this.updateFeedbackForm(this.feedbackData);
     // this.feedbackData.comment = this.feedbackForm.get('comment').value;
     // this.feedbackData = structuredClone(this.feedbackData);
     // this.submitFeedback();

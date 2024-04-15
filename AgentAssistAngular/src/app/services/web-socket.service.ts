@@ -111,6 +111,9 @@ export class WebSocketService {
     welcomeMessageParams['allQueryParams'] = {...this.rootService.connectionDetails};
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
 
+    if(!this.rootService.settingsData?.isProactiveEnabled){
+      this.handleOverrideMode(true, null);
+    }
 
     let menu_request_params : any = {
       botId,

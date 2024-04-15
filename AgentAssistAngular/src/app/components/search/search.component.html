@@ -84,7 +84,7 @@
                 </div>
             </div>
         </ng-container>
-        <ng-container *ngIf="(searchResponse | json) == '{}' && searched">
+        <ng-container *ngIf="(searchResponse | json) == '{}' && searched && !showSpinner">
             <div class="empty-search-container-wrapper">
                 <img src="assets/images/icons/search-empty.png">
                 <h1>No Search Result Found</h1>
