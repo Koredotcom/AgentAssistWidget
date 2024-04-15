@@ -402,7 +402,7 @@ export class CommonService {
     return renderResponse;
   }
 
-  formatDialogRunRenderResponse(res, responseId, dialogId, dialogName) {
+  formatDialogRunRenderResponse(res, responseId, dialogId, dialogName, tabName = ProjConstants.ASSIST) {
     let renderResponse = {
       data: res,
       type: this.renderResponseType.AUTOMATION,
@@ -411,12 +411,13 @@ export class CommonService {
       dialogName: dialogName,
       connectionDetails: this.rootService.connectionDetails,
       showAutomation: true,
-      sourceMsgId : res.sourceMsgId || ""
+      sourceMsgId : res.sourceMsgId || "",
+      tab : tabName
     }
     return renderResponse;
   }
 
-  formatAutomationRenderResponse(data, responseId, result, newTemp, dialogPositionId) {
+  formatAutomationRenderResponse(data, responseId, result, newTemp, dialogPositionId, tabName) {
     let renderResponse = {
       data: data,
       type: this.renderResponseType.AUTOMATION,
@@ -428,7 +429,8 @@ export class CommonService {
       responseType: this.renderResponseType.ASSISTRESPONSE,
       errorCount: 0,
       value: data?.buttons[0]?.value,
-      dialogId : dialogPositionId
+      dialogId : dialogPositionId,
+      tab : tabName
     }
     return renderResponse;
   }
@@ -443,7 +445,7 @@ export class CommonService {
     return renderResponse;
   }
 
-  formatSmallTalkRenderResponse(data, responseId, result, newTemp, dialogPositionId?) {
+  formatSmallTalkRenderResponse(data, responseId, result, newTemp, dialogPositionId, tabName) {
     let renderResponse: any = {
       data: data,
       type: this.renderResponseType.SMALLTALK,
@@ -458,7 +460,8 @@ export class CommonService {
       sendData: result?.parsedPayload ? newTemp : data?.buttons[0]?.value,
       dialogId: dialogPositionId,
       responseType: this.renderResponseType.ASSISTRESPONSE,
-      sourceMsgId : data.sourceMsgId || ''
+      sourceMsgId : data.sourceMsgId || '',
+      tab : tabName
     }
     renderResponse.template = this.rootService.getTemplateHtml(renderResponse.templateRender, result);
     return renderResponse;

@@ -332,7 +332,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     if(!data.sendMenuRequest){
       if (this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
         this.showSpinner = false;
-        renderResponse = this.commonService.formatAutomationRenderResponse(data,responseId, result, newTemp, this.dialogPositionId)
+        renderResponse = this.commonService.formatAutomationRenderResponse(data,responseId, result, newTemp, this.dialogPositionId, ProjConstants.ASSIST)
         if (data.isPrompt && (!this.proactiveModeStatus || this.rootService.manualAssistOverrideMode)) {
           renderResponse.toggleOverride = true;
           renderResponse.hideOverrideDiv = true;
@@ -347,7 +347,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   
       // small talk with templates
       if (!this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
-        renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId)
+        renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId, ProjConstants.ASSIST)
         if (data.isPrompt && !this.proactiveModeStatus) {
           renderResponse.toggleOverride = true;
           renderResponse.hideOverrideDiv = true;
@@ -358,7 +358,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   
       // small talk without templates
       if (!this.rootService.isAutomationOnGoing && !this.rootService.dropdownHeaderUuids && !data.suggestions && !result.parsePayLoad && !data.sendMenuRequest) {
-        renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId)
+        renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId, ProjConstants.ASSIST)
         if (data.isPrompt && !this.proactiveModeStatus) {
           renderResponse.toggleOverride = true;
           renderResponse.hideOverrideDiv = true;
@@ -729,7 +729,7 @@ export class AssistComponent implements OnInit, OnDestroy {
             // automation
             if (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
               let responseId = res?.buttons && res?.buttons[0]?._id ? (res?.buttons && res?.buttons[0]?._id) : uuids;
-              renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp, currentTaskPositionId);
+              renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp, currentTaskPositionId, ProjConstants.ASSIST);
               if (res.isPrompt && !this.proactiveModeStatus) {
                 renderResponse.toggleOverride = true;
                 renderResponse.hideOverrideDiv = true;
@@ -742,7 +742,7 @@ export class AssistComponent implements OnInit, OnDestroy {
             } else if ((previousTaskName != currentTaskName)) {
               //small talk after dialogue terminate   
               this.dialogName = null;           
-              renderResponse = this.commonService.formatSmallTalkRenderResponse(res, uuids, result, newTemp, previousId)
+              renderResponse = this.commonService.formatSmallTalkRenderResponse(res, uuids, result, newTemp, previousId, ProjConstants.ASSIST)
               this.assistResponseArray.push(renderResponse);
               this.assistResponseArray = [...this.assistResponseArray];
             }

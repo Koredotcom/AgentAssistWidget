@@ -203,7 +203,7 @@ export class MybotComponent {
       if (data.entityName) {
         this.myBotDataResponse = Object.assign({}, data);
       }
-      let renderResponse : any = this.commonService.formatAutomationRenderResponse(data, myBotuuids, results, newTemp, this.myBotDialogPositionId);
+      let renderResponse : any = this.commonService.formatAutomationRenderResponse(data, myBotuuids, results, newTemp, this.myBotDialogPositionId, ProjConstants.MYBOT);
       renderResponse.toggleOverride = data.isPrompt ? true : false;
       renderResponse.hideOverrideDiv =  true;
       this.currentRunningStep = data.entityDisplayName ? data.entityDisplayName : data.entityName;
@@ -217,7 +217,7 @@ export class MybotComponent {
 
     //small talk
     if (!this.rootService.isMyBotAutomationOnGoing && this.rootService.myBotDropdownHeaderUuids && data.buttons && (this.myBotDialogPositionId && !data.positionId || data.positionId == this.myBotDialogPositionId)) {
-      let renderResponse = this.commonService.formatSmallTalkRenderResponse(data, myBotuuids, results, newTemp, this.myBotDialogPositionId);
+      let renderResponse = this.commonService.formatSmallTalkRenderResponse(data, myBotuuids, results, newTemp, this.myBotDialogPositionId, ProjConstants.MYBOT);
       renderResponse.hideOverrideDiv = true;
       renderResponse.toggleOverride = data.isPrompt ? true : false;
       renderResponse.template = this.rootService.getTemplateHtml(renderResponse.isTemplateRender, results);
@@ -270,7 +270,7 @@ export class MybotComponent {
     this.rootService.myBotDropdownHeaderUuids = agentBotuuids;
     this.commonService.updateLocalStorageForMyBot(true);
     this.grayoutOldFeedbacks();
-    let renderResponse = this.commonService.formatDialogRunRenderResponse(data, this.rootService.myBotDropdownHeaderUuids, this.myBotDialogPositionId, this.dialogName);
+    let renderResponse = this.commonService.formatDialogRunRenderResponse(data, this.rootService.myBotDropdownHeaderUuids, this.myBotDialogPositionId, this.dialogName, ProjConstants.MYBOT);
     this.mybotResponseArray.push(renderResponse);
     this.mybotResponseArray = [...this.mybotResponseArray];
     this.dialogName = data.intentName;
@@ -484,7 +484,7 @@ export class MybotComponent {
             previousTaskPositionId = currentTaskPositionId;
             previousTaskName = currentTaskName;
             this.grayoutOldFeedbacks();
-            let renderResponse =  this.commonService.formatDialogRunRenderResponse(res, previousId, currentTaskPositionId, currentTaskName);
+            let renderResponse =  this.commonService.formatDialogRunRenderResponse(res, previousId, currentTaskPositionId, currentTaskName, ProjConstants.MYBOT);
             this.mybotResponseArray.push(renderResponse);
             this.mybotResponseArray = [...this.mybotResponseArray];
 
@@ -516,9 +516,9 @@ export class MybotComponent {
           
           if (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
             let responseId = res.buttons && res.buttons[0]?._id ? (res.buttons && res.buttons[0]?._id) : uuids
-            renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp, currentTaskPositionId);
+            renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp, currentTaskPositionId, ProjConstants.MYBOT);
+            renderResponse.toggleOverride = res.isPrompt ? true : false;
             if (res.isPrompt) {
-              renderResponse.toggleOverride = false;
               renderResponse.hideOverrideDiv = true;
             }
             renderResponse = this.commonService.formatAssistAutomation(renderResponse);
@@ -530,7 +530,7 @@ export class MybotComponent {
           }else if((previousTaskName != currentTaskName)){
           //small talk after dialogue terminate
             this.dialogName = null;
-            renderResponse = this.commonService.formatSmallTalkRenderResponse(res, uuids, result, newTemp, previousId)
+            renderResponse = this.commonService.formatSmallTalkRenderResponse(res, uuids, result, newTemp, previousId, ProjConstants.MYBOT)
             this.mybotResponseArray.push(renderResponse);
             this.mybotResponseArray = [...this.mybotResponseArray];
           }

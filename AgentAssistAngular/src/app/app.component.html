@@ -46,7 +46,7 @@
 </ng-container>
 
 <ng-template #disabledWidget>
-  <div class="widgets-disabled-card-wrapper">
+  <div class="widgets-disabled-card-wrapper" *ngIf="widgetSettings?.agentAssistWidgetEnabled === false">
       <div class="widgets-info-disabled-content">
         <div class="icon_block">
           <i class="krIocnsFont-warning-solid"></i>
