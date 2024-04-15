@@ -126,6 +126,16 @@
                     font-size: 16px;
                 }
             }
+            .override-btn{
+                background: transparent;
+                padding: 0;
+                border: 0;
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 20px;
+                cursor: pointer;
+                color: var(--themeColor);
+            }
         }
     }
     .info-entity-text{
