@@ -77,6 +77,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   knowledgeAIFormGroup: FormGroup;
   agentAssistformDirty : boolean = false;
   isV3= false;
+  currentBot: any;
+  useCases = {};
+  linkedBotObjs:any = {};
+  botId = this.workflowService.getCurrentBtSmt(true)._id;
   searchResultArr = [
       {type: 'alwaysShow', text: 'Always show', tooltip:'Display Knowledge AI results consistently, regardless of Bot Intents.'}, 
       {type: 'isXODependant', text: 'Show with XO results',tooltip:'Display Knowledge AI results when relevant Bot events (Dialog Tasks and FAQs) are detected.'}, 
@@ -258,7 +262,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getUseCases();
+    this.initLoad();
     this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
       this.isCoachingDisable = isEnabled;
     });
@@ -280,6 +284,20 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.isUnifiedPlatform = this.workflowService?.isUnifiedPlatform();
     this.isLoading = true;
     this.getAgentAssistSettingsNew();
+    this.onBotChange();
+  }
+
+  initLoad() {
+    this.currentBot = this.workflowService.getCurrentBt(true);
+    console.log("🚀 ~ WidgetsComponent ~ initLoad ~ this.currentBot:", this.currentBot)
+    if(this.currentBot.type === 'universalbot') {
+      this.getLinkedBots();   
+      } else {
+        this.botId = this.currentBot._id;
+        this.selectBot(this.currentBot);
+        this.currentSelectedBotDialogs = [];
+        this.getUseCases();
+    }
   }
 
   // Get AgentAssist Settings in the Get API Call
@@ -610,7 +628,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       }),
       summarization: this.fb.group({
         isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
-        canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false]
+        canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false],
+        summaryModel : [isUpdate ? (obj.summarization?.summaryModel ??'koreSummary'): 'koreSummary']
       }),
       isAgentPlaybookEnabled: [isUpdate ? (obj.isAgentPlaybookEnabled ?? false) : false],
       isWidgetLandingEnabled: this.fb.group({
@@ -662,6 +681,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }
     (KAIObj['searchAssistConfig'] as FormGroup).addControl('integrations', integrations);   
     return KAIObj;
+
   }
 
   chooseChannel(channel){
@@ -728,10 +748,34 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     .patchValue(defaultUrl);
   }
 
+  autoSummaryEnabled(evt) {
+    console.log("🚀 ~ WidgetsComponent ~ autoSummaryEnabled ~ evt:", evt.target.checked)
+    if(evt.target.checked) {
+
+    }
+    
+  }
+
+  onBotChange() {
+    this.workflowService.getCurrentBotDetails$.subscribe(bot => {
+      this.currentBot = bot;
+      console.log("🚀 ~ WidgetsComponent ~ ngOnInit ~ this.currentBot:", this.currentBot);
+      if(bot.type === 'universalbot') {
+        this.getLinkedBots();
+        
+      } else {
+        this.botId = bot._id;
+        this.selectBot(this.currentBot);
+        this.currentSelectedBotDialogs = [];
+        this.getUseCases();
+      }
+    })
+  }
+
   getUseCases(){
     // limit=:limit&offset=:offset&search=:search&filterby=:filterby&usecaseType=:usecaseType&status=:status&isAgentAssist=true
     this.service.invoke('get.usecases', {
-      streamId: this.workflowService?.getCurrentBtSmt(true)._id,
+      streamId: this.botId,
       search: '',
       filterby: '',
       status: '',
@@ -740,7 +784,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       limit: -1,
 
     }).subscribe((data) => {
-      this.currentSelectedBotDialogs = data.usecases;
+      if(data.usecases) {
+        this.currentSelectedBotDialogs = data.usecases;
+        console.log("🚀 ~ WidgetsComponent ~ getUseCases ~ this.currentSelectedBotDialogs:", this.currentSelectedBotDialogs)
+      }
+      
       // if (data) {
       //   this.selectedDialog = (data?.usecases || []).reduce((acc, item)=>{
       //     acc[item.dialogId] = item.usecaseName;
@@ -748,7 +796,49 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       //   }, {});
       // }
     });
-    
+  }
+
+  getLinkedBots(){
+    const params = {
+      userId: this.authService.getUserId(),
+      streamId: this.currentBot._id
+    }
+    this.service.invoke('get.bt.stream', params).subscribe(data => {
+      console.log(data.publishedBots)
+      if(data){
+        this.linkedBotObjs = [...data.configuredBots, ...data.publishedBots];
+      } 
+    });
+    console.log("🚀 ~ WidgetsComponent ~ this.service.invoke ~ standardBotsOj:", this.linkedBotObjs)
+  }
+
+  selectBot(bot, click=false){
+    // this.childBotId = bot._id;
+    if(click){
+      return;
+    }else if(click){
+        this.useCases = {};
+    }
+    if(click){
+    }
+    this.service.invoke('get.usecases', {
+      streamId: bot._id,
+      search: '',
+      filterby: '',
+      status: '',
+      usecaseType: 'dialog',
+      offset: 0,
+      limit: -1,
+
+    }).subscribe((data) => {
+      if (data) {
+        this.useCases = (data?.usecases || [])
+        .reduce((acc, item)=>{
+          acc[item.dialogId] = item.usecaseName;
+          return acc;
+        }, {});
+      }
+    });
   }
 
   selectedSummaryModelType(event, model) {
@@ -756,7 +846,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     
   }
 
-  selectCustomBot(dialog) {
+  selectCustomDialog(dialog) {
 
   }
 
