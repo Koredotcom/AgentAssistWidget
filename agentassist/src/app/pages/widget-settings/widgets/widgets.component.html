@@ -180,7 +180,7 @@
                             </div>
                             <div class="content-data-check">
                                 <label class="kr-sg-toggle">
-                                    <input type="checkbox" formControlName="isEnabled">
+                                    <input type="checkbox" formControlName="isEnabled" (change)="autoSummaryEnabled($event)">
                                     <div class="slider">
                                         <span class="enabled">Enabled</span>
                                         <span class="disabled">Disabled</span>
@@ -191,22 +191,50 @@
                         <div class="toggle-info-data m-0" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.isEnabled">
                             <div class="content-data-toggle">
                                 <h1>Auto Summarization Model</h1>
-                                <p>Triggers the Automatic Summarization at the end of conversation.</p>
+                                <p>Choose a suitable model for generating the summarization</p>
                                 <div class="radio-group-block">
                                     <div class="kr-sg-radiobutton p-0"
                                         *ngFor="let model of summaryModelType; let idx = index">
                                         <input id="summarymodel-{{idx}}" class="radio-custom" type="radio" [value]="model.type"
-                                            name="summaryModel" formControlName="summaryModel"
+                                            name="summaryModel" 
                                             (change)="selectedSummaryModelType($event, model)">
                                         <label for="summarymodel-{{idx}}" class="radio-custom-label">{{model.text}}</label>
+                                        <!-- <ng-container *ngFor="let dialog of currentSelectedBotDialogs | keyvalue">
+                                            <li ngbDropdownItem class="p-0" (click)="selectCustomBot(dialog)">
+                                                <a>{{dialog.name}}</a>
+                                            </li>
+                                        </ng-container> -->
+                                        <div class="dailog-model-dropdown" *ngIf="model?.type === 'customSummary' && currentBot?.type === 'universalbot'">
+                                            <div class="kr-sg-dropdowns" ngbDropdown>
+                                                <div class="dropdown dropdown-open" >
+                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>SelectBot</button>
+                                                    <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
+                                                        <ng-container *ngFor="let automationBot of linkedBotObjs">
+                                                            <li ngbDropdownItem class="p-0" (click)="selectCustomBot(automationBot)">
+                                                                <a>{{automationBot.botName}}</a>
+                                                            </li>
+                                                        </ng-container>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="dailog-model-dropdown" *ngIf="model?.type === 'customSummary' && currentBot?.type === 'default'">
+                                            <div class="kr-sg-dropdowns" ngbDropdown>
+                                                <div class="dropdown dropdown-open" >
+                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
+                                                    <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
+                                                        <ng-container *ngFor="let useCase of currentSelectedBotDialogs">
+                                                            <li ngbDropdownItem class="p-0" *ngIf="selectedChannel === 'chat' ? useCase?.triggerPoints.isChatEnabled : selectedChannel === 'voice' && useCase?.triggerPoints.isVoiceEnabled" (click)="selectCustomDialog(useCase)">
+                                                                <a>{{useCase?.usecaseName}}</a>
+                                                            </li>
+                                                        </ng-container>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div>
                                         <ul>
-                                            <ng-container *ngFor="let dialog of currentSelectedBotDialogs | keyvalue">
-                                                <li ngbDropdownItem class="p-0" (click)="selectCustomBot(dialog)">
-                                                    <a>{{dialog.name}}</a>
-                                                </li>
-                                            </ng-container>
                                         </ul>
                                     </div>
                                 </div>
