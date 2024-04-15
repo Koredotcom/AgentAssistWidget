@@ -193,18 +193,15 @@
                                 <h1>Auto Summarization Model</h1>
                                 <p>Choose a suitable model for generating the summarization</p>
                                 <div class="radio-group-block">
-                                    <div class="kr-sg-radiobutton p-0"
-                                        *ngFor="let model of summaryModelType; let idx = index">
-                                        <input id="summarymodel-{{idx}}" class="radio-custom" type="radio" [value]="model.type"
-                                            name="summaryModel" 
-                                            (change)="selectedSummaryModelType($event, model)">
+                                    <div class="kr-sg-radiobutton p-0" *ngFor="let model of summaryModelType; let idx = index">
+                                        <input id="summarymodel-{{idx}}" class="radio-custom" type="radio" [value]="model.type" name="summaryModel" (change)="selectedSummaryModelType($event, model)">
                                         <label for="summarymodel-{{idx}}" class="radio-custom-label">{{model.text}}</label>
                                         <!-- <ng-container *ngFor="let dialog of currentSelectedBotDialogs | keyvalue">
                                             <li ngbDropdownItem class="p-0" (click)="selectCustomBot(dialog)">
                                                 <a>{{dialog.name}}</a>
                                             </li>
                                         </ng-container> -->
-                                        <div class="dailog-model-dropdown" *ngIf="model?.type === 'customSummary' && currentBot?.type === 'universalbot'">
+                                        <div class="dailog-model-dropdown d-none" *ngIf="model?.type === 'customSummary' && currentBot?.type === 'universalbot'">
                                             <div class="kr-sg-dropdowns" ngbDropdown>
                                                 <div class="dropdown dropdown-open" >
                                                     <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>SelectBot</button>
@@ -218,7 +215,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="dailog-model-dropdown" *ngIf="model?.type === 'customSummary' && currentBot?.type === 'default'">
+                                        <div class="dailog-model-dropdown d-none" *ngIf="model?.type === 'customSummary' && currentBot?.type === 'default'">
                                             <div class="kr-sg-dropdowns" ngbDropdown>
                                                 <div class="dropdown dropdown-open" >
                                                     <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
@@ -232,10 +229,85 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <ul>
-                                        </ul>
+
+                                        <div class="dailog-model-dropdown">
+                                            <div class="kr-sg-dropdowns" ngbDropdown>
+                                                <div class="dropdown dropdown-open" >
+                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>SelectBot</button>
+                                                    <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
+                                                        <li>
+                                                            <a class="selected">Design Update</a>
+                                                        </li>
+                                                        <li>
+                                                            <div class="multi-dropdown-list" data-toggle="collapse" data-target="#demo">
+                                                                <span>Help Bot</span>
+                                                                <i class="icon-coaching--left-arrow"></i>
+                                                            </div>
+                                                            <div id="demo" class="multip-collapse-details collapse in">
+                                                                <ng-container>
+                                                                    <button>
+                                                                        <span>Billing</span>
+                                                                        <i class="icon-coaching--check"></i>
+                                                                    </button>
+                                                                    <button>
+                                                                        <span>Refunds</span>
+                                                                        <i class="icon-coaching--check"></i>
+                                                                    </button>
+                                                                    <button class="selected-btn">
+                                                                        <span>Price Objection</span>
+                                                                        <i class="icon-coaching--check"></i>
+                                                                    </button>
+                                                               </ng-container>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="multi-dropdown-list" data-toggle="collapse" data-target="#demo1">
+                                                                <span>Credit Assistance Bot</span>
+                                                                <i class="icon-coaching--left-arrow"></i>
+                                                            </div>
+                                                            <div id="demo1" class="multip-collapse-details collapse in">
+                                                               <ng-container>
+                                                                    <button>
+                                                                        <span>Billing</span>
+                                                                        <i class="icon-coaching--check"></i>
+                                                                    </button>
+                                                                    <button class="selected-btn">
+                                                                        <span>Refunds</span>
+                                                                        <i class="icon-coaching--check"></i>
+                                                                    </button>
+                                                                    <button>
+                                                                        <span>Price Objection</span>
+                                                                        <i class="icon-coaching--check"></i>
+                                                                    </button>
+                                                               </ng-container>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="multi-dropdown-list" data-toggle="collapse" data-target="#demo2">
+                                                                <span>Pricing Bot</span>
+                                                                <i class="icon-coaching--left-arrow"></i>
+                                                            </div>
+                                                            <div id="demo2" class="multip-collapse-details collapse in">
+                                                                <ng-container>
+                                                                    <button class="selected-btn">
+                                                                        <span>Billing</span>
+                                                                        <i class="icon-coaching--check"></i>
+                                                                    </button>
+                                                                    <button>
+                                                                        <span>Refunds</span>
+                                                                        <i class="icon-coaching--check"></i>
+                                                                    </button>
+                                                                    <button>
+                                                                        <span>Price Objection</span>
+                                                                        <i class="icon-coaching--check"></i>
+                                                                    </button>
+                                                               </ng-container>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
