@@ -67,34 +67,38 @@ export class WidgetUsageComponent implements OnInit {
         let seriesData = [];
         this.payload.isCompare = this.showCompare;
         this.service.invoke('widgetUsage', this.params, this.payload).subscribe((data: any) => {
-            this.widgetUsageData = data;
-            if (data.currentData?.length > 0) {
-                this.widgetUsageData.currentData = this.addZerosValForBarGraphData(this.widgetUsageData.currentData);
-                let intervalAverage = this.widgetUsageData.currentData?.map(resp => this.gettooltipData(resp));
-                seriesData.push({
-                    name: 'Current',
-                    data: intervalAverage,
-                    type: 'line',
-                    color: '#E267AC'
-                })
-            }
-
-            if (this.showCompare && data.previousData?.length > 0) {
-                this.widgetUsageData.previousData = this.addZerosValForBarGraphData(this.widgetUsageData.previousData);
-                let intervalAverage = this.widgetUsageData.previousData?.map(resp => this.gettooltipData(resp));
-                seriesData.push({
-                    name: 'Previous',
-                    data: intervalAverage,
-                    type: 'line',
-                    color: '#F59E0B'
-                });
-
-                if(data.previousAvg){
-                    this.widgetUsageData.percent =  ((this.widgetUsageData.currentAvg - this.widgetUsageData.previousAvg)/this.widgetUsageData.previousAvg) * 100
-                    this.widgetUsageData.percent = this.decimalPipe.transform(this.widgetUsageData.percent/60000, '1.2-2');
+            if(data.currentData?.length > 0 || data.previousData?.length > 0){
+                this.widgetUsageData = data;
+                if (data.currentData?.length > 0) {
+                    this.widgetUsageData.currentData = this.addZerosValForBarGraphData(this.widgetUsageData.currentData);
+                    let intervalAverage = this.widgetUsageData.currentData?.map(resp => this.gettooltipData(resp));
+                    seriesData.push({
+                        name: 'Current',
+                        data: intervalAverage,
+                        type: 'line',
+                        color: '#E267AC'
+                    })
                 }
-            }            
-            this.getChartOptions(seriesData);
+    
+                if (this.showCompare && data.previousData?.length > 0) {
+                    this.widgetUsageData.previousData = this.addZerosValForBarGraphData(this.widgetUsageData.previousData);
+                    let intervalAverage = this.widgetUsageData.previousData?.map(resp => this.gettooltipData(resp));
+                    seriesData.push({
+                        name: 'Previous',
+                        data: intervalAverage,
+                        type: 'line',
+                        color: '#F59E0B'
+                    });
+    
+                    if(data.previousAvg){
+                        this.widgetUsageData.percent =  ((this.widgetUsageData.currentAvg - this.widgetUsageData.previousAvg)/this.widgetUsageData.previousAvg) * 100
+                        this.widgetUsageData.percent = this.decimalPipe.transform(this.widgetUsageData.percent/60000, '1.2-2');
+                    }
+                }            
+                this.getChartOptions(seriesData);
+            }else{
+                this.widgetUsageData = {};
+            }
         },(err)=> {
             this.widgetUsageData = {};
         });
