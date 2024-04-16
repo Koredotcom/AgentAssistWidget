@@ -142,6 +142,10 @@ export class LocalStorageService {
           appState[conversationId][storageConst.LANGUAGE] = widgetSettings?.languageSettings?.language;
         }
 
+        if(this.rootService.internalTransfer && Object.keys(this.rootService.internalTransferData)?.length > 0 && conversationId == this.rootService.internalTransferData?.conversationId){
+          appState[conversationId][storageConst.INTERNAL_TRANSFER] = this.rootService.internalTransferData;
+        }
+
         this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];
         this.rootService.setActiveTab(appState[conversationId][storageConst.ACTIVE_TAB]);
 

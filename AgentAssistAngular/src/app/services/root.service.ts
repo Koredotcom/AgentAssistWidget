@@ -155,6 +155,8 @@ export class RootService {
 
   showListView : boolean = true;
   showRestart : boolean = true;
+  internalTransfer : boolean = false;
+  internalTransferData : any = {};
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     private dirService : DirService) {

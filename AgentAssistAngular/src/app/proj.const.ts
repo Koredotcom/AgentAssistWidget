@@ -111,7 +111,8 @@ export const storageConst = {
     ACTIVE_TAB : 'activeTab',
     SHOWSEND : 'showSend',
     ENABLEWIDGET :   'enableWidget',
-    ISSEND_WELCOME_MSG : 'isSendWelcomeMessage'
+    ISSEND_WELCOME_MSG : 'isSendWelcomeMessage',
+    INTERNAL_TRANSFER : 'internalTransfer'
 }
 
 export const WidgetConst = {
