@@ -118,6 +118,10 @@ export class AgentFeedbackComponent implements OnInit {
   }
 
   updateAgentFeedbackData(tab, empty=false) {    
+    let botId = this.dashboardService.getSelectedBotDetails()._id;
+    let params: any = {
+      streamId: botId,
+    };
     if (this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData) {      
       this.isLoading = true;
       this.cdRef.detectChanges();
@@ -125,10 +129,6 @@ export class AgentFeedbackComponent implements OnInit {
         this.skip = 0;
         this.fetched = 0;
       }
-      let botId = this.dashboardService.getSelectedBotDetails()._id;
-      let params: any = {
-        streamId: botId,
-      };
       let body: any = {
         limit: this.limit,
         skip: this.skip,
@@ -156,7 +156,7 @@ export class AgentFeedbackComponent implements OnInit {
         type : this.feedbackTabSelection
       }
       body = {...body, ... this.payload}
-      this.service.invoke('agentFeedbacks', this.params, body).subscribe((data : any) => {
+      this.service.invoke('agentFeedbacks', params, body).subscribe((data : any) => {
         this.updateViewData(data);
       });
     }
@@ -219,7 +219,11 @@ export class AgentFeedbackComponent implements OnInit {
     this.dashboardService.setFeedbackIntentPageSelection(taskObj);
     this.negativeFeedbackTableData = {};
     this.negFbisLoading = true;
-    this.service.invoke('agentFeedbacks', this.params, body).pipe(finalize(()=> {this.negFbisLoading = false})).subscribe((response : any) => {
+    let botId = this.dashboardService.getSelectedBotDetails()._id;
+    let params: any = {
+      streamId: botId,
+    };
+    this.service.invoke('agentFeedbacks', params, body).pipe(finalize(()=> {this.negFbisLoading = false})).subscribe((response : any) => {
       if(response?.data && Object.keys(response?.data)?.length > 0){
         this.negativeFeedbackTableData = response;        
       }
@@ -251,8 +255,11 @@ export class AgentFeedbackComponent implements OnInit {
     body = { ...body, ... this.payload };
 
     this.feedbackisLoading = true;
-
-    this.service.invoke('agentFeedbacks', this.params, body).pipe(finalize(() => {
+    let botId = this.dashboardService.getSelectedBotDetails()._id;
+    let params: any = {
+      streamId: botId,
+    };
+    this.service.invoke('agentFeedbacks', params, body).pipe(finalize(() => {
       this.feedbackisLoading = false;
       this.cdRef.detectChanges();
     })).subscribe((response: any) => {    
