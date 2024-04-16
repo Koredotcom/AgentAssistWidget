@@ -53,7 +53,7 @@
               <button type="button" class="dropdown-toggle before-none dropdown-input" id="repdropdown" ngbDropdownToggle>
                   <i class="icon-ast_channels"></i>
                   <span class="title-text">{{('DASHBOARD.CHANNEL_' + this.selectedChannel) | translate}}</span>
-                  <span class="count-channels">2</span>
+                  <span class="count-channels">{{channelList?.length - 1}}</span>
               </button>
               <ul class="content-menu" aria-labelledby="repdropdown" ngbDropdownMenu>
                   <perfect-scrollbar>

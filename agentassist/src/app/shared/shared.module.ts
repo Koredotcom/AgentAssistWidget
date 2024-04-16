@@ -58,6 +58,8 @@ import { AceEditorModule } from 'ng2-ace-editor';
 import { PlaceHolderDirective } from '../helpers/directives/placeholder.directive';
 import { LookupPipe } from '../helpers/filters/lookup.pipe';
 import { UbEmptyScreensComponent } from '../pages/usecases/uc-main/uc-table-main/uc-table-view/ub-empty-screens/ub-empty-screens.component';
+import { ConvsHistoryLogsComponent } from '../pages/conversational-logs/convs-history-logs/convs-history-logs.component';
+import { MillisToDurationPipePipe } from '../helpers/filters/millis-to-duration-pipe.pipe';
 
 const COMPONENTS = [
   SliderComponentComponent,
@@ -73,7 +75,8 @@ const COMPONENTS = [
 
 const PIPES = [
   FilterPipe,
-  LookupPipe
+  LookupPipe,
+  MillisToDurationPipePipe
 ]
 
 const DIRECTIVES = [
@@ -109,7 +112,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConversationConfigComponent,
     ConnectToBotComponent,
     StrictFilterPipe,
-    JsEditorComponent
+    JsEditorComponent,
+    ConvsHistoryLogsComponent
   ],
   imports: [
     CommonModule,
@@ -134,7 +138,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxDaterangepickerMd.forRoot(),
     AceEditorModule
   ],
-  providers: [TitleCasePipe, FilterPipe],
+  providers: [TitleCasePipe, FilterPipe, MillisToDurationPipePipe],
   exports: [
     ...COMPONENTS,
     ...DIRECTIVES,
@@ -175,7 +179,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConnectToBotComponent,
     StrictFilterPipe,
     AceEditorModule,
-    JsEditorComponent
+    JsEditorComponent,
+    ConvsHistoryLogsComponent
   ],
 })
 export class SharedModule { }

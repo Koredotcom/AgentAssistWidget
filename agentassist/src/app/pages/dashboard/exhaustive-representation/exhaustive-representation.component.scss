@@ -9,6 +9,22 @@
         height: 56px;
         .lef-sec{
             position: relative;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            span{
+                line-height: normal;
+                font-size: 12px;
+                cursor: pointer;
+                color: #737373;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
             .main-title{
                 font-weight: 400;
                 font-size: 16px;
