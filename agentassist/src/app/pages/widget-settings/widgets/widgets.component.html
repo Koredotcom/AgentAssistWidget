@@ -164,147 +164,189 @@
                             </div>
                         </div>
                     <!-- </ng-container> -->
-                        <div class="toggle-info-data m-0" formGroupName="summarization">
-                            <div class="content-data-toggle">
-                                <h1>Auto Summarization</h1>
-                                <p>Triggers the Automatic Summarization at the end of conversation.</p>
-                                <div class="auto-sub"
-                                    *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.isEnabled">
-                                    <span class="action-text">Actions</span>
-                                    <div class="kr-sg-checkbox">
-                                        <input id="canSub-12" class="checkbox-custom" type="checkbox"
-                                            formControlName="canSubmit">
-                                        <label for="canSub-12" class="checkbox-custom-label">Submit button</label>
+                        <div class="toggle-info-data summary-model m-0" formGroupName="summarization">
+                            <!--  -->
+                            <div class="">
+                                <div class="content-data-toggle">
+                                    <h1>Auto Summarization</h1>
+                                    <p>Triggers the Automatic Summarization at the end of conversation.</p>
+                                    <div class="auto-sub"
+                                        *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.isEnabled">
+                                        <span class="action-text">Actions</span>
+                                        <div class="kr-sg-checkbox">
+                                            <input id="canSub-12" class="checkbox-custom" type="checkbox"
+                                                formControlName="canSubmit">
+                                            <label for="canSub-12" class="checkbox-custom-label">Submit button</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="content-data-check">
-                                <label class="kr-sg-toggle">
-                                    <input type="checkbox" formControlName="isEnabled" (change)="autoSummaryEnabled($event)">
-                                    <div class="slider">
-                                        <span class="enabled">Enabled</span>
-                                        <span class="disabled">Disabled</span>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="toggle-info-data m-0" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.isEnabled">
-                            <div class="content-data-toggle">
-                                <h1>Auto Summarization Model</h1>
-                                <p>Choose a suitable model for generating the summarization</p>
-                                <div class="radio-group-block">
-                                    <div class="kr-sg-radiobutton p-0" *ngFor="let model of summaryModelType; let idx = index">
-                                        <input id="summarymodel-{{idx}}" class="radio-custom" type="radio" [value]="model.type" name="summaryModel" (change)="selectedSummaryModelType($event, model)">
-                                        <label for="summarymodel-{{idx}}" class="radio-custom-label">{{model.text}}</label>
-                                        <!-- <ng-container *ngFor="let dialog of currentSelectedBotDialogs | keyvalue">
-                                            <li ngbDropdownItem class="p-0" (click)="selectCustomBot(dialog)">
-                                                <a>{{dialog.name}}</a>
-                                            </li>
-                                        </ng-container> -->
-                                        <div class="dailog-model-dropdown d-none" *ngIf="model?.type === 'customSummary' && currentBot?.type === 'universalbot'">
-                                            <div class="kr-sg-dropdowns" ngbDropdown>
-                                                <div class="dropdown dropdown-open" >
-                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>SelectBot</button>
-                                                    <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
-                                                        <ng-container *ngFor="let automationBot of linkedBotObjs">
-                                                            <li ngbDropdownItem class="p-0" (click)="selectCustomBot(automationBot)">
-                                                                <a>{{automationBot.botName}}</a>
-                                                            </li>
-                                                        </ng-container>
-                                                    </ul>
-                                                </div>
-                                            </div>
+                                <div class="content-data-check">
+                                    <label class="kr-sg-toggle">
+                                        <input type="checkbox" formControlName="isEnabled" (change)="autoSummaryEnabled($event)">
+                                        <div class="slider">
+                                            <span class="enabled">Enabled</span>
+                                            <span class="disabled">Disabled</span>
                                         </div>
-                                        <div class="dailog-model-dropdown d-none" *ngIf="model?.type === 'customSummary' && currentBot?.type === 'default'">
-                                            <div class="kr-sg-dropdowns" ngbDropdown>
-                                                <div class="dropdown dropdown-open" >
-                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
-                                                    <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
-                                                        <ng-container *ngFor="let useCase of currentSelectedBotDialogs">
-                                                            <li ngbDropdownItem class="p-0" *ngIf="selectedChannel === 'chat' ? useCase?.triggerPoints.isChatEnabled : selectedChannel === 'voice' && useCase?.triggerPoints.isVoiceEnabled" (click)="selectCustomDialog(useCase)">
-                                                                <a>{{useCase?.usecaseName}}</a>
-                                                            </li>
-                                                        </ng-container>
-                                                    </ul>
+                                    </label>
+                                </div>
+                            </div>
+                            <!--  -->
+                            <div class="content-data-toggle" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.isEnabled" formGroupName="model">
+                                <div class="content-data-toggle" >
+                                    <h1>Auto Summarization Model</h1>
+                                    <p>Choose a suitable model for generating the summarization</p>
+                                    <div class="radio-group-block">
+                                        <div class="kr-sg-radiobutton p-0" *ngFor="let customModel of summaryModelType; let modelidx = index">
+                                            <input id="summarymodel-{{modelidx}}" class="radio-custom" type="radio" [value]="customModel.type" name="type" formControlName="type" (change)="selectedSummaryModelType($event, customModel)" >
+                                            <label for="summarymodel-{{modelidx}}" class="radio-custom-label">{{customModel.text}}</label>
+                                            <ng-container>
+                                                <div class="dailog-model-dropdown" *ngIf="customModel?.type === 'customTask' && currentBot?.type === 'default'"  [ngClass]="{'disabled': (customModel?.type !== 'customTask')}">
+                                                    <div class="kr-sg-dropdowns" ngbDropdown [disabled]="isDropdownDisabled">
+                                                        <div class="dropdown dropdown-open" >
+                                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
+                                                                {{ configuredDialog.selectedDialogName !== '' ? configuredDialog.selectedDialogName : ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
+                                                            
+                                                            <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
+                                                                <ng-container *ngFor="let useCase of currentSelectedBotDialogs">
+                                                                    <li ngbDropdownItem class="p-0" *ngIf="selectedChannel === 'chat' ? useCase?.triggerPoints.isChatEnabled : selectedChannel === 'voice' && useCase?.triggerPoints.isVoiceEnabled" (click)="selectCustomDialog(useCase)">
+                                                                        <a >{{useCase?.usecaseName}}</a>
+                                                                    </li>
+                                                                </ng-container>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                                <div class="dailog-model-dropdown" *ngIf="customModel?.type === 'customTask' && currentBot?.type === 'universalbot'"  [ngClass]="{'disabled': (customModel?.type !== 'customTask')}">
+                                                    <div class="kr-sg-dropdowns" ngbDropdown >
+                                                        <div class="dropdown dropdown-open" >
+                                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ configuredDialog.selectedDialogName !== '' ? configuredDialog.selectedDialogName : ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
+                                                            <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
+                                                                <ng-container *ngFor="let automationBot of linkedBotObjs; let indxVal = index">
+                                                                    <li>
+                                                                        <div class="multi-dropdown-list" data-toggle="collapse" [attr.data-target]="'#' + automationBot.botName + '-' +indxVal" (click)="selectCustomBot(automationBot?._id)">
+                                                                            <span>{{automationBot.botName}}</span>
+                                                                            <i class="icon-coaching--left-arrow"></i>
+                                                                        </div>
+                                                                        <div [id]="automationBot.botName + '-' +indxVal" class="multip-collapse-details collapse in">
+                                                                            <ng-container *ngIf="loaded; else loading">
+                                                                                <div *ngFor="let dialog of automationBot?.dialogs; let ucIndx = index">
+                                                                                    <button class="selected-btn"  (click)="selectedCustomChildBotDialog(automationBot, dialog)">
+                                                                                        <!-- <span>{{dialog | json}}</span> -->
+                                                                                        <span>{{dialog?.usecaseName}}</span>
+                                                                                    </button>
+                                                                                </div>
+                                                                           </ng-container>
+                                                                           <ng-template #loading>
+                                                                                <ng-container>
+                                                                                    <div class="ai-itassist-wrapper">
+                                                                                        <div class="no-data-loader">
+                                                                                            <div class="sk-fading-circle">
+                                                                                                <div class="sk-circle1 sk-circle"></div>
+                                                                                                <div class="sk-circle2 sk-circle"></div>
+                                                                                                <div class="sk-circle3 sk-circle"></div>
+                                                                                                <div class="sk-circle4 sk-circle"></div>
+                                                                                                <div class="sk-circle5 sk-circle"></div>
+                                                                                                <div class="sk-circle6 sk-circle"></div>
+                                                                                                <div class="sk-circle7 sk-circle"></div>
+                                                                                                <div class="sk-circle8 sk-circle"></div>
+                                                                                                <div class="sk-circle9 sk-circle"></div>
+                                                                                                <div class="sk-circle10 sk-circle"></div>
+                                                                                                <div class="sk-circle11 sk-circle"></div>
+                                                                                                <div class="sk-circle12 sk-circle"></div>
+                                                                                            </div>
+                                                                                            <div class="thinking-text">Loading...</div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </ng-container>
+                                                                            </ng-template>
+                                                                           <ng-container >
 
-                                        <div class="dailog-model-dropdown">
-                                            <div class="kr-sg-dropdowns" ngbDropdown>
-                                                <div class="dropdown dropdown-open" >
-                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>SelectBot</button>
-                                                    <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
-                                                        <li>
-                                                            <a class="selected">Design Update</a>
-                                                        </li>
-                                                        <li>
-                                                            <div class="multi-dropdown-list" data-toggle="collapse" data-target="#demo">
-                                                                <span>Help Bot</span>
-                                                                <i class="icon-coaching--left-arrow"></i>
-                                                            </div>
-                                                            <div id="demo" class="multip-collapse-details collapse in">
-                                                                <ng-container>
-                                                                    <button>
-                                                                        <span>Billing</span>
-                                                                        <i class="icon-coaching--check"></i>
-                                                                    </button>
-                                                                    <button>
-                                                                        <span>Refunds</span>
-                                                                        <i class="icon-coaching--check"></i>
-                                                                    </button>
-                                                                    <button class="selected-btn">
-                                                                        <span>Price Objection</span>
-                                                                        <i class="icon-coaching--check"></i>
-                                                                    </button>
-                                                               </ng-container>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="multi-dropdown-list" data-toggle="collapse" data-target="#demo1">
-                                                                <span>Credit Assistance Bot</span>
-                                                                <i class="icon-coaching--left-arrow"></i>
-                                                            </div>
-                                                            <div id="demo1" class="multip-collapse-details collapse in">
-                                                               <ng-container>
-                                                                    <button>
-                                                                        <span>Billing</span>
-                                                                        <i class="icon-coaching--check"></i>
-                                                                    </button>
-                                                                    <button class="selected-btn">
-                                                                        <span>Refunds</span>
-                                                                        <i class="icon-coaching--check"></i>
-                                                                    </button>
-                                                                    <button>
-                                                                        <span>Price Objection</span>
-                                                                        <i class="icon-coaching--check"></i>
-                                                                    </button>
-                                                               </ng-container>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="multi-dropdown-list" data-toggle="collapse" data-target="#demo2">
-                                                                <span>Pricing Bot</span>
-                                                                <i class="icon-coaching--left-arrow"></i>
-                                                            </div>
-                                                            <div id="demo2" class="multip-collapse-details collapse in">
-                                                                <ng-container>
-                                                                    <button class="selected-btn">
-                                                                        <span>Billing</span>
-                                                                        <i class="icon-coaching--check"></i>
-                                                                    </button>
-                                                                    <button>
-                                                                        <span>Refunds</span>
-                                                                        <i class="icon-coaching--check"></i>
-                                                                    </button>
-                                                                    <button>
-                                                                        <span>Price Objection</span>
-                                                                        <i class="icon-coaching--check"></i>
-                                                                    </button>
-                                                               </ng-container>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
+                                                                           </ng-container>
+                                                                        </div>
+                                                                    </li>
+                                                                </ng-container>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+    
+                                            <div class="dailog-model-dropdown d-none" *ngIf="customModel?.type === 'kore'">
+                                                <div class="kr-sg-dropdowns" ngbDropdown>
+                                                    <div class="dropdown dropdown-open" >
+                                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>SelectBot</button>
+                                                        <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
+                                                            <li>
+                                                                <a class="selected">Design Update</a>
+                                                            </li>
+                                                            <li>
+                                                                <div class="multi-dropdown-list" data-toggle="collapse" data-target="#demo">
+                                                                    <span>Help Bot</span>
+                                                                    <i class="icon-coaching--left-arrow"></i>
+                                                                </div>
+                                                                <div id="demo" class="multip-collapse-details collapse in">
+                                                                    <ng-container>
+                                                                        <button>
+                                                                            <span>Billing</span>
+                                                                            <i class="icon-coaching--check"></i>
+                                                                        </button>
+                                                                        <button>
+                                                                            <span>Refunds</span>
+                                                                            <i class="icon-coaching--check"></i>
+                                                                        </button>
+                                                                        <button class="selected-btn">
+                                                                            <span>Price Objection</span>
+                                                                            <i class="icon-coaching--check"></i>
+                                                                        </button>
+                                                                   </ng-container>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="multi-dropdown-list" data-toggle="collapse" data-target="#demo1">
+                                                                    <span>Credit Assistance Bot</span>
+                                                                    <i class="icon-coaching--left-arrow"></i>
+                                                                </div>
+                                                                <div id="demo1" class="multip-collapse-details collapse in">
+                                                                   <ng-container>
+                                                                        <button>
+                                                                            <span>Billing</span>
+                                                                            <i class="icon-coaching--check"></i>
+                                                                        </button>
+                                                                        <button class="selected-btn">
+                                                                            <span>Refunds</span>
+                                                                            <i class="icon-coaching--check"></i>
+                                                                        </button>
+                                                                        <button>
+                                                                            <span>Price Objection</span>
+                                                                            <i class="icon-coaching--check"></i>
+                                                                        </button>
+                                                                   </ng-container>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="multi-dropdown-list" data-toggle="collapse" data-target="#demo2">
+                                                                    <span>Pricing Bot</span>
+                                                                    <i class="icon-coaching--left-arrow"></i>
+                                                                </div>
+                                                                <div id="demo2" class="multip-collapse-details collapse in">
+                                                                    <ng-container>
+                                                                        <button class="selected-btn">
+                                                                            <span>Billing</span>
+                                                                            <i class="icon-coaching--check"></i>
+                                                                        </button>
+                                                                        <button>
+                                                                            <span>Refunds</span>
+                                                                            <i class="icon-coaching--check"></i>
+                                                                        </button>
+                                                                        <button>
+                                                                            <span>Price Objection</span>
+                                                                            <i class="icon-coaching--check"></i>
+                                                                        </button>
+                                                                   </ng-container>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -312,6 +354,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="toggle-info-data m-0">
                             <div class="content-data-toggle">
                                 <h1>Widget Landing Tab</h1>
