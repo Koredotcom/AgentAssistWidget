@@ -12,9 +12,9 @@
                 </div>
                 <div class="widget-usage" *ngIf="(widgetUsageData | json) != '{}' && (widgetUsageData?.currentAvg || widgetUsageData?.percent)">
                     <h1>{{widgetUsageData?.currentAvg | millisToDurationPipe}}</h1>
-                    <div class="value-data" *ngIf="widgetUsageData?.percent">
-                        <i class="icon-ast_sortup"></i>
-                        <span>{{widgetUsageData?.percent}}%</span>
+                    <div class="value-data" [ngClass]="{'negtive': widgetUsageData.decrement}" *ngIf="widgetUsageData?.percent">
+                        <i [ngClass]="widgetUsageData.decrement ?  'icon-ast_sortdown' : 'icon-ast_sortup'"></i>
+                        <span>{{widgetUsageData?.percent | number : '1.2-2'}}%</span>
                     </div>
                 </div>
             </div>
