@@ -73,7 +73,7 @@ export class AgentFeedbackComponent implements OnInit {
     private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.params.streamId = this.authService.smartAssistBots[0]._id;
+    this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
     this.subscribeEvents();
   }
 
