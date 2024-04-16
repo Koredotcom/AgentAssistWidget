@@ -59,8 +59,6 @@ export class RootService {
   isAgentSentRequestOnClick: boolean = false;
   isMyBotAgentSentRequestOnClick: boolean = false;
 
-  sentSearchResponse : boolean = false;
-
   settingsData : any = {};
   bulbClick : boolean = false;
   aaHelpers = null;
