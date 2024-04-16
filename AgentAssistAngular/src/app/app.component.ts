@@ -75,6 +75,22 @@ export class AppComponent implements OnInit, OnDestroy{
         name: 'agent_assist',
       };
       window.parent.postMessage(message, '*');
+      // this needs to delete before commit
+      // setTimeout(() => {
+      //   let data = {
+      //     "conversationId": this.connectionDetails.conversationId,
+      //     "name": "agentAssist.internalTransfer",
+      //     "transfertype": "cold", //warm, cold
+      //     "transition": "exit", //entry, exit
+      //     "participant": {      //New Participant Details who is going to participate
+      //       "identity": "agentID1",
+      //       "name": "agentName1",
+      //       "type": "agent" //default to agent
+      //     }
+      //   }
+      //   this.rootService.internalTransfer = true;
+      //   this.rootService.internalTransferData = data;
+      // }, 0);
     });
 
     this.subs.sink = this.webSocketService.agentFeedbackResponse$.subscribe((response: any) => {
@@ -160,7 +176,8 @@ export class AppComponent implements OnInit, OnDestroy{
     
     /* below are the events for internal transfer ex: cold / warm */
     else if(e.data?.name === 'agentAssist.internalTransfer'){
-      this.webSocketService.emitEvents(EVENTS.internal_transfer, e.data);
+      this.rootService.internalTransfer = true;
+      this.rootService.internalTransferData = e.data;
     };
     
     this.eventListenerFromParent(e);
@@ -296,6 +313,33 @@ export class AppComponent implements OnInit, OnDestroy{
     let instanceBotId = params.fromSAT ? params.instanceBotId : params.botId;
     this.serviceInvoker.invoke('get.settings', {instanceBotId : instanceBotId, channel : params.channel}, {},{ botId : params.botId },params.agentassisturl).pipe(finalize(() => {this.widgetLoader = false})).subscribe((res)=> {
       if(res && res.agentAssistSettings && res.agentAssistSettings[params.channel]){
+        // res.agentAssistSettings[params.channel].transferConfigs = {
+        //   // cold transfer scenario
+        //   cold: {
+        //       isEnabled: true,
+        //       actionType: "scrollToTop",
+        //       taskConfigs: {
+        //           lBId: "st-xxxx", // in case of universal bot
+        //           taskRefId: "gvdsjd222",
+        //           taskId: "dg-sddad",
+        //           usecaseId: "sat-212713",
+        //           refId: "sdasdsaD"
+        //       }
+        //   },
+        //   // warm transfer scenario
+        //   warm: {
+        //       isEnabled: true,
+        //       actionType: "scrollToTop",
+        //       taskConfigs: {
+        //           lBId: "st-xxxx", // in case of universal bot
+        //           taskRefId: "gvdsjd222",
+        //           taskId: "dg-sddad",
+        //           usecaseId: "sat-212713",
+        //           refId: "sdasdsaD"
+        //       }
+        //   },
+        // };
+        
         this.rootService.accountId = res.accountId;
         this.widgetSettings = Object.assign(res.agentAssistSettings, res.agentAssistSettings[params.channel]);
       }else{
