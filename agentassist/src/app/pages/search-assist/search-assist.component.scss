@@ -107,32 +107,6 @@
             }
         }
     }
-    .waring-info-banner{
-        display: flex;
-        width: 800px;
-        padding: 12px 20px;
-        gap: 8px;
-        border-radius: 6px;
-        border: 1px solid var(--Warning-200, #FDE68A);
-        background: var(--Warning-50, #FFFBEB);
-        margin-bottom: 32px;
-        span{
-            flex-shrink: 0;
-            color: #991B1B;
-            &.close-warning{
-                color: #F59E0B;
-                cursor: pointer;
-            }
-        }
-        p{
-            width: 100%;
-            color: var(--Warning-800, #92400E);
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 20px; 
-            margin-bottom: 0px;
-        }
-    }
     .banner-success{
         background: #F0FDF4;
         border: 1px solid #BBF7D0;
@@ -141,7 +115,7 @@
         display: flex;
         align-items: flex-start;
         position: relative;
-        margin-bottom: 22px;
+        margin-bottom: 30px;
         .icon_check{
             width: 16px;
             height: 16px;
@@ -158,7 +132,6 @@
             top: 2px;
         }
         .content-sec{
-            width: 100%;
             .title{
                 font-weight: 500;
                 font-size: 14px;
@@ -176,7 +149,9 @@
             }
         }
         .close-banner{
-            flex-shrink: 0;
+            position: absolute;
+            right: 12px;
+            top: 19px;
             cursor: pointer;
             color: #22C55E;
         }
@@ -184,7 +159,6 @@
     .fail-banner{
         display: flex;
         align-items: center;
-        gap: 8px;
         background: #FEF2F2;
         border: 1px solid #FECACA;
         border-radius: 6px;
@@ -193,10 +167,10 @@
         font-size: 14px;
         line-height: 20px;
         color: #991B1B;
-        margin-bottom: 22px;
-        p{
+        margin-bottom: 30px;
+        span{
             width: 100%;
-            margin-bottom: 0px;
+            padding-left: 10px;
         }
         .close-banner{
             cursor: pointer;
@@ -206,13 +180,13 @@
         margin: 15px 0;
         background: #FAFAFA;
         border-radius: 4px;
-        padding:20px 15px;
+        padding: 0px 20px;
         width: 800px;
         .row-data{
             margin: 0;
             border-bottom: 1px solid #E5E5E5;
             .column-data{
-                 margin-bottom: 20px;
+                padding: 20px 10px;
                 .label-text{
                     margin-bottom: 4px;
                     font-weight: 500;
@@ -257,43 +231,25 @@
     .edit-save{
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: end;
         margin-top: 20px;
-        gap: 20px;
-        .po-active-mode-block{
+        .goto-link{
             display: flex;
             align-items: center;
-            gap: 6px;
-            i{
-                cursor: pointer;
-                color: #889097;
-            }
-            p{
-                margin-bottom: 0px;
-                padding-right: 7px;
-                color: var(--Kora-Grey-Grey-Dark-1, #202124);
-                font-size: 14px;
-                font-weight: 400;
-                line-height: 20px; 
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 20px;
+            color: #2B75E4;
+            cursor: pointer;
+            height: 34px;
+            padding: 0 10px;
+            span{
+                padding-right: 10px;
             }
         }
-        .edit-save-actions{
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            justify-content: end;
-            .goto-link{
-                display: flex;
-                align-items: center;
-                font-weight: 500;
-                font-size: 14px;
-                line-height: 20px;
-                color: #2B75E4;
-                cursor: pointer;
-                height: 34px;
-            }
+        button{
+            margin-left: 15px;
         }
-
     }
 }
 

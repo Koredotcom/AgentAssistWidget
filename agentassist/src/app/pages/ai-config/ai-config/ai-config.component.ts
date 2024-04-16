@@ -38,23 +38,23 @@ export class AiConfigComponent implements OnInit, OnDestroy {
     openai: 'https://qa-static.kore.ai/integrations/32/openai.png'
   }
   azureObj = {
-    name: 'Azure GPT-3.5',
+    name: 'Azure OpenAI - GPT-3',
     src: 'https://qa-static.kore.ai/integrations/32/azureOpenAI.png',
     type: 'azure',
-    model: 'GPT-3.5',
+    model: 'GPT-3',
   };
   openAiObj = {
-    name: 'OpenAI - GPT-3.5',
+    name: 'OpenAI - GPT-3',
     src: 'https://qa-static.kore.ai/integrations/32/openai.png',
     type: 'openai',
-    model: 'GPT-3.5'
+    model: 'GPT-3'
   };
   configOpts = [];
 
   configArr = [
     {
-      "defaultModel": "GPT-3.5",
-      "displayName": "Azure OpenAI - GPT-3.5",
+      "defaultModel": "GPT-3",
+      "displayName": "Azure OpenAI - GPT-3",
       "integration": "azure",
       "name": "aa_utterance",
       "enable": false,
@@ -78,38 +78,8 @@ export class AiConfigComponent implements OnInit, OnDestroy {
       },
       "name": "aa_noneintent",
       "integration": "openai",
-      "defaultModel": "GPT-3.5",
-      "displayName": "OpenAI - GPT-3.5",
-      "enable": false,
-    },
-    {
-      "defaultModel": "GPT-4",
-      "displayName": "Azure OpenAI - GPT-4",
-      "integration": "azure",
-      "name": "aa_utterance",
-      "enable": false,
-      "params": {
-          "temperature": 0.7,
-          "max_tokens": 1068,
-          "Instructions": "1. Structurally different samples\n2. Different entity combinations\n3. Some utterances without entities",
-          "top_p": 1,
-          "frequency_penalty": 0,
-          "presence_penalty": 0,
-      }
-  },
-  {
-      "params": {
-          "temperature": 0.7,
-          "max_tokens": 1068,
-          "Instructions": "1. Structurally different samples\n2. Different entity combinations\n3. Some utterances without entities",
-          "top_p": 1,
-          "frequency_penalty": 0,
-          "presence_penalty": 0,
-      },
-      "name": "aa_noneintent",
-      "integration": "openai",
-      "defaultModel": "GPT-4",
-      "displayName": "OpenAI - GPT-4",
+      "defaultModel": "GPT-3",
+      "displayName": "OpenAI - GPT-3",
       "enable": false,
     }
   ]
@@ -209,7 +179,7 @@ export class AiConfigComponent implements OnInit, OnDestroy {
         .subscribe(res => {
           this.notificationService.notify(this.translate.instant('SUCCESSFULLY.UPDATED'), 'success');
           this.features.forEach((iItem)=>{
-            iItem.selected = 'OpenAI - GPT-3.5';
+            iItem.selected = 'OpenAI - GPT-3';
             iItem.selectedSrc = this.srcs['openai'];
             iItem.enable = true;
           })
@@ -254,7 +224,7 @@ export class AiConfigComponent implements OnInit, OnDestroy {
         .subscribe(res => {
           this.notificationService.notify(this.translate.instant('SUCCESSFULLY.UPDATED'), 'success');
           this.features.forEach((iItem)=>{
-            iItem.selected = 'Azure OpenAI - GPT-3.5';
+            iItem.selected = 'Azure OpenAI - GPT-3';
             iItem.selectedSrc = this.srcs['azure'];
             iItem.enable = true;
           })

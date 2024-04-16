@@ -262,8 +262,8 @@ export class SpeechAnalysisComponent implements OnInit {
   }
 
   clearConvType(){
-    this.selectedConvType = this.coachingCnst.TRIGGER_ANYTIME;
-    (this.form.controls.frequency as FormGroup).controls?.duration?.setValue(this.coachingCnst.TRIGGER_ANYTIME);
+    this.selectedConvType = null;
+    (this.form.controls.frequency as FormGroup).controls?.duration?.setValue('');
   }
 
   changeOperator(op){

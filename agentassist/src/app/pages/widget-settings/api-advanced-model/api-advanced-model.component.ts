@@ -29,19 +29,9 @@ export class ApiAdvancedModelComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if(this.data?.value !== '') {
-      if(this.data?.emitType === 'advancemode') {
-        try {
-          if(JSON.parse(this.data?.value)) {
-            this.apiScript = this.data.value;
-          }
-        } catch (err) {
-        }
-      } else if(this.data?.emitType === 'advance'){
-        this.apiScript = this.data.value
-      }
+    if(this.data != '') {
+      this.apiScript = this.data;
     }
-    
     
   }
 
@@ -57,7 +47,7 @@ export class ApiAdvancedModelComponent implements OnInit {
     
 
   cancel() {
-    this.activeModal.close(this.data?.value);
+    this.activeModal.close(this.data);
   }
 
 }

@@ -31,8 +31,8 @@ export class ConvsHistoryLogsComponent implements OnInit {
   hasMore = false;
   isLoading = true;
   ngOnInit(): void {
-    this.getclickedConversationHistory();
-    // this.getConvUserBot();
+    // this.getclickedConversationHistory();
+    this.getConvUserBot();
   }
 
   close() {
@@ -103,8 +103,8 @@ export class ConvsHistoryLogsComponent implements OnInit {
       this.getclickedConversationHistory(true)
     }
   }
-  // historyData = [];
-/*   getConvUserBot(){
+  historyData = [];
+  getConvUserBot(){
     let params = {
       botId: this.botId,
       userId: this.userId,
@@ -118,5 +118,5 @@ export class ConvsHistoryLogsComponent implements OnInit {
       this.chatHistData.push(...data.messages);
       // this.historyData = data ? data : [];
     });
-  } */
+  }
 }
