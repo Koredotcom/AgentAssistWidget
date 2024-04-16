@@ -91,8 +91,11 @@ export class WidgetUsageComponent implements OnInit {
                     });
     
                     if(data.previousAvg){
-                        this.widgetUsageData.percent =  ((this.widgetUsageData.currentAvg - this.widgetUsageData.previousAvg)/this.widgetUsageData.previousAvg) * 100
-                        this.widgetUsageData.percent = this.decimalPipe.transform(this.widgetUsageData.percent/60000, '1.2-2');
+                        this.widgetUsageData.percent =  ((this.widgetUsageData.currentAvg - this.widgetUsageData.previousAvg)/this.widgetUsageData.previousAvg) * 100;
+                        if(this.widgetUsageData.percent < 0){
+                            this.widgetUsageData.decrement = true;
+                            this.widgetUsageData.percent = Math.abs(this.widgetUsageData.percent)
+                        }
                     }
                 }            
                 this.getChartOptions(seriesData);
@@ -128,6 +131,13 @@ export class WidgetUsageComponent implements OnInit {
         let interval = this.calculateInterval();
        
         this.chartOptions = {
+            grid: {
+                top: '10%',
+                left: '5%',
+                right: '5%',
+                bottom: '10%',
+                containLabel : true
+              },
             tooltip: {
                 trigger: "axis",
                 axisPointer: {
@@ -142,7 +152,10 @@ export class WidgetUsageComponent implements OnInit {
                 },
             },
             yAxis: {
-                type: 'value'
+                type: 'value',
+                name: 'Time in (Minutes)',
+                nameLocation: 'middle',
+                nameGap : 50
             },
             series: data
         };
