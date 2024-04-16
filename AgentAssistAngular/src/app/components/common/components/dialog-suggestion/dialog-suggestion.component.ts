@@ -25,6 +25,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
   suggestionCount : number = 0;
   viewCount = 2;
   moreClick = false;
+  menuLoader : boolean = true;
 
 
   constructor(private websocketService : WebSocketService, private handleSubjectService : HandleSubjectService,
@@ -48,6 +49,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
         this.menuResponse = this.formatMenuResponse(menuResponse.usecases);
         this.suggestionCount = this.menuResponse.length || 0;
         this.updateMenuResponseLoader.emit(false);
+        this.menuLoader = false;
       }
     });
   }
