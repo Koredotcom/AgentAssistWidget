@@ -46,10 +46,10 @@ export class WebSocketService {
   prevTimeStamp : number = 0;
   intervalTime : number = 510;
   count = 1;
-  participantOmitEvents = {
-    'welcome_message_request' : true,
-    'agent_menu_request': true,
-  }
+  // participantOmitEvents = {
+  //   'welcome_message_request' : true,
+  //   'agent_menu_request': true,
+  // }
 
   constructor(private rootService : RootService, private localStorageService : LocalStorageService,
     private handleSubjectService : HandleSubjectService, private templateRenderClassService : TemplateRenderClassService, private koregenerateUUIDPipe : KoreGenerateuuidPipe) {
@@ -154,7 +154,7 @@ export class WebSocketService {
       requestParams.experience = this.rootService.connectionDetails?.channel;
       requestParams.traceId = uuids;
       requestParams.language = this.rootService.connectionDetails?.interactiveLanguage;
-      if(!this.participantOmitEvents[eventName] && internalTransferDetails && Object.keys(internalTransferDetails)?.length > 0 && internalTransferDetails?.participant){
+      if(internalTransferDetails && Object.keys(internalTransferDetails)?.length > 0 && internalTransferDetails?.participant){
         requestParams.participant = internalTransferDetails?.participant;
       }
     }
