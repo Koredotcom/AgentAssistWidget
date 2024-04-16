@@ -80,6 +80,12 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   currentBot: any;
   useCases = {};
   linkedBotObjs:any = {};
+  configuredDialog = {
+    selectedDialogName: '',
+    linkedbot: ''
+  }
+  isDropdownDisabled = true;
+  loaded = false;
   botId = this.workflowService.getCurrentBtSmt(true)._id;
   searchResultArr = [
       {type: 'alwaysShow', text: 'Always show', tooltip:'Display Knowledge AI results consistently, regardless of Bot Intents.'}, 
@@ -88,8 +94,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   ];
   AutoSuggestions = [{type:'On'}, {type: 'Off'}];
   summaryModelType = [
-    {type:'koreSummary', text:'OOTB Kore Summarization', tooltip:'The default Kore summarization model will be used'}, 
-    {type:'customSummary',text:'Custom Dialog Task', tooltip:'Ensure that this dialog task has only one message node.This message node will hold summarization content.'}]
+    {type:'kore', text:'OOTB Kore Summarization', tooltip:'The default Kore summarization model will be used'}, 
+    {type:'customTask',text:'Custom Dialog Task', tooltip:'Ensure that this dialog task has only one message node.This message node will hold summarization content.'}]
   URLBehaviour = [
       {type: 'defaultBehaviour', text: 'Default System Behaviour', tooltip: "The AgentAssist widget will use the system's default governing approach for URL opening."},
       {type: 'sendPostEvent', text: 'Post Event', tooltip:'The AgentAssist widget will open URLs based on the consumed "AgentAssist.UrlClickedMessage" post event.'}]
@@ -289,14 +295,12 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   initLoad() {
     this.currentBot = this.workflowService.getCurrentBt(true);
-    console.log("🚀 ~ WidgetsComponent ~ initLoad ~ this.currentBot:", this.currentBot)
     if(this.currentBot.type === 'universalbot') {
       this.getLinkedBots();   
       } else {
         this.botId = this.currentBot._id;
-        this.selectBot(this.currentBot);
         this.currentSelectedBotDialogs = [];
-        this.getUseCases();
+        this.getUseCases(this.botId);
     }
   }
 
@@ -629,7 +633,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       summarization: this.fb.group({
         isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
         canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false],
-        summaryModel : [isUpdate ? (obj.summarization?.summaryModel ??'koreSummary'): 'koreSummary']
+        model: this.fb.group({
+          type: [isUpdate ? (obj?.summarization?.model?.type ?? 'kore') : 'kore']
+        })
       }),
       isAgentPlaybookEnabled: [isUpdate ? (obj.isAgentPlaybookEnabled ?? false) : false],
       isWidgetLandingEnabled: this.fb.group({
@@ -638,6 +644,35 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }
     if(isUpdate && obj?.isWidgetLandingEnabled?.tab === "transcript" && !obj?.transcript?.isEnabled){
       this.selectTab(this.selectedChannel ,'assist');
+    }
+
+    console.log("obj:", obj);
+    console.log("obj?.summarization?.model?.type:", obj?.summarization?.model?.type);
+    console.log("isUpdate:", isUpdate);
+    console.log('settingsForm', settingsForm)
+
+    if(isUpdate && obj?.summarization?.model?.type === 'customTask') {
+      (((((((this.agentAssistFormGroup as FormGroup)
+      .get('agentAssistSettings') as FormGroup)
+      .get(this.selectedChannel) as FormGroup)
+      .get('summarization') as FormGroup)
+      .get('model') as FormGroup)
+      .addControl('customTaskConfig', this.fb.group({
+        usecaseId: obj?.summarization?.model?.customTaskConfig?.usecaseId || '',
+        refId: obj?.summarization?.model?.customTaskConfig?.refId || '',
+        dialogId: obj?.summarization?.model?.customTaskConfig?.dialogId || '',
+        taskRefId: obj?.summarization?.model?.customTaskConfig?.taskRefId || '',
+        linkedBotId: obj?.summarization?.model?.customTaskConfig?.linkedBotId || ''
+      }))));
+      if(obj?.summarization?.model?.customTaskConfig?.linkedBotId !== '') {
+        this.selectCustomBot( obj?.summarization?.model?.customTaskConfig?.linkedBotId);
+        const dialog = this.currentSelectedBotDialogs.find(dialog => dialog.taskRefId === obj?.summarization?.model?.customTaskConfig?.taskRefId); 
+        this.configuredDialog.selectedDialogName = dialog.usecaseName;
+      } else {
+        const dialog = this.currentSelectedBotDialogs.find(dialog => dialog.taskRefId === obj?.summarization?.model?.customTaskConfig?.taskRefId);
+        this.configuredDialog.selectedDialogName = dialog.usecaseName;
+
+      }
     }
     return settingsForm;
   }
@@ -749,8 +784,14 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   autoSummaryEnabled(evt) {
-    console.log("🚀 ~ WidgetsComponent ~ autoSummaryEnabled ~ evt:", evt.target.checked)
     if(evt.target.checked) {
+      (((((this.agentAssistFormGroup as FormGroup)
+      .get('agentAssistSettings') as FormGroup)
+      .get(this.selectedChannel) as FormGroup)
+      .get('summarization') as FormGroup)
+      .get('model') as FormGroup).patchValue({
+        type: 'kore'
+      })
 
     }
     
@@ -759,23 +800,21 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   onBotChange() {
     this.workflowService.getCurrentBotDetails$.subscribe(bot => {
       this.currentBot = bot;
-      console.log("🚀 ~ WidgetsComponent ~ ngOnInit ~ this.currentBot:", this.currentBot);
       if(bot.type === 'universalbot') {
         this.getLinkedBots();
         
       } else {
         this.botId = bot._id;
-        this.selectBot(this.currentBot);
         this.currentSelectedBotDialogs = [];
-        this.getUseCases();
+        this.getUseCases(this.botId);
       }
     })
   }
 
-  getUseCases(){
+  getUseCases(botId?){
     // limit=:limit&offset=:offset&search=:search&filterby=:filterby&usecaseType=:usecaseType&status=:status&isAgentAssist=true
     this.service.invoke('get.usecases', {
-      streamId: this.botId,
+      streamId: botId,
       search: '',
       filterby: '',
       status: '',
@@ -784,17 +823,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       limit: -1,
 
     }).subscribe((data) => {
-      if(data.usecases) {
+      if(data.usecases) {        
         this.currentSelectedBotDialogs = data.usecases;
-        console.log("🚀 ~ WidgetsComponent ~ getUseCases ~ this.currentSelectedBotDialogs:", this.currentSelectedBotDialogs)
+        this.currentSelectedBotDialogs = this.currentSelectedBotDialogs.map(v => ({...v, isActive: true}))
       }
-      
-      // if (data) {
-      //   this.selectedDialog = (data?.usecases || []).reduce((acc, item)=>{
-      //     acc[item.dialogId] = item.usecaseName;
-      //     return acc;
-      //   }, {});
-      // }
     });
   }
 
@@ -804,25 +836,67 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       streamId: this.currentBot._id
     }
     this.service.invoke('get.bt.stream', params).subscribe(data => {
-      console.log(data.publishedBots)
       if(data){
         this.linkedBotObjs = [...data.configuredBots, ...data.publishedBots];
-      } 
+      }
     });
-    console.log("🚀 ~ WidgetsComponent ~ this.service.invoke ~ standardBotsOj:", this.linkedBotObjs)
   }
 
-  selectBot(bot, click=false){
-    // this.childBotId = bot._id;
-    if(click){
-      return;
-    }else if(click){
-        this.useCases = {};
-    }
-    if(click){
-    }
+  
+
+  selectedSummaryModelType(event, model) {
+    ((((((this.agentAssistFormGroup as FormGroup)
+      .get('agentAssistSettings') as FormGroup)
+      .get(this.selectedChannel) as FormGroup)
+      .get('summarization') as FormGroup)
+      .get('model') as FormGroup)
+      .get('type') as FormControl).patchValue(model.type);
+
+      if(model.type === 'customTask') {
+        this.isDropdownDisabled = false;
+        ((((((this.agentAssistFormGroup as FormGroup)
+          .get('agentAssistSettings') as FormGroup)
+          .get(this.selectedChannel) as FormGroup)
+          .get('summarization') as FormGroup)
+          .get('model') as FormGroup)
+          .addControl('customTaskConfig', this.fb.group({
+            usecaseId: ['', [Validators.required]],
+            refId: ['', [Validators.required]],
+            dialogId: ['', [Validators.required]],
+            taskRefId: ['', [Validators.required]],
+            linkedBotId: ['']
+          })))
+      } else {
+        this.isDropdownDisabled = true;
+        ((((((this.agentAssistFormGroup as FormGroup)
+        .get('agentAssistSettings') as FormGroup)
+        .get(this.selectedChannel) as FormGroup)
+        .get('summarization') as FormGroup)
+        .get('model') as FormGroup).removeControl('customTaskConfig'));
+      }
+  }
+
+  selectCustomDialog(dialog) {
+    this.configuredDialog.selectedDialogName = dialog.usecaseName;
+    const customTaskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
+                                      .get('agentAssistSettings') as FormGroup)
+                                      .get(this.selectedChannel) as FormGroup)
+                                      .get('summarization') as FormGroup)
+                                      .get('model') as FormGroup)
+                                      .get('customTaskConfig') as FormGroup));
+    customTaskConfigFormGroup.patchValue({
+      usecaseId: dialog?._id || '',
+      refId: dialog?.refId || '',
+      dialogId: dialog?.dialogId || '',
+      taskRefId: dialog?.taskRefId || '',
+      linkedBotId: dialog?.linkedBotId || ''
+    });
+  }
+
+  selectCustomBot(childBotDetails) {
+    this.loaded = false;
     this.service.invoke('get.usecases', {
-      streamId: bot._id,
+      streamId: childBotDetails,
       search: '',
       filterby: '',
       status: '',
@@ -831,23 +905,44 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       limit: -1,
 
     }).subscribe((data) => {
-      if (data) {
-        this.useCases = (data?.usecases || [])
-        .reduce((acc, item)=>{
-          acc[item.dialogId] = item.usecaseName;
-          return acc;
-        }, {});
-      }
+      if (data.usecases) {
+        const dialogsByBotId = this.groupDialogsByBotId(data.usecases);
+        this.linkedBotObjs.forEach(bot => {
+            if (dialogsByBotId[bot.botId]) {
+                bot.dialogs = dialogsByBotId[bot.botId];
+            }
+        });
+        this.loaded = true;
+    }
     });
   }
 
-  selectedSummaryModelType(event, model) {
-    console.log("🚀 ~ WidgetsComponent ~ selectedSummaryModelType ~ model:", model)
-    
-  }
+  groupDialogsByBotId(dialogs) {
+    return dialogs.reduce((acc, dialog) => {
+        acc[dialog.botId] = acc[dialog.botId] || [];
+        acc[dialog.botId].push(dialog);
+        return acc;
+    }, {});
+}
 
-  selectCustomDialog(dialog) {
-
+selectedCustomChildBotDialog(bot, dialog) {
+  this.configuredDialog = {
+    selectedDialogName: dialog.usecaseName,
+    linkedbot: bot._id
   }
+  const customTaskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
+                                    .get('agentAssistSettings') as FormGroup)
+                                    .get(this.selectedChannel) as FormGroup)
+                                    .get('summarization') as FormGroup)
+                                    .get('model') as FormGroup)
+                                    .get('customTaskConfig') as FormGroup));
+    customTaskConfigFormGroup.patchValue({
+      usecaseId: dialog?._id || '',
+      refId: dialog?.refId || '',
+      dialogId: dialog?.dialogId || '',
+      taskRefId: dialog?.taskRefId || '',
+      linkedBotId: bot?._id || ''
+    });
+}
 
 }
