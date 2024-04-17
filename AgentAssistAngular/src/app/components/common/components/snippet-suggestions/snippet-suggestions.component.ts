@@ -1,8 +1,10 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChange, ViewChild } from '@angular/core';
+import { EVENTS } from 'src/app/helpers/events';
 import { ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
+import { WebSocketService } from 'src/app/services/web-socket.service';
 import { SubSink } from 'subsink';
 
 @Component({
@@ -31,7 +33,8 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   extMore = true;
   intMore = true;
   constructor(private handleSubjectService : HandleSubjectService,
-    public rootService : RootService, private commonService : CommonService){
+    public rootService : RootService, private commonService : CommonService,
+    private websocketService : WebSocketService){
 
   }
 
@@ -131,4 +134,35 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
       document.querySelectorAll(this.prevClass)?.forEach(el => el?.classList?.remove('selection-on-snippet-color'));
     }
   }
+
+  snippetFeedback(feedback, snippet){
+    snippet.feedback = feedback ? 'like' : 'dislike';
+    this.AgentAssist_feedBack_Update_Request(snippet);
+  }
+
+  AgentAssist_feedBack_Update_Request(snippet) {
+    let agent_assist_feedback_request = {
+      feedback : snippet.feedback,
+      conversationId: this.rootService.connectionDetails.conversationId,
+      agentId: '',
+      botId: this.rootService.connectionDetails.botId,
+      orgId: '',
+      interactionType : snippet.intType,
+      positionId: snippet.positionId,
+      experience: this.rootService.connectionDetails?.channel,
+      sourceMsgId: snippet.sourceMsgId || '',
+      type: "answer",
+      title: snippet.title,
+      answer: snippet.sendCopyText || '',
+      sources: snippet.sources,
+      isFromGeneratedSummary: snippet.isFromGeneratedSummary, // based on the flag passed from backend
+      answerType: snippet.templateType // citation_snippet or paragraph_snippet etc
+    }
+    if(snippet.internalInfo?.length > 0){
+      agent_assist_feedback_request.answer += snippet.internalInfo.join(' ');
+    }
+    this.rootService.isUpdateFeedBackDetailsFlag = true;
+    this.websocketService.emitEvents(EVENTS.agent_feedback_request, agent_assist_feedback_request);
+  }
+
 }
