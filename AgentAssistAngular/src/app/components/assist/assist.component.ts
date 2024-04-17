@@ -797,7 +797,8 @@ export class AssistComponent implements OnInit, OnDestroy {
   scrollToBottom(history?){
     if(this.collapseTab?.nativeElement){
       let scrollHeight = 0;
-      if(history && this.rootService.internalTransfer && this.rootService.settingsData?.transferConfigs[this.rootService.internalTransferData?.transfertype]?.actionType === 'scrollToTop' ){
+      if(history && this.rootService.internalTransfer && this.rootService.settingsData?.transferConfigs && 
+        this.rootService.settingsData?.transferConfigs[this.rootService.internalTransferData?.transfertype]?.actionType === 'scrollToTop' ){
         scrollHeight = 0;
       }else{
         scrollHeight = this.collapseTab.nativeElement.scrollHeight;

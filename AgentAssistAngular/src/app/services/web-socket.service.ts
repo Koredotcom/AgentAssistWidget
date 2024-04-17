@@ -136,7 +136,7 @@ export class WebSocketService {
     }
     this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
 
-    if(this.rootService.internalTransfer && this.rootService.internalTransferData){
+    if(this.rootService.internalTransfer && this.rootService.internalTransferData && this.rootService.internalTransferData?.transition == 'entry'){
       this.emitEvents(EVENTS.internal_transfer, this.rootService.internalTransferData);
     }
 

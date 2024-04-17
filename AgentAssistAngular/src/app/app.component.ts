@@ -81,7 +81,7 @@ export class AppComponent implements OnInit, OnDestroy{
       //     "conversationId": this.connectionDetails.conversationId,
       //     "name": "agentAssist.internalTransfer",
       //     "transfertype": "cold", //warm, cold
-      //     "transition": "exit", //entry, exit
+      //     "transition": "entry", //entry, exit
       //     "participant": {      //New Participant Details who is going to participate
       //       "identity": "agentID1",
       //       "name": "agentName1",
@@ -178,6 +178,9 @@ export class AppComponent implements OnInit, OnDestroy{
     else if(e.data?.name === 'agentAssist.internalTransfer'){
       this.rootService.internalTransfer = true;
       this.rootService.internalTransferData = e.data;
+      if(e.data?.transition === 'exit'){
+        this.webSocketService.emitEvents(EVENTS.internal_transfer, e.data);
+      }
     };
     
     this.eventListenerFromParent(e);
