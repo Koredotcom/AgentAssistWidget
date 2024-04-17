@@ -14,10 +14,10 @@
                         </label>
                     </div> -->
                 </div>
-                <div class="waring-info-banner" *ngIf="!isDomainValid">
+                <div class="waring-info-banner" *ngIf="!isDomainValid || (searchConv.isEnabled && !searchAssistConfigDetailsObj.domain)">
                   <span><i class="icon-sa-info"></i></span>
                    <p>Ensure that the domain URL does not contains "https://" and does not have a forward slash "/" at the end.</p>
-                   <span class="close-warning"><i class="icon-sa-close"></i></span>
+                   <!-- <span class="close-warning"><i class="icon-sa-close"></i></span> -->
                 </div>
                 <div class="banner-success" *ngIf="createFormStatus">
                     <div class="icon_check">
