@@ -136,7 +136,7 @@ export class AppComponent implements OnInit, OnDestroy{
       this.connectionDetails = this.rootService.getConnectionDetails();
       this.initAgentAssist(this.connectionDetails);
     } else if (e.data.name === 'userBotConvos') {
-      if (e.data && e.data.sessionId && e.data.userId) {
+      if (e.data && e.data.sessionId) {
         this.rootService.setUserBotConversationDataDetails(e.data);
       }
     } else if (e.data.name === 'setAgentInfo') {
