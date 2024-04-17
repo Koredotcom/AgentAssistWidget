@@ -147,7 +147,8 @@ export class WebSocketService {
     const {fromSAT, source, isCall, autoBotId} = this.rootService.getConnectionDetails()
     let uuids = this.koregenerateUUIDPipe.transform();
     let appState = this.localStorageService.getLocalStorageState();
-    let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
+    // let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
+    let internalTransferDetails = this.rootService.internalTransferData;
     if(requestParams){
       requestParams.isExtAD = fromSAT ? false : true;
       requestParams.source = source;
