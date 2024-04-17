@@ -75,10 +75,10 @@
                 </div>
               </ng-container>
               <div class="thumbs-feedback-info">
-                <button class="thumb-btn">
+                <button class="thumb-btn" (click)="snippetFeedback(true, snippet)" [ngClass]="{'active-feedback-btn': snippet.feedback === 'like'}">
                   <i class="krIocnsFont-thumbs-up-solid"></i>
                 </button>
-                <button class="thumb-btn">
+                <button class="thumb-btn" (click)="snippetFeedback(false, snippet)" [ngClass]="{'active-feedback-btn': snippet.feedback === 'dislike'}">
                   <i class="krIocnsFont-thumbs-down"></i>
                 </button>
               </div>

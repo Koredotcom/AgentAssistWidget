@@ -457,7 +457,6 @@ export class RootService {
                   internalFlag: snippet.internalFlag
                 };
                 snipObje['contentArray'].push(ansObj);
-                snipObje.sourceMsgId = response.sourceMsgId || '';
                 snipObje.internalFlag = snippet.internalFlag || false;
                 snipObje.isActCit = true;
               });
@@ -477,8 +476,12 @@ export class RootService {
               }
               snipObje.contentArray.push(otherType);
             }
-            snipObje.sourceMsgId = response.sourceMsgId || '';
           }
+          snipObje.templateType = snippet.templateType;
+          snipObje.positionId = snippet.positionId;
+          snipObje.sourceMsgId = response.sourceMsgId || '';
+          snipObje.intType = response.intType;
+          snipObje.isFromGeneratedSummary = response.isFromGeneratedSummary;
         }
       });
       let extInfo = '';
