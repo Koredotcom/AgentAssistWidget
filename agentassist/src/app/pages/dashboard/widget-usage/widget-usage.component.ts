@@ -3,6 +3,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '@kore.services/auth.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import * as moment from 'moment';
+import { MillisToDurationPipePipe } from 'src/app/helpers/filters/millis-to-duration-pipe.pipe';
+import { MillisecondsToDateAndHourPipe } from 'src/app/helpers/filters/milliseconds-to-date-and-hour.pipe';
 import { SubSink } from 'subsink';
 import { IDashboardFilter } from '../dashboard-filters/dateFilter.model';
 import { DashboardService } from '../dashboard.service';
@@ -32,7 +34,7 @@ export class WidgetUsageComponent implements OnInit {
     widgetUsageData: any = {};
 
     constructor(private dashboardService: DashboardService, private authService: AuthService, private service: ServiceInvokerService,
-        private decimalPipe : DecimalPipe) { }
+        private decimalPipe : DecimalPipe, private milliPipe : MillisToDurationPipePipe, private milliDate : MillisecondsToDateAndHourPipe) { }
 
     ngOnInit(): void {
         this.params.streamId = this.authService.smartAssistBots[0]._id;
@@ -53,6 +55,7 @@ export class WidgetUsageComponent implements OnInit {
     gettooltipData(data){
         let obj: any = {
             value: data.intervalAverage ? parseFloat(this.decimalPipe.transform(data.intervalAverage / 60000, '1.2-2')) : 0,
+            date : data.time ? this.milliDate.transform(new Date(data.time).getTime()) : ''
         }
         if (this.widgetUsageData.aggregationType == 'hour') {
             const momentDate = moment(data.time);
@@ -69,8 +72,8 @@ export class WidgetUsageComponent implements OnInit {
         this.service.invoke('widgetUsage', this.params, this.payload).subscribe((data: any) => {
             if(data.currentData?.length > 0 || data.previousData?.length > 0){
                 this.widgetUsageData = data;
-                if (data.currentData?.length > 0) {
-                    this.widgetUsageData.currentData = this.addZerosValForBarGraphData(this.widgetUsageData.currentData);
+                if (data.currentData) {
+                    this.widgetUsageData.currentData = this.addZerosValForBarGraphData(this.widgetUsageData.currentData, this.payload.startDate, this.payload.endDate);
                     let intervalAverage = this.widgetUsageData.currentData?.map(resp => this.gettooltipData(resp));
                     seriesData.push({
                         name: 'Current',
@@ -80,8 +83,11 @@ export class WidgetUsageComponent implements OnInit {
                     })
                 }
     
-                if (this.showCompare && data.previousData?.length > 0) {
-                    this.widgetUsageData.previousData = this.addZerosValForBarGraphData(this.widgetUsageData.previousData);
+                if (this.showCompare && data.previousData) {
+                    let diff = new Date(this.payload.endDate).getTime() - new Date(this.payload.startDate).getTime();
+                    let prevStartDate = new Date(new Date(this.payload.startDate).getTime() - diff);
+                    let prevEndDate = this.payload.startDate;
+                    this.widgetUsageData.previousData = this.addZerosValForBarGraphData(this.widgetUsageData.previousData, prevStartDate, prevEndDate);
                     let intervalAverage = this.widgetUsageData.previousData?.map(resp => this.gettooltipData(resp));
                     seriesData.push({
                         name: 'Previous',
@@ -165,12 +171,20 @@ export class WidgetUsageComponent implements OnInit {
                 interval : interval
             }
         }
-        if(this.widgetUsageData.aggregationType == 'hour'){
+        if(this.widgetUsageData.aggregationType){
             this.chartOptions.tooltip.formatter =  (params) => {
                 let tooltipContent = '<div style="text-align: left;">';
-                tooltipContent += '<strong>' + params[0].data.name + '</strong>';
-                params.forEach((item) => {
-                    tooltipContent += '<br/>' + item.marker + ' ' + item.seriesName + ': ' + item.value;
+                // tooltipContent += '<strong>' + params[0].data.name + '</strong>';
+                params.forEach((item,index) => {
+                    if(index != 0){
+                        tooltipContent += '</br>'
+                    }
+                    tooltipContent += item.marker + ' ' + item.seriesName + ': ' + item.value;
+                    // console.log(item, "itme");
+                    
+                    if(item?.data?.date){
+                        tooltipContent += ' (' + item.data.date + ')';
+                    }
                 });
                 tooltipContent += '</div>';
                 return tooltipContent;
@@ -210,12 +224,12 @@ export class WidgetUsageComponent implements OnInit {
         return Math.ceil((daysAfterFirstWeek + 1) / 7) + 1 + weekStr;
     }
 
-    addZerosValForBarGraphData(widgetUsageData) {
+    addZerosValForBarGraphData(widgetUsageData, startDate, endDate) {
         let dateType = (this.widgetUsageData?.aggregationType == 'week') ? 'weeks' : this.widgetUsageData?.aggregationType;
         let dateList = this.getDateList(widgetUsageData)
         let startOfType = (this.widgetUsageData.aggregationType == 'week') ? 'week' : 'day';
-        let currDate = moment(this.payload.startDate).startOf(startOfType as moment.unitOfTime.StartOf);
-        let lastDate = moment(this.payload.endDate).endOf(startOfType as moment.unitOfTime.StartOf);
+        let currDate = moment(startDate).startOf(startOfType as moment.unitOfTime.StartOf);
+        let lastDate = moment(endDate).endOf(startOfType as moment.unitOfTime.StartOf);
         if(dateType == 'day' || dateType == 'hour'){
             while (currDate.diff(lastDate) < 0) {
                 let avalDate;
