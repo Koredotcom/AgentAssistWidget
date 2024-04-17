@@ -162,7 +162,7 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
       agent_assist_feedback_request.answer += snippet.internalInfo.join(' ');
     }
     this.rootService.isUpdateFeedBackDetailsFlag = true;
-    this.websocketService.emitEvents(EVENTS.agent_feedback_request, agent_assist_feedback_request);
+    this.websocketService.emitEvents(EVENTS.agent_usage_feedback, agent_assist_feedback_request);
   }
 
 }
