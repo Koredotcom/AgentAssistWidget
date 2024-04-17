@@ -478,9 +478,9 @@ export class RootService {
             }
           }
           snipObje.templateType = snippet.templateType;
+          snipObje.positionId = snippet.positionId;
           snipObje.sourceMsgId = response.sourceMsgId || '';
           snipObje.intType = response.intType;
-          snipObje.positionId = response.positionId;
           snipObje.isFromGeneratedSummary = response.isFromGeneratedSummary;
         }
       });
