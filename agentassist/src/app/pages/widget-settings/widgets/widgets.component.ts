@@ -388,25 +388,17 @@ export class WidgetsComponent implements OnInit, OnDestroy {
                         "isEnabled": true,
                         "actionType": "default",
                         "taskConfigs": {
-                            "usecaseId": "sat-ce7d82aa-fcd4-56b9-912c-dd7149c484fc",
-                            "refId": "50e420c7-1b7b-5b1d-ad85-acdceb7e3bd0",
-                            "dialogId": "dg-66f64d54-9f8b-5a50-a892-1d6e589b055b",
-                            "taskRefId": "50e420c7-1b7b-5b1d-ad85-acdceb7e3bd0",
+                            "usecaseId": "sat-99a15cc1-7fad-5b00-adfb-036d40cf0cc1",
+                            "refId": "4fe9727a-40fc-563e-af4a-20f95057776a",
+                            "dialogId": "dg-ffe5dd72-7c26-59ae-95b7-6c325288cbbc",
+                            "taskRefId": "4fe9727a-40fc-563e-af4a-20f95057776a",
                             "linkedBotId": "st-76febdb9-3355-53f6-935c-721d466eabf4",
                             "extractIntents": false
                         }
                     },
                     "warm": {
                         "isEnabled": true,
-                        "actionType": "default",
-                        "taskConfigs": {
-                            "usecaseId": "sat-9e376e39-5217-5d93-8f94-907fd6ee9279",
-                            "refId": "ccb88dcd-64ca-56d6-983b-b981c61e80cc",
-                            "dialogId": "dg-a2719e46-dbe8-5d51-8ec2-0f73e4fadc5e",
-                            "taskRefId": "ccb88dcd-64ca-56d6-983b-b981c61e80cc",
-                            "linkedBotId": "st-64127994-4569-5a6a-831c-0af1bec7ef14",
-                            "extractIntents": false
-                        }
+                        "actionType": "scrollToTop"
                     }
                 },
                 "transcripts": {
@@ -418,11 +410,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
                     "model": {
                         "type": "customTask",
                         "customTaskConfig": {
-                            "usecaseId": "sat-408acc9d-de19-5c57-9f42-26b27867cd15",
-                            "refId": "96e7717f-fc40-5961-a625-6dc5f85d7156",
-                            "dialogId": "dg-cba8da30-137d-5b52-bb99-0df5c7a29467",
-                            "taskRefId": "96e7717f-fc40-5961-a625-6dc5f85d7156",
-                            "linkedBotId": "st-76febdb9-3355-53f6-935c-721d466eabf4"
+                            "usecaseId": "sat-adf5df48-6068-51ad-be6e-05e4a7c40302",
+                            "refId": "d55b7e77-bcd7-5825-84dc-94690cb253b5",
+                            "dialogId": "dg-de94e409-152b-5165-90b6-744dd040b779",
+                            "taskRefId": "d55b7e77-bcd7-5825-84dc-94690cb253b5",
+                            "linkedBotId": "st-64127994-4569-5a6a-831c-0af1bec7ef14"
                         }
                     }
                 },
@@ -494,9 +486,169 @@ export class WidgetsComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        const automationBotMockData = '';
-        res.agentAssistSettings = {...JSON.parse(JSON.stringify(res.agentAssistSettings)), ...JSON.parse(JSON.stringify(LinkedBotMockData))};
-        console.log(res);
+        const automationBotMockData = {
+          "isCustomisedLogoEnabled": {
+              "isEnabled": false,
+              "fileId": "",
+              "fileName": "",
+              "hash": ""
+          },
+          "botEvents": {
+              "fallback": {
+                  "isEnabled": false
+              }
+          },
+          "urlOpenBehaviour": {
+              "urlOpenType": "defaultBehaviour",
+              "defaultBehaviour": true,
+              "sendPostEvent": false
+          },
+          "agentActions": {
+              "sharingFormat": "plainString"
+          },
+          "sentiment": {
+              "isEnabled": false
+          },
+          "intentExecution": {
+              "restartFunctionality": {
+                  "isEnabled": true
+              },
+              "entityView": {
+                  "isEnabled": true
+              }
+          },
+          "languageSettings": {
+              "language": "en",
+              "allowAgentSwitch": false
+          },
+          "dialogsDisplayNameParser": {
+              "mode": "default"
+          },
+          "showHelp": {
+              "isEnabled": true,
+              "documentation": {
+                  "isEnabled": true,
+                  "resource": "https://docs.kore.ai/agentassist/"
+              },
+              "faq": {
+                  "isEnabled": true,
+                  "resource": "https://docs.kore.ai/agentassist/frequently-asked-questions/faq/"
+              },
+              "koreAcademy": {
+                  "isEnabled": true
+              }
+          },
+          "chat": {
+              "agentAssistWidgetEnabled": true,
+              "isProactiveEnabled": true,
+              "isAgentCoachingEnabled": false,
+              "isAgentResponseEnabled": true,
+              "isAgentResponseCopyEnabled": true,
+              "transferConfigs": {
+                  "cold": {
+                      "isEnabled": true,
+                      "actionType": "scrollToTop"
+                  },
+                  "warm": {
+                      "isEnabled": true,
+                      "actionType": "task",
+                      "taskConfigs": {
+                          "usecaseId": "sat-5c155cef-2bb9-55e5-bdb2-0aaa8a3958c8",
+                          "refId": "58534d23-dc6c-590a-832e-2c1ab9138f1b",
+                          "dialogId": "dg-2fb1b2d9-4f98-5a65-9db0-f0c744246df2",
+                          "taskRefId": "58534d23-dc6c-590a-832e-2c1ab9138f1b",
+                          "linkedBotId": "",
+                          "extractIntents": false
+                      }
+                  }
+              },
+              "transcripts": {
+                  "isEnabled": true
+              },
+              "summarization": {
+                  "isEnabled": true,
+                  "canSubmit": true,
+                  "model": {
+                      "type": "customTask",
+                      "customTaskConfig": {
+                          "usecaseId": "sat-5492fa40-3c5f-5b4e-a051-3ccc48591801",
+                          "refId": "d55b7e77-bcd7-5825-84dc-94690cb253b5",
+                          "dialogId": "dg-e83c3da7-8f05-5aea-9ad4-d52981147842",
+                          "taskRefId": "d55b7e77-bcd7-5825-84dc-94690cb253b5",
+                          "linkedBotId": ""
+                      }
+                  }
+              },
+              "isAgentPlaybookEnabled": false,
+              "isWidgetLandingEnabled": {
+                  "tab": "assist"
+              }
+          },
+          "voice": {
+              "agentAssistWidgetEnabled": true,
+              "isProactiveEnabled": true,
+              "isAgentCoachingEnabled": false,
+              "isAgentResponseEnabled": true,
+              "isAgentResponseCopyEnabled": true,
+              "transferConfigs": {
+                  "cold": {
+                      "isEnabled": false,
+                      "actionType": "default"
+                  },
+                  "warm": {
+                      "isEnabled": false,
+                      "actionType": "default"
+                  }
+              },
+              "transcripts": {
+                  "isEnabled": true
+              },
+              "summarization": {
+                  "isEnabled": true,
+                  "canSubmit": true,
+                  "model": {
+                      "type": "kore"
+                  }
+              },
+              "isAgentPlaybookEnabled": false,
+              "isWidgetLandingEnabled": {
+                  "tab": "transcript"
+              }
+          },
+          "email": {
+              "agentAssistWidgetEnabled": true,
+              "isProactiveEnabled": true,
+              "isAgentCoachingEnabled": false,
+              "isAgentResponseEnabled": false,
+              "isAgentResponseCopyEnabled": true,
+              "transferConfigs": {
+                  "cold": {
+                      "isEnabled": false,
+                      "actionType": "default"
+                  },
+                  "warm": {
+                      "isEnabled": false,
+                      "actionType": "default"
+                  }
+              },
+              "transcripts": {
+                  "isEnabled": true
+              },
+              "summarization": {
+                  "isEnabled": false,
+                  "canSubmit": false,
+                  "model": {
+                      "type": "kore"
+                  }
+              },
+              "isAgentPlaybookEnabled": false,
+              "isWidgetLandingEnabled": {
+                  "tab": "assist"
+              }
+          }
+      };
+        // res.agentAssistSettings = {...JSON.parse(JSON.stringify(res.agentAssistSettings)), ...JSON.parse(JSON.stringify(LinkedBotMockData))};
+        // res.agentAssistSettings = {...JSON.parse(JSON.stringify(res.agentAssistSettings)), ...JSON.parse(JSON.stringify(automationBotMockData))};
           this.clonedWidgetSettings = res;
           this.isLoading = false;
           this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
@@ -842,28 +994,57 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       .get('summarization') as FormGroup)
       .get('model') as FormGroup)
       .addControl('customTaskConfig', this.fb.group({
-        usecaseId: obj?.summarization?.model?.customTaskConfig?.usecaseId || '',
-        refId: obj?.summarization?.model?.customTaskConfig?.refId || '',
-        dialogId: obj?.summarization?.model?.customTaskConfig?.dialogId || '',
-        taskRefId: obj?.summarization?.model?.customTaskConfig?.taskRefId || '',
-        linkedBotId: obj?.summarization?.model?.customTaskConfig?.linkedBotId || ''
+        usecaseId: obj?.summarization?.model?.customTaskConfig?.usecaseId,
+        refId: obj?.summarization?.model?.customTaskConfig?.refId,
+        dialogId: obj?.summarization?.model?.customTaskConfig?.dialogId,
+        taskRefId: obj?.summarization?.model?.customTaskConfig?.taskRefId,
+        linkedBotId: obj?.summarization?.model?.customTaskConfig?.linkedBotId
       }))));
       if(obj?.summarization?.model?.customTaskConfig?.linkedBotId !== '') {
-        if(this.linkedBotObjs.length > 0) {
-          this.selectCustomBot( obj?.summarization?.model?.customTaskConfig?.linkedBotId);
-          let checkchildBotObj = this.linkedBotObjs.find(bot => bot._id === obj?.summarization?.model?.customTaskConfig?.linkedBotId);
-          const dialogsList = checkchildBotObj.dialogs;
-          console.log("🚀 ~ WidgetsComponent ~ commongSettingsForm ~ checkchildBotObj:", checkchildBotObj)
-          console.log("🚀 ~ WidgetsComponent ~ commongSettingsForm ~ checkchildBotObj:", checkchildBotObj?.dialogs)  
-          let dialog = dialogsList.find(dialog => dialog.taskRefId === obj?.summarization?.model?.customTaskConfig?.taskRefId);
-          console.log('---------------------------',dialog);
-          this.configuredDialog.selectedDialogName = dialog.usecaseName;
-        }
-        // this.configuredDialog.selectedDialogName = dialog.usecaseName;
-      } else {
-        const dialog = this.currentSelectedBotDialogs.find(dialog => dialog.taskRefId === obj?.summarization?.model?.customTaskConfig?.taskRefId);
-        this.configuredDialog.selectedDialogName = dialog.usecaseName;
+        this.selectCustomBot( obj?.summarization?.model?.customTaskConfig?.linkedBotId, isUpdate, obj, 'customTask'); 
+      }else {
+        this.getUseCases(this.currentBot._id, isUpdate, obj, 'customTask')
+      }
+    }
 
+    if(isUpdate) {
+      if( obj?.transferConfigs?.cold?.actionType === 'task') {
+        (((((((this.agentAssistFormGroup as FormGroup)
+        .get('agentAssistSettings') as FormGroup)
+        .get(this.selectedChannel) as FormGroup)
+        .get('transferConfigs') as FormGroup)
+        .get('cold') as FormGroup)
+        .addControl('taskConfigs', this.fb.group({
+          usecaseId: obj?.transferConfigs?.cold?.taskConfigs?.usecaseId,
+          refId: obj?.transferConfigs?.cold?.taskConfigs?.refId,
+          dialogId: obj?.transferConfigs?.cold?.taskConfigs?.dialogId,
+          taskRefId: obj?.transferConfigs?.cold?.taskConfigs?.taskRefId,
+          linkedBotId: obj?.transferConfigs?.cold?.taskConfigs?.linkedBotId,
+          extractIntents: obj?.transferConfigs?.cold?.taskConfigs?.extractIntents}))))
+          if(obj?.summarization?.model?.customTaskConfig?.linkedBotId !== '') {
+            this.selectCustomBot( obj?.summarization?.model?.customTaskConfig?.linkedBotId, isUpdate, obj, 'cold'); 
+          }else {
+            this.getUseCases(this.currentBot._id, isUpdate, obj, 'cold')
+          }
+      }
+      if( obj?.transferConfigs?.warm?.actionType === 'task') {
+        (((((((this.agentAssistFormGroup as FormGroup)
+        .get('agentAssistSettings') as FormGroup)
+        .get(this.selectedChannel) as FormGroup)
+        .get('transferConfigs') as FormGroup)
+        .get('warm') as FormGroup)
+        .addControl('taskConfigs', this.fb.group({
+          usecaseId: obj?.transferConfigs?.cold?.taskConfigs?.usecaseId,
+          refId: obj?.transferConfigs?.cold?.taskConfigs?.refId,
+          dialogId: obj?.transferConfigs?.cold?.taskConfigs?.dialogId,
+          taskRefId: obj?.transferConfigs?.cold?.taskConfigs?.taskRefId,
+          linkedBotId: obj?.transferConfigs?.cold?.taskConfigs?.linkedBotId,
+          extractIntents: obj?.transferConfigs?.cold?.taskConfigs?.extractIntents}))))
+          if(obj?.summarization?.model?.customTaskConfig?.linkedBotId !== '') {
+            this.selectCustomBot( obj?.summarization?.model?.customTaskConfig?.linkedBotId, isUpdate, obj, 'warm'); 
+          }else {
+            this.getUseCases(this.currentBot._id, isUpdate, obj, 'warm')
+          }
       }
     }
     return settingsForm;
@@ -1003,7 +1184,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     })
   }
 
-  getUseCases(botId?){
+  getUseCases(botId, isUpdate?, settings?, confType?){
     // limit=:limit&offset=:offset&search=:search&filterby=:filterby&usecaseType=:usecaseType&status=:status&isAgentAssist=true
     this.service.invoke('get.usecases', {
       streamId: botId,
@@ -1018,6 +1199,16 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       if(data.usecases) {        
         this.currentSelectedBotDialogs = data.usecases;
         this.currentSelectedBotDialogs = this.currentSelectedBotDialogs.map(v => ({...v, isActive: true}))
+        if(isUpdate) {
+          if(confType === 'customTask') {
+            const dialog = this.currentSelectedBotDialogs.find(dialog => dialog.taskRefId === settings?.summarization?.model?.customTaskConfig?.taskRefId);
+            this.configuredDialog.selectedDialogName = dialog.usecaseName;
+          } else if(confType === 'cold') {
+
+          } else if(confType === 'warm') {
+
+          }
+        }
       }
     });
   }
@@ -1030,7 +1221,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.service.invoke('get.bt.stream', params).subscribe(data => {
       if(data){
         this.linkedBotObjs = [...data.configuredBots, ...data.publishedBots];
-        console.log(this.linkedBotObjs);
         this.getAgentAssistSettingsNew();
       }
     });
@@ -1057,7 +1247,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
             refId: ['', [Validators.required]],
             dialogId: ['', [Validators.required]],
             taskRefId: ['', [Validators.required]],
-            linkedBotId: ['']
+            linkedBotId: ''
           })))
       } else {
         ((((((this.agentAssistFormGroup as FormGroup)
@@ -1081,33 +1271,30 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         refId: [dialog?.refId ||  '', [Validators.required]],
         dialogId: [dialog?.dialogId || '', [Validators.required]],
         taskRefId: [dialog?.taskRefId ||  '', [Validators.required]],
-        linkedBotId: [dialog?.linkedBotId || ''],
+        linkedBotId: dialog?.linkedBotId || '',
         extractIntents: [false]}))))
     } else if( from === 'summaryModel') {
       this.configuredDialog.selectedDialogName = dialog.usecaseName;
-      const customTaskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
-                                        .get('agentAssistSettings') as FormGroup)
-                                        .get(this.selectedChannel) as FormGroup)
-                                        .get('summarization') as FormGroup)
-                                        .get('model') as FormGroup)
-                                        .get('customTaskConfig') as FormGroup));
-      customTaskConfigFormGroup.patchValue({
-        usecaseId: dialog?._id || '',
-        refId: dialog?.refId || '',
-        dialogId: dialog?.dialogId || '',
-        taskRefId: dialog?.taskRefId || '',
-        linkedBotId: dialog?.linkedBotId || ''
-      });
+      ((((((this.agentAssistFormGroup as FormGroup)
+          .get('agentAssistSettings') as FormGroup)
+          .get(this.selectedChannel) as FormGroup)
+          .get('summarization') as FormGroup)
+          .get('model') as FormGroup)
+          .get('customTaskConfig') as FormGroup).patchValue({
+            usecaseId: dialog?._id,
+            refId: dialog?.refId,
+            dialogId: dialog?.dialogId,
+            taskRefId: dialog?.taskRefId,
+            linkedBotId: ''
+          });
     }
     
   }
 
-  selectCustomBot(childBotDetails) {
+  selectCustomBot(childBotDetails, isUpdate?, obj?, confType?) {
     this.loaded = false;
-    console.log(this.linkedBotObjs);
     if(this.linkedBotObjs.length > 0) {
       let checkchildBotObj =this.linkedBotObjs.find(obj => obj._id === childBotDetails);
-      console.log(checkchildBotObj);
       if(!checkchildBotObj['dialogs'] ) {
         this.service.invoke('get.usecases', {
           streamId: childBotDetails,
@@ -1118,10 +1305,22 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           offset: 0,
           limit: -1,
         }).subscribe((data) => {
-          if (data.usecases) {        
+          if (data.usecases) {     
+            let childBotObj:any = {};   
             this.linkedBotObjs.forEach(bot => {
                 if (bot._id == childBotDetails) {
                     bot.dialogs = data.usecases;
+                    if(isUpdate && data.usecases.length > 0) {
+                      childBotObj = data.usecases;
+                      let dialog = childBotObj.find(dialog => dialog.taskRefId === obj?.summarization?.model?.customTaskConfig?.taskRefId);
+                      if(confType === 'customTask') {
+                        this.configuredDialog.selectedDialogName = dialog.usecaseName;
+                      } else if(confType === 'cold') {
+                        this.getAfterTransferText(confType);
+                      } else if(confType === 'warm') {
+                        this.getAfterTransferText(confType);
+                      }
+                    }
                 }
             });
             this.loaded = true;
@@ -1152,7 +1351,7 @@ selectedCustomChildBotDialog(bot, dialog, from, transferType?) {
         dialogId: [dialog?.dialogId || '', [Validators.required]],
         taskRefId: [dialog?.taskRefId ||  '', [Validators.required]],
         linkedBotId: [bot?._id || '', [Validators.required]],
-        extractIntents: [false]}))))
+        extractIntents: false}))))
   } else if(from === 'summaryModel') {
     this.configuredDialog = {
       selectedDialogName: dialog.usecaseName,

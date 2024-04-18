@@ -307,7 +307,7 @@
                                                             
                                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                                                 <ng-container *ngFor="let useCase of currentSelectedBotDialogs">
-                                                                    <li ngbDropdownItem class="p-0" *ngIf="selectedChannel === 'chat' ? useCase?.triggerPoints.isChatEnabled : selectedChannel === 'voice' && useCase?.triggerPoints.isVoiceEnabled" (click)="selectCustomDialog(useCase, 'summaryModel')">
+                                                                    <li ngbDropdownItem class="p-0" *ngIf="selectedChannel === 'chat' ? useCase?.triggerPoints?.isChatEnabled : selectedChannel === 'voice' && useCase?.triggerPoints?.isVoiceEnabled" (click)="selectCustomDialog(useCase, 'summaryModel')">
                                                                         <a >{{useCase?.usecaseName}}</a>
                                                                     </li>
                                                                 </ng-container>
