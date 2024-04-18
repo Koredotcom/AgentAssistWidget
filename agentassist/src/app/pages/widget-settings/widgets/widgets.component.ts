@@ -676,7 +676,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       if(this.currentBot.type === 'universalbot' && obj?.summarization?.model?.customTaskConfig?.linkedBotId !== '') {
         this.selectCustomBot( obj?.summarization?.model?.customTaskConfig?.linkedBotId, isUpdate, obj, 'customTask'); 
       }else {
-        this.getUseCases(this.currentBot._id, isUpdate, obj, 'customTask')
+        if(this.currentSelectedBotDialogs.lenght <= 0) {
+          this.getUseCases(this.currentBot._id, isUpdate, obj, 'customTask')
+        }
       }
     }
     return settingsForm;
