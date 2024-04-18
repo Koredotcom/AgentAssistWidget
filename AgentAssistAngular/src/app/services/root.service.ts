@@ -96,7 +96,17 @@ export class RootService {
     "isSearchAssistEnabled": true,
     "summarization": {
       "isEnabled": false,
-      "canSubmit": false
+      "canSubmit": false,
+      model: {
+        "type": "kore",
+        "customTaskConfig": {
+            "usecaseId": "",
+            "refId": "",
+            "dialogId": "",
+            "taskRefId": "",
+            "linkedBotId": ""
+        }
+    }
     },
     "transcripts": {
       "isEnabled": true,
