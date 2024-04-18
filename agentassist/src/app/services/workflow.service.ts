@@ -66,7 +66,6 @@ export class workflowService {
   callflowStep: any;
 
   getCurrentSelectedBotId: any;
-  getCurrentBotDetails$: Subject<any> = new Subject<any>();
 
   btNavigation$: Subject<any> = new Subject<any>();
   private _tokenSource =  new Subject();
@@ -151,7 +150,6 @@ export class workflowService {
 
   setCurrentBt(bt: any) {
     console.log(bt);
-    this.getCurrentBotDetails$.next(bt);
     this.currentSelectedBotDetails = bt;
     this.currentBtDetails = bt;
 

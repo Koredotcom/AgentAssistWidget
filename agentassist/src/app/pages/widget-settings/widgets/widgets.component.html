@@ -205,6 +205,7 @@
                                                     <div class="kr-sg-dropdowns" ngbDropdown >
                                                         <div class="dropdown dropdown-open" [ngClass]="{'summary-dropdown-disabled': !(agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.type === 'customTask')}">
                                                             <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
+                                                                
                                                                 {{ configuredDialog.selectedDialogName !== '' ? configuredDialog.selectedDialogName : ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
                                                             
                                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
@@ -218,7 +219,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="dailog-model-dropdown" *ngIf="customModel?.type === 'customTask' && currentBot?.type === 'universalbot'"  [ngClass]="{'summary-dropdown-disabled': !(agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.type === 'customTask')}">
-                                                    <div class="kr-sg-dropdowns" ngbDropdown >
+                                                    <div class="kr-sg-dropdowns" ngbDropdown #myDropdown="ngbDropdown">
                                                         <div class="dropdown dropdown-open" >
                                                             <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ configuredDialog.selectedDialogName !== '' ? configuredDialog.selectedDialogName : ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
                                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
@@ -231,7 +232,7 @@
                                                                         <div [id]="automationBot.botName + '-' +indxVal" class="multip-collapse-details collapse in">
                                                                             <ng-container *ngIf="automationBot?.dialogs?.length; else loading">
                                                                                 <div *ngFor="let dialog of automationBot?.dialogs; let ucIndx = index">
-                                                                                    <button class="selected-btn"  (click)="selectedCustomChildBotDialog(automationBot, dialog, 'summaryModel')">
+                                                                                    <button class="selected-btn"  (click)="selectCustomDialog(dialog, 'summaryModel',automationBot)">
                                                                                         <span>{{dialog?.usecaseName}}</span>
                                                                                     </button>
                                                                                 </div>
