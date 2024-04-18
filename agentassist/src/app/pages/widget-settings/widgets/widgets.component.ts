@@ -662,6 +662,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       }else {
         this.getUseCases(this.currentBot._id, isUpdate, obj, 'customTask')
       }
+    } else {
+      this.configuredDialog.selectedDialogName = '';
     }
     return settingsForm;
   }
@@ -867,6 +869,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         .get(this.selectedChannel) as FormGroup)
         .get('summarization') as FormGroup)
         .get('model') as FormGroup).removeControl('customTaskConfig'));
+        this.configuredDialog.selectedDialogName = '';
       }
   }
 
