@@ -115,15 +115,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     {type:'FAQ', tooltip:'Control accessibility to FAQ and customise URLs.', value : 'faq'},
     {type:'Kore Academy', tooltip:'Control accessibility to Kore Academy', value : 'koreAcademy'}
   ]
-  conversationTransferTypes = [
-    { type: 'cold', tooltip: 'When Agent 1 transfer call to Agent 2', title: 'Cold Transfer'},
-    { type: 'warm', tooltip: 'When Agent 1 invites Agent 2 to conference call' , title: 'warm Transfer'}
-  ]
-  afterTransferSettings = [
-    {type:'scrollToTop', text : 'Scroll up to First Message'},
-    {type:'default', text : ' Continue from the LastMessage'},
-    {type:'task', text : 'Configure Dialog Task'},
-  ]
   advancedModeScript: string = '';
   advanceDialogTaskModeScript: string = '';
   selectedChannel = 'chat';
@@ -325,330 +316,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.service.invoke("get.agentAssistSettings", params, body).subscribe(
       (res) => {
         if (res) {
-          const LinkedBotMockData = {
-            "isCustomisedLogoEnabled": {
-                "isEnabled": false,
-                "fileId": "",
-                "fileName": "",
-                "hash": ""
-            },
-            "botEvents": {
-                "fallback": {
-                    "isEnabled": false
-                }
-            },
-            "urlOpenBehaviour": {
-                "urlOpenType": "defaultBehaviour",
-                "defaultBehaviour": true,
-                "sendPostEvent": false
-            },
-            "agentActions": {
-                "sharingFormat": "plainString"
-            },
-            "sentiment": {
-                "isEnabled": false
-            },
-            "intentExecution": {
-                "restartFunctionality": {
-                    "isEnabled": true
-                },
-                "entityView": {
-                    "isEnabled": true
-                }
-            },
-            "languageSettings": {
-                "language": "en",
-                "allowAgentSwitch": false
-            },
-            "dialogsDisplayNameParser": {
-                "mode": "default"
-            },
-            "showHelp": {
-                "isEnabled": true,
-                "documentation": {
-                    "isEnabled": true,
-                    "resource": "https://docs.kore.ai/agentassist/"
-                },
-                "faq": {
-                    "isEnabled": true,
-                    "resource": "https://docs.kore.ai/agentassist/frequently-asked-questions/faq/"
-                },
-                "koreAcademy": {
-                    "isEnabled": true
-                }
-            },
-            "chat": {
-                "agentAssistWidgetEnabled": true,
-                "isProactiveEnabled": true,
-                "isAgentCoachingEnabled": false,
-                "isAgentResponseEnabled": true,
-                "isAgentResponseCopyEnabled": true,
-                "transferConfigs": {
-                    "cold": {
-                        "isEnabled": true,
-                        "actionType": "default",
-                        "taskConfigs": {
-                            "usecaseId": "sat-99a15cc1-7fad-5b00-adfb-036d40cf0cc1",
-                            "refId": "4fe9727a-40fc-563e-af4a-20f95057776a",
-                            "dialogId": "dg-ffe5dd72-7c26-59ae-95b7-6c325288cbbc",
-                            "taskRefId": "4fe9727a-40fc-563e-af4a-20f95057776a",
-                            "linkedBotId": "st-76febdb9-3355-53f6-935c-721d466eabf4",
-                            "extractIntents": false
-                        }
-                    },
-                    "warm": {
-                        "isEnabled": true,
-                        "actionType": "scrollToTop"
-                    }
-                },
-                "transcripts": {
-                    "isEnabled": true
-                },
-                "summarization": {
-                    "isEnabled": true,
-                    "canSubmit": true,
-                    "model": {
-                        "type": "customTask",
-                        "customTaskConfig": {
-                            "usecaseId": "sat-adf5df48-6068-51ad-be6e-05e4a7c40302",
-                            "refId": "d55b7e77-bcd7-5825-84dc-94690cb253b5",
-                            "dialogId": "dg-de94e409-152b-5165-90b6-744dd040b779",
-                            "taskRefId": "d55b7e77-bcd7-5825-84dc-94690cb253b5",
-                            "linkedBotId": "st-64127994-4569-5a6a-831c-0af1bec7ef14"
-                        }
-                    }
-                },
-                "isAgentPlaybookEnabled": false,
-                "isWidgetLandingEnabled": {
-                    "tab": "assist"
-                }
-            },
-            "voice": {
-                "agentAssistWidgetEnabled": true,
-                "isProactiveEnabled": true,
-                "isAgentCoachingEnabled": false,
-                "isAgentResponseEnabled": true,
-                "isAgentResponseCopyEnabled": true,
-                "transferConfigs": {
-                    "cold": {
-                        "isEnabled": false,
-                        "actionType": "default"
-                    },
-                    "warm": {
-                        "isEnabled": false,
-                        "actionType": "default"
-                    }
-                },
-                "transcripts": {
-                    "isEnabled": true
-                },
-                "summarization": {
-                    "isEnabled": true,
-                    "canSubmit": true,
-                    "model": {
-                        "type": "kore"
-                    }
-                },
-                "isAgentPlaybookEnabled": false,
-                "isWidgetLandingEnabled": {
-                    "tab": "transcript"
-                }
-            },
-            "email": {
-                "agentAssistWidgetEnabled": true,
-                "isProactiveEnabled": true,
-                "isAgentCoachingEnabled": false,
-                "isAgentResponseEnabled": false,
-                "isAgentResponseCopyEnabled": true,
-                "transferConfigs": {
-                    "cold": {
-                        "isEnabled": false,
-                        "actionType": "default"
-                    },
-                    "warm": {
-                        "isEnabled": false,
-                        "actionType": "default"
-                    }
-                },
-                "transcripts": {
-                    "isEnabled": true
-                },
-                "summarization": {
-                    "isEnabled": false,
-                    "canSubmit": false,
-                    "model": {
-                        "type": "kore"
-                    }
-                },
-                "isAgentPlaybookEnabled": false,
-                "isWidgetLandingEnabled": {
-                    "tab": "assist"
-                }
-            }
-        }
-        const automationBotMockData = {
-          "isCustomisedLogoEnabled": {
-              "isEnabled": false,
-              "fileId": "",
-              "fileName": "",
-              "hash": ""
-          },
-          "botEvents": {
-              "fallback": {
-                  "isEnabled": false
-              }
-          },
-          "urlOpenBehaviour": {
-              "urlOpenType": "defaultBehaviour",
-              "defaultBehaviour": true,
-              "sendPostEvent": false
-          },
-          "agentActions": {
-              "sharingFormat": "plainString"
-          },
-          "sentiment": {
-              "isEnabled": false
-          },
-          "intentExecution": {
-              "restartFunctionality": {
-                  "isEnabled": true
-              },
-              "entityView": {
-                  "isEnabled": true
-              }
-          },
-          "languageSettings": {
-              "language": "en",
-              "allowAgentSwitch": false
-          },
-          "dialogsDisplayNameParser": {
-              "mode": "default"
-          },
-          "showHelp": {
-              "isEnabled": true,
-              "documentation": {
-                  "isEnabled": true,
-                  "resource": "https://docs.kore.ai/agentassist/"
-              },
-              "faq": {
-                  "isEnabled": true,
-                  "resource": "https://docs.kore.ai/agentassist/frequently-asked-questions/faq/"
-              },
-              "koreAcademy": {
-                  "isEnabled": true
-              }
-          },
-          "chat": {
-              "agentAssistWidgetEnabled": true,
-              "isProactiveEnabled": true,
-              "isAgentCoachingEnabled": false,
-              "isAgentResponseEnabled": true,
-              "isAgentResponseCopyEnabled": true,
-              "transferConfigs": {
-                  "cold": {
-                      "isEnabled": true,
-                      "actionType": "scrollToTop"
-                  },
-                  "warm": {
-                      "isEnabled": true,
-                      "actionType": "task",
-                      "taskConfigs": {
-                          "usecaseId": "sat-5c155cef-2bb9-55e5-bdb2-0aaa8a3958c8",
-                          "refId": "58534d23-dc6c-590a-832e-2c1ab9138f1b",
-                          "dialogId": "dg-2fb1b2d9-4f98-5a65-9db0-f0c744246df2",
-                          "taskRefId": "58534d23-dc6c-590a-832e-2c1ab9138f1b",
-                          "linkedBotId": "",
-                          "extractIntents": false
-                      }
-                  }
-              },
-              "transcripts": {
-                  "isEnabled": true
-              },
-              "summarization": {
-                  "isEnabled": true,
-                  "canSubmit": true,
-                  "model": {
-                      "type": "customTask",
-                      "customTaskConfig": {
-                          "usecaseId": "sat-5492fa40-3c5f-5b4e-a051-3ccc48591801",
-                          "refId": "d55b7e77-bcd7-5825-84dc-94690cb253b5",
-                          "dialogId": "dg-e83c3da7-8f05-5aea-9ad4-d52981147842",
-                          "taskRefId": "d55b7e77-bcd7-5825-84dc-94690cb253b5",
-                          "linkedBotId": ""
-                      }
-                  }
-              },
-              "isAgentPlaybookEnabled": false,
-              "isWidgetLandingEnabled": {
-                  "tab": "assist"
-              }
-          },
-          "voice": {
-              "agentAssistWidgetEnabled": true,
-              "isProactiveEnabled": true,
-              "isAgentCoachingEnabled": false,
-              "isAgentResponseEnabled": true,
-              "isAgentResponseCopyEnabled": true,
-              "transferConfigs": {
-                  "cold": {
-                      "isEnabled": false,
-                      "actionType": "default"
-                  },
-                  "warm": {
-                      "isEnabled": false,
-                      "actionType": "default"
-                  }
-              },
-              "transcripts": {
-                  "isEnabled": true
-              },
-              "summarization": {
-                  "isEnabled": true,
-                  "canSubmit": true,
-                  "model": {
-                      "type": "kore"
-                  }
-              },
-              "isAgentPlaybookEnabled": false,
-              "isWidgetLandingEnabled": {
-                  "tab": "transcript"
-              }
-          },
-          "email": {
-              "agentAssistWidgetEnabled": true,
-              "isProactiveEnabled": true,
-              "isAgentCoachingEnabled": false,
-              "isAgentResponseEnabled": false,
-              "isAgentResponseCopyEnabled": true,
-              "transferConfigs": {
-                  "cold": {
-                      "isEnabled": false,
-                      "actionType": "default"
-                  },
-                  "warm": {
-                      "isEnabled": false,
-                      "actionType": "default"
-                  }
-              },
-              "transcripts": {
-                  "isEnabled": true
-              },
-              "summarization": {
-                  "isEnabled": false,
-                  "canSubmit": false,
-                  "model": {
-                      "type": "kore"
-                  }
-              },
-              "isAgentPlaybookEnabled": false,
-              "isWidgetLandingEnabled": {
-                  "tab": "assist"
-              }
-          }
-      };
-        // res.agentAssistSettings = {...JSON.parse(JSON.stringify(res.agentAssistSettings)), ...JSON.parse(JSON.stringify(LinkedBotMockData))};
-        // res.agentAssistSettings = {...JSON.parse(JSON.stringify(res.agentAssistSettings)), ...JSON.parse(JSON.stringify(automationBotMockData))};
           this.clonedWidgetSettings = res;
           this.isLoading = false;
           this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
@@ -959,16 +626,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       isAgentCoachingEnabled: [isUpdate ? (obj.isAgentCoachingEnabled ?? false) : false],
       isAgentResponseEnabled: [isUpdate ? (obj.isAgentResponseEnabled ?? false) : true],
       isAgentResponseCopyEnabled: [isUpdate ? (obj.isAgentResponseCopyEnabled ?? false) : true],
-      transferConfigs : this.fb.group({
-        cold: this.fb.group({
-          isEnabled: [isUpdate ? (obj.transferConfigs?.cold?.isEnabled ?? false) : false],
-          actionType: [isUpdate ? (obj.transferConfigs?.cold?.actionType ?? 'default') : 'default']
-        }),
-        warm: this.fb.group({
-          isEnabled: [isUpdate ? (obj.transferConfigs?.warm?.isEnabled ?? false) : false],
-          actionType: [isUpdate ? (obj.transferConfigs?.warm?.actionType ?? 'default') : 'default']
-        })
-      }),
       transcripts : this.fb.group({
         isEnabled : [isUpdate ? (obj.transcripts?.isEnabled??true) : true],
       }),
@@ -1004,47 +661,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         this.selectCustomBot( obj?.summarization?.model?.customTaskConfig?.linkedBotId, isUpdate, obj, 'customTask'); 
       }else {
         this.getUseCases(this.currentBot._id, isUpdate, obj, 'customTask')
-      }
-    }
-
-    if(isUpdate) {
-      if( obj?.transferConfigs?.cold?.actionType === 'task') {
-        (((((((this.agentAssistFormGroup as FormGroup)
-        .get('agentAssistSettings') as FormGroup)
-        .get(this.selectedChannel) as FormGroup)
-        .get('transferConfigs') as FormGroup)
-        .get('cold') as FormGroup)
-        .addControl('taskConfigs', this.fb.group({
-          usecaseId: obj?.transferConfigs?.cold?.taskConfigs?.usecaseId,
-          refId: obj?.transferConfigs?.cold?.taskConfigs?.refId,
-          dialogId: obj?.transferConfigs?.cold?.taskConfigs?.dialogId,
-          taskRefId: obj?.transferConfigs?.cold?.taskConfigs?.taskRefId,
-          linkedBotId: obj?.transferConfigs?.cold?.taskConfigs?.linkedBotId,
-          extractIntents: obj?.transferConfigs?.cold?.taskConfigs?.extractIntents}))))
-          if(obj?.summarization?.model?.customTaskConfig?.linkedBotId !== '') {
-            this.selectCustomBot( obj?.summarization?.model?.customTaskConfig?.linkedBotId, isUpdate, obj, 'cold'); 
-          }else {
-            this.getUseCases(this.currentBot._id, isUpdate, obj, 'cold')
-          }
-      }
-      if( obj?.transferConfigs?.warm?.actionType === 'task') {
-        (((((((this.agentAssistFormGroup as FormGroup)
-        .get('agentAssistSettings') as FormGroup)
-        .get(this.selectedChannel) as FormGroup)
-        .get('transferConfigs') as FormGroup)
-        .get('warm') as FormGroup)
-        .addControl('taskConfigs', this.fb.group({
-          usecaseId: obj?.transferConfigs?.cold?.taskConfigs?.usecaseId,
-          refId: obj?.transferConfigs?.cold?.taskConfigs?.refId,
-          dialogId: obj?.transferConfigs?.cold?.taskConfigs?.dialogId,
-          taskRefId: obj?.transferConfigs?.cold?.taskConfigs?.taskRefId,
-          linkedBotId: obj?.transferConfigs?.cold?.taskConfigs?.linkedBotId,
-          extractIntents: obj?.transferConfigs?.cold?.taskConfigs?.extractIntents}))))
-          if(obj?.summarization?.model?.customTaskConfig?.linkedBotId !== '') {
-            this.selectCustomBot( obj?.summarization?.model?.customTaskConfig?.linkedBotId, isUpdate, obj, 'warm'); 
-          }else {
-            this.getUseCases(this.currentBot._id, isUpdate, obj, 'warm')
-          }
       }
     }
     return settingsForm;
@@ -1203,10 +819,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           if(confType === 'customTask') {
             const dialog = this.currentSelectedBotDialogs.find(dialog => dialog.taskRefId === settings?.summarization?.model?.customTaskConfig?.taskRefId);
             this.configuredDialog.selectedDialogName = dialog.usecaseName;
-          } else if(confType === 'cold') {
-
-          } else if(confType === 'warm') {
-
           }
         }
       }
@@ -1259,21 +871,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   selectCustomDialog(dialog, from, transferType?) {
-    const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
-    if(from === 'convosTransfer') {
-      (((((((this.agentAssistFormGroup as FormGroup)
-      .get('agentAssistSettings') as FormGroup)
-      .get(this.selectedChannel) as FormGroup)
-      .get('transferConfigs') as FormGroup)
-      .get(selectedFormGroup) as FormGroup)
-      .addControl('taskConfigs', this.fb.group({
-        usecaseId: [dialog?._id || '', [Validators.required]],
-        refId: [dialog?.refId ||  '', [Validators.required]],
-        dialogId: [dialog?.dialogId || '', [Validators.required]],
-        taskRefId: [dialog?.taskRefId ||  '', [Validators.required]],
-        linkedBotId: dialog?.linkedBotId || '',
-        extractIntents: [false]}))))
-    } else if( from === 'summaryModel') {
+    if( from === 'summaryModel') {
       this.configuredDialog.selectedDialogName = dialog.usecaseName;
       ((((((this.agentAssistFormGroup as FormGroup)
           .get('agentAssistSettings') as FormGroup)
@@ -1315,10 +913,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
                       let dialog = childBotObj.find(dialog => dialog.taskRefId === obj?.summarization?.model?.customTaskConfig?.taskRefId);
                       if(confType === 'customTask') {
                         this.configuredDialog.selectedDialogName = dialog.usecaseName;
-                      } else if(confType === 'cold') {
-                        this.getAfterTransferText(confType);
-                      } else if(confType === 'warm') {
-                        this.getAfterTransferText(confType);
                       }
                     }
                 }
@@ -1338,21 +932,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
 selectedCustomChildBotDialog(bot, dialog, from, transferType?) {
-  const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
-  if(from === 'convosTransfer') {
-      (((((((this.agentAssistFormGroup as FormGroup)
-      .get('agentAssistSettings') as FormGroup)
-      .get(this.selectedChannel) as FormGroup)
-      .get('transferConfigs') as FormGroup)
-      .get(selectedFormGroup) as FormGroup)
-      .addControl('taskConfigs', this.fb.group({
-        usecaseId: [dialog?._id || '', [Validators.required]],
-        refId: [dialog?.refId ||  '', [Validators.required]],
-        dialogId: [dialog?.dialogId || '', [Validators.required]],
-        taskRefId: [dialog?.taskRefId ||  '', [Validators.required]],
-        linkedBotId: [bot?._id || '', [Validators.required]],
-        extractIntents: false}))))
-  } else if(from === 'summaryModel') {
+  if(from === 'summaryModel') {
     this.configuredDialog = {
       selectedDialogName: dialog.usecaseName,
       linkedbot: bot._id
@@ -1373,34 +953,6 @@ selectedCustomChildBotDialog(bot, dialog, from, transferType?) {
   }
 }
 
-getAfterTransferText(transferType: string): string {
-  const actionType = this.agentAssistFormGroup.get('agentAssistSettings').value[this.selectedChannel]?.transferConfigs[transferType]?.actionType;
-  const afterTransferSetting = this.afterTransferSettings.find(setting => setting.type === actionType);
-  return afterTransferSetting ? afterTransferSetting.text : '';
-}
 
-getActionType(setting, transferType) {
-  const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
-  (((((((this.agentAssistFormGroup as FormGroup)
-                                        .get('agentAssistSettings') as FormGroup)
-                                        .get(this.selectedChannel) as FormGroup)
-                                        .get('transferConfigs') as FormGroup)
-                                        .get(selectedFormGroup) as FormGroup)
-                                        .get('actionType') as FormControl).patchValue(setting))
-}
-
-// Extract intents from the Dialog
-toggleExtractIntents(event, transferType) {    
-  const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
-  const taskConfigs =(((((((this.agentAssistFormGroup as FormGroup)
-                                        .get('agentAssistSettings') as FormGroup)
-                                        .get(this.selectedChannel) as FormGroup)
-                                        .get('transferConfigs') as FormGroup)
-                                        .get(selectedFormGroup) as FormGroup)
-                                        .get('taskConfigs') as FormGroup))
-  taskConfigs.patchValue({
-    extractIntents: event.target.checked
-  })
-}
 
 }
