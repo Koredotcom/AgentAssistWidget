@@ -191,14 +191,14 @@
                                 </div>
                             <!--  -->                            
                         </div>
-                        <div class="toggle-info-data summary-model m-0 p-l-20">
-                            <div class="content-data-toggle" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.isEnabled" formGroupName="model">
+                        <div class="toggle-info-data summary-model m-0 p-l-20" formGroupName="model">
+                            <div class="content-data-toggle" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.isEnabled">
                                 <div class="content-data-toggle" >
                                     <h1>Auto Summarization Model</h1>
                                     <p>Choose a suitable model for generating the summarization</p>
                                     <div class="radio-group-block">
                                         <div class="kr-sg-radiobutton p-0" *ngFor="let customModel of summaryModelType; let modelidx = index">
-                                            <input id="summarymodel-{{modelidx}}" class="radio-custom" type="radio" [value]="customModel.type" name="type" formControlName="type" (change)="selectedSummaryModelType($event, customModel)" >
+                                            <input id="summarymodel-{{modelidx}}" class="radio-custom" type="radio" [value]="customModel.type" formControlName="type" (change)="selectedSummaryModelType($event, customModel)" >
                                             <label for="summarymodel-{{modelidx}}" class="radio-custom-label">{{customModel.text}}</label>
                                             <ng-container>
                                                 <div class="dailog-model-dropdown" *ngIf="customModel?.type === 'customTask' && currentBot?.type === 'default'" >
