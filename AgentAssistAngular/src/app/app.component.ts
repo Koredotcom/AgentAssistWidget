@@ -13,6 +13,7 @@ import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
 import { HandleSubjectService } from './services/handle-subject.service';
 import { finalize } from 'rxjs';
 import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
+import { storageConst } from './proj.const';
 
 
 @Component({
@@ -176,10 +177,16 @@ export class AppComponent implements OnInit, OnDestroy{
     
     /* below are the events for internal transfer ex: cold / warm */
     else if(e.data?.name === 'agentAssist.internalTransfer'){
-      this.rootService.internalTransfer = true;
-      this.rootService.internalTransferData = e.data;
-      if(e.data?.transition === 'exit'){
-        this.webSocketService.emitEvents(EVENTS.internal_transfer, e.data);
+      if(e.data){
+        this.rootService.internalTransfer = true;
+        this.rootService.internalTransferData = e.data;
+        let storageObject: any = {
+          [storageConst.INTERNAL_TRANSFER]: e.data
+        }
+        this.localStorageService.setLocalStorageItem(storageObject);
+        if(e.data?.transition === 'exit'){
+          this.webSocketService.emitEvents(EVENTS.internal_transfer, e.data);
+        }
       }
     };
     

@@ -81,6 +81,10 @@ export class LocalStorageService {
       if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.ISSEND_WELCOME_MSG])){
         appState[conversationId][storageConst.ISSEND_WELCOME_MSG] = storageObject[storageConst.ISSEND_WELCOME_MSG];
       }
+
+      if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.INTERNAL_TRANSFER])){
+        appState[conversationId][storageConst.INTERNAL_TRANSFER] = storageObject[storageConst.INTERNAL_TRANSFER];
+      }
       
     }
     localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
