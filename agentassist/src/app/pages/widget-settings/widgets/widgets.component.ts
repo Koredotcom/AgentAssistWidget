@@ -8,7 +8,7 @@ import { SubSink } from 'subsink';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { ApiAdvancedModelComponent } from '../api-advanced-model/api-advanced-model.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   AbstractControl,
   FormBuilder,
@@ -24,6 +24,7 @@ import {
 })
 export class WidgetsComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') inputRef: ElementRef<HTMLInputElement>;
+  @ViewChild('myDropdown', { static: false }) myDropdown: NgbDropdown;
 
   isUnifiedPlatform: boolean = false;
   disableButtons: boolean =  false;
@@ -77,12 +78,24 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   knowledgeAIFormGroup: FormGroup;
   agentAssistformDirty : boolean = false;
   isV3= false;
+  currentBot: any;
+  useCases = {};
+  linkedBotObjs:any = [];
+  configuredDialog = {
+    selectedDialogName: '',
+    linkedbot: ''
+  }
+  loaded = false;
+  botId = this.workflowService.getCurrentBtSmt(true)._id;
   searchResultArr = [
       {type: 'alwaysShow', text: 'Always show', tooltip:'Display Knowledge AI results consistently, regardless of Bot Intents.'}, 
       {type: 'isXODependant', text: 'Show with XO results',tooltip:'Display Knowledge AI results when relevant Bot events (Dialog Tasks and FAQs) are detected.'}, 
       {type: 'fallback', text: 'Show as a Fallback event', tooltip:'Display Knowledge AI Results as a fallback when no Bot Intents are identified.'}
   ];
   AutoSuggestions = [{type:'On'}, {type: 'Off'}];
+  summaryModelType = [
+    {type:'kore', text:'OOTB Kore Summarization', tooltip:'The default Kore summarization model will be used'}, 
+    {type:'customTask',text:'Custom Dialog Task', tooltip:'Ensure that this dialog task has only one message node.This message node will hold summarization content.'}]
   URLBehaviour = [
       {type: 'defaultBehaviour', text: 'Default System Behaviour', tooltip: "The AgentAssist widget will use the system's default governing approach for URL opening."},
       {type: 'sendPostEvent', text: 'Post Event', tooltip:'The AgentAssist widget will open URLs based on the consumed "AgentAssist.UrlClickedMessage" post event.'}]
@@ -107,6 +120,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   advanceDialogTaskModeScript: string = '';
   selectedChannel = 'chat';
   selectedKAIChannel = 'chat';
+  currentSelectedBotDialogs: any = [];
+  selectedDialog: any;
   isCoachingDisable = true;
   agentAssistSeedData : any = {};
   disableSaveButton : any = {
@@ -253,6 +268,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.initLoad(this.workflowService.getCurrentBt(true));
     this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
       this.isCoachingDisable = isEnabled;
     });
@@ -273,7 +289,34 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.createOrUpdateSearchForm();
     this.isUnifiedPlatform = this.workflowService?.isUnifiedPlatform();
     this.isLoading = true;
-    this.getAgentAssistSettingsNew();
+    this.subscribeEvents();
+  }
+
+  subscribeEvents(){
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((bot)=>{
+      if(bot){
+        this.linkedBotObjs = [];
+        this.initLoad(bot);
+      }
+    });
+  }
+
+  closeDropdown() {
+    if (this.myDropdown) {
+      this.myDropdown.close();
+    }
+  }
+
+  initLoad(bot?) {
+    this.currentBot = bot;
+    if(this.currentBot.type === 'universalbot') {
+      this.getLinkedBots();  
+      } else {
+        this.botId = this.currentBot._id;
+        this.getAgentAssistSettingsNew();
+        this.getUseCases(this.botId);
+        this.currentSelectedBotDialogs = [];
+    }
   }
 
   // Get AgentAssist Settings in the Get API Call
@@ -604,7 +647,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       }),
       summarization: this.fb.group({
         isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
-        canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false]
+        canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false],
+        model: this.fb.group({
+          type: [isUpdate ? (obj?.summarization?.model?.type ?? 'kore') : 'kore']
+        })
       }),
       isAgentPlaybookEnabled: [isUpdate ? (obj.isAgentPlaybookEnabled ?? false) : false],
       isWidgetLandingEnabled: this.fb.group({
@@ -613,6 +659,27 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }
     if(isUpdate && obj?.isWidgetLandingEnabled?.tab === "transcript" && !obj?.transcript?.isEnabled){
       this.selectTab(this.selectedChannel ,'assist');
+    }
+    if(isUpdate && obj?.summarization?.model?.type === 'customTask') {
+      (((((((this.agentAssistFormGroup as FormGroup)
+      .get('agentAssistSettings') as FormGroup)
+      .get(this.selectedChannel) as FormGroup)
+      .get('summarization') as FormGroup)
+      .get('model') as FormGroup)
+      .addControl('customTaskConfig', this.fb.group({
+        usecaseId: obj?.summarization?.model?.customTaskConfig?.usecaseId,
+        refId: obj?.summarization?.model?.customTaskConfig?.refId,
+        dialogId: obj?.summarization?.model?.customTaskConfig?.dialogId,
+        taskRefId: obj?.summarization?.model?.customTaskConfig?.taskRefId,
+        linkedBotId: obj?.summarization?.model?.customTaskConfig?.linkedBotId
+      }))));
+      if(this.currentBot.type === 'universalbot' && obj?.summarization?.model?.customTaskConfig?.linkedBotId !== '') {
+        this.selectCustomBot( obj?.summarization?.model?.customTaskConfig?.linkedBotId, isUpdate, obj, 'customTask'); 
+      }else {
+        if(this.currentSelectedBotDialogs.lenght <= 0) {
+          this.getUseCases(this.currentBot._id, isUpdate, obj, 'customTask')
+        }
+      }
     }
     return settingsForm;
   }
@@ -656,6 +723,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }
     (KAIObj['searchAssistConfig'] as FormGroup).addControl('integrations', integrations);   
     return KAIObj;
+
   }
 
   chooseChannel(channel){
@@ -720,6 +788,178 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     .get(key) as FormGroup)
     .get('resource') as FormControl)
     .patchValue(defaultUrl);
+  }
+
+  autoSummaryEnabled(evt) {
+    if(evt.target.checked) {
+      (((((this.agentAssistFormGroup as FormGroup)
+      .get('agentAssistSettings') as FormGroup)
+      .get(this.selectedChannel) as FormGroup)
+      .get('summarization') as FormGroup)
+      .get('model') as FormGroup).patchValue({
+        type: 'kore'
+      })
+
+    }
+    
+  }
+
+
+  getUseCases(botId, isUpdate?, settings?, confType?){
+    // limit=:limit&offset=:offset&search=:search&filterby=:filterby&usecaseType=:usecaseType&status=:status&isAgentAssist=true
+    this.service.invoke('get.usecases', {
+      streamId: botId,
+      search: '',
+      filterby: '',
+      status: '',
+      usecaseType: 'dialog',
+      offset: 0,
+      limit: -1,
+
+    }).subscribe((data) => {
+      if(data.usecases) {        
+        this.currentSelectedBotDialogs = data.usecases;
+        this.currentSelectedBotDialogs = this.currentSelectedBotDialogs.map(v => ({...v, isActive: true}))
+        if(isUpdate) {
+          if(confType === 'customTask') {
+            const dialog = this.currentSelectedBotDialogs.find(dialog => dialog.taskRefId === settings?.summarization?.model?.customTaskConfig?.taskRefId);
+            this.configuredDialog.selectedDialogName = dialog.usecaseName;
+          }
+        }
+      }
+    });
+  }
+
+  getLinkedBots(){
+    const params = {
+      userId: this.authService.getUserId(),
+      streamId: this.currentBot._id
+    }
+    this.service.invoke('get.bt.stream', params).subscribe(data => {
+      if(data){
+        this.linkedBotObjs = [...data.configuredBots, ...data.publishedBots];
+        this.getAgentAssistSettingsNew();
+      }
+    });
+  }
+
+  
+
+  selectedSummaryModelType(event, model) {
+    ((((((this.agentAssistFormGroup as FormGroup)
+      .get('agentAssistSettings') as FormGroup)
+      .get(this.selectedChannel) as FormGroup)
+      .get('summarization') as FormGroup)
+      .get('model') as FormGroup)
+      .get('type') as FormControl).patchValue(model.type);
+
+      if(model.type === 'customTask') {
+        ((((((this.agentAssistFormGroup as FormGroup)
+          .get('agentAssistSettings') as FormGroup)
+          .get(this.selectedChannel) as FormGroup)
+          .get('summarization') as FormGroup)
+          .get('model') as FormGroup)
+          .addControl('customTaskConfig', this.fb.group({
+            usecaseId: '',
+            refId: ['', [Validators.required]],
+            dialogId: ['', [Validators.required]],
+            taskRefId: ['', [Validators.required]],
+            linkedBotId: ''
+          })))
+      } else {
+        ((((((this.agentAssistFormGroup as FormGroup)
+        .get('agentAssistSettings') as FormGroup)
+        .get(this.selectedChannel) as FormGroup)
+        .get('summarization') as FormGroup)
+        .get('model') as FormGroup).removeControl('customTaskConfig'));
+        this.configuredDialog.selectedDialogName = '';
+      }
+  }
+
+  selectCustomDialog(dialog, from, bot?, transferType?) {
+    if( from === 'summaryModel') {
+      this.configuredDialog = {
+        selectedDialogName: dialog.usecaseName,
+        linkedbot: bot?._id
+      }
+      const customTaskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
+                                      .get('agentAssistSettings') as FormGroup)
+                                      .get(this.selectedChannel) as FormGroup)
+                                      .get('summarization') as FormGroup)
+                                      .get('model') as FormGroup)
+                                      .get('customTaskConfig') as FormGroup));
+      if (customTaskConfigFormGroup) {
+        customTaskConfigFormGroup.patchValue({
+          usecaseId: dialog?._id || '',
+          refId: dialog?.refId || '',
+          dialogId: dialog?.dialogId || '',
+          taskRefId: dialog?.taskRefId || '',
+          linkedBotId: bot?._id || ''
+        });
+      } else {
+        const newFormGroup = new FormGroup({
+          usecaseId: new FormControl(dialog?._id || ''),
+          refId: new FormControl(dialog?.refId || ''),
+          dialogId: new FormControl(dialog?.dialogId || ''),
+          taskRefId: new FormControl(dialog?.taskRefId || ''),
+          linkedBotId: new FormControl(bot?._id || '')
+        });
+        (((((((this.agentAssistFormGroup as FormGroup)
+        .get('agentAssistSettings') as FormGroup)
+        .get(this.selectedChannel) as FormGroup)
+        .get('summarization') as FormGroup)
+        .get('model') as FormGroup)
+        .addControl('customTaskConfig', newFormGroup)));
+    }
+    if(bot) {
+      this.closeDropdown();
+    }
+  }
+    
+  }
+
+  selectCustomBot(childBotDetails, isUpdate?, obj?, confType?) {
+    this.loaded = false;
+    let childBotObj:any = {};
+    if(this.linkedBotObjs.length > 0) {
+      let checkchildBotObj =this.linkedBotObjs.find(obj => obj._id === childBotDetails);
+      if(checkchildBotObj && !checkchildBotObj['dialogs'] ) {
+        this.service.invoke('get.usecases', {
+          streamId: childBotDetails,
+          search: '',
+          filterby: '',
+          status: '',
+          usecaseType: 'dialog',
+          offset: 0,
+          limit: -1,
+        }).subscribe((data) => {
+          if (data.usecases) {        
+            this.linkedBotObjs.forEach(bot => {
+                if (bot._id == childBotDetails) {
+                    bot.dialogs = data.usecases;
+                    if(isUpdate && data.usecases.length > 0) {
+                      childBotObj = data.usecases;
+                      let dialog = childBotObj.find(dialog => dialog.taskRefId === obj?.summarization?.model?.customTaskConfig?.taskRefId);
+                      if(confType === 'customTask') {
+                        this.configuredDialog.selectedDialogName = dialog.usecaseName;
+                      }
+                    }
+                }
+            });
+            this.loaded = true;
+        }
+        });
+      } else {
+        if(isUpdate && checkchildBotObj.dialogs.length > 0) {
+          childBotObj = checkchildBotObj.dialogs;
+          let dialog = childBotObj.find(dialog => dialog.taskRefId === obj?.summarization?.model?.customTaskConfig?.taskRefId);
+          if(confType === 'customTask') {
+            this.configuredDialog.selectedDialogName = dialog.usecaseName;
+          }
+        }
+      }
+    }
+    
   }
 
 }
