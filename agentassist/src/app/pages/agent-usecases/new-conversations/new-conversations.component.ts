@@ -404,6 +404,9 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
       } else {
         return { text: e.text || '' }
       }
+    }).filter(obj => {
+        if(obj.text)
+          return obj;
     });
 
     // Deleted utterances
