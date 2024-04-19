@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NotificationService } from '@kore.services/notification.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,11 +15,14 @@ export class ApiAdvancedModelComponent implements OnInit {
   @Output() emitScriptService = new EventEmitter();
   
   apiScript: string = "";
+  isFullscreen : boolean = false;
+  modalHeight : string = '350px'
 
   editorOptions = {
     fontSize: 14,
     enableBasicAutocompletion: true,
     enableLiveAutocompletion: true,
+    showPrintMargin: false
     };
 
   constructor(
@@ -27,6 +30,16 @@ export class ApiAdvancedModelComponent implements OnInit {
     private notificationService: NotificationService
     
   ) { }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscape(event: KeyboardEvent) {
+    // Check if the pressed key is the escape key
+    if (event.key === "Escape" && this.isFullscreen) {
+      // Handle the escape event here, e.g., close a modal or cancel an action
+      this.isFullscreen = false;
+      this.modalHeight = this.isFullscreen ? 'calc(100vh - 170px)' : '350px';
+    }
+  }
 
   ngOnInit(): void {
     if(this.data?.value !== '') {
@@ -60,4 +73,18 @@ export class ApiAdvancedModelComponent implements OnInit {
     this.activeModal.close(this.data?.value);
   }
 
+  copyInputMessage(inputElement){
+    var dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = inputElement;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+    this.notificationService.notify("copied successfully", "success");
+  }
+
+  expandModal() {
+    this.isFullscreen = !this.isFullscreen
+    this.modalHeight = this.isFullscreen ? 'calc(100vh - 170px)' : '350px';
+  }
 }
