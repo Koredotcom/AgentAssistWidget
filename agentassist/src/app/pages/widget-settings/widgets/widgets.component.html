@@ -234,7 +234,7 @@
                                                                             <ng-container *ngIf="automationBot?.dialogs?.length; else loading">
                                                                                 <div *ngFor="let dialog of automationBot?.dialogs; let ucIndx = index">
                                                                                     <button class="selected-btn"  (click)="selectCustomDialog(dialog, 'summaryModel',automationBot)" >
-                                                                                        <a [ngClass]="{'selected' : agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === useCase?.taskRefId}">{{dialog?.usecaseName}}</a>
+                                                                                        <span [ngClass]="{'selected' : agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === useCase?.taskRefId}">{{dialog?.usecaseName}}</span>
                                                                                         <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === dialog?.taskRefId"></i>
                                                                                     </button>
                                                                                 </div>
