@@ -719,7 +719,7 @@ export class RootService {
       // if (quotflag) {
       //   eleanswer = this.replaceLtGt(eleanswer, quotflag)
       // }
-      return eleanswer.replace(new RegExp("[<br />]+$"),'');
+      return eleanswer.replace(new RegExp("(<br />)+$"),'');
 
     }
     return eleanswer;
