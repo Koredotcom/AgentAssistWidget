@@ -225,11 +225,11 @@
                                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                                                 <ng-container *ngFor="let automationBot of linkedBotObjs; let indxVal = index">
                                                                     <li>
-                                                                        <div class="multi-dropdown-list" data-toggle="collapse" [attr.data-target]="'#' + automationBot.botName + '-' +indxVal" (click)="selectCustomBot(automationBot?._id)">
+                                                                        <div class="multi-dropdown-list" data-toggle="collapse" [attr.data-target]="'#autoSummaryModel-' + indxVal" (click)="selectCustomBot(automationBot?._id)">
                                                                             <span>{{automationBot.botName}}</span>
                                                                             <i class="icon-coaching--left-arrow"></i>
                                                                         </div>
-                                                                        <div [id]="automationBot.botName + '-' +indxVal" class="multip-collapse-details collapse in">
+                                                                        <div [id]="'autoSummaryModel-' + indxVal" class="multip-collapse-details collapse in">
                                                                             <ng-container *ngIf="automationBot?.dialogs?.length; else loading">
                                                                                 <div *ngFor="let dialog of automationBot?.dialogs; let ucIndx = index">
                                                                                     <button class="selected-btn"  (click)="selectCustomDialog(dialog, 'summaryModel',automationBot)">
