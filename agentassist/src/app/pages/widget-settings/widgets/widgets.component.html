@@ -206,13 +206,13 @@
                                                         <div class="dropdown dropdown-open" [ngClass]="{'summary-dropdown-disabled': !(agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.type === 'customTask')}">
                                                             <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
                                                                 
-                                                                {{ useCases[agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
+                                                                {{ useCases[agentAssistFormGroup.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
                                                             
                                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                                                 <ng-container *ngFor="let useCase of currentSelectedBotDialogs">
                                                                     <li ngbDropdownItem class="p-0" *ngIf="selectedChannel === 'chat' ? useCase?.triggerPoints?.isChatEnabled : selectedChannel === 'voice' && useCase?.triggerPoints?.isVoiceEnabled" (click)="selectCustomDialog(useCase, 'summaryModel')">
-                                                                        <a [ngClass]="{'selected' : agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === useCase?.taskRefId}" >{{useCase?.usecaseName}}</a>
-                                                                        <i class="icon-coaching--check" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === dialog?.taskRefId"></i>
+                                                                        <a [ngClass]="{'selected' : agentAssistFormGroup.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === useCase?.taskRefId}" >{{useCase?.usecaseName}}</a>
+                                                                        <i class="icon-coaching--check" *ngIf="agentAssistFormGroup.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === dialog?.taskRefId"></i>
                                                                     </li>
                                                                 </ng-container>
                                                             </ul>
@@ -222,7 +222,7 @@
                                                 <div class="dailog-model-dropdown" *ngIf="customModel?.type === 'customTask' && currentBot?.type === 'universalbot'"  [ngClass]="{'summary-dropdown-disabled': !(agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.type === 'customTask')}">
                                                     <div class="kr-sg-dropdowns" ngbDropdown #myDropdown="ngbDropdown">
                                                         <div class="dropdown dropdown-open" >
-                                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ useCases[agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
+                                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ useCases[agentAssistFormGroup.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
                                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                                                 <ng-container *ngFor="let automationBot of linkedBotObjs; let indxVal = index">
                                                                     <li>
@@ -234,8 +234,8 @@
                                                                             <ng-container *ngIf="automationBot?.dialogs?.length; else loading">
                                                                                 <div *ngFor="let dialog of automationBot?.dialogs; let ucIndx = index">
                                                                                     <button class="selected-btn"  (click)="selectCustomDialog(dialog, 'summaryModel',automationBot)" >
-                                                                                        <a [ngClass]="{'selected' : agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === useCase?.taskRefId}">{{dialog?.usecaseName}}</a>
-                                                                                        <i class="icon-coaching--check" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === dialog?.taskRefId"></i>
+                                                                                        <a [ngClass]="{'selected' : agentAssistFormGroup.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === useCase?.taskRefId}">{{dialog?.usecaseName}}</a>
+                                                                                        <i class="icon-coaching--check" *ngIf="agentAssistFormGroup.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === dialog?.taskRefId"></i>
                                                                                     </button>
                                                                                 </div>
                                                                            </ng-container>

@@ -933,9 +933,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
                       childBotObj.forEach(obj => {
                         this.useCases[obj.taskRefId] = obj.usecaseName;
                       })  
-                      let dialog = childBotObj.find(dialog => dialog.taskRefId === obj?.summarization?.model?.customTaskConfig?.taskRefId);
-                      if(confType === 'customTask') {
-                      }
                     }
                 }
             });
@@ -945,9 +942,6 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       } else {
         if(isUpdate && checkchildBotObj.dialogs.length > 0) {
           childBotObj = checkchildBotObj.dialogs;
-          let dialog = childBotObj.find(dialog => dialog.taskRefId === obj?.summarization?.model?.customTaskConfig?.taskRefId);
-          if(confType === 'customTask') {
-          }
         }
       }
     }
