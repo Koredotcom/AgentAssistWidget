@@ -215,7 +215,8 @@ export class AppComponent implements OnInit, OnDestroy{
           chatHistory: e.data?.payload?.chatHistory
         }
         if(this.widgetSettings?.summarization?.isEnabled) {
-          this.webSocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
+          request_resolution_comments['model'] = this.widgetSettings?.summarization?.model;
+        this.webSocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
         }
         this.webSocketService.emitEvents(EVENTS.end_of_conversation, request_resolution_comments);
         this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
