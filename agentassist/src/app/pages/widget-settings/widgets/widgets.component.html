@@ -181,7 +181,7 @@
                                                                     <i class="icon-coaching--left-arrow"></i>
                                                                 </button>
                                                                 <div ngbDropdownMenu class="secondary-dropdown" *ngIf="currentBot?.type === 'default'">
-                                                                    <button ngbDropdownItem *ngFor="let dialog of currentSelectedBotDialogs; let dialogIndx = index" (click)="selectCustomDialog(dialog, 'convosTransfer', transferMode.type)">
+                                                                    <button ngbDropdownItem *ngFor="let dialog of currentSelectedBotDialogs; let dialogIndx = index" (click)="getActionType(loadTime.type, transferMode.type); selectCustomDialog(dialog, 'convosTransfer', '', transferMode.type)">
                                                                         <li ngClass="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId">{{dialog?.usecaseName}}</li>
                                                                         <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId"></i>
                                                                     </button>                                                                    
@@ -242,8 +242,8 @@
                                         </div>
                                     </ng-container>
                                     <div class="kr-sg-checkbox" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[this.selectedChannel]?.transferConfigs[transferMode.type]?.actionType === 'task'">
-                                        <input id="extractIntent" class="checkbox-custom" type="checkbox" [checked]="extractIntentsChecked(transferMode.type)"  (change)="toggleExtractIntents($event, transferMode.type)">
-                                        <label for="extractIntent" class="checkbox-custom-label">{{'ONCONNECT_EVENT_EXTRACT_INTENT' | translate}}</label>
+                                        <input id="{{transferMode.type}}-111" class="checkbox-custom" type="checkbox" [checked]="extractIntentsChecked(transferMode.type)"  (change)="toggleExtractIntents($event, transferMode.type)">
+                                        <label for="{{transferMode.type}}-111" class="checkbox-custom-label">{{'ONCONNECT_EVENT_EXTRACT_INTENT' | translate}}</label>
                                     </div> 
                                     
                                 </div>

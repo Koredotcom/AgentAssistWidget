@@ -1105,7 +1105,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         .get('transferConfigs') as FormGroup)
         .get(selectedFormGroup) as FormGroup)
         .addControl('taskConfigs', this.fb.group({
-          usecaseId: [dialog?._id || '', [Validators.required]],
+          usecaseId: dialog?._id || '',
           refId: [dialog?.refId ||  '', [Validators.required]],
           dialogId: [dialog?.dialogId || '', [Validators.required]],
           taskRefId: [dialog?.taskRefId ||  '', [Validators.required]],
