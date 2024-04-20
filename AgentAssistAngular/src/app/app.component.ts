@@ -13,6 +13,7 @@ import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
 import { HandleSubjectService } from './services/handle-subject.service';
 import { finalize } from 'rxjs';
 import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
+import { storageConst } from './proj.const';
 
 
 @Component({
@@ -135,6 +136,7 @@ export class AppComponent implements OnInit, OnDestroy{
       this.rootService.formatConnectionDetails(urlParams);
       this.connectionDetails = this.rootService.getConnectionDetails();
       this.initAgentAssist(this.connectionDetails);
+
     } else if (e.data.name === 'userBotConvos') {
       if (e.data && e.data.sessionId) {
         this.rootService.setUserBotConversationDataDetails(e.data);
@@ -147,11 +149,31 @@ export class AppComponent implements OnInit, OnDestroy{
       this.localStorageService.userDetails = e.data.userDetails
         ? e.data.userDetails
         : null;
-    } else if (e.data.type === 'AGENT' || e.data?.author?.type === 'AGENT') {
+    } 
+
+    /* we need to remove conditions for below || e.data.type === 'AGENT' , 'USER' || e.data?.author?.type === 'AGENT' , 'USER' */
+
+    else if (e.data?.name === 'agentAssist.AgentMessage' || e.data.type === 'AGENT' || e.data?.author?.type === 'AGENT') {
       this.emitUserAgentMessage(e.data, 'agent_inp_msg');
-    } else if (e.data.type === 'USER' || e.data?.author?.type === 'USER') {
+    } else if (e.data?.name === 'agentAssist.CustomerMessage' || e.data.type === 'USER' || e.data?.author?.type === 'USER') {
       this.emitUserAgentMessage(e.data, 'user_inp_msg');
     }
+    
+    /* below are the events for internal transfer ex: cold / warm */
+    else if(e.data?.name === 'agentAssist.internalTransfer'){
+      if(e.data){
+        this.rootService.internalTransfer = true;
+        this.rootService.internalTransferData = e.data;
+        let storageObject: any = {
+          [storageConst.INTERNAL_TRANSFER]: e.data
+        }
+        this.localStorageService.setLocalStorageItem(storageObject);
+        if(e.data?.transition === 'exit'){
+          this.webSocketService.emitEvents(EVENTS.internal_transfer, e.data);
+        }
+      }
+    };
+    
     this.eventListenerFromParent(e);
   }
 

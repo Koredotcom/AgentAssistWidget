@@ -46,6 +46,10 @@ export class WebSocketService {
   prevTimeStamp : number = 0;
   intervalTime : number = 510;
   count = 1;
+  // participantOmitEvents = {
+  //   'welcome_message_request' : true,
+  //   'agent_menu_request': true,
+  // }
 
   constructor(private rootService : RootService, private localStorageService : LocalStorageService,
     private handleSubjectService : HandleSubjectService, private templateRenderClassService : TemplateRenderClassService, private koregenerateUUIDPipe : KoreGenerateuuidPipe) {
@@ -132,18 +136,32 @@ export class WebSocketService {
     }
     this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
 
+    if(this.rootService.internalTransfer && this.rootService.internalTransferData && this.rootService.internalTransferData?.transition == 'entry'){
+      this.emitEvents(EVENTS.internal_transfer, this.rootService.internalTransferData);
+    }
+
     this.sendCheckListOpened$.next(true);
   }
 
   emitEvents(eventName : string,requestParams : any) {
     const {fromSAT, source, isCall, autoBotId} = this.rootService.getConnectionDetails()
     let uuids = this.koregenerateUUIDPipe.transform();
+    let appState = this.localStorageService.getLocalStorageState();
+    let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
+    // let internalTransferDetails = this.rootService.internalTransferData;
     if(requestParams){
       requestParams.isExtAD = fromSAT ? false : true;
       requestParams.source = source;
       requestParams.experience = this.rootService.connectionDetails?.channel;
       requestParams.traceId = uuids;
       requestParams.language = this.rootService.connectionDetails?.interactiveLanguage;
+      if(internalTransferDetails && Object.keys(internalTransferDetails)?.length > 0 && internalTransferDetails?.participant){
+        requestParams.participant = internalTransferDetails?.participant;
+      }
+    }
+
+    if(eventName == EVENTS.internal_transfer){
+      requestParams.botId = this.rootService.connectionDetails.botId;
     }
 
     if(this.loaderEvents[eventName]) {
