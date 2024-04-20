@@ -168,7 +168,6 @@
                                         <div class="dailog-model-dropdown">
                                             <div class="kr-sg-dropdowns" ngbDropdown #conversationTransferDropDown="ngbDropdown" [ngClass]="{'transfer-dropdown-unclickable': !agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.transferConfigs[transferMode.type]?.isEnabled}">
                                                 <div class="dropdown dropdown-open">
-                                                    <div>{{ useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId]}}</div>
                                                     <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
                                                         {{ agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.actionType === 'task' ? getAfterTransferText(transferMode?.type) + ' - ' + useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId] : getAfterTransferText(transferMode?.type)}}
                                                     </button>
