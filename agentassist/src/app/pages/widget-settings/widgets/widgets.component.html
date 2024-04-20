@@ -157,16 +157,16 @@
                                 </div>
                             </div>
                             <div class="help-support-wrapper conversation-transfer">
-                                <div class="help-support-block convos-transfer-block" *ngFor="let transferMode of conversationTransferTypes" formGroupName="{{transferMode.type}}">
+                                <div class="help-support-block convos-transfer-block" *ngFor="let transferMode of conversationTransferTypes" formGroupName="{{transferMode?.type}}">
                                     <div class="kr-sg-checkbox p-0 m-0">
-                                        <input id="{{transferMode.type}}" class="checkbox-custom" type="checkbox" formControlName="isEnabled">
-                                        <label for="{{transferMode.type}}" class="checkbox-custom-label">{{transferMode.title}} <i class="icon-sa-info"
-                                            tooltipClass="tooltip-global-styles" ngbTooltip="{{transferMode.tooltip}}"></i>
+                                        <input id="{{transferMode?.type}}" class="checkbox-custom" type="checkbox" formControlName="isEnabled">
+                                        <label for="{{transferMode?.type}}" class="checkbox-custom-label">{{transferMode?.title}} <i class="icon-sa-info"
+                                            tooltipClass="tooltip-global-styles" ngbTooltip="{{transferMode?.tooltip}}"></i>
                                         </label>
                                     </div>
                                     <ng-container>
                                         <div class="dailog-model-dropdown">
-                                            <div class="kr-sg-dropdowns" ngbDropdown #conversationTransferDropDown="ngbDropdown" [ngClass]="{'transfer-dropdown-unclickable': !agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.transferConfigs[transferMode.type]?.isEnabled}">
+                                            <div class="kr-sg-dropdowns" ngbDropdown #conversationTransferDropDown="ngbDropdown" [ngClass]="{'transfer-dropdown-unclickable': !agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.isEnabled}">
                                                 <div class="dropdown dropdown-open">
                                                     <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
                                                         {{ agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.actionType === 'task' ? getAfterTransferText(transferMode?.type) + ' - ' + useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId] : getAfterTransferText(transferMode?.type)}}
@@ -176,11 +176,11 @@
                                                             <button ngbDropdownItem *ngIf="loadTime?.type !== 'task'" (click)="getActionType(loadTime.type, transferMode.type)">{{loadTime.text}}</button>
                                                             <div ngbDropdown placement="right-top" *ngIf="loadTime?.type === 'task'">
                                                                 <button class="dropdown-toggle dropdown-input multi-drp-item-btn" ngbDropdownToggle >
-                                                                    <span>{{loadTime.text}}</span>
+                                                                    <span>{{loadTime?.text}}</span>
                                                                     <i class="icon-coaching--left-arrow"></i>
                                                                 </button>
                                                                 <div ngbDropdownMenu class="secondary-dropdown" *ngIf="currentBot?.type === 'default'">
-                                                                    <button ngbDropdownItem *ngFor="let dialog of currentSelectedBotDialogs; let dialogIndx = index" (click)="getActionType(loadTime.type, transferMode.type); selectCustomDialog(dialog, 'convosTransfer', '', transferMode.type)">
+                                                                    <button ngbDropdownItem *ngFor="let dialog of currentSelectedBotDialogs; let dialogIndx = index" (click)="getActionType(loadTime?.type, transferMode?.type); selectCustomDialog(dialog, 'convosTransfer', '', transferMode?.type)">
                                                                         <li ngClass="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId">{{dialog?.usecaseName}}</li>
                                                                         <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId"></i>
                                                                     </button>                                                                    
@@ -190,13 +190,13 @@
                                                                     <ng-container *ngFor="let automationBot of linkedBotObjs; let autoIndex = index">
                                                                         <li>
                                                                             <div class="multi-dropdown-list" data-toggle="collapse" [attr.data-target]="'#' + convosTransferType + '-' +autoIndex" (click)="selectCustomBot(automationBot?._id)">
-                                                                                <span>{{automationBot.botName}}</span>
+                                                                                <span>{{automationBot?.botName}}</span>
                                                                                 <i class="icon-coaching--left-arrow"></i>
                                                                             </div>
                                                                             <div [id]="convosTransferType + '-' +autoIndex" class="multip-collapse-details collapse in">
                                                                                 <ng-container *ngIf="automationBot?.dialogs?.length; else loading">
                                                                                     <div *ngFor="let dialog of automationBot?.dialogs; let ucIndx = index">
-                                                                                        <button class="selected-btn"  (click)="getActionType(loadTime.type, transferMode.type); selectCustomDialog(dialog, 'convosTransfer', automationBot, transferMode.type);conversationTransferDropDown.close()">
+                                                                                        <button class="selected-btn"  (click)="getActionType(loadTime?.type, transferMode?.type); selectCustomDialog(dialog, 'convosTransfer', automationBot, transferMode?.type);conversationTransferDropDown.close()">
                                                                                             <span>{{dialog?.usecaseName}}</span>
                                                                                             <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId"></i>
                                                                                         </button>
@@ -204,7 +204,7 @@
                                                                                 </ng-container>
                                                                                 <ng-template #loading>
                                                                                     <ng-container>
-                                                                                        <div [id]="automationBot.refId + '-' +autoIndex" class="ai-itassist-wrapper">
+                                                                                        <div [id]="automationBot?.refId + '-' +autoIndex" class="ai-itassist-wrapper">
                                                                                             <div class="no-data-loader">
                                                                                                 <div class="sk-fading-circle">
                                                                                                     <div class="sk-circle1 sk-circle"></div>
@@ -241,8 +241,8 @@
                                         </div>
                                     </ng-container>
                                     <div class="kr-sg-checkbox" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[this.selectedChannel]?.transferConfigs[transferMode.type]?.actionType === 'task'">
-                                        <input id="{{transferMode.type}}-111" class="checkbox-custom" type="checkbox" [checked]="extractIntentsChecked(transferMode.type)"  (change)="toggleExtractIntents($event, transferMode.type)">
-                                        <label for="{{transferMode.type}}-111" class="checkbox-custom-label">{{'ONCONNECT_EVENT_EXTRACT_INTENT' | translate}}</label>
+                                        <input id="{{transferMode?.type}}-111" class="checkbox-custom" type="checkbox" [checked]="extractIntentsChecked(transferMode?.type)"  (change)="toggleExtractIntents($event, transferMode?.type)">
+                                        <label for="{{transferMode?.type}}-111" class="checkbox-custom-label">{{'ONCONNECT_EVENT_EXTRACT_INTENT' | translate}}</label>
                                     </div> 
                                     
                                 </div>
