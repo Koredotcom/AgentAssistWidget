@@ -25,6 +25,7 @@ import {
 export class WidgetsComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') inputRef: ElementRef<HTMLInputElement>;
   @ViewChild('myDropdown', { static: false }) myDropdown: NgbDropdown;
+  @ViewChild('conversationTransferDropdown') conversationTransferDropdown : NgbDropdown;
 
   isUnifiedPlatform: boolean = false;
   disableButtons: boolean =  false;
@@ -111,7 +112,16 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     {type:'Documentation', tooltip: 'Control accessibility to doc and customise URLs.', value : 'documentation'}, 
     {type:'FAQ', tooltip:'Control accessibility to FAQ and customise URLs.', value : 'faq'},
     {type:'Kore Academy', tooltip:'Control accessibility to Kore Academy', value : 'koreAcademy'}
-  ]
+  ];
+  conversationTransferTypes = [
+    { type: 'cold', tooltip: 'When Agent 1 transfer call to Agent 2', title: 'Cold Transfer'},
+    { type: 'warm', tooltip: 'When Agent 1 invites Agent 2 to conference call' , title: 'warm Transfer'}
+  ];
+  afterTransferSettings = [
+    {type:'scrollToTop', text : 'Scroll up to First Message'},
+    {type:'default', text : ' Continue from the LastMessage'},
+    {type:'task', text : 'Configure Dialog Task'},
+  ];
   advancedModeScript: string = '';
   advanceDialogTaskModeScript: string = '';
   selectedChannel = 'chat';
@@ -299,9 +309,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     });
   }
 
-  closeDropdown() {
-    if (this.myDropdown) {
+  closeDropdown(from) {
+    if (from === 'summaryModel' && this.myDropdown) {
       this.myDropdown.close();
+    } else if(from === 'convosTransfer' && this.conversationTransferDropdown) {
+      this.conversationTransferDropdown.close();
     }
   }
 
@@ -330,6 +342,168 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     this.service.invoke("get.agentAssistSettings", params, body).subscribe(
       (res) => {
         if (res) {
+        //   let mockData = {
+        //     "isCustomisedLogoEnabled": {
+        //         "isEnabled": false,
+        //         "fileId": "",
+        //         "fileName": "",
+        //         "hash": ""
+        //     },
+        //     "botEvents": {
+        //         "fallback": {
+        //             "isEnabled": false
+        //         }
+        //     },
+        //     "urlOpenBehaviour": {
+        //         "urlOpenType": "defaultBehaviour",
+        //         "defaultBehaviour": false,
+        //         "sendPostEvent": false
+        //     },
+        //     "agentActions": {
+        //         "sharingFormat": "plainString"
+        //     },
+        //     "sentiment": {
+        //         "isEnabled": true
+        //     },
+        //     "intentExecution": {
+        //         "restartFunctionality": {
+        //             "isEnabled": true
+        //         },
+        //         "entityView": {
+        //             "isEnabled": true
+        //         }
+        //     },
+        //     "languageSettings": {
+        //         "language": "en",
+        //         "allowAgentSwitch": false
+        //     },
+        //     "dialogsDisplayNameParser": {
+        //         "mode": "default"
+        //     },
+        //     "showHelp": {
+        //         "isEnabled": true,
+        //         "documentation": {
+        //             "isEnabled": true,
+        //             "resource": "https://docs.kore.ai/agentassist/"
+        //         },
+        //         "faq": {
+        //             "isEnabled": true,
+        //             "resource": "https://docs.kore.ai/agentassist/frequently-asked-questions/faq/"
+        //         },
+        //         "koreAcademy": {
+        //             "isEnabled": true
+        //         }
+        //     },
+        //     "chat": {
+        //         "agentAssistWidgetEnabled": true,
+        //         "isProactiveEnabled": false,
+        //         "isAgentCoachingEnabled": false,
+        //         "isAgentResponseEnabled": true,
+        //         "isAgentResponseCopyEnabled": true,
+        //         "transferConfigs": {
+        //             "cold": {
+        //                 "isEnabled": true,
+        //                 "actionType": "default"
+        //             },
+        //             "warm": {
+        //                 "isEnabled": true,
+        //                 "actionType": "task",
+        //                 "taskConfigs": {
+        //                     "usecaseId": "sat-7a14e502-e455-557c-a8a4-3850e84b498e",
+        //                     "refId": "31e2407e-8c20-51ce-8b4c-7afe829489bd",
+        //                     "dialogId": "dg-cdd204f3-6449-5475-a06d-79b30660b314",
+        //                     "taskRefId": "31e2407e-8c20-51ce-8b4c-7afe829489bd",
+        //                     "linkedBotId": "st-f5b9f8e0-6426-5ba4-90fe-e0d4bf08113b",
+        //                     "extractIntents": true
+        //                 }
+        //             }
+        //         },
+        //         "transcripts": {
+        //             "isEnabled": true
+        //         },
+        //         "summarization": {
+        //             "isEnabled": true,
+        //             "canSubmit": false,
+        //             "model": {
+        //                 "type": "customTask",
+        //                 "customTaskConfig": {
+        //                     "usecaseId": "sat-b15b6438-5d5a-58f7-aa27-945c306976d0",
+        //                     "refId": "8a3260e9-4b7f-5b3c-9a23-5a9acaebff62",
+        //                     "dialogId": "dg-7685180e-80fc-5927-9dff-03e0ec66dd14",
+        //                     "taskRefId": "8a3260e9-4b7f-5b3c-9a23-5a9acaebff62",
+        //                     "linkedBotId": "st-30310fe7-f57c-5ecf-97e8-1131166c9f34"
+        //                 }
+        //             }
+        //         },
+        //         "isAgentPlaybookEnabled": false,
+        //         "isWidgetLandingEnabled": {
+        //             "tab": "assist"
+        //         }
+        //     },
+        //     "voice": {
+        //         "agentAssistWidgetEnabled": false,
+        //         "isProactiveEnabled": false,
+        //         "isAgentCoachingEnabled": false,
+        //         "isAgentResponseEnabled": true,
+        //         "isAgentResponseCopyEnabled": true,
+        //         "transferConfigs": {
+        //             "cold": {
+        //                 "isEnabled": false,
+        //                 "actionType": "default"
+        //             },
+        //             "warm": {
+        //                 "isEnabled": false,
+        //                 "actionType": "default"
+        //             }
+        //         },
+        //         "transcripts": {
+        //             "isEnabled": true
+        //         },
+        //         "summarization": {
+        //             "isEnabled": false,
+        //             "canSubmit": false,
+        //             "model": {
+        //                 "type": "kore"
+        //             }
+        //         },
+        //         "isAgentPlaybookEnabled": false,
+        //         "isWidgetLandingEnabled": {
+        //             "tab": "assist"
+        //         }
+        //     },
+        //     "email": {
+        //         "agentAssistWidgetEnabled": false,
+        //         "isProactiveEnabled": false,
+        //         "isAgentCoachingEnabled": false,
+        //         "isAgentResponseEnabled": true,
+        //         "isAgentResponseCopyEnabled": true,
+        //         "transferConfigs": {
+        //             "cold": {
+        //                 "isEnabled": false,
+        //                 "actionType": "default"
+        //             },
+        //             "warm": {
+        //                 "isEnabled": false,
+        //                 "actionType": "default"
+        //             }
+        //         },
+        //         "transcripts": {
+        //             "isEnabled": true
+        //         },
+        //         "summarization": {
+        //             "isEnabled": false,
+        //             "canSubmit": false,
+        //             "model": {
+        //                 "type": "kore"
+        //             }
+        //         },
+        //         "isAgentPlaybookEnabled": false,
+        //         "isWidgetLandingEnabled": {
+        //             "tab": "assist"
+        //         }
+        //     }
+        // };
+        // res.agentAssistSettings = {...JSON.parse(JSON.stringify(res.agentAssistSettings)), ...JSON.parse(JSON.stringify(mockData))}
           this.clonedWidgetSettings = res;
           this.isLoading = false;
           this.createOrUpdateAgSettingsForm(res.agentAssistSettings);
@@ -640,6 +814,16 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       isAgentCoachingEnabled: [isUpdate ? (obj.isAgentCoachingEnabled ?? false) : false],
       isAgentResponseEnabled: [isUpdate ? (obj.isAgentResponseEnabled ?? false) : true],
       isAgentResponseCopyEnabled: [isUpdate ? (obj.isAgentResponseCopyEnabled ?? false) : true],
+      transferConfigs : this.fb.group({
+        cold: this.fb.group({
+          isEnabled: [isUpdate ? (obj.transferConfigs?.cold?.isEnabled ?? false) : false],
+          actionType: [isUpdate ? (obj.transferConfigs?.cold?.actionType ?? 'default') : 'default']
+        }),
+        warm: this.fb.group({
+          isEnabled: [isUpdate ? (obj.transferConfigs?.warm?.isEnabled ?? false) : false],
+          actionType: [isUpdate ? (obj.transferConfigs?.warm?.actionType ?? 'default') : 'default']
+        })
+      }),
       transcripts : this.fb.group({
         isEnabled : [isUpdate ? (obj.transcripts?.isEnabled??true) : true],
       }),
@@ -674,7 +858,40 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           this.getUseCases(this.currentBot._id, isUpdate, obj, 'customTask')
         }
       }
-    }    
+    }
+
+    if(isUpdate) {
+      if( obj?.transferConfigs?.cold?.actionType === 'task') {
+        ((settingsForm.transferConfigs as FormGroup).get('cold') as FormGroup).addControl('taskConfigs', this.fb.group({
+          usecaseId: obj?.transferConfigs?.cold?.taskConfigs?.usecaseId || '',
+          refId: obj?.transferConfigs?.cold?.taskConfigs?.refId || '',
+          dialogId: obj?.transferConfigs?.cold?.taskConfigs?.dialogId || '',
+          taskRefId: obj?.transferConfigs?.cold?.taskConfigs?.taskRefId || '',
+          linkedBotId: obj?.transferConfigs?.cold?.taskConfigs?.linkedBotId || '',
+          extractIntents: obj?.transferConfigs?.cold?.taskConfigs?.extractIntents || ''
+        }));
+        if(obj?.transferConfigs?.cold?.taskConfigs?.linkedBotId !== '') {
+          this.selectCustomBot( obj?.transferConfigs?.cold?.taskConfigs?.linkedBotId, isUpdate, obj, 'cold'); 
+        }else {
+          this.getUseCases(this.currentBot._id, isUpdate, obj, 'cold')
+        }
+      }
+      if( obj?.transferConfigs?.warm?.actionType === 'task') {
+        ((settingsForm.transferConfigs as FormGroup).get('warm') as FormGroup).addControl('taskConfigs', this.fb.group({
+          usecaseId: obj?.transferConfigs?.warm?.taskConfigs?.usecaseId || '',
+          refId: obj?.transferConfigs?.warm?.taskConfigs?.refId || '',
+          dialogId: obj?.transferConfigs?.warm?.taskConfigs?.dialogId || '',
+          taskRefId: obj?.transferConfigs?.warm?.taskConfigs?.taskRefId || '',
+          linkedBotId: obj?.transferConfigs?.warm?.taskConfigs?.linkedBotId || '',
+          extractIntents: obj?.transferConfigs?.warm?.taskConfigs?.extractIntents || ''
+        }));
+          if(obj?.transferConfigs?.warm?.taskConfigs?.linkedBotId !== '') {
+            this.selectCustomBot( obj?.transferConfigs?.warm?.taskConfigs?.linkedBotId, isUpdate, obj, 'warm'); 
+          }else {
+            this.getUseCases(this.currentBot._id, isUpdate, obj, 'warm')
+          }
+      }
+    }
     return settingsForm;
   }
 
@@ -793,9 +1010,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       .get('model') as FormGroup).patchValue({
         type: 'kore'
       })
-
     }
-    
   }
 
 
@@ -814,14 +1029,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       if(data.usecases) {        
         this.currentSelectedBotDialogs = data.usecases;
         this.currentSelectedBotDialogs.forEach(obj => {
-          this.useCases[obj.taskRefId] = obj.usecaseName
+          this.useCases[obj.taskRefId] = obj.usecaseName;
         })
-        this.currentSelectedBotDialogs = this.currentSelectedBotDialogs.map(v => ({...v, isActive: true}))
-        if(isUpdate) {
-          if(confType === 'customTask') {
-            const dialog = this.currentSelectedBotDialogs.find(dialog => dialog.taskRefId === settings?.summarization?.model?.customTaskConfig?.taskRefId);
-          }
-        }
       }
     });
   }
@@ -872,7 +1081,42 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   selectCustomDialog(dialog, from, bot?, transferType?) {
-    if( from === 'summaryModel') {
+    const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
+    if(from === 'convosTransfer') {
+      const taskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
+      .get('agentAssistSettings') as FormGroup)
+      .get(this.selectedChannel) as FormGroup)
+      .get('transferConfigs') as FormGroup)
+      .get(selectedFormGroup) as FormGroup)
+      .get('taskConfigs') as FormGroup));
+
+      if (taskConfigFormGroup) {
+        taskConfigFormGroup.patchValue({
+          usecaseId: dialog?._id || '',
+          refId: dialog?.refId || '',
+          dialogId: dialog?.dialogId || '',
+          taskRefId: dialog?.taskRefId || '',
+          linkedBotId: bot?._id || ''
+        });
+      } else {
+        (((((((this.agentAssistFormGroup as FormGroup)
+        .get('agentAssistSettings') as FormGroup)
+        .get(this.selectedChannel) as FormGroup)
+        .get('transferConfigs') as FormGroup)
+        .get(selectedFormGroup) as FormGroup)
+        .addControl('taskConfigs', this.fb.group({
+          usecaseId: [dialog?._id || '', [Validators.required]],
+          refId: [dialog?.refId ||  '', [Validators.required]],
+          dialogId: [dialog?.dialogId || '', [Validators.required]],
+          taskRefId: [dialog?.taskRefId ||  '', [Validators.required]],
+          linkedBotId: bot?._id || '',
+          extractIntents: false}))));
+      }
+      if(bot) {
+        this.closeDropdown('convosTransfer');
+      }
+      console.log('---------------------------------------', this.agentAssistFormGroup.get('agentAssistSettings').get(this.selectedChannel).get('transferConfigs').value);
+    } else if( from === 'summaryModel') {
       const customTaskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
                                       .get('agentAssistSettings') as FormGroup)
                                       .get(this.selectedChannel) as FormGroup)
@@ -903,7 +1147,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         .addControl('customTaskConfig', newFormGroup)));
     }
     if(bot) {
-      this.closeDropdown();
+      this.closeDropdown('summaryModel');
     }
   }
     
@@ -928,24 +1172,71 @@ export class WidgetsComponent implements OnInit, OnDestroy {
             this.linkedBotObjs.forEach(bot => {
                 if (bot._id == childBotDetails) {
                     bot.dialogs = data.usecases;
-                    if(isUpdate && data.usecases.length > 0) {
-                      childBotObj = data.usecases;
-                      childBotObj.forEach(obj => {
-                        this.useCases[obj.taskRefId] = obj.usecaseName;
-                      })  
-                    }
+                    childBotObj = data.usecases;
+                    childBotObj.forEach(obj => {
+                      this.useCases[obj.taskRefId] = obj.usecaseName;
+                    })
                 }
             });
             this.loaded = true;
         }
         });
-      } else {
-        if(isUpdate && checkchildBotObj.dialogs.length > 0) {
-          childBotObj = checkchildBotObj.dialogs;
-        }
+      } 
+    }
+  }
+
+  getAfterTransferText(transferType: string): string {
+    const actionType = this.agentAssistFormGroup.get('agentAssistSettings').value[this.selectedChannel]?.transferConfigs[transferType]?.actionType;
+    const afterTransferSetting = this.afterTransferSettings.find(setting => setting.type === actionType);
+    return afterTransferSetting ? afterTransferSetting.text : '';
+  }
+  
+  getActionType(setting, transferType) {
+    const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
+    (((((((this.agentAssistFormGroup as FormGroup)
+    .get('agentAssistSettings') as FormGroup)
+    .get(this.selectedChannel) as FormGroup)
+    .get('transferConfigs') as FormGroup)
+    .get(selectedFormGroup) as FormGroup)
+    .get('actionType') as FormControl).patchValue(setting));
+
+    if(setting !== 'task') {
+      const taskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
+      .get('agentAssistSettings') as FormGroup)
+      .get(this.selectedChannel) as FormGroup)
+      .get('transferConfigs') as FormGroup)
+      .get(selectedFormGroup) as FormGroup)
+      .get('taskConfigs') as FormGroup));
+      if(taskConfigFormGroup) {
+        (((((((this.agentAssistFormGroup as FormGroup)
+        .get('agentAssistSettings') as FormGroup)
+        .get(this.selectedChannel) as FormGroup)
+        .get('transferConfigs') as FormGroup)
+        .get(selectedFormGroup) as FormGroup)
+        .removeControl('taskConfigs')));
       }
     }
-    
+
+
   }
+  
+  // Extract intents from the Dialog
+  toggleExtractIntents(event, transferType) {    
+    const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
+    const taskConfigs = (((((((this.agentAssistFormGroup as FormGroup)
+                        .get('agentAssistSettings') as FormGroup)
+                        .get(this.selectedChannel) as FormGroup)
+                        .get('transferConfigs') as FormGroup)
+                        .get(selectedFormGroup) as FormGroup)
+                        .get('taskConfigs') as FormGroup));
+    taskConfigs.patchValue({
+      extractIntents: event.target.checked
+    })
+  }
+
+  extractIntentsChecked(transferType: string): boolean {
+    const taskConfigs = this.agentAssistFormGroup.get('agentAssistSettings').value[this.selectedChannel]?.transferConfigs[transferType]?.taskConfigs;
+    return taskConfigs ? taskConfigs.extractIntents : false; // Assuming default value is false if not set
+}
 
 }
