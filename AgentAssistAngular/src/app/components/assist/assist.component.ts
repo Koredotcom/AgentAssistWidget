@@ -371,7 +371,7 @@ export class AssistComponent implements OnInit, OnDestroy {
       this.welcomeMsgResponse = data;
       this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);
       this.assistResponseArray = [...this.assistResponseArray];
-      this.scrollToBottom();
+      this.scrollToBottom(true);
     }
 
     if(this.rootService.isAgentSentRequestOnClick){
@@ -765,7 +765,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         }
       } 
     });    
-    this.scrollToBottom();
+    this.scrollToBottom(true);
   }
 
 
@@ -794,11 +794,19 @@ export class AssistComponent implements OnInit, OnDestroy {
     }
   }
 
-  scrollToBottom(){
+  scrollToBottom(history?){
     if(this.collapseTab?.nativeElement){
-      setTimeout(() => {
-        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
-      }, 10);
+      if (history && this.rootService.internalTransfer && this.rootService.settingsData?.transferConfigs &&
+        this.rootService.settingsData?.transferConfigs[this.rootService.internalTransferData?.transfertype]?.actionType === 'scrollToTop') {
+        setTimeout(() => {
+          this.collapseTab.nativeElement.scrollTop = 0;
+        }, 10);
+      } else {
+        setTimeout(() => {
+          this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
+        }, 10);
+      }
+
     }
   }
 }
