@@ -30,6 +30,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   @ViewChild('collapseTab', { static: false }) private collapseTab: ElementRef;
   @ViewChild('terminateCanvas', {static : false}) private canvas : ElementRef<HTMLDivElement>
   @ViewChild('summeryModalpopupContent', {static : false}) private summaryPopupContent : ElementRef<HTMLDivElement>
+  @ViewChild('summaryBannerDetails', { static : false}) private summaryBannerDetails: ElementRef<HTMLDivElement>
 
   connectionDetails: any = {};
   subs = new SubSink();
@@ -37,6 +38,8 @@ export class AssistComponent implements OnInit, OnDestroy {
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
 
+  conversationSummaryObj: any;
+  showConversationSummary: any = false;
 
   dialogName: string;
   dialogPositionId: string;
@@ -100,6 +103,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         let appState = this.localStorageService.getLocalStorageState();
         this.proactiveModeStatus = appState[this.connectionDetails.conversationId][storageConst.PROACTIVE_MODE];
         this.getInterruptDialogList();
+        this.summeryModalpopup({});
       }
     });
 
@@ -497,6 +501,8 @@ export class AssistComponent implements OnInit, OnDestroy {
   }
 
   handlePopupEvent(popupObject) {
+    this.showConversationSummary = true;
+    this.conversationSummaryObj = popupObject;
     let sourceMsgId =  this.commonService.getLastAutomationSourceMsgId(this.assistResponseArray)
     if (popupObject.type == this.projConstants.TERMINATE) {
       this.terminateClick = popupObject.status;
