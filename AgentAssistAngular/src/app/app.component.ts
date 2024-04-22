@@ -13,7 +13,8 @@ import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
 import { HandleSubjectService } from './services/handle-subject.service';
 import { finalize } from 'rxjs';
 import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
-import { storageConst } from './proj.const';
+import { ProjConstants, storageConst } from './proj.const';
+import { CommonService } from './services/common.service';
 
 
 @Component({
@@ -42,7 +43,8 @@ export class AppComponent implements OnInit, OnDestroy{
     private serviceInvoker : ServiceInvokerService,
     private koregenerateUUIDPipe : KoreGenerateuuidPipe,
     private handleSubjectService: HandleSubjectService,
-    private sanitizeHTMLPipe : SanitizeHtmlPipe
+    private sanitizeHTMLPipe : SanitizeHtmlPipe,
+    private commonService : CommonService
   ) {
     // this.translate.setDefaultLang('en');
   }
@@ -102,7 +104,6 @@ export class AppComponent implements OnInit, OnDestroy{
     this.isGrantSuccess = true;
     setTimeout(() => {
       this.webSocketService.socketConnection();
-      this.rootService.setSocketConnection(true);
     }, 100);
   }
 
@@ -169,6 +170,11 @@ export class AppComponent implements OnInit, OnDestroy{
         }
         this.localStorageService.setLocalStorageItem(storageObject);
         if(e.data?.transition === 'exit'){
+          if(this.rootService.settingsData?.transferConfigs &&
+            this.rootService.settingsData?.transferConfigs[e?.data?.transfertype]?.actionType === 'task' &&
+            this.rootService.isAutomationOnGoing){
+              this.commonService.AgentAssist_run_click({ intentName: ProjConstants.DISCARD_ALL}, this.rootService.currentPositionId);
+            }
           this.webSocketService.emitEvents(EVENTS.internal_transfer, e.data);
         }
       }
