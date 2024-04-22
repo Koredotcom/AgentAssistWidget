@@ -646,7 +646,7 @@
                             }
                         }
                         .dailog-model-dropdown{
-                            width: 100%;
+                            max-width: 100%;
                             padding-left: 30px;
                             margin-top: 5px;
                             .kr-sg-dropdowns{
@@ -888,6 +888,14 @@
                                     }
                                 }
                             }
+                            div {
+                                button {
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    padding-right: 38px;
+                                }
+                            }
                         }
                         .info-tip{
                             display: flex;
@@ -1112,7 +1120,12 @@
                 width: 100%;
                 padding-left: 30px;
                 margin-top: 5px;
-               
+               .convos-transfer-selection {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    padding-right: 38px;
+               }
                 .multi-drp-item-btn{
                     display: flex;
                     padding: 10px 14px;
@@ -1411,6 +1424,18 @@
     // z-index: 999999;
     max-height: 260px;
     overflow: auto;
+    button {
+        li {
+            a {
+                max-width: 376px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                padding-right: 38px;
+            }
+        }
+    }
 }
 
 ::ng-deep .multip-drp-menu-body-append{

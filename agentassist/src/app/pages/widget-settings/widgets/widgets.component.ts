@@ -115,11 +115,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   ];
   conversationTransferTypes = [
     { type: 'cold', tooltip: 'When Agent 1 transfer call to Agent 2', title: 'Cold Transfer'},
-    { type: 'warm', tooltip: 'When Agent 1 invites Agent 2 to conference call' , title: 'warm Transfer'}
+    { type: 'warm', tooltip: 'When Agent 1 invites Agent 2 to conference call' , title: 'Warm Transfer'}
   ];
   afterTransferSettings = [
     {type:'scrollToTop', text : 'Scroll up to First Message'},
-    {type:'default', text : ' Continue from the LastMessage'},
+    {type:'default', text : ' Continue from the Last Message'},
     {type:'task', text : 'Configure Dialog Task'},
   ];
   advancedModeScript: string = '';
