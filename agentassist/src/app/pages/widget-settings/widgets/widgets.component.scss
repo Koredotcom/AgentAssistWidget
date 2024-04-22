@@ -1416,6 +1416,18 @@
     // z-index: 999999;
     max-height: 260px;
     overflow: auto;
+    button {
+        li {
+            a {
+                max-width: 376px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                padding-right: 38px;
+            }
+        }
+    }
 }
 
 ::ng-deep .multip-drp-menu-body-append{

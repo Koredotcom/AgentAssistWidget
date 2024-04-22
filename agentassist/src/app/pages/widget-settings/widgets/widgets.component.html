@@ -181,8 +181,8 @@
                                                                 </button>
                                                                 <div ngbDropdownMenu class="secondary-dropdown" *ngIf="currentBot?.type === 'default'">
                                                                     <button ngbDropdownItem *ngFor="let dialog of currentSelectedBotDialogs; let dialogIndx = index" (click)="getActionType(loadTime?.type, transferMode?.type); selectCustomDialog(dialog, 'convosTransfer', '', transferMode?.type)">
-                                                                        <li class="p-0">
-                                                                            <a [ngClass]="{'selected' : agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId}">{{dialog?.usecaseName}}</a>
+                                                                        <li class="p-0" ngbTooltip="{{dialog?.usecaseName.length > 40 ? dialog?.usecaseName : ''}}" placement="bottom-right">
+                                                                            <a  [ngClass]="{'selected' : agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId}">{{dialog?.usecaseName}}</a>
                                                                             <!-- <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId"></i> -->
                                                                         </li>
                                                                         
