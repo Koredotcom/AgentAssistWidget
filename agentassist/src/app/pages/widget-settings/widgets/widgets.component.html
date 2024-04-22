@@ -167,75 +167,79 @@
                                     <ng-container>
                                         <div class="dailog-model-dropdown">
                                             <div class="kr-sg-dropdowns" ngbDropdown #conversationTransferDropDown="ngbDropdown" [ngClass]="{'transfer-dropdown-unclickable': !agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.isEnabled}">
-                                                <div class="dropdown dropdown-open">
-                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
-                                                        {{ agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.actionType === 'task' ? getAfterTransferText(transferMode?.type) + ' - ' + useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId] : getAfterTransferText(transferMode?.type)}}
-                                                    </button>
-                                                    <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu >
-                                                        <ng-container *ngFor="let loadTime of afterTransferSettings">
-                                                            <button ngbDropdownItem *ngIf="loadTime?.type !== 'task'" (click)="getActionType(loadTime.type, transferMode.type)">{{loadTime.text}}</button>
-                                                            <div ngbDropdown placement="right-top" *ngIf="loadTime?.type === 'task'">
-                                                                <button class="dropdown-toggle dropdown-input multi-drp-item-btn" ngbDropdownToggle >
-                                                                    <span>{{loadTime?.text}}</span>
-                                                                    <i class="icon-coaching--left-arrow"></i>
-                                                                </button>
-                                                                <div ngbDropdownMenu class="secondary-dropdown" *ngIf="currentBot?.type === 'default'">
-                                                                    <button ngbDropdownItem *ngFor="let dialog of currentSelectedBotDialogs; let dialogIndx = index" (click)="getActionType(loadTime?.type, transferMode?.type); selectCustomDialog(dialog, 'convosTransfer', '', transferMode?.type)">
-                                                                        <li ngClass="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId">{{dialog?.usecaseName}}</li>
-                                                                        <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId"></i>
-                                                                    </button>                                                                    
-                                                                </div>
-                                                                <div ngbDropdownMenu class="multip-drp-menu-body-append" *ngIf="currentBot?.type === 'universalbot'">
-                                                                    <!--  -->
-                                                                    <ng-container *ngFor="let automationBot of linkedBotObjs; let autoIndex = index">
-                                                                        <li>
-                                                                            <div class="multi-dropdown-list" data-toggle="collapse" [attr.data-target]="'#' + convosTransferType + '-' +autoIndex" (click)="selectCustomBot(automationBot?._id)">
-                                                                                <span>{{automationBot?.botName}}</span>
-                                                                                <i class="icon-coaching--left-arrow"></i>
-                                                                            </div>
-                                                                            <div [id]="convosTransferType + '-' +autoIndex" class="multip-collapse-details collapse in">
-                                                                                <ng-container *ngIf="automationBot?.dialogs?.length; else loading">
-                                                                                    <div *ngFor="let dialog of automationBot?.dialogs; let ucIndx = index">
-                                                                                        <button class="selected-btn"  (click)="getActionType(loadTime?.type, transferMode?.type); selectCustomDialog(dialog, 'convosTransfer', automationBot, transferMode?.type);conversationTransferDropDown.close()">
-                                                                                            <span>{{dialog?.usecaseName}}</span>
-                                                                                            <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId"></i>
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </ng-container>
-                                                                                <ng-template #loading>
-                                                                                    <ng-container>
-                                                                                        <div [id]="automationBot?.refId + '-' +autoIndex" class="ai-itassist-wrapper">
-                                                                                            <div class="no-data-loader">
-                                                                                                <div class="sk-fading-circle">
-                                                                                                    <div class="sk-circle1 sk-circle"></div>
-                                                                                                    <div class="sk-circle2 sk-circle"></div>
-                                                                                                    <div class="sk-circle3 sk-circle"></div>
-                                                                                                    <div class="sk-circle4 sk-circle"></div>
-                                                                                                    <div class="sk-circle5 sk-circle"></div>
-                                                                                                    <div class="sk-circle6 sk-circle"></div>
-                                                                                                    <div class="sk-circle7 sk-circle"></div>
-                                                                                                    <div class="sk-circle8 sk-circle"></div>
-                                                                                                    <div class="sk-circle9 sk-circle"></div>
-                                                                                                    <div class="sk-circle10 sk-circle"></div>
-                                                                                                    <div class="sk-circle11 sk-circle"></div>
-                                                                                                    <div class="sk-circle12 sk-circle"></div>
-                                                                                                </div>
-                                                                                                <div class="thinking-text">Loading...</div>
-                                                                                            </div>
+                                                <div class="dropdown dropdown-open" 
+                                                    ngbTooltip="{{agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.actionType === 'task' ? getAfterTransferText(transferMode?.type) + ' - ' + useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId] : getAfterTransferText(transferMode?.type)}}">
+                                                        <button class="dropdown-toggle dropdown-input convos-transfer-selection" ngbDropdownToggle>
+                                                            {{ agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.actionType === 'task' ? getAfterTransferText(transferMode?.type) + ' - ' + useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId] : getAfterTransferText(transferMode?.type)}}
+                                                        </button>
+                                                        <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu >
+                                                            <ng-container *ngFor="let loadTime of afterTransferSettings">
+                                                                <button ngbDropdownItem *ngIf="loadTime?.type !== 'task'" ngbTooltip="{{loadTime.text}}" (click)="getActionType(loadTime.type, transferMode.type)">{{loadTime.text}}</button>
+                                                                <div ngbDropdown placement="right-top" *ngIf="loadTime?.type === 'task'">
+                                                                    <button class="dropdown-toggle dropdown-input multi-drp-item-btn" ngbDropdownToggle >
+                                                                        <span>{{loadTime?.text}}</span>
+                                                                        <i class="icon-coaching--left-arrow"></i>
+                                                                    </button>
+                                                                    <div ngbDropdownMenu class="secondary-dropdown" *ngIf="currentBot?.type === 'default'">
+                                                                        <button ngbDropdownItem *ngFor="let dialog of currentSelectedBotDialogs; let dialogIndx = index" (click)="getActionType(loadTime?.type, transferMode?.type); selectCustomDialog(dialog, 'convosTransfer', '', transferMode?.type)">
+                                                                            <li class="p-0" ngbTooltip="{{dialog?.usecaseName}}" placement="bottom-right">
+                                                                                <a  [ngClass]="{'selected' : agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId}">{{dialog?.usecaseName}}</a>
+                                                                                <!-- <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId"></i> -->
+                                                                            </li>
+                                                                            
+                                                                        </button>                                                                    
+                                                                    </div>
+                                                                    <div ngbDropdownMenu class="multip-drp-menu-body-append" *ngIf="currentBot?.type === 'universalbot'">
+                                                                        <!--  -->
+                                                                        <ng-container *ngFor="let automationBot of linkedBotObjs; let autoIndex = index">
+                                                                            <li>
+                                                                                <div ngbTooltip="{{automationBot?.botName}}" class="multi-dropdown-list" data-toggle="collapse" [attr.data-target]="'#' + convosTransferType + '-' +autoIndex" (click)="selectCustomBot(automationBot?._id)">
+                                                                                    <span>{{automationBot?.botName}}</span>
+                                                                                    <i class="icon-coaching--left-arrow"></i>
+                                                                                </div>
+                                                                                <div [id]="convosTransferType + '-' +autoIndex" class="multip-collapse-details collapse in">
+                                                                                    <ng-container *ngIf="automationBot?.dialogs?.length; else loading">
+                                                                                        <div *ngFor="let dialog of automationBot?.dialogs; let ucIndx = index">
+                                                                                            <button ngbTooltip="{{dialog?.usecaseName}}" class="selected-btn"  (click)="getActionType(loadTime?.type, transferMode?.type); selectCustomDialog(dialog, 'convosTransfer', automationBot, transferMode?.type);conversationTransferDropDown.close()">
+                                                                                                <span>{{dialog?.usecaseName}}</span>
+                                                                                                <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId"></i>
+                                                                                            </button>
                                                                                         </div>
                                                                                     </ng-container>
-                                                                                </ng-template>
-                                                                                <ng-container >
+                                                                                    <ng-template #loading>
+                                                                                        <ng-container>
+                                                                                            <div [id]="automationBot?.refId + '-' +autoIndex" class="ai-itassist-wrapper">
+                                                                                                <div class="no-data-loader">
+                                                                                                    <div class="sk-fading-circle">
+                                                                                                        <div class="sk-circle1 sk-circle"></div>
+                                                                                                        <div class="sk-circle2 sk-circle"></div>
+                                                                                                        <div class="sk-circle3 sk-circle"></div>
+                                                                                                        <div class="sk-circle4 sk-circle"></div>
+                                                                                                        <div class="sk-circle5 sk-circle"></div>
+                                                                                                        <div class="sk-circle6 sk-circle"></div>
+                                                                                                        <div class="sk-circle7 sk-circle"></div>
+                                                                                                        <div class="sk-circle8 sk-circle"></div>
+                                                                                                        <div class="sk-circle9 sk-circle"></div>
+                                                                                                        <div class="sk-circle10 sk-circle"></div>
+                                                                                                        <div class="sk-circle11 sk-circle"></div>
+                                                                                                        <div class="sk-circle12 sk-circle"></div>
+                                                                                                    </div>
+                                                                                                    <div class="thinking-text">Loading...</div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </ng-container>
+                                                                                    </ng-template>
+                                                                                    <ng-container >
 
-                                                                                </ng-container>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ng-container>
-                                                                    <!--  -->
+                                                                                    </ng-container>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ng-container>
+                                                                        <!--  -->
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </ng-container>
-                                                    </ul>
+                                                            </ng-container>
+                                                        </ul>
                                                 </div>
                                             </div>
                                         </div>
@@ -277,7 +281,7 @@
                                         <div class="kr-sg-checkbox">
                                             <input id="canSub-12" class="checkbox-custom" type="checkbox"
                                                 formControlName="canSubmit">
-                                            <label for="canSub-12" class="checkbox-custom-label">Submit button</label>
+                                            <label for="canSub-12" class="checkbox-custom-label">Submit Button</label>
                                         </div>
                                     </div>
                                 </div>
@@ -305,12 +309,12 @@
                                                 <div class="dailog-model-dropdown" *ngIf="customModel?.type === 'customTask' && currentBot?.type === 'default'" >
                                                     <div class="kr-sg-dropdowns" ngbDropdown >
                                                         <div class="dropdown dropdown-open" [ngClass]="{'summary-dropdown-disabled': !(agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.type === 'customTask')}">
-                                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
+                                                            <button ngbTooltip="{{useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}" class="dropdown-toggle dropdown-input" ngbDropdownToggle>
                                                                 {{ useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}
                                                             </button>
                                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                                                 <ng-container *ngFor="let useCase of currentSelectedBotDialogs">
-                                                                    <li ngbDropdownItem class="p-0" *ngIf="selectedChannel === 'chat' ? useCase?.triggerPoints?.isChatEnabled : selectedChannel === 'voice' && useCase?.triggerPoints?.isVoiceEnabled" (click)="selectCustomDialog(useCase, 'summaryModel')">
+                                                                    <li ngbDropdownItem class="p-0" ngbTooltip="{{useCase?.usecaseName}}" *ngIf="selectedChannel === 'chat' ? useCase?.triggerPoints?.isChatEnabled : selectedChannel === 'voice' && useCase?.triggerPoints?.isVoiceEnabled" (click)="selectCustomDialog(useCase, 'summaryModel')">
                                                                         <a [ngClass]="{'selected' : agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === useCase?.taskRefId}" >{{useCase?.usecaseName}}</a>
                                                                         <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === dialog?.taskRefId"></i>
                                                                     </li>
@@ -322,18 +326,20 @@
                                                 <div class="dailog-model-dropdown" *ngIf="customModel?.type === 'customTask' && currentBot?.type === 'universalbot'"  [ngClass]="{'summary-dropdown-disabled': !(agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.type === 'customTask')}">
                                                     <div class="kr-sg-dropdowns" ngbDropdown #myDropdown="ngbDropdown">
                                                         <div class="dropdown dropdown-open" >
-                                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}</button>
+                                                            <button class="dropdown-toggle dropdown-input" ngbTooltip="{{useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}"  ngbDropdownToggle>
+                                                                {{ useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}
+                                                            </button>
                                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                                                 <ng-container *ngFor="let automationBot of linkedBotObjs; let indxVal = index">
                                                                     <li>
                                                                         <div class="multi-dropdown-list" data-toggle="collapse" [attr.data-target]="'#autoSummaryModel-' + indxVal" (click)="selectCustomBot(automationBot?._id)">
-                                                                            <span>{{automationBot.botName}}</span>
+                                                                            <span ngbTooltip="{{automationBot?.botName}}" placement="bottom-right">{{automationBot?.botName}}</span>
                                                                             <i class="icon-coaching--left-arrow"></i>
                                                                         </div>
                                                                         <div [id]="'autoSummaryModel-' + indxVal" class="multip-collapse-details collapse in">
                                                                             <ng-container *ngIf="automationBot?.dialogs?.length; else loading">
                                                                                 <div *ngFor="let dialog of automationBot?.dialogs; let ucIndx = index">
-                                                                                    <button class="selected-btn"  (click)="selectCustomDialog(dialog, 'summaryModel',automationBot)" >
+                                                                                    <button class="selected-btn"  (click)="selectCustomDialog(dialog, 'summaryModel',automationBot)" ngbTooltip="{{dialog?.usecaseName}}">
                                                                                         <span [ngClass]="{'selected' : agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === useCase?.taskRefId}">{{dialog?.usecaseName}}</span>
                                                                                         <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId === dialog?.taskRefId"></i>
                                                                                     </button>
