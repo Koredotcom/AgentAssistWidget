@@ -30,6 +30,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   @ViewChild('collapseTab', { static: false }) private collapseTab: ElementRef;
   @ViewChild('terminateCanvas', {static : false}) private canvas : ElementRef<HTMLDivElement>
   @ViewChild('summeryModalpopupContent', {static : false}) private summaryPopupContent : ElementRef<HTMLDivElement>
+  @ViewChild('summaryBannerDetails', { static : false}) private summaryBannerDetails: ElementRef<HTMLDivElement>
 
   connectionDetails: any = {};
   subs = new SubSink();
@@ -37,6 +38,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
 
+  conversationSummaryObj: any;
 
   dialogName: string;
   dialogPositionId: string;
@@ -563,6 +565,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         }
       }
     } else if (popupObject.type == this.projConstants.SUMMARY) {
+      this.conversationSummaryObj = popupObject;
       if(popupObject.status){
         this.rootService.activeTab = this.projConstants.ASSIST;
         this.summaryText = popupObject.summaryText || '';
