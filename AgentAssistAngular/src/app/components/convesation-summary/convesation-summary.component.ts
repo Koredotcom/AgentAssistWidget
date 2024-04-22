@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ProjConstants, supportLanguage } from 'src/app/proj.const';
 
 @Component({
   selector: 'app-convesation-summary',
@@ -8,6 +9,8 @@ import { Component, Input } from '@angular/core';
 export class ConvesationSummaryComponent {
   @Input() conversationSummaryObj : any;
   summaryConverationText: any;
+  projCnst : any = ProjConstants;
+  tooltipText : string = supportLanguage.COPY;
 
   constructor() { }
   ngOnInit(): void {
@@ -23,5 +26,9 @@ export class ConvesationSummaryComponent {
     dummy.select();
     document.execCommand("copy");
     document.body.removeChild(dummy);
+    this.tooltipText = supportLanguage.COPIED
+    setTimeout(() => {
+      this.tooltipText = supportLanguage.COPY;
+    }, 3000);
   }
 }
