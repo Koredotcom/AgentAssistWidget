@@ -1,4 +1,31 @@
-
+<!-- 
 <p>Conversation Summary</p>
 <p *ngIf="conversationSummaryObj?.editedSummary !== ''">{{conversationSummaryObj?.editedSummary}}</p>
-<p *ngIf="conversationSummaryObj?.summaryText !== ''">{{conversationSummaryObj?.summaryText}}</p>
+<p *ngIf="conversationSummaryObj?.summaryText !== ''">{{conversationSummaryObj?.summaryText}}</p> -->
+
+
+<div class="summery-conv-banner-wrapper">
+    <div class="heading-text">
+        <i class="krIocnsFont-Aimark"></i>
+        <h1>CONVERSATION SUMMARY</h1>
+    </div>
+    <ng-container>
+        <ul>
+            <!-- <li>
+                <span>Customer states to get states they need pizza</span>
+            </li>
+            <li>
+                <span>pizza Customer gets 10% discout</span>
+                <button class="copy-btn">
+                    <i class="krIocnsFont-copy"></i>
+                </button>
+            </li> -->
+            <li>
+                <span>Customer states to get states they need pizza Customer gets 10% discout</span>
+                <button class="copy-btn" ngbTooltip="Copy">
+                    <i class="krIocnsFont-copy"></i>
+                </button>
+            </li>
+        </ul>
+    </ng-container>
+</div>
