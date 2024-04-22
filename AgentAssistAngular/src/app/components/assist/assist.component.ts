@@ -298,7 +298,7 @@ export class AssistComponent implements OnInit, OnDestroy {
       let isInitialTaskRanORNot;
       let appState = this.localStorageService.getLocalStorageState();
       if (appState[this.connectionDetails.conversationId]) {
-        isInitialTaskRanORNot = appState[this.connectionDetails.conversationId][storageConst.INITIALTASK_GOING_ON]
+        isInitialTaskRanORNot = appState[this.connectionDetails.conversationId][storageConst.INITIALTASK_GOING_ON] && !data.onConnectTask
       }
       if (!isInitialTaskRanORNot) {
         this.runDialogForAssistTab(data, "onInitRun");
