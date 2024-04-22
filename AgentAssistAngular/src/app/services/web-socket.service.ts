@@ -73,6 +73,10 @@ export class WebSocketService {
     this._agentAsisstSocket.connect();
     this.listenEvents();
     this._agentAsisstSocket.on("connect", () => {
+      if(!this.rootService.socketConnection){
+        this.rootService.socketConnection = true;
+        this.rootService.setSocketConnection(true);
+      }
       // if(!window._agentAssistSocketEventListener){
         this.commonEmitEvents(true);
       //   window._agentAssistSocketEventListener = true;
@@ -136,11 +140,13 @@ export class WebSocketService {
     }
     this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
 
+    this.sendCheckListOpened$.next(true);
+  }
+
+  emitTransferEvent(){
     if(this.rootService.internalTransfer && this.rootService.internalTransferData && this.rootService.internalTransferData?.transition == 'entry'){
       this.emitEvents(EVENTS.internal_transfer, this.rootService.internalTransferData);
     }
-
-    this.sendCheckListOpened$.next(true);
   }
 
   emitEvents(eventName : string,requestParams : any) {

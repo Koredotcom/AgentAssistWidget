@@ -167,6 +167,7 @@ export class RootService {
   showRestart : boolean = true;
   internalTransfer : boolean = false;
   internalTransferData : any = {};
+  socketConnection : boolean = false;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     private dirService : DirService) {

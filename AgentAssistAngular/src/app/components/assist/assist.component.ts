@@ -210,7 +210,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     let feedback = this.commonService.assistFeedback(params);
     let history = this.commonService.assistHistory(params);
     this.handleSubjectService.setLoader(true);
-    forkJoin([feedback, history]).pipe(finalize(() => { this.showSpinner = false; })).subscribe(res => {
+    forkJoin([feedback, history]).pipe(finalize(() => { this.showSpinner = false; this.websocketService.emitTransferEvent() })).subscribe(res => {
       let feedbackData = res[0]?.results || [];
       let historyData = res[1] || [];
       this.renderHistoryMessages(historyData, feedbackData);
@@ -298,7 +298,7 @@ export class AssistComponent implements OnInit, OnDestroy {
       let isInitialTaskRanORNot;
       let appState = this.localStorageService.getLocalStorageState();
       if (appState[this.connectionDetails.conversationId]) {
-        isInitialTaskRanORNot = appState[this.connectionDetails.conversationId][storageConst.INITIALTASK_GOING_ON]
+        isInitialTaskRanORNot = appState[this.connectionDetails.conversationId][storageConst.INITIALTASK_GOING_ON] && !data.onConnectTask
       }
       if (!isInitialTaskRanORNot) {
         this.runDialogForAssistTab(data, "onInitRun");
