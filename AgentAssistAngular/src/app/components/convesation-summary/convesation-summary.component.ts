@@ -7,14 +7,21 @@ import { Component, Input } from '@angular/core';
 })
 export class ConvesationSummaryComponent {
   @Input() conversationSummaryObj : any;
+  summaryConverationText: any;
 
   constructor() { }
   ngOnInit(): void {
-    console.log(this.conversationSummaryObj);
-    if(this.conversationSummaryObj?.summaryText !== '') {
-      console.log(this.conversationSummaryObj?.summaryText)
-    } else {
-      console.log(this.conversationSummaryObj?.summaryText);
+    if(this.conversationSummaryObj?.editedSummary !== '') {
+      this.summaryConverationText = this.conversationSummaryObj?.editedSummary;
     }
+  }
+
+  copyConversationSummaryTxt(data) {
+    var dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = data;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
   }
 }

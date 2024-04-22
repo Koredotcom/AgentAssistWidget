@@ -1,10 +1,4 @@
-<!-- 
-<p>Conversation Summary</p>
-<p *ngIf="conversationSummaryObj?.editedSummary !== ''">{{conversationSummaryObj?.editedSummary}}</p>
-<p *ngIf="conversationSummaryObj?.summaryText !== ''">{{conversationSummaryObj?.summaryText}}</p> -->
-
-
-<div class="summery-conv-banner-wrapper">
+<div class="summery-conv-banner-wrapper" *ngIf="conversationSummaryObj?.editedSummary !== ''">
     <div class="heading-text">
         <i class="krIocnsFont-Aimark"></i>
         <h1>CONVERSATION SUMMARY</h1>
@@ -21,8 +15,8 @@
                 </button>
             </li> -->
             <li>
-                <span>Customer states to get states they need pizza Customer gets 10% discout</span>
-                <button class="copy-btn" ngbTooltip="Copy">
+                <span>{{conversationSummaryObj?.editedSummary}}</span>
+                <button class="copy-btn" ngbTooltip="Copy" (click)="copyConversationSummaryTxt(conversationSummaryObj?.editedSummary)">
                     <i class="krIocnsFont-copy"></i>
                 </button>
             </li>

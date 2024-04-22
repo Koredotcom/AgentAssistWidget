@@ -39,7 +39,6 @@ export class AssistComponent implements OnInit, OnDestroy {
   renderResponseType: any = RenderResponseType;
 
   conversationSummaryObj: any;
-  showConversationSummary: any = false;
 
   dialogName: string;
   dialogPositionId: string;
@@ -501,7 +500,6 @@ export class AssistComponent implements OnInit, OnDestroy {
   }
 
   handlePopupEvent(popupObject) {
-    this.showConversationSummary = true;
     this.conversationSummaryObj = popupObject;
     let sourceMsgId =  this.commonService.getLastAutomationSourceMsgId(this.assistResponseArray)
     if (popupObject.type == this.projConstants.TERMINATE) {
