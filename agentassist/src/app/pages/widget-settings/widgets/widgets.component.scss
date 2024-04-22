@@ -646,7 +646,7 @@
                             }
                         }
                         .dailog-model-dropdown{
-                            width: 100%;
+                            max-width: 100%;
                             padding-left: 30px;
                             margin-top: 5px;
                             .kr-sg-dropdowns{
@@ -886,6 +886,14 @@
                                             }
                                         }
                                     }
+                                }
+                            }
+                            div {
+                                button {
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    padding-right: 38px;
                                 }
                             }
                         }
