@@ -499,7 +499,6 @@ export class AssistComponent implements OnInit, OnDestroy {
   }
 
   handlePopupEvent(popupObject) {
-    this.conversationSummaryObj = popupObject;
     let sourceMsgId =  this.commonService.getLastAutomationSourceMsgId(this.assistResponseArray)
     if (popupObject.type == this.projConstants.TERMINATE) {
       this.terminateClick = popupObject.status;
@@ -566,6 +565,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         }
       }
     } else if (popupObject.type == this.projConstants.SUMMARY) {
+      this.conversationSummaryObj = popupObject;
       if(popupObject.status){
         this.rootService.activeTab = this.projConstants.ASSIST;
         this.summaryText = popupObject.summaryText || '';
