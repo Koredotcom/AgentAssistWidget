@@ -104,7 +104,6 @@ export class AppComponent implements OnInit, OnDestroy{
     this.isGrantSuccess = true;
     setTimeout(() => {
       this.webSocketService.socketConnection();
-      this.rootService.setSocketConnection(true);
     }, 100);
   }
 
