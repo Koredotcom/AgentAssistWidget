@@ -102,7 +102,6 @@ export class AssistComponent implements OnInit, OnDestroy {
         let appState = this.localStorageService.getLocalStorageState();
         this.proactiveModeStatus = appState[this.connectionDetails.conversationId][storageConst.PROACTIVE_MODE];
         this.getInterruptDialogList();
-        this.summeryModalpopup({});
       }
     });
 
