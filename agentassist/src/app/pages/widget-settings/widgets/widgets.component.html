@@ -167,8 +167,8 @@
                                     <ng-container>
                                         <div class="dailog-model-dropdown">
                                             <div class="kr-sg-dropdowns" ngbDropdown #conversationTransferDropDown="ngbDropdown" [ngClass]="{'transfer-dropdown-unclickable': !agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.isEnabled}">
-                                                <div class="dropdown dropdown-open">
-                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
+                                                <div class="dropdown dropdown-open" ngbTooltip="{{agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.actionType === 'task' ? useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId] : '' }}">
+                                                    <button class="dropdown-toggle dropdown-input convos-transfer-selection" ngbDropdownToggle>
                                                         {{ agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.actionType === 'task' ? getAfterTransferText(transferMode?.type) + ' - ' + useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId] : getAfterTransferText(transferMode?.type)}}
                                                     </button>
                                                     <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu >
@@ -181,8 +181,11 @@
                                                                 </button>
                                                                 <div ngbDropdownMenu class="secondary-dropdown" *ngIf="currentBot?.type === 'default'">
                                                                     <button ngbDropdownItem *ngFor="let dialog of currentSelectedBotDialogs; let dialogIndx = index" (click)="getActionType(loadTime?.type, transferMode?.type); selectCustomDialog(dialog, 'convosTransfer', '', transferMode?.type)">
-                                                                        <li ngClass="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId">{{dialog?.usecaseName}}</li>
-                                                                        <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId"></i>
+                                                                        <li class="p-0">
+                                                                            <a [ngClass]="{'selected' : agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId}">{{dialog?.usecaseName}}</a>
+                                                                            <!-- <i class="icon-coaching--check" *ngIf="agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.taskConfigs?.taskRefId === dialog?.taskRefId"></i> -->
+                                                                        </li>
+                                                                        
                                                                     </button>                                                                    
                                                                 </div>
                                                                 <div ngbDropdownMenu class="multip-drp-menu-body-append" *ngIf="currentBot?.type === 'universalbot'">
@@ -277,7 +280,7 @@
                                         <div class="kr-sg-checkbox">
                                             <input id="canSub-12" class="checkbox-custom" type="checkbox"
                                                 formControlName="canSubmit">
-                                            <label for="canSub-12" class="checkbox-custom-label">Submit button</label>
+                                            <label for="canSub-12" class="checkbox-custom-label">Submit Button</label>
                                         </div>
                                     </div>
                                 </div>

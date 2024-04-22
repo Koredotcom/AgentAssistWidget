@@ -1112,7 +1112,12 @@
                 width: 100%;
                 padding-left: 30px;
                 margin-top: 5px;
-               
+               .convos-transfer-selection {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    padding-right: 38px;
+               }
                 .multi-drp-item-btn{
                     display: flex;
                     padding: 10px 14px;
