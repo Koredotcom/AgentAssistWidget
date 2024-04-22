@@ -90,7 +90,7 @@
                             ></app-feedback>
                         </ng-container>
                     </ng-container>
-                    <ng-container *ngIf="conversationSummaryObj?.editedSummary?.length !== 0">
+                    <ng-container *ngIf="conversationSummaryObj?.editedSummary?.length > 0">
                         <app-convesation-summary [conversationSummaryObj]='conversationSummaryObj'></app-convesation-summary>
                     </ng-container>
             </div>
