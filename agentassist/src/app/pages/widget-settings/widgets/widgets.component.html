@@ -305,7 +305,7 @@
                                         <div *ngFor="let customModel of summaryModelType; let modelidx = index">
                                             <div class="kr-sg-radiobutton p-0" >
                                                 <input id="summarymodel-{{modelidx}}" class="radio-custom" type="radio" [value]="customModel.type" formControlName="type" (change)="selectedSummaryModelType($event, customModel)" >
-                                                <label for="summarymodel-{{modelidx}}" class="radio-custom-label">{{customModel.text}}</label>
+                                                <label for="summarymodel-{{modelidx}}" class="radio-custom-label" ngbTooltip="{{customModel.text}}">{{customModel.text}}</label>
                                             </div>
                                             <ng-container>
                                                 <div class="dailog-model-dropdown" *ngIf="customModel?.type === 'customTask' && currentBot?.type === 'default'" >
