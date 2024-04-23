@@ -81,15 +81,19 @@ export class MybotComponent {
     this.subs.unsubscribe();
   }
 
+  setCollapseTabPadding(){
+    let collapseTabHeight = this.collapseTab?.nativeElement?.offsetHeight;
+    if(collapseTabHeight){
+      let pixel = (28 * collapseTabHeight) / 100;
+      this.renderer.setStyle(this.collapseTab.nativeElement, 'padding-bottom', pixel+"px");
+    }else{
+      this.collapseTab.nativeElement.classList.add('pB');
+    }
+  }
+
   scrollToBottomRuntime = () => {
     if(this.collapseTab?.nativeElement){
-      let collapseTabHeight = this.collapseTab?.nativeElement?.offsetHeight;
-      if(collapseTabHeight){
-        let pixel = (28 * collapseTabHeight) / 100;
-        this.renderer.setStyle(this.collapseTab.nativeElement, 'padding-bottom', pixel+"px");
-      }else{
-        this.collapseTab.nativeElement.classList.add('pB');
-      }
+      this.setCollapseTabPadding();
       setTimeout(() => {
         try {
           this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight + 90;
@@ -99,6 +103,7 @@ export class MybotComponent {
   }
 
   scrollToBottom() {
+    this.setCollapseTabPadding();
     setTimeout(() => {
       try {
         this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
