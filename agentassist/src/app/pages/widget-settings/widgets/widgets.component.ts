@@ -1076,4 +1076,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     return taskConfigs ? taskConfigs.extractIntents : false; // Assuming default value is false if not set
 }
 
+  handleTransferCheckboxClick(event, transferType) {
+    if(!event.target.checked){
+      this.toggleExtractIntents(event, transferType)
+    }
+  }
+
 }

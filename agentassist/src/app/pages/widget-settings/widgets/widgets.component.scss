@@ -1063,6 +1063,9 @@
         align-items: flex-start;
         .help-support-block{
            width: 320px;
+           .extract-intents{
+            padding: 5px 0px 0px 30px;
+           }
             .help-support-block-info{
                 .help-support-block-heading{
                     color: var(--Gray-700, var(--Primary-Colors-Gray-700, #344054));
