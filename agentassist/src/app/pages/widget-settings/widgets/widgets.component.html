@@ -245,7 +245,8 @@
                                         </div>
                                     </ng-container>
                                     <div class="kr-sg-checkbox" *ngIf="agentAssistFormGroup.get('agentAssistSettings').value[this.selectedChannel]?.transferConfigs[transferMode.type]?.actionType === 'task'">
-                                        <input id="{{transferMode?.type}}-111" class="checkbox-custom" type="checkbox" [checked]="extractIntentsChecked(transferMode?.type)"  (change)="toggleExtractIntents($event, transferMode?.type)">
+                                        <input id="{{transferMode?.type}}-111" class="checkbox-custom" type="checkbox" [checked]="extractIntentsChecked(transferMode?.type)" 
+                                         (change)="toggleExtractIntents($event, transferMode?.type)" [disabled]="!agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.transferConfigs[transferMode.type]?.isEnabled">
                                         <label for="{{transferMode?.type}}-111" class="checkbox-custom-label">{{'ONCONNECT_EVENT_EXTRACT_INTENT' | translate}}</label>
                                     </div> 
                                     
