@@ -646,9 +646,13 @@
                             }
                         }
                         .dailog-model-dropdown{
-                            max-width: 100%;
                             padding-left: 30px;
                             margin-top: 5px;
+                            .default-summary-dialogs {
+                                .dropdown-toggle {
+                                    width: 300px !important;
+                                }
+                            }
                             .kr-sg-dropdowns{
                                 .content-menu{
                                     max-height: 300px;
@@ -886,6 +890,9 @@
                                             }
                                         }
                                     }
+                                }
+                                .summary-toggle {
+                                    width: 300px !important;
                                 }
                             }
                             div {
