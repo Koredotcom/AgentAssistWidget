@@ -16,7 +16,7 @@
             </li> -->
             <li>
                 <span>{{summaryConverationText}}</span>
-                <button class="copy-btn" ngbTooltip="tooltipText" (click)="copyConversationSummaryTxt(summaryConverationText)" [disabled]="(tooltipText === projCnst.COPIED)">
+                <button class="copy-btn" ngbTooltip="{{tooltipText}}" (click)="copyConversationSummaryTxt(summaryConverationText)" [disabled]="(tooltipText === projCnst.COPIED)">
                     <i class="krIocnsFont-copy"></i>
                 </button>
             </li>
