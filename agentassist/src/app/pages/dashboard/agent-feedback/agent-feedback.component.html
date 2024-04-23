@@ -151,7 +151,7 @@
             <ng-container *ngIf="selectedTaskObj?.intentName">
                 <div class="feedback-helpfull-not-help-wrapper accordion" id="accordionExample">
                     <div class="help-wrapper">
-                        <div>Helpful 👍</div>
+                        <div>Helpful <i class="icon-ast_thumbsup"></i></div>
                         <p>{{selectedTaskObj.liked | number: '1.0-0'}} (<span>{{selectedTaskObj.likedPercent | number: '1.0-0'}}%</span>)</p>
                     </div>
                     <div class="accordion_item">
@@ -160,7 +160,7 @@
                             <div class="arrow_icon">
                                 <i class="icon-sa-arrow-down"></i>
                             </div>
-                            <h2>Not Helpful 👎</h2>
+                            <h2>Not Helpful <i class="icon-sat_thumsdown"></i></h2>
                             <p>{{selectedTaskObj.disliked | number: '1.0-0'}} (<span>{{selectedTaskObj.dislikedPercent | number: '1.0-0'}}%</span>)</p>
                         </button>
                         <div class='init-loading-neg' *ngIf="negFbisLoading">
@@ -202,7 +202,7 @@
                             <div class="arrow_icon">
                                 <i class="icon-sa-arrow-down"></i>
                             </div>
-                            <h2>Response</h2>
+                            <h2>Response ({{negFeedback?.key}})</h2>
                             <p>{{negFeedback?.value?.additionalCommentsCount}} Comments</p>
                         </button>
                         
@@ -258,14 +258,14 @@
                             <div class="arrow_icon">
                                 <i class="icon-sa-arrow-down"></i>
                             </div>
-                            <h2>Response</h2>
+                            <h2>Response ({{negFeedback?.key}})</h2>
                             <p>{{negFeedback?.value?.additionalCommentsCount}} Comments</p>
                         </button>
                         <div id="responses" class="accordion-collapse collapse show" aria-labelledby="responses">
                             <div class="accordion-body">
                                 <div class="table-list-data-temp">
                                     <div class="kr-sg-input-search">
-                                        <input type="text" placeholder="Search Agent Name, Agent ID or Conversation ID"
+                                        <input type="text" placeholder="Search Conversation ID"
                                             class="input-search" [formControl]="searchField" name="searchConv" (keydown.enter)="getConversationSearch()">
                                         <i class="icon-sa-search search-icon"></i>
                                     </div>
