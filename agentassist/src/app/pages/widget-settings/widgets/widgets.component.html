@@ -302,14 +302,16 @@
                                     <h1>Auto Summarization Model</h1>
                                     <p>Choose a suitable model for generating the summarization</p>
                                     <div class="radio-group-block">
-                                        <div class="kr-sg-radiobutton p-0" *ngFor="let customModel of summaryModelType; let modelidx = index">
-                                            <input id="summarymodel-{{modelidx}}" class="radio-custom" type="radio" [value]="customModel.type" formControlName="type" (change)="selectedSummaryModelType($event, customModel)" >
-                                            <label for="summarymodel-{{modelidx}}" class="radio-custom-label">{{customModel.text}}</label>
+                                        <div *ngFor="let customModel of summaryModelType; let modelidx = index">
+                                            <div class="kr-sg-radiobutton p-0" >
+                                                <input id="summarymodel-{{modelidx}}" class="radio-custom" type="radio" [value]="customModel.type" formControlName="type" (change)="selectedSummaryModelType($event, customModel)" >
+                                                <label for="summarymodel-{{modelidx}}" class="radio-custom-label" ngbTooltip="{{customModel.text}}">{{customModel.text}}</label>
+                                            </div>
                                             <ng-container>
                                                 <div class="dailog-model-dropdown" *ngIf="customModel?.type === 'customTask' && currentBot?.type === 'default'" >
-                                                    <div class="kr-sg-dropdowns" ngbDropdown >
-                                                        <div class="dropdown dropdown-open" [ngClass]="{'summary-dropdown-disabled': !(agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.type === 'customTask')}">
-                                                            <button ngbTooltip="{{useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}" class="dropdown-toggle dropdown-input" ngbDropdownToggle>
+                                                    <div class="kr-sg-dropdowns default-summary-dialogs" ngbDropdown >
+                                                        <div class="dropdown dropdown-open " [ngClass]="{'summary-dropdown-disabled': !(agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.type === 'customTask')}">
+                                                            <button class="dropdown-toggle dropdown-input" ngbTooltip="{{useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}" class="dropdown-toggle dropdown-input" ngbDropdownToggle>
                                                                 {{ useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}
                                                             </button>
                                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
@@ -326,7 +328,7 @@
                                                 <div class="dailog-model-dropdown" *ngIf="customModel?.type === 'customTask' && currentBot?.type === 'universalbot'"  [ngClass]="{'summary-dropdown-disabled': !(agentAssistFormGroup.get('agentAssistSettings').value[selectedChannel]?.summarization?.model?.type === 'customTask')}">
                                                     <div class="kr-sg-dropdowns" ngbDropdown #myDropdown="ngbDropdown">
                                                         <div class="dropdown dropdown-open" >
-                                                            <button class="dropdown-toggle dropdown-input" ngbTooltip="{{useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}"  ngbDropdownToggle>
+                                                            <button class="dropdown-toggle dropdown-input summary-toggle" ngbTooltip="{{useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}"  ngbDropdownToggle>
                                                                 {{ useCases[agentAssistFormGroup?.get('agentAssistSettings')?.value[selectedChannel]?.summarization?.model?.customTaskConfig?.taskRefId] || ('GUIDED_CHECKLIST.TRIGGER_BY.SELECT_OPTION' | translate)}}
                                                             </button>
                                                             <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
@@ -380,6 +382,7 @@
                                                 </div>
                                             </ng-container>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
