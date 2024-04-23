@@ -782,13 +782,7 @@ export class AssistComponent implements OnInit, OnDestroy {
 
   scrollToBottomRuntime = () => {
     if(this.collapseTab?.nativeElement){
-      let collapseTabHeight = this.collapseTab?.nativeElement?.offsetHeight;
-      if(collapseTabHeight){
-        let pixel = (28 * collapseTabHeight) / 100;
-        this.renderer.setStyle(this.collapseTab.nativeElement, 'padding-bottom', pixel+"px");
-      }else{
-        this.collapseTab.nativeElement.classList.add('pB');
-      }
+      this.setCollapseTabPadding();
       setTimeout(() => {
         try {
           this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight + 90;
@@ -809,7 +803,19 @@ export class AssistComponent implements OnInit, OnDestroy {
           this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
         }, 10);
       }
+      if(history){
+        this.setCollapseTabPadding();
+      }
+    }
+  }
 
+  setCollapseTabPadding(){
+    let collapseTabHeight = this.collapseTab?.nativeElement?.offsetHeight;
+    if(collapseTabHeight){
+      let pixel = (28 * collapseTabHeight) / 100;
+      this.renderer.setStyle(this.collapseTab.nativeElement, 'padding-bottom', pixel+"px");
+    }else{
+      this.collapseTab.nativeElement.classList.add('pB');
     }
   }
 }
