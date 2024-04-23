@@ -75,14 +75,14 @@
                         white-space: nowrap;
                     }
                     .icon-sat_thumsdown{
-                        color: #FFC46A;
+                        color: #e0655c;
                         font-size: 14px;
                         margin-left: 5px;
                         position: relative;
                         top: 2px;
                     }
                     .icon-ast_thumbsup{
-                        color: #2B75E4;
+                        color: #70af5a;
                         font-size: 14px;
                         margin-left: 5px;
                         position: relative;
@@ -143,6 +143,12 @@
                 i{
                     cursor: pointer;
                     font-size: 12px;
+                }
+                .icon-ast_thumbsup{
+                    color: #70af5a;
+                }
+                .icon-sat_thumsdown{
+                    color: #e0655c;
                 }
             }
         }
@@ -211,14 +217,14 @@
                         margin: 0;
                     }
                     .icon-ast_thumbsup{
-                        color: #2B75E4;
+                        color: #70af5a;
                         margin-right: 5px;
                         font-size: 14px;
                         position: relative;
                         top: -1px;
                     }
                     .icon-sat_thumsdown{
-                        color: #FFC46A;
+                        color: #e0655c;
                         margin-right: 5px;
                         font-size: 14px;
                         position: relative;
@@ -312,6 +318,13 @@
             font-weight: 500;
             line-height: normal;
             text-transform: capitalize;
+            .icon-ast_thumbsup{
+                color: #70af5a;
+                font-size: 14px;
+                margin-left: 5px;
+                position: relative;
+                top: -2px;
+            }
         }
         p{
             margin: 0;
@@ -350,6 +363,13 @@
             padding: 15px 8px;
             align-items: center;
             gap: 16px;
+            .icon-sat_thumsdown{
+                color: #e0655c;
+                font-size: 14px;
+                margin-left: 5px;
+                position: relative;
+                top: 2px;
+            }
             &.collapsed{
                 .arrow_icon{
                     transform: none;

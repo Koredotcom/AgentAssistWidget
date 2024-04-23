@@ -206,6 +206,9 @@ export class WidgetUsageComponent implements OnInit {
             dateList = widgetUsageData?.map(date => {
                 const momentDate = moment(date.time);
                 let formattedString = axis ? momentDate.format('hh a') : momentDate.format('Do MMM').toString() +  momentDate.format('hh a');
+                if(axis && formattedString == '12 am'){
+                    formattedString = '(' + momentDate.format('Do MMM').toString() + ')'
+                }
                 return formattedString;
             });
         } else if (this.widgetUsageData.aggregationType == 'week') {
