@@ -133,7 +133,7 @@ export class WidgetUsageComponent implements OnInit {
     }
 
     getChartOptions(data) {
-        let days = this.getDateList(this.widgetUsageData.currentData);
+        let days = this.getDateList(this.widgetUsageData.currentData, true);
         let interval = this.calculateInterval();
        
         this.chartOptions = {
@@ -198,14 +198,14 @@ export class WidgetUsageComponent implements OnInit {
         this.getWidgetUsageData();
     }
 
-    getDateList(widgetUsageData){
+    getDateList(widgetUsageData , axis?){
         let dateList = [];
         if (this.widgetUsageData?.aggregationType == 'day') {
             dateList = widgetUsageData?.map(date => moment(date.time).format('Do MMM').toString());
         } else if (this.widgetUsageData?.aggregationType == 'hour') {
             dateList = widgetUsageData?.map(date => {
                 const momentDate = moment(date.time);
-                let formattedString = momentDate.format('hh a');
+                let formattedString = axis ? momentDate.format('hh a') : momentDate.format('Do MMM').toString() +  momentDate.format('hh a');
                 return formattedString;
             });
         } else if (this.widgetUsageData.aggregationType == 'week') {
@@ -236,7 +236,7 @@ export class WidgetUsageComponent implements OnInit {
                 if (dateType == 'day') {
                     avalDate = moment(currDate).format('Do MMM').toString();
                 } else if(dateType == 'hour') {
-                    avalDate = moment(currDate).format('hh a').toString();
+                    avalDate = moment(currDate).format('Do MMM').toString() + moment(currDate).format('hh a').toString();
                 } else if(dateType == 'week'){
                     avalDate = this.getWeekOfMonth(currDate);
                 }
