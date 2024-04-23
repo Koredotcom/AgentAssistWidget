@@ -1070,6 +1070,9 @@
         align-items: flex-start;
         .help-support-block{
            width: 320px;
+           .extract-intents{
+            padding: 5px 0px 0px 30px;
+           }
             .help-support-block-info{
                 .help-support-block-heading{
                     color: var(--Gray-700, var(--Primary-Colors-Gray-700, #344054));
@@ -1177,7 +1180,7 @@
                             }
                         }                      
                         .dropdown-item{
-                            color: var(--Gray-500, var(--Primary-Colors-Gray-500, #667085));
+                            // color: var(--Gray-500, var(--Primary-Colors-Gray-500, #667085));
                             font-size: 16px;
                             font-weight: 400;
                             width: 100%;
@@ -1461,7 +1464,7 @@
         }
     }                      
     .dropdown-item{
-        color: var(--Gray-500, var(--Primary-Colors-Gray-500, #667085));
+        // color: var(--Gray-500, var(--Primary-Colors-Gray-500, #667085));
         font-size: 16px;
         font-weight: 400;
         width: 100%;
