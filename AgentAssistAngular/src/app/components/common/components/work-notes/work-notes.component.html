@@ -8,8 +8,9 @@
     
         <div id="accordionResponseArray" class="categorey-accordion-wrapper">
             <ng-container *ngFor="let workNote of automationObj.elements; let i = index">
-                <div data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-'+i+'-'+responseArrayIndex" [attr.href]="'#collapse-'+i+'-'+responseArrayIndex" class="categorey_link collapsed"
-                    aria-expanded="false">
+                <div (click)="toggleCollapse(i)" class="category_link collapsed">
+                <!-- <div data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-'+i+'-'+responseArrayIndex" [attr.href]="'#collapse-'+i+'-'+responseArrayIndex" class="categorey_link collapsed"
+                    aria-expanded="false"> -->
                     <div class="categorey-content-header-btn">
                         <div class="categorey-title-block">
                             <div class="categorey-title">
@@ -22,7 +23,8 @@
                         </div><i class="krIocnsFont-chevron-down arrow-icon"></i>
                     </div>
                 </div>
-                <div id="collapse-{{i}}-{{responseArrayIndex}}" class="collapse" data-bs-parent="#accordionResponseArray">
+                <div [id]="'collapse-'+i" class="collapse" [ngClass]="{'show': isCollapsed[i]}">
+                <!-- <div id="collapse-{{i}}-{{responseArrayIndex}}" class="collapse" data-bs-parent="#accordionResponseArray"> -->
                     <div class="categorey-content-body">
                         <p class="title">{{workNote?.title | titlecase}}</p>
                         <div class="categorey-content-header" [innerHTML]="workNote?.description">

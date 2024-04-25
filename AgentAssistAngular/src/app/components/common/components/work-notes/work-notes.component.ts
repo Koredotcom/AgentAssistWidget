@@ -30,6 +30,8 @@ export class WorkNotesComponent implements OnInit{
   
   automationObj: any = {};
 
+  isCollapsed : any = {};
+
   ngOnInit(): void {
     this.feedback = (this.feedBackForWn || []).reduce((acc, item)=>{
       if(item.type === 'worknote'){
@@ -48,10 +50,14 @@ export class WorkNotesComponent implements OnInit{
       }
       if(automation?.payload?.template_type === 'worknotesTemplate'){
         this.automationObj = {...automation?.payload};
+        this.automationObj?.elements?.forEach(worknote => {
+            worknote.description = worknote?.description?.replace(/\n/g, '<br>')
+        });
       }
     }catch(e){
       console.error(e);
     }
+    this.isCollapsed[0] = true;
   }
 
   workNoteFeedBack(isPosOrNeg, wn){
@@ -78,6 +84,13 @@ export class WorkNotesComponent implements OnInit{
         }
       } ).subscribe((data)=>{
     });
+  }
+
+  toggleCollapse(index: number) {
+    this.isCollapsed[index] = !this.isCollapsed[index];
+    for(let key in this.isCollapsed){
+      this.isCollapsed[key] = (parseInt(key) === index) ? true : false;
+    }
   }
 
   postTheFeedback(isPosOrNeg, wn){
