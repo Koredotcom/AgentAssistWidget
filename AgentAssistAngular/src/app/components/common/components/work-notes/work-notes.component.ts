@@ -51,7 +51,10 @@ export class WorkNotesComponent implements OnInit{
       if(automation?.payload?.template_type === 'worknotesTemplate'){
         this.automationObj = {...automation?.payload};
         this.automationObj?.elements?.forEach(worknote => {
-            worknote.description = worknote?.description?.replace(/\n/g, '<br>')
+            worknote.description = worknote?.description?.replace(/\n/g, '<br>');            
+            if(this.feedback[worknote.worknoteId]){
+              worknote.feedback = this.feedback[worknote.worknoteId]
+            }
         });
       }
     }catch(e){
@@ -61,7 +64,8 @@ export class WorkNotesComponent implements OnInit{
   }
 
   workNoteFeedBack(isPosOrNeg, wn){
-    this.feedback[wn.worknoteId] = null;
+    
+    // this.feedback[wn.worknoteId] = null;
     wn.feedback = isPosOrNeg ? "like" : "dislike";
     this.postTheFeedback(isPosOrNeg, wn);
     if(!this.automationObj?.feedbackWebhookURL){
@@ -89,7 +93,9 @@ export class WorkNotesComponent implements OnInit{
   toggleCollapse(index: number) {
     this.isCollapsed[index] = !this.isCollapsed[index];
     for(let key in this.isCollapsed){
-      this.isCollapsed[key] = (parseInt(key) === index) ? true : false;
+      if(parseInt(key) != index){
+        this.isCollapsed[key] = false;
+      }
     }
   }
 
@@ -107,6 +113,7 @@ export class WorkNotesComponent implements OnInit{
       "feedbackDetails" : [],
       "type": 'worknote' 
     };
+    this.rootService.isUpdateFeedBackDetailsFlag = true;
     this.websocketService.emitEvents(EVENTS.agent_usage_feedback, feedBack);
   }
 }

@@ -404,6 +404,7 @@ export class AssistComponent implements OnInit, OnDestroy {
 
 
   runDialogForAssistTab(data, runInitent?) {
+    this.feedBackForWn = [];
     let uuids = this.koreGenerateuuidPipe.transform();
     this.rootService.dropdownHeaderUuids = uuids;
     this.commonService.updateLocalStorageForAssist(true);

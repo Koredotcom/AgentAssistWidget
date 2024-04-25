@@ -20,7 +20,9 @@
                             <div class="categorey-des">
                                 {{workNote?.subCategoryTitle}}
                             </div>
-                        </div><i class="krIocnsFont-chevron-down arrow-icon"></i>
+                        </div>
+                        <i class="krIocnsFont-chevron-down arrow-icon" *ngIf="!isCollapsed[i]"></i>
+                        <i class="krIocnsFont-chevron-up arrow-icon" *ngIf="isCollapsed[i]"></i>
                     </div>
                 </div>
                 <div [id]="'collapse-'+i" class="collapse" [ngClass]="{'show': isCollapsed[i]}">
@@ -32,8 +34,10 @@
                         </div>
                         <div class="categorey-content-footer">
                             {{workNote.feedbackMessage || 'Was it helpful?'}}
-                            <button (click)="workNoteFeedBack(true, workNote)" class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn': workNote.feedback === 'like' || feedback && feedback[workNote.worknoteId] === 'like'}"><i class="krIocnsFont-thumbs-up-solid"></i></button>
-                            <button (click)="workNoteFeedBack(false, workNote)" class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn': workNote.feedback === 'dislike' || feedback && feedback[workNote.worknoteId] === 'dislike'}"><i class="krIocnsFont-thumbs-down"></i></button>
+                            <button (click)="workNoteFeedBack(true, workNote)" [disabled]="workNote.feedback === 'dislike' "
+                             class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn': workNote.feedback === 'like'}"><i class="krIocnsFont-thumbs-up-solid"></i></button>
+                            <button (click)="workNoteFeedBack(false, workNote)" [disabled]="workNote.feedback === 'like' "
+                            class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn': workNote.feedback === 'dislike'}"><i class="krIocnsFont-thumbs-down"></i></button>
                         </div>
                     </div>
                 </div>
