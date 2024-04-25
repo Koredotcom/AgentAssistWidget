@@ -156,7 +156,8 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
       answer: snippet.sendCopyText || '',
       sources: snippet.sources,
       isFromGeneratedSummary: snippet.isFromGeneratedSummary, // based on the flag passed from backend
-      answerType: snippet.templateType // citation_snippet or paragraph_snippet etc
+      answerType: snippet.templateType, // citation_snippet or paragraph_snippet etc
+      query : snippet.userInput
     }
     if(snippet.internalInfo?.length > 0){
       agent_assist_feedback_request.answer += snippet.internalInfo.join(' ');

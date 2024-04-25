@@ -495,6 +495,7 @@ export class RootService {
           snipObje.sourceMsgId = response.sourceMsgId || '';
           snipObje.intType = response.intType;
           snipObje.isFromGeneratedSummary = response.isFromGeneratedSummary;
+          snipObje.userInput = response.userInput || '';
         }
       });
       let extInfo = '';
