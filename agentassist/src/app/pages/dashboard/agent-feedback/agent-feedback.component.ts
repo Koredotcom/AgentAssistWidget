@@ -100,7 +100,7 @@ export class AgentFeedbackComponent implements OnInit {
 
     this.searchField.valueChanges.pipe(debounceTime(300), tap(() => { }))
       .subscribe(term => {
-        if(term == '' && this.conversationTableData?.length > 0){
+        if(term == ''){
           this.getFeedbackTable(true);
         }
       });
@@ -269,7 +269,7 @@ export class AgentFeedbackComponent implements OnInit {
     this.negFeedback = negFb;
     this.showResponseTable = (type == 'count') ? true : false;
     this.showCommentTable = (type == 'comment') ? true : false;
-    this.searchField.setValue('');
+    this.searchField.setValue(null);
     this.getFeedbackTable(true);
   }
 
