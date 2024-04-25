@@ -30,6 +30,8 @@ export class WorkNotesComponent implements OnInit{
   
   automationObj: any = {};
 
+  isCollapsed : any = {};
+
   ngOnInit(): void {
     this.feedback = (this.feedBackForWn || []).reduce((acc, item)=>{
       if(item.type === 'worknote'){
@@ -48,14 +50,22 @@ export class WorkNotesComponent implements OnInit{
       }
       if(automation?.payload?.template_type === 'worknotesTemplate'){
         this.automationObj = {...automation?.payload};
+        this.automationObj?.elements?.forEach(worknote => {
+            worknote.description = worknote?.description?.replace(/\n/g, '<br>');            
+            if(this.feedback[worknote.worknoteId]){
+              worknote.feedback = this.feedback[worknote.worknoteId]
+            }
+        });
       }
     }catch(e){
       console.error(e);
     }
+    this.isCollapsed[0] = true;
   }
 
   workNoteFeedBack(isPosOrNeg, wn){
-    this.feedback[wn.worknoteId] = null;
+    
+    // this.feedback[wn.worknoteId] = null;
     wn.feedback = isPosOrNeg ? "like" : "dislike";
     this.postTheFeedback(isPosOrNeg, wn);
     if(!this.automationObj?.feedbackWebhookURL){
@@ -80,6 +90,15 @@ export class WorkNotesComponent implements OnInit{
     });
   }
 
+  toggleCollapse(index: number) {
+    this.isCollapsed[index] = !this.isCollapsed[index];
+    for(let key in this.isCollapsed){
+      if(parseInt(key) != index){
+        this.isCollapsed[key] = false;
+      }
+    }
+  }
+
   postTheFeedback(isPosOrNeg, wn){
     let feedBack =       {
       "botId": this.rootService.connectionDetails.botId,
@@ -94,6 +113,7 @@ export class WorkNotesComponent implements OnInit{
       "feedbackDetails" : [],
       "type": 'worknote' 
     };
+    this.rootService.isUpdateFeedBackDetailsFlag = true;
     this.websocketService.emitEvents(EVENTS.agent_usage_feedback, feedBack);
   }
 }
