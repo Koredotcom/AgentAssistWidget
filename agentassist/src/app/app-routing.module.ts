@@ -15,6 +15,7 @@ import { LanguagesSpeechComponent } from './pages/languages-speech/languages-spe
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 import { BlankComponent } from './pages/blank/blank.component';
+import { FeedbackSettingsComponent } from './pages/feedback-settings/feedback-settings.component';
 
 let isSmartassist = false;
 if(window.location.href.includes('smartassist')){
@@ -44,6 +45,7 @@ const routes: Routes = [
           { path: 'coaching', loadChildren: () => import('./pages/coaching/coaching.module').then(m => m.CoachingModule)},
           { path: 'guided-checklist', loadChildren: () => import('./pages/guided-checklist/guided-checklist.module').then(m => m.GuidedChecklistModule)},
           { path: 'widget-settings', loadChildren: () => import('./pages/widget-settings/widget-settings.module').then(m => m.WidgetSettingsModule)},
+          { path : 'feedback-settings', component : FeedbackSettingsComponent},
           { path: 'advanced-nlu', loadChildren: () => import('./pages/ai-config/ai-config.module').then(m => m.AiConfigModule)},
           { path: 'blank', component: BlankComponent },
           { path: '**', redirectTo: (isSmartassist ? 'coaching' : 'usecases') },
