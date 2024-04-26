@@ -16,7 +16,7 @@
                 </div>
                 <div class="waring-info-banner" *ngIf="!isDomainValid || (searchConv.isEnabled && !searchAssistConfigDetailsObj.domain)">
                   <span><i class="icon-sa-info"></i></span>
-                   <p>Ensure that the domain URL does not contains "https://" and does not have a forward slash "/" at the end.</p>
+                   <p>{{"WARNING_MESSAGE" | translate : ({'https': "https://", 'forwardSlash': "/"}) }}</p>
                    <!-- <span class="close-warning"><i class="icon-sa-close"></i></span> -->
                 </div>
                 <div class="banner-success" *ngIf="createFormStatus">
@@ -72,16 +72,16 @@
                             <div class="row row-data">
                                 <div class="col-12 column-data">
                                     <div class="kr-sg-input-text">
-                                        <div class="label-text">{{ "SEARCHASSIST.DOMAIN_URL" | translate}}
-                                             <i class="icon-sa-help"></i>
+                                        <div class="label-text">{{ "SEARCHASSIST.DOMAIN_URL" | translate}} <sup>*</sup>
+                                             <!-- <i class="icon-sa-help"></i> -->
                                         </div>
                                         <input type="text" id="domain" name="domain" placeholder="Enter Domain URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.domain" required autocomplete="off"(input)="domainValidator($event)">
                                     </div>
                                 </div>
                                 <div class="col-12 column-data">
                                     <div class="kr-sg-input-text">
-                                        <div class="label-text">{{ "SEARCHASSIST.APP_ID" | translate}}
-                                            <i class="icon-sa-help"></i>
+                                        <div class="label-text">{{ "SEARCHASSIST.APP_ID" | translate}} <sup>*</sup>
+                                            <!-- <i class="icon-sa-help"></i> -->
                                         </div>
                                         <input type="text" id="searchAssistbotId" name="searchAssistbotId" placeholder="Enter APP ID" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.searchAssistbotId" required autocomplete="off">
                                     </div>
@@ -90,16 +90,16 @@
                             <div class="row row-data border-0 m-t-20">
                                 <div class="col-12 column-data">
                                     <div class="kr-sg-input-text">
-                                        <div class="label-text">{{ "SEARCHASSIST.CLIENT_ID" | translate}}
-                                            <i class="icon-sa-help"></i>
+                                        <div class="label-text">{{ "SEARCHASSIST.CLIENT_ID" | translate}} <sup>*</sup>
+                                            <!-- <i class="icon-sa-help"></i> -->
                                         </div>
                                         <input type="text" id="clientId"  name="clientId" placeholder="Enter Client URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.clientId" required autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="col-12 column-data m-0">
                                     <div class="kr-sg-input-text">
-                                        <div class="label-text">{{ "SEARCHASSIST.CLIENT_SECRET" | translate}}
-                                             <i class="icon-sa-help"></i>
+                                        <div class="label-text">{{ "SEARCHASSIST.CLIENT_SECRET" | translate}} <sup>*</sup>
+                                             <!-- <i class="icon-sa-help"></i> -->
                                         </div>
                                         <div class="eye-copy">
                                             <div class="eye" placement="bottom-left" (click)="showOpenEyeIcon = !showOpenEyeIcon">
