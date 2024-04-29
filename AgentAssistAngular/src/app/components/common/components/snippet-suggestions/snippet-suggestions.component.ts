@@ -166,4 +166,8 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     this.websocketService.emitEvents(EVENTS.agent_usage_feedback, agent_assist_feedback_request);
   }
 
+  updateFeedbackProperties(data, snipObje) {
+    snipObje.feedbackData = data;
+  }
+
 }

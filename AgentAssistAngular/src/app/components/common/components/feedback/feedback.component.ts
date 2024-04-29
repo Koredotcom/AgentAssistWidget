@@ -51,22 +51,50 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
     })
   }
 
-  createForm(){    
-    this.feedbackForm = new FormGroup(
-      {
-        "botId": new FormControl(this.feedbackData.connectionDetails.botId),
-        "conversationId" : new FormControl(this.feedbackData.connectionDetails.conversationId),
-        "event" : new FormControl(EVENTS.agent_usage_feedback),
-        "interactionType": new FormControl(this.rootService.activeTab == ProjConstants.ASSIST ? 'assist' : 'mybot'),
-        "positionId" : new FormControl(this.feedbackData.dialogPositionId),
-        "taskId" : new FormControl(this.feedbackData.uuid),
-        "taskName" : new FormControl(this.feedbackData.dialogName),
-        "comment" : new FormControl(this.feedbackData.comment),
-        "feedback" : new FormControl(this.feedbackData.feedback,[Validators.required]),
-        "feedbackDetails" : new FormControl(this.feedbackData.feedbackDetails),
-        "type": new FormControl('dialog')
+  createForm(){     
+    if(this.feedbackData.suggestionType){
+      this.feedbackForm = new FormGroup(
+        {
+          "botId": new FormControl(this.feedbackData.connectionDetails.botId),
+          "conversationId" : new FormControl(this.feedbackData.connectionDetails.conversationId),
+          "event" : new FormControl(EVENTS.agent_usage_feedback),
+          "interactionType": new FormControl(this.feedbackData.interactionType),
+          "positionId" : new FormControl(this.feedbackData.positionId),
+          "experience" : new FormControl(this.feedbackData.connectionDetails?.channel),
+          "sourceMsgId" : new FormControl(this.feedbackData.sourceMsgId),
+          "type" : new FormControl(this.feedbackData.suggestionType),
+          "comment" : new FormControl(this.feedbackData.comment),
+          "feedback" : new FormControl(this.feedbackData.feedback,[Validators.required]),
+          "feedbackDetails" : new FormControl(this.feedbackData.feedbackDetails),
+          "query" : new FormControl(this.feedbackData.query)
+        }
+      );
+
+      if (this.feedbackData.suggestionType == 'answer') {
+        (this.feedbackForm as FormGroup)?.addControl('title', new FormControl(this.feedbackData.title));
+        (this.feedbackForm as FormGroup)?.addControl('answer', new FormControl(this.feedbackData.answer));
+        (this.feedbackForm as FormGroup)?.addControl('sources', new FormControl(this.feedbackData.sources));
+        (this.feedbackForm as FormGroup)?.addControl('isFromGeneratedSummary', new FormControl(this.feedbackData.isFromGeneratedSummary));
+        (this.feedbackForm as FormGroup)?.addControl('answerType', new FormControl(this.feedbackData.answerType));
       }
-    );
+
+    } else{
+      this.feedbackForm = new FormGroup(
+        {
+          "botId": new FormControl(this.feedbackData.connectionDetails.botId),
+          "conversationId" : new FormControl(this.feedbackData.connectionDetails.conversationId),
+          "event" : new FormControl(EVENTS.agent_usage_feedback),
+          "interactionType": new FormControl(this.rootService.activeTab == ProjConstants.ASSIST ? 'assist' : 'mybot'),
+          "positionId" : new FormControl(this.feedbackData.dialogPositionId),
+          "taskId" : new FormControl(this.feedbackData.uuid),
+          "taskName" : new FormControl(this.feedbackData.dialogName),
+          "comment" : new FormControl(this.feedbackData.comment),
+          "feedback" : new FormControl(this.feedbackData.feedback,[Validators.required]),
+          "feedbackDetails" : new FormControl(this.feedbackData.feedbackDetails),
+          "type": new FormControl('dialog')
+        }
+      );
+    }  
     
     if(this.rootService.isUpdateFeedBackDetailsFlag && this.feedbackData?.feedbackResponse){
       this.updateFeedbackForm(this.feedbackData);

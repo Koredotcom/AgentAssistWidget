@@ -8,7 +8,7 @@
                 <p>{{'ENDED' | translate}}</p>
             </div>
         </div> -->
-        <div class="dialog-ended-wrapper grayout-msgs-node">        
+        <div class="dialog-ended-wrapper grayout-msgs-node" *ngIf="feedbackForm?.get('type').value == 'dialog'">        
             <div class="middle-info">
                 <p>{{'DIALOG_TEXT' | translate}}</p>
                 <button class="btn_link" [title]="feedbackData?.dialogName">{{feedbackData?.dialogName}}</button>
