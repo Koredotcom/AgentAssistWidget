@@ -118,6 +118,7 @@
     "POSITIVE" : "Pos",
     "NEGATIVE" : "Neg",
     "ASSOCIATED_WORK_NOTES": "Past Resolution Notes",
-    "AGENT_JOINED_CONV": "Agent joined the conversation"
+    "AGENT_JOINED_CONV": "Agent joined the conversation",
+    "AUTOSCROLL_ASSIST" : "Auto-Scroll Assist Tab Content"
 
 }
