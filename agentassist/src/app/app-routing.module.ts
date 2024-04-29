@@ -15,21 +15,13 @@ import { LanguagesSpeechComponent } from './pages/languages-speech/languages-spe
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 import { BlankComponent } from './pages/blank/blank.component';
+import { AuthService } from '@kore.services/auth.service';
 
 let isSmartassist = false;
 // if(window.location.href.includes('smartassist')){
 //   isSmartassist = true;
 // }
 
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.has('commingFrom')) {
-  console.log("🚀 ~ urlParams.has('commingFrom'):", urlParams.has('commingFrom'))
-  // Check the value of the 'commingFrom' query parameter
-  if (urlParams.get('commingFrom') === 'smartassist') {
-    console.log("🚀 ~ commingFromValue === 'smartassist':", urlParams.get('commingFrom'))
-    isSmartassist = true;
-  }
-}
 
 const routes: Routes = [
   {
@@ -82,4 +74,14 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, relativeLinkResolution: 'legacy' })],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule { 
+  constructor(private authService: AuthService) {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('commingFrom')) {
+      // Check the value of the 'commingFrom' query parameter
+      if (urlParams.get('commingFrom') === 'smartassist') {
+      this.authService.isLoadingOnSm = true;
+      }
+    }
+  }
+}

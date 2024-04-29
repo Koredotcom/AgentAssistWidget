@@ -7,6 +7,7 @@ import { environment } from '@kore.environment';
 import { AppService } from './app.service';
 import { LocalStoreService } from './localstore.service';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -189,28 +190,18 @@ export class workflowService {
   }
 
   getCurrentBtSmt(automationBot?: boolean) {
+    const queryParams = this.route.snapshot.queryParams;
+    console.log(queryParams?.commingFrom)
     if (automationBot) {
-      // 
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has('commingFrom')) {
-        if (urlParams.get('commingFrom') === 'smartassist') {
-          let selAcc = this.local.getSelectedAccount();
-          let smBotObj = selAcc['instanceBots'][0];
-          smBotObj._id = smBotObj.instanceBotId;
-          return smBotObj;
-        } else {
-          return { ...this.currentBtDetails };
-        }
+      if(!queryParams.hasOwnProperty('commingFrom')) {
+        return { ...this.currentBtDetails };
+      } else if(queryParams.hasOwnProperty('commingFrom') && queryParams?.commingFrom === 'smartassist') {
+        let selAcc = this.local.getSelectedAccount();
+        let smBotObj = selAcc['instanceBots'][0];
+        smBotObj._id = smBotObj.instanceBotId;
+        return smBotObj;
+        
       }
-      // 
-      // if(!window.location.href.includes('smartassist')) {
-      //   return { ...this.currentBtDetails };
-      // } else {
-      //   let selAcc = this.local.getSelectedAccount();
-      //   let smBotObj = selAcc['instanceBots'][0];
-      //   smBotObj._id = smBotObj.instanceBotId;
-      //   return smBotObj;
-      // }
     }
   }
 

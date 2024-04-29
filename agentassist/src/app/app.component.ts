@@ -61,12 +61,8 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnInit() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('commingFrom')) {
-      if (urlParams.get('commingFrom') === 'smartassist') {
-        console.log("🚀 ~ app component: ", urlParams.get('commingFrom'))
+    if (this.authService.isLoadingOnSm) {
         document.getElementsByTagName('html')[0].classList.add('init-smartassist');
-      }
     }
     // if(window.location.href.includes('smartassist')){
       
@@ -128,10 +124,8 @@ export class AppComponent implements OnDestroy {
     // const browserLang = this.translate.getBrowserLang();
     // this.localstore.appLanguage = this.localstore.appLanguage || (browserLang.match(/ja/) ? browserLang : 'en');
     let lang = this.authService.externalQp?.appLanguage || this.localstore.appLanguage;
-    if (urlParams.has('commingFrom')) {
-      if (urlParams.get('commingFrom') === 'smartassist') {
+    if (this.authService.isLoadingOnSm) {
         lang = this.localstore.appLanguage;
-      }
     }
     // if(window.location.href.includes('smartassist')) {
     //   lang = this.localstore.appLanguage;
