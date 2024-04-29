@@ -131,7 +131,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
       this.getBalance();
     }
     if (this.workflowService.deflectAppsData.length || this.workflowService.deflectAppsData._id) {
-     
+     debugger;
       this.smartABots = this.authService.smartAssistBots || [];
       this.smartABots.forEach((v: any) => {
         v.name = v.name.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
