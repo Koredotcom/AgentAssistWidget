@@ -1066,9 +1066,22 @@ export class WidgetsComponent implements OnInit, OnDestroy {
                         .get('transferConfigs') as FormGroup)
                         .get(selectedFormGroup) as FormGroup)
                         .get('taskConfigs') as FormGroup));
-    taskConfigs.patchValue({
-      extractIntents: event.target.checked
-    })
+    if (taskConfigs) {
+      taskConfigs.patchValue({
+        extractIntents: event.target.checked
+      })
+    } else {
+      // taskConfigs
+      const taskConfigs = (((((((this.agentAssistFormGroup as FormGroup)
+                        .get('agentAssistSettings') as FormGroup)
+                        .get(this.selectedChannel) as FormGroup)
+                        .get('transferConfigs') as FormGroup)
+                        .get(selectedFormGroup) as FormGroup)));
+      taskConfigs.addControl('taskConfigs', this.fb.group({
+        'extractIntents': event.target.checked
+      }))
+    }
+    
   }
 
   extractIntentsChecked(transferType: string): boolean {
