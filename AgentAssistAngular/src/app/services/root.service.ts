@@ -35,6 +35,7 @@ export class RootService {
 
   OverRideMode: boolean = false;
   proactiveModeStatus : boolean = false;
+  autoScrollStatus : boolean = true;
   isAutomationOnGoing: boolean = false;
   isMyBotAutomationOnGoing: boolean = false;
   isInitialDialogOnGoing: boolean = false;
@@ -89,6 +90,7 @@ export class RootService {
     },
     "agentAssistWidgetEnabled": true,
     "isProactiveEnabled": true,
+    "isAutoScrollEnabled" : true,
     "isAgentCoachingEnabled": false,
     "isAgentResponseEnabled": true,
     "isAgentPlaybookEnabled": false,

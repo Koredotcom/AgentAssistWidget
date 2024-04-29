@@ -112,7 +112,8 @@ export const storageConst = {
     SHOWSEND : 'showSend',
     ENABLEWIDGET :   'enableWidget',
     ISSEND_WELCOME_MSG : 'isSendWelcomeMessage',
-    INTERNAL_TRANSFER : 'internalTransfer'
+    INTERNAL_TRANSFER : 'internalTransfer',
+    AUTOSCROLL : 'autoScroll'
 }
 
 export const WidgetConst = {
