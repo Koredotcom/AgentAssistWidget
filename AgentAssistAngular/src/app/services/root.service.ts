@@ -19,6 +19,7 @@ export class RootService {
   mybotTemplateClick$ : BehaviorSubject<any> = new BehaviorSubject(null);
   userBotHistory$ : Subject<any> = new Subject<any>();
   userBotConversationDetailsSubject : BehaviorSubject<any> = new BehaviorSubject(null);
+  userBotHistoryData: any;
 
   public userBotConversationDetails: any;
 
@@ -316,6 +317,7 @@ export class RootService {
 
   setUserBotHistory(obj){
     this.userBotHistory$.next(obj);
+    this.userBotHistoryData = obj;
   }
 
   setAssistTemplateClick(value){

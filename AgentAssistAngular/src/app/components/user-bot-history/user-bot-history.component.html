@@ -19,14 +19,11 @@
 
 
 <ng-template  #userBotHistory>
-    <ng-container *ngFor="let conv of historyResponse">
+    <!-- <ng-container *ngFor="let conv of historyResponse">
         <div class="transcipt-bot-bubble-comp"
             *ngIf="conv.type == 'incoming' && conv.buttons && conv.buttons[0]?.value">
             <div class="bot-bubble-content hover-show-copy">
                 <div class="top-info">
-                    <!-- <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName +
-                        this.parsedCustomData?.lName) ||
-                        'Customer'}}</div> -->
                     <div class="time-tamp"><time>{{conv.timestampValue | converTimestampToDate}}</time></div>
                 </div>
                 <div class="bubble-msg-with-img">
@@ -36,7 +33,6 @@
                         <ul class="chat-container" [id]="'displayData-' + conv._id"
                             [innerHTML]="renderHTMLPrompt(conv.template) | safeHtml">
                         </ul>
-                        <!-- <div class="template-list-content-html" [id]="'displayData-' + conv._id" [innerHTML]="conv.template"></div> -->
                     </div>
                 </div>
             </div>
@@ -55,10 +51,52 @@
                         <ul class="chat-container" [id]="'displayData-' + conv._id"
                             [innerHTML]="renderHTMLPrompt(conv.template) | safeHtml">
                         </ul>
-                        <!-- <div class="template-list-content-html" [id]="'displayData-' + conv._id" [innerHTML]="conv.template"></div> -->
                     </div>
                 </div>
             </div>
         </div>
-    </ng-container>  
+    </ng-container>   -->
+    <ng-container *ngFor="let conv of historyResponse">
+        <ng-container *ngIf="!conv?.unsupported">
+            <div class="transcipt-bot-bubble-comp" *ngIf="conv?.msgType === 'USER' && conv.components[0]?.data?.text">
+                <div class="bot-bubble-content hover-show-copy">
+                    <div class="top-info">
+                        <div class="you-text">{{parsedCustomData?.userName || (parsedCustomData?.fName +
+                            this.parsedCustomData?.lName) ||
+                            ('CUSTOMER' | translate)}}</div>
+                        <div class="time-tamp"><time>{{conv.createdOn | date:'h:mm a'}}</time></div>
+                    </div>
+                    <div class="bubble-msg-with-img">
+                        <div class="bubble-msg">{{conv.components[0]?.data?.text}}</div>
+                        <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
+                            <sub>1</sub>
+                            <i class="krIocnsFont-light-bulb"></i>
+                        </div> -->
+                        <!-- <div class="copy-bubble">
+                            <i class="krIocnsFont-copy"></i>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="transcipt-agent-bubble-comp"
+                *ngIf="(conv?.msgType === 'BOT') && conv.components[0]?.data?.text">
+                <div class="agent-bubble-content hover-show-copy">
+                    <div class="top-info">
+                        <div class="time-tamp"><time>{{conv.createdOn | date:'h:mm a'}}</time></div>
+                        <div class="you-text">{{'BOT' | translate}}</div>
+                    </div>
+                    <div class="bubble-msg-with-img">
+                        <div class="bubble-msg">{{conv.components[0]?.data?.text}}</div>
+                        <!-- <div class="intent-suggestion-buld" ngbTooltip="bala">
+                            <sub>1</sub>
+                            <i class="krIocnsFont-light-bulb"></i>
+                        </div> -->
+                        <!-- <div class="copy-bubble">
+                            <i class="krIocnsFont-copy"></i>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
 </ng-template>

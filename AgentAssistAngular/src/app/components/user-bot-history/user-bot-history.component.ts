@@ -19,6 +19,8 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
   connectionDetails : any;
   historyResponse : any = [];
   projConstants : any = ProjConstants;
+  summary: any = {};
+  parsedCustomData: any;
 
 
   constructor(private rootService : RootService, private serviceInvoker : ServiceInvokerService,
@@ -28,32 +30,55 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.subscribeEvents();
+    this.getUserBotHistoryObj();
+  }
+
+  getUserBotHistoryObj() {
+    if(this.rootService.userBotHistoryData?.userBotMessages?.result?.length > 0) {
+      this.historyResponse = this.rootService.userBotHistoryData?.userBotMessages?.result;
+      this.summary = this.rootService?.userBotHistoryData?.summary;
+    this.formatHistoryResponse();
+    }
   }
 
   subscribeEvents(){
     this.subs.sink = this.rootService.socketConnection$.subscribe(res => {
-      if(res){
+      if(res){        
         this.connectionDetails  = this.rootService.getConnectionDetails();
+        this.parsedCustomData = Object.assign({},this.connectionDetails.customData);
       }
     });
-    this.subs.sink = this.rootService.userBotHistory$.subscribe((data : any) => {
-        if(data && data.messages?.length > 0){
-          this.historyResponse = data.messages;
+    this.subs.sink = this.rootService.userBotHistory$.subscribe((data : any) => {      
+        if(data && data.userBotMessages && data.userBotMessages.result && data.userBotMessages.result.length > 0){
+          this.historyResponse = data.userBotMessages.result;
           this.formatHistoryResponse();
         }
     })
   }
 
   formatHistoryResponse(){
-    this.historyResponse.forEach((element, index, theArray) => {
-      theArray[index] = this.rootService.formatUserBotHistoryResponse(element);
-      let hisRes = theArray[index];
-      // hisRes = this.rootService.confirmationNodeRenderForHistoryDataTransform(hisRes);
-      let result : any = this.templateRenderClassService.getResponseUsingTemplate(hisRes, true);
-      hisRes.isTemplateRender = this.templateRenderCheck(hisRes,result);
-      hisRes.template = this.rootService.getTemplateHtml(hisRes.isTemplateRender, result);
-    });
+
+    (this.historyResponse || [])
+      .forEach((item)=>{
+          if(typeof(item?.components[0]?.data?.text) === 'string'){
+              try{
+                  let a = JSON.parse(item?.components[0]?.data?.text);
+                  if(typeof a === 'object' && a?.payload?.text){
+                      item.components[0].data.text = a?.payload?.text;
+                  }
+              }catch(e){
+                  
+              }
+          }
+      });
+    this.summary.message = this.extractConversationSummary(this.summary.message || '');
   }
+
+  extractConversationSummary(inputString=''){
+    const conversationSummaryRegex = /Conversation Summary: (.+?)(?=\n\n|\n?$)/s;
+    const match = inputString.match(conversationSummaryRegex);
+    return match ? match[1].trim() : inputString;
+  };
 
   renderHTMLPrompt(value) {
     let temp_hisRes = value

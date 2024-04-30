@@ -6,6 +6,7 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
 import { SubSink } from 'subsink';
+import { finalize } from 'rxjs';
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
@@ -26,7 +27,6 @@ export class FooterComponent implements OnInit, OnDestroy{
   hideUserBotHistory : boolean = true;
   showTranscript : boolean = false;
 
-
   constructor(private offcanvasService: NgbOffcanvas, private localStorageService : LocalStorageService,
     private rootService: RootService, 
     @Inject(DOCUMENT) private document: Document,
@@ -37,8 +37,8 @@ export class FooterComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    // this.getUserBotHistory(this.rootService.connectionDetails);
-    // this.subscribeEvents();
+    this.getUserBotHistory(this.rootService.connectionDetails);
+    this.subscribeEvents();
   }
 
   @HostListener('document:click', ['$event.target']) onMouseEnter(targetElement) {
@@ -75,32 +75,36 @@ export class FooterComponent implements OnInit, OnDestroy{
       }
     });
 
-    // this.subs.sink = this.rootService.userBotConversationDetailsSubject.subscribe((res)=> {
-    //   if(res){
-    //     this.getUserBotHistory(this.rootService.connectionDetails);
-    //   }
-    // })
+    this.subs.sink = this.rootService.userBotConversationDetailsSubject.subscribe((res)=> {
+      if(res){
+        this.getUserBotHistory(this.rootService.connectionDetails);
+      }
+    })
   }
 
-/*   getUserBotHistory(params){
+   getUserBotHistory(params){
     let userBotConversationDetails = this.rootService.getUserBotConvosDataDetails() || {};
-    let botId = userBotConversationDetails?.botId || params?.botId;
+    let botId = params?.botId;
     let userId = userBotConversationDetails?.userId;
     let sessionId = userBotConversationDetails?.sessionId; 
-    if((userBotConversationDetails?.botId || this.rootService.connectionDetails?.botId) && userBotConversationDetails?.userId && userBotConversationDetails?.sessionId) {
-      this.serviceInvoker.invoke('get.userBotHistory', { botId: botId, convId: params.conversationId, userId, sessionId }, {}, { excludeAccountId: 'true', botId : botId }, params.agentassisturl).subscribe((data)=> {
-        if(data && data.messages?.length > 0){
-          this.hideUserBotHistory = false;
-        }else{
-          this.hideUserBotHistory = true;
+    if(( this.rootService.connectionDetails?.botId) && sessionId) {
+      this.serviceInvoker.invoke('get.transcriptHistory', { convId: params.conversationId, botId : botId, isSummaryRequired: true, sessionId: sessionId || '', experience:  this.rootService.connectionDetails?.channel}, {}, { botId : params.botId }, params.agentassisturl)
+      .pipe(
+        finalize(()=>{
+        })
+      )
+      .subscribe((data)=> {
+        if(data) {
+          if(data?.userBotMessages?.result.length > 0) {
+            this.rootService.setUserBotHistory(data);
+            this.hideUserBotHistory = false;
+          } else {
+            this.hideUserBotHistory = true;
+          }
         }
-        this.rootService.setUserBotHistory(data);
-      },(error)=> {
-        this.hideUserBotHistory = true;
-        this.rootService.setUserBotHistory(null);
       });
     }
-  } */
+  }
   
   updateLocalStorageForTabSwitch(tab){
     let storageObject: any = {};
