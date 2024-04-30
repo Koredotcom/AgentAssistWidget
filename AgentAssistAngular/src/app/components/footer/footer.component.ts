@@ -37,7 +37,6 @@ export class FooterComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    // this.getUserBotHistory(this.rootService.connectionDetails);
     this.subscribeEvents();
     
   }
@@ -78,19 +77,9 @@ export class FooterComponent implements OnInit, OnDestroy{
 
     this.subs.sink = this.rootService.userBotConversationDetailsSubject.subscribe((res)=> {
       if(!this.rootService.connectionDetails.isCallConversation && res && res?.userBotConversationDetails?.sessionId && res?.userBotConversationDetails.sessionId !== ''){
-        this.getUserBotHistory(res);
+        this.hideUserBotHistory = false;
       }
     })
-  }
-
-   getUserBotHistory(params){
-    let userBotConversationDetails = this.rootService.getUserBotConvosDataDetails() || {};
-    let sessionId = userBotConversationDetails?.sessionId; 
-    if(sessionId !== '') {
-      this.hideUserBotHistory = false;
-    } else {
-      this.hideUserBotHistory = true;
-    }
   }
   
   updateLocalStorageForTabSwitch(tab){
