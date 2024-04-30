@@ -175,10 +175,8 @@ export class FeedbackSettingsComponent implements OnInit {
       .subscribe(
         (res) => {
           if (res) {
-            res = this.checkBackwardCompatibility(res);
             this.notificationService.showSuccess(this.translate.instant("FEEDBACK_SETTINGS_SAVED"));
-            this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
-            this.createOrUpdateFeedbackForm(res?.agentAssistSettings?.feedback);
+            this.updateIndividualFeedbackForm(res,type);
           }
         },
         (err) => {
@@ -190,6 +188,12 @@ export class FeedbackSettingsComponent implements OnInit {
         }
       );
       // 
+  }
+  updateIndividualFeedbackForm(res,type){
+    if(res?.agentAssistSettings?.feedback && res?.agentAssistSettings?.feedback[type]){
+      this.feedbackForm?.get(type)?.patchValue(res?.agentAssistSettings?.feedback[type]);
+      this.clonedWidgetSettings.agentAssistSettings.feedback[type] = JSON.parse(JSON.stringify(res?.agentAssistSettings?.feedback[type]));
+    }
   }
 
   toggleFeedbackEvent(event, type){
