@@ -36,6 +36,10 @@
                                 <h1>{{obj.enableDesc}}</h1>
                             </div>
                         </div>
+                        <div class="kr-sg-checkbox"*ngIf="feedbackForm?.get(obj.bkey)?.get('isEnabled').value">
+                            <input id="{{obj.bkey}}-111" class="checkbox-custom" type="checkbox"  formControlName="acceptComment" [checked]="feedbackForm?.get(obj.bkey)?.get('acceptComment').value" (change)="toggleFeedbackComment($event, obj.bkey)">
+                            <label for="{{obj.bkey}}-111" class="checkbox-custom-label">{{'FEEDBACK_ACCEPT_COMMENT' | translate}}</label>
+                        </div> 
                     </div>
                     <div class="divider"></div>
                     <div class="connect-dialoge-info" *ngIf="feedbackForm?.get(obj.bkey)?.get('isEnabled').value">

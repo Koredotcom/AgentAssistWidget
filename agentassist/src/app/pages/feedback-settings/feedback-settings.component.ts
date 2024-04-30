@@ -206,6 +206,11 @@ export class FeedbackSettingsComponent implements OnInit {
     }
   }
 
+  toggleFeedbackComment(event,type){
+    let enabled = event.target.checked;
+    this.feedbackForm?.get(type)?.patchValue({acceptComment : enabled});
+  }
+
   cancel(type){
     let feedbackTypeSettings = JSON.parse(JSON.stringify(this.clonedWidgetSettings?.agentAssistSettings?.feedback[type]))
     this.feedbackForm.get(type).patchValue(feedbackTypeSettings);
