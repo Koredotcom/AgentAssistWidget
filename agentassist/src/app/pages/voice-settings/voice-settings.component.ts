@@ -206,6 +206,12 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.voiceListSub) this.voiceListSub.unsubscribe();
     this.voiceListSub = this.service.invoke('get.voiceList', params, qparams).subscribe(voiceList => {
       this.phoneNumandSipDetailsList = voiceList;
+      const sipURI = this.phoneNumandSipDetailsList.sipTransfers[0].sipURI;
+      const didNumber = this.phoneNumandSipDetailsList.sipTransfers[0].didNumbers[0].number;
+      const sipIP = sipURI.split('@')[1].split(':')[0];
+      const port = sipURI.split(':')[2].split('?')[0];
+      const queryString = sipURI.split('?')[1];
+      this.phoneNumandSipDetailsList.sipTransfers[0].sipURI = `sip:${didNumber}@${sipIP}:${port}?${queryString}`;
       if(this.phoneNumandSipDetailsList?.sipTransfers.length == 0){
         this.showNewSIPTransfers = true;
       }
