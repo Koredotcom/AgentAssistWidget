@@ -144,7 +144,10 @@ export const RenderResponseType = {
 export const FeebackConst = {
     LIKE : 'like',
     DISLIKE : 'dislike',
-    DISLIKE_LIST : ['Wrong suggestions', 'Incorrect intent', 'Accidental click', 'Time taking', 'Other']
+    DISLIKE_LIST : ['Wrong suggestions', 'Incorrect intent', 'Accidental click', 'Time taking', 'Other'],
+    DIALOGS : 'dialogs',
+    FAQS : 'faqs',
+    ANSWERS : 'answers'
 }
 
 export const coachingConst = {

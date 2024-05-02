@@ -84,7 +84,7 @@
               </div> -->
             </div>
           </div>
-          <app-feedback [feedbackData]="snippet?.feedbackData" (updateFeedbackProperties)="updateFeedbackProperties($event,snippet)">
+          <app-feedback [feedbackData]="snippet?.feedbackData" (updateFeedbackProperties)="updateFeedbackProperties($event,snippet)" [feedbackType]="feedbackConst.ANSWERS">
           </app-feedback>
         </div>
       </ng-container>

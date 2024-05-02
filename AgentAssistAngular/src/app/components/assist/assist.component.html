@@ -83,9 +83,9 @@
                             <app-dialog [automationData]="res" [agentassistArrayIndex]="i+1"
                                 [agentassistResponseArray]="assistResponseArray" [feedBackForWn]="feedBackForWn"></app-dialog>
                         </ng-container>
-                        <ng-container *ngIf="res.type == renderResponseType.FEEDBACK">
+                        <ng-container *ngIf="res.type == renderResponseType.FEEDBACK && (rootService?.settingsData?.feedback && rootService?.settingsData?.feedback[feedbackConst.DIALOGS]?.isEnabled)">
                             <app-feedback [feedbackData]="res" (updateFeedbackProperties)="updateFeedbackProperties($event,i)"
-                                [agentassistArrayIndex]="i+1" [agentassistResponseArray]="assistResponseArray"
+                                [agentassistArrayIndex]="i+1" [agentassistResponseArray]="assistResponseArray" [feedbackType]="feedbackConst.DIALOGS"
                                 [ngClass]="{'componentSlideUPAnimation' : (assistResponseArray?.length == i+1), 'grayout-msgs-node' : res.oldFeedback}"
                             ></app-feedback>
                         </ng-container>

@@ -73,6 +73,98 @@ export class RootService {
   numOfLines : any = 4;
   maxHeight : any;
   scrollHeight : any;
+  defaultFeedbackSettings : any = {
+    "dialogs": {
+      "isEnabled": true,
+      "acceptComment": true,
+      "negativeKeyWords": [
+        {
+          "isEnabled": true,
+          "key": "Wrong Suggestion"
+        },
+        {
+          "isEnabled": true,
+          "key": "Incorrect Intent"
+        },
+        {
+          "isEnabled": true,
+          "key": "Accidental Click"
+        },
+        {
+          "isEnabled": true,
+          "key": "Time Taking"
+        },
+        {
+          "isEnabled": false,
+          "key": "Other"
+        },
+        {
+          "isEnabled": true,
+          "key": "Confusing"
+        }
+      ]
+    },
+    "faqs": {
+      "isEnabled": true,
+      "acceptComment": true,
+      "negativeKeyWords": [
+        {
+          "isEnabled": true,
+          "key": "Wrong Suggestion"
+        },
+        {
+          "isEnabled": true,
+          "key": "Incorrect Intent"
+        },
+        {
+          "isEnabled": true,
+          "key": "Accidental Click"
+        },
+        {
+          "isEnabled": true,
+          "key": "Time Taking"
+        },
+        {
+          "isEnabled": true,
+          "key": "Other"
+        },
+        {
+          "isEnabled": false,
+          "key": "Confusing"
+        }
+      ]
+    },
+    "searchassist": {
+      "isEnabled": true,
+      "acceptComment": true,
+      "negativeKeyWords": [
+        {
+          "isEnabled": true,
+          "key": "Wrong Suggestion"
+        },
+        {
+          "isEnabled": true,
+          "key": "Incorrect Intent"
+        },
+        {
+          "isEnabled": true,
+          "key": "Accidental Click"
+        },
+        {
+          "isEnabled": true,
+          "key": "Time Taking"
+        },
+        {
+          "isEnabled": true,
+          "key": "Other"
+        },
+        {
+          "isEnabled": false,
+          "key": "Confusing"
+        }
+      ]
+    }
+  }
 
   defaultwidgetSettings: any = {
     "isCustomisedLogoEnabled": {
@@ -159,8 +251,8 @@ export class RootService {
     "languageSettings": {
       "language": "en",
       "allowAgentSwitch": false
-    }
-
+    },
+    "feedback": this.defaultFeedbackSettings
   }
 
   showListView : boolean = true;

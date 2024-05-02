@@ -16,19 +16,14 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
   @Input() feedbackData : any = {};
   @Input() agentassistArrayIndex : number;
   @Input() agentassistResponseArray : number;
+  @Input() feedbackType : string;
   @Output() updateFeedbackProperties = new EventEmitter();
 
   feedbackForm : FormGroup;
   feedbackConst : any = FeebackConst;
   feedbackComment : string;
   formTouched : boolean = false;
-  dislikeList : any = {
-    "WRONG_SUGGESTION" : ProjConstants.WRONG_SUGGESTION,
-    "INCORRECT_INTENT" : ProjConstants.INCORRECT_INTENT,
-    "ACCIDENTAL_CLICK" : ProjConstants.ACCIDENTAL_CLICK,
-    "TIME_TAKING" : ProjConstants.TIME_TAKING,
-    "OTHER" : ProjConstants.OTHER,
-  }
+  dislikeList : any = [];
 
   constructor(private rootService : RootService,
     private websocketService : WebSocketService,
@@ -51,7 +46,12 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
     })
   }
 
-  createForm(){     
+  createForm(){  
+    this.rootService.settingsData?.feedback[this.feedbackType]?.forEach(element => {
+      if(element.isEnabled){
+        this.dislikeList.push(element.key);
+      }
+    });
     if(this.feedbackData.suggestionType){
       this.feedbackForm = new FormGroup(
         {
