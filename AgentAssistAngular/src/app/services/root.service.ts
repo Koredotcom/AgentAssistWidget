@@ -96,11 +96,11 @@ export class RootService {
           "key": "Time Taking"
         },
         {
-          "isEnabled": false,
+          "isEnabled": true,
           "key": "Other"
         },
         {
-          "isEnabled": true,
+          "isEnabled": false,
           "key": "Confusing"
         }
       ]
@@ -483,8 +483,10 @@ export class RootService {
           childBotId: faq.childBotId,
           childBotName: faq.childBotName,
           answerCount: 1,
-          sourceMsgId : response.sourceMsgId || ''
-
+          sourceMsgId : response.sourceMsgId || '',
+          positionId : faq.positionId,
+          userInput : response.userInput,
+          intType : response.intType
         }
         if (faq.answer && faq.answer.length > 0) {
           for (let ans of faq.answer) {
@@ -499,6 +501,7 @@ export class RootService {
             faqObject.answer.push(object);
           }
         }
+        faqObject.feedbackData = this.prepareFeedbackForSuggestions('faqs',faqObject,{})
         searchResponse.faqs.push(faqObject);
       }
       if (suggestions?.searchassist?.snippets?.length > 0) {
@@ -697,6 +700,13 @@ export class RootService {
       if(suggestion.internalInfo?.length > 0){
         renderResponse.answer += suggestion.internalInfo.join(' ');
       }
+    }else if(suggestionType == 'faqs'){
+      let answer = '';
+      suggestion.answer.forEach(element => {
+        answer += element.ans;
+      });
+      renderResponse.title = suggestion.question;
+      renderResponse.answer = answer;
     }
     return renderResponse
   }

@@ -148,7 +148,7 @@ export const FeebackConst = {
     DISLIKE_LIST : ['Wrong suggestions', 'Incorrect intent', 'Accidental click', 'Time taking', 'Other'],
     DIALOGS : 'dialogs',
     FAQS : 'faqs',
-    ANSWERS : 'answers'
+    ANSWERS : 'searchassist'
 }
 
 export const coachingConst = {

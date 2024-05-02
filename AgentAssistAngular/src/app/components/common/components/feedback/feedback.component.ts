@@ -24,6 +24,7 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
   feedbackComment : string;
   formTouched : boolean = false;
   dislikeList : any = [];
+  showComments : boolean = false;
 
   constructor(private rootService : RootService,
     private websocketService : WebSocketService,
@@ -47,11 +48,12 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
   }
 
   createForm(){  
-    this.rootService.settingsData?.feedback[this.feedbackType]?.forEach(element => {
+    this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords?.forEach(element => {
       if(element.isEnabled){
         this.dislikeList.push(element.key);
       }
     });
+    this.showComments = this.rootService.settingsData?.feedback[this.feedbackType]?.acceptComment;
     if(this.feedbackData.suggestionType){
       this.feedbackForm = new FormGroup(
         {
@@ -76,6 +78,9 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
         (this.feedbackForm as FormGroup)?.addControl('sources', new FormControl(this.feedbackData.sources));
         (this.feedbackForm as FormGroup)?.addControl('isFromGeneratedSummary', new FormControl(this.feedbackData.isFromGeneratedSummary));
         (this.feedbackForm as FormGroup)?.addControl('answerType', new FormControl(this.feedbackData.answerType));
+      }else if(this.feedbackData.suggestionType == 'faqs'){
+        (this.feedbackForm as FormGroup)?.addControl('title', new FormControl(this.feedbackData.title));
+        (this.feedbackForm as FormGroup)?.addControl('answer', new FormControl(this.feedbackData.answer));
       }
 
     } else{
