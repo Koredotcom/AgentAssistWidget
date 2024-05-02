@@ -2458,5 +2458,6 @@
         "ONCONNECT_EVENT_EXTRACT_INTENT": "Extract intents from On Dialog Task",
         "GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD_TAGS": "Tags",
         "GUIDED_CHECKLIST.COMP.STATUS": "Status",
-        "SEARCHASSIST.APP_ID" : "App ID"
+        "SEARCHASSIST.APP_ID" : "App ID",
+        "WARNING_MESSAGE": "Ensure that the domain URL does not contains “{{https}}” and does not have a forward slash “{{forwardSlash}}” at the end."
 }

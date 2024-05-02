@@ -10,6 +10,9 @@ builder/dist/**
 builder/node_modules/**
 builder/config/**
 
+AgentAssistAngular/.angular/**
+AgentAssistAngular/node_modules/**
+
 workflows/dist/**
 workflows/node_modules/**
 workflows/config/**

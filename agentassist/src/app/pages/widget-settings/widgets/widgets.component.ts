@@ -673,6 +673,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         })
       }),
       isAgentPlaybookEnabled: [isUpdate ? (obj.isAgentPlaybookEnabled ?? false) : false],
+      isAutoScrollEnabled : [isUpdate ? (obj.isAutoScrollEnabled ?? true) : true],
       isWidgetLandingEnabled: this.fb.group({
         tab: [isUpdate ? (obj.isWidgetLandingEnabled?.tab??'assist') : 'assist']
       }),
@@ -1066,9 +1067,21 @@ export class WidgetsComponent implements OnInit, OnDestroy {
                         .get('transferConfigs') as FormGroup)
                         .get(selectedFormGroup) as FormGroup)
                         .get('taskConfigs') as FormGroup));
-    taskConfigs.patchValue({
-      extractIntents: event.target.checked
-    })
+    if (taskConfigs) {
+      taskConfigs.patchValue({
+        extractIntents: event.target.checked
+      })
+    } else {
+      const intentExtract = (((((((this.agentAssistFormGroup as FormGroup)
+                        .get('agentAssistSettings') as FormGroup)
+                        .get(this.selectedChannel) as FormGroup)
+                        .get('transferConfigs') as FormGroup)
+                        .get(selectedFormGroup) as FormGroup)));
+      intentExtract.addControl('taskConfigs', this.fb.group({
+        'extractIntents': event.target.checked
+      }))
+    }
+    
   }
 
   extractIntentsChecked(transferType: string): boolean {

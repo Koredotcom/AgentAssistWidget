@@ -112,10 +112,15 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
     }, 500);
   } 
 
-  updateAgentAspectData(){
+  updateAgentAspectData(initial=true){
+    if(initial){
+      this.agentAspectData = {};
+      this.agentAspectTableData  = [];
+      this.agentAspectPartialTableData = [];
+    }
+    this.isLoading = true;
     if(this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData){
       // let this = this;
-      this.isLoading = true;
       this.cdRef.detectChanges();
       let botId = this.dashboardService.getSelectedBotDetails()._id;
       let params: any = {
@@ -148,7 +153,10 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
       // })
       
 
-      this.service.invoke('agentsLookingfor', this.params, this.payload).subscribe((data : any) => {
+      this.service.invoke('agentsLookingfor', this.params, this.payload).pipe(finalize(() => {
+        this.isLoading = false;
+        this.cdRef.detectChanges();
+      })).subscribe((data : any) => {
         this.updateViewData(data);
       });
     }
@@ -166,6 +174,8 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
         this.agentAspectTableData.push(...data.actualData);
         // this.agentAspectTableData = data.actualData;
       }
+    }else if(Object.keys(this.agentAspectData)?.length <= 0){
+      this.formatWorldCloudData([]);
     }
   }
 
@@ -178,12 +188,14 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
       };
       worldCloudData.push(obj);
     }
-    worldCloudData[0].textStyle = {
-      normal: {
-        color: 'black'
-      },
-      emphasis: {
-        color: 'blue'
+    if(worldCloudData[0]){
+      worldCloudData[0].textStyle = {
+        normal: {
+          color: 'black'
+        },
+        emphasis: {
+          color: 'blue'
+        }
       }
     }
     this.setWordCloudOptions(worldCloudData);
@@ -196,7 +208,7 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
   onReachEnd(event){
     if(!this.isLoading && this.hasMore && event.target.scrollTop > 0){
       // this.zone.run(()=>{
-        this.updateAgentAspectData();
+        this.updateAgentAspectData(false);
       // })
     }
   }
