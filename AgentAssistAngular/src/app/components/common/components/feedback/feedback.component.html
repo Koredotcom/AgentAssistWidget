@@ -21,10 +21,12 @@
             <div class="feedback-wrapper" [ngClass]="{'grayout-msgs-node' : feedbackData.oldFeedback}">
                 <div class="feedback-actions-info">
                     <div class="left-sec-info">
-                        <div class="icon_block">
-                            <img src="assets/images/logo/gifLoader.gif" alt="Image">
-                        </div>
-                        <h1>{{'HELP_FULL' | translate}}</h1>
+                        <ng-container *ngIf="!feedbackData.suggestionType">
+                            <div class="icon_block">
+                                <img src="assets/images/logo/gifLoader.gif" alt="Image">
+                            </div>
+                            <h1>{{'HELP_FULL' | translate}}</h1>
+                        </ng-container>
                         <button class="feedback-btn-thumb" [ngClass]="{'active-feedback-btn' : feedbackData?.feedback === feedbackConst.LIKE}" (click)="addFeedback(feedbackConst.LIKE)" aria-label="Button" [attr.href]="'#thankyou' + feedbackData.dialogPositionId" data-bs-toggle="collapse">
                             <i class="krIocnsFont-thumbs-up-solid"></i>
                         </button>
