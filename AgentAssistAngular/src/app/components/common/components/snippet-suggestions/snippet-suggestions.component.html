@@ -84,8 +84,10 @@
               </div> -->
             </div>
           </div>
-          <app-feedback [feedbackData]="snippet?.feedbackData" (updateFeedbackProperties)="updateFeedbackProperties($event,snippet)" [feedbackType]="feedbackConst.ANSWERS">
-          </app-feedback>
+          <ng-container *ngIf="(rootService?.settingsData?.feedback && rootService?.settingsData?.feedback[feedbackConst.ANSWERS]?.isEnabled)">
+            <app-feedback [feedbackData]="snippet?.feedbackData" (updateFeedbackProperties)="updateFeedbackProperties($event,snippet)" [feedbackType]="feedbackConst.ANSWERS">
+            </app-feedback>
+          </ng-container>
         </div>
       </ng-container>
       </div>
