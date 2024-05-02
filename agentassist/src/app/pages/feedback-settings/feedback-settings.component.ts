@@ -71,18 +71,19 @@ export class FeedbackSettingsComponent implements OnInit {
       title : 'Answers Feedback',
       desc : 'Define the feedback message provided to agents upon viewing of Answers.',
       enableDesc : 'Enable Answers Feedback',
-      bkey : 'faqs'
+      bkey : 'searchassist'
     },
     {
       title : 'FAQ Feedback',
       desc : 'Define the feedback message provided to agents upon viewing of FAQ',
       enableDesc : 'Enable FAQ Feedback',
-      bkey : 'searchassist'
+      bkey : 'faqs'
     }
   ]
   showCountWarningMsg : boolean = false;
   showDuplicateWarning : boolean = false;
   showDisableWarning : boolean = false;
+  selectedLang : string = 'en';
 
   constructor(private workflowService : workflowService, private service : ServiceInvokerService,
     private authService : AuthService, private notificationService : NotificationService, private translate: TranslateService,
@@ -126,7 +127,9 @@ export class FeedbackSettingsComponent implements OnInit {
         res.agentAssistSettings.feedback[obj.bkey] = {
           isEnabled : true,
           acceptComment : true,
-          negativeKeyWords : JSON.parse(JSON.stringify(this.sampleFeedbackData))
+          negativeKeyWords : {
+            [this.selectedLang] : JSON.parse(JSON.stringify(this.sampleFeedbackData))
+          }
         }
       }
     }
@@ -138,17 +141,24 @@ export class FeedbackSettingsComponent implements OnInit {
       dialogs: this.fb.group({
         isEnabled: [isUpdate ? (obj?.dialogs?.isEnabled ?? true) : true],
         acceptComment: [isUpdate ? (obj?.dialogs?.acceptComment ?? true) : true],
-        negativeKeyWords: [isUpdate ? obj?.dialogs?.negativeKeyWords ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData))]
+        negativeKeyWords: this.fb.group({
+          [this.selectedLang] : [isUpdate ? obj?.dialogs?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData))]
+        })
       }),
       faqs: this.fb.group({
         isEnabled: [isUpdate ? (obj?.faqs?.isEnabled ?? true) : true],
         acceptComment: [isUpdate ? (obj?.faqs?.acceptComment ?? true) : true],
-        negativeKeyWords: [isUpdate ? obj?.faqs?.negativeKeyWords ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData))]
+        negativeKeyWords: this.fb.group({
+          [this.selectedLang] : [isUpdate ? obj?.faqs?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData))]
+        })
+        
       }),
       searchassist: this.fb.group({
         isEnabled: [isUpdate ? (obj?.searchassist?.isEnabled ?? true) : true],
         acceptComment: [isUpdate ? (obj?.searchassist?.acceptComment ?? true) : true],
-        negativeKeyWords: [isUpdate ? obj?.searchassist?.negativeKeyWords ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData))]
+        negativeKeyWords: this.fb.group({
+          [this.selectedLang] : [isUpdate ? obj?.searchassist?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData))]
+        })
       })
     })
   }
@@ -218,8 +228,7 @@ export class FeedbackSettingsComponent implements OnInit {
 
 
   toggleMsgEnable(event, index, type){
-    let suggestionSettings = this.feedbackForm?.get(type)?.get('negativeKeyWords').value;
-    console.log(suggestionSettings, 'suggestiong settings');
+    let suggestionSettings = this.feedbackForm?.get(type)?.get('negativeKeyWords')?.get(this.selectedLang)?.value;
 
     let enableCount = 0;
     let duplicateName = false;
@@ -230,9 +239,7 @@ export class FeedbackSettingsComponent implements OnInit {
         if(suggestion.isEnabled){
           enableCount++;
         }
-        if(suggestionNameList.indexOf(suggestion.key) >= 0){
-          console.log(suggestionNameList, suggestion.key, "name and key");
-          
+        if(suggestionNameList.indexOf(suggestion.key) >= 0){          
           duplicateName = true;
         }
         suggestionNameList.push(suggestion.key);
@@ -252,14 +259,14 @@ export class FeedbackSettingsComponent implements OnInit {
       event.target.checked = !event.target.checked;
     }else{
       suggestionSettings[index].isEnabled = event.target.checked;
-      this.feedbackForm?.get(type)?.get('negativeKeyWords').patchValue(suggestionSettings);    
+      this.feedbackForm?.get(type)?.get('negativeKeyWords')?.get(this.selectedLang).patchValue(suggestionSettings);    
     }
   }
 
   submitSuggestion(value, index, type){
     
     let duplicateName = false;
-    let suggestionSettings = this.feedbackForm?.get(type)?.get('negativeKeyWords').value;
+    let suggestionSettings = this.feedbackForm?.get(type)?.get('negativeKeyWords')?.get(this.selectedLang).value;
 
     
 
@@ -280,7 +287,7 @@ export class FeedbackSettingsComponent implements OnInit {
     if(!duplicateName){
       this.closeDropdown();
       suggestionSettings[index].key = value;
-      this.feedbackForm?.get(type)?.get('negativeKeyWords').patchValue(suggestionSettings);
+      this.feedbackForm?.get(type)?.get('negativeKeyWords')?.get(this.selectedLang).patchValue(suggestionSettings);
     }
   }
 

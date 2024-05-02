@@ -61,8 +61,8 @@
                         </div>
                         <ng-container *ngIf="feedbackForm?.get(obj.bkey)?.get('isEnabled').value">
                             <div class="divider"></div>
-                            <div class="table-feedback-form-data" *ngIf="feedbackForm?.get(obj.bkey)?.get('negativeKeyWords')?.value?.length > 0">
-                                <ng-container *ngFor="let item of feedbackForm?.get(obj.bkey)?.get('negativeKeyWords').value; let i = index">
+                            <div class="table-feedback-form-data" *ngIf="feedbackForm?.get(obj.bkey)?.get('negativeKeyWords')?.get(selectedLang)?.value?.length > 0">
+                                <ng-container *ngFor="let item of feedbackForm?.get(obj.bkey)?.get('negativeKeyWords')?.get(selectedLang)?.value; let i = index">
                                     <div class="table-form-repeat-list">
                                         <div class="name-feedback">{{item.key}}</div>
                                         <div class="edit-feedback-action" ngbDropdown container="body" #suggestionDropdown="ngbDropdown">
