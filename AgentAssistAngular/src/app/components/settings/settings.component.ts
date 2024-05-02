@@ -29,6 +29,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   projConstants : any = ProjConstants;
   connectionDetails : any;
   proactiveModeEnabled: boolean = this.rootService.proactiveModeStatus;
+  autoScrollEnabled : boolean = this.rootService.autoScrollStatus;
   aaSettings : any = this.rootService.settingsData;
   enableLangChange : boolean = true;
   helpSupportSettings : any = this.rootService.settingsData?.showHelp || {};
@@ -84,6 +85,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.rootService.proactiveModeStatus = proactiveModeEnabled;
     this.handleSubjectService.setProactiveModeStatus(proactiveModeEnabled);
     this.updateProactiveModeState(this.proactiveModeEnabled);
+  }
+
+  autoScrolloggle(autoScrollEnabled){
+    this.autoScrollEnabled = autoScrollEnabled;
+    this.rootService.autoScrollStatus = autoScrollEnabled;
+    let storageObject: any = {
+      [storageConst.AUTOSCROLL]: autoScrollEnabled
+    }
+    this.localStorageService.setLocalStorageItem(storageObject);
   }
 
   updateProactiveModeState(modeStatus) {
