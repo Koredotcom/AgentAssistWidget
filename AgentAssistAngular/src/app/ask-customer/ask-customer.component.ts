@@ -145,14 +145,16 @@ export class AskCustomerComponent {
   }
 
   handleAgentInput() {
-    this.automation.hideOverrideDiv = true;
-    this.automation.userInput = this.projConstants.NO;
-    if (this.rootService.activeTab == this.projConstants.ASSIST) {
-      this.assistInputValue(this.automation.entityValue);
-    } else if (this.rootService.activeTab == this.projConstants.MYBOT) {
-      this.mybotInputValue(this.automation.entityValue)
+    if(this.automation.entityValue){
+      this.automation.hideOverrideDiv = true;
+      this.automation.userInput = this.projConstants.NO;
+      if (this.rootService.activeTab == this.projConstants.ASSIST) {
+        this.assistInputValue(this.automation.entityValue);
+      } else if (this.rootService.activeTab == this.projConstants.MYBOT) {
+        this.mybotInputValue(this.automation.entityValue)
+      }
+      this.grayOutCurrentAutomation();
     }
-    this.grayOutCurrentAutomation();
   }
 
   assistInputValue(inputValue) {
