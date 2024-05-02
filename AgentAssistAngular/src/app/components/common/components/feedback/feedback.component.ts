@@ -3,7 +3,8 @@ import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmi
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { EVENTS } from 'src/app/helpers/events';
-import { FeebackConst, ProjConstants } from 'src/app/proj.const';
+import { FeebackConst, ProjConstants, storageConst } from 'src/app/proj.const';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { RootService } from 'src/app/services/root.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 
@@ -29,7 +30,8 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
   constructor(private rootService : RootService,
     private websocketService : WebSocketService,
     private cdRef : ChangeDetectorRef,
-    private translate : TranslateService){
+    private translate : TranslateService,
+    private localStorageService : LocalStorageService){
 
   }
 
@@ -47,8 +49,12 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
     })
   }
 
-  createForm(){  
-    this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords?.forEach(element => {
+  createForm(){ 
+    let appState = this.localStorageService.getLocalStorageState();   
+    let language = appState[this.feedbackData.connectionDetails.conversationId][storageConst.LANGUAGE];
+    let suggestionList = (this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords[language]) ? 
+    this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords[language] : this.rootService.defaultNegSuggestionList;
+    suggestionList?.forEach(element => {
       if(element.isEnabled){
         this.dislikeList.push(element.key);
       }

@@ -74,96 +74,53 @@ export class RootService {
   numOfLines : any = 4;
   maxHeight : any;
   scrollHeight : any;
+  defaultNegSuggestionList : any = [
+    {
+      "isEnabled": true,
+      "key": "Wrong Suggestion"
+    },
+    {
+      "isEnabled": true,
+      "key": "Incorrect Intent"
+    },
+    {
+      "isEnabled": true,
+      "key": "Accidental Click"
+    },
+    {
+      "isEnabled": true,
+      "key": "Time Taking"
+    },
+    {
+      "isEnabled": true,
+      "key": "Other"
+    },
+    {
+      "isEnabled": false,
+      "key": "Confusing"
+    }
+  ];
   defaultFeedbackSettings : any = {
     "dialogs": {
       "isEnabled": true,
       "acceptComment": true,
-      "negativeKeyWords": [
-        {
-          "isEnabled": true,
-          "key": "Wrong Suggestion"
-        },
-        {
-          "isEnabled": true,
-          "key": "Incorrect Intent"
-        },
-        {
-          "isEnabled": true,
-          "key": "Accidental Click"
-        },
-        {
-          "isEnabled": true,
-          "key": "Time Taking"
-        },
-        {
-          "isEnabled": true,
-          "key": "Other"
-        },
-        {
-          "isEnabled": false,
-          "key": "Confusing"
-        }
-      ]
+      "negativeKeyWords": {
+        "en" : this.defaultNegSuggestionList
+      }
     },
     "faqs": {
       "isEnabled": true,
       "acceptComment": true,
-      "negativeKeyWords": [
-        {
-          "isEnabled": true,
-          "key": "Wrong Suggestion"
-        },
-        {
-          "isEnabled": true,
-          "key": "Incorrect Intent"
-        },
-        {
-          "isEnabled": true,
-          "key": "Accidental Click"
-        },
-        {
-          "isEnabled": true,
-          "key": "Time Taking"
-        },
-        {
-          "isEnabled": true,
-          "key": "Other"
-        },
-        {
-          "isEnabled": false,
-          "key": "Confusing"
-        }
-      ]
+      "negativeKeyWords": {
+        "en" : this.defaultNegSuggestionList
+      }
     },
     "searchassist": {
       "isEnabled": true,
       "acceptComment": true,
-      "negativeKeyWords": [
-        {
-          "isEnabled": true,
-          "key": "Wrong Suggestion"
-        },
-        {
-          "isEnabled": true,
-          "key": "Incorrect Intent"
-        },
-        {
-          "isEnabled": true,
-          "key": "Accidental Click"
-        },
-        {
-          "isEnabled": true,
-          "key": "Time Taking"
-        },
-        {
-          "isEnabled": true,
-          "key": "Other"
-        },
-        {
-          "isEnabled": false,
-          "key": "Confusing"
-        }
-      ]
+      "negativeKeyWords": {
+        "en" : this.defaultNegSuggestionList
+      }
     }
   }
 
