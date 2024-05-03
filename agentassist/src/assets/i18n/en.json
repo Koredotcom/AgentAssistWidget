@@ -2459,5 +2459,18 @@
         "GUIDED_CHECKLIST.CREATE_CHECKLIST.ADD_TAGS": "Tags",
         "GUIDED_CHECKLIST.COMP.STATUS": "Status",
         "SEARCHASSIST.APP_ID" : "App ID",
-        "WARNING_MESSAGE": "Ensure that the domain URL does not contains “{{https}}” and does not have a forward slash “{{forwardSlash}}” at the end."
+        "DIALOG_TASK_FEEDBACK_TITLE" : "Dialog Task Feedback",
+        "DIALOG_TASK_FEEDBACK_DESC" : "Define the feedback message provided to agents upon completion of a Dialog Task",
+        "FEEDBACK_ENABLED" : "Enabled",
+        "FEEDBACK_DISABLED" : "Disabled",
+        "FEEDBACK_SETTINGS_SAVED": "AgentAssist Feedback Settings saved successfully",
+        "SAVE_FEEDBACK_FALLBACK_ERROR_MSG" : "Failed to save the AgentAssist Feedback Settings",
+        "FEEDBACK_WARNING" : "Warning",
+        "FEEDBACK_WARNING_DESC" : "Only 5 entries can be enabled at a time",
+        "FEEDBACK_DUPLICATE_WARNING_DESC" : "Suggestion is already exists, Edit the name to add or enable",
+        "FEEDBACK.SUGGESTION" : "Edit Feedback",
+        "FEEDBACK_SUGGESTION_SUBTEXT" : "Press Enter to save",
+        "FEEDBACK_DISABLE_WARNING_TEXT" : "If Feedback is enabled, there should be at least one suggestion enabled. otherwise, disable the feedback",
+        "WARNING_MESSAGE": "Ensure that the domain URL does not contains “{{https}}” and does not have a forward slash “{{forwardSlash}}” at the end.",
+        "FEEDBACK_ACCEPT_COMMENT" : "Display additional comment."
 }

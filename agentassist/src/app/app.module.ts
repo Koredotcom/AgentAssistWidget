@@ -103,6 +103,7 @@ import { AutomationIntentvsEntityStringPipe } from './helpers/filters/automation
 import { AccWarningDialogComponent } from './helpers/components/acc-warning-dialog/acc-warning-dialog.component';
 import { XoMenuComponent } from './components/xo-menu/xo-menu.component';
 import { BlankComponent } from './pages/blank/blank.component';
+import { FeedbackSettingsComponent } from './pages/feedback-settings/feedback-settings.component';
 
 @NgModule({
   declarations: [
@@ -179,7 +180,8 @@ import { BlankComponent } from './pages/blank/blank.component';
     // AutomationIntentvsEntityStringPipe,
     AccWarningDialogComponent,
     XoMenuComponent,
-    BlankComponent
+    BlankComponent,
+    FeedbackSettingsComponent
   ],
   imports: [
     CommonModule,
