@@ -33,7 +33,7 @@
                     <button class="solidbtn" (click)="handleSendCopyButton(projConstants.SEND, ansObj, projConstants.FAQ, faq.sourceMsgId)" *ngIf="!hideSendButton">{{'SEND' | translate}}</button>
                 </ng-container>
             </div>
-            <div class="data-faq-paragraph" [class.if-feedback-ebanle-adjust-padding]="(rootService?.settingsData?.feedback && rootService?.settingsData?.feedback[feedbackConst.FAQS]?.isEnabled) || !(faq?.answer?.length > 1 && !faq.seeMoreWrapper || faq?.answer?.length > 1 && faq.seeMoreWrapper)">   
+            <div class="data-faq-paragraph">   
                 <div class="text-info-more-data-link">         
                     <p #faqcontent [ngClass]="{'show-full-text' : !ansObj['showMoreButton']}"  [style.--max-height.px]="rootService.maxHeight" [innerHTML]="rootService.handleEmptyLine(ansObj['ans'], false, 'faq') | safeHtml"></p>     
                     <div class="more-links-actions" *ngIf="rootService?.numOfLines != -1">

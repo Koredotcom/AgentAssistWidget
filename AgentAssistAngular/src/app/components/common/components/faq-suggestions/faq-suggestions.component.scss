@@ -105,7 +105,7 @@
         }
         .data-faq-paragraph{
             &.if-feedback-ebanle-adjust-padding{
-                padding-right: 74px;
+                // padding-right: 74px;
             }
             .text-info-more-data-link{
                 position: relative;
@@ -331,19 +331,20 @@
         }
     }
     app-feedback{
-        position: relative;
+        // position: relative;
         .form-feedback-info{
             background: transparent;
-            width: auto;
+            // width: auto;
             padding: 0;
             .dialog-ended-and-feedback {
-                .form-feedback-div{
-                    position: absolute;
-                    right: -5px;
-                    bottom: 7px;
-                    top: -27px;
-                    height: 20px;
-                }
+                justify-content: flex-end;
+                // .form-feedback-div{
+                //     position: absolute;
+                //     right: -5px;
+                //     bottom: 7px;
+                //     top: -27px;
+                //     height: 20px;
+                // }
             }
         }
     }
