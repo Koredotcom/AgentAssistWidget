@@ -188,7 +188,7 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
       conversationId: conversationId,
       event: "clicked",
       sourceMsgId: snippet.sourceMsgId,
-      source: "snippet"
+      dataSource: "snippet"
     }
     return socketRequestParams;
   }
