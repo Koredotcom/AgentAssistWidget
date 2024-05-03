@@ -75,6 +75,8 @@ export class RootService {
   maxHeight : any;
   scrollHeight : any;
 
+  lastSourceMsgId : string = '';
+
   defaultwidgetSettings: any = {
     "isCustomisedLogoEnabled": {
       "isEnabled": false

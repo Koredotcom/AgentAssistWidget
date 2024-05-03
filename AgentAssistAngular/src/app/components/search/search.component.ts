@@ -44,6 +44,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   closeSuggestions : boolean = true;
   secondaryIp = true;
   prevScrollLeft: number = 0;
+  startTime : any;
+  endTime : any;
 
 
   constructor(public rootService: RootService, private serviceInvoker: ServiceInvokerService,
@@ -99,11 +101,18 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     }
   }
 
+  onTyping(event){    
+    if(!this.startTime && this.searchText?.length > 0){
+      this.startTime = new Date();
+    }
+  }
+
   clearSearch(){
     this.searchText = '';
     this.autocompleteText = '';
     this.searched = false;
     this.searchResponse = {};
+    this.startTime = null;
     // this.handleSubjectService.setSearchResponse(this.searchResponse);
   }
 
@@ -176,6 +185,24 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     }
     let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
+    this.rawDataRequest();
+  }
+
+  rawDataRequest() {
+    this.endTime = new Date();
+    const { botId, conversationId, channel } = this.rootService.getConnectionDetails();
+    let socketRequestParams = {
+      botId: botId,
+      conversationId: conversationId,
+      event: "typed",
+      eventType: "search",
+      sourceMsgId: this.rootService.lastSourceMsgId,
+      url: "",
+      isInternal: false,
+      starTime: this.startTime,
+      endTime: this.endTime
+    }
+    this.websocketService.emitEvents(EVENTS.agent_activity_request, socketRequestParams);
   }
 
 

@@ -383,7 +383,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     if (!data.sendMenuRequest) {
       this.scrollToBottomRuntime();
     }
-    
+    this.rootService.lastSourceMsgId = data.sourceMsgId;
   }
 
   formatListViewEntityList(type){
