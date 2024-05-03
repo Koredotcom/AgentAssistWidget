@@ -107,7 +107,7 @@ export class FeedbackSettingsComponent implements OnInit {
           res = this.checkBackwardCompatibility(res);
           this.clonedWidgetSettings = JSON.parse(JSON.stringify(res));
           this.isLoading = false;
-          this.createOrUpdateFeedbackForm(res?.agentAssistSettings?.feedback);
+          this.createOrUpdateFeedbackForm(res?.agentAssistSettings?.feedback, true);
         }
       },
       (err) => {
@@ -280,6 +280,8 @@ export class FeedbackSettingsComponent implements OnInit {
         if(suggestion.key === value){
           duplicateName = true;
           this.showDuplicateWarning = true;
+          this.showCountWarningMsg = false;
+          this.showDisableWarning = false;
         }
       }
     });

@@ -8,7 +8,7 @@
     <div id="accordion" class="body-feedback-data">
         <ng-container *ngFor="let obj of feedbackList; let fbinx = index">
             <div class="welcome-event-accordion childComp" [formGroup]="feedbackForm.get(obj.bkey)" *ngIf="feedbackForm">
-                <div data-toggle="collapse" [attr.href] ="'#configGreetings' + fbinx" class="card_link" aria-expanded="false">
+                <div data-toggle="collapse" [attr.href] ="'#configGreetings' + fbinx" class="card_link" aria-expanded="false" (click)="showCountWarningMsg = false;showDuplicateWarning=false;showDisableWarning=false;">
                     <div class="accordion-content-header">
                         <div class="team-with-profile">
                             <i class="icon-sa-arrow-down arrow-icon"></i>
@@ -124,7 +124,7 @@
                                         <p>{{'FEEDBACK_DISABLE_WARNING_TEXT' | translate}}</p>
                                     </ng-container>
                                 </div>
-                                <div class="disable-state-error-close" (click)="showCountWarningMsg = false;showDuplicateWarning=false;">
+                                <div class="disable-state-error-close" (click)="showCountWarningMsg = false;showDuplicateWarning=false;showDisableWarning=false;">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                         <path d="M15 5L5 15M5 5L15 15" stroke="#F79009" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
