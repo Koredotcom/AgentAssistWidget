@@ -184,8 +184,10 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
       connectionDetails['sourceMsgId'] = faq.sourceMsgId;
     }
     let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
+    agent_assist_agent_request_params.startTime = this.startTime;
+    agent_assist_agent_request_params.endTime = this.endTime;
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
-    this.rawDataRequest();
+    // this.rawDataRequest();
   }
 
   rawDataRequest() {
