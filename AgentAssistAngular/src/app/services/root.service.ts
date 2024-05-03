@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { ProjConstants } from '../proj.const';
+import { ProjConstants, RenderResponseType } from '../proj.const';
 import { TemplateRenderClassService } from './template-render-class.service';
 import * as $ from 'jquery';
 import { EVENTS } from '../helpers/events';
@@ -74,6 +74,55 @@ export class RootService {
   numOfLines : any = 4;
   maxHeight : any;
   scrollHeight : any;
+  defaultNegSuggestionList : any = [
+    {
+      "isEnabled": true,
+      "key": "Wrong Suggestion"
+    },
+    {
+      "isEnabled": true,
+      "key": "Incorrect Intent"
+    },
+    {
+      "isEnabled": true,
+      "key": "Accidental Click"
+    },
+    {
+      "isEnabled": true,
+      "key": "Time Taking"
+    },
+    {
+      "isEnabled": true,
+      "key": "Other"
+    },
+    {
+      "isEnabled": false,
+      "key": "Confusing"
+    }
+  ];
+  defaultFeedbackSettings : any = {
+    "dialogs": {
+      "isEnabled": true,
+      "acceptComment": true,
+      "negativeKeyWords": {
+        "en" : this.defaultNegSuggestionList
+      }
+    },
+    "faqs": {
+      "isEnabled": true,
+      "acceptComment": true,
+      "negativeKeyWords": {
+        "en" : this.defaultNegSuggestionList
+      }
+    },
+    "searchassist": {
+      "isEnabled": true,
+      "acceptComment": true,
+      "negativeKeyWords": {
+        "en" : this.defaultNegSuggestionList
+      }
+    }
+  }
 
   defaultwidgetSettings: any = {
     "isCustomisedLogoEnabled": {
@@ -161,8 +210,8 @@ export class RootService {
     "languageSettings": {
       "language": "en",
       "allowAgentSwitch": false
-    }
-
+    },
+    "feedback": this.defaultFeedbackSettings
   }
 
   showListView : boolean = true;
@@ -391,8 +440,10 @@ export class RootService {
           childBotId: faq.childBotId,
           childBotName: faq.childBotName,
           answerCount: 1,
-          sourceMsgId : response.sourceMsgId || ''
-
+          sourceMsgId : response.sourceMsgId || '',
+          positionId : faq.positionId,
+          userInput : response.userInput,
+          intType : response.intType
         }
         if (faq.answer && faq.answer.length > 0) {
           for (let ans of faq.answer) {
@@ -407,6 +458,7 @@ export class RootService {
             faqObject.answer.push(object);
           }
         }
+        faqObject.feedbackData = this.prepareFeedbackForSuggestions('faqs',faqObject,{})
         searchResponse.faqs.push(faqObject);
       }
       if (suggestions?.searchassist?.snippets?.length > 0) {
@@ -575,9 +627,45 @@ export class RootService {
         if(extInfo?.trim()){
           snipObje['contentArray'].push(extInfo?.trim());
         }
+        snipObje.feedbackData = this.prepareFeedbackForSuggestions('answer',snipObje,{})
         snippetResponeArray.push(snipObje);
     } 
     return snippetResponeArray;   
+  }
+
+  prepareFeedbackForSuggestions(suggestionType, suggestion, feedbackData?){
+    let renderResponse: any = {
+      type: RenderResponseType.FEEDBACK,
+      connectionDetails: this.connectionDetails,
+      positionId: suggestion.positionId,
+      submitForm: feedbackData?.feedback ? true : false,
+      feedback: feedbackData?.feedback ? feedbackData.feedback : '',
+      feedbackDetails: feedbackData?.feedbackDetails?.length ? feedbackData.feedbackDetails : [],
+      comment: feedbackData?.comment ? feedbackData?.comment : '',
+      sourceMsgId : suggestion.sourceMsgId || '',
+      query : suggestion.userInput,
+      suggestionType : suggestionType
+    }
+
+    if(suggestionType == 'answer'){
+      renderResponse.isFromGeneratedSummary = suggestion.isFromGeneratedSummary;
+      renderResponse.answerType = suggestion.templateType;
+      renderResponse.title = suggestion.title;
+      renderResponse.answer = suggestion.sendCopyText || '';
+      renderResponse.interactionType = suggestion.intType;
+      renderResponse.sources = suggestion.sources;
+      if(suggestion.internalInfo?.length > 0){
+        renderResponse.answer += suggestion.internalInfo.join(' ');
+      }
+    }else if(suggestionType == 'faqs'){
+      let answer = '';
+      suggestion.answer.forEach(element => {
+        answer += element.ans;
+      });
+      renderResponse.title = suggestion.question;
+      renderResponse.answer = answer;
+    }
+    return renderResponse
   }
 
   checkEmptyObjectsInArray(arr) {

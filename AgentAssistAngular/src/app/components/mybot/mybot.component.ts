@@ -3,7 +3,7 @@ import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
 import { forkJoin } from 'rxjs';
 import { SubSink } from 'subsink';
-import { ProjConstants, RenderResponseType, storageConst } from 'src/app/proj.const';
+import { FeebackConst, ProjConstants, RenderResponseType, storageConst } from 'src/app/proj.const';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { TemplateRenderClassService } from 'src/app/services/template-render-class.service';
 import { KoreGenerateuuidPipe } from 'src/app/pipes/kore-generateuuid.pipe';
@@ -32,6 +32,7 @@ export class MybotComponent {
   subs = new SubSink();
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
+  feedbackConst : any = FeebackConst;
 
 
   dialogName: string;

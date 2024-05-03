@@ -315,6 +315,7 @@ export class AppComponent implements OnInit, OnDestroy{
     this.serviceInvoker.invoke('get.settings', {instanceBotId : instanceBotId, channel : params.channel}, {},{ botId : params.botId },params.agentassisturl).pipe(finalize(() => {this.widgetLoader = false})).subscribe((res)=> {
       if(res && res.agentAssistSettings && res.agentAssistSettings[params.channel]){
         this.rootService.accountId = res.accountId;
+        res.agentAssistSettings = this.addBackWardCompatibility(res.agentAssistSettings);
         this.widgetSettings = Object.assign(res.agentAssistSettings, res.agentAssistSettings[params.channel]);
       }else{
         this.widgetSettings = this.rootService.defaultwidgetSettings;
@@ -327,6 +328,13 @@ export class AppComponent implements OnInit, OnDestroy{
       this.initiateSocketConnection(params);
     });
 
+  }
+
+  addBackWardCompatibility(agentassistSettings){
+    if(agentassistSettings && (!agentassistSettings.feedback || !Object.keys(agentassistSettings.feedback)?.length)){
+      agentassistSettings.feedback = this.rootService.defaultFeedbackSettings;
+    }
+    return agentassistSettings
   }
 
   closeFeedback(){
