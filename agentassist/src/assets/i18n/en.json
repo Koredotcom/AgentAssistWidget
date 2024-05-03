@@ -2472,5 +2472,7 @@
         "FEEDBACK_SUGGESTION_SUBTEXT" : "Press Enter to save",
         "FEEDBACK_DISABLE_WARNING_TEXT" : "If Feedback is enabled, there should be at least one suggestion enabled. otherwise, disable the feedback",
         "WARNING_MESSAGE": "Ensure that the domain URL does not contains “{{https}}” and does not have a forward slash “{{forwardSlash}}” at the end.",
-        "FEEDBACK_ACCEPT_COMMENT" : "Display additional comment."
+        "FEEDBACK_ACCEPT_COMMENT" : "Display additional comment.",
+        "DASHBOARD.CHANNEL" : "Channels",
+        "DASHBOARD.CHANNELS" : "All Channels"
 }

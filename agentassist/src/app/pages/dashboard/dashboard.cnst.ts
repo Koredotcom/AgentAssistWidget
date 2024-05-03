@@ -64,4 +64,4 @@ export const actualvsDisplayTitle = {
     }
 }
 
-export const CHANNELS = ['all', 'chat', 'voice', 'email']
+export const CHANNELS = ['chat', 'voice', 'email']
