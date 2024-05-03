@@ -101,7 +101,8 @@ export class WebSocketService {
       'uId': this.rootService.userBotConversationDetails?.userId || '',
       'sId': this.rootService.userBotConversationDetails?.sessionId || '',
       'experience' : this.rootService.connectionDetails?.channel,
-      'jToken': this.rootService.getConnectionDetails().token
+      'jToken': this.rootService.getConnectionDetails().token,
+      'conversationId' : conversationId
     }
     if(customData && Object.keys(customData)?.length > 0 && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
       welcomeMessageParams['customData'] = customData
