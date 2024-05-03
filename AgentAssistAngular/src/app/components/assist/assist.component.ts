@@ -6,7 +6,7 @@ import { SubSink } from 'subsink';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { EVENTS } from 'src/app/helpers/events';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { ProjConstants, RenderResponseType, storageConst } from 'src/app/proj.const';
+import { FeebackConst, ProjConstants, RenderResponseType, storageConst } from 'src/app/proj.const';
 import { KoreGenerateuuidPipe } from 'src/app/pipes/kore-generateuuid.pipe';
 import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -37,6 +37,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   proactiveModeStatus: boolean;
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
+  feedbackConst : any = FeebackConst;
 
   conversationSummaryObj: any;
 

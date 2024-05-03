@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChange, ViewChild } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
-import { ProjConstants } from 'src/app/proj.const';
+import { FeebackConst, ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
@@ -16,6 +16,8 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
   @Input() searchResponse : any;
   @ViewChild('snippetContent',{static: false}) private snippetContent : ElementRef;
+
+  feedbackConst : any = FeebackConst;
 
   prevClass = '';
   subs = new SubSink();
@@ -191,6 +193,10 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
       dataSource: "snippet"
     }
     return socketRequestParams;
+  }
+  
+  updateFeedbackProperties(data, snipObje) {
+    snipObje.feedbackData = data;
   }
 
 }

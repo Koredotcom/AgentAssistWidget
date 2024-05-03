@@ -51,6 +51,10 @@
         <button class="close-expand btn_link" (click)="toggleExpandAndClose(faq)" *ngIf="faq?.answer?.length > 1 && !faq.seeMoreWrapper">{{'EXPAND_MORE' | translate}}</button>
         <button class="close-expand btn_link" (click)="toggleExpandAndClose(faq)" *ngIf="faq?.answer?.length > 1 && faq.seeMoreWrapper">{{'CLOSE_TEXT' | translate}}</button>
     </ng-container>
+    <ng-container *ngIf="(rootService?.settingsData?.feedback && rootService?.settingsData?.feedback[feedbackConst.FAQS]?.isEnabled)">
+        <app-feedback [feedbackData]="faq?.feedbackData" (updateFeedbackProperties)="updateFeedbackProperties($event,faq)" [feedbackType]="feedbackConst.FAQS">
+        </app-feedback>
+    </ng-container>
 </div>
 </ng-container>
 <a class="moreText-bottom" *ngIf="searchedFAQList?.length > 2">
