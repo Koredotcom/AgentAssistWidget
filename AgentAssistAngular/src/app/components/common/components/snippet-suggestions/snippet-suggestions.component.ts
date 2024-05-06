@@ -119,8 +119,9 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     this.viewCountInt = (this.internalInfo && this.internalInfo?.length <= 2) ? this.internalInfo?.length : 2;
   }
 
-  openurlInBrowser(url){
+  openurlInBrowser(url, snippet){
     this.rootService.openurlInBrowser(url);
+    this.handleUrlClickEvent(url, snippet);
   }
 
   hoverOnSource(sourceInx, type, i){
@@ -168,6 +169,32 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     this.websocketService.emitEvents(EVENTS.agent_usage_feedback, agent_assist_feedback_request);
   }
 
+  handleMoreClickEvent(isInternal,snippet){
+    let socketRequestParams : any = this.commonRequestParams(snippet);
+    socketRequestParams.eventType= "showmore_clicked";
+    socketRequestParams.isInternal = isInternal;
+    this.websocketService.emitEvents(EVENTS.agent_activity_request, socketRequestParams);
+  }
+
+  handleUrlClickEvent(url, snippet){
+    let socketRequestParams : any = this.commonRequestParams(snippet);
+    socketRequestParams.eventType= "url_clicked";
+    socketRequestParams.url = url;
+    this.websocketService.emitEvents(EVENTS.agent_activity_request, socketRequestParams);
+  }
+
+  commonRequestParams(snippet){
+    const { botId, conversationId, channel } = this.rootService.getConnectionDetails();
+    let socketRequestParams = {
+      botId: botId,
+      conversationId: conversationId,
+      event: "clicked",
+      sourceMsgId: snippet.sourceMsgId,
+      dataSource: "snippet"
+    }
+    return socketRequestParams;
+  }
+  
   updateFeedbackProperties(data, snipObje) {
     snipObje.feedbackData = data;
   }

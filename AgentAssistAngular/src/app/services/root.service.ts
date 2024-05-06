@@ -124,6 +124,8 @@ export class RootService {
     }
   }
 
+  lastSourceMsgId : string = '';
+
   defaultwidgetSettings: any = {
     "isCustomisedLogoEnabled": {
       "isEnabled": false
