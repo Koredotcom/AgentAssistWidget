@@ -612,6 +612,12 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.assistResponseArray[index] = data;
   }
 
+  getFeedbackObjForFaq(faq, feedBackResult){
+    let feedback = {};
+    feedback = feedBackResult.find((ele) => ele.positionId === faq.positionId);
+    return feedback;
+  }
+
   renderHistoryMessages(response, feedBackResult) {
     let previousId;
     let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
@@ -623,16 +629,19 @@ export class AssistComponent implements OnInit, OnDestroy {
       if(res.type == 'outgoing'){
         res = this.rootService.formatHistoryResonseToNormalRender(res);
         // res = this.rootService.confirmationNodeRenderForHistoryDataTransform(res);
-
-        if ((res.suggestions || res.ambiguityList) && res.faqResponse) {
+        let ambiguity = false;
+        if ((res.suggestions || res.ambiguityList)) {
   
-          res.suggestions.faqs.forEach(faq => {
-            faq.answer = res?.buttons[0]?.value
+          res.suggestions?.faqs?.forEach(faq => {
+            if(!faq.answer){
+              faq.answer = res?.buttons[0]?.value;
+            }
           });
+          
+          let faqSuggestions = JSON.parse(JSON.stringify(res.suggestions?.faqs || []));
+          faqSuggestions = this.rootService.formatFAQResponse(res.suggestions?.faqs || []);
   
-          res.suggestions.faqs = this.rootService.formatFAQResponse(res.suggestions.faqs);
-  
-          let faqQuestionList = res?.suggestions?.faqs?.reduce((acc, faq) => {
+          let faqQuestionList = faqSuggestions?.reduce((acc, faq) => {
             acc[faq.question] = faq;
             return acc;
           }, {});
@@ -643,11 +652,12 @@ export class AssistComponent implements OnInit, OnDestroy {
               assistResp.searchResponse.faqs.forEach(faq => {
                 if (faqQuestionList[faq.question]) {
                   if (!faq.answer) {
+                    ambiguity = true;
                     faq.answer = faqQuestionList[faq.question].answer;
                     faq.toggle = true;
                     faq.showMoreButton = false,
-                      faq.showLessButton = false,
-                      inx = index;
+                    faq.showLessButton = false,
+                    inx = index;
                   }
                 }
               });
@@ -660,7 +670,12 @@ export class AssistComponent implements OnInit, OnDestroy {
           this.assistResponseArray = structuredClone(this.assistResponseArray);
         }
   
-        if ((res.suggestions || res.ambiguityList) && !res.faqResponse) {
+        
+        
+        if ((res.suggestions || res.ambiguityList) && !ambiguity) {
+          res?.suggestions?.faqs?.forEach(faq => {
+            faq.historyFeedback = this.getFeedbackObjForFaq(faq, feedBackResult);
+          });
           renderResponse = this.commonService.formatSuggestionRenderResponse(res, res._id);
           this.assistResponseArray.push(renderResponse);
           this.assistResponseArray = structuredClone(this.assistResponseArray);
