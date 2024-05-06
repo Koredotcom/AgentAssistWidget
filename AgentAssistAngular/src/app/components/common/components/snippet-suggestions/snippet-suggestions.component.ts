@@ -192,7 +192,7 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
       sourceMsgId: snippet.sourceMsgId,
       dataSource: "snippet",
       positionId : snippet.positionId,
-      agentId : this.rootService?.internalTransferData?.participant?.identity || ''
+      participant : this.rootService?.internalTransferData?.participant || {}
     }
     return socketRequestParams;
   }
