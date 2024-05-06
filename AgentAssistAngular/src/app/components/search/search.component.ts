@@ -187,6 +187,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     this.endTime = new Date();
     agent_assist_agent_request_params.startTime = this.startTime;
     agent_assist_agent_request_params.endTime = this.endTime;
+    agent_assist_agent_request_params.agentId = this.rootService?.internalTransferData?.participant?.identity || '';
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
     // this.rawDataRequest();
   }
