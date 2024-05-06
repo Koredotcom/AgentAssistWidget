@@ -587,6 +587,15 @@ export class AssistComponent implements OnInit, OnDestroy {
           window.parent.postMessage(message, '*');
         }
       }
+      let submitSummaryRequestParams = {
+        conversationId : this.connectionDetails.conversationId,
+        summary : [
+          {
+              'summary_text' : popupObject.editedSummary || ''
+          }
+        ]
+      }
+      this.websocketService.emitEvents(EVENTS.submit_summary_request, submitSummaryRequestParams);
       this.closeSummaryPopup();
     }
   }
