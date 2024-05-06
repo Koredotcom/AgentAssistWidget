@@ -158,7 +158,7 @@
                             </div>
                             <div class="help-support-wrapper conversation-transfer">
                                 <div class="help-support-block convos-transfer-block" *ngFor="let transferMode of conversationTransferTypes" formGroupName="{{transferMode?.type}}">
-                                    <ng-container *ngIf="transferMode.type != 'warm'">
+                                    <ng-container >
                                         <div class="kr-sg-checkbox p-0 m-0">
                                             <input id="{{transferMode?.type}}" class="checkbox-custom" type="checkbox" formControlName="isEnabled" (click)="handleTransferCheckboxClick($event, transferMode?.type)">
                                             <label for="{{transferMode?.type}}" class="checkbox-custom-label">{{transferMode?.title}} <i class="icon-sa-info"
