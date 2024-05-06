@@ -377,7 +377,7 @@ export class RootService {
     this.assistTemplateClick$.next(value);
   }
 
-  formatSearchResponse(response) {
+  formatSearchResponse(response, isSearch=false) {
     let suggestions = response.suggestions;
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
@@ -460,7 +460,9 @@ export class RootService {
             faqObject.answer.push(object);
           }
         }
-        faqObject.feedbackData = this.prepareFeedbackForSuggestions('faqs',faqObject,{})
+        let feedbackData = faq.historyFeedback ? faq.historyFeedback : {};
+        faqObject.feedbackData = this.prepareFeedbackForSuggestions('faqs',faqObject,feedbackData);
+        faqObject.feedbackData.interactionType = isSearch ?  'mybot' : 'assist';
         searchResponse.faqs.push(faqObject);
       }
       if (suggestions?.searchassist?.snippets?.length > 0) {
