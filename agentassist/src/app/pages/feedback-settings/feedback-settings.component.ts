@@ -45,11 +45,11 @@ export class FeedbackSettingsComponent implements OnInit {
       },
       {
         isEnabled: true,
-        key : "Other",
+        key : "Not Satisfactory",
       },
       {
         isEnabled: false,
-        key : "Others",
+        key : "Other",
       }
     ],
     'searchassist' : [
@@ -71,11 +71,11 @@ export class FeedbackSettingsComponent implements OnInit {
       },
       {
         isEnabled: true,
-        key : "Other",
+        key : "Not Satisfactory",
       },
       {
         isEnabled: false,
-        key : "Others",
+        key : "Other",
       }
     ],
     'faqs' : [
@@ -97,11 +97,11 @@ export class FeedbackSettingsComponent implements OnInit {
       },
       {
         isEnabled: true,
-        key : "Other",
+        key : "Not Satisfactory",
       },
       {
         isEnabled: false,
-        key : "Others",
+        key : "Other",
       }
     ]
   }
