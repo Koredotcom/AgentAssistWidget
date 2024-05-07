@@ -17,7 +17,7 @@ import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 })
 export class FeedbackSettingsComponent implements OnInit {
 
-  @ViewChildren(NgbDropdown) suggestionDropdowns: QueryList<NgbDropdown>;
+  @ViewChildren(NgbDropdown) suggestionDropdown: QueryList<NgbDropdown>;
 
   
   subs = new SubSink();
@@ -84,6 +84,7 @@ export class FeedbackSettingsComponent implements OnInit {
   showDuplicateWarning : boolean = false;
   showDisableWarning : boolean = false;
   selectedLang : string = 'en';
+  suggestionTitle: string = '';
 
   constructor(private workflowService : workflowService, private service : ServiceInvokerService,
     private authService : AuthService, private notificationService : NotificationService, private translate: TranslateService,
@@ -308,8 +309,11 @@ export class FeedbackSettingsComponent implements OnInit {
   }
 
   closeDropdown(){
-    this.suggestionDropdowns.forEach(dropdown => {
-      dropdown.close();
+    this.suggestionTitle = '';
+    this.suggestionDropdown?.forEach(dropdown => {
+      if(dropdown){
+        dropdown.close();
+      }
     });
   }
 
