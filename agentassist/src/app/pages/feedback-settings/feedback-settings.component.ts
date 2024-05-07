@@ -90,7 +90,21 @@ export class FeedbackSettingsComponent implements OnInit {
     private fb: FormBuilder, private localstorage : LocalStoreService, private cdRef : ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    this.subscribeEvents();
     this.getAgentAssistSettingsNew();
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
+
+  subscribeEvents(){
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((bot)=>{
+      if(bot){
+        this.isLoading = true;
+        this.getAgentAssistSettingsNew();
+      }
+    });
   }
 
   getAgentAssistSettingsNew() {

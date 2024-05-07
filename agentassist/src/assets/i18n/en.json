@@ -2474,5 +2474,6 @@
         "WARNING_MESSAGE": "Ensure that the domain URL does not contains “{{https}}” and does not have a forward slash “{{forwardSlash}}” at the end.",
         "FEEDBACK_ACCEPT_COMMENT" : "Display additional comment.",
         "DASHBOARD.CHANNEL" : "Channels",
-        "DASHBOARD.CHANNELS" : "All Channels"
+        "DASHBOARD.CHANNELS" : "All Channels",
+        "FEEDBACK_SUB_TITLE" : "Provides users with the flexibility to specify the range of options available for providing negative feedback"
 }
