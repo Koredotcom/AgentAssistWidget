@@ -84,6 +84,7 @@ export class FeedbackSettingsComponent implements OnInit {
   showDuplicateWarning : boolean = false;
   showDisableWarning : boolean = false;
   selectedLang : string = 'en';
+  suggestionTitle: string = '';
 
   constructor(private workflowService : workflowService, private service : ServiceInvokerService,
     private authService : AuthService, private notificationService : NotificationService, private translate: TranslateService,
@@ -308,6 +309,7 @@ export class FeedbackSettingsComponent implements OnInit {
   }
 
   closeDropdown(){
+    this.suggestionTitle = '';
     this.suggestionDropdowns.forEach(dropdown => {
       dropdown.close();
     });
