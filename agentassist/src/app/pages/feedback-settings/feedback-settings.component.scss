@@ -25,6 +25,15 @@
                 font-size: 14px;
             }
         }
+        .sub-title{
+            p {
+                color: var(--Gray-500, var(--Primary-Colors-Gray-500, #667085));
+                font-size: 12px;
+                font-weight: normal;
+                line-height: 18px;
+                margin: 0;
+            }
+        }
     }
     .body-feedback-data{
         flex: 1 1 auto;
