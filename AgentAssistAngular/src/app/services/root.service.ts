@@ -419,6 +419,8 @@ export class RootService {
           article.userInput = response.userInput;
           article.sourceMsgId = response.sourceMsgId || '';
           article.subType = article.subType;
+          article.intType = isSearch ?  'mybot' : 'assist';
+          article.feedbackData = this.prepareFeedbackForSuggestions('article',article,{})
         }
         for (let file of searchResponse.files) {
           file.showMoreButton = true;
@@ -428,6 +430,8 @@ export class RootService {
           file.userInput = response.userInput;
           file.sourceMsgId = response.sourceMsgId || '';
           file.subType = file.subType;
+          file.intType = isSearch ?  'mybot' : 'assist';
+          file.feedbackData = this.prepareFeedbackForSuggestions('file',file,{})
         }
       }
       for (let faq of faqArray) {
@@ -648,7 +652,8 @@ export class RootService {
       comment: feedbackData?.comment ? feedbackData?.comment : '',
       sourceMsgId : suggestion.sourceMsgId || '',
       query : suggestion.userInput,
-      suggestionType : suggestionType
+      suggestionType : suggestionType,
+      dialogPositionId : suggestion.positionId
     }
 
     if(suggestionType == 'answer'){
@@ -661,6 +666,10 @@ export class RootService {
       if(suggestion.internalInfo?.length > 0){
         renderResponse.answer += suggestion.internalInfo.join(' ');
       }
+    }else if(suggestionType == 'article' || suggestionType == 'file'){
+      renderResponse.title = suggestion.title;
+      renderResponse.answer = suggestion.content || '';
+      renderResponse.interactionType = suggestion.intType;
     }else if(suggestionType == 'faqs'){
       let answer = '';
       suggestion.answer.forEach(element => {

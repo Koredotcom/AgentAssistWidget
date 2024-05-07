@@ -87,6 +87,9 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
       }else if(this.feedbackData.suggestionType == 'faqs'){
         (this.feedbackForm as FormGroup)?.addControl('title', new FormControl(this.feedbackData.title));
         (this.feedbackForm as FormGroup)?.addControl('answer', new FormControl(this.feedbackData.answer));
+      }else if(this.feedbackData.suggestionType == 'article' || this.feedbackData.suggestionType == 'file'){
+        (this.feedbackForm as FormGroup)?.addControl('title', new FormControl(this.feedbackData.title));
+        (this.feedbackForm as FormGroup)?.addControl('answer', new FormControl(this.feedbackData.answer));
       }
 
     } else{
@@ -155,8 +158,8 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
       this.feedbackData.feedbackDetails.push(suggestion);
     }
     this.feedbackData.oldFeedback =  false;
+    this.feedbackData.comment = this.feedbackForm.get('comment').value;
     this.updateFeedbackForm(this.feedbackData);
-    // this.feedbackData.comment = this.feedbackForm.get('comment').value;
     // this.feedbackData = structuredClone(this.feedbackData);
     // this.submitFeedback();
   }

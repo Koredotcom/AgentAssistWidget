@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, SimpleChange, ViewChild } from '@angular/core';
-import { ProjConstants } from 'src/app/proj.const';
+import { FeebackConst, ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
@@ -18,6 +18,7 @@ export class FileSuggestionsComponent {
   
   subs = new SubSink();
   projConstants: any = ProjConstants;
+  feedbackConst : any = FeebackConst;
   filesList : any[] = [];
   viewCount = 2;
   moreClick = false;
@@ -95,5 +96,9 @@ export class FileSuggestionsComponent {
 
   openurlInBrowser(url){
     this.rootService.openurlInBrowser(url);
+  }
+
+  updateFeedbackProperties(data, fileObj) {
+    fileObj.feedbackData = data;
   }
 }
