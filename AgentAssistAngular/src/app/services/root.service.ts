@@ -102,7 +102,7 @@ export class RootService {
           },
           {
             isEnabled: false,
-            key : "Others",
+            key : "Not Satisfactory",
           }
         ]
       }
@@ -134,7 +134,7 @@ export class RootService {
           },
           {
             isEnabled: false,
-            key : "Others",
+            key : "Not Satisfactory",
           }
         ]
       }
@@ -166,7 +166,7 @@ export class RootService {
           },
           {
             isEnabled: false,
-            key : "Others",
+            key : "Not Satisfactory",
           }
         ]
       }
