@@ -83,12 +83,12 @@
                             top: -2px;
                         }
                         .value-data{
-                            background: #E6F8EF;
+                            background: #F3F4F6;
                             border-radius: 40px;
                             padding: 3px 5px;
                             font-weight: 600;
                             font-size: 10px;
-                            color: #026C3B;
+                            color: #777A80;
                             line-height: 12px;
                             display: flex;
                             align-items: center;
@@ -103,6 +103,10 @@
                             &.negtive{
                                 background: #FBECEF;
                                 color: #D9435F;
+                            }
+                            &.positive {
+                                background: #E6F8EF;
+                                color: #026C3B;
                             }
                         }
                     }
