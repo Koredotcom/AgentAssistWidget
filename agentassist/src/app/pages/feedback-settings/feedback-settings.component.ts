@@ -253,9 +253,9 @@ export class FeedbackSettingsComponent implements OnInit {
     }
     this.showCountWarningMsg = enableCount >= 5 ? true : false;
     this.showDuplicateWarning = duplicateName ? true : false;
-    this.showDisableWarning = !event.target.checked && zeroEnableStatus ? true : false;
+    // this.showDisableWarning = !event.target.checked && zeroEnableStatus ? true : false;
 
-    if(this.showCountWarningMsg || this.showDuplicateWarning || this.showDisableWarning){
+    if(this.showCountWarningMsg || this.showDuplicateWarning){
       event.target.checked = !event.target.checked;
     }else{
       suggestionSettings[index].isEnabled = event.target.checked;
