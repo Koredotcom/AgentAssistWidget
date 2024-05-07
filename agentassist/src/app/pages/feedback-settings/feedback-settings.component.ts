@@ -24,32 +24,87 @@ export class FeedbackSettingsComponent implements OnInit {
   clonedWidgetSettings:any = {};
   isLoading = false;
   feedbackForm : FormGroup;
-  sampleFeedbackData : any = [
-    {
-      isEnabled: true,
-      key : "Wrong Suggestion",
-    },
-    {
-      isEnabled: true,
-      key : "Incorrect Intent",
-    },
-    {
-      isEnabled: true,
-      key : "Accidental Click",
-    },
-    {
-      isEnabled: true,
-      key : "Time Taking",
-    },
-    {
-      isEnabled: true,
-      key : "Other",
-    },
-    {
-      isEnabled: false,
-      key : "Confusing",
-    }
-  ]
+  
+  sampleFeedbackData : any = {
+    'dialogs' : [
+      {
+        isEnabled: true,
+        key : "Wrong Suggestion",
+      },
+      {
+        isEnabled: true,
+        key : "Accidental Click",
+      },
+      {
+        isEnabled: true,
+        key : "Time Taking",
+      },
+      {
+        isEnabled: true,
+        key : "Confusing",
+      },
+      {
+        isEnabled: true,
+        key : "Not Satisfactory",
+      },
+      {
+        isEnabled: false,
+        key : "Other",
+      }
+    ],
+    'searchassist' : [
+      {
+        isEnabled: true,
+        key : "Wrong Suggestion",
+      },
+      {
+        isEnabled: true,
+        key : "Inaccurate Content",
+      },
+      {
+        isEnabled: true,
+        key : "Accidental Click",
+      },
+      {
+        isEnabled: true,
+        key : "Too Lengthy",
+      },
+      {
+        isEnabled: true,
+        key : "Not Satisfactory",
+      },
+      {
+        isEnabled: false,
+        key : "Other",
+      }
+    ],
+    'faqs' : [
+      {
+        isEnabled: true,
+        key : "Wrong Suggestion",
+      },
+      {
+        isEnabled: true,
+        key : "Inaccurate Content",
+      },
+      {
+        isEnabled: true,
+        key : "Irrelevant Content",
+      },
+      {
+        isEnabled: true,
+        key : "Confusing",
+      },
+      {
+        isEnabled: true,
+        key : "Not Satisfactory",
+      },
+      {
+        isEnabled: false,
+        key : "Other",
+      }
+    ]
+  }
 
   disableSaveButton : any = {
     dialogs : false,
@@ -69,13 +124,13 @@ export class FeedbackSettingsComponent implements OnInit {
     },
     {
       title : 'Answers Feedback',
-      desc : 'Define the feedback message provided to agents upon viewing of Answers.',
+      desc : 'Define the feedback message provided to agents upon viewing of Answers or Web Pages.',
       enableDesc : 'Enable Answers Feedback',
       bkey : 'searchassist'
     },
     {
       title : 'FAQ Feedback',
-      desc : 'Define the feedback message provided to agents upon viewing of FAQ',
+      desc : 'Define the feedback message provided to agents upon viewing of FAQ.',
       enableDesc : 'Enable FAQ Feedback',
       bkey : 'faqs'
     }
@@ -143,7 +198,7 @@ export class FeedbackSettingsComponent implements OnInit {
           isEnabled : true,
           acceptComment : true,
           negativeKeyWords : {
-            [this.selectedLang] : JSON.parse(JSON.stringify(this.sampleFeedbackData))
+            [this.selectedLang] : JSON.parse(JSON.stringify(this.sampleFeedbackData[obj.bkey]))
           }
         }
       }
@@ -157,14 +212,14 @@ export class FeedbackSettingsComponent implements OnInit {
         isEnabled: [isUpdate ? (obj?.dialogs?.isEnabled ?? true) : true],
         acceptComment: [isUpdate ? (obj?.dialogs?.acceptComment ?? true) : true],
         negativeKeyWords: this.fb.group({
-          [this.selectedLang] : [isUpdate ? obj?.dialogs?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData))]
+          [this.selectedLang] : [isUpdate ? obj?.dialogs?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData[obj.bkey]))]
         })
       }),
       faqs: this.fb.group({
         isEnabled: [isUpdate ? (obj?.faqs?.isEnabled ?? true) : true],
         acceptComment: [isUpdate ? (obj?.faqs?.acceptComment ?? true) : true],
         negativeKeyWords: this.fb.group({
-          [this.selectedLang] : [isUpdate ? obj?.faqs?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData))]
+          [this.selectedLang] : [isUpdate ? obj?.faqs?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData[obj.bkey]))]
         })
         
       }),
@@ -172,7 +227,7 @@ export class FeedbackSettingsComponent implements OnInit {
         isEnabled: [isUpdate ? (obj?.searchassist?.isEnabled ?? true) : true],
         acceptComment: [isUpdate ? (obj?.searchassist?.acceptComment ?? true) : true],
         negativeKeyWords: this.fb.group({
-          [this.selectedLang] : [isUpdate ? obj?.searchassist?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData))]
+          [this.selectedLang] : [isUpdate ? obj?.searchassist?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData[obj.bkey]))]
         })
       })
     })
