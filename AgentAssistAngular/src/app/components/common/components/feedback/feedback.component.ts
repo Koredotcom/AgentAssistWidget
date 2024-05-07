@@ -131,10 +131,14 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
       this.feedbackData.feedback = feedBackFlag;
       (this.feedbackForm.controls?.['feedback']).setValue(feedBackFlag);
       this.formTouched = false;
-      this.rootService.isUpdateFeedBackDetailsFlag = false;
       this.callAgentFeedbackUsage(); 
       this.feedbackData.oldFeedback = (feedBackFlag == this.feedbackConst.LIKE) ? true : false;
-    }    
+      if(feedBackFlag == this.feedbackConst.DISLIKE && this.dislikeList.length == 0 && !this.showComments){
+        this.rootService.isUpdateFeedBackDetailsFlag = true;
+      }else{
+        this.rootService.isUpdateFeedBackDetailsFlag = false;
+      }
+    }  
   }
 
   dislikeFeedbackArrowToggle(){
