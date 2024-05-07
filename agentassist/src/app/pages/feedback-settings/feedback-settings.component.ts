@@ -17,7 +17,7 @@ import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 })
 export class FeedbackSettingsComponent implements OnInit {
 
-  @ViewChildren(NgbDropdown) suggestionDropdowns: QueryList<NgbDropdown>;
+  @ViewChildren(NgbDropdown) suggestionDropdown: QueryList<NgbDropdown>;
 
   
   subs = new SubSink();
@@ -310,8 +310,10 @@ export class FeedbackSettingsComponent implements OnInit {
 
   closeDropdown(){
     this.suggestionTitle = '';
-    this.suggestionDropdowns.forEach(dropdown => {
-      dropdown.close();
+    this.suggestionDropdown?.forEach(dropdown => {
+      if(dropdown){
+        dropdown.close();
+      }
     });
   }
 
