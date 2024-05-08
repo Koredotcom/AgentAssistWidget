@@ -2,7 +2,7 @@
     <div class="header-data">
         <div class="title">
             <p>Feedback Settings</p>
-            <i class="icon-sa-info"></i>
+            <!-- <i class="icon-sa-info"></i> -->
         </div>
         <div class="sub-title">
             <p>{{'FEEDBACK_SUB_TITLE' | translate}}</p>
@@ -69,7 +69,7 @@
                                     <div class="table-form-repeat-list">
                                         <div class="name-feedback">{{item.key}}</div>
                                         <div class="edit-feedback-action" ngbDropdown container="body" #suggestionDropdown="ngbDropdown">
-                                            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle (click)="suggestionTitle.value = item.key">
+                                            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle (click)="suggestionTitle = item.key">
                                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                                     <path d="M2.39686 15.0964C2.43515 14.7518 2.45429 14.5795 2.50642 14.4185C2.55268 14.2756 2.61802 14.1397 2.70069 14.0143C2.79388 13.873 2.91645 13.7504 3.1616 13.5053L14.1669 2.50005C15.0873 1.57957 16.5797 1.57957 17.5002 2.50005C18.4207 3.42052 18.4207 4.91291 17.5002 5.83338L6.49493 16.8386C6.24978 17.0838 6.12721 17.2063 5.9859 17.2995C5.86054 17.3822 5.72457 17.4475 5.5817 17.4938C5.42067 17.5459 5.24838 17.5651 4.9038 17.6033L2.0835 17.9167L2.39686 15.0964Z" stroke="#667085" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
                                                 </svg>
@@ -81,11 +81,11 @@
                                                             <!-- <i class="icon-sa-help" tooltipClass="tooltip-global-styles" ngbTooltip="Use lowercase for word characters"></i> -->
                                                         </div>
                                                         <div class="kr-sg-input-text">                                            
-                                                            <input type="text" class="input-text" maxlength="25" #suggestionTitle (keyup.enter)="submitSuggestion(suggestionTitle.value, i, obj.bkey);">
+                                                            <input type="text" class="input-text" maxlength="25" [(ngModel)]="suggestionTitle" (keyup.enter)="submitSuggestion(suggestionTitle, i, obj.bkey);" [ngModelOptions]="{standalone: true}">
                                                         </div>
                                                         <div class="hint-info-input-text-block">
                                                             <p>{{'FEEDBACK_SUGGESTION_SUBTEXT' | translate}}</p>
-                                                            <div class="count-char">{{item?.key?.length}}/25</div>
+                                                            <div class="count-char">{{suggestionTitle?.length}}/25</div>
                                                         </div>
                                                     </div>
                                                     <!-- <div class="check-icon-block" (click)="submitSuggestion(suggestionTitle.value, i, obj.bkey);">

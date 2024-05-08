@@ -17,39 +17,94 @@ import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 })
 export class FeedbackSettingsComponent implements OnInit {
 
-  @ViewChildren(NgbDropdown) suggestionDropdowns: QueryList<NgbDropdown>;
+  @ViewChildren(NgbDropdown) suggestionDropdown: QueryList<NgbDropdown>;
 
   
   subs = new SubSink();
   clonedWidgetSettings:any = {};
   isLoading = false;
   feedbackForm : FormGroup;
-  sampleFeedbackData : any = [
-    {
-      isEnabled: true,
-      key : "Wrong Suggestion",
-    },
-    {
-      isEnabled: true,
-      key : "Incorrect Intent",
-    },
-    {
-      isEnabled: true,
-      key : "Accidental Click",
-    },
-    {
-      isEnabled: true,
-      key : "Time Taking",
-    },
-    {
-      isEnabled: true,
-      key : "Other",
-    },
-    {
-      isEnabled: false,
-      key : "Confusing",
-    }
-  ]
+  
+  sampleFeedbackData : any = {
+    'dialogs' : [
+      {
+        isEnabled: true,
+        key : "Wrong Suggestion",
+      },
+      {
+        isEnabled: true,
+        key : "Accidental Click",
+      },
+      {
+        isEnabled: true,
+        key : "Time Taking",
+      },
+      {
+        isEnabled: true,
+        key : "Confusing",
+      },
+      {
+        isEnabled: true,
+        key : "Not Satisfactory",
+      },
+      {
+        isEnabled: false,
+        key : "Other",
+      }
+    ],
+    'searchassist' : [
+      {
+        isEnabled: true,
+        key : "Wrong Suggestion",
+      },
+      {
+        isEnabled: true,
+        key : "Inaccurate Content",
+      },
+      {
+        isEnabled: true,
+        key : "Accidental Click",
+      },
+      {
+        isEnabled: true,
+        key : "Too Lengthy",
+      },
+      {
+        isEnabled: true,
+        key : "Not Satisfactory",
+      },
+      {
+        isEnabled: false,
+        key : "Other",
+      }
+    ],
+    'faqs' : [
+      {
+        isEnabled: true,
+        key : "Wrong Suggestion",
+      },
+      {
+        isEnabled: true,
+        key : "Inaccurate Content",
+      },
+      {
+        isEnabled: true,
+        key : "Irrelevant Content",
+      },
+      {
+        isEnabled: true,
+        key : "Confusing",
+      },
+      {
+        isEnabled: true,
+        key : "Not Satisfactory",
+      },
+      {
+        isEnabled: false,
+        key : "Other",
+      }
+    ]
+  }
 
   disableSaveButton : any = {
     dialogs : false,
@@ -84,6 +139,7 @@ export class FeedbackSettingsComponent implements OnInit {
   showDuplicateWarning : boolean = false;
   showDisableWarning : boolean = false;
   selectedLang : string = 'en';
+  suggestionTitle: string = '';
 
   constructor(private workflowService : workflowService, private service : ServiceInvokerService,
     private authService : AuthService, private notificationService : NotificationService, private translate: TranslateService,
@@ -142,7 +198,7 @@ export class FeedbackSettingsComponent implements OnInit {
           isEnabled : true,
           acceptComment : true,
           negativeKeyWords : {
-            [this.selectedLang] : JSON.parse(JSON.stringify(this.sampleFeedbackData))
+            [this.selectedLang] : JSON.parse(JSON.stringify(this.sampleFeedbackData[obj.bkey]))
           }
         }
       }
@@ -156,14 +212,14 @@ export class FeedbackSettingsComponent implements OnInit {
         isEnabled: [isUpdate ? (obj?.dialogs?.isEnabled ?? true) : true],
         acceptComment: [isUpdate ? (obj?.dialogs?.acceptComment ?? true) : true],
         negativeKeyWords: this.fb.group({
-          [this.selectedLang] : [isUpdate ? obj?.dialogs?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData))]
+          [this.selectedLang] : [isUpdate ? obj?.dialogs?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData[obj.bkey]))]
         })
       }),
       faqs: this.fb.group({
         isEnabled: [isUpdate ? (obj?.faqs?.isEnabled ?? true) : true],
         acceptComment: [isUpdate ? (obj?.faqs?.acceptComment ?? true) : true],
         negativeKeyWords: this.fb.group({
-          [this.selectedLang] : [isUpdate ? obj?.faqs?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData))]
+          [this.selectedLang] : [isUpdate ? obj?.faqs?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData[obj.bkey]))]
         })
         
       }),
@@ -171,7 +227,7 @@ export class FeedbackSettingsComponent implements OnInit {
         isEnabled: [isUpdate ? (obj?.searchassist?.isEnabled ?? true) : true],
         acceptComment: [isUpdate ? (obj?.searchassist?.acceptComment ?? true) : true],
         negativeKeyWords: this.fb.group({
-          [this.selectedLang] : [isUpdate ? obj?.searchassist?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData))]
+          [this.selectedLang] : [isUpdate ? obj?.searchassist?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData[obj.bkey]))]
         })
       })
     })
@@ -308,8 +364,11 @@ export class FeedbackSettingsComponent implements OnInit {
   }
 
   closeDropdown(){
-    this.suggestionDropdowns.forEach(dropdown => {
-      dropdown.close();
+    this.suggestionTitle = '';
+    this.suggestionDropdown?.forEach(dropdown => {
+      if(dropdown){
+        dropdown.close();
+      }
     });
   }
 
