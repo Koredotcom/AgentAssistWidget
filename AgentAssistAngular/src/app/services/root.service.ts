@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { ProjConstants, RenderResponseType } from '../proj.const';
+import { FeebackConst, ProjConstants, RenderResponseType } from '../proj.const';
 import { TemplateRenderClassService } from './template-render-class.service';
 import * as $ from 'jquery';
 import { EVENTS } from '../helpers/events';
@@ -77,101 +77,19 @@ export class RootService {
   defaultFeedbackSettings : any = {
     "dialogs": {
       "isEnabled": true,
-      "acceptComment": true,
-      "negativeKeyWords": {
-        "en" : [
-          {
-            isEnabled: true,
-            key : "Wrong Suggestion",
-          },
-          {
-            isEnabled: true,
-            key : "Accidental Click",
-          },
-          {
-            isEnabled: true,
-            key : "Time Taking",
-          },
-          {
-            isEnabled: true,
-            key : "Confusing",
-          },
-          {
-            isEnabled: true,
-            key : "Not Satisfactory",
-          },
-          {
-            isEnabled: false,
-            key : "Other",
-          }
-        ]
-      }
+      "acceptComment": true
     },
     "faqs": {
       "isEnabled": true,
-      "acceptComment": true,
-      "negativeKeyWords": {
-        "en" : [
-          {
-            isEnabled: true,
-            key : "Wrong Suggestion",
-          },
-          {
-            isEnabled: true,
-            key : "Inaccurate Content",
-          },
-          {
-            isEnabled: true,
-            key : "Irrelevant Content",
-          },
-          {
-            isEnabled: true,
-            key : "Confusing",
-          },
-          {
-            isEnabled: true,
-            key : "Not Satisfactory",
-          },
-          {
-            isEnabled: false,
-            key : "Other",
-          }
-        ]
-      }
+      "acceptComment": true
     },
     "searchassist": {
       "isEnabled": true,
-      "acceptComment": true,
-      "negativeKeyWords": {
-        "en" : [
-          {
-            isEnabled: true,
-            key : "Wrong Suggestion",
-          },
-          {
-            isEnabled: true,
-            key : "Inaccurate Content",
-          },
-          {
-            isEnabled: true,
-            key : "Accidental Click",
-          },
-          {
-            isEnabled: true,
-            key : "Too Lengthy",
-          },
-          {
-            isEnabled: true,
-            key : "Not Satisfactory",
-          },
-          {
-            isEnabled: false,
-            key : "Other",
-          }
-        ]
-      }
+      "acceptComment": true
     }
   }
+
+  defaultSuggestionObj : any = FeebackConst.DEFAULT_SUGGESTION;
 
   lastSourceMsgId : string = '';
 
@@ -275,6 +193,7 @@ export class RootService {
     private dirService : DirService) {
     // this.chatWindowInstance = new chatWindow();
     this.aaHelpers = new agentAssistHelpers();
+    this.updateDefaultFeedbackData();
   }
 
   getConnectionDetails() {
@@ -1042,6 +961,23 @@ export class RootService {
     }else{
       window.open(url, '_blank');
     }
+  }
+
+  updateDefaultFeedbackData(){
+    for(let key in this.defaultFeedbackSettings){
+      this.defaultFeedbackSettings[key].negativeKeyWords = {};
+      Object.keys(this.defaultSuggestionObj[key])?.forEach(language => {
+        let langArray = [];
+        this.defaultSuggestionObj[key][language]?.forEach((element, index) => {
+          let obj : any = {
+            isEnabled : index <= 4 ? true : false,
+            key : element
+          }
+          langArray.push(obj);
+        });
+        this.defaultFeedbackSettings[key].negativeKeyWords[language] = langArray;
+      })
+    } 
   }
 
 }

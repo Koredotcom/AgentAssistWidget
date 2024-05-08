@@ -53,7 +53,7 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
     let appState = this.localStorageService.getLocalStorageState();   
     let language = appState[this.feedbackData.connectionDetails.conversationId][storageConst.LANGUAGE];
     let suggestionList = (this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords[language]) ? 
-    this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords[language] : this.rootService.defaultFeedbackSettings[this.feedbackType]?.negativeKeyWords['en'];
+    this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords[language] : this.rootService.defaultFeedbackSettings[this.feedbackType]?.negativeKeyWords[language];
     suggestionList?.forEach(element => {
       if(element.isEnabled){
         this.dislikeList.push(element.key);
