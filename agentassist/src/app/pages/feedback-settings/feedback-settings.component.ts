@@ -124,7 +124,7 @@ export class FeedbackSettingsComponent implements OnInit {
     },
     {
       title : 'Answers Feedback',
-      desc : 'Define the feedback message provided to agents upon viewing of Answers or Web Pages.',
+      desc : 'Define the feedback message provided to agents upon viewing of an Answers or Web Pages.',
       enableDesc : 'Enable Answers Feedback',
       bkey : 'searchassist'
     },
