@@ -31,7 +31,7 @@
             <div class="more-links-actions">
               <a class="moreText" role="button" aria-expanded="false" *ngIf="rootService?.numOfLines !== -1 && snippetContent?.scrollHeight > rootService.scrollHeight">
                 <span class="more-text" *ngIf="extMore"
-                  (click)="extMore = !extMore">{{'MORE_TEXT' | translate}}</span>
+                  (click)="extMore = !extMore;handleMoreClickEvent(false, snippet)">{{'MORE_TEXT' | translate}}</span>
                 <span class="less-text" *ngIf="!extMore"
                   (click)="extMore = !extMore">{{'LESS_TEXT' | translate}}</span>
               </a>
@@ -53,7 +53,7 @@
               <div class="more-links-actions">
                 <a class="moreText" role="button" aria-expanded="false" *ngIf="rootService?.numOfLines !== -1 && snippetContent1?.scrollHeight > rootService.scrollHeight">
                   <span class="more-text" *ngIf="intMore"
-                    (click)="intMore = !intMore">{{'MORE_TEXT' | translate}}</span>
+                    (click)="intMore = !intMore;handleMoreClickEvent(true,snippet)">{{'MORE_TEXT' | translate}}</span>
                   <span class="less-text" *ngIf="!intMore"
                     (click)="intMore = !intMore">{{'LESS_TEXT' | translate}}</span>
                 </a>
@@ -71,7 +71,7 @@
               <ng-container *ngFor="let source of snippet.sources;let ii = index">
                 <div class="source-tag" *ngIf="source.url" (mouseover)="hoverOnSource(ii+1, 'ext', i)" (mouseleave)="mouseLeave()">
                   <span *ngIf="snippet.isActCit">{{ii+1}}</span>
-                  <a (click)="openurlInBrowser(source.url)" title="{{source.title}}">{{source?.title || 'Know More'}}</a>
+                  <a (click)="openurlInBrowser(source.url, snippet)" title="{{source.title}}">{{source?.title || 'Know More'}}</a>
                 </div>
               </ng-container>
               <!-- <div class="thumbs-feedback-info">

@@ -53,7 +53,7 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
     let appState = this.localStorageService.getLocalStorageState();   
     let language = appState[this.feedbackData.connectionDetails.conversationId][storageConst.LANGUAGE];
     let suggestionList = (this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords[language]) ? 
-    this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords[language] : this.rootService.defaultNegSuggestionList;
+    this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords[language] : this.rootService.defaultFeedbackSettings[this.feedbackType]?.negativeKeyWords['en'];
     suggestionList?.forEach(element => {
       if(element.isEnabled){
         this.dislikeList.push(element.key);
@@ -85,6 +85,9 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
         (this.feedbackForm as FormGroup)?.addControl('isFromGeneratedSummary', new FormControl(this.feedbackData.isFromGeneratedSummary));
         (this.feedbackForm as FormGroup)?.addControl('answerType', new FormControl(this.feedbackData.answerType));
       }else if(this.feedbackData.suggestionType == 'faqs'){
+        (this.feedbackForm as FormGroup)?.addControl('title', new FormControl(this.feedbackData.title));
+        (this.feedbackForm as FormGroup)?.addControl('answer', new FormControl(this.feedbackData.answer));
+      }else if(this.feedbackData.suggestionType == 'article' || this.feedbackData.suggestionType == 'file'){
         (this.feedbackForm as FormGroup)?.addControl('title', new FormControl(this.feedbackData.title));
         (this.feedbackForm as FormGroup)?.addControl('answer', new FormControl(this.feedbackData.answer));
       }
@@ -131,10 +134,14 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
       this.feedbackData.feedback = feedBackFlag;
       (this.feedbackForm.controls?.['feedback']).setValue(feedBackFlag);
       this.formTouched = false;
-      this.rootService.isUpdateFeedBackDetailsFlag = false;
       this.callAgentFeedbackUsage(); 
       this.feedbackData.oldFeedback = (feedBackFlag == this.feedbackConst.LIKE) ? true : false;
-    }    
+      if(feedBackFlag == this.feedbackConst.DISLIKE && this.dislikeList.length == 0 && !this.showComments){
+        this.rootService.isUpdateFeedBackDetailsFlag = true;
+      }else{
+        this.rootService.isUpdateFeedBackDetailsFlag = false;
+      }
+    }  
   }
 
   dislikeFeedbackArrowToggle(){
@@ -151,8 +158,8 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
       this.feedbackData.feedbackDetails.push(suggestion);
     }
     this.feedbackData.oldFeedback =  false;
+    this.feedbackData.comment = this.feedbackForm.get('comment').value;
     this.updateFeedbackForm(this.feedbackData);
-    // this.feedbackData.comment = this.feedbackForm.get('comment').value;
     // this.feedbackData = structuredClone(this.feedbackData);
     // this.submitFeedback();
   }
