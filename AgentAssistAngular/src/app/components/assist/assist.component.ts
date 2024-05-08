@@ -588,6 +588,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         }
       }
       let submitSummaryRequestParams = {
+        botId: this.connectionDetails?.autoBotId,
         conversationId : this.connectionDetails.conversationId,
         summary : [
           {
