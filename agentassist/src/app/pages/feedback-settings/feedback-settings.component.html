@@ -60,12 +60,12 @@
                             <div class="add-message-block-right">
                                 <div class="kr-sg-dropdowns" ngbDropdown>
                                     <div class="dropdown dropdown-open">
-                                        <button class="lang-btn" ngbDropdownToggle>{{languageSelectionList[selectedLang[obj.bkey]]}} <i
+                                        <button class="lang-btn" ngbDropdownToggle>{{selectedLang[obj.bkey] | titlecase}} <i
                                                 class="icon-sa-arrow-down m-r-8"></i></button>
                                         <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                             <div class="scroll-ul">
                                                 <li ngbDropdownItem *ngFor="let item of languageSelectionList | keyvalue : asIsOrder" (click)="updateLanguageSelection(obj.bkey,item.key)">
-                                                    <a [ngClass]="{'selected' : selectedLang[obj.bkey] == item.key}"> {{item.value}}</a>
+                                                    <a> {{item.value}}</a>
                                                     <!-- <i class="icon-coaching--check" *ngIf="selectedLang[obj.bkey] == item.key"></i></li> -->
                                             </div>
                                         </ul>
