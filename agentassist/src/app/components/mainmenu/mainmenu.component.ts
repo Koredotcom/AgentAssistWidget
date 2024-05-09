@@ -278,9 +278,9 @@ export class MainmenuComponent implements OnInit, OnDestroy {
     };
     this.subs.sink = this.workflowService.seedData$.subscribe(res => {
       this.subs.sink = this.service.invoke('get.channelData', params).subscribe(channeType => {
-        res.deflectSeedData = channeType.deflectSeedData;
-        res.smartAssistSeedData = channeType.smartAssistSeedData;
-        res.agentAssistSeedData = channeType.agentAssistSeedData;
+        // res.deflectSeedData = channeType.deflectSeedData;
+        // res.smartAssistSeedData = channeType.smartAssistSeedData;
+        res.agentAssistSeedData.agentAssistSipURI = channeType?.agentAssistSeedData?.agentAssistSipURI || res.agentAssistSeedData.agentAssistSipURI;
       })
     })
   }
