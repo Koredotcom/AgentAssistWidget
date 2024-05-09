@@ -162,7 +162,7 @@ export const FeebackConst = {
           zh_cn : ["错误建议", "意外点击", "耗时", "令人困惑", "不令人满意", "其他"]
         },
         'searchassist' : {
-          en : ["Wrong Suggestion", "Inaccurate Content", "Accidental Click", "Too Lengthy", "Not Satisfactory", "Other"],
+          en : ["Wrong Suggestion", "Inaccurate Content", "Time Taking", "Too Lengthy", "Not Satisfactory", "Other"],
           ar : ["اقتراح خاطئ", "محتوى غير دقيق", "يستغرق وقتًا", "طويل جدًا", "غير مرضٍ", "آخر"],
           de : ["Falscher Vorschlag", "Unrichtiger Inhalt", "Zeitaufwendig", "Zu lang", "Nicht zufriedenstellend", "Andere"],
           es : ["Sugerencia incorrecta", "Contenido inexacto", "Lleva tiempo", "Demasiado largo", "No satisfactorio", "Otro"],
