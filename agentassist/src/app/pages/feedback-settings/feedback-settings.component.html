@@ -60,7 +60,7 @@
                             <div class="add-message-block-right">
                                 <div class="kr-sg-dropdowns" ngbDropdown>
                                     <div class="dropdown dropdown-open">
-                                        <button class="lang-btn" ngbDropdownToggle>{{selectedLang[obj.bkey] | titlecase}} <i
+                                        <button class="lang-btn" ngbDropdownToggle>{{(selectedLang[obj.bkey] === 'zh_cn' ? 'Zh-Cn' : (selectedLang[obj.bkey]) | titlecase)}} <i
                                                 class="icon-sa-arrow-down m-r-8"></i></button>
                                         <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                             <div class="scroll-ul">
