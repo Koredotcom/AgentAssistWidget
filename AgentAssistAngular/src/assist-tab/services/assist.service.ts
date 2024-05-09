@@ -108,6 +108,9 @@ export class AssistService {
   parseWelcomeMsgResponse(uuids,welcomeMsgResponse){
     let template = '';
     let index = 0;
+    if(!welcomeMsgResponse?.buttons){
+      return;
+    }
     for(let item of welcomeMsgResponse?.buttons){
       template += `<div class="agent-utt">
       <div class="title-data" id="displayData-${uuids + index}">${item.value}</div>
