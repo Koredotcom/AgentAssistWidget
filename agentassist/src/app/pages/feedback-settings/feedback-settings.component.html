@@ -57,15 +57,30 @@
                                     <h1>{{obj.enableDesc}}</h1>
                                 </div>
                             </div>
-                            <div class="kr-sg-checkbox"*ngIf="feedbackForm?.get(obj.bkey)?.get('isEnabled').value">
-                                <input id="{{obj.bkey}}-111" class="checkbox-custom" type="checkbox"  formControlName="acceptComment" [checked]="feedbackForm?.get(obj.bkey)?.get('acceptComment').value" (change)="toggleFeedbackComment($event, obj.bkey)">
-                                <label for="{{obj.bkey}}-111" class="checkbox-custom-label">{{'FEEDBACK_ACCEPT_COMMENT' | translate}}</label>
-                            </div> 
+                            <div class="add-message-block-right">
+                                <div class="kr-sg-dropdowns" ngbDropdown>
+                                    <div class="dropdown dropdown-open">
+                                        <button class="lang-btn" ngbDropdownToggle>{{languageSelectionList[selectedLang[obj.bkey]]}} <i
+                                                class="icon-sa-arrow-down m-r-8"></i></button>
+                                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                            <div class="scroll-ul">
+                                                <li ngbDropdownItem *ngFor="let item of languageSelectionList | keyvalue : asIsOrder" (click)="updateLanguageSelection(obj.bkey,item.key)">
+                                                    <a [ngClass]="{'selected' : selectedLang[obj.bkey] == item.key}"> {{item.value}}</a>
+                                                    <!-- <i class="icon-coaching--check" *ngIf="selectedLang[obj.bkey] == item.key"></i></li> -->
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="kr-sg-checkbox"*ngIf="feedbackForm?.get(obj.bkey)?.get('isEnabled').value">
+                                    <input id="{{obj.bkey}}-111" class="checkbox-custom" type="checkbox"  formControlName="acceptComment" [checked]="feedbackForm?.get(obj.bkey)?.get('acceptComment').value" (change)="toggleFeedbackComment($event, obj.bkey)">
+                                    <label for="{{obj.bkey}}-111" class="checkbox-custom-label">{{'FEEDBACK_ACCEPT_COMMENT' | translate}}</label>
+                                </div> 
+                            </div>
                         </div>
                         <ng-container *ngIf="feedbackForm?.get(obj.bkey)?.get('isEnabled').value">
                             <div class="divider"></div>
-                            <div class="table-feedback-form-data" *ngIf="feedbackForm?.get(obj.bkey)?.get('negativeKeyWords')?.get(selectedLang)?.value?.length > 0">
-                                <ng-container *ngFor="let item of feedbackForm?.get(obj.bkey)?.get('negativeKeyWords')?.get(selectedLang)?.value; let i = index">
+                            <div class="table-feedback-form-data" *ngIf="feedbackForm?.get(obj.bkey)?.get('negativeKeyWords')?.get(selectedLang[obj.bkey])?.value?.length > 0">
+                                <ng-container *ngFor="let item of feedbackForm?.get(obj.bkey)?.get('negativeKeyWords')?.get(selectedLang[obj.bkey])?.value; let i = index">
                                     <div class="table-form-repeat-list">
                                         <div class="name-feedback">{{item.key}}</div>
                                         <div class="edit-feedback-action" ngbDropdown container="body" #suggestionDropdown="ngbDropdown">

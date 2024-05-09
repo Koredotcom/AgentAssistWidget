@@ -134,16 +134,42 @@
                     gap: 10px;
                     justify-content: space-between;
                     margin-bottom: 16px;
-                    .kr-sg-checkbox {
+                    .add-message-block-right {
+                        display: flex;
+                        gap: 8px;
+                        align-items: center;
                         flex-shrink: 0;
-                        padding: 0;
-                        margin: 0;
-                        .checkbox-custom {
-                            + .checkbox-custom-label{
-                                color: var(--Gray-700, var(--Primary-Colors-Gray-700, #344054));
-                                font-size: 14px;
-                                font-weight: 500;
-                                line-height: 20px;
+                        width: 50%;
+                        justify-content: end;
+                        .lang-btn {
+                            color: var(--Gray-900, #101828);
+                            font-size: 12px;
+                            font-weight: 400;
+                            line-height: 18px;
+                            border: 0px;
+                            padding: 0px;
+                            background-color: transparent;
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                        }
+                        .kr-sg-dropdowns {
+                            width: auto;
+                            .content-menu{
+                                width: 250px !important;
+                            }
+                        }
+                        .kr-sg-checkbox {
+                            flex-shrink: 0;
+                            padding: 0;
+                            margin: 0;
+                            .checkbox-custom {
+                                + .checkbox-custom-label{
+                                    color: var(--Gray-700, var(--Primary-Colors-Gray-700, #344054));
+                                    font-size: 14px;
+                                    font-weight: 500;
+                                    line-height: 20px;
+                                }
                             }
                         }
                     }
