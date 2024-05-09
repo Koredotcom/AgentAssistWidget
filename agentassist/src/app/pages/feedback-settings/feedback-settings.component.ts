@@ -24,94 +24,12 @@ export class FeedbackSettingsComponent implements OnInit {
   clonedWidgetSettings:any = {};
   isLoading = false;
   feedbackForm : FormGroup;
-  
-  sampleFeedbackData : any = {
-    'dialogs' : [
-      {
-        isEnabled: true,
-        key : "Wrong Suggestion",
-      },
-      {
-        isEnabled: true,
-        key : "Accidental Click",
-      },
-      {
-        isEnabled: true,
-        key : "Time Taking",
-      },
-      {
-        isEnabled: true,
-        key : "Confusing",
-      },
-      {
-        isEnabled: true,
-        key : "Not Satisfactory",
-      },
-      {
-        isEnabled: false,
-        key : "Other",
-      }
-    ],
-    'searchassist' : [
-      {
-        isEnabled: true,
-        key : "Wrong Suggestion",
-      },
-      {
-        isEnabled: true,
-        key : "Inaccurate Content",
-      },
-      {
-        isEnabled: true,
-        key : "Accidental Click",
-      },
-      {
-        isEnabled: true,
-        key : "Too Lengthy",
-      },
-      {
-        isEnabled: true,
-        key : "Not Satisfactory",
-      },
-      {
-        isEnabled: false,
-        key : "Other",
-      }
-    ],
-    'faqs' : [
-      {
-        isEnabled: true,
-        key : "Wrong Suggestion",
-      },
-      {
-        isEnabled: true,
-        key : "Inaccurate Content",
-      },
-      {
-        isEnabled: true,
-        key : "Irrelevant Content",
-      },
-      {
-        isEnabled: true,
-        key : "Confusing",
-      },
-      {
-        isEnabled: true,
-        key : "Not Satisfactory",
-      },
-      {
-        isEnabled: false,
-        key : "Other",
-      }
-    ]
-  }
 
   disableSaveButton : any = {
     dialogs : false,
     faqs : false,
     searchassist : false
   }
-  noFormchange : boolean = false;
   selAcc = this.localstorage.getSelectedAccount();
   iId = this.authService?.isLoadingOnSm && this.selAcc && this.selAcc?.instanceBots?.length ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
 
