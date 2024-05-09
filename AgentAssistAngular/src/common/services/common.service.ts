@@ -677,7 +677,7 @@ export class CommonService {
     let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [])
     if (suggestions.searchassist && Object.keys(suggestions.searchassist).length > 0) {
       for(let source in suggestions.searchassist){
-        if(source != "snippets"){
+        if(source != "snippets" && source != 'searchRequestId'){
           suggestions.searchassist[source] = this.checkEmptyObjectsInArray(suggestions.searchassist[source]);
           if(Object.keys(suggestions.searchassist[source]).length > 0){
             searchResponse.articles.push.apply(searchResponse.articles,suggestions.searchassist[source]);
