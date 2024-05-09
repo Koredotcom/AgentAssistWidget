@@ -213,7 +213,7 @@ export class WebSocketService {
     let welcomeMessageParams: any = {
       'waitTime': 2000,
       'id': this.connectionDetails.conversationId,
-      "isSendWelcomeMessage": shouldProcessResponse,
+      "isSendWelcomeMessage": this.localStorageService.getWelcomeMessageSent() === true ? false : true,
       'agentassistInfo' : agent_user_details,
       'botId': this.connectionDetails.botId,
       'sendMenuRequest': true,
@@ -240,6 +240,7 @@ export class WebSocketService {
     }
     welcomeMessageParams['allQueryParams'] = {...this.connectionDetails};
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
+    this.localStorageService.setWelcomeMessageSent(true);
   }
 
   loaderOnTimer() {

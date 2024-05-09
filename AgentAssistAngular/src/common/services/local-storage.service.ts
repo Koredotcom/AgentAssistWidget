@@ -124,4 +124,20 @@ export class LocalStorageService {
     return false;
   }
 
+  setWelcomeMessageSent(val){
+    let conversationId = this.connectionDetails.conversationId;
+    let appState = this.getLocalStorageState();
+    appState[conversationId]['isSendWelcomeMessage'] = val;
+    localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
+  }
+
+  getWelcomeMessageSent(){
+    let conversationId = this.connectionDetails.conversationId;
+    let appState = this.getLocalStorageState();
+    if(appState && appState[conversationId] && this.emptyObjectCheckPipe.transform(appState[conversationId]['isSendWelcomeMessage'])){
+      return true;
+    }
+    return false;
+  }
+
 }
