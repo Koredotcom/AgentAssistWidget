@@ -456,9 +456,11 @@ export class RootService {
               searchResponse.files.push.apply(searchResponse.files, suggestions.searchassist[source]);
             }
           }
-          suggestions?.searchassist[source]?.forEach((item : any) => {
-            item.subType = source;
-          });
+          if(source && source != 'searchRequestId'){
+            suggestions?.searchassist[source]?.forEach((item : any) => {
+              item.subType = source;
+            });
+          }
         }    
         for (let article of searchResponse.articles) {
           article.showMoreButton = true;
