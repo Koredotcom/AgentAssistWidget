@@ -132,7 +132,7 @@ export class AskCustomerComponent {
     if (this.rootService.activeTab != this.projConstants.MYBOT) {
       this.inputName = supportLanguage.AWAITING;
       this.automation.toggleOverride = false;
-      this.automation.entityValue = '';
+      this.automation.entityValue = this.automation.errorCount ? this.automation.entityValue : '';
       if(this.rootService.OverRideMode && this.rootService.proactiveModeStatus && !this.rootService.manualAssistOverrideMode){
         this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
       }
