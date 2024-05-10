@@ -963,21 +963,22 @@ export class RootService {
     }
   }
 
-  updateDefaultFeedbackData(){
-    for(let key in this.defaultFeedbackSettings){
-      this.defaultFeedbackSettings[key].negativeKeyWords = {};
-      Object.keys(this.defaultSuggestionObj[key])?.forEach(language => {
-        let langArray = [];
-        this.defaultSuggestionObj[key][language]?.forEach((element, index) => {
-          let obj : any = {
-            isEnabled : index <= 4 ? true : false,
-            key : element
-          }
-          langArray.push(obj);
-        });
-        this.defaultFeedbackSettings[key].negativeKeyWords[language] = langArray;
-      })
-    } 
+
+  updateDefaultFeedbackData() {
+    const categories = Object.keys(this.defaultFeedbackSettings);
+
+    categories.forEach(category => {
+      const languages = Object.keys(this.defaultSuggestionObj[category]);
+      this.defaultFeedbackSettings[category].negativeKeyWords = {};
+
+      languages.forEach(language => {
+        const langArray = this.defaultSuggestionObj[category][language].map((element, index) => ({
+          isEnabled: index <= 4,
+          key: element
+        }));
+        this.defaultFeedbackSettings[category].negativeKeyWords[language] = langArray;
+      });
+    });
   }
 
 }
