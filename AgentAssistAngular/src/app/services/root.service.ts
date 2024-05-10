@@ -444,7 +444,7 @@ export class RootService {
       searchResponse.files = [];
       if (suggestions.searchassist && Object.keys(suggestions.searchassist)?.length > 0) {
         for (let source in suggestions.searchassist) {
-          if (source != "snippets" && source != "file") {
+          if (source != "snippets" && source != "file" && source != 'searchRequestId') {
             suggestions.searchassist[source] = this.checkEmptyObjectsInArray(suggestions.searchassist[source]);
             if (suggestions.searchassist[source] && Object.keys(suggestions.searchassist[source])?.length > 0) {
               searchResponse.articles.push.apply(searchResponse.articles, suggestions.searchassist[source]);
@@ -456,9 +456,11 @@ export class RootService {
               searchResponse.files.push.apply(searchResponse.files, suggestions.searchassist[source]);
             }
           }
-          suggestions?.searchassist[source]?.forEach((item : any) => {
-            item.subType = source;
-          });
+          if(source && source != 'searchRequestId'){
+            suggestions?.searchassist[source]?.forEach((item : any) => {
+              item.subType = source;
+            });
+          }
         }    
         for (let article of searchResponse.articles) {
           article.showMoreButton = true;
