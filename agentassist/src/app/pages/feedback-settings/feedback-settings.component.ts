@@ -24,94 +24,12 @@ export class FeedbackSettingsComponent implements OnInit {
   clonedWidgetSettings:any = {};
   isLoading = false;
   feedbackForm : FormGroup;
-  
-  sampleFeedbackData : any = {
-    'dialogs' : [
-      {
-        isEnabled: true,
-        key : "Wrong Suggestion",
-      },
-      {
-        isEnabled: true,
-        key : "Accidental Click",
-      },
-      {
-        isEnabled: true,
-        key : "Time Taking",
-      },
-      {
-        isEnabled: true,
-        key : "Confusing",
-      },
-      {
-        isEnabled: true,
-        key : "Not Satisfactory",
-      },
-      {
-        isEnabled: false,
-        key : "Other",
-      }
-    ],
-    'searchassist' : [
-      {
-        isEnabled: true,
-        key : "Wrong Suggestion",
-      },
-      {
-        isEnabled: true,
-        key : "Inaccurate Content",
-      },
-      {
-        isEnabled: true,
-        key : "Accidental Click",
-      },
-      {
-        isEnabled: true,
-        key : "Too Lengthy",
-      },
-      {
-        isEnabled: true,
-        key : "Not Satisfactory",
-      },
-      {
-        isEnabled: false,
-        key : "Other",
-      }
-    ],
-    'faqs' : [
-      {
-        isEnabled: true,
-        key : "Wrong Suggestion",
-      },
-      {
-        isEnabled: true,
-        key : "Inaccurate Content",
-      },
-      {
-        isEnabled: true,
-        key : "Irrelevant Content",
-      },
-      {
-        isEnabled: true,
-        key : "Confusing",
-      },
-      {
-        isEnabled: true,
-        key : "Not Satisfactory",
-      },
-      {
-        isEnabled: false,
-        key : "Other",
-      }
-    ]
-  }
 
   disableSaveButton : any = {
     dialogs : false,
     faqs : false,
     searchassist : false
   }
-  noFormchange : boolean = false;
   selAcc = this.localstorage.getSelectedAccount();
   iId = this.authService?.isLoadingOnSm && this.selAcc && this.selAcc?.instanceBots?.length ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
 
@@ -138,8 +56,24 @@ export class FeedbackSettingsComponent implements OnInit {
   showCountWarningMsg : boolean = false;
   showDuplicateWarning : boolean = false;
   showDisableWarning : boolean = false;
-  selectedLang : string = 'en';
+  selectedLang : any = {
+    'dialogs' : 'en',
+    'faqs' : 'en',
+    'searchassist' : 'en'
+  };
   suggestionTitle: string = '';
+  supportedLanguageSeedData : any = {};
+  languageSelectionList : any = {
+    'en' : 'English (En)',
+    'ar' : 'Arabic (Ar)',
+    'de' : 'German (De)',
+    'es' : 'Espanol (Es)',
+    'fr' : 'French (Fr)',
+    'it' : 'Italian (It)',
+    'ja' : 'Japanese (Ja)',
+    'ko' : 'Korean (Ko)',
+    'zh_cn': 'Chinese (Simplified) - Zh-Cn'
+  }
 
   constructor(private workflowService : workflowService, private service : ServiceInvokerService,
     private authService : AuthService, private notificationService : NotificationService, private translate: TranslateService,
@@ -147,7 +81,6 @@ export class FeedbackSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscribeEvents();
-    this.getAgentAssistSettingsNew();
   }
 
   ngOnDestroy() {
@@ -160,6 +93,20 @@ export class FeedbackSettingsComponent implements OnInit {
         this.isLoading = true;
         this.getAgentAssistSettingsNew();
       }
+    });
+
+    this.subs.sink = this.workflowService.seedData$.subscribe(res => {      
+      if(res?.agentAssistSeedData?.supportedLanguages){
+        this.feedbackList.forEach((element : any) => {
+          this.supportedLanguageSeedData[element.bkey] = {};
+          Object.keys(res?.agentAssistSeedData?.supportedLanguages).forEach((key) => {
+            if(res?.agentAssistSeedData?.supportedLanguages[key]?.negativeKeyWords){
+              this.supportedLanguageSeedData[element.bkey][key] = JSON.parse(JSON.stringify(res?.agentAssistSeedData?.supportedLanguages[key]?.negativeKeyWords[element.bkey]));
+            }
+          });
+        });
+      }
+      this.getAgentAssistSettingsNew();      
     });
   }
 
@@ -193,12 +140,15 @@ export class FeedbackSettingsComponent implements OnInit {
   checkBackwardCompatibility(res){
     if(!res?.agentAssistSettings?.feedback || Object.keys(res?.agentAssistSettings?.feedback)?.length <= 0){
       res.agentAssistSettings.feedback = {};
-      for(let obj of this.feedbackList){
+    }
+    for(let obj of this.feedbackList){
+      if(!res.agentAssistSettings?.feedback[obj.bkey] || !res.agentAssistSettings?.feedback[obj.bkey]?.negativeKeyWords || !res.agentAssistSettings?.feedback[obj.bkey]?.negativeKeyWords[this.selectedLang[obj.bkey]]){
+        let langSpecificList = this.prepareLanguageSpecificList(this.supportedLanguageSeedData[obj.bkey]['en']);
         res.agentAssistSettings.feedback[obj.bkey] = {
           isEnabled : true,
           acceptComment : true,
           negativeKeyWords : {
-            [this.selectedLang] : JSON.parse(JSON.stringify(this.sampleFeedbackData[obj.bkey]))
+            'en' : JSON.parse(JSON.stringify(langSpecificList))
           }
         }
       }
@@ -206,32 +156,40 @@ export class FeedbackSettingsComponent implements OnInit {
     return res;
   }
 
-  createOrUpdateFeedbackForm(obj, isUpdate?){
+  getNegativeKeywordsForEachLang(type, obj, isUpdate) {
+    let returnObj = {};
+    if (isUpdate && obj && obj[type]?.negativeKeyWords && Object.keys(obj[type]?.negativeKeyWords)?.length) {
+        let languageKeys = Object.keys(obj[type].negativeKeyWords);
+        returnObj = languageKeys.reduce((acc, lang) => {
+            acc[lang] = [obj[type].negativeKeyWords[lang]]; // Change to array
+            return acc;
+        }, {});
+    } else {
+        returnObj = this.prepareLanguageSpecificList(this.supportedLanguageSeedData[type][this.selectedLang]);
+    }
+    return returnObj;
+}
+
+createOrUpdateFeedbackForm(obj, isUpdate?) {
     this.feedbackForm = this.fb.group({
-      dialogs: this.fb.group({
-        isEnabled: [isUpdate ? (obj?.dialogs?.isEnabled ?? true) : true],
-        acceptComment: [isUpdate ? (obj?.dialogs?.acceptComment ?? true) : true],
-        negativeKeyWords: this.fb.group({
-          [this.selectedLang] : [isUpdate ? obj?.dialogs?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData[obj.bkey]))]
+        dialogs: this.fb.group({
+            isEnabled: [isUpdate ? (obj?.dialogs?.isEnabled ?? true) : true],
+            acceptComment: [isUpdate ? (obj?.dialogs?.acceptComment ?? true) : true],
+            negativeKeyWords: this.fb.group(this.getNegativeKeywordsForEachLang('dialogs', obj, isUpdate))
+        }),
+        faqs: this.fb.group({
+            isEnabled: [isUpdate ? (obj?.faqs?.isEnabled ?? true) : true],
+            acceptComment: [isUpdate ? (obj?.faqs?.acceptComment ?? true) : true],
+            negativeKeyWords: this.fb.group(this.getNegativeKeywordsForEachLang('faqs', obj, isUpdate))
+
+        }),
+        searchassist: this.fb.group({
+            isEnabled: [isUpdate ? (obj?.searchassist?.isEnabled ?? true) : true],
+            acceptComment: [isUpdate ? (obj?.searchassist?.acceptComment ?? true) : true],
+            negativeKeyWords: this.fb.group(this.getNegativeKeywordsForEachLang('searchassist', obj, isUpdate))
         })
-      }),
-      faqs: this.fb.group({
-        isEnabled: [isUpdate ? (obj?.faqs?.isEnabled ?? true) : true],
-        acceptComment: [isUpdate ? (obj?.faqs?.acceptComment ?? true) : true],
-        negativeKeyWords: this.fb.group({
-          [this.selectedLang] : [isUpdate ? obj?.faqs?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData[obj.bkey]))]
-        })
-        
-      }),
-      searchassist: this.fb.group({
-        isEnabled: [isUpdate ? (obj?.searchassist?.isEnabled ?? true) : true],
-        acceptComment: [isUpdate ? (obj?.searchassist?.acceptComment ?? true) : true],
-        negativeKeyWords: this.fb.group({
-          [this.selectedLang] : [isUpdate ? obj?.searchassist?.negativeKeyWords[this.selectedLang] ?? [] : JSON.parse(JSON.stringify(this.sampleFeedbackData[obj.bkey]))]
-        })
-      })
-    })
-  }
+    });
+}
 
   saveFeedbackForm(type){
     this.disableSaveButton[type] = true;
@@ -298,7 +256,7 @@ export class FeedbackSettingsComponent implements OnInit {
 
 
   toggleMsgEnable(event, index, type){
-    let suggestionSettings = this.feedbackForm?.get(type)?.get('negativeKeyWords')?.get(this.selectedLang)?.value;
+    let suggestionSettings = this.feedbackForm?.get(type)?.get('negativeKeyWords')?.get(this.selectedLang[type])?.value;
 
     let enableCount = 0;
     let duplicateName = false;
@@ -329,14 +287,14 @@ export class FeedbackSettingsComponent implements OnInit {
       event.target.checked = !event.target.checked;
     }else{
       suggestionSettings[index].isEnabled = event.target.checked;
-      this.feedbackForm?.get(type)?.get('negativeKeyWords')?.get(this.selectedLang).patchValue(suggestionSettings);    
+      this.feedbackForm?.get(type)?.get('negativeKeyWords')?.get(this.selectedLang[type]).patchValue(suggestionSettings);    
     }
   }
 
   submitSuggestion(value, index, type){
     
     let duplicateName = false;
-    let suggestionSettings = this.feedbackForm?.get(type)?.get('negativeKeyWords')?.get(this.selectedLang).value;
+    let suggestionSettings = this.feedbackForm?.get(type)?.get('negativeKeyWords')?.get(this.selectedLang[type]).value;
 
     
 
@@ -359,7 +317,7 @@ export class FeedbackSettingsComponent implements OnInit {
     if(!duplicateName){
       this.closeDropdown();
       suggestionSettings[index].key = value;
-      this.feedbackForm?.get(type)?.get('negativeKeyWords')?.get(this.selectedLang).patchValue(suggestionSettings);
+      this.feedbackForm?.get(type)?.get('negativeKeyWords')?.get(this.selectedLang[type]).patchValue(suggestionSettings);
     }
   }
 
@@ -372,4 +330,29 @@ export class FeedbackSettingsComponent implements OnInit {
     });
   }
 
+  updateLanguageSelection(type, lang) {    
+    this.selectedLang[type] = lang;
+    let negativeKeyWordsGroup = this.feedbackForm.get(type)?.get('negativeKeyWords') as FormGroup;
+    if (!negativeKeyWordsGroup.get(lang)) {
+      let langSpecificList = this.prepareLanguageSpecificList(this.supportedLanguageSeedData[type][lang]);
+      negativeKeyWordsGroup.addControl(lang, this.fb.control(langSpecificList));
+      this.feedbackForm.updateValueAndValidity();
+    }
+  }
+
+  prepareLanguageSpecificList(seedData){
+   seedData = JSON.parse(JSON.stringify(seedData));
+   let acc =  seedData.reduce((accumulator, item, index) => {    
+      accumulator.push({ 
+        isEnabled : index <= 4 ? true : false,
+        key : item
+       });
+      return accumulator;
+    }, [])
+    return acc
+  }
+
+  asIsOrder(a, b) {
+    return 1;
+  }
 }
