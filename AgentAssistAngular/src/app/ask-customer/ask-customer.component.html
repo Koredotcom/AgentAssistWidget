@@ -35,7 +35,7 @@
         <div class="input-block-entity">
             <p container="body" ngbTooltip="{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}">{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}</p>
             <p>:</p>
-            <input type="text" #entityInput aria-label="Input" [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
+            <input type="text" [ngClass]="{'disable-input' : automation.disableInput || assistAutomationData?.endAutomation}" #entityInput aria-label="Input" [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
             [(ngModel)]="automation.entityValue" [disabled]="automation.disableInput || assistAutomationData?.endAutomation" (keyup.enter)="handleAgentInput()" [placeholder]="automation?.tab === projConstants.ASSIST ? automation.placeholderText : ''">
             <div class="border-outline"></div>
             <div class="actions-inputs">
@@ -76,7 +76,7 @@
     <div class="entity-mesage-data listView" [ngClass]="{'error-no-reponse' : automation.errorCount, 'grayout-msgs-node' : automation.grayOut}">
         <div class="input-block-entity">
             <p>{{automation.entityName}} : </p>
-            <input type="text" #listEntityInput aria-label="Input" [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
+            <input type="text" [ngClass]="{'disable-input' : automation.disableInput}" #listEntityInput aria-label="Input" [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
              [(ngModel)]="automation.entityValue" [disabled]="automation.disableInput" (keyup.enter)="handleAgentInput()" [placeholder]="automation?.tab === projConstants.ASSIST ? automation.placeholderText : ''">
             <div class="border-outline"></div>
             <div class="actions-inputs">                
