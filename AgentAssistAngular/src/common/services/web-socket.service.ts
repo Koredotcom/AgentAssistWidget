@@ -41,6 +41,8 @@ export class WebSocketService {
     'request_resolution_comments' : true,
   }
 
+  transcriptReload : boolean = true;
+
 
   constructor(private handleSubjectService : HandleSubjectService,
     private sanitizeHTMLPipe : SanitizeHtmlPipe, private localStorageService : LocalStorageService,
@@ -69,7 +71,18 @@ export class WebSocketService {
         this.socketConnectFlag$.next(true);
         window._agentAssistSocketEventListener = true;
       }
+      this.updateTranscript();
     });
+    // this._agentAsisstSocket.on("disconnect", () => {
+    //   this.transcriptReload = false;
+    // })
+  }
+
+  updateTranscript(){
+    this.transcriptReload = false;
+    setTimeout(() => {
+      this.transcriptReload = true;
+    }, 0);
   }
 
   emitEvents(eventName,requestParams) {

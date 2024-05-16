@@ -1,4 +1,4 @@
-<div class="transcipt-only-calls-data" id="scriptContainer" (wheel)="onScroll()">
+<div class="transcipt-only-calls-data" id="scriptContainer" (wheel)="onScroll()" *ngIf="websocketService.transcriptReload">
     <div class="data-contnet">
       <ng-container *ngIf = "sourceDesktop !== 'smartassist-color-scheme'">
         <app-user-bot-history [hidden]="!commonService.isCallConversation || !historyResponse || historyResponse.length == 0 || !scrollEventDone"></app-user-bot-history>

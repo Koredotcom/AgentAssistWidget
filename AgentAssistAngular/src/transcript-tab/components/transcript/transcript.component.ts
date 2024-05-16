@@ -24,7 +24,7 @@ export class TranscriptComponent implements OnInit {
   @Output() newButtonScrollClickEvents = new EventEmitter();
   @Output() scrollToTranscriptElement = new EventEmitter();
 
-  constructor(private websocketService: WebSocketService,
+  constructor(public websocketService: WebSocketService,
     private handleSubjectService: HandleSubjectService,
     public commonService: CommonService,
     private formatAMPMPipe: FormatAMPMPipe,
