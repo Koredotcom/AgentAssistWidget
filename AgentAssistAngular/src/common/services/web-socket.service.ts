@@ -29,6 +29,7 @@ export class WebSocketService {
   checkListResponse$ = new Subject<any>();
   realtimeSentimeResponse$ = new Subject<any>();
   sendCheckListOpened$ = new Subject<any>();
+  updateTranscript$ = new Subject<any>();
   isWelcomeResonse = false;
   LoaderTimeout: number = 10000;
 
@@ -40,7 +41,6 @@ export class WebSocketService {
     'agent_assist_agent_request' : true,
     'request_resolution_comments' : true,
   }
-
 
   constructor(private handleSubjectService : HandleSubjectService,
     private sanitizeHTMLPipe : SanitizeHtmlPipe, private localStorageService : LocalStorageService,
@@ -69,7 +69,12 @@ export class WebSocketService {
         this.socketConnectFlag$.next(true);
         window._agentAssistSocketEventListener = true;
       }
+      this.updateTranscript();
     });
+  }
+
+  updateTranscript(){
+    this.updateTranscript$.next(true);
   }
 
   emitEvents(eventName,requestParams) {
