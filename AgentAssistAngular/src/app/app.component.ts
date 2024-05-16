@@ -104,15 +104,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.subs.sink = this.webSocketService.makeActiveOrPassiveAgent$.subscribe((data)=>{
       let appState = this.localStorageService.getLocalStorageState();
-      let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
-      if(internalTransferDetails?.participant?.identity === data?.participant?.identity){
-        data.isDisabled = data?.allowAccess;
-        this.rootService.disableWidget(data?.allowAccess);
+      if(appState[this.rootService.connectionDetails.conversationId] && appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER]){
+        let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
+        if(internalTransferDetails?.participant?.identity === data?.participant?.identity){
+          data.isDisabled = data?.allowAccess;
+          this.rootService.disableWidget(data?.allowAccess);
+        }
+        let storageObject: any = {
+          [storageConst.INTERNAL_TRANSFER]: data
+        }
+        this.localStorageService.setLocalStorageItem(storageObject);
       }
-      let storageObject: any = {
-        [storageConst.INTERNAL_TRANSFER]: data
-      }
-      this.localStorageService.setLocalStorageItem(storageObject);
     })
   }
 
