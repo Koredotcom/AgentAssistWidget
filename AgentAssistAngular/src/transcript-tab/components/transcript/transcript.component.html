@@ -10,7 +10,31 @@
         <div class="transcript-history-scroll-bottom" *ngIf="commonService.isCallConversation && historyResponse && historyResponse?.length" id="transcriptTabHistoryText">
             <span>{{transcriptScrollTopText}}</span>
         </div>
-        <app-transcript-history></app-transcript-history>
+        <app-transcript-history (transcriptHistoryResponse)="userAgentHistoryResponse($event)"></app-transcript-history>
+        <ng-container *ngFor="let obj of runtimeTranscripts;let i = index; trackBy:transcriptRespType;">
+            <ng-container *ngIf="obj.msgType == 'user'">
+                <div class="other-user-bubble" id="otherBubble-{{obj.uuid}}">
+                    <div class="name-with-time">
+                        <div class="u-name">{{parsedCustomData?.userName || parsedCustomData?.fName + this.parsedCustomData?.lName || 'Customer'}}</div>
+                        <div class="u-time">{{obj.timeStr}}</div>
+                    </div>
+                    <div class="bubble-data" id="userInputMsg">
+                        <div class="b-text">{{obj.value}}</div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="obj.msgType == 'agent'">
+                <div class="current-user-bubble" id="currentUser-{{uuid}}">
+                    <div class="name-with-time">
+                        <div class="u-time">{{obj.timeStr}}</div>
+                        <div class="u-name">You</div>
+                    </div>
+                    <div class="bubble-data">
+                        <div class="b-text">{{obj.value}}</div>
+                    </div>
+                    </div>
+            </ng-container>
+        </ng-container>
     </div>
     <div class="scroll-bottom-show-btn hiddenEle">
         <button id="scrollButtonTranscript" class="scroll-bottom-btn">
@@ -18,7 +42,7 @@
             <span>Scroll to bottom</span>
         </button>
     </div>
-    <div class="empty-data-no-agents" *ngIf="!historyResponse || !historyResponse?.length">
+    <div class="empty-data-no-agents" *ngIf="(!historyResponse || !historyResponse?.length) && !transcriptHistory">
         <div class="title">Voice based utterances from customer and Agent will render on this screen.</div>
     </div>
 </div>
