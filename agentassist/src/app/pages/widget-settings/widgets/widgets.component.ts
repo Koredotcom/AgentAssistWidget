@@ -8,7 +8,7 @@ import { SubSink } from 'subsink';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { ApiAdvancedModelComponent } from '../api-advanced-model/api-advanced-model.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   AbstractControl,
   FormBuilder,
@@ -24,6 +24,8 @@ import {
 })
 export class WidgetsComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') inputRef: ElementRef<HTMLInputElement>;
+  @ViewChild('myDropdown', { static: false }) myDropdown: NgbDropdown;
+  @ViewChild('conversationTransferDropdown') conversationTransferDropdown : NgbDropdown;
 
   isUnifiedPlatform: boolean = false;
   disableButtons: boolean =  false;
@@ -39,12 +41,13 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   imgPreview: any;
   isLoading = false;
   isApiConfigured= true;
+  currentAdvMode = '';
   iId = this.authService?.isLoadingOnSm && this.selAcc && this.selAcc?.instanceBots?.length ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
   channels = ['chat', 'voice', 'email'];
   landingPageTabs = {
     transcript: 'Transcription',
     assist: 'Assist',
-    library: 'Library',
+    library: 'Search',
     mybot: 'My bot'
   }
   multiLanguageList = {
@@ -76,18 +79,30 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   knowledgeAIFormGroup: FormGroup;
   agentAssistformDirty : boolean = false;
   isV3= false;
+  currentBot: any;
+  useCases = {};
+  linkedBotObjs:any = [];
+  loaded = false;
+  botId = this.workflowService.getCurrentBtSmt(true)._id;
   searchResultArr = [
       {type: 'alwaysShow', text: 'Always show', tooltip:'Display Knowledge AI results consistently, regardless of Bot Intents.'}, 
       {type: 'isXODependant', text: 'Show with XO results',tooltip:'Display Knowledge AI results when relevant Bot events (Dialog Tasks and FAQs) are detected.'}, 
       {type: 'fallback', text: 'Show as a Fallback event', tooltip:'Display Knowledge AI Results as a fallback when no Bot Intents are identified.'}
   ];
   AutoSuggestions = [{type:'On'}, {type: 'Off'}];
+  summaryModelType = [
+    {type:'kore', text:'OOTB Kore Summarization', tooltip:'The default Kore summarization model will be used'}, 
+    {type:'customTask',text:'Custom Dialog Task', tooltip:'Ensure that this dialog task has only one message node.This message node will hold summarization content.'}]
   URLBehaviour = [
       {type: 'defaultBehaviour', text: 'Default System Behaviour', tooltip: "The AgentAssist widget will use the system's default governing approach for URL opening."},
       {type: 'sendPostEvent', text: 'Post Event', tooltip:'The AgentAssist widget will open URLs based on the consumed "AgentAssist.UrlClickedMessage" post event.'}]
   integration = [
     {type:'basic', desc: 'Use Default Knowledge AI Configurations'}, 
     {type:'advance', desc:'Configure How You Want To Use Knowledge AI'}
+  ]
+  dialogTaskConfig = [
+    {type: 'default', title: 'Default System Behaviour', desc: 'Use Default System Behaviour'},
+    {type: 'advance', title: 'Advance Mode', desc: 'Define your custom script logic'}
   ]
   dataFormat = [
     {type:'Plain string', tooltip:'Transmit as plain text', value : 'plainString'},
@@ -97,10 +112,22 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     {type:'Documentation', tooltip: 'Control accessibility to doc and customise URLs.', value : 'documentation'}, 
     {type:'FAQ', tooltip:'Control accessibility to FAQ and customise URLs.', value : 'faq'},
     {type:'Kore Academy', tooltip:'Control accessibility to Kore Academy', value : 'koreAcademy'}
-  ]
+  ];
+  conversationTransferTypes = [
+    { type: 'cold', tooltip: 'When Agent 1 transfer call to Agent 2', title: 'Cold Transfer'},
+    { type: 'warm', tooltip: 'When Agent 1 invites Agent 2 to conference call' , title: 'Warm Transfer'}
+  ];
+  afterTransferSettings = [
+    {type:'scrollToTop', text : 'Scroll up to First Message'},
+    {type:'default', text : ' Continue from the Last Message'},
+    {type:'task', text : 'Configure Dialog Task'},
+  ];
   advancedModeScript: string = '';
+  advanceDialogTaskModeScript: string = '';
   selectedChannel = 'chat';
   selectedKAIChannel = 'chat';
+  currentSelectedBotDialogs: any = [];
+  selectedDialog: any;
   isCoachingDisable = true;
   agentAssistSeedData : any = {};
   disableSaveButton : any = {
@@ -178,6 +205,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           language : [isUpdate ? (obj.languageSettings?.language??'en') : 'en'],
           allowAgentSwitch : [isUpdate ? (obj.languageSettings?.allowAgentSwitch??false) : false],
         }),
+        dialogsDisplayNameParser : this.fb.group({
+          mode : [isUpdate ? (obj.dialogsDisplayNameParser?.mode ??'default'): 'default']
+        }),
         showHelp : this.fb.group({
           isEnabled : [isUpdate ? (obj.showHelp?.isEnabled ?? true) : true],
           documentation : this.fb.group({
@@ -208,6 +238,13 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       (((this.agentAssistFormGroup.get('agentAssistSettings') as FormGroup).get('urlOpenBehaviour')as FormGroup)
       .get('urlOpenType') as FormControl)
       .patchValue(urlOpenType);
+
+      if(obj.dialogsDisplayNameParser?.mode === 'advance') {
+        ((this.agentAssistFormGroup.get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup).addControl('config', this.fb.group({
+          script: [obj.dialogsDisplayNameParser.config.script || '']
+        }))
+        this.advanceDialogTaskModeScript = (obj.dialogsDisplayNameParser?.config?.script.length > 0) ? obj.dialogsDisplayNameParser?.config?.script : '';
+      }
     }
 
     if(this.agentAssistFormGroup){
@@ -237,6 +274,14 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isUnifiedPlatform = this.workflowService?.isUnifiedPlatform();
+    // this.initLoad(this.workflowService.getCurrentBt(true));
+    // if(this.isUnifiedPlatform) {
+      this.initLoad(this.workflowService.getCurrentBtSmt(true));
+    // } else {
+    //   this.initLoad(this.workflowService.getCurrentBt(true));
+    // }
+
     this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
       this.isCoachingDisable = isEnabled;
     });
@@ -255,9 +300,39 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     
     this.createOrUpdateAgSettingsForm();
     this.createOrUpdateSearchForm();
-    this.isUnifiedPlatform = this.workflowService?.isUnifiedPlatform();
     this.isLoading = true;
-    this.getAgentAssistSettingsNew();
+    this.subscribeEvents();
+  }
+
+  subscribeEvents(){
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((bot)=>{
+      if(bot){
+        this.currentSelectedBotDialogs = [];
+        this.useCases = {};
+        this.linkedBotObjs = [];
+        this.initLoad(bot);
+      }
+    });
+  }
+
+  closeDropdown(from) {
+    if (from === 'summaryModel' && this.myDropdown) {
+      this.myDropdown.close();
+    } else if(from === 'convosTransfer' && this.conversationTransferDropdown) {
+      this.conversationTransferDropdown.close();
+    }
+  }
+
+  initLoad(bot?) {
+    this.currentBot = bot;
+    if(this.currentBot.type === 'universalbot') {
+      this.getLinkedBots();  
+      } else {
+        this.botId = this.currentBot._id;
+        this.getAgentAssistSettingsNew();
+        this.getUseCases(this.botId);
+        this.currentSelectedBotDialogs = [];
+    }
   }
 
   // Get AgentAssist Settings in the Get API Call
@@ -457,22 +532,56 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   // API Configuration for the SearchAssist in Advanced Mode
   apiAdvancedMode() {
+    let scriptFrom = {'value': '',
+                      'emitType': ''};
     this.modalRef = this.modalService.open(ApiAdvancedModelComponent, { centered: true, keyboard: false, windowClass: 'api-advance-mode', backdrop: 'static' });
-    this.modalRef.componentInstance.data = this.advancedModeScript;
-    this.modalRef.result.then(emitedValue => {
-      this.advancedModeScript = emitedValue;
-      ((((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
-       .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
-      ((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup).get('integrations').updateValueAndValidity();
-      if(this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value?.searchAssistConfig?.integrations?.type === 'advance' && emitedValue?.length !== 0) {
-        this.knowledgeAIFormGroup.markAsDirty();
-        // this.isApiConfigured = true;
-        this.advancedModeScript = '';
-      } else {
-        // this.isApiConfigured = false;
-        this.advancedModeScript = '';
+    if(this.currentAdvMode === 'advance') {
+      scriptFrom.value = this.advancedModeScript;
+      scriptFrom.emitType = this.currentAdvMode;
+      this.modalRef.componentInstance.data = scriptFrom;
+      this.modalRef.result.then(emitedValue => {
+        this.advancedModeScript = emitedValue;
+          ((((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
+        .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
+          ((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup).get('integrations').updateValueAndValidity();
+          if(this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value?.searchAssistConfig?.integrations?.type === 'advance' && emitedValue?.length !== 0) {
+            this.knowledgeAIFormGroup.markAsDirty();
+            // this.isApiConfigured = true;
+          }
+          this.currentAdvMode = '';
+          this.advancedModeScript = '';
+          scriptFrom.value = '';
+          scriptFrom.emitType = '';
+      });
+    } else if(this.currentAdvMode === 'advancemode') {
+      scriptFrom.value = this.advanceDialogTaskModeScript;
+      scriptFrom.emitType = this.currentAdvMode;
+      this.modalRef.componentInstance.data = scriptFrom;
+      this.modalRef.result.then(emitedValue => {
+        
+        try {
+          if(JSON.parse(emitedValue)) {
+            this.advanceDialogTaskModeScript = emitedValue;
+            (((((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup)
+            .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
+            if(this.agentAssistFormGroup?.value?.agentAssistSettings?.dialogsDisplayNameParser?.mode === 'advance' && emitedValue?.length !== 0) {
+              this.knowledgeAIFormGroup.markAsDirty();
+              this.isApiConfigured = true;
+            } 
+            this.currentAdvMode = '';
+            this.advanceDialogTaskModeScript = '';
+            scriptFrom.value = '';
+            scriptFrom.emitType = '';
+            }
+        } catch (err) {
+          this.isApiConfigured = false;
+          this.advanceDialogTaskModeScript = emitedValue;
+        }
+        
       }
-    });
+      )};
+      
+    
   }
 
   // update the AutoSuggestions keys
@@ -490,6 +599,20 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // open script editor for the DialogTask Display Name config Mode
+  dialogConfigType(e, configType) {
+    this.advanceDialogTaskModeScript = this.agentAssistFormGroup?.value?.agentAssistSettings?.dialogsDisplayNameParser?.config?.script;
+    this.isApiConfigured = true;
+    (((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup).removeControl('config');
+    if(configType.type === 'advance') {
+      this.currentAdvMode =  'advancemode';
+      (((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup).addControl('config',this.fb.group({
+        script: ['',[Validators.required]],
+      }));
+      this.apiAdvancedMode();
+    }
+  }
+
   // open script editor for the Advanced Mode
   selectedIntegrationType(e, integrate) {
     this.advancedModeScript = this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value?.searchAssistConfig?.integrations?.config?.script;
@@ -497,6 +620,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
     .removeControl('config');
     if(integrate.type === 'advance') {
+      this.currentAdvMode = integrate.type;
       ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
       .addControl('config', this.fb.group({
         script: ['',[Validators.required]],
@@ -528,18 +652,31 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   commongSettingsForm(isUpdate, obj){
-    let settingsForm = {
+    let settingsForm : any = {
       agentAssistWidgetEnabled: [isUpdate ? (obj.agentAssistWidgetEnabled ?? false) : false],
       isProactiveEnabled: [isUpdate ? (obj.isProactiveEnabled ?? false) : false],
       isAgentCoachingEnabled: [isUpdate ? (obj.isAgentCoachingEnabled ?? false) : false],
       isAgentResponseEnabled: [isUpdate ? (obj.isAgentResponseEnabled ?? false) : true],
       isAgentResponseCopyEnabled: [isUpdate ? (obj.isAgentResponseCopyEnabled ?? false) : true],
+      transferConfigs : this.fb.group({
+        cold: this.fb.group({
+          isEnabled: [isUpdate ? (obj.transferConfigs?.cold?.isEnabled ?? false) : false],
+          actionType: [isUpdate ? (obj.transferConfigs?.cold?.actionType ?? 'default') : 'default']
+        }),
+        warm: this.fb.group({
+          isEnabled: [isUpdate ? (obj.transferConfigs?.warm?.isEnabled ?? false) : false],
+          actionType: [isUpdate ? (obj.transferConfigs?.warm?.actionType ?? 'default') : 'default']
+        })
+      }),
       transcripts : this.fb.group({
         isEnabled : [isUpdate ? (obj.transcripts?.isEnabled??true) : true],
       }),
       summarization: this.fb.group({
         isEnabled : [isUpdate ? (obj.summarization?.isEnabled??false) : false],
-        canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false]
+        canSubmit : [isUpdate ? (obj.summarization?.canSubmit??false) : false],
+        model: this.fb.group({
+          type: [isUpdate ? (obj?.summarization?.model?.type ?? 'kore') : 'kore']
+        })
       }),
       isAgentPlaybookEnabled: [isUpdate ? (obj.isAgentPlaybookEnabled ?? false) : false],
       isWidgetLandingEnabled: this.fb.group({
@@ -548,6 +685,56 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }
     if(isUpdate && obj?.isWidgetLandingEnabled?.tab === "transcript" && !obj?.transcript?.isEnabled){
       this.selectTab(this.selectedChannel ,'assist');
+    }
+    if(isUpdate && obj?.summarization?.model?.type === 'customTask') {
+
+      ((settingsForm.summarization as FormGroup).get('model') as FormGroup).addControl('customTaskConfig', this.fb.group({
+        usecaseId: obj?.summarization?.model?.customTaskConfig?.usecaseId,
+        refId: obj?.summarization?.model?.customTaskConfig?.refId,
+        dialogId: obj?.summarization?.model?.customTaskConfig?.dialogId,
+        taskRefId: obj?.summarization?.model?.customTaskConfig?.taskRefId,
+        linkedBotId: obj?.summarization?.model?.customTaskConfig?.linkedBotId
+      }))
+      if(this.currentBot.type === 'universalbot' && obj?.summarization?.model?.customTaskConfig?.linkedBotId !== '') {
+        this.selectCustomBot( obj?.summarization?.model?.customTaskConfig?.linkedBotId, isUpdate, obj, 'customTask'); 
+      }else {
+        if(this.currentSelectedBotDialogs.lenght <= 0) {
+          this.getUseCases(this.currentBot._id, isUpdate, obj, 'customTask')
+        }
+      }
+    }
+
+    if(isUpdate) {
+      if( obj?.transferConfigs?.cold?.actionType === 'task') {
+        ((settingsForm.transferConfigs as FormGroup).get('cold') as FormGroup).addControl('taskConfigs', this.fb.group({
+          usecaseId: obj?.transferConfigs?.cold?.taskConfigs?.usecaseId || '',
+          refId: obj?.transferConfigs?.cold?.taskConfigs?.refId || '',
+          dialogId: obj?.transferConfigs?.cold?.taskConfigs?.dialogId || '',
+          taskRefId: obj?.transferConfigs?.cold?.taskConfigs?.taskRefId || '',
+          linkedBotId: obj?.transferConfigs?.cold?.taskConfigs?.linkedBotId || '',
+          extractIntents: obj?.transferConfigs?.cold?.taskConfigs?.extractIntents || ''
+        }));
+        if(obj?.transferConfigs?.cold?.taskConfigs?.linkedBotId !== '') {
+          this.selectCustomBot( obj?.transferConfigs?.cold?.taskConfigs?.linkedBotId, isUpdate, obj, 'cold'); 
+        }else {
+          this.getUseCases(this.currentBot._id, isUpdate, obj, 'cold')
+        }
+      }
+      if( obj?.transferConfigs?.warm?.actionType === 'task') {
+        ((settingsForm.transferConfigs as FormGroup).get('warm') as FormGroup).addControl('taskConfigs', this.fb.group({
+          usecaseId: obj?.transferConfigs?.warm?.taskConfigs?.usecaseId || '',
+          refId: obj?.transferConfigs?.warm?.taskConfigs?.refId || '',
+          dialogId: obj?.transferConfigs?.warm?.taskConfigs?.dialogId || '',
+          taskRefId: obj?.transferConfigs?.warm?.taskConfigs?.taskRefId || '',
+          linkedBotId: obj?.transferConfigs?.warm?.taskConfigs?.linkedBotId || '',
+          extractIntents: obj?.transferConfigs?.warm?.taskConfigs?.extractIntents || ''
+        }));
+          if(obj?.transferConfigs?.warm?.taskConfigs?.linkedBotId !== '') {
+            this.selectCustomBot( obj?.transferConfigs?.warm?.taskConfigs?.linkedBotId, isUpdate, obj, 'warm'); 
+          }else {
+            this.getUseCases(this.currentBot._id, isUpdate, obj, 'warm')
+          }
+      }
     }
     return settingsForm;
   }
@@ -589,8 +776,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         type: ['basic'],
       });
     }
-    (KAIObj['searchAssistConfig'] as FormGroup).addControl('integrations', integrations);
+    (KAIObj['searchAssistConfig'] as FormGroup).addControl('integrations', integrations);   
     return KAIObj;
+
   }
 
   chooseChannel(channel){
@@ -655,6 +843,261 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     .get(key) as FormGroup)
     .get('resource') as FormControl)
     .patchValue(defaultUrl);
+  }
+
+  autoSummaryEnabled(evt) {
+    if(evt.target.checked) {
+      (((((this.agentAssistFormGroup as FormGroup)
+      .get('agentAssistSettings') as FormGroup)
+      .get(this.selectedChannel) as FormGroup)
+      .get('summarization') as FormGroup)
+      .get('model') as FormGroup).patchValue({
+        type: 'kore'
+      })
+    }
+  }
+
+
+  getUseCases(botId, isUpdate?, settings?, confType?){
+    // limit=:limit&offset=:offset&search=:search&filterby=:filterby&usecaseType=:usecaseType&status=:status&isAgentAssist=true
+    this.service.invoke('get.usecases', {
+      streamId: botId,
+      search: '',
+      filterby: '',
+      status: '',
+      usecaseType: 'dialog',
+      offset: 0,
+      limit: -1,
+
+    }).subscribe((data) => {
+      if(data.usecases) {        
+        this.currentSelectedBotDialogs = data.usecases;
+        this.currentSelectedBotDialogs.forEach(obj => {
+          this.useCases[obj.taskRefId] = obj.usecaseName;
+        })
+      }
+    });
+  }
+
+  getLinkedBots(){
+    const params = {
+      userId: this.authService.getUserId(),
+      streamId: this.currentBot._id
+    }
+    this.service.invoke('get.bt.stream', params).subscribe(data => {
+      if(data){
+        this.linkedBotObjs = [...data.configuredBots, ...data.publishedBots];
+        this.getAgentAssistSettingsNew();
+      }
+    });
+  }
+
+  
+
+  selectedSummaryModelType(event, model) {
+    ((((((this.agentAssistFormGroup as FormGroup)
+      .get('agentAssistSettings') as FormGroup)
+      .get(this.selectedChannel) as FormGroup)
+      .get('summarization') as FormGroup)
+      .get('model') as FormGroup)
+      .get('type') as FormControl).patchValue(model.type);
+
+      if(model.type === 'customTask') {
+        ((((((this.agentAssistFormGroup as FormGroup)
+          .get('agentAssistSettings') as FormGroup)
+          .get(this.selectedChannel) as FormGroup)
+          .get('summarization') as FormGroup)
+          .get('model') as FormGroup)
+          .addControl('customTaskConfig', this.fb.group({
+            usecaseId: '',
+            refId: ['', [Validators.required]],
+            dialogId: ['', [Validators.required]],
+            taskRefId: ['', [Validators.required]],
+            linkedBotId: ''
+          })))
+      } else if(model.type === 'kore'){
+        ((((((this.agentAssistFormGroup as FormGroup)
+        .get('agentAssistSettings') as FormGroup)
+        .get(this.selectedChannel) as FormGroup)
+        .get('summarization') as FormGroup)
+        .get('model') as FormGroup).removeControl('customTaskConfig'));
+      }
+  }
+
+  selectCustomDialog(dialog, from, bot?, transferType?) {
+    const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
+    if(from === 'convosTransfer') {
+      const taskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
+      .get('agentAssistSettings') as FormGroup)
+      .get(this.selectedChannel) as FormGroup)
+      .get('transferConfigs') as FormGroup)
+      .get(selectedFormGroup) as FormGroup)
+      .get('taskConfigs') as FormGroup));
+
+      if (taskConfigFormGroup) {
+        taskConfigFormGroup.patchValue({
+          usecaseId: dialog?._id || '',
+          refId: dialog?.refId || '',
+          dialogId: dialog?.dialogId || '',
+          taskRefId: dialog?.taskRefId || '',
+          linkedBotId: bot?._id || ''
+        });
+      } else {
+        (((((((this.agentAssistFormGroup as FormGroup)
+        .get('agentAssistSettings') as FormGroup)
+        .get(this.selectedChannel) as FormGroup)
+        .get('transferConfigs') as FormGroup)
+        .get(selectedFormGroup) as FormGroup)
+        .addControl('taskConfigs', this.fb.group({
+          usecaseId: dialog?._id || '',
+          refId: [dialog?.refId ||  '', [Validators.required]],
+          dialogId: [dialog?.dialogId || '', [Validators.required]],
+          taskRefId: [dialog?.taskRefId ||  '', [Validators.required]],
+          linkedBotId: bot?._id || '',
+          extractIntents: false}))));
+      }
+      if(bot) {
+        this.closeDropdown('convosTransfer');
+      }
+    } else if( from === 'summaryModel') {
+      const customTaskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
+                                      .get('agentAssistSettings') as FormGroup)
+                                      .get(this.selectedChannel) as FormGroup)
+                                      .get('summarization') as FormGroup)
+                                      .get('model') as FormGroup)
+                                      .get('customTaskConfig') as FormGroup));
+      if (customTaskConfigFormGroup) {
+        customTaskConfigFormGroup.patchValue({
+          usecaseId: dialog?._id || '',
+          refId: dialog?.refId || '',
+          dialogId: dialog?.dialogId || '',
+          taskRefId: dialog?.taskRefId || '',
+          linkedBotId: bot?._id || ''
+        });
+      } else {
+        const newFormGroup = new FormGroup({
+          usecaseId: new FormControl(dialog?._id || ''),
+          refId: new FormControl(dialog?.refId || ''),
+          dialogId: new FormControl(dialog?.dialogId || ''),
+          taskRefId: new FormControl(dialog?.taskRefId || ''),
+          linkedBotId: new FormControl(bot?._id || '')
+        });
+        (((((((this.agentAssistFormGroup as FormGroup)
+        .get('agentAssistSettings') as FormGroup)
+        .get(this.selectedChannel) as FormGroup)
+        .get('summarization') as FormGroup)
+        .get('model') as FormGroup)
+        .addControl('customTaskConfig', newFormGroup)));
+    }
+    if(bot) {
+      this.closeDropdown('summaryModel');
+    }
+  }
+    
+  }
+
+  selectCustomBot(childBotDetails, isUpdate?, obj?, confType?) {
+    this.loaded = false;
+    let childBotObj:any = {};
+    if(this.linkedBotObjs.length > 0) {
+      let checkchildBotObj =this.linkedBotObjs.find(obj => obj._id === childBotDetails);
+      if(checkchildBotObj && !checkchildBotObj['dialogs'] ) {
+        this.service.invoke('get.usecases', {
+          streamId: childBotDetails,
+          search: '',
+          filterby: '',
+          status: '',
+          usecaseType: 'dialog',
+          offset: 0,
+          limit: -1,
+        }).subscribe((data) => {
+          if (data.usecases) {      
+            this.linkedBotObjs.forEach(bot => {
+                if (bot._id == childBotDetails) {
+                    bot.dialogs = data.usecases;
+                    childBotObj = data.usecases;
+                    childBotObj.forEach(obj => {
+                      this.useCases[obj.taskRefId] = obj.usecaseName;
+                    })
+                }
+            });
+            this.loaded = true;
+        }
+        });
+      } 
+    }
+  }
+
+  getAfterTransferText(transferType: string): string {
+    const actionType = this.agentAssistFormGroup.get('agentAssistSettings').value[this.selectedChannel]?.transferConfigs[transferType]?.actionType;
+    const afterTransferSetting = this.afterTransferSettings.find(setting => setting.type === actionType);
+    return afterTransferSetting ? afterTransferSetting.text : '';
+  }
+  
+  getActionType(setting, transferType) {
+    const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
+    (((((((this.agentAssistFormGroup as FormGroup)
+    .get('agentAssistSettings') as FormGroup)
+    .get(this.selectedChannel) as FormGroup)
+    .get('transferConfigs') as FormGroup)
+    .get(selectedFormGroup) as FormGroup)
+    .get('actionType') as FormControl).patchValue(setting));
+
+    if(setting !== 'task') {
+      const taskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
+      .get('agentAssistSettings') as FormGroup)
+      .get(this.selectedChannel) as FormGroup)
+      .get('transferConfigs') as FormGroup)
+      .get(selectedFormGroup) as FormGroup)
+      .get('taskConfigs') as FormGroup));
+      if(taskConfigFormGroup) {
+        (((((((this.agentAssistFormGroup as FormGroup)
+        .get('agentAssistSettings') as FormGroup)
+        .get(this.selectedChannel) as FormGroup)
+        .get('transferConfigs') as FormGroup)
+        .get(selectedFormGroup) as FormGroup)
+        .removeControl('taskConfigs')));
+      }
+    }
+
+
+  }
+  
+  // Extract intents from the Dialog
+  toggleExtractIntents(event, transferType) {    
+    const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
+    const taskConfigs = (((((((this.agentAssistFormGroup as FormGroup)
+                        .get('agentAssistSettings') as FormGroup)
+                        .get(this.selectedChannel) as FormGroup)
+                        .get('transferConfigs') as FormGroup)
+                        .get(selectedFormGroup) as FormGroup)
+                        .get('taskConfigs') as FormGroup));
+    if (taskConfigs) {
+      taskConfigs.patchValue({
+        extractIntents: event.target.checked
+      })
+    } else {
+      const intentExtract = (((((((this.agentAssistFormGroup as FormGroup)
+                        .get('agentAssistSettings') as FormGroup)
+                        .get(this.selectedChannel) as FormGroup)
+                        .get('transferConfigs') as FormGroup)
+                        .get(selectedFormGroup) as FormGroup)));
+      intentExtract.addControl('taskConfigs', this.fb.group({
+        'extractIntents': event.target.checked
+      }))
+    }
+    
+  }
+
+  extractIntentsChecked(transferType: string): boolean {
+    const taskConfigs = this.agentAssistFormGroup.get('agentAssistSettings').value[this.selectedChannel]?.transferConfigs[transferType]?.taskConfigs;
+    return taskConfigs ? taskConfigs.extractIntents : false; // Assuming default value is false if not set
+}
+
+  handleTransferCheckboxClick(event, transferType) {
+    if(!event.target.checked){
+      this.toggleExtractIntents(event, transferType)
+    }
   }
 
 }
