@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ProjConstants } from 'src/common/constants/proj.cnts';
 import { CommonService } from 'src/common/services/common.service';
@@ -14,6 +14,9 @@ import * as $ from 'jquery';
 })
 export class TranscriptHistoryComponent {
 
+
+  @Output() transcriptHistoryResponse = new EventEmitter();
+  
   subscriptionsList: Subscription[] = [];
   historyResponse : any = [];
   projconstants : any = ProjConstants;
@@ -56,7 +59,7 @@ export class TranscriptHistoryComponent {
             }
         }
         $.ajax({
-          url: `${connectionDetails.agentassisturl}/agentassist/api/v1/agentassistconversations/${connectionDetails.conversationId}/conversation?page=1&&limit=1000`,
+          url: `${connectionDetails.agentassisturl}/agentassist/api/v1/agentassistconversations/${connectionDetails.conversationId}/conversation?page=0&&limit=5000`,
           type: 'get',
           headers: headersVal,
           dataType: 'json',
@@ -64,6 +67,7 @@ export class TranscriptHistoryComponent {
             console.log(data);
             if(data && data?.result?.length > 0) {
               this.historyResponse = data.result;
+              this.transcriptHistoryResponse.emit(true);
             }
           },
           error: function (err) {

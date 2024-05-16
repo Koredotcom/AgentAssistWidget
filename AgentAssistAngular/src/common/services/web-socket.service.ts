@@ -41,7 +41,7 @@ export class WebSocketService {
     'request_resolution_comments' : true,
   }
 
-  transcriptReload : boolean = true;
+  transcriptReload : boolean = false;
 
 
   constructor(private handleSubjectService : HandleSubjectService,

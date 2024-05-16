@@ -10,7 +10,7 @@
         <div class="transcript-history-scroll-bottom" *ngIf="commonService.isCallConversation && historyResponse && historyResponse?.length" id="transcriptTabHistoryText">
             <span>{{transcriptScrollTopText}}</span>
         </div>
-        <app-transcript-history></app-transcript-history>
+        <app-transcript-history (transcriptHistoryResponse)="userAgentHistoryResponse($event)"></app-transcript-history>
     </div>
     <div class="scroll-bottom-show-btn hiddenEle">
         <button id="scrollButtonTranscript" class="scroll-bottom-btn">
@@ -18,7 +18,7 @@
             <span>Scroll to bottom</span>
         </button>
     </div>
-    <div class="empty-data-no-agents" *ngIf="!historyResponse || !historyResponse?.length">
+    <div class="empty-data-no-agents" *ngIf="(!historyResponse || !historyResponse?.length) && !transcriptHistory">
         <div class="title">Voice based utterances from customer and Agent will render on this screen.</div>
     </div>
 </div>

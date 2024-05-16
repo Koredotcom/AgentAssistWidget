@@ -42,6 +42,7 @@ export class TranscriptComponent implements OnInit {
   scrollEventDone : boolean = false;
   transcriptScrollTopText : string = 'Scroll up for Bot Conversation History';
   sourceDesktop: any = this.commonService?.configObj?.source;
+  transcriptHistory : boolean = false;
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -162,6 +163,12 @@ export class TranscriptComponent implements OnInit {
     this.subscriptionsList.push(subscription4);
     this.subscriptionsList.push(subscription5);
 
+  }
+
+  userAgentHistoryResponse(event){
+    if(event){
+      this.transcriptHistory = true;
+    }
   }
 
   processUserMessage(response) {
