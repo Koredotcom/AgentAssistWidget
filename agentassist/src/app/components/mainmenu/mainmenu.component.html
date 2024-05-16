@@ -118,6 +118,16 @@
 						<img class="refreshIcon" src="assets/icons/AgentAssistWidgetSettingsIcon.svg"><span class="link-name">Widget Settings</span>
 					</div>
 				</ng-container>
+				<ng-container>
+					<div class="link-router" [routerLink]="['feedback-settings']" routerLinkActive="active"
+						*hasPermission="['admin']">
+						<!-- <img class="refreshIcon" src="assets/icons/AgentAssistWidgetSettingsIcon.svg"> -->
+						<svg width="18" height="18" viewBox="0 0 15 16" fill="none">
+							<path d="M8.73478 6.83333H11.5137C12.381 6.83333 12.9451 7.74603 12.5572 8.52175L10.5156 12.6051C10.3179 13.0003 9.91398 13.25 9.47208 13.25H7.1284C7.03302 13.25 6.93799 13.2383 6.84545 13.2152L4.65145 12.6667M8.73478 6.83333V3.91667C8.73478 3.27233 8.21245 2.75 7.56812 2.75H7.51242C7.22101 2.75 6.98478 2.98623 6.98478 3.27764C6.98478 3.69432 6.86144 4.10167 6.63031 4.44837L4.65145 7.41667V12.6667M8.73478 6.83333H7.56812M4.65145 12.6667H3.48478C2.84045 12.6667 2.31812 12.1443 2.31812 11.5V8C2.31812 7.35567 2.84045 6.83333 3.48478 6.83333H4.94312" stroke="#101828" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+						<span class="link-name">Feedback Settings</span>
+					</div>
+				</ng-container>
 			</div>
 		</ng-container>
 	</div>

@@ -1,0 +1,161 @@
+<div class="feedback-setting-wrapper" ngClass="{'feedback-settings-wrapper-isunified' : isUnifiedPlatform}">
+    <div class="header-data">
+        <div class="title">
+            <p>Feedback Settings</p>
+            <!-- <i class="icon-sa-info"></i> -->
+        </div>
+        <div class="sub-title">
+            <p>Provides users with the flexibility to specify the range of options available for providing negative feedback</p>
+        </div>
+    </div>
+    <div id="accordion" class="body-feedback-data"> 
+        <ng-container *ngFor="let obj of feedbackList; let fbinx = index">
+            <div class="welcome-event-accordion childComp" [formGroup]="feedbackForm.get(obj.bkey)" *ngIf="feedbackForm">
+                <div data-bs-toggle="collapse" [attr.href] ="'#configGreetings' + fbinx" class="card_link" aria-expanded="false" (click)="showCountWarningMsg = false;showDuplicateWarning=false;showDisableWarning=false;">
+                    <div class="accordion-content-header">
+                        <div class="team-with-profile">
+                            <i class="icon-sa-arrow-down arrow-icon"></i>
+                            <div class="accordion-icon">
+                                <ng-container *ngIf="obj.bkey === 'dialogs'">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M5.07847 9.35729C5.02668 9.02348 4.99981 8.68151 4.99981 8.33329C4.99981 4.65139 8.00421 1.66663 11.7103 1.66663C15.4165 1.66663 18.4209 4.65139 18.4209 8.33329C18.4209 9.16502 18.2675 9.96117 17.9875 10.6954C17.9293 10.8479 17.9002 10.9241 17.887 10.9836C17.8739 11.0426 17.8689 11.0841 17.8674 11.1445C17.866 11.2055 17.8743 11.2726 17.8908 11.4069L18.2263 14.1321C18.2626 14.4271 18.2808 14.5746 18.2317 14.6818C18.1887 14.7758 18.1123 14.8504 18.0174 14.8912C17.9091 14.9378 17.762 14.9162 17.4679 14.8731L14.8135 14.4841C14.675 14.4637 14.6056 14.4536 14.5425 14.4539C14.4801 14.4543 14.4369 14.4589 14.3758 14.4717C14.314 14.4847 14.2351 14.5143 14.0773 14.5734C13.3412 14.8491 12.5435 15 11.7103 15C11.3618 15 11.0196 14.9736 10.6854 14.9227M6.35949 18.3333C8.83023 18.3333 10.8332 16.2813 10.8332 13.75C10.8332 11.2187 8.83023 9.16663 6.35949 9.16663C3.88874 9.16663 1.8858 11.2187 1.8858 13.75C1.8858 14.2588 1.96673 14.7482 2.11613 15.2056C2.17928 15.3989 2.21085 15.4955 2.22122 15.5616C2.23204 15.6305 2.23393 15.6692 2.2299 15.7389C2.22604 15.8056 2.20935 15.881 2.17596 16.0319L1.6665 18.3333L4.16217 17.9925C4.29839 17.9739 4.3665 17.9646 4.42598 17.965C4.4886 17.9654 4.52184 17.9688 4.58326 17.981C4.64159 17.9926 4.7283 18.0233 4.90173 18.0845C5.35866 18.2457 5.84909 18.3333 6.35949 18.3333Z" stroke="#475467" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </ng-container>
+                                <ng-container *ngIf="obj.bkey === 'faqs'">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M5.83333 7.08333H10M5.83333 10H12.5M5.83333 15V16.9463C5.83333 17.3903 5.83333 17.6123 5.92436 17.7263C6.00352 17.8255 6.12356 17.8832 6.25045 17.8831C6.39636 17.8829 6.56973 17.7442 6.91646 17.4668L8.90434 15.8765C9.31043 15.5517 9.51347 15.3892 9.73957 15.2737C9.94017 15.1712 10.1537 15.0963 10.3743 15.051C10.6231 15 10.8831 15 11.4031 15H13.5C14.9001 15 15.6002 15 16.135 14.7275C16.6054 14.4878 16.9878 14.1054 17.2275 13.635C17.5 13.1002 17.5 12.4001 17.5 11V6.5C17.5 5.09987 17.5 4.3998 17.2275 3.86502C16.9878 3.39462 16.6054 3.01217 16.135 2.77248C15.6002 2.5 14.9001 2.5 13.5 2.5H6.5C5.09987 2.5 4.3998 2.5 3.86502 2.77248C3.39462 3.01217 3.01217 3.39462 2.77248 3.86502C2.5 4.3998 2.5 5.09987 2.5 6.5V11.6667C2.5 12.4416 2.5 12.8291 2.58519 13.147C2.81635 14.0098 3.49022 14.6836 4.35295 14.9148C4.67087 15 5.05836 15 5.83333 15Z" stroke="#475467" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </ng-container>
+                                <ng-container *ngIf="obj.bkey === 'searchassist'">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M8.33333 6.66853C8.48016 6.25113 8.76998 5.89917 9.15144 5.67498C9.53291 5.45079 9.98141 5.36884 10.4175 5.44364C10.8536 5.51844 11.2492 5.74517 11.5341 6.08367C11.8191 6.42217 11.975 6.8506 11.9744 7.29306C11.9744 8.54213 10.1008 9.16667 10.1008 9.16667M10.1249 11.6667H10.1333M5.83333 15V16.9463C5.83333 17.3903 5.83333 17.6123 5.92436 17.7263C6.00352 17.8255 6.12356 17.8832 6.25045 17.8831C6.39636 17.8829 6.56973 17.7442 6.91646 17.4668L8.90434 15.8765C9.31043 15.5517 9.51347 15.3892 9.73957 15.2737C9.94017 15.1712 10.1537 15.0963 10.3743 15.051C10.6231 15 10.8831 15 11.4031 15H13.5C14.9001 15 15.6002 15 16.135 14.7275C16.6054 14.4878 16.9878 14.1054 17.2275 13.635C17.5 13.1002 17.5 12.4001 17.5 11V6.5C17.5 5.09987 17.5 4.3998 17.2275 3.86502C16.9878 3.39462 16.6054 3.01217 16.135 2.77248C15.6002 2.5 14.9001 2.5 13.5 2.5H6.5C5.09987 2.5 4.3998 2.5 3.86502 2.77248C3.39462 3.01217 3.01217 3.39462 2.77248 3.86502C2.5 4.3998 2.5 5.09987 2.5 6.5V11.6667C2.5 12.4416 2.5 12.8291 2.58519 13.147C2.81635 14.0098 3.49022 14.6836 4.35295 14.9148C4.67087 15 5.05836 15 5.83333 15Z" stroke="#475467" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </ng-container>
+                            </div>
+                            <div class="accordion-header-info">
+                                <div class="accordion-header-title">{{obj.title}}</div>
+                                <div class="accordion-header-des">{{obj.desc}}</div>
+                            </div>
+                        </div>
+                        <div class="agent-counts">
+                            <span class="accordion-badge">{{(feedbackForm?.get(obj.bkey)?.get('isEnabled').value) ? ('FEEDBACK_ENABLED' | translate) : ('FEEDBACK_DISABLED' | translate)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="configGreetings{{fbinx}}" class="collapse" data-bs-parent="#accordion">
+                    <div class="accordion-content-body">
+                        <div class="enabled-block">
+                            <div class="toggle-info-data">
+                                <label class="kr-sg-toggle">
+                                    <input type="checkbox" formControlName="isEnabled" [checked]="feedbackForm?.get(obj.bkey)?.get('isEnabled').value" (change)="toggleFeedbackEvent($event, obj.bkey)">
+                                    <div class="slider">
+                                        <span class="enabled"></span>
+                                        <span class="disabled"></span>
+                                    </div>
+                                </label>
+                                <div class="content-data-toggle">
+                                    <h1>{{obj.enableDesc}}</h1>
+                                </div>
+                            </div>
+                            <div class="add-message-block-right">
+                                <div class="kr-sg-dropdowns" ngbDropdown>
+                                    <div class="dropdown dropdown-open">
+                                        <button class="lang-btn" ngbDropdownToggle>{{(selectedLang[obj.bkey] === 'zh_cn' ? 'Zh-Cn' : (selectedLang[obj.bkey]) | titlecase)}} <i
+                                                class="icon-sa-arrow-down m-r-8"></i></button>
+                                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                            <div class="scroll-ul">
+                                                <li ngbDropdownItem *ngFor="let item of languageSelectionList | keyvalue : asIsOrder" (click)="updateLanguageSelection(obj.bkey,item.key)">
+                                                    <a> {{item.value}}</a>
+                                                    <!-- <i class="icon-coaching--check" *ngIf="selectedLang[obj.bkey] == item.key"></i></li> -->
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="kr-sg-checkbox"*ngIf="feedbackForm?.get(obj.bkey)?.get('isEnabled').value">
+                                    <input id="{{obj.bkey}}-111" class="checkbox-custom" type="checkbox"  formControlName="acceptComment" [checked]="feedbackForm?.get(obj.bkey)?.get('acceptComment').value" (change)="toggleFeedbackComment($event, obj.bkey)">
+                                    <label for="{{obj.bkey}}-111" class="checkbox-custom-label">{{'FEEDBACK_ACCEPT_COMMENT' | translate}}</label>
+                                </div> 
+                            </div>
+                        </div>
+                        <ng-container *ngIf="feedbackForm?.get(obj.bkey)?.get('isEnabled').value">
+                            <div class="divider"></div>
+                            <div class="table-feedback-form-data" *ngIf="feedbackForm?.get(obj.bkey)?.get('negativeKeyWords')?.get(selectedLang[obj.bkey])?.value?.length > 0">
+                                <ng-container *ngFor="let item of feedbackForm?.get(obj.bkey)?.get('negativeKeyWords')?.get(selectedLang[obj.bkey])?.value; let i = index">
+                                    <div class="table-form-repeat-list">
+                                        <div class="name-feedback">{{item.key}}</div>
+                                        <div class="edit-feedback-action" ngbDropdown container="body" #suggestionDropdown="ngbDropdown">
+                                            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle (click)="suggestionTitle = item.key">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                    <path d="M2.39686 15.0964C2.43515 14.7518 2.45429 14.5795 2.50642 14.4185C2.55268 14.2756 2.61802 14.1397 2.70069 14.0143C2.79388 13.873 2.91645 13.7504 3.1616 13.5053L14.1669 2.50005C15.0873 1.57957 16.5797 1.57957 17.5002 2.50005C18.4207 3.42052 18.4207 4.91291 17.5002 5.83338L6.49493 16.8386C6.24978 17.0838 6.12721 17.2063 5.9859 17.2995C5.86054 17.3822 5.72457 17.4475 5.5817 17.4938C5.42067 17.5459 5.24838 17.5651 4.9038 17.6033L2.0835 17.9167L2.39686 15.0964Z" stroke="#667085" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </button>
+                                            <ul class="dropdown_menu_feedback_action" ngbDropdownMenu>                                            
+                                                <div class="variable-value-input with-check-icon">
+                                                    <div class="input-variable-sec">
+                                                        <div class="label-text">{{'FEEDBACK.SUGGESTION' | translate}} 
+                                                            <!-- <i class="icon-sa-help" tooltipClass="tooltip-global-styles" ngbTooltip="Use lowercase for word characters"></i> -->
+                                                        </div>
+                                                        <div class="kr-sg-input-text">                                            
+                                                            <input type="text" class="input-text" maxlength="25" [(ngModel)]="suggestionTitle" (keyup.enter)="submitSuggestion(suggestionTitle, i, obj.bkey);" [ngModelOptions]="{standalone: true}">
+                                                        </div>
+                                                        <div class="hint-info-input-text-block">
+                                                            <p>{{'FEEDBACK_SUGGESTION_SUBTEXT' | translate}}</p>
+                                                            <div class="count-char">{{suggestionTitle?.length}}/25</div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="check-icon-block" (click)="submitSuggestion(suggestionTitle.value, i, obj.bkey);">
+                                                        <i class="icon-sa-conv-check"></i>
+                                                    </div> -->
+                                                </div>
+                                            </ul>
+                                        </div>
+                                        <div class="toggle-info-data">
+                                            <label class="kr-sg-toggle">
+                                                <input type="checkbox" [checked]="item.isEnabled" (change)="toggleMsgEnable($event, i, obj.bkey)">
+                                                <div class="slider">
+                                                    <span class="enabled"></span>
+                                                    <span class="disabled"></span>
+                                                </div>
+                                            </label>
+                                            <div class="content-data-toggle">
+                                                <h1>{{item.isEnabled ? ('FEEDBACK_ENABLED' | translate) : ('FEEDBACK_DISABLED' | translate)}}</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div class="disable-state-error" *ngIf="(showCountWarningMsg || showDuplicateWarning || showDisableWarning)">
+                                <div class="disable-state-error-icon">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M8.1827 13.8889H11.8172M9.99996 3V3.77778M14.9497 5.05025L14.3997 5.60022M17 9.99996H16.2222M3.77778 9.99996H3M5.60018 5.60022L5.05021 5.05025M7.2501 12.7499C5.73139 11.2312 5.73139 8.76886 7.2501 7.25016C8.7688 5.73145 11.2311 5.73145 12.7498 7.25016C14.2685 8.76886 14.2685 11.2312 12.7498 12.7499L12.3243 13.1754C11.8321 13.6676 11.5555 14.3353 11.5555 15.0314V15.4444C11.5555 16.3036 10.8591 17 9.99996 17C9.14085 17 8.4444 16.3036 8.4444 15.4444V15.0314C8.4444 14.3353 8.16786 13.6676 7.67562 13.1754L7.2501 12.7499Z" stroke="#DC6803" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="disable-state-error-info">
+                                    <h4>{{'FEEDBACK_WARNING' | translate}}</h4>
+                                    <ng-container *ngIf="showCountWarningMsg">
+                                        <p>{{('FEEDBACK_WARNING_DESC' | translate)}}</p>
+                                    </ng-container>
+                                    <ng-container *ngIf="showDuplicateWarning">
+                                        <p>{{('FEEDBACK_DUPLICATE_WARNING_DESC' | translate)}}</p>
+                                    </ng-container>
+                                    <ng-container *ngIf="showDisableWarning">
+                                        <p>{{'FEEDBACK_DISABLE_WARNING_TEXT' | translate}}</p>
+                                    </ng-container>
+                                </div>
+                                <div class="disable-state-error-close" (click)="showCountWarningMsg = false;showDuplicateWarning=false;showDisableWarning=false;">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M15 5L5 15M5 5L15 15" stroke="#F79009" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <div class="accordion-footer">
+                            <button class="kr-sg-button-secondary btn_lg" (click)="cancel(obj.bkey)" [disabled]="feedbackForm.get(obj.bkey)?.invalid || disableSaveButton[obj.bkey]">{{'BUTTONS.CANCEL' | translate}}</button>
+                            <button class="kr-sg-button-primary btn_lg" (click)="saveFeedbackForm(obj.bkey)" [disabled]="feedbackForm.get(obj.bkey)?.invalid || disableSaveButton[obj.bkey]">{{'BUTTONS.SAVE' | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
