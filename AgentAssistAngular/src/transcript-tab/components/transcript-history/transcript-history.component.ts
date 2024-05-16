@@ -6,6 +6,7 @@ import { HandleSubjectService } from 'src/common/services/handle-subject.service
 import { MockDataService } from 'src/common/services/mock-data.service';
 import { TemplateRenderClassService } from 'src/common/services/template-render-class.service';
 import * as $ from 'jquery';
+import { WebSocketService } from 'src/common/services/web-socket.service';
 
 @Component({
   selector: 'app-transcript-history',
@@ -25,7 +26,8 @@ export class TranscriptHistoryComponent {
     private handleSubjectService : HandleSubjectService,
     private templateRenderClassService : TemplateRenderClassService,
     public commonService : CommonService,
-    private mockDataService : MockDataService
+    private mockDataService : MockDataService,
+    private websocketService : WebSocketService
     ) { }
 
   ngOnInit(): void {
@@ -35,10 +37,17 @@ export class TranscriptHistoryComponent {
       if(response && response.isCall !== 'false') {
         this.userAgentConversationHistoryAPICall();
       }
+    });
+    this.websocketService.updateTranscript$.subscribe((flag) => {
+      if(flag){
+        if(this.commonService.configObj.isCall !== 'false') {
+          this.userAgentConversationHistoryAPICall(true);
+        }
+      }
     })
   }
 
-  userAgentConversationHistoryAPICall() {
+  userAgentConversationHistoryAPICall(isReload = false) {
     let connectionDetails;
       let headersVal = {};
       this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
@@ -67,7 +76,7 @@ export class TranscriptHistoryComponent {
             console.log(data);
             if(data && data?.result?.length > 0) {
               this.historyResponse = data.result;
-              this.transcriptHistoryResponse.emit(true);
+              this.transcriptHistoryResponse.emit(isReload);
             }
           },
           error: function (err) {
