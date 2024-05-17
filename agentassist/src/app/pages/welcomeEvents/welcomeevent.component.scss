@@ -293,6 +293,9 @@
                     }
                     .kr-sg-dropdowns {
                         width: auto;
+                        .content-menu{
+                            width: 250px !important;
+                        }
                     }
                 }
             }

@@ -67,11 +67,11 @@
                         <div class="add-message-block-right">
                             <div class="kr-sg-dropdowns" ngbDropdown>
                                 <div class="dropdown dropdown-open">
-                                    <button class="lang-btn" ngbDropdownToggle>{{selectedLocale | titlecase}} <i
+                                    <button class="lang-btn" ngbDropdownToggle>{{(selectedLocale === 'zh_cn' ? 'Zh-Cn' : selectedLocale | titlecase)}} <i
                                             class="icon-sa-arrow-down m-r-8"></i></button>
                                     <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                         <div class="scroll-ul">
-                                            <li ngbDropdownItem *ngFor="let item of supportedLanguageSeedData | keyvalue" (click)="selectedLang(item.key)"><a>{{item.key | titlecase}}</a></li>
+                                            <li ngbDropdownItem *ngFor="let item of languageSelectionList | keyvalue : asIsOrder" (click)="selectedLang(item.key)"><a>{{item.value}}</a></li>
                                         </div>
                                     </ul>
                                 </div>

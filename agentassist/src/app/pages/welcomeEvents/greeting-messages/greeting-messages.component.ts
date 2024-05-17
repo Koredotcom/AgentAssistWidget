@@ -45,6 +45,17 @@ export class GreetingMessagesComponent implements OnInit {
   newOrEditFormTouch : boolean = false;
   copyMultiSelectModal : boolean = false;
   supportedLanguageSeedData : any = {};
+  languageSelectionList : any = {
+    'en' : 'English (En)',
+    'ar' : 'Arabic (Ar)',
+    'de' : 'German (De)',
+    'es' : 'Espanol (Es)',
+    'fr' : 'French (Fr)',
+    'it' : 'Italian (It)',
+    'ja' : 'Japanese (Ja)',
+    'ko' : 'Korean (Ko)',
+    'zh_cn': 'Chinese (Simplified) - Zh-Cn'
+  }
 
   constructor(private modalService: NgbModal, private fb: FormBuilder, private welcomeEventService: WelcomeEventsService,
     private workflowService : workflowService) { }
@@ -350,6 +361,10 @@ export class GreetingMessagesComponent implements OnInit {
     this.updateData(this.welcomeTaskPreviousData);
     this.initGreetingForm(this.welcomeTaskPreviousData);
     this.noFormchange = true;
+  }
+
+  asIsOrder(a, b) {
+    return 1;
   }
 
 }
