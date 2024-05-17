@@ -18,8 +18,16 @@ import { BlankComponent } from './pages/blank/blank.component';
 import { FeedbackSettingsComponent } from './pages/feedback-settings/feedback-settings.component';
 
 let isSmartassist = false;
-if(window.location.href.includes('smartassist')){
-  isSmartassist = true;
+// if(window.location.href.includes('smartassist')){
+//   isSmartassist = true;
+// }
+
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has('commingFrom')) {
+  // Check the value of the 'commingFrom' query parameter
+  if (urlParams.get('commingFrom') === 'smartassist') {
+    isSmartassist = true;
+  }
 }
 
 const routes: Routes = [

@@ -190,14 +190,27 @@ export class workflowService {
 
   getCurrentBtSmt(automationBot?: boolean) {
     if (automationBot) {
-      if(!window.location.href.includes('smartassist')) {
-        return { ...this.currentBtDetails };
-      } else {
-        let selAcc = this.local.getSelectedAccount();
-        let smBotObj = selAcc['instanceBots'][0];
-        smBotObj._id = smBotObj.instanceBotId;
-        return smBotObj;
+      // 
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('commingFrom')) {
+        if (urlParams.get('commingFrom') === 'smartassist') {
+          let selAcc = this.local.getSelectedAccount();
+          let smBotObj = selAcc['instanceBots'][0];
+          smBotObj._id = smBotObj.instanceBotId;
+          return smBotObj;
+        } else {
+          return { ...this.currentBtDetails };
+        }
       }
+      // 
+      // if(!window.location.href.includes('smartassist')) {
+      //   return { ...this.currentBtDetails };
+      // } else {
+      //   let selAcc = this.local.getSelectedAccount();
+      //   let smBotObj = selAcc['instanceBots'][0];
+      //   smBotObj._id = smBotObj.instanceBotId;
+      //   return smBotObj;
+      // }
     }
   }
 
