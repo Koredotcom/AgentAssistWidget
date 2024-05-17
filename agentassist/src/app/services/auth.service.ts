@@ -32,7 +32,9 @@ export class AuthService {
   public fromToken_tokenId = null;
   public externalQp: any;
   userAccIdDetail: any;
-  public isLoadingOnSm = window.location.href.includes('smartassist') ? true : false;
+  // public isLoadingOnSm = window.location.href.includes('smartassist') ? true : false;
+  private urlParams = new URLSearchParams(window.location.search);
+  public isLoadingOnSm = this.urlParams.has('commingFrom') && this.urlParams.get('commingFrom') === 'smartassist' ? true : false;
   public isAgentDesktopEnabled$ = new BehaviorSubject(false);
   public isAgentCoachongEnable$ = new BehaviorSubject(true);
   public agentAssistAutomationBots: any = [];

@@ -1831,6 +1831,12 @@ export class EndPointsService {
       endpoint: this.API_SERVER_URL + '/smartassist/users/:userId/streams/:streamId/channels/seedData?isAgentAssist=true',
       method: 'get'
     }
+
+    // this.serviceList['get.smartassistAutomationBots'] = {
+    //   endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots?instanceBotId=:instanceBotId&includeInstanceBot=true',
+    //   method: 'get'
+    // }
+
   }
   
 }
