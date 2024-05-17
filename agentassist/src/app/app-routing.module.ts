@@ -23,10 +23,8 @@ let isSmartassist = false;
 
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.has('commingFrom')) {
-  console.log("🚀 ~ urlParams.has('commingFrom'):", urlParams.has('commingFrom'))
   // Check the value of the 'commingFrom' query parameter
   if (urlParams.get('commingFrom') === 'smartassist') {
-    console.log("🚀 ~ commingFromValue === 'smartassist':", urlParams.get('commingFrom'))
     isSmartassist = true;
   }
 }

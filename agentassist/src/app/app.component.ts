@@ -64,7 +64,6 @@ export class AppComponent implements OnDestroy {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('commingFrom')) {
       if (urlParams.get('commingFrom') === 'smartassist') {
-        console.log("🚀 ~ app component: ", urlParams.get('commingFrom'))
         document.getElementsByTagName('html')[0].classList.add('init-smartassist');
       }
     }
