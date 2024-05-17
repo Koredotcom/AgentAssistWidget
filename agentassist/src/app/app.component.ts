@@ -61,9 +61,16 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnInit() {
-    if(window.location.href.includes('smartassist')){
-      document.getElementsByTagName('html')[0].classList.add('init-smartassist');
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('commingFrom')) {
+      if (urlParams.get('commingFrom') === 'smartassist') {
+        document.getElementsByTagName('html')[0].classList.add('init-smartassist');
+      }
     }
+    // if(window.location.href.includes('smartassist')){
+      
+    //   document.getElementsByTagName('html')[0].classList.add('init-smartassist');
+    // }
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     const self = this;
     this.iFrameUrl = `${this.workflowService.resolveHostUrl()}/botstore/store?product=SmartAssist-App#from=SmartAssist`;
@@ -119,7 +126,15 @@ export class AppComponent implements OnDestroy {
       });
     // const browserLang = this.translate.getBrowserLang();
     // this.localstore.appLanguage = this.localstore.appLanguage || (browserLang.match(/ja/) ? browserLang : 'en');
-    const lang = this.authService.externalQp?.appLanguage || this.localstore.appLanguage;
+    let lang = this.authService.externalQp?.appLanguage || this.localstore.appLanguage;
+    if (urlParams.has('commingFrom')) {
+      if (urlParams.get('commingFrom') === 'smartassist') {
+        lang = this.localstore.appLanguage;
+      }
+    }
+    // if(window.location.href.includes('smartassist')) {
+    //   lang = this.localstore.appLanguage;
+    // }
     if (lang) { this.translate.use(lang); }
 
     this.route.queryParamMap.subscribe(paramMap => {

@@ -184,7 +184,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
       }
     } else {
       params = {
-        streamId: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id,
+        streamId: this.workflowService.deflectApps()?._id || this.workflowService.deflectApps()[0]?._id,
       }
     }
 
