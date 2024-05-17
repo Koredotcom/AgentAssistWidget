@@ -50,8 +50,9 @@ export class AutomationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isHideBotsList = false;
-    this.getBots();
     this.authService.getDeflectApps();
+    this.workflowService.setCurrentBt(this.authService.smartAssistBots[0]);
+    this.getBots();
     if(this.workflowService.emailBool) {
       this.navigatetoBotBuilder(this.workflowService.emailBotEIBP)
     }
