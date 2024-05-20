@@ -83,11 +83,11 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
 
   handleSendCopyButton(actionType, snippetObj, selectType){
+    let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
+    snippetObj.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(this.snippetContent.nativeElement) : (snippetObj.sendCopyText);
     snippetObj.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     let snippet = JSON.parse(JSON.stringify(snippetObj));
     snippet.content = snippetObj?.sendCopyText;
-    let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
-    snippetObj.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(this.snippetContent.nativeElement) : (snippet.content);
     this.commonService.handleSendCopyButton(actionType, snippet, selectType)
   }
 
