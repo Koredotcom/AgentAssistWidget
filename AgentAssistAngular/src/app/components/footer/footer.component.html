@@ -32,7 +32,7 @@
             </div>
             <p>{{'HISTORY' | translate}}</p>
         </button>
-        <button class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.SETTINGS}" (click)="changeTab(projConstants.SETTINGS)">
+        <button appActiveOrPassive class="btn_footer" [ngClass]="{'selected-tab sel-bg': selectedTab === projConstants.SETTINGS}" (click)="changeTab(projConstants.SETTINGS)">
             <div class="svg_icon">
                 <i class="krIocnsFont-settings"></i>
             </div>

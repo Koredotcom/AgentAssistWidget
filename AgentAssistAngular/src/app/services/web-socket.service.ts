@@ -27,6 +27,7 @@ export class WebSocketService {
   agentAssistUserMessageResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
   agentFeedbackResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
   responseResolutionCommentsResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
+  makeActiveOrPassiveAgent$ : BehaviorSubject<any> = new BehaviorSubject(null);
   agentCoachingResponse$ = new Subject<any>();
   checkListStepResponse$ = new Subject<any>();
   checkListResponse$ = new Subject<any>();
@@ -291,6 +292,10 @@ export class WebSocketService {
       this.responseResolutionCommentsResponse$.next(data);
       this.addOrRemoveLoader(false);
     })
+
+    this._agentAsisstSocket.on(EVENTS.agentassist_control_request, (data : any) =>{
+      this.makeActiveOrPassiveAgent$.next(data);
+    });
   }
 
   handleOverrideMode(toggleOverride, dialogId){

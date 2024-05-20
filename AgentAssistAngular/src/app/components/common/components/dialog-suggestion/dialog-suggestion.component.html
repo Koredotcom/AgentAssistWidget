@@ -15,7 +15,7 @@
                     <!-- <span>(buy_bot)</span> -->
                 </div>
                 <div class="dialog-actions">
-                    <button class="primary-btn" (click)="dialogueRunClick(dialogue.value,projConstants.ASSIST)">{{'RUN' | translate}}</button>
+                    <button class="primary-btn" (click)="dialogueRunClick(dialogue.value,projConstants.ASSIST)" appActiveOrPassive>{{'RUN' | translate}}</button>
                     <div ngbDropdown class="elipse-ngbdropdown" container="body">
                         <button type="button" id="elipseDrp" ngbDropdownToggle>
                             <i class="krIocnsFont-outlined"></i>
@@ -38,7 +38,7 @@
                 <span *ngIf="dialog?.childBotName">({{dialog?.childBotName}})</span>
             </div>
             <div class="dialog-actions">
-                <button class="primary-btn" (click)="dialogueRunClick(dialog,projConstants.ASSIST)">{{'RUN' | translate}}</button>
+                <button class="primary-btn" (click)="dialogueRunClick(dialog,projConstants.ASSIST)" appActiveOrPassive>{{'RUN' | translate}}</button>
                 <div ngbDropdown class="elipse-ngbdropdown" container="body">
                     <button type="button" id="elipseDrp" ngbDropdownToggle>
                         <i class="krIocnsFont-outlined"></i>
