@@ -40,5 +40,6 @@ export enum EVENTS {
     'checklist_proceed_to_closed' = 'checklist_proceed_to_closed',
     'internal_transfer'= 'internal_transfer',
     'agent_activity_request' = 'agent_activity_request',
-    'submit_summary_request' = 'submit_summary_request'
+    'submit_summary_request' = 'submit_summary_request',
+    'agentassist_control_response' = 'agentassist_control_response'
 }
