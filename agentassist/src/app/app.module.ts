@@ -105,6 +105,7 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
 import { XoMenuComponent } from './components/xo-menu/xo-menu.component';
 import { EmptyRouteComponent } from './empty-route/empty-route.component';
 import { BlankComponent } from './pages/blank/blank.component';
+import { FeedbackSettingsComponent } from './pages/feedback-settings/feedback-settings.component';
 
 @NgModule({
   declarations: [
@@ -183,7 +184,8 @@ import { BlankComponent } from './pages/blank/blank.component';
     AccWarningDialogComponent,
     XoMenuComponent,
     EmptyRouteComponent,
-    BlankComponent
+    BlankComponent,
+    FeedbackSettingsComponent
   ],
   imports: [
     CommonModule,

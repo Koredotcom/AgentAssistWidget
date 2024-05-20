@@ -98,7 +98,6 @@ export class FeedbackSettingsComponent implements OnInit {
 
     this.subs.sink = this.workflowService.seedData$.subscribe(res => {      
       if(res?.agentAssistSeedData?.supportedLanguages){
-        console.log("🚀 ~ FeedbackSettingsComponent ~ subscribeEvents ~ res?.agentAssistSeedData?.supportedLanguages:", res?.agentAssistSeedData?.supportedLanguages)
         this.feedbackList.forEach((element : any) => {
           this.supportedLanguageSeedData[element.bkey] = {};
           Object.keys(res?.agentAssistSeedData?.supportedLanguages).forEach((key) => {
