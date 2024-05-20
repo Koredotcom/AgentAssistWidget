@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="actions-assist-header">
+                <div class="actions-assist-header" appActiveOrPassive>
                     <div class="sentiment-div-block" *ngIf="showSentiment">
                         <app-sentiment-score></app-sentiment-score>
                     </div>
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="collapse-tab" #collapseTab>
-          <div class="card-body">
+          <div class="card-body" appActiveOrPassive>
                 <div class="card_body_acc_content kore-chat-window">
                     <app-loader [type]="projConstants.WIDGET_LOADER" *ngIf="showSpinner"></app-loader>
                     <!-- <app-tell-customer [automation]="welcomeMsgResponse" [isWelcomeMsg]="true" *ngIf="(welcomeMsgResponse | json) != '{}'" [responseArray]="assistResponseArray" [responseArrayIndex]="0"

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from './services/local-storage.service';
 import { WebSocketService } from './services/web-socket.service';
@@ -22,7 +22,8 @@ import { CommonService } from './services/common.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, OnDestroy{
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
+
   isGrantSuccess = false;
   errorMsg: string = '';
   subs = new SubSink();
@@ -47,6 +48,17 @@ export class AppComponent implements OnInit, OnDestroy{
     private commonService : CommonService
   ) {
     // this.translate.setDefaultLang('en');
+  }
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      let appState = this.localStorageService.getLocalStorageState();
+      if(appState[this.rootService.connectionDetails.conversationId]){
+        let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
+        if(internalTransferDetails){
+          this.rootService.disableWidget(internalTransferDetails.isDisabled);
+        }
+      }
+    });
   }
 
   ngOnInit() {
@@ -91,6 +103,21 @@ export class AppComponent implements OnInit, OnDestroy{
         }
       }
     });
+
+    this.subs.sink = this.webSocketService.makeActiveOrPassiveAgent$.subscribe((data)=>{
+      let appState = this.localStorageService.getLocalStorageState();
+      if(appState[this.rootService.connectionDetails.conversationId] && appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER]){
+        let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
+        if(internalTransferDetails?.participant?.identity === data?.participant?.identity){
+          data.isDisabled = data?.allowAccess;
+          this.rootService.disableWidget(!data?.allowAccess);
+        }
+        let storageObject: any = {
+          [storageConst.INTERNAL_TRANSFER]: data
+        }
+        this.localStorageService.setLocalStorageItem(storageObject);
+      }
+    })
   }
 
   ngOnDestroy(){
@@ -165,6 +192,11 @@ export class AppComponent implements OnInit, OnDestroy{
       if(e.data){
         this.rootService.internalTransfer = true;
         this.rootService.internalTransferData = e.data;
+        e.data.isDisabled = false;
+        if(e.data?.transfertype === 'warm' && e.data?.transition === 'entry'){
+          this.rootService.disableWidget(true);
+          e.data.isDisabled = true;
+        }
         let storageObject: any = {
           [storageConst.INTERNAL_TRANSFER]: e.data
         }

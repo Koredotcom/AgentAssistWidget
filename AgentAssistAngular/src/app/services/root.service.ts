@@ -19,6 +19,7 @@ export class RootService {
   mybotTemplateClick$ : BehaviorSubject<any> = new BehaviorSubject(null);
   userBotHistory$ : Subject<any> = new Subject<any>();
   userBotConversationDetailsSubject : BehaviorSubject<any> = new BehaviorSubject(null);
+  disableTheWidget : BehaviorSubject<any> = new BehaviorSubject(null);
 
   public userBotConversationDetails: any;
 
@@ -981,6 +982,10 @@ export class RootService {
         this.defaultFeedbackSettings[category].negativeKeyWords[language] = langArray;
       });
     });
+  }
+
+  disableWidget(flag = false){
+    this.disableTheWidget.next(flag);
   }
 
 }
