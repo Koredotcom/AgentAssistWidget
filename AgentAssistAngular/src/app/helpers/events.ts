@@ -41,5 +41,5 @@ export enum EVENTS {
     'internal_transfer'= 'internal_transfer',
     'agent_activity_request' = 'agent_activity_request',
     'submit_summary_request' = 'submit_summary_request',
-    'agentassist_control_request' = 'agentassist_control_request'
+    'agentassist_control_response' = 'agentassist_control_response'
 }

@@ -52,9 +52,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       let appState = this.localStorageService.getLocalStorageState();
-      let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
-      if(internalTransferDetails){
-        this.rootService.disableWidget(internalTransferDetails.isDisabled);
+      if(appState[this.rootService.connectionDetails.conversationId]){
+        let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
+        if(internalTransferDetails){
+          this.rootService.disableWidget(internalTransferDetails.isDisabled);
+        }
       }
     });
   }
@@ -108,7 +110,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
         if(internalTransferDetails?.participant?.identity === data?.participant?.identity){
           data.isDisabled = data?.allowAccess;
-          this.rootService.disableWidget(data?.allowAccess);
+          this.rootService.disableWidget(!data?.allowAccess);
         }
         let storageObject: any = {
           [storageConst.INTERNAL_TRANSFER]: data
