@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChange, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, SimpleChange, ViewChild } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { FeebackConst, ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
@@ -12,10 +12,11 @@ import { SubSink } from 'subsink';
   templateUrl: './snippet-suggestions.component.html',
   styleUrls: ['./snippet-suggestions.component.scss']
 })
-export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
+export class SnippetSuggestionsComponent implements OnInit, OnDestroy, AfterViewInit{
 
   @Input() searchResponse : any;
   @ViewChild('snippetContent',{static: false}) private snippetContent : ElementRef;
+  @ViewChild('snippetContent1',{static: false}) private snippetContent1 : ElementRef;
 
   feedbackConst : any = FeebackConst;
 
@@ -34,15 +35,20 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   // sourceInx = null;
   extMore = true;
   intMore = true;
-  constructor(private handleSubjectService : HandleSubjectService,
-    public rootService : RootService, private commonService : CommonService,
-    private websocketService : WebSocketService){
 
+  constructor(
+    private handleSubjectService : HandleSubjectService,
+    public rootService : RootService, 
+    private commonService : CommonService,
+    private websocketService : WebSocketService,
+    private renderer: Renderer2
+  ){}
+
+  ngAfterViewInit(): void {
+    this.addClickListenerToAnchors();
   }
 
-  ngOnInit(){
-    
-  }
+  ngOnInit(){}
 
   ngOnChanges(changes : SimpleChange){
     if(changes['searchResponse']?.currentValue){
@@ -199,6 +205,38 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   
   updateFeedbackProperties(data, snipObje) {
     snipObje.feedbackData = data;
+  }
+
+  addClickListenerToAnchors(){
+    const anchorElements = this.snippetContent?.nativeElement.getElementsByTagName('a');
+    if(anchorElements){
+      for (let anchor of anchorElements) {
+        this.renderer.listen(anchor, 'click', (event) => {
+          event.preventDefault(); 
+          this.handleAnchorClick(event);
+        });
+      };
+    }
+
+
+    const anchorElementsInmternal = this.snippetContent1?.nativeElement.getElementsByTagName('a');
+    if(anchorElementsInmternal){
+      for (let anchor of anchorElementsInmternal) {
+        this.renderer.listen(anchor, 'click', (event) => {
+          event.preventDefault(); 
+          this.handleAnchorClick(event, true);
+        });
+      }
+    }
+  }
+
+  handleAnchorClick(event, isInternal = false){
+    let socketRequestParams : any = this.commonRequestParams(this.searchResponse.snippets[0]);
+    socketRequestParams.eventType= "url_clicked";
+    socketRequestParams.url = event?.srcElement?.href;
+    socketRequestParams.isEmbedded = true;
+    socketRequestParams.isInternal = isInternal;
+    this.websocketService.emitEvents(EVENTS.agent_activity_request, socketRequestParams);
   }
 
 }
