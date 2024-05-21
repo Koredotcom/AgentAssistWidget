@@ -30,8 +30,8 @@
 
     </ng-container>
 </ng-container>
-<!-- <ng-container [ngTemplateOutlet]="dialogEnded"
-    *ngIf="automationData.endAutomation && automationData?.automationsArray?.length"></ng-container> -->
+<ng-container [ngTemplateOutlet]="dialogEnded"
+    *ngIf="automationData.endAutomation && automationData?.automationsArray?.length && !rootService?.settingsData?.feedback[feedbackConst.DIALOGS]?.isEnabled"></ng-container>
 
 
 <ng-template #dialogStarted>
@@ -47,7 +47,7 @@
 </ng-template>
 
 <ng-template #dialogEnded>
-    <div class="dialog-ended-wrapper" [ngClass]="{'grayout-msgs-node' : automationData?.endAutomation && automationData?.automationsArray?.length}">
+    <div class="dialog-ended-wrapper grayout-msgs-node">
         <div class="line_bar"></div>
         <div class="middle-info">
             <p>{{'DIALOG_TEXT' | translate}}</p>
