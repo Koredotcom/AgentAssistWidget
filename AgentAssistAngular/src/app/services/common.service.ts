@@ -212,6 +212,7 @@ export class CommonService {
       payload : message.payload,
       title: message.title,
       contentId : message.contentId,
+      positionId : faq_or_article_obj.positionId ? faq_or_article_obj.positionId : '',
       sessionId: (this.rootService.activeTab == this.projConstants.MYBOT || this.rootService.activeTab == this.projConstants.SEARCH) ? this.rootService.myBotTabSessionId : this.rootService.assistTabSessionId,
     };
     data = this.rootService.addSourceMsgIdToRequestParams(faq_or_article_obj,data);
