@@ -265,7 +265,7 @@ export class AskCustomerComponent {
       formData.append('Content-Type', file.type);
 
       self.uploadInprogress = true;
-      const _params = {userId: 'u-ba49b921-d291-59ef-8550-c54e227a89b1' }
+      const _params = {userId: 'u-' + Math.floor(Date.now() / 1000) }
       let headers = new HttpHeaders();
       headers = headers.append('enctype', 'multipart/form-data');
       let con = this.rootService.connectionDetails
