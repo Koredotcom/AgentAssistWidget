@@ -20,7 +20,7 @@ export class I1 implements HttpInterceptor {
         let modifiedReq = req.clone();
 
         let botId = modifiedReq.headers.get('botId');        
-        let headerObj : any = {"content-type": 'application/json', 'iid' : botId ? botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'};
+        let headerObj : any = { 'iid' : botId ? botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'};
         let headerToken = fromSAT ? 'bearer' + ' ' + token : this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
         let headerAccountId = fromSAT ? accountId : this.rootService.grantResponseObj?.userInfo?.accountId;
 

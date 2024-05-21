@@ -35,8 +35,8 @@
         <div class="input-block-entity">
             <p container="body" ngbTooltip="{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}">{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}</p>
             <p>:</p>
-            <input type="text" [ngClass]="{'disable-input' : automation.disableInput || assistAutomationData?.endAutomation}" #entityInput aria-label="Input" [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
-            [(ngModel)]="automation.entityValue" [disabled]="automation.disableInput || assistAutomationData?.endAutomation" (keyup.enter)="handleAgentInput()" [placeholder]="automation?.tab === projConstants.ASSIST ? automation.placeholderText : ''">
+            <input [type]="automation?.data?.entityType === 'attachment' ? 'file' : 'text'" [ngClass]="{'disable-input' : automation.disableInput || assistAutomationData?.endAutomation}" #entityInput aria-label="Input" [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
+            [(ngModel)]="automation.entityValue" [disabled]="automation.disableInput || assistAutomationData?.endAutomation" (keyup.enter)="handleAgentInput()" (change)="addFiles(entityInput.files)" [placeholder]="automation?.tab === projConstants.ASSIST ? automation.placeholderText : ''">
             <div class="border-outline"></div>
             <div class="actions-inputs">
                 <button class="remove-input" aria-label="Button" ngbTooltip="Agent’s Input" container="body" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">

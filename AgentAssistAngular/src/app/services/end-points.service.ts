@@ -91,6 +91,18 @@ export class EndPointsService {
       method : 'get',
       defaultEndPoint : false
     }
+
+    this.serviceList['post.uploadfile'] = {
+      endpoint: '/agentassist/api/v1/users/:userId/file',
+      method: 'post',
+      defaultEndPoint : false
+    };
+
+    this.serviceList['get.uploadedfile'] = {
+      endpoint: '/agentassist/api/v1/attachment/file/:fileId/url?isAgentAssist=true',
+      method: 'get',
+      defaultEndPoint : false
+    }
   }
 
 }

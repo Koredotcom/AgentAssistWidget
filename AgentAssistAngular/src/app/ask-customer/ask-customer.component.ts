@@ -7,6 +7,9 @@ import { CommonService } from '../services/common.service';
 import { HandleSubjectService } from '../services/handle-subject.service';
 import { RootService } from '../services/root.service';
 import { WebSocketService } from '../services/web-socket.service';
+import { ServiceInvokerService } from '../services/service-invoker.service';
+import { finalize } from 'rxjs/operators';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-ask-customer',
@@ -26,13 +29,19 @@ export class AskCustomerComponent {
   @ViewChild('askCustNode',{static: false}) private askCustNode : ElementRef;
 
   subs = new SubSink();
+  uploadedfileDetails: any = '';
+  largeFileFlag = false;
+  fileTypeFlag = false;
+  uploadInprogress: boolean = false;
+  filePreview: any;
+  validExtensions: string[] = ['.png'];
 
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
   inputName: string = supportLanguage.AWAITING;
 
   constructor(public rootService: RootService, private websocketService: WebSocketService, private translateService : TranslateService,
-    private commonService : CommonService, private handleSubjectService : HandleSubjectService) {
+    private commonService : CommonService, private handleSubjectService : HandleSubjectService, private serviceInvoker : ServiceInvokerService) {
 
   }
 
@@ -216,5 +225,71 @@ export class AskCustomerComponent {
       }
     }
     return sendData;
+  }
+
+  // adding the files by selection
+  addFiles(files) {
+    if(this.automation?.data?.entityType === 'attachment') {
+      this.removeFile();
+    }
+    this.fileUploadCall(files[0]);
+  }
+
+  removeFile() {
+    this.largeFileFlag = false;
+    this.fileTypeFlag = false;
+    this.uploadedfileDetails = '';
+  }
+
+  // file upload method
+  fileUploadCall(file){
+    if (file) {
+      this.uploadedfileDetails = file.name;
+      if(file?.size > 25000000){ // file size restricting to 25MB
+        this.largeFileFlag = true;
+        return;
+      }
+      const _ext = file.name.substring(file.name.lastIndexOf('.'));
+
+      if (this.validExtensions.indexOf(_ext.toLowerCase()) === -1) {
+        this.fileTypeFlag = true;
+        return;
+      }
+      const self = this;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      const formData: any = new FormData();
+      formData.append('file', file);
+      formData.append('fileContext', 'marketplace');
+      formData.append('fileExtension', file.name.substring(file.name.lastIndexOf('.') + 1));
+      formData.append('Content-Type', file.type);
+
+      self.uploadInprogress = true;
+      const _params = {userId: 'u-ba49b921-d291-59ef-8550-c54e227a89b1' }
+      let headers = new HttpHeaders();
+      headers = headers.append('enctype', 'multipart/form-data');
+      let con = this.rootService.connectionDetails
+      this.serviceInvoker.invoke('post.uploadfile', _params, formData, headers,  con.agentassisturl)
+      .pipe(finalize(() => { }))
+        .subscribe(
+          (res : any) => {
+            this.largeFileFlag = false;
+            this.fileTypeFlag = false;
+            this.uploadedfileDetails = '';
+            
+
+            this.getuploadedLogoFileURL(res.fileId);
+          }, err => {
+          });
+    }
+  }
+
+  // get uploaded image preview method
+  getuploadedLogoFileURL(fileId){
+    this.serviceInvoker.invoke('get.uploadedfile', {'fileId': fileId}).subscribe((res) => {
+      if(res) {
+        this.filePreview = res.fileUrl;
+      }
+    })
   }
 }
