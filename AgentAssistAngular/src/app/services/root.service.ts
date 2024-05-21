@@ -430,7 +430,8 @@ export class RootService {
               showMoreButton: true,
               showLessButton: false,
               displayName: faq.displayName,
-              sourceMsgId : response.sourceMsgId || ''
+              sourceMsgId : response.sourceMsgId || '',
+              positionId : faq.positionId
             }
             faqObject.answer.push(object);
           }
