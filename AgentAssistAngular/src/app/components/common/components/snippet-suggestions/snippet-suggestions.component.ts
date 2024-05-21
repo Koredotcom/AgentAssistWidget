@@ -212,7 +212,6 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy, AfterView
     if(anchorElements){
       for (let anchor of anchorElements) {
         this.renderer.listen(anchor, 'click', (event) => {
-          event.preventDefault(); 
           this.handleAnchorClick(event);
         });
       };
@@ -223,7 +222,6 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy, AfterView
     if(anchorElementsInmternal){
       for (let anchor of anchorElementsInmternal) {
         this.renderer.listen(anchor, 'click', (event) => {
-          event.preventDefault(); 
           this.handleAnchorClick(event, true);
         });
       }
