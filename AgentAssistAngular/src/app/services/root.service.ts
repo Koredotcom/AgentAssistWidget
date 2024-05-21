@@ -643,9 +643,11 @@ export class RootService {
       renderResponse.interactionType = suggestion.intType;
     }else if(suggestionType == 'faqs'){
       let answer = '';
-      suggestion.answer.forEach(element => {
-        answer += element.ans;
-      });
+      if(Array.isArray(suggestion?.answer)){
+        suggestion?.answer?.forEach(element => {
+          answer += element.ans;
+        });
+      }
       renderResponse.title = suggestion.question;
       renderResponse.answer = answer;
     }
