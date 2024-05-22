@@ -198,10 +198,10 @@ export class workflowService {
           let smBotObj = selAcc['instanceBots'][0];
           smBotObj._id = smBotObj.instanceBotId;
           return smBotObj;
-        } else {
+        } 
+      } else {
           return { ...this.currentBtDetails };
         }
-      }
       // 
       // if(!window.location.href.includes('smartassist')) {
       //   return { ...this.currentBtDetails };
