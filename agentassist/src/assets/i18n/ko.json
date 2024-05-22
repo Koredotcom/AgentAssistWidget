@@ -294,5 +294,8 @@
     "DASHBOARD.CHANNEL": "채널",
     "DASHBOARD.CHANNELS": "모든 채널",
     "FEEDBACK_SUB_TITLE": "사용자가 부정적 피드백을 제공할 수 있는 옵션 범위를 지정할 수 있는 유연성을 제공합니다",
-    "FEEDBACK_TITLE": "피드백 설정"
+    "FEEDBACK_TITLE": "피드백 설정",
+    "COACHING_RULE_CREATE_chat" : "라이브 채팅 ",
+    "COACHING_RULE_CREATE_voice" : "보이스",
+    "COACHING_RULE_CREATE_CANCEL" : "취소"
 }

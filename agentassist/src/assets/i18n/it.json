@@ -294,5 +294,8 @@
     "DASHBOARD.CHANNEL": "Canali",
     "DASHBOARD.CHANNELS": "Tutti i Canali",
     "FEEDBACK_SUB_TITLE": "Fornisce agli utenti la flessibilità di specificare la gamma di opzioni disponibili per fornire feedback negativo",
-    "FEEDBACK_TITLE": "Impostazioni di Feedback"
+    "FEEDBACK_TITLE": "Impostazioni di Feedback",
+    "COACHING_RULE_CREATE_chat" : "Chat dal Vivo",
+    "COACHING_RULE_CREATE_voice" : "Voce",
+    "COACHING_RULE_CREATE_CANCEL" : "Annulla"
 }

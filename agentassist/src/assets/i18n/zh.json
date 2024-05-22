@@ -294,5 +294,8 @@
     "DASHBOARD.CHANNEL": "渠道",
     "DASHBOARD.CHANNELS": "所有渠道",
     "FEEDBACK_SUB_TITLE": "为用户提供指定提供负面反馈的选项范围的灵活性",
-    "FEEDBACK_TITLE": "反馈设置"
+    "FEEDBACK_TITLE": "反馈设置",
+    "COACHING_RULE_CREATE_chat" : "在线聊天",
+    "COACHING_RULE_CREATE_voice" : "语音",
+    "COACHING_RULE_CREATE_CANCEL" : "取消"
 }

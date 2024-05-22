@@ -294,5 +294,8 @@
     "DASHBOARD.CHANNEL": "チャンネル",
     "DASHBOARD.CHANNELS": "すべてのチャンネル",
     "FEEDBACK_SUB_TITLE": "ユーザーにネガティブフィードバックを提供するためのオプションの範囲を指定する柔軟性を提供",
-    "FEEDBACK_TITLE": "フィードバック設定"
+    "FEEDBACK_TITLE": "フィードバック設定",
+    "COACHING_RULE_CREATE_chat" : "ライブチャット",
+    "COACHING_RULE_CREATE_voice" : "音声",
+    "COACHING_RULE_CREATE_CANCEL" : "キャンセル"
 }

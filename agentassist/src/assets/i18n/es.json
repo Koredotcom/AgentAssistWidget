@@ -294,5 +294,8 @@
     "DASHBOARD.CHANNEL": "Canales",
     "DASHBOARD.CHANNELS": "Todos los canales",
     "FEEDBACK_SUB_TITLE": "Proporciona a los usuarios la flexibilidad de especificar la gama de opciones disponibles para proporcionar retroalimentación negativa",
-    "FEEDBACK_TITLE": "Configuración de retroalimentación"
+    "FEEDBACK_TITLE": "Configuración de retroalimentación",
+    "COACHING_RULE_CREATE_chat" : "Chat en Vivo",
+    "COACHING_RULE_CREATE_voice" : "Voz",
+    "COACHING_RULE_CREATE_CANCEL" : "Cancelar"
 }
