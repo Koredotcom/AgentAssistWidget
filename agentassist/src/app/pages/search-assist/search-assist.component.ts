@@ -38,6 +38,8 @@ export class SearchAssistComponent implements OnInit {
   searchAssistKeys: any = ['searchAssistbotId', 'domain', 'clientId', 'clientSecret'];
   isSearchAssistEnabled: boolean = true;
   loading = false;
+  isDomainValid = true;
+  statusCodeVal: number = 0;
   constructor(private localstorage: LocalStoreService, private service: ServiceInvokerService,
     private cdr: ChangeDetectorRef, private dialog: MatDialog,
     private translate: TranslateService, private notificationService: NotificationService,
@@ -164,9 +166,11 @@ export class SearchAssistComponent implements OnInit {
       this.searchFormChangeMode();
       let methodType = this.editEnabled ? 'put.searchaccounts' : 'post.searchaccounts';
       this.service.invoke(methodType, { accountId: this.accountId }, payLoad).subscribe((data) => {
-        if(data && data.statusCode == 401){
+        if(data && data?.statusCode && data?.statusCode >= 400){
+          this.statusCodeVal = data?.statusCode
           this.handleSaveFailureCase();
         }else if(data){
+          this.statusCodeVal = 0;
           this.editEnabled = false; 
           this.createFormStatus = this.searchConv.isEnabled ? true : undefined;
           this.updateSearchConfDetailsFromDb(data);

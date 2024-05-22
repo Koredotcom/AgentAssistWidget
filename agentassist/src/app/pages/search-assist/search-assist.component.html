@@ -27,8 +27,9 @@
                     </div>
                 </div>
                 <div class="fail-banner" *ngIf="createFormStatus == false">
-                    <i class="icon-sa-warning"></i>
-                    <span>{{"SEARCHASSIST.FAILURE_BANNER" | translate}}</span>
+                    <i class="icon-sa-info"></i>
+                    <p *ngIf="statusCodeVal >= 400 && statusCodeVal < 500">{{"SEARCHASSIST.FAILURE_BANNER" | translate}}</p>
+                    <p *ngIf="statusCodeVal >= 500">{{"SEARCHASSIST_500_STATUSCODE" | translate}}</p>
                     <div class="close-banner" (click)="createFormStatus = undefined">
                         <i class="icon-sa-close"></i>
                     </div>
