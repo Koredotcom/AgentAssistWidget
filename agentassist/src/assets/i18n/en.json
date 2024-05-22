@@ -2489,5 +2489,6 @@
         "COACHING_MSG_DESC" : "This Rule is pre-trained with utterances. More utterances can be added to train it better.",
         "COACHING_ENCHANCED_MODULE" : "New! Enhanced module",
         "COACHING_ENCHANCE_MODULE_DESC" : "The utterance module is now enhanced with generative AI functionality that will simplify the need for utterance additions.",
-        "COACHING_CONVERSATION_NOFOUND" : "No conversation history found."
+        "COACHING_CONVERSATION_NOFOUND" : "No conversation history found.",
+        "SEARCHASSIST_500_STATUSCODE" : "Something went Wrong. Please try again."
     }
