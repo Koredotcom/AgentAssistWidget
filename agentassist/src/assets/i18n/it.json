@@ -300,5 +300,13 @@
     "COACHING_RULE_CREATE_CANCEL" : "Annulla",
     "BUTTONS.CANCEL": "Annulla",
     "COACHING_UTTERANCE.CLEAR": "Cancella",
-    "COACHING_UTTERANCE.ADD": "Aggiungi"
+    "COACHING_UTTERANCE.ADD": "Aggiungi",
+    "COACHING_SIMILAR_UTTERANCE" : "Frasi simili con lo stesso significato",
+    "COACHING_ASSISTANT" : "Assistente",
+    "COACHING_WORKING" : "Lavorando...",
+    "COACHING_MESSAGE" : "Messaggio",
+    "COACHING_MSG_DESC" : "Questa regola è pre-addestrata con frasi. Si possono aggiungere altre frasi per addestrarla meglio.",
+    "COACHING_ENCHANCED_MODULE" : "Nuovo! Modulo migliorato",
+    "COACHING_ENCHANCE_MODULE_DESC" : "Il modulo di frasi è ora migliorato con funzionalità di IA generativa che semplificherà la necessità di aggiungere frasi.",
+    "COACHING_CONVERSATION_NOFOUND" : "Nessuna cronologia delle conversazioni trovata."
 }

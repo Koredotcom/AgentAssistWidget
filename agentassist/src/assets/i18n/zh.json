@@ -300,5 +300,13 @@
     "COACHING_RULE_CREATE_CANCEL" : "取消",
     "BUTTONS.CANCEL": "取消",
     "COACHING_UTTERANCE.CLEAR": "清除",
-    "COACHING_UTTERANCE.ADD": "添加"
+    "COACHING_UTTERANCE.ADD": "添加",
+    "COACHING_SIMILAR_UTTERANCE" : "意思相同的类似语句",
+    "COACHING_ASSISTANT" : "助理",
+    "COACHING_WORKING" : "工作中...",
+    "COACHING_MESSAGE" : "信息",
+    "COACHING_MSG_DESC" : "此规则已用语句进行预训练。可以添加更多语句以更好地进行训练。",
+    "COACHING_ENCHANCED_MODULE" : "新！增强模块",
+    "COACHING_ENCHANCE_MODULE_DESC" : "语句模块现在已增强了生成式AI功能，将简化添加语句的需求。",
+    "COACHING_CONVERSATION_NOFOUND" : "未找到对话记录。"
 }

@@ -300,5 +300,13 @@
     "COACHING_RULE_CREATE_CANCEL" : "キャンセル",
     "BUTTONS.CANCEL": "キャンセル",
     "COACHING_UTTERANCE.CLEAR": "クリア",
-    "COACHING_UTTERANCE.ADD": "追加"
+    "COACHING_UTTERANCE.ADD": "追加",
+    "COACHING_SIMILAR_UTTERANCE" : "同じ意味の類似発話、",
+    "COACHING_ASSISTANT" : "アシスタント、",
+    "COACHING_WORKING" : "作業中...",
+    "COACHING_MESSAGE" : "メッセージ、",
+    "COACHING_MSG_DESC" : "このルールは発話で事前にトレーニングされています。さらに発話を追加してより良くトレーニングできます。、",
+    "COACHING_ENCHANCED_MODULE" : "新しい！強化されたモジュール、",
+    "COACHING_ENCHANCE_MODULE_DESC" : "発話モジュールは現在、発話追加の必要性を簡素化する生成AI機能で強化されています。、",
+    "COACHING_CONVERSATION_NOFOUND" : "会話履歴が見つかりませんでした。"
 }

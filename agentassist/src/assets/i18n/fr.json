@@ -300,5 +300,13 @@
     "COACHING_RULE_CREATE_CANCEL" : "Annuler",
     "BUTTONS.CANCEL": "Annuler",
     "COACHING_UTTERANCE.CLEAR": "Effacer",
-    "COACHING_UTTERANCE.ADD": "Ajouter"
+    "COACHING_UTTERANCE.ADD": "Ajouter",
+    "COACHING_SIMILAR_UTTERANCE" : "Expressions similaires avec le même sens",
+    "COACHING_ASSISTANT" : "Assistant",
+    "COACHING_WORKING" : "Travail en cours...",
+    "COACHING_MESSAGE" : "Message",
+    "COACHING_MSG_DESC" : "Cette règle est préentraînée avec des expressions. D'autres expressions peuvent être ajoutées pour l'entraîner davantage.",
+    "COACHING_ENCHANCED_MODULE" : "Nouveau ! Module amélioré",
+    "COACHING_ENCHANCE_MODULE_DESC" : "Le module d'expressions est maintenant amélioré avec des fonctionnalités d'IA générative qui simplifieront la nécessité d'ajouter des expressions.",
+    "COACHING_CONVERSATION_NOFOUND" : "Aucun historique de conversation trouvé"
 }

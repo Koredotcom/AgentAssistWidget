@@ -300,5 +300,13 @@
     "COACHING_RULE_CREATE_CANCEL" : "Cancelar",
     "BUTTONS.CANCEL": "Cancelar",
     "COACHING_UTTERANCE.CLEAR": "Limpiar",
-    "COACHING_UTTERANCE.ADD": "Añadir"
+    "COACHING_UTTERANCE.ADD": "Añadir",
+    "COACHING_SIMILAR_UTTERANCE" : "Utterancias similares con el mismo significado",
+    "COACHING_ASSISTANT" : "Asistente",
+    "COACHING_WORKING" : "Trabajando...",
+    "COACHING_MESSAGE" : "Mensaje",
+    "COACHING_MSG_DESC" : "Esta regla está preentrenada con utterancias. Se pueden agregar más utterancias para entrenarla mejor.",
+    "COACHING_ENCHANCED_MODULE" : "¡Nuevo! Módulo mejorado",
+    "COACHING_ENCHANCE_MODULE_DESC" : "El módulo de utterancias ahora está mejorado con funcionalidad de IA generativa que simplificará la necesidad de agregar utterancias.",
+    "COACHING_CONVERSATION_NOFOUND" : "No se encontró historial de conversaciones."
 }

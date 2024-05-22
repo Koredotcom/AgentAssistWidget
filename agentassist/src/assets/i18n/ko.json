@@ -300,5 +300,13 @@
     "COACHING_RULE_CREATE_CANCEL" : "취소",
     "BUTTONS.CANCEL": "취소",
     "COACHING_UTTERANCE.CLEAR": "지우기",
-    "COACHING_UTTERANCE.ADD": "추가"
+    "COACHING_UTTERANCE.ADD": "추가",
+    "COACHING_SIMILAR_UTTERANCE" : "같은 의미의 유사 발화",
+    "COACHING_ASSISTANT" : "어시스턴트",
+    "COACHING_WORKING" : "작업 중...",
+    "COACHING_MESSAGE" : "메시지",
+    "COACHING_MSG_DESC" : "이 규칙은 발화로 사전 학습되었습니다. 더 나은 학습을 위해 더 많은 발화를 추가할 수 있습니다.",
+    "COACHING_ENCHANCED_MODULE" : "새로워진! 강화된 모듈",
+    "COACHING_ENCHANCE_MODULE_DESC" : "발화 모듈이 이제 발화 추가의 필요성을 단순화하는 생성 AI 기능으로 강화되었습니다.",
+    "COACHING_CONVERSATION_NOFOUND" : "대화 기록을 찾을 수 없습니다."
 }
