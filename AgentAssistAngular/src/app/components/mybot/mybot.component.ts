@@ -83,12 +83,14 @@ export class MybotComponent {
   }
 
   setCollapseTabPadding(){
-    let collapseTabHeight = this.collapseTab?.nativeElement?.offsetHeight;
-    if(collapseTabHeight){
-      let pixel = (28 * collapseTabHeight) / 100;
-      this.renderer.setStyle(this.collapseTab.nativeElement, 'padding-bottom', pixel+"px");
-    }else{
-      this.collapseTab.nativeElement.classList.add('pB');
+    if(this.collapseTab && this.collapseTab?.nativeElement){
+      let collapseTabHeight = this.collapseTab?.nativeElement?.offsetHeight;
+      if(collapseTabHeight){
+        let pixel = (28 * collapseTabHeight) / 100;
+        this.renderer.setStyle(this.collapseTab.nativeElement, 'padding-bottom', pixel+"px");
+      }else{
+        this.collapseTab.nativeElement.classList.add('pB');
+      }
     }
   }
 
@@ -104,12 +106,14 @@ export class MybotComponent {
   }
 
   scrollToBottom() {
-    this.setCollapseTabPadding();
-    setTimeout(() => {
-      try {
-        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
-      } catch (err) { }
-    }, 10);
+    if(this.collapseTab?.nativeElement){
+      this.setCollapseTabPadding();
+      setTimeout(() => {
+        try {
+          this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
+        } catch (err) { }
+      }, 10);
+    }
   }
 
   subscribeEvents(){
