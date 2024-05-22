@@ -62,14 +62,14 @@
                 <div class="check-item" *ngFor="let item of coachingCnst.channelList; let i = index">
                     <input class="input" id="checkboxtd-{{i}}" type="checkbox" (change)="channelSelection($event,item)"
                         [checked]="channelList.indexOf(item) >= 0">
-                    <span for="checkboxtd-{{i}}">{{coachingCnst[item]}}</span>
+                    <span for="checkboxtd-{{i}}">{{('COACHING_RULE_CREATE_' + item) | translate}}</span>
                 </div>
 
             </div>
         </div>
     </div>
     <div class="footer-wrapper">
-        <button class="kr-sg-button-secondary-two btn_lg" (click)="closeRule()">{{'BUTTONS.CANCEL' | translate}}</button>
+        <button class="kr-sg-button-secondary-two btn_lg" (click)="closeRule()">{{'COACHING_RULE_CREATE_CANCEL' | translate}}</button>
         <button class="kr-sg-button-primary btn_lg" (click)="submitForm()" [disabled]="disableApplyButton || !(ruleName?.trim() && ruleDesc?.trim() && channelList?.length)">{{'BUTTONS.APPLY' | translate}}</button>
     </div>
 </div>
