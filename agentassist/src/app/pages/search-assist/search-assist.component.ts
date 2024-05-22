@@ -179,7 +179,7 @@ export class SearchAssistComponent implements OnInit {
       this.searchFormChangeMode();
       let methodType = this.editEnabled ? 'put.searchaccounts' : 'post.searchaccounts';
       this.service.invoke(methodType, { accountId: this.accountId }, payLoad).subscribe((data) => {
-        if(data && data?.statusCode && (data?.statusCode >= 400 && data?.statusCode <= 500)){
+        if(data && data?.statusCode && data?.statusCode >= 400){
           this.statusCodeVal = data?.statusCode
           this.handleSaveFailureCase();
         }else if(data){
