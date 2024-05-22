@@ -70,8 +70,8 @@ export class FooterComponent implements OnInit, OnDestroy{
     this.subs.sink = this.rootService.activeTab$.subscribe(tab => {
       if(tab){
         this.selectedTab = (!this.showTranscript && tab === this.projConstants.TRANSCRIPT) ? this.projConstants.ASSIST : tab;
-        this.actionOnButton(tab);
-        this.updateLocalStorageForTabSwitch(tab);
+        this.actionOnButton(this.selectedTab);
+        this.updateLocalStorageForTabSwitch(this.selectedTab);
       }
     });
 
