@@ -978,12 +978,19 @@ input[type=number]::-webkit-outer-spin-button {
     align-items: center;
     gap: 8px;
     align-self: stretch;
+    .mat-form-field-label{
+        font-weight: 400 !important;
+        color: var(--gray-500, #667085) !important; 
+        left: 0 !important;
+        opacity: 0.5;
+    }
     .mat-form-field-flex{
         padding: 0 12px;
     }
     .mat-form-field-wrapper{
         padding: 0;
         width: 100%;
+        padding: 0 10px !important;
         .mat-form-field-infix{
             padding: 0;
             margin: 0;
@@ -993,7 +1000,8 @@ input[type=number]::-webkit-outer-spin-button {
     .mat-input-element{
         margin: 0 !important;
         height: 31px;
-        padding-left: 10px;
+        padding:0 0 0 0px !important;
+        border: 0 !important;
     }
     .mat-form-field-label-wrapper{
         top: -13px;

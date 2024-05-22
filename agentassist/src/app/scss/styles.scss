@@ -117,8 +117,8 @@ html{
                 background-color: $secondaryFontColor !important;
             }
             .mat-form-field-label {
-                color: $secondaryFontColor !important;
-                font-weight: 300 !important;
+                color: var(--gray-500, #667085) !important;
+                font-weight: 400 !important;
                 font-size: $font-md;
             }
         }
