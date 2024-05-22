@@ -297,5 +297,8 @@
     "FEEDBACK_TITLE": "Configuración de retroalimentación",
     "COACHING_RULE_CREATE_chat" : "Chat en Vivo",
     "COACHING_RULE_CREATE_voice" : "Voz",
-    "COACHING_RULE_CREATE_CANCEL" : "Cancelar"
+    "COACHING_RULE_CREATE_CANCEL" : "Cancelar",
+    "BUTTONS.CANCEL": "Cancelar",
+    "COACHING_UTTERANCE.CLEAR": "Limpiar",
+    "COACHING_UTTERANCE.ADD": "Añadir"
 }

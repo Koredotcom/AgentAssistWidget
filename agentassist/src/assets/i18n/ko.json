@@ -297,5 +297,8 @@
     "FEEDBACK_TITLE": "피드백 설정",
     "COACHING_RULE_CREATE_chat" : "라이브 채팅 ",
     "COACHING_RULE_CREATE_voice" : "보이스",
-    "COACHING_RULE_CREATE_CANCEL" : "취소"
+    "COACHING_RULE_CREATE_CANCEL" : "취소",
+    "BUTTONS.CANCEL": "취소",
+    "COACHING_UTTERANCE.CLEAR": "지우기",
+    "COACHING_UTTERANCE.ADD": "추가"
 }

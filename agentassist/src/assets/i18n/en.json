@@ -2479,5 +2479,15 @@
         "FEEDBACK_TITLE" : "Feedback Settings",
         "COACHING_RULE_CREATE_chat" : "Live Chat",
         "COACHING_RULE_CREATE_voice" : "Voice",
-        "COACHING_RULE_CREATE_CANCEL" : "Cancel"
+        "COACHING_RULE_CREATE_CANCEL" : "Cancel",
+        "COACHING_UTTERANCE.CLEAR": "Clear",
+        "COACHING_UTTERANCE.ADD": "Add",
+        "COACHING_SIMILAR_UTTERANCE" : "Similar utterances with the same meaning",
+        "COACHING_ASSISTANT" : "Assistant",
+        "COACHING_WORKING" : "Working...",
+        "COACHING_MESSAGE" : "Message",
+        "COACHING_MSG_DESC" : "This Rule is pre-trained with utterances. More utterances can be added to train it better.",
+        "COACHING_ENCHANCED_MODULE" : "New! Enhanced module",
+        "COACHING_ENCHANCE_MODULE_DESC" : "The utterance module is now enhanced with generative AI functionality that will simplify the need for utterance additions.",
+        "COACHING_CONVERSATION_NOFOUND" : "No conversation history found."
     }

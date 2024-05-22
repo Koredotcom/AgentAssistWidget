@@ -297,5 +297,8 @@
     "FEEDBACK_TITLE": "反馈设置",
     "COACHING_RULE_CREATE_chat" : "在线聊天",
     "COACHING_RULE_CREATE_voice" : "语音",
-    "COACHING_RULE_CREATE_CANCEL" : "取消"
+    "COACHING_RULE_CREATE_CANCEL" : "取消",
+    "BUTTONS.CANCEL": "取消",
+    "COACHING_UTTERANCE.CLEAR": "清除",
+    "COACHING_UTTERANCE.ADD": "添加"
 }

@@ -297,5 +297,8 @@
     "FEEDBACK_TITLE": "Impostazioni di Feedback",
     "COACHING_RULE_CREATE_chat" : "Chat dal Vivo",
     "COACHING_RULE_CREATE_voice" : "Voce",
-    "COACHING_RULE_CREATE_CANCEL" : "Annulla"
+    "COACHING_RULE_CREATE_CANCEL" : "Annulla",
+    "BUTTONS.CANCEL": "Annulla",
+    "COACHING_UTTERANCE.CLEAR": "Cancella",
+    "COACHING_UTTERANCE.ADD": "Aggiungi"
 }
