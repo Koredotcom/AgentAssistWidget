@@ -24,6 +24,7 @@ export class I1 implements HttpInterceptor {
         let headerToken = fromSAT ? 'bearer' + ' ' + token : this.rootService.grantResponseObj?.authorization?.token_type + ' ' + this.rootService.grantResponseObj?.authorization?.accessToken;
         let headerAccountId = fromSAT ? accountId : this.rootService.grantResponseObj?.userInfo?.accountId;
 
+
         if(headerToken && headerAccountId){
             if(fromSAT){
                 headerObj.eAD = 'false';
@@ -47,6 +48,18 @@ export class I1 implements HttpInterceptor {
                 });
             }
            
+        }
+        // if (req.body instanceof FormData) {
+        //     headerObj.iid = '',
+        //     headerObj.accountId = ''
+        //     headerObj.contentType = 'multipart/form-data';
+        // }
+        if(req.url.includes('/attachment/file') || req.url.includes('/file') ) {
+            if((req.body instanceof FormData || req.url.includes('/chunk')) && req.method === 'POST') {
+                headerObj.contentType = 'multipart/form-data'
+            }
+            headerObj.iid = '',
+            headerObj.accountId = ''
         }
         const modified = modifiedReq.clone({setHeaders: headerObj});        
         return next.handle(modified);

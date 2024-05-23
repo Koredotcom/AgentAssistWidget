@@ -9,8 +9,11 @@ import { RootService } from '../services/root.service';
 import { WebSocketService } from '../services/web-socket.service';
 import { ServiceInvokerService } from '../services/service-invoker.service';
 import { finalize } from 'rxjs/operators';
-import { HttpHeaders } from '@angular/common/http';
+import { ChunkFileUploadService } from '../helpers/chunk-file-upload.service';
+import { FileUploadService } from '../helpers/file-chunk-upload.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+const CHUNK_SIZE = 1024 * 1024 * 2;
 @Component({
   selector: 'app-ask-customer',
   templateUrl: './ask-customer.component.html',
@@ -34,14 +37,15 @@ export class AskCustomerComponent {
   fileTypeFlag = false;
   uploadInprogress: boolean = false;
   filePreview: any;
-  validExtensions: string[] = ['.png'];
+  // private readonly chunkSize = 1024 * 1024; // 1 MB
 
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
   inputName: string = supportLanguage.AWAITING;
 
   constructor(public rootService: RootService, private websocketService: WebSocketService, private translateService : TranslateService,
-    private commonService : CommonService, private handleSubjectService : HandleSubjectService, private serviceInvoker : ServiceInvokerService) {
+    private commonService : CommonService, private handleSubjectService : HandleSubjectService, private serviceInvoker : ServiceInvokerService,
+   private chunkFileUploadService: ChunkFileUploadService, private fileUploadService: FileUploadService) {
 
   }
 
@@ -242,19 +246,61 @@ export class AskCustomerComponent {
   }
 
   // file upload method
-  fileUploadCall(file){
-    if (file) {
-      this.uploadedfileDetails = file.name;
-      if(file?.size > 25000000){ // file size restricting to 25MB
-        this.largeFileFlag = true;
-        return;
-      }
-      const _ext = file.name.substring(file.name.lastIndexOf('.'));
+  async fileUploadCall(file){
+    if (!file) {
+      return;
+    }
+    
+    this.uploadedfileDetails = file.name;
 
-      if (this.validExtensions.indexOf(_ext.toLowerCase()) === -1) {
-        this.fileTypeFlag = true;
-        return;
+    if(file?.size > 25000000){ // file size restricting to 25MB
+      this.largeFileFlag = true;
+      return;
+    }
+
+    
+    console.log("🚀 ~ AskCustomerComponent ~ fileUploadCall ~ file.size:", file.size)
+    let chunkUpload = file.size > CHUNK_SIZE;
+    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+    if(chunkUpload){
+      this.fileUploadService.getFileToken().subscribe(
+        
+        
+        
+        async (token) =>{
+        if(token){
+            for (let chunkNumber = 0; chunkNumber < totalChunks; chunkNumber++) {
+              const start = chunkNumber * CHUNK_SIZE;
+              const end = Math.min(start + CHUNK_SIZE, file.size);
+              const chunk = file.slice(start, end);
+
+              try {
+                const res = await this.fileUploadService.uploadChunk(token, file, chunk, chunkNumber + 1, totalChunks).toPromise();
+                console.log(res);
+                if(res?.hash !== '') {
+                  console.log(res)
+                    // const headers = new HttpHeaders({
+                    //     //   'Content-Range': `bytes ${start}-${end - 1}/${file?.size}`,
+                    //     'enctype': 'multipart/form-data'
+                    //     });
+                    //     const params = {
+                    //         fileToken: token
+                    //       };
+                    // this.serviceInvoker.invoke('post.uploadfaqfile.fileId', params, token, headers, this.rootService.connectionDetails.agentassisturl).subscribe(fileIdRes => {
+                    // });
+                }
+              } catch (error) {
+                console.error(`Error uploading chunk ${chunkNumber + 1}:`, error);
+                break;
+              }
+            }
+        }
       }
+    
+    
+    
+    );
+    } else {
       const self = this;
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -265,11 +311,9 @@ export class AskCustomerComponent {
       formData.append('Content-Type', file.type);
 
       self.uploadInprogress = true;
-      const _params = {userId: 'u-' + Math.floor(Date.now() / 1000) }
-      let headers = new HttpHeaders();
-      headers = headers.append('enctype', 'multipart/form-data');
+      const _params = {};
       let con = this.rootService.connectionDetails
-      this.serviceInvoker.invoke('post.uploadfile', _params, formData, headers,  con.agentassisturl)
+      this.serviceInvoker.invoke('post.uploadfile', _params, formData, {},  con.agentassisturl)
       .pipe(finalize(() => { }))
         .subscribe(
           (res : any) => {
@@ -282,11 +326,13 @@ export class AskCustomerComponent {
           }, err => {
           });
     }
+      
+    
   }
 
   // get uploaded image preview method
   getuploadedLogoFileURL(fileId){
-    this.serviceInvoker.invoke('get.uploadedfile', {'fileId': fileId}).subscribe((res) => {
+    this.serviceInvoker.invoke('get.uploadedfile', {'fileId': fileId}, {}, {}, this.rootService.connectionDetails.agentassisturl).subscribe((res) => {
       if(res) {
         this.filePreview = res.fileUrl;
       }

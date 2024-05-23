@@ -92,14 +92,31 @@ export class EndPointsService {
       defaultEndPoint : false
     }
 
+     /** File token API Start */
+     this.serviceList['post.file.token'] = {
+      endpoint: '/api/1.1/attachment/file/token',
+      method: 'post'
+    }
+    /** File token API End */
+
+    this.serviceList['post.uploadfaqfile.chunk'] = {
+      endpoint:  '/api/1.1/attachment/file/:fileToken/chunk',
+      method: 'post'
+    };
+
+    this.serviceList['post.uploadfaqfile.fileId'] = {
+      endpoint:  '/api/1.1/attachment/file/:fileToken',
+      method: 'post'
+    };
+
     this.serviceList['post.uploadfile'] = {
-      endpoint: '/agentassist/api/v1/users/:userId/file',
+      endpoint: '/api/1.1/attachment/file',
       method: 'post',
       defaultEndPoint : false
     };
 
     this.serviceList['get.uploadedfile'] = {
-      endpoint: '/agentassist/api/v1/attachment/file/:fileId/url?isAgentAssist=true',
+      endpoint: '/api/1.1/attachment/file/:fileId/url?isAgentAssist=true',
       method: 'get',
       defaultEndPoint : false
     }
