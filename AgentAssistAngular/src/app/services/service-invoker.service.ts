@@ -43,6 +43,22 @@ export class ServiceInvokerService {
     if (serviceId === 'post.uploadfile') {
       _headers = JSON.parse(JSON.stringify(this.UPLOAD_HEADERS));
     }
+    if (serviceId === 'post.uploadfaqfile.chunk' || serviceId === 'post.uploadfaqfile.fileId') {
+      let MULTIPART_UPLOAD_HEADERS = {
+        'Content-Type': "multipart/form-data; boundary=" + payload?.boundary
+      };
+      if(serviceId === 'post.uploadfaqfile.fileId'){
+        MULTIPART_UPLOAD_HEADERS = {...MULTIPART_UPLOAD_HEADERS, ...headers};
+      }
+      _headers = JSON.parse(JSON.stringify(MULTIPART_UPLOAD_HEADERS));
+      payload = payload.toString();
+    } else if (serviceId === 'sa.post.directory_metadata' || serviceId === 'sa.post.file_upload') {
+      // let account: any = localStorage.getItem('jStorage');
+      // account = JSON.parse(account);
+      // if (account?.currentAccount?.userInfo) {
+      //   _headers.userId = account?.currentAccount?.userInfo.id;
+      // }
+    }
     try {
       _verb = serviceConf.method;
       _url = serviceConf.endpoint;

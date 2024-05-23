@@ -3,8 +3,9 @@ import { Observable } from 'rxjs';
 import { map } from "rxjs/operators";
 import { ServiceInvokerService } from '../services/service-invoker.service';
 import { RootService } from '../services/root.service';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 
-const CHUNK_SIZE = 1024 * 2024 * 5;
+const CHUNK_SIZE = 1024 * 2024 * 2;
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,7 @@ export class ChunkFileUploadService {
   totalChunks: any;
   currChunk: any;
 
-  constructor(private service: ServiceInvokerService, private rootService: RootService) { }
+  constructor(private http: HttpClient, private service: ServiceInvokerService, private rootService: RootService) { }
 
   getFileToken(): Observable<any> {
     return this.service.invoke('post.file.token', {}, {}, {}, this.rootService.connectionDetails.agentassisturl).pipe(map(res => {
@@ -22,7 +23,9 @@ export class ChunkFileUploadService {
   }
 
   uploadChunkFile(token, file): Observable<any> {
+
     this.blobs = [];
+
     return new Observable((observe)=>{
       for (let start = 0; start < file.size; start += CHUNK_SIZE) {
         const blob = file.slice(start, start + CHUNK_SIZE + 1);
@@ -32,6 +35,7 @@ export class ChunkFileUploadService {
       const params = {
         fileToken: token
       };
+
       let splitName = file.name.split('.');
       let ext = splitName[splitName.length - 1];
   
@@ -44,9 +48,6 @@ export class ChunkFileUploadService {
         });
       })()
     });
-
-    
-   
   }
 
   async startChunkUpload(token, file, callback) {
@@ -55,9 +56,9 @@ export class ChunkFileUploadService {
     };
 
     const blob = this.blobs[this.currChunk];
-
     const _mdat = new MultipartData();
     let _self = this;
+
     var reader = new FileReader();
     reader.onloadend = function (evt) {
       if (evt.target.readyState === FileReader.DONE) { // DONE == 2
@@ -69,30 +70,35 @@ export class ChunkFileUploadService {
         if (_self.currChunk < _self.totalChunks) {
           _mdat.append('chunkNo', _self.currChunk);
           _mdat.append('messageToken', token);
+          _mdat.append('fileContext', 'bulkImport');
+          _mdat.append('Content-Type', file?.type);
           _mdat.append('chunk', {
             data: chunk,
             fileName: file.name
           });
           let data = _mdat;
           console.log("chunk >>>>>>>>>", data);
+          // let headers = new HttpHeaders({
+          //   'enctype': 'multipart/form-data'
+          //   });
           _self.service.invoke('post.uploadfaqfile.chunk', params, data, {}, _self.rootService.connectionDetails.agentassisturl).subscribe(
             res => {
               console.log(res, "??????????????");
               if (_self.currChunk + 1 == _self.totalChunks) {
-                const _mdatFinal = new FormData();
+                const _mdatFinal = new MultipartData();
                 _mdatFinal.append('totalChunks', _self.totalChunks);
                 _mdatFinal.append('messageToken', token);
-                _mdatFinal.append('fileExtension', file.name.substring(file.name.lastIndexOf('.') + 1));
+                _mdatFinal.append('fileExtension', file?.name.substring(file?.name.lastIndexOf('.') + 1));
                 _mdatFinal.append('fileContext', "bulkImport");
-                _mdatFinal.append('Content-Type', file.type);
-                _mdatFinal.append('filename', file.name);
+                _mdatFinal.append('Content-Type', file?.type);
+                _mdatFinal.append('filename', file?.name);
                 console.log("_mdatFinal >>>>>>>", _mdatFinal);
-
-                _self.service.invoke('post.uploadfaqfile.fileId', params, _mdatFinal, { 'X-HTTP-Method-Override': 'put' }, _self.rootService.connectionDetails.agentassisturl).subscribe(
+                _self.service.invoke('post.uploadfaqfile.fileId', params, _mdatFinal, { 'X-HTTP-Method-Override': 'put' }, _self.rootService?.connectionDetails?.agentassisturl).subscribe(
                   res => {
                     console.log(res);
                     callback(res.fileId);
                   }, err => {
+                    // error message
                   }
                 )
               } else {
@@ -100,6 +106,7 @@ export class ChunkFileUploadService {
                 _self.startChunkUpload(token, file, callback);
               }
             }, err => {
+              // error message
             }
           )
 
@@ -117,6 +124,7 @@ function MultipartData() {
   this.boundary = "--------MultipartData" + Math.random();
   this._fields = [];
 }
+
 MultipartData.prototype.append = function (key, value) {
   this._fields.push([key, value]);
 };
