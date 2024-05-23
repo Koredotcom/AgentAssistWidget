@@ -1518,22 +1518,33 @@
                     } else if (type == "url" || type == "web_url") {
                         if($(e.target).attr('msgData')!==undefined){
                             var msgData;
+                            var a_link = $(e.target).attr('url');
+                            if (a_link.indexOf("http:") < 0 && a_link.indexOf("https:") < 0) {
+                                a_link = "http:////" + a_link;
+                            }
                             try {
                                 msgData = JSON.parse($(e.target).attr('msgData'));
                                } catch (err) {
 
                             }
-                            if(msgData && msgData.message && msgData.message[0].component && (msgData.message[0].component.formData || (msgData.message[0].component.payload &&  msgData.message[0].component.payload.formData))){
+                            if(msgData.message[0].component.payload){
+                                msgData.message[0].component.payload.formData = {
+                                    "formLink": a_link + '&showClose=true',
+                                    "renderType": "inline",
+                                    "name": "form",
+                                    "displayName": "testing form",
+                                    "isSecured": false,
+                                    "formLinkExpiry": 300,
+                                    "submitExpiry": 600
+                                }
+                            }
+                            if(msgData && msgData.message && msgData.message[0].component && (msgData.message[0].component.formData || (msgData.message[0].component.payload &&  msgData.message[0].component.payload.formData && msgData.message[0].component.payload.formData.renderType === 'inline'))){
                                 if(msgData.message[0].component.formData){
                                    msgData.message[0].component.payload.formData = msgData.message[0].component.formData;
                                 }
                                 me.renderWebForm(msgData);
                                 return;
                             }
-                        }
-                        var a_link = $(e.target).attr('url');
-                        if (a_link.indexOf("http:") < 0 && a_link.indexOf("https:") < 0) {
-                            a_link = "http:////" + a_link;
                         }
                         me.openExternalLink(a_link);
                     }
@@ -3032,6 +3043,37 @@
                     // }else{
                     //     console.log($(`#agentAssistContainer #${runInfoContent} #displayData-${elementID}  li#`).length,"----<============================else=======================>came here out of else main if condition===",$(`${me.config.agentAssist?`#agentAssistContainer #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length,msgData.messageId, msgData.renderType);
                     // }
+
+                    
+
+                    if ($('.kore-chat-window .chat-container li#' + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
+                        var _chatContainer = $('.kore-chat-window').find('.chat-container');
+                        if (msgData.type === "bot_response" && msgData.fromHistorySync) {
+                            var msgTimeStamps = [];
+                            var msgEles = $('.kore-chat-window .chat-container>li');
+                            if (msgEles.length) {
+                                msgEles.each(function (i, ele) {
+                                    msgTimeStamps.push(parseInt($(ele).attr('data-time')));
+                                });
+                                var insertAtIndex = findSortedIndex(msgTimeStamps, msgData.createdOnTimemillis);
+
+                                if (insertAtIndex > 0) {
+                                    var insertAfterEle = msgEles[insertAtIndex];
+                                    if (insertAfterEle) {
+                                        $(messageHtml).insertBefore(insertAfterEle);
+                                    } else {
+                                        _chatContainer.append(messageHtml);
+                                    }
+                                } else {
+                                    _chatContainer.prepend(messageHtml);
+                                }
+                            } else {
+                                _chatContainer.append(messageHtml);
+                            }
+                        } else {
+                            _chatContainer.append(messageHtml);
+                        }
+                    }
                 }
                 me.handleImagePreview();
 
