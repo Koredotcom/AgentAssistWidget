@@ -29,30 +29,28 @@
             i{
                 font-size: 16px;
             }
+            .close-summery{
+                background: transparent;
+                border: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+                width: 16px;
+                height: 16px;
+                font-size: 16px;
+                color: var(--secondaryTextColor);
+                cursor: pointer;
+            }
         }
     }
     .input-block{
         padding: 8px;
         position: relative;
-        .close-summery{
-            position: absolute;
-            right: 16px;
-            top: 16px;
-            background: transparent;
-            border: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            width: 16px;
-            height: 16px;
-            font-size: 16px;
-            color: var(--secondaryTextColor);
-            cursor: pointer;
-        }
         textarea{
             min-height: 150px;
-            resize: none;
+            // resize: none;
+            max-height: 70vh;
         }
     }
     .actions-footer{

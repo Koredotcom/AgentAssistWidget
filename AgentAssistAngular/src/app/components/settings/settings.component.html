@@ -29,6 +29,36 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <svg width="14" height="12" viewBox="0 0 14 12" fill="none">
+                                <path
+                                    d="M2.5312 0.195262C2.79155 -0.0650874 3.21366 -0.0650874 3.47401 0.195262L5.47401 2.19526C5.73436 2.45561 5.73436 2.87772 5.47401 3.13807C5.21366 3.39842 4.79155 3.39842 4.5312 3.13807L3.66927 2.27614L3.66927 9.72386L4.5312 8.86193C4.79155 8.60158 5.21366 8.60158 5.47401 8.86193C5.73436 9.12228 5.73436 9.54439 5.47401 9.80474L3.47401 11.8047C3.21366 12.0651 2.79155 12.0651 2.5312 11.8047L0.5312 9.80474C0.27085 9.54439 0.27085 9.12228 0.5312 8.86193C0.791549 8.60158 1.21366 8.60158 1.47401 8.86193L2.33594 9.72386L2.33594 2.27614L1.47401 3.13807C1.21366 3.39842 0.791549 3.39842 0.5312 3.13807C0.27085 2.87772 0.27085 2.45561 0.5312 2.19526L2.5312 0.195262Z"
+                                    fill="#2970FF" />
+                                <path
+                                    d="M7.0026 2C7.0026 1.63181 7.30108 1.33333 7.66927 1.33333H13.0026C13.3708 1.33333 13.6693 1.63181 13.6693 2C13.6693 2.36819 13.3708 2.66667 13.0026 2.66667H7.66927C7.30108 2.66667 7.0026 2.36819 7.0026 2Z"
+                                    fill="#2970FF" />
+                                <path
+                                    d="M7.0026 4.66667C7.0026 4.29848 7.30108 4 7.66927 4H13.0026C13.3708 4 13.6693 4.29848 13.6693 4.66667C13.6693 5.03486 13.3708 5.33333 13.0026 5.33333H7.66927C7.30108 5.33333 7.0026 5.03486 7.0026 4.66667Z"
+                                    fill="#2970FF" />
+                                <path
+                                    d="M7.66927 6.66667C7.30108 6.66667 7.0026 6.96514 7.0026 7.33333C7.0026 7.70152 7.30108 8 7.66927 8H13.0026C13.3708 8 13.6693 7.70152 13.6693 7.33333C13.6693 6.96514 13.3708 6.66667 13.0026 6.66667H7.66927Z"
+                                    fill="#2970FF" />
+                                <path
+                                    d="M7.0026 10C7.0026 9.63181 7.30108 9.33333 7.66927 9.33333H13.0026C13.3708 9.33333 13.6693 9.63181 13.6693 10C13.6693 10.3682 13.3708 10.6667 13.0026 10.6667H7.66927C7.30108 10.6667 7.0026 10.3682 7.0026 10Z"
+                                    fill="#2970FF" />
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title"><span>{{'AUTOSCROLL_ASSIST' | translate}}</span></div>
+                        </div>
+                        <div class="card-right-data">
+                            <div class="form-check form-switch xs">
+                                <input class="form-check-input" type="checkbox" role="switch" id="checkAutoScroll" #autoScroll
+                                    [checked]="autoScrollEnabled" (change)="autoScrolloggle(autoScroll.checked)">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-group">
                     <div class="card" (click)="setting = 'help'" *ngIf="helpSupportSettings?.isEnabled !== false">
@@ -148,12 +178,12 @@
                     <label class="form-check-label" for="flexRadioDefault1">English</label>
                 </div>
                 <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="jp" type="radio" name="radioForLang" id="flexRadioDefault2">
-                    <label class="form-check-label" for="flexRadioDefault2">スペイン語 (Japanese)</label>
+                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="ja" type="radio" name="radioForLang" id="flexRadioDefault2">
+                    <label class="form-check-label" for="flexRadioDefault2">日本語 (Japanese)</label>
                 </div>
                 <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="kr" type="radio" name="radioForLang" id="flexRadioDefault3">
-                    <label class="form-check-label" for="flexRadioDefault3">スペイン語 (Korean)</label>
+                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="ko" type="radio" name="radioForLang" id="flexRadioDefault3">
+                    <label class="form-check-label" for="flexRadioDefault3">한국어 (Korean)</label>
                 </div>
                 <!-- <div class="form-check sm">
                     <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="chi" type="radio" name="radioForLang" id="flexRadioDefault8">
@@ -168,11 +198,11 @@
                     <label class="form-check-label" for="flexRadioDefault5">عربي (Arabic)</label>
                 </div>
                 <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="ge" type="radio" name="radioForLang" id="flexRadioDefault6">
+                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="de" type="radio" name="radioForLang" id="flexRadioDefault6">
                     <label class="form-check-label" for="flexRadioDefault6">Deutsch (German)</label>
                 </div>
                 <div class="form-check sm">
-                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="sp" type="radio" name="radioForLang" id="flexRadioDefault7">
+                    <input class="form-check-input" (change)="selectedLang($event)"  [(ngModel)]="defLanguage" [disabled]="!enableLangChange" value="es" type="radio" name="radioForLang" id="flexRadioDefault7">
                     <label class="form-check-label" for="flexRadioDefault7">Español (Spanish)</label>
                 </div>
             </div>

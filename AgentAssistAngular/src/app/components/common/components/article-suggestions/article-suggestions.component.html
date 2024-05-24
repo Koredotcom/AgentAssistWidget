@@ -31,6 +31,10 @@
                     <a class="moreText" role="link" (click)="openurlInBrowser(article.link)" *ngIf="article.link && !article.title">{{'VIEW_FULL_ARTICLE' | translate}}</a>
                 </div>
             </div>                       
+            <ng-container *ngIf="(rootService?.settingsData?.feedback && rootService?.settingsData?.feedback[feedbackConst.ANSWERS]?.isEnabled)">
+                <app-feedback [feedbackData]="article?.feedbackData" (updateFeedbackProperties)="updateFeedbackProperties($event,article)" [feedbackType]="feedbackConst.ANSWERS">
+                </app-feedback>
+            </ng-container>
         </div>
     </div>
   </div>

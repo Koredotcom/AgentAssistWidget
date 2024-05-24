@@ -10,6 +10,11 @@ export class I1 implements HttpInterceptor {
 
     }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {  
+
+        if(req.body?.isExternalWn){
+            delete req.body['isExternalWn']
+            return next.handle(req);
+        }
         const {fromSAT, token, accountId} = this.rootService.getConnectionDetails(); 
 
         let modifiedReq = req.clone();

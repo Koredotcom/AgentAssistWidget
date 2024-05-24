@@ -4,6 +4,7 @@ import { SubSink } from 'subsink';
 import { EVENTS } from '../helpers/events';
 import { ProjConstants, RenderResponseType, supportLanguage } from '../proj.const';
 import { CommonService } from '../services/common.service';
+import { HandleSubjectService } from '../services/handle-subject.service';
 import { RootService } from '../services/root.service';
 import { WebSocketService } from '../services/web-socket.service';
 
@@ -31,7 +32,7 @@ export class AskCustomerComponent {
   inputName: string = supportLanguage.AWAITING;
 
   constructor(public rootService: RootService, private websocketService: WebSocketService, private translateService : TranslateService,
-    private commonService : CommonService) {
+    private commonService : CommonService, private handleSubjectService : HandleSubjectService) {
 
   }
 
@@ -51,7 +52,24 @@ export class AskCustomerComponent {
       if(val && ((this.automation.type == RenderResponseType.AUTOMATION && this.automationIndex === this.automationArrayLength -1) || (this.automation.type == RenderResponseType.SMALLTALK && this.responseArrayIndex === this.responseArray?.length))){
         this.handleTemplateClick();
       }
-    })
+    });
+
+    this.subs.sink = this.handleSubjectService.proactiveModeSubject.subscribe((response: any) => {
+      if (response != null && response != undefined && this.automation?.tab === this.projConstants.ASSIST && !this.assistAutomationData?.endAutomation) {
+        this.handleOverrideFlag(!response, !response);
+        this.handlePlaceHolderText(response);
+      }
+    });
+    this.handlePlaceHolderText(true);
+  }
+
+  handlePlaceHolderText(flag){
+    this.automation.placeholderText = (flag && this.automation?.tab == this.projConstants.ASSIST && this.rootService.proactiveModeStatus && !this.automation.toggleOverride && !this.automation.hideOverrideDiv) ? 'waiting...' : '';
+  }
+
+  handleOverrideFlag(toggleOverride, hideOverrideDiv){
+    this.automation.toggleOverride = toggleOverride;
+    this.automation.hideOverrideDiv = hideOverrideDiv;
   }
 
   handleTemplateClick(){
@@ -73,6 +91,10 @@ export class AskCustomerComponent {
       if(this.automation.entityValue && (typeof this.automation.entityValue == 'object') && Object.keys(this.automation.entityValue)?.length > 0){
         this.automation.entityValue = JSON.stringify(this.automation.entityValue);
       }
+    }
+    if(changes?.assistAutomationData?.currentValue?.endAutomation){
+      this.handleOverrideFlag(false, true);
+      this.handlePlaceHolderText(false);
     }
   }
 
@@ -102,6 +124,7 @@ export class AskCustomerComponent {
       if (!this.rootService.OverRideMode) {
         this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
       }
+      this.handlePlaceHolderText(false);
     }
   }
 
@@ -109,10 +132,11 @@ export class AskCustomerComponent {
     if (this.rootService.activeTab != this.projConstants.MYBOT) {
       this.inputName = supportLanguage.AWAITING;
       this.automation.toggleOverride = false;
-      this.automation.entityValue = '';
+      this.automation.entityValue = this.automation.errorCount ? this.automation.entityValue : '';
       if(this.rootService.OverRideMode && this.rootService.proactiveModeStatus && !this.rootService.manualAssistOverrideMode){
         this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
       }
+      this.handlePlaceHolderText(true);
     }
   }
 
@@ -121,14 +145,16 @@ export class AskCustomerComponent {
   }
 
   handleAgentInput() {
-    this.automation.hideOverrideDiv = true;
-    this.automation.userInput = this.projConstants.NO;
-    if (this.rootService.activeTab == this.projConstants.ASSIST) {
-      this.assistInputValue(this.automation.entityValue);
-    } else if (this.rootService.activeTab == this.projConstants.MYBOT) {
-      this.mybotInputValue(this.automation.entityValue)
+    if(this.automation.entityValue){
+      this.automation.hideOverrideDiv = true;
+      this.automation.userInput = this.projConstants.NO;
+      if (this.rootService.activeTab == this.projConstants.ASSIST) {
+        this.assistInputValue(this.automation.entityValue);
+      } else if (this.rootService.activeTab == this.projConstants.MYBOT) {
+        this.mybotInputValue(this.automation.entityValue)
+      }
+      this.grayOutCurrentAutomation();
     }
-    this.grayOutCurrentAutomation();
   }
 
   assistInputValue(inputValue) {

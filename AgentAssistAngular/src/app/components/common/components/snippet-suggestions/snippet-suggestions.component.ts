@@ -1,8 +1,10 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChange, ViewChild } from '@angular/core';
-import { ProjConstants } from 'src/app/proj.const';
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, SimpleChange, ViewChild } from '@angular/core';
+import { EVENTS } from 'src/app/helpers/events';
+import { FeebackConst, ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
+import { WebSocketService } from 'src/app/services/web-socket.service';
 import { SubSink } from 'subsink';
 
 @Component({
@@ -10,10 +12,13 @@ import { SubSink } from 'subsink';
   templateUrl: './snippet-suggestions.component.html',
   styleUrls: ['./snippet-suggestions.component.scss']
 })
-export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
+export class SnippetSuggestionsComponent implements OnInit, OnDestroy, AfterViewInit{
 
   @Input() searchResponse : any;
   @ViewChild('snippetContent',{static: false}) private snippetContent : ElementRef;
+  @ViewChild('snippetContent1',{static: false}) private snippetContent1 : ElementRef;
+
+  feedbackConst : any = FeebackConst;
 
   prevClass = '';
   subs = new SubSink();
@@ -30,14 +35,20 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
   // sourceInx = null;
   extMore = true;
   intMore = true;
-  constructor(private handleSubjectService : HandleSubjectService,
-    public rootService : RootService, private commonService : CommonService){
 
+  constructor(
+    private handleSubjectService : HandleSubjectService,
+    public rootService : RootService, 
+    private commonService : CommonService,
+    private websocketService : WebSocketService,
+    private renderer: Renderer2
+  ){}
+
+  ngAfterViewInit(): void {
+    this.addClickListenerToAnchors();
   }
 
-  ngOnInit(){
-    
-  }
+  ngOnInit(){}
 
   ngOnChanges(changes : SimpleChange){
     if(changes['searchResponse']?.currentValue){
@@ -78,11 +89,11 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
 
 
   handleSendCopyButton(actionType, snippetObj, selectType){
+    let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
+    snippetObj.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(this.snippetContent.nativeElement) : (snippetObj.sendCopyText);
     snippetObj.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     let snippet = JSON.parse(JSON.stringify(snippetObj));
     snippet.content = snippetObj?.sendCopyText;
-    let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
-    snippetObj.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(this.snippetContent.nativeElement) : (snippet.content);
     this.commonService.handleSendCopyButton(actionType, snippet, selectType)
   }
 
@@ -114,8 +125,9 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
     this.viewCountInt = (this.internalInfo && this.internalInfo?.length <= 2) ? this.internalInfo?.length : 2;
   }
 
-  openurlInBrowser(url){
+  openurlInBrowser(url, snippet){
     this.rootService.openurlInBrowser(url);
+    this.handleUrlClickEvent(url, snippet);
   }
 
   hoverOnSource(sourceInx, type, i){
@@ -131,4 +143,98 @@ export class SnippetSuggestionsComponent implements OnInit, OnDestroy{
       document.querySelectorAll(this.prevClass)?.forEach(el => el?.classList?.remove('selection-on-snippet-color'));
     }
   }
+
+  snippetFeedback(feedback, snippet){
+    snippet.feedback = feedback ? 'like' : 'dislike';
+    this.AgentAssist_feedBack_Update_Request(snippet);
+  }
+
+  AgentAssist_feedBack_Update_Request(snippet) {
+    let agent_assist_feedback_request = {
+      feedback : snippet.feedback,
+      conversationId: this.rootService.connectionDetails.conversationId,
+      agentId: '',
+      botId: this.rootService.connectionDetails.botId,
+      orgId: '',
+      interactionType : snippet.intType,
+      positionId: snippet.positionId,
+      experience: this.rootService.connectionDetails?.channel,
+      sourceMsgId: snippet.sourceMsgId || '',
+      type: "answer",
+      title: snippet.title,
+      answer: snippet.sendCopyText || '',
+      sources: snippet.sources,
+      isFromGeneratedSummary: snippet.isFromGeneratedSummary, // based on the flag passed from backend
+      answerType: snippet.templateType, // citation_snippet or paragraph_snippet etc
+      query : snippet.userInput
+    }
+    if(snippet.internalInfo?.length > 0){
+      agent_assist_feedback_request.answer += snippet.internalInfo.join(' ');
+    }
+    this.rootService.isUpdateFeedBackDetailsFlag = true;
+    this.websocketService.emitEvents(EVENTS.agent_usage_feedback, agent_assist_feedback_request);
+  }
+
+  handleMoreClickEvent(isInternal,snippet){
+    let socketRequestParams : any = this.commonRequestParams(snippet);
+    socketRequestParams.eventType= "showmore_clicked";
+    socketRequestParams.isInternal = isInternal;
+    this.websocketService.emitEvents(EVENTS.agent_activity_request, socketRequestParams);
+  }
+
+  handleUrlClickEvent(url, snippet){
+    let socketRequestParams : any = this.commonRequestParams(snippet);
+    socketRequestParams.eventType= "url_clicked";
+    socketRequestParams.url = url;
+    this.websocketService.emitEvents(EVENTS.agent_activity_request, socketRequestParams);
+  }
+
+  commonRequestParams(snippet){
+    const { botId, conversationId, channel } = this.rootService.getConnectionDetails();
+    let socketRequestParams = {
+      botId: botId,
+      conversationId: conversationId,
+      event: "clicked",
+      sourceMsgId: snippet.sourceMsgId,
+      dataSource: "snippet",
+      positionId : snippet.positionId,
+      participant : this.rootService?.internalTransferData?.participant || {}
+    }
+    return socketRequestParams;
+  }
+  
+  updateFeedbackProperties(data, snipObje) {
+    snipObje.feedbackData = data;
+  }
+
+  addClickListenerToAnchors(){
+    const anchorElements = this.snippetContent?.nativeElement.getElementsByTagName('a');
+    if(anchorElements){
+      for (let anchor of anchorElements) {
+        this.renderer.listen(anchor, 'click', (event) => {
+          this.handleAnchorClick(event);
+        });
+      };
+    }
+
+
+    const anchorElementsInmternal = this.snippetContent1?.nativeElement.getElementsByTagName('a');
+    if(anchorElementsInmternal){
+      for (let anchor of anchorElementsInmternal) {
+        this.renderer.listen(anchor, 'click', (event) => {
+          this.handleAnchorClick(event, true);
+        });
+      }
+    }
+  }
+
+  handleAnchorClick(event, isInternal = false){
+    let socketRequestParams : any = this.commonRequestParams(this.searchResponse.snippets[0]);
+    socketRequestParams.eventType= "url_clicked";
+    socketRequestParams.url = event?.srcElement?.href;
+    socketRequestParams.isEmbedded = true;
+    socketRequestParams.isInternal = isInternal;
+    this.websocketService.emitEvents(EVENTS.agent_activity_request, socketRequestParams);
+  }
+
 }

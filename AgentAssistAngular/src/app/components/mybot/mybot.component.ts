@@ -3,7 +3,7 @@ import { RootService } from 'src/app/services/root.service';
 import { ServiceInvokerService } from 'src/app/services/service-invoker.service';
 import { forkJoin } from 'rxjs';
 import { SubSink } from 'subsink';
-import { ProjConstants, RenderResponseType, storageConst } from 'src/app/proj.const';
+import { FeebackConst, ProjConstants, RenderResponseType, storageConst } from 'src/app/proj.const';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { TemplateRenderClassService } from 'src/app/services/template-render-class.service';
 import { KoreGenerateuuidPipe } from 'src/app/pipes/kore-generateuuid.pipe';
@@ -32,6 +32,7 @@ export class MybotComponent {
   subs = new SubSink();
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
+  feedbackConst : any = FeebackConst;
 
 
   dialogName: string;
@@ -81,8 +82,8 @@ export class MybotComponent {
     this.subs.unsubscribe();
   }
 
-  scrollToBottomRuntime = () => {
-    if(this.collapseTab?.nativeElement){
+  setCollapseTabPadding(){
+    if(this.collapseTab && this.collapseTab?.nativeElement){
       let collapseTabHeight = this.collapseTab?.nativeElement?.offsetHeight;
       if(collapseTabHeight){
         let pixel = (28 * collapseTabHeight) / 100;
@@ -90,6 +91,12 @@ export class MybotComponent {
       }else{
         this.collapseTab.nativeElement.classList.add('pB');
       }
+    }
+  }
+
+  scrollToBottomRuntime = () => {
+    if(this.collapseTab?.nativeElement){
+      this.setCollapseTabPadding();
       setTimeout(() => {
         try {
           this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight + 90;
@@ -99,11 +106,14 @@ export class MybotComponent {
   }
 
   scrollToBottom() {
-    setTimeout(() => {
-      try {
-        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
-      } catch (err) { }
-    }, 10);
+    if(this.collapseTab?.nativeElement){
+      this.setCollapseTabPadding();
+      setTimeout(() => {
+        try {
+          this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
+        } catch (err) { }
+      }, 10);
+    }
   }
 
   subscribeEvents(){
@@ -203,7 +213,7 @@ export class MybotComponent {
       if (data.entityName) {
         this.myBotDataResponse = Object.assign({}, data);
       }
-      let renderResponse : any = this.commonService.formatAutomationRenderResponse(data, myBotuuids, results, newTemp, this.myBotDialogPositionId);
+      let renderResponse : any = this.commonService.formatAutomationRenderResponse(data, myBotuuids, results, newTemp, this.myBotDialogPositionId, ProjConstants.MYBOT);
       renderResponse.toggleOverride = data.isPrompt ? true : false;
       renderResponse.hideOverrideDiv =  true;
       this.currentRunningStep = data.entityDisplayName ? data.entityDisplayName : data.entityName;
@@ -217,7 +227,7 @@ export class MybotComponent {
 
     //small talk
     if (!this.rootService.isMyBotAutomationOnGoing && this.rootService.myBotDropdownHeaderUuids && data.buttons && (this.myBotDialogPositionId && !data.positionId || data.positionId == this.myBotDialogPositionId)) {
-      let renderResponse = this.commonService.formatSmallTalkRenderResponse(data, myBotuuids, results, newTemp, this.myBotDialogPositionId);
+      let renderResponse = this.commonService.formatSmallTalkRenderResponse(data, myBotuuids, results, newTemp, this.myBotDialogPositionId, ProjConstants.MYBOT);
       renderResponse.hideOverrideDiv = true;
       renderResponse.toggleOverride = data.isPrompt ? true : false;
       renderResponse.template = this.rootService.getTemplateHtml(renderResponse.isTemplateRender, results);
@@ -270,7 +280,7 @@ export class MybotComponent {
     this.rootService.myBotDropdownHeaderUuids = agentBotuuids;
     this.commonService.updateLocalStorageForMyBot(true);
     this.grayoutOldFeedbacks();
-    let renderResponse = this.commonService.formatDialogRunRenderResponse(data, this.rootService.myBotDropdownHeaderUuids, this.myBotDialogPositionId, this.dialogName);
+    let renderResponse = this.commonService.formatDialogRunRenderResponse(data, this.rootService.myBotDropdownHeaderUuids, this.myBotDialogPositionId, this.dialogName, ProjConstants.MYBOT);
     this.mybotResponseArray.push(renderResponse);
     this.mybotResponseArray = [...this.mybotResponseArray];
     this.dialogName = data.intentName;
@@ -484,7 +494,7 @@ export class MybotComponent {
             previousTaskPositionId = currentTaskPositionId;
             previousTaskName = currentTaskName;
             this.grayoutOldFeedbacks();
-            let renderResponse =  this.commonService.formatDialogRunRenderResponse(res, previousId, currentTaskPositionId, currentTaskName);
+            let renderResponse =  this.commonService.formatDialogRunRenderResponse(res, previousId, currentTaskPositionId, currentTaskName, ProjConstants.MYBOT);
             this.mybotResponseArray.push(renderResponse);
             this.mybotResponseArray = [...this.mybotResponseArray];
 
@@ -516,9 +526,9 @@ export class MybotComponent {
           
           if (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
             let responseId = res.buttons && res.buttons[0]?._id ? (res.buttons && res.buttons[0]?._id) : uuids
-            renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp, currentTaskPositionId);
+            renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp, currentTaskPositionId, ProjConstants.MYBOT);
+            renderResponse.toggleOverride = res.isPrompt ? true : false;
             if (res.isPrompt) {
-              renderResponse.toggleOverride = false;
               renderResponse.hideOverrideDiv = true;
             }
             renderResponse = this.commonService.formatAssistAutomation(renderResponse);
@@ -530,7 +540,7 @@ export class MybotComponent {
           }else if((previousTaskName != currentTaskName)){
           //small talk after dialogue terminate
             this.dialogName = null;
-            renderResponse = this.commonService.formatSmallTalkRenderResponse(res, uuids, result, newTemp, previousId)
+            renderResponse = this.commonService.formatSmallTalkRenderResponse(res, uuids, result, newTemp, previousId, ProjConstants.MYBOT)
             this.mybotResponseArray.push(renderResponse);
             this.mybotResponseArray = [...this.mybotResponseArray];
           }

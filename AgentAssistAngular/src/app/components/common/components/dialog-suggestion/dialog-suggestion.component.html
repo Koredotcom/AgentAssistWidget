@@ -1,24 +1,32 @@
 
 
 <ng-container *ngIf="!searchedDialogList.length">
-    <ng-container *ngFor="let dialogue of menuResponse | keyvalue;let i = index">
-        <div class="dialog-task-wrapper">
-            <div class="title-paragraph">
-                <p>{{dialogue?.value['name']}}</p>
-                <!-- <span>(buy_bot)</span> -->
-            </div>
-            <div class="dialog-actions">
-                <button class="primary-btn" (click)="dialogueRunClick(dialogue.value,projConstants.ASSIST)">{{'RUN' | translate}}</button>
-                <div ngbDropdown class="elipse-ngbdropdown" container="body">
-                    <button type="button" id="elipseDrp" ngbDropdownToggle>
-                        <i class="krIocnsFont-outlined"></i>
-                    </button>
-                    <div ngbDropdownMenu class="elipse-ngbdropdown-content" aria-labelledby="elipseDrp">
-                        <button ngbDropdownItem aria-disabled="true" (click)="dialogueRunClick(dialogue.value,projConstants.MYBOT)">{{'RUN_AGENT' | translate}}</button>
+    <ng-container *ngIf="(menuResponse | json) == '{}' && !menuLoader">
+        <div class="empty-menu-container-wrapper">
+            <h1>No Dialog Task Found</h1>
+            <p>No dialog tasks are available to display in the library</p>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="(menuResponse | json) != '{}'">
+        <ng-container *ngFor="let dialogue of menuResponse | keyvalue;let i = index">
+            <div class="dialog-task-wrapper">
+                <div class="title-paragraph">
+                    <p>{{dialogue?.value['name']}}</p>
+                    <!-- <span>(buy_bot)</span> -->
+                </div>
+                <div class="dialog-actions">
+                    <button class="primary-btn" (click)="dialogueRunClick(dialogue.value,projConstants.ASSIST)" appActiveOrPassive>{{'RUN' | translate}}</button>
+                    <div ngbDropdown class="elipse-ngbdropdown" container="body">
+                        <button type="button" id="elipseDrp" ngbDropdownToggle>
+                            <i class="krIocnsFont-outlined"></i>
+                        </button>
+                        <div ngbDropdownMenu class="elipse-ngbdropdown-content" aria-labelledby="elipseDrp">
+                            <button ngbDropdownItem aria-disabled="true" (click)="dialogueRunClick(dialogue.value,projConstants.MYBOT)">{{'RUN_AGENT' | translate}}</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </ng-container>
     </ng-container>
 </ng-container>
 
@@ -30,7 +38,7 @@
                 <span *ngIf="dialog?.childBotName">({{dialog?.childBotName}})</span>
             </div>
             <div class="dialog-actions">
-                <button class="primary-btn" (click)="dialogueRunClick(dialog,projConstants.ASSIST)">{{'RUN' | translate}}</button>
+                <button class="primary-btn" (click)="dialogueRunClick(dialog,projConstants.ASSIST)" appActiveOrPassive>{{'RUN' | translate}}</button>
                 <div ngbDropdown class="elipse-ngbdropdown" container="body">
                     <button type="button" id="elipseDrp" ngbDropdownToggle>
                         <i class="krIocnsFont-outlined"></i>

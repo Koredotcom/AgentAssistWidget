@@ -16,7 +16,7 @@ declare var $: any;
 })
 export class WebSocketService {
 
-  _agentAsisstSocket : any;
+  _agentAssistSocket : any;
 
   agentMenuResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
   agentAssistResponse$: BehaviorSubject<any> = new BehaviorSubject([]);
@@ -27,6 +27,7 @@ export class WebSocketService {
   agentAssistUserMessageResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
   agentFeedbackResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
   responseResolutionCommentsResponse$ : BehaviorSubject<any> = new BehaviorSubject(null);
+  makeActiveOrPassiveAgent$ : BehaviorSubject<any> = new BehaviorSubject(null);
   agentCoachingResponse$ = new Subject<any>();
   checkListStepResponse$ = new Subject<any>();
   checkListResponse$ = new Subject<any>();
@@ -46,6 +47,10 @@ export class WebSocketService {
   prevTimeStamp : number = 0;
   intervalTime : number = 510;
   count = 1;
+  // participantOmitEvents = {
+  //   'welcome_message_request' : true,
+  //   'agent_menu_request': true,
+  // }
 
   constructor(private rootService : RootService, private localStorageService : LocalStorageService,
     private handleSubjectService : HandleSubjectService, private templateRenderClassService : TemplateRenderClassService, private koregenerateUUIDPipe : KoreGenerateuuidPipe) {
@@ -65,10 +70,14 @@ export class WebSocketService {
       }
     };
     
-    this._agentAsisstSocket =  io(config.url, config.options);
-    this._agentAsisstSocket.connect();
+    this._agentAssistSocket =  io(config.url, config.options);
+    this._agentAssistSocket.connect();
     this.listenEvents();
-    this._agentAsisstSocket.on("connect", () => {
+    this._agentAssistSocket.on("connect", () => {
+      if(!this.rootService.socketConnection){
+        this.rootService.socketConnection = true;
+        this.rootService.setSocketConnection(true);
+      }
       // if(!window._agentAssistSocketEventListener){
         this.commonEmitEvents(true);
       //   window._agentAssistSocketEventListener = true;
@@ -93,7 +102,8 @@ export class WebSocketService {
       'uId': this.rootService.userBotConversationDetails?.userId || '',
       'sId': this.rootService.userBotConversationDetails?.sessionId || '',
       'experience' : this.rootService.connectionDetails?.channel,
-      'jToken': this.rootService.getConnectionDetails().token
+      'jToken': this.rootService.getConnectionDetails().token,
+      'conversationId' : conversationId
     }
     if(customData && Object.keys(customData)?.length > 0 && this.rootService.connectionDetails?.source !== ProjConstants.SMARTASSIST_SOURCE) {
       welcomeMessageParams['customData'] = customData
@@ -111,6 +121,9 @@ export class WebSocketService {
     welcomeMessageParams['allQueryParams'] = {...this.rootService.connectionDetails};
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
 
+    if(!this.rootService.settingsData?.isProactiveEnabled){
+      this.handleOverrideMode(true, null);
+    }
 
     let menu_request_params : any = {
       botId,
@@ -132,22 +145,38 @@ export class WebSocketService {
     this.sendCheckListOpened$.next(true);
   }
 
+  emitTransferEvent(){
+    if(this.rootService.internalTransfer && this.rootService.internalTransferData && this.rootService.internalTransferData?.transition == 'entry'){
+      this.emitEvents(EVENTS.internal_transfer, this.rootService.internalTransferData);
+    }
+  }
+
   emitEvents(eventName : string,requestParams : any) {
     const {fromSAT, source, isCall, autoBotId} = this.rootService.getConnectionDetails()
     let uuids = this.koregenerateUUIDPipe.transform();
+    let appState = this.localStorageService.getLocalStorageState();
+    let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
+    // let internalTransferDetails = this.rootService.internalTransferData;
     if(requestParams){
       requestParams.isExtAD = fromSAT ? false : true;
       requestParams.source = source;
       requestParams.experience = this.rootService.connectionDetails?.channel;
       requestParams.traceId = uuids;
       requestParams.language = this.rootService.connectionDetails?.interactiveLanguage;
+      if(internalTransferDetails && Object.keys(internalTransferDetails)?.length > 0 && internalTransferDetails?.participant){
+        requestParams.participant = internalTransferDetails?.participant;
+      }
+    }
+
+    if(eventName == EVENTS.internal_transfer){
+      requestParams.botId = this.rootService.connectionDetails.botId;
     }
 
     if(this.loaderEvents[eventName]) {
       this.loaderOnTimer()
     }
 
-    this._agentAsisstSocket.emit(eventName, requestParams);
+    this._agentAssistSocket.emit(eventName, requestParams);
   }
 
   getTimeout(){
@@ -179,7 +208,7 @@ export class WebSocketService {
   listenEvents() {
     const {botId, conversationId, isCall, autoBotId} = this.rootService.getConnectionDetails()
 
-    this._agentAsisstSocket.on(EVENTS.agent_assist_response, (data : any) => {
+    this._agentAssistSocket.on(EVENTS.agent_assist_response, (data : any) => {
       this.rootService.assistTabSessionId = '';
       if (data.sessionId) {
         this.rootService.assistTabSessionId = data?.sessionId;
@@ -195,32 +224,32 @@ export class WebSocketService {
       }, settimeoutTime);
     });
 
-    this._agentAsisstSocket.on(EVENTS.agent_menu_response, (data : any) => {
+    this._agentAssistSocket.on(EVENTS.agent_menu_response, (data : any) => {
       this.agentMenuResponse$.next(data);
       this.addOrRemoveLoader(false);
     });
 
-    this._agentAsisstSocket.on(EVENTS.agent_coaching_response, (data : any)=>{
+    this._agentAssistSocket.on(EVENTS.agent_coaching_response, (data : any)=>{
       this.agentCoachingResponse$.next(data);
       this.addOrRemoveLoader(false);
     });
 
-    this._agentAsisstSocket.on(EVENTS.checklist_step_response, (data : any)=>{
+    this._agentAssistSocket.on(EVENTS.checklist_step_response, (data : any)=>{
       this.checkListStepResponse$.next(data);
       this.addOrRemoveLoader(false);
     });
 
-    this._agentAsisstSocket.on(EVENTS.checklist_response, (data : any)=>{
+    this._agentAssistSocket.on(EVENTS.checklist_response, (data : any)=>{
       this.checkListResponse$.next(data);
       this.addOrRemoveLoader(false);
     });
 
-    this._agentAsisstSocket.on(EVENTS.realtime_sentiment_response, (data : any) => {
+    this._agentAssistSocket.on(EVENTS.realtime_sentiment_response, (data : any) => {
       this.realtimeSentimeResponse$.next(data);
       this.addOrRemoveLoader(false);
     });
 
-    this._agentAsisstSocket.on(EVENTS.agent_assist_agent_response, (data : any)=>{
+    this._agentAssistSocket.on(EVENTS.agent_assist_agent_response, (data : any)=>{
       let settimeoutTime = this.getTimeout();
       setTimeout(() => {
         this.rootService.sentSearchResponse = false;
@@ -233,37 +262,41 @@ export class WebSocketService {
       },settimeoutTime);
     });
 
-    this._agentAsisstSocket.on(EVENTS.agent_assist_endoftask, (data : any) =>{
+    this._agentAssistSocket.on(EVENTS.agent_assist_endoftask, (data : any) =>{
       let settimeoutTime = this.getTimeout();
       setTimeout(() => {
         this.endOfTaskResponse$.next(data);
       },settimeoutTime);
     });
 
-    this._agentAsisstSocket.on(EVENTS.user_message, (data : any) =>{
+    this._agentAssistSocket.on(EVENTS.user_message, (data : any) =>{
       this.userMessageResponse$.next(data);
     });
 
-    this._agentAsisstSocket.on(EVENTS.agent_message, (data : any)=>{
+    this._agentAssistSocket.on(EVENTS.agent_message, (data : any)=>{
       this.agentMessageResponse$.next(data);
     });
 
-    this._agentAsisstSocket.on(EVENTS.agent_assist_user_message, (data : any) => {
+    this._agentAssistSocket.on(EVENTS.agent_assist_user_message, (data : any) => {
       let settimeoutTime = this.getTimeout();
       setTimeout(() => {
         this.agentAssistUserMessageResponse$.next(data);
       },settimeoutTime);
     });
 
-    this._agentAsisstSocket.on(EVENTS.agent_feedback_response, (data : any) =>{
+    this._agentAssistSocket.on(EVENTS.agent_feedback_response, (data : any) =>{
       this.agentFeedbackResponse$.next(data);
       this.addOrRemoveLoader(false);
     });
 
-    this._agentAsisstSocket.on(EVENTS.response_resolution_comments, (data : any) =>{
+    this._agentAssistSocket.on(EVENTS.response_resolution_comments, (data : any) =>{
       this.responseResolutionCommentsResponse$.next(data);
       this.addOrRemoveLoader(false);
     })
+
+    this._agentAssistSocket.on(EVENTS.agentassist_control_response, (data : any) =>{
+      this.makeActiveOrPassiveAgent$.next(data);
+    });
   }
 
   handleOverrideMode(toggleOverride, dialogId){

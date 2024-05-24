@@ -74,3 +74,29 @@
         // }
     }
 }
+
+.empty-menu-container-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+    gap: 10px;
+    flex-direction: column;
+    text-align: center;
+    height: calc(100vh - 200px);
+    h1{
+        color: var(--primaryTextColorTwo);
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 18px;
+        margin: 0;
+    }
+    p{
+        color: var(--primaryTextColorTwo);
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 18px;
+        margin: 0;
+    }
+}

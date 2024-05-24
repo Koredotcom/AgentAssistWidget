@@ -26,10 +26,14 @@
                           <span class="more-text" *ngIf="file?.showMoreButton" (click)="toggleShowMoreLess(file)">{{'MORE_TEXT' | translate}}</span>
                           <span class="less-text" *ngIf="!file?.showMoreButton" (click)="toggleShowMoreLess(file)">{{'LESS_TEXT' | translate}}</span>
                       </a>
-                      <p *ngIf="fileContent.scrollHeight > rootService.scrollHeight && file.link">|</p>
+                      <p *ngIf="fileContent.scrollHeight > rootService.scrollHeight && file.link && !file.title">|</p>
                       <a class="moreText" role="link" (click)="openurlInBrowser(file.link)" *ngIf="file.link && !file.title">{{'VIEW_FULL_FILE' | translate}}</a>
                   </div>
-              </div>                       
+                </div>                       
+                <ng-container *ngIf="(rootService?.settingsData?.feedback && rootService?.settingsData?.feedback[feedbackConst.ANSWERS]?.isEnabled)">
+                  <app-feedback [feedbackData]="file?.feedbackData" (updateFeedbackProperties)="updateFeedbackProperties($event,file)" [feedbackType]="feedbackConst.ANSWERS">
+                  </app-feedback>
+              </ng-container>
           </div>
       </div>
     </div>

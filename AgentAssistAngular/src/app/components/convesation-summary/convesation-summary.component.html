@@ -1,0 +1,25 @@
+<div class="summery-conv-banner-wrapper" *ngIf="conversationSummaryObj?.editedSummary !== ''">
+    <div class="heading-text">
+        <i class="krIocnsFont-Aimark"></i>
+        <h1>CONVERSATION SUMMARY</h1>
+    </div>
+    <ng-container>
+        <ul>
+            <!-- <li>
+                <span>Customer states to get states they need pizza</span>
+            </li>
+            <li>
+                <span>pizza Customer gets 10% discout</span>
+                <button class="copy-btn">
+                    <i class="krIocnsFont-copy"></i>
+                </button>
+            </li> -->
+            <li>
+                <span>{{summaryConverationText}}</span>
+                <button class="copy-btn" ngbTooltip="{{tooltipText}}" (click)="copyConversationSummaryTxt(summaryConverationText)" [disabled]="(tooltipText === projCnst.COPIED)">
+                    <i class="krIocnsFont-copy"></i>
+                </button>
+            </li>
+        </ul>
+    </ng-container>
+</div>

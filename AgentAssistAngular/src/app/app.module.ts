@@ -54,7 +54,10 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
 import { WidgetDragDirective } from './helpers/widget-drag.directive';
 import { FileSuggestionsComponent } from './components/common/components/file-suggestions/file-suggestions.component';
+import { WorkNotesComponent } from './components/common/components/work-notes/work-notes.component';
 import { TitleCasePipe } from '@angular/common';
+import { ConvesationSummaryComponent } from './components/convesation-summary/convesation-summary.component';
+import { ActiveOrPassiveDirective } from './helpers/active-or-passive.directive';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -103,7 +106,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     SafeHtmlPipe,
     SanitizeHtmlPipe,
     WidgetDragDirective,
-    FileSuggestionsComponent
+    FileSuggestionsComponent,
+    WorkNotesComponent,
+    ConvesationSummaryComponent,
+    ActiveOrPassiveDirective
   ],
   imports: [
     TranslateModule.forRoot({

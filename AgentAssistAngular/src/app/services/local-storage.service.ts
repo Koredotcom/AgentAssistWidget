@@ -66,6 +66,10 @@ export class LocalStorageService {
         appState[conversationId][storageConst.PROACTIVE_MODE] = storageObject[storageConst.PROACTIVE_MODE];
       }
 
+      if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.AUTOSCROLL])){
+        appState[conversationId][storageConst.AUTOSCROLL] = storageObject[storageConst.AUTOSCROLL];
+      }
+
       if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.THEME])){
         appState[conversationId][storageConst.THEME] = storageObject[storageConst.THEME];
       }
@@ -80,6 +84,10 @@ export class LocalStorageService {
 
       if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.ISSEND_WELCOME_MSG])){
         appState[conversationId][storageConst.ISSEND_WELCOME_MSG] = storageObject[storageConst.ISSEND_WELCOME_MSG];
+      }
+
+      if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.INTERNAL_TRANSFER])){
+        appState[conversationId][storageConst.INTERNAL_TRANSFER] = storageObject[storageConst.INTERNAL_TRANSFER];
       }
       
     }
@@ -119,6 +127,7 @@ export class LocalStorageService {
         appState[conversationId][storageConst.SHOWSEND] = true;
         appState[conversationId][storageConst.ENABLEWIDGET] = true;
         appState[conversationId][storageConst.ISSEND_WELCOME_MSG] = true;
+        appState[conversationId][storageConst.AUTOSCROLL] = true;
 
         if(widgetSettings && typeof widgetSettings?.isProactiveEnabled == 'boolean'){
           appState[conversationId][storageConst.PROACTIVE_MODE] = widgetSettings?.isProactiveEnabled;
@@ -132,6 +141,10 @@ export class LocalStorageService {
           appState[conversationId][storageConst.ENABLEWIDGET] = widgetSettings?.agentAssistWidgetEnabled;
         }
 
+        if(widgetSettings && typeof widgetSettings?.isAutoScrollEnabled == 'boolean'){
+          appState[conversationId][storageConst.AUTOSCROLL] = widgetSettings?.isAutoScrollEnabled;
+        }
+
         let experience = connectionDetails?.channel;
 
         if(widgetSettings && widgetSettings?.isWidgetLandingEnabled && widgetSettings?.isWidgetLandingEnabled?.tab){
@@ -142,6 +155,11 @@ export class LocalStorageService {
           appState[conversationId][storageConst.LANGUAGE] = widgetSettings?.languageSettings?.language;
         }
 
+        if(this.rootService.internalTransfer && Object.keys(this.rootService.internalTransferData)?.length > 0 && conversationId == this.rootService.internalTransferData?.conversationId){
+          appState[conversationId][storageConst.INTERNAL_TRANSFER] = this.rootService.internalTransferData;
+        }
+
+        this.rootService.autoScrollStatus = appState[conversationId][storageConst.AUTOSCROLL];
         this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];
         this.rootService.setActiveTab(appState[conversationId][storageConst.ACTIVE_TAB]);
 
@@ -151,6 +169,7 @@ export class LocalStorageService {
       }
     }else if(appState && appState[conversationId]){
       this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];
+      this.rootService.autoScrollStatus = appState[conversationId][storageConst.AUTOSCROLL];
       let defLanguage = appState[conversationId][storageConst.LANGUAGE] || storageConst.ENGLISH;
       this.translateService.use(defLanguage);
       this.rootService.checkRtl(defLanguage);

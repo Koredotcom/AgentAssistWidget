@@ -44,6 +44,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
   closeSuggestions : boolean = true;
   secondaryIp = true;
   prevScrollLeft: number = 0;
+  startTime : any;
+  endTime : any;
 
 
   constructor(public rootService: RootService, private serviceInvoker: ServiceInvokerService,
@@ -99,11 +101,18 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
     }
   }
 
+  onTyping(event){    
+    if(!this.startTime && this.searchText?.length > 0){
+      this.startTime = new Date();
+    }
+  }
+
   clearSearch(){
     this.searchText = '';
     this.autocompleteText = '';
     this.searched = false;
     this.searchResponse = {};
+    this.startTime = null;
     // this.handleSubjectService.setSearchResponse(this.searchResponse);
   }
 
@@ -175,7 +184,29 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
       connectionDetails['sourceMsgId'] = faq.sourceMsgId;
     }
     let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
+    this.endTime = new Date();
+    agent_assist_agent_request_params.startTime = this.startTime;
+    agent_assist_agent_request_params.endTime = this.endTime;
+    agent_assist_agent_request_params.participant = this.rootService?.internalTransferData?.participant || {};
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
+    // this.rawDataRequest();
+  }
+
+  rawDataRequest() {
+    this.endTime = new Date();
+    const { botId, conversationId, channel } = this.rootService.getConnectionDetails();
+    let socketRequestParams = {
+      botId: botId,
+      conversationId: conversationId,
+      event: "typed",
+      eventType: "search",
+      sourceMsgId: this.rootService.lastSourceMsgId,
+      url: "",
+      isInternal: false,
+      starTime: this.startTime,
+      endTime: this.endTime
+    }
+    this.websocketService.emitEvents(EVENTS.agent_activity_request, socketRequestParams);
   }
 
 
@@ -211,7 +242,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
         //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']},
         //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
         // ]
-        this.searchResponse = this.rootService.formatSearchResponse(response);
+        this.searchResponse = this.rootService.formatSearchResponse(response, true);
         if(this.searchResponse && Object.keys(this.searchResponse)?.length > 0){
           this.searchResponse.totalSearchResults = (this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse?.articles?.length + this.searchResponse?.snippets?.length || 0);
           this.faqViewCount = (this.searchResponse.faqs && this.searchResponse.faqs?.length <= 2) ? this.searchResponse.faqs?.length : 2;

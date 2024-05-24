@@ -73,13 +73,18 @@ export class ListviewComponent implements AfterViewInit{
       let automation = this.entityList[this.entityList.length - 1];
       if(this.rootService.activeTab != this.projConstants.MYBOT){
         this.inputName = this.projConstants.AWAITING;
-        automation.toggleOverride = false;
+        automation.toggleOverride = this.rootService.proactiveModeStatus ? false : true;
         automation.entityValue = '';
         if(this.rootService.OverRideMode && this.rootService.proactiveModeStatus && !this.rootService.manualAssistOverrideMode){
           this.handleOverridBtnClick(automation.connectionDetails, automation.dialogId, automation.toggleOverride);
         }
+        this.handlePlaceHolderText(true, automation);
       }
     }
+  }
+
+  handlePlaceHolderText(flag, automation){
+    automation.placeholderText = (flag && automation?.tab == this.projConstants.ASSIST && this.rootService.proactiveModeStatus && !automation.toggleOverride && !automation.hideOverrideDiv) ? 'waiting...' : '';
   }
 
   handleAgentInput(automation){

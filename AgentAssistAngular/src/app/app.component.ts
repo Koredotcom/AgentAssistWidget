@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from './services/local-storage.service';
 import { WebSocketService } from './services/web-socket.service';
@@ -13,6 +13,8 @@ import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
 import { HandleSubjectService } from './services/handle-subject.service';
 import { finalize } from 'rxjs';
 import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
+import { ProjConstants, storageConst } from './proj.const';
+import { CommonService } from './services/common.service';
 
 
 @Component({
@@ -20,7 +22,8 @@ import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, OnDestroy{
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
+
   isGrantSuccess = false;
   errorMsg: string = '';
   subs = new SubSink();
@@ -41,9 +44,21 @@ export class AppComponent implements OnInit, OnDestroy{
     private serviceInvoker : ServiceInvokerService,
     private koregenerateUUIDPipe : KoreGenerateuuidPipe,
     private handleSubjectService: HandleSubjectService,
-    private sanitizeHTMLPipe : SanitizeHtmlPipe
+    private sanitizeHTMLPipe : SanitizeHtmlPipe,
+    private commonService : CommonService
   ) {
     // this.translate.setDefaultLang('en');
+  }
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      let appState = this.localStorageService.getLocalStorageState();
+      if(appState[this.rootService.connectionDetails.conversationId]){
+        let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
+        if(internalTransferDetails){
+          this.rootService.disableWidget(internalTransferDetails.isDisabled);
+        }
+      }
+    });
   }
 
   ngOnInit() {
@@ -88,6 +103,21 @@ export class AppComponent implements OnInit, OnDestroy{
         }
       }
     });
+
+    this.subs.sink = this.webSocketService.makeActiveOrPassiveAgent$.subscribe((data)=>{
+      let appState = this.localStorageService.getLocalStorageState();
+      if(appState[this.rootService.connectionDetails.conversationId] && appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER]){
+        let internalTransferDetails = appState[this.rootService.connectionDetails.conversationId][storageConst.INTERNAL_TRANSFER];
+        if(internalTransferDetails?.participant?.identity === data?.participant?.identity){
+          data.isDisabled = data?.allowAccess;
+          this.rootService.disableWidget(!data?.allowAccess);
+        }
+        let storageObject: any = {
+          [storageConst.INTERNAL_TRANSFER]: data
+        }
+        this.localStorageService.setLocalStorageItem(storageObject);
+      }
+    })
   }
 
   ngOnDestroy(){
@@ -101,7 +131,6 @@ export class AppComponent implements OnInit, OnDestroy{
     this.isGrantSuccess = true;
     setTimeout(() => {
       this.webSocketService.socketConnection();
-      this.rootService.setSocketConnection(true);
     }, 100);
   }
 
@@ -135,8 +164,9 @@ export class AppComponent implements OnInit, OnDestroy{
       this.rootService.formatConnectionDetails(urlParams);
       this.connectionDetails = this.rootService.getConnectionDetails();
       this.initAgentAssist(this.connectionDetails);
+
     } else if (e.data.name === 'userBotConvos') {
-      if (e.data && e.data.sessionId && e.data.userId) {
+      if (e.data && e.data.sessionId) {
         this.rootService.setUserBotConversationDataDetails(e.data);
       }
     } else if (e.data.name === 'setAgentInfo') {
@@ -147,11 +177,41 @@ export class AppComponent implements OnInit, OnDestroy{
       this.localStorageService.userDetails = e.data.userDetails
         ? e.data.userDetails
         : null;
-    } else if (e.data.type === 'AGENT' || e.data?.author?.type === 'AGENT') {
+    } 
+
+    /* we need to remove conditions for below || e.data.type === 'AGENT' , 'USER' || e.data?.author?.type === 'AGENT' , 'USER' */
+
+    else if (e.data?.name === 'agentAssist.AgentMessage' || e.data.type === 'AGENT' || e.data?.author?.type === 'AGENT') {
       this.emitUserAgentMessage(e.data, 'agent_inp_msg');
-    } else if (e.data.type === 'USER' || e.data?.author?.type === 'USER') {
+    } else if (e.data?.name === 'agentAssist.CustomerMessage' || e.data.type === 'USER' || e.data?.author?.type === 'USER') {
       this.emitUserAgentMessage(e.data, 'user_inp_msg');
     }
+    
+    /* below are the events for internal transfer ex: cold / warm */
+    else if(e.data?.name === 'agentAssist.internalTransfer'){
+      if(e.data){
+        this.rootService.internalTransfer = true;
+        this.rootService.internalTransferData = e.data;
+        e.data.isDisabled = false;
+        if(e.data?.transfertype === 'warm' && e.data?.transition === 'entry'){
+          this.rootService.disableWidget(true);
+          e.data.isDisabled = true;
+        }
+        let storageObject: any = {
+          [storageConst.INTERNAL_TRANSFER]: e.data
+        }
+        this.localStorageService.setLocalStorageItem(storageObject);
+        if(e.data?.transition === 'exit'){
+          if(this.rootService.settingsData?.transferConfigs &&
+            this.rootService.settingsData?.transferConfigs[e?.data?.transfertype]?.actionType === 'task' &&
+            this.rootService.isAutomationOnGoing){
+              this.commonService.AgentAssist_run_click({ intentName: ProjConstants.DISCARD_ALL}, this.rootService.currentPositionId);
+            }
+          this.webSocketService.emitEvents(EVENTS.internal_transfer, e.data);
+        }
+      }
+    };
+    
     this.eventListenerFromParent(e);
   }
 
@@ -193,6 +253,7 @@ export class AppComponent implements OnInit, OnDestroy{
           chatHistory: e.data?.payload?.chatHistory
         }
         if(this.widgetSettings?.summarization?.isEnabled) {
+          request_resolution_comments['model'] = this.widgetSettings?.summarization?.model;
         this.webSocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
         }
         this.webSocketService.emitEvents(EVENTS.end_of_conversation, request_resolution_comments);
@@ -241,11 +302,12 @@ export class AppComponent implements OnInit, OnDestroy{
         this.handleSubjectService.setAgentOrTranscriptResponse(userInputData);
       } else {
         if (userInputData?.author?.type === 'USER') {
-          if (!this.rootService.OverRideMode) {
+          if (!this.rootService.OverRideMode && this.rootService.settingsData?.isProactiveEnabled) {
             this.webSocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
-          } else {
-            this.webSocketService.emitEvents(EVENTS.user_message, user_messsage);
-          }
+          } 
+          // else {
+          //   this.webSocketService.emitEvents(EVENTS.user_message, user_messsage);
+          // }
         }
       }
     }
@@ -284,6 +346,8 @@ export class AppComponent implements OnInit, OnDestroy{
     let instanceBotId = params.fromSAT ? params.instanceBotId : params.botId;
     this.serviceInvoker.invoke('get.settings', {instanceBotId : instanceBotId, channel : params.channel}, {},{ botId : params.botId },params.agentassisturl).pipe(finalize(() => {this.widgetLoader = false})).subscribe((res)=> {
       if(res && res.agentAssistSettings && res.agentAssistSettings[params.channel]){
+        this.rootService.accountId = res.accountId;
+        res.agentAssistSettings = this.addBackWardCompatibility(res.agentAssistSettings);
         this.widgetSettings = Object.assign(res.agentAssistSettings, res.agentAssistSettings[params.channel]);
       }else{
         this.widgetSettings = this.rootService.defaultwidgetSettings;
@@ -296,6 +360,13 @@ export class AppComponent implements OnInit, OnDestroy{
       this.initiateSocketConnection(params);
     });
 
+  }
+
+  addBackWardCompatibility(agentassistSettings){
+    if(agentassistSettings && (!agentassistSettings.feedback || !Object.keys(agentassistSettings.feedback)?.length)){
+      agentassistSettings.feedback = this.rootService.defaultFeedbackSettings;
+    }
+    return agentassistSettings
   }
 
   closeFeedback(){

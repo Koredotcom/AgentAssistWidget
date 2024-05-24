@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { ProjConstants } from '../proj.const';
+import { FeebackConst, ProjConstants, RenderResponseType } from '../proj.const';
 import { TemplateRenderClassService } from './template-render-class.service';
 import * as $ from 'jquery';
 import { EVENTS } from '../helpers/events';
@@ -12,13 +12,14 @@ declare const agentAssistHelpers: any;
   providedIn: 'root'
 })
 export class RootService {
-
+  accountId = '';
   socketConnection$: BehaviorSubject<any> = new BehaviorSubject(null);
   activeTab$: BehaviorSubject<any> = new BehaviorSubject(null);
   assistTemplateClick$ : BehaviorSubject<any> = new BehaviorSubject(null);
   mybotTemplateClick$ : BehaviorSubject<any> = new BehaviorSubject(null);
   userBotHistory$ : Subject<any> = new Subject<any>();
   userBotConversationDetailsSubject : BehaviorSubject<any> = new BehaviorSubject(null);
+  disableTheWidget : BehaviorSubject<any> = new BehaviorSubject(null);
 
   public userBotConversationDetails: any;
 
@@ -35,6 +36,7 @@ export class RootService {
 
   OverRideMode: boolean = false;
   proactiveModeStatus : boolean = false;
+  autoScrollStatus : boolean = true;
   isAutomationOnGoing: boolean = false;
   isMyBotAutomationOnGoing: boolean = false;
   isInitialDialogOnGoing: boolean = false;
@@ -75,6 +77,24 @@ export class RootService {
   numOfLines : any = 4;
   maxHeight : any;
   scrollHeight : any;
+  defaultFeedbackSettings : any = {
+    "dialogs": {
+      "isEnabled": true,
+      "acceptComment": true
+    },
+    "faqs": {
+      "isEnabled": true,
+      "acceptComment": true
+    },
+    "searchassist": {
+      "isEnabled": true,
+      "acceptComment": true
+    }
+  }
+
+  defaultSuggestionObj : any = FeebackConst.DEFAULT_SUGGESTION;
+
+  lastSourceMsgId : string = '';
 
   defaultwidgetSettings: any = {
     "isCustomisedLogoEnabled": {
@@ -91,6 +111,7 @@ export class RootService {
     },
     "agentAssistWidgetEnabled": true,
     "isProactiveEnabled": true,
+    "isAutoScrollEnabled" : true,
     "isAgentCoachingEnabled": false,
     "isAgentResponseEnabled": true,
     "isAgentPlaybookEnabled": false,
@@ -98,7 +119,17 @@ export class RootService {
     "isSearchAssistEnabled": true,
     "summarization": {
       "isEnabled": false,
-      "canSubmit": false
+      "canSubmit": false,
+      model: {
+        "type": "kore",
+        "customTaskConfig": {
+            "usecaseId": "",
+            "refId": "",
+            "dialogId": "",
+            "taskRefId": "",
+            "linkedBotId": ""
+        }
+    }
     },
     "transcripts": {
       "isEnabled": true,
@@ -151,17 +182,21 @@ export class RootService {
     "languageSettings": {
       "language": "en",
       "allowAgentSwitch": false
-    }
-
+    },
+    "feedback": this.defaultFeedbackSettings
   }
 
   showListView : boolean = true;
   showRestart : boolean = true;
+  internalTransfer : boolean = false;
+  internalTransferData : any = {};
+  socketConnection : boolean = false;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     private dirService : DirService) {
     // this.chatWindowInstance = new chatWindow();
     this.aaHelpers = new agentAssistHelpers();
+    this.updateDefaultFeedbackData();
   }
 
   getConnectionDetails() {
@@ -259,6 +294,10 @@ export class RootService {
       agent_assist_agent_request_params['dialogId'] = data.dialogId
     }
 
+    if(data.isDiscard){
+      agent_assist_agent_request_params['terminateTask'] = data.isDiscard
+    }
+
     agent_assist_agent_request_params = this.addSourceMsgIdToRequestParams(data,agent_assist_agent_request_params)
     
     return agent_assist_agent_request_params;
@@ -309,7 +348,7 @@ export class RootService {
     this.assistTemplateClick$.next(value);
   }
 
-  formatSearchResponse(response) {
+  formatSearchResponse(response, isSearch=false) {
     let suggestions = response.suggestions;
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
@@ -327,7 +366,7 @@ export class RootService {
       searchResponse.files = [];
       if (suggestions.searchassist && Object.keys(suggestions.searchassist)?.length > 0) {
         for (let source in suggestions.searchassist) {
-          if (source != "snippets" && source != "file") {
+          if (source != "snippets" && source != "file" && source != 'searchRequestId') {
             suggestions.searchassist[source] = this.checkEmptyObjectsInArray(suggestions.searchassist[source]);
             if (suggestions.searchassist[source] && Object.keys(suggestions.searchassist[source])?.length > 0) {
               searchResponse.articles.push.apply(searchResponse.articles, suggestions.searchassist[source]);
@@ -339,9 +378,11 @@ export class RootService {
               searchResponse.files.push.apply(searchResponse.files, suggestions.searchassist[source]);
             }
           }
-          suggestions?.searchassist[source]?.forEach((item : any) => {
-            item.subType = source;
-          });
+          if(source && source != 'searchRequestId'){
+            suggestions?.searchassist[source]?.forEach((item : any) => {
+              item.subType = source;
+            });
+          }
         }    
         for (let article of searchResponse.articles) {
           article.showMoreButton = true;
@@ -351,6 +392,8 @@ export class RootService {
           article.userInput = response.userInput;
           article.sourceMsgId = response.sourceMsgId || '';
           article.subType = article.subType;
+          article.intType = isSearch ?  'mybot' : 'assist';
+          article.feedbackData = this.prepareFeedbackForSuggestions('article',article,{})
         }
         for (let file of searchResponse.files) {
           file.showMoreButton = true;
@@ -360,6 +403,8 @@ export class RootService {
           file.userInput = response.userInput;
           file.sourceMsgId = response.sourceMsgId || '';
           file.subType = file.subType;
+          file.intType = isSearch ?  'mybot' : 'assist';
+          file.feedbackData = this.prepareFeedbackForSuggestions('file',file,{})
         }
       }
       for (let faq of faqArray) {
@@ -374,8 +419,10 @@ export class RootService {
           childBotId: faq.childBotId,
           childBotName: faq.childBotName,
           answerCount: 1,
-          sourceMsgId : response.sourceMsgId || ''
-
+          sourceMsgId : response.sourceMsgId || '',
+          positionId : faq.positionId,
+          userInput : response.userInput,
+          intType : response.intType
         }
         if (faq.answer && faq.answer.length > 0) {
           for (let ans of faq.answer) {
@@ -385,11 +432,15 @@ export class RootService {
               showMoreButton: true,
               showLessButton: false,
               displayName: faq.displayName,
-              sourceMsgId : response.sourceMsgId || ''
+              sourceMsgId : response.sourceMsgId || '',
+              positionId : faq.positionId
             }
             faqObject.answer.push(object);
           }
         }
+        let feedbackData = faq.historyFeedback ? faq.historyFeedback : {};
+        faqObject.feedbackData = this.prepareFeedbackForSuggestions('faqs',faqObject,feedbackData);
+        faqObject.feedbackData.interactionType = isSearch ?  'mybot' : 'assist';
         searchResponse.faqs.push(faqObject);
       }
       if (suggestions?.searchassist?.snippets?.length > 0) {
@@ -424,7 +475,7 @@ export class RootService {
         }
         searchResponse.dialogs.push({
           name: dialog.name, agentRunButton: false, childBotId: dialog.childBotId,
-          childBotName: dialog.childBotName, entities: dialog.entities, userInput: dialog.userInput,
+          childBotName: dialog.childBotName, entities: dialog.entities, userInput: response.userInput,
           sourceMsgId : response.sourceMsgId || ''
         });
       }
@@ -455,7 +506,6 @@ export class RootService {
                   internalFlag: snippet.internalFlag
                 };
                 snipObje['contentArray'].push(ansObj);
-                snipObje.sourceMsgId = response.sourceMsgId || '';
                 snipObje.internalFlag = snippet.internalFlag || false;
                 snipObje.isActCit = true;
               });
@@ -475,8 +525,13 @@ export class RootService {
               }
               snipObje.contentArray.push(otherType);
             }
-            snipObje.sourceMsgId = response.sourceMsgId || '';
           }
+          snipObje.templateType = snippet.templateType;
+          snipObje.positionId = snippet.positionId;
+          snipObje.sourceMsgId = response.sourceMsgId || '';
+          snipObje.intType = response.intType;
+          snipObje.isFromGeneratedSummary = response.isFromGeneratedSummary;
+          snipObje.userInput = response.userInput || '';
         }
       });
       let extInfo = '';
@@ -554,9 +609,52 @@ export class RootService {
         if(extInfo?.trim()){
           snipObje['contentArray'].push(extInfo?.trim());
         }
+        snipObje.feedbackData = this.prepareFeedbackForSuggestions('answer',snipObje,{})
         snippetResponeArray.push(snipObje);
     } 
     return snippetResponeArray;   
+  }
+
+  prepareFeedbackForSuggestions(suggestionType, suggestion, feedbackData?){
+    let renderResponse: any = {
+      type: RenderResponseType.FEEDBACK,
+      connectionDetails: this.connectionDetails,
+      positionId: suggestion.positionId,
+      submitForm: feedbackData?.feedback ? true : false,
+      feedback: feedbackData?.feedback ? feedbackData.feedback : '',
+      feedbackDetails: feedbackData?.feedbackDetails?.length ? feedbackData.feedbackDetails : [],
+      comment: feedbackData?.comment ? feedbackData?.comment : '',
+      sourceMsgId : suggestion.sourceMsgId || '',
+      query : suggestion.userInput,
+      suggestionType : suggestionType,
+      dialogPositionId : suggestion.positionId
+    }
+
+    if(suggestionType == 'answer'){
+      renderResponse.isFromGeneratedSummary = suggestion.isFromGeneratedSummary;
+      renderResponse.answerType = suggestion.templateType;
+      renderResponse.title = suggestion.title;
+      renderResponse.answer = suggestion.sendCopyText || '';
+      renderResponse.interactionType = suggestion.intType;
+      renderResponse.sources = suggestion.sources;
+      if(suggestion.internalInfo?.length > 0){
+        renderResponse.answer += suggestion.internalInfo.join(' ');
+      }
+    }else if(suggestionType == 'article' || suggestionType == 'file'){
+      renderResponse.title = suggestion.title;
+      renderResponse.answer = suggestion.content || '';
+      renderResponse.interactionType = suggestion.intType;
+    }else if(suggestionType == 'faqs'){
+      let answer = '';
+      if(Array.isArray(suggestion?.answer)){
+        suggestion?.answer?.forEach(element => {
+          answer += element.ans;
+        });
+      }
+      renderResponse.title = suggestion.question;
+      renderResponse.answer = answer;
+    }
+    return renderResponse
   }
 
   checkEmptyObjectsInArray(arr) {
@@ -704,7 +802,7 @@ export class RootService {
       // if (quotflag) {
       //   eleanswer = this.replaceLtGt(eleanswer, quotflag)
       // }
-      return eleanswer.replace(new RegExp("[<br />]+$"),'');
+      return eleanswer.replace(new RegExp("(<br />)+$"),'');
 
     }
     return eleanswer;
@@ -820,6 +918,10 @@ export class RootService {
       agent_assist_request['dialogId'] = data.dialogId
     }
 
+    if(data.isDiscard){
+      agent_assist_request['terminateTask'] = data.isDiscard
+    }
+
     agent_assist_request = this.addSourceMsgIdToRequestParams(data,agent_assist_request)
 
     return agent_assist_request;
@@ -867,6 +969,28 @@ export class RootService {
     }else{
       window.open(url, '_blank');
     }
+  }
+
+
+  updateDefaultFeedbackData() {
+    const categories = Object.keys(this.defaultFeedbackSettings);
+
+    categories.forEach(category => {
+      const languages = Object.keys(this.defaultSuggestionObj[category]);
+      this.defaultFeedbackSettings[category].negativeKeyWords = {};
+
+      languages.forEach(language => {
+        const langArray = this.defaultSuggestionObj[category][language].map((element, index) => ({
+          isEnabled: index <= 4,
+          key: element
+        }));
+        this.defaultFeedbackSettings[category].negativeKeyWords[language] = langArray;
+      });
+    });
+  }
+
+  disableWidget(flag = false){
+    this.disableTheWidget.next(flag);
   }
 
 }

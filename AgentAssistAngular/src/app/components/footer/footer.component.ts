@@ -37,8 +37,8 @@ export class FooterComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    // this.getUserBotHistory(this.rootService.connectionDetails);
-    // this.subscribeEvents();
+    this.subscribeEvents();
+    
   }
 
   @HostListener('document:click', ['$event.target']) onMouseEnter(targetElement) {
@@ -70,37 +70,17 @@ export class FooterComponent implements OnInit, OnDestroy{
     this.subs.sink = this.rootService.activeTab$.subscribe(tab => {
       if(tab){
         this.selectedTab = (!this.showTranscript && tab === this.projConstants.TRANSCRIPT) ? this.projConstants.ASSIST : tab;
-        this.actionOnButton(tab);
-        this.updateLocalStorageForTabSwitch(tab);
+        this.actionOnButton(this.selectedTab);
+        this.updateLocalStorageForTabSwitch(this.selectedTab);
       }
     });
 
-    // this.subs.sink = this.rootService.userBotConversationDetailsSubject.subscribe((res)=> {
-    //   if(res){
-    //     this.getUserBotHistory(this.rootService.connectionDetails);
-    //   }
-    // })
+    this.subs.sink = this.rootService.userBotConversationDetailsSubject.subscribe((res)=> {
+      if(!this.rootService.connectionDetails.isCallConversation && res && res?.userBotConversationDetails?.sessionId && res?.userBotConversationDetails.sessionId !== ''){
+        this.hideUserBotHistory = false;
+      }
+    })
   }
-
-/*   getUserBotHistory(params){
-    let userBotConversationDetails = this.rootService.getUserBotConvosDataDetails() || {};
-    let botId = userBotConversationDetails?.botId || params?.botId;
-    let userId = userBotConversationDetails?.userId;
-    let sessionId = userBotConversationDetails?.sessionId; 
-    if((userBotConversationDetails?.botId || this.rootService.connectionDetails?.botId) && userBotConversationDetails?.userId && userBotConversationDetails?.sessionId) {
-      this.serviceInvoker.invoke('get.userBotHistory', { botId: botId, convId: params.conversationId, userId, sessionId }, {}, { excludeAccountId: 'true', botId : botId }, params.agentassisturl).subscribe((data)=> {
-        if(data && data.messages?.length > 0){
-          this.hideUserBotHistory = false;
-        }else{
-          this.hideUserBotHistory = true;
-        }
-        this.rootService.setUserBotHistory(data);
-      },(error)=> {
-        this.hideUserBotHistory = true;
-        this.rootService.setUserBotHistory(null);
-      });
-    }
-  } */
   
   updateLocalStorageForTabSwitch(tab){
     let storageObject: any = {};

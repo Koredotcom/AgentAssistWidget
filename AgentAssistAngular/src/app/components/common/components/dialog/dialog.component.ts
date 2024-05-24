@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
-import { ProjConstants, RenderResponseType } from 'src/app/proj.const';
+import { FeebackConst, ProjConstants, RenderResponseType } from 'src/app/proj.const';
 import { RootService } from 'src/app/services/root.service';
 
 @Component({
@@ -12,14 +12,16 @@ export class DialogComponent {
   @Input() automationData : any;
   @Input() agentassistArrayIndex : number;
   @Input() agentassistResponseArray : any;
+  @Input() feedBackForWn:any = [];
 
   renderResponseType : any = RenderResponseType;
+  feedbackConst : any = FeebackConst;
 
   assistRespType(index, respType) {
     return respType?.data?._id;
   };
 
-  constructor(private rootService : RootService, private randomUUIDPipe : RandomUuidPipe){
+  constructor(public rootService : RootService, private randomUUIDPipe : RandomUuidPipe){
 
   }
 

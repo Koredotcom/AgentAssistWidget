@@ -39,3 +39,56 @@
         }
     }
 }
+
+
+
+.widgets-disabled-card-wrapper{
+    position: fixed;
+    bottom: 0;
+    padding: 20px 10px;
+    z-index: 9;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    .widgets-info-disabled-content{
+        border-radius: 12px;
+        background: var(--Warning-500, #F79009);
+        box-shadow: 0px 25px 50px -12px rgba(16, 24, 40, 0.25);
+        display: flex;
+        padding: 12px;
+        align-items: flex-start;
+        gap: 16px;
+        .icon_block{
+            display: flex;
+            width: 24px;
+            height: 24px;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            border-radius: 28px;
+            border: 2px solid var(--Warning-100, #FEF0C7);
+            background: var(--Base-White, #FFF);
+            color: #F79009;
+            font-size: 16px;
+        }
+        .content-info-widget{
+            width: 100%;
+            h1{
+                color: var(--Base-White, #FFF);
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 20px;
+                margin: 0 0 4px 0;
+            }
+            p{
+                color: var(--Base-White, #FFF);
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 20px;
+                margin: 0;
+            }
+        }
+    }
+}

@@ -111,7 +111,9 @@ export const storageConst = {
     ACTIVE_TAB : 'activeTab',
     SHOWSEND : 'showSend',
     ENABLEWIDGET :   'enableWidget',
-    ISSEND_WELCOME_MSG : 'isSendWelcomeMessage'
+    ISSEND_WELCOME_MSG : 'isSendWelcomeMessage',
+    INTERNAL_TRANSFER : 'internalTransfer',
+    AUTOSCROLL : 'autoScroll'
 }
 
 export const WidgetConst = {
@@ -143,7 +145,45 @@ export const RenderResponseType = {
 export const FeebackConst = {
     LIKE : 'like',
     DISLIKE : 'dislike',
-    DISLIKE_LIST : ['Wrong suggestions', 'Incorrect intent', 'Accidental click', 'Time taking', 'Other']
+    DISLIKE_LIST : ['Wrong suggestions', 'Incorrect intent', 'Accidental click', 'Time taking', 'Other'],
+    DIALOGS : 'dialogs',
+    FAQS : 'faqs',
+    ANSWERS : 'searchassist',
+    DEFAULT_SUGGESTION : {
+        "dialogs" : {
+          en : ["Wrong Suggestion", "Accidental Click", "Time Taking", "Confusing", "Not Satisfactory", "Other"],
+          ar : ["اقتراح خاطئ", "نقر عرضي", "يستغرق وقتًا", "مربك", "غير مرضٍ", "آخر"],
+          de : ["Falscher Vorschlag", "Versehentlicher Klick", "Zeitaufwendig", "Verwirrend", "Nicht zufriedenstellend", "Andere"],
+          es : ["Sugerencia incorrecta", "Clic accidental", "Lleva tiempo", "Confuso", "No satisfactorio", "Otro"],
+          fr : ["Suggestion incorrecte", "Clic accidentel", "Prendre du temps", "Confus", "Non satisfaisant", "Autre"],
+          it : ["Suggerimento errato", "Clic accidentale", "Richiede tempo", "Confuso", "Non soddisfacente", "Altro"],
+          ja : ["間違った提案", "誤ってクリックする", "時間がかかる", "混乱する", "不十分", "その他"],
+          ko : ["잘못된 제안", "우연한 클릭", "시간이 걸리는", "혼란스러운", "불만족스러운", "기타"],
+          zh_cn : ["错误建议", "意外点击", "耗时", "令人困惑", "不令人满意", "其他"]
+        },
+        'searchassist' : {
+          en : ["Wrong Suggestion", "Inaccurate Content", "Time Taking", "Too Lengthy", "Not Satisfactory", "Other"],
+          ar : ["اقتراح خاطئ", "محتوى غير دقيق", "يستغرق وقتًا", "طويل جدًا", "غير مرضٍ", "آخر"],
+          de : ["Falscher Vorschlag", "Unrichtiger Inhalt", "Zeitaufwendig", "Zu lang", "Nicht zufriedenstellend", "Andere"],
+          es : ["Sugerencia incorrecta", "Contenido inexacto", "Lleva tiempo", "Demasiado largo", "No satisfactorio", "Otro"],
+          fr : ["Suggestion incorrecte", "Contenu inexact", "Prendre du temps", "Trop long", "Non satisfaisant", "Autre"],
+          it : ["Suggerimento errato", "Contenuto inesatto", "Richiede tempo", "Troppo lungo", "Non soddisfacente", "Altro"],
+          ja : ["間違った提案", "不正確なコンテンツ", "時間がかかる", "長すぎる", "不十分", "その他"],
+          ko : ["잘못된 제안", "부정확한 콘텐츠", "시간이 걸리는", "너무 긴", "불만족스러운", "기타"],
+          zh_cn : ["错误建议", "不准确内容", "耗时", "过长", "不令人满意", "其他"]
+        },
+        'faqs' : {
+          en : ["Wrong Suggestion", "Inaccurate Content", "Irrelevant Content", "Confusing", "Not Satisfactory", "Other"],
+          ar : ["اقتراح خاطئ", "محتوى غير دقيق", "محتوى غير متعلق", "مربك", "غير مرضٍ", "آخر"],
+          de : ["Falscher Vorschlag", "Unrichtiger Inhalt", "Irrelevanter Inhalt", "Verwirrend", "Nicht zufriedenstellend", "Andere"],
+          es : ["Sugerencia incorrecta", "Contenido inexacto", "Contenido irrelevante", "Confuso", "No satisfactorio", "Otro"],
+          fr : ["Suggestion incorrecte", "Contenu inexact", "Contenu non pertinent", "Confus", "Non satisfaisant", "Autre"],
+          it : ["Suggerimento errato", "Contenuto inesatto", "Contenuto non pertinente", "Confuso", "Non soddisfacente", "Altro"],
+          ja : ["間違った提案", "不正確なコンテンツ", "関連のないコンテンツ", "混乱する", "不十分", 'その他'],
+          ko : ["잘못된 제안", "부정확한 콘텐츠", "관련 없는 콘텐츠", "혼란스러운", "불만족스러운", "기타"],
+          zh_cn : ["错误建议", "不准确内容", "无关内容", "令人困惑", "不令人满意", "其他"]
+        }
+      }
 }
 
 export const coachingConst = {

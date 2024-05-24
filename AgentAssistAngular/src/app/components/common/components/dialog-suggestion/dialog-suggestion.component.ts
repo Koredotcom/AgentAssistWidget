@@ -25,6 +25,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
   suggestionCount : number = 0;
   viewCount = 2;
   moreClick = false;
+  menuLoader : boolean = true;
 
 
   constructor(private websocketService : WebSocketService, private handleSubjectService : HandleSubjectService,
@@ -48,6 +49,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
         this.menuResponse = this.formatMenuResponse(menuResponse.usecases);
         this.suggestionCount = this.menuResponse.length || 0;
         this.updateMenuResponseLoader.emit(false);
+        this.menuLoader = false;
       }
     });
   }
@@ -82,7 +84,7 @@ export class DialogSuggestionComponent implements OnInit, OnDestroy{
     this.rootService.setActiveTab(searchType);
     dialog.positionId = this.randomUUIDPipe.transform('positionId');
     dialog.intentName = dialog.name;
-    dialog.userInput = dialog.name;
+    dialog.userInput = dialog.userInput;
     dialog.agentRunButton = (searchType == this.projConstants.MYBOT) ? true : false;
     dialog.traits = this.suggestionData?.traits || [];    
     if(!dialog.dialogId){

@@ -6,7 +6,7 @@ import { SubSink } from 'subsink';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { EVENTS } from 'src/app/helpers/events';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { ProjConstants, RenderResponseType, storageConst } from 'src/app/proj.const';
+import { FeebackConst, ProjConstants, RenderResponseType, storageConst } from 'src/app/proj.const';
 import { KoreGenerateuuidPipe } from 'src/app/pipes/kore-generateuuid.pipe';
 import { RandomUuidPipe } from 'src/app/pipes/random-uuid.pipe';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -30,13 +30,16 @@ export class AssistComponent implements OnInit, OnDestroy {
   @ViewChild('collapseTab', { static: false }) private collapseTab: ElementRef;
   @ViewChild('terminateCanvas', {static : false}) private canvas : ElementRef<HTMLDivElement>
   @ViewChild('summeryModalpopupContent', {static : false}) private summaryPopupContent : ElementRef<HTMLDivElement>
+  @ViewChild('summaryBannerDetails', { static : false}) private summaryBannerDetails: ElementRef<HTMLDivElement>
 
   connectionDetails: any = {};
   subs = new SubSink();
   proactiveModeStatus: boolean;
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
+  feedbackConst : any = FeebackConst;
 
+  conversationSummaryObj: any;
 
   dialogName: string;
   dialogPositionId: string;
@@ -69,7 +72,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   showSentiment : boolean = true;
 
   listViewEntityList : any = [];
-
+  feedBackForWn:any = [];
   assistRespType(index, respType) {
     return respType?.data?._id;
   };
@@ -158,13 +161,8 @@ export class AssistComponent implements OnInit, OnDestroy {
         if(this.showListView){
           this.handlePopupEvent({type : this.projConstants.LISTVIEW, status : false});
         }
-        this.dialogTerminatedOrIntruppted();        
-        if (this.interruptRun) {
-          this.interruptRun = false;
-          let index = (this.interruptDialogList || [])?.findIndex(obj => obj.name === this.interruptDialog.name);
-          // index = index < 0 ? 0 : index;
-          this.commonService.dialogueRunClick(this.interruptDialog,index, false);
-        }
+        this.dialogTerminatedOrIntruppted();  
+        this.interruptDialogCheck();      
         if(this.showRestart){
           this.handlePopupEvent({type : this.projConstants.RESTART, status : false});
           this.commonService.restartDialogueRunClick(this.restartDialogName, false);
@@ -202,11 +200,20 @@ export class AssistComponent implements OnInit, OnDestroy {
     }, 10000);
   }
 
+  interruptDialogCheck(){
+    if (this.interruptRun) {
+      this.interruptRun = false;
+      let index = (this.interruptDialogList || [])?.findIndex(obj => obj.name === this.interruptDialog.name);
+      // index = index < 0 ? 0 : index;
+      this.commonService.dialogueRunClick(this.interruptDialog,index, false);
+    }
+  }
+
   getAssistData(params) {
     let feedback = this.commonService.assistFeedback(params);
     let history = this.commonService.assistHistory(params);
     this.handleSubjectService.setLoader(true);
-    forkJoin([feedback, history]).pipe(finalize(() => { this.showSpinner = false; })).subscribe(res => {
+    forkJoin([feedback, history]).pipe(finalize(() => { this.showSpinner = false; this.websocketService.emitTransferEvent() })).subscribe(res => {
       let feedbackData = res[0]?.results || [];
       let historyData = res[1] || [];
       this.renderHistoryMessages(historyData, feedbackData);
@@ -274,9 +281,9 @@ export class AssistComponent implements OnInit, OnDestroy {
       this.dialogTerminatedOrIntruppted();
     }
 
-    if (!this.rootService.isAutomationOnGoing && !this.proactiveModeStatus && !data.sendMenuRequest) {
-      return;
-    }
+    // if (!this.rootService.isAutomationOnGoing && !this.proactiveModeStatus && !data.sendMenuRequest) {
+    //   return;
+    // }
 
     if (!data.sendMenuRequest) {
       this.assistResponseArray = this.commonService.removeOrAddOverRideDivForPreviousResponse(this.assistResponseArray,true);
@@ -290,11 +297,11 @@ export class AssistComponent implements OnInit, OnDestroy {
     let uuids = this.koreGenerateuuidPipe.transform();
     let responseId = uuids;
 
-    if (!this.rootService.isAutomationOnGoing && data.intentName && !data.suggestions && !this.rootService.isInitialDialogOnGoing) {
+    if (!this.rootService.isAutomationOnGoing && data.intentName && (!data.suggestions && data.buttons?.length > 0) && !this.rootService.isInitialDialogOnGoing) {
       let isInitialTaskRanORNot;
       let appState = this.localStorageService.getLocalStorageState();
       if (appState[this.connectionDetails.conversationId]) {
-        isInitialTaskRanORNot = appState[this.connectionDetails.conversationId][storageConst.INITIALTASK_GOING_ON]
+        isInitialTaskRanORNot = appState[this.connectionDetails.conversationId][storageConst.INITIALTASK_GOING_ON] && !data.onConnectTask
       }
       if (!isInitialTaskRanORNot) {
         this.runDialogForAssistTab(data, "onInitRun");
@@ -328,7 +335,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     if(!data.sendMenuRequest){
       if (this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
         this.showSpinner = false;
-        renderResponse = this.commonService.formatAutomationRenderResponse(data,responseId, result, newTemp, this.dialogPositionId)
+        renderResponse = this.commonService.formatAutomationRenderResponse(data,responseId, result, newTemp, this.dialogPositionId, ProjConstants.ASSIST)
         if (data.isPrompt && (!this.proactiveModeStatus || this.rootService.manualAssistOverrideMode)) {
           renderResponse.toggleOverride = true;
           renderResponse.hideOverrideDiv = true;
@@ -343,7 +350,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   
       // small talk with templates
       if (!this.rootService.isAutomationOnGoing && this.rootService.dropdownHeaderUuids && data.buttons && !data.sendMenuRequest && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
-        renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId)
+        renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId, ProjConstants.ASSIST)
         if (data.isPrompt && !this.proactiveModeStatus) {
           renderResponse.toggleOverride = true;
           renderResponse.hideOverrideDiv = true;
@@ -354,7 +361,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   
       // small talk without templates
       if (!this.rootService.isAutomationOnGoing && !this.rootService.dropdownHeaderUuids && !data.suggestions && !result.parsePayLoad && !data.sendMenuRequest) {
-        renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId)
+        renderResponse = this.commonService.formatSmallTalkRenderResponse(data, responseId, result, newTemp, this.dialogPositionId, ProjConstants.ASSIST)
         if (data.isPrompt && !this.proactiveModeStatus) {
           renderResponse.toggleOverride = true;
           renderResponse.hideOverrideDiv = true;
@@ -367,7 +374,7 @@ export class AssistComponent implements OnInit, OnDestroy {
       this.welcomeMsgResponse = data;
       this.assistResponseArray = this.commonService.formatRunningLastSmallTalkEntityNode(this.assistResponseArray, renderResponse);
       this.assistResponseArray = [...this.assistResponseArray];
-      this.scrollToBottom();
+      this.scrollToBottom(true);
     }
 
     if(this.rootService.isAgentSentRequestOnClick){
@@ -377,7 +384,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     if (!data.sendMenuRequest) {
       this.scrollToBottomRuntime();
     }
-    
+    this.rootService.lastSourceMsgId = data.sourceMsgId;
   }
 
   formatListViewEntityList(type){
@@ -398,6 +405,7 @@ export class AssistComponent implements OnInit, OnDestroy {
 
 
   runDialogForAssistTab(data, runInitent?) {
+    this.feedBackForWn = [];
     let uuids = this.koreGenerateuuidPipe.transform();
     this.rootService.dropdownHeaderUuids = uuids;
     this.commonService.updateLocalStorageForAssist(true);
@@ -516,7 +524,11 @@ export class AssistComponent implements OnInit, OnDestroy {
         this.showInterruptPopup = false;
         // this.dialogTerminatedOrIntruppted();
         this.interruptRun = true;
-        this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL, sourceMsgId : sourceMsgId }, this.dialogPositionId)
+        if(this.rootService.isAutomationOnGoing){
+          this.commonService.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL, sourceMsgId : sourceMsgId }, this.dialogPositionId)
+        }else{
+          this.interruptDialogCheck();
+        }
       } else if (popupObject.runLater) {
         this.showInterruptPopup = false;
         let index = (this.interruptDialogList || [])?.findIndex(obj => obj.name === this.interruptDialog.name);
@@ -555,6 +567,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         }
       }
     } else if (popupObject.type == this.projConstants.SUMMARY) {
+      this.conversationSummaryObj = popupObject;
       if(popupObject.status){
         this.rootService.activeTab = this.projConstants.ASSIST;
         this.summaryText = popupObject.summaryText || '';
@@ -574,6 +587,16 @@ export class AssistComponent implements OnInit, OnDestroy {
           window.parent.postMessage(message, '*');
         }
       }
+      let submitSummaryRequestParams = {
+        conversationId : this.connectionDetails.conversationId,
+        botId: this.connectionDetails?.botId,
+        summary : [
+          {
+              'summary_text' : popupObject.editedSummary || ''
+          }
+        ]
+      }
+      this.websocketService.emitEvents(EVENTS.submit_summary_request, submitSummaryRequestParams);
       this.closeSummaryPopup();
     }
   }
@@ -590,6 +613,12 @@ export class AssistComponent implements OnInit, OnDestroy {
     this.assistResponseArray[index] = data;
   }
 
+  getFeedbackObjForFaq(faq, feedBackResult){
+    let feedback = {};
+    feedback = feedBackResult.find((ele) => ele.positionId === faq.positionId);
+    return feedback;
+  }
+
   renderHistoryMessages(response, feedBackResult) {
     let previousId;
     let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
@@ -601,16 +630,19 @@ export class AssistComponent implements OnInit, OnDestroy {
       if(res.type == 'outgoing'){
         res = this.rootService.formatHistoryResonseToNormalRender(res);
         // res = this.rootService.confirmationNodeRenderForHistoryDataTransform(res);
-
-        if ((res.suggestions || res.ambiguityList) && res.faqResponse) {
+        let ambiguity = false;
+        if ((res.suggestions || res.ambiguityList)) {
   
-          res.suggestions.faqs.forEach(faq => {
-            faq.answer = res?.buttons[0]?.value
+          res.suggestions?.faqs?.forEach(faq => {
+            if(!faq.answer){
+              faq.answer = res?.buttons[0]?.value;
+            }
           });
+          
+          let faqSuggestions = JSON.parse(JSON.stringify(res.suggestions?.faqs || []));
+          faqSuggestions = this.rootService.formatFAQResponse(res.suggestions?.faqs || []);
   
-          res.suggestions.faqs = this.rootService.formatFAQResponse(res.suggestions.faqs);
-  
-          let faqQuestionList = res?.suggestions?.faqs?.reduce((acc, faq) => {
+          let faqQuestionList = faqSuggestions?.reduce((acc, faq) => {
             acc[faq.question] = faq;
             return acc;
           }, {});
@@ -621,11 +653,12 @@ export class AssistComponent implements OnInit, OnDestroy {
               assistResp.searchResponse.faqs.forEach(faq => {
                 if (faqQuestionList[faq.question]) {
                   if (!faq.answer) {
+                    ambiguity = true;
                     faq.answer = faqQuestionList[faq.question].answer;
                     faq.toggle = true;
                     faq.showMoreButton = false,
-                      faq.showLessButton = false,
-                      inx = index;
+                    faq.showLessButton = false,
+                    inx = index;
                   }
                 }
               });
@@ -638,7 +671,12 @@ export class AssistComponent implements OnInit, OnDestroy {
           this.assistResponseArray = structuredClone(this.assistResponseArray);
         }
   
-        if ((res.suggestions || res.ambiguityList) && !res.faqResponse) {
+        
+        
+        if ((res.suggestions || res.ambiguityList) && !ambiguity) {
+          res?.suggestions?.faqs?.forEach(faq => {
+            faq.historyFeedback = this.getFeedbackObjForFaq(faq, feedBackResult);
+          });
           renderResponse = this.commonService.formatSuggestionRenderResponse(res, res._id);
           this.assistResponseArray.push(renderResponse);
           this.assistResponseArray = structuredClone(this.assistResponseArray);
@@ -646,6 +684,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   
         if ((!res.suggestions && !res.ambiguityList && !res.ambiguity)) {
           if (res.endOfTask && previousId) {
+            this.feedBackForWn = JSON.parse(JSON.stringify(feedBackResult));
             let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
   
             this.filterAutomationByPositionId();
@@ -720,7 +759,7 @@ export class AssistComponent implements OnInit, OnDestroy {
             // automation
             if (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
               let responseId = res?.buttons && res?.buttons[0]?._id ? (res?.buttons && res?.buttons[0]?._id) : uuids;
-              renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp, currentTaskPositionId);
+              renderResponse = this.commonService.formatAutomationRenderResponse(res,responseId, result, newTemp, currentTaskPositionId, ProjConstants.ASSIST);
               if (res.isPrompt && !this.proactiveModeStatus) {
                 renderResponse.toggleOverride = true;
                 renderResponse.hideOverrideDiv = true;
@@ -733,7 +772,7 @@ export class AssistComponent implements OnInit, OnDestroy {
             } else if ((previousTaskName != currentTaskName)) {
               //small talk after dialogue terminate   
               this.dialogName = null;           
-              renderResponse = this.commonService.formatSmallTalkRenderResponse(res, uuids, result, newTemp, previousId)
+              renderResponse = this.commonService.formatSmallTalkRenderResponse(res, uuids, result, newTemp, previousId, ProjConstants.ASSIST)
               this.assistResponseArray.push(renderResponse);
               this.assistResponseArray = [...this.assistResponseArray];
             }
@@ -756,7 +795,7 @@ export class AssistComponent implements OnInit, OnDestroy {
         }
       } 
     });    
-    this.scrollToBottom();
+    this.scrollToBottom(true);
   }
 
 
@@ -770,26 +809,42 @@ export class AssistComponent implements OnInit, OnDestroy {
 
   scrollToBottomRuntime = () => {
     if(this.collapseTab?.nativeElement){
-      let collapseTabHeight = this.collapseTab?.nativeElement?.offsetHeight;
-      if(collapseTabHeight){
-        let pixel = (28 * collapseTabHeight) / 100;
-        this.renderer.setStyle(this.collapseTab.nativeElement, 'padding-bottom', pixel+"px");
-      }else{
-        this.collapseTab.nativeElement.classList.add('pB');
+      this.setCollapseTabPadding();
+      if(this.rootService.autoScrollStatus){
+        setTimeout(() => {
+          try {
+            this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight + 90;
+          } catch (err) { }
+        }, 0);
       }
-      setTimeout(() => {
-        try {
-          this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight + 90;
-        } catch (err) { }
-      }, 0);
     }
   }
 
-  scrollToBottom(){
+  scrollToBottom(history?){
     if(this.collapseTab?.nativeElement){
-      setTimeout(() => {
-        this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
-      }, 10);
+      if (history && this.rootService.internalTransfer && this.rootService.settingsData?.transferConfigs &&
+        this.rootService.settingsData?.transferConfigs[this.rootService.internalTransferData?.transfertype]?.actionType === 'scrollToTop') {
+        setTimeout(() => {
+          this.collapseTab.nativeElement.scrollTop = 0;
+        }, 10);
+      } else if(this.rootService.autoScrollStatus){
+        setTimeout(() => {
+          this.collapseTab.nativeElement.scrollTop = this.collapseTab.nativeElement.scrollHeight;
+        }, 10);
+      }
+      if(history){
+        this.setCollapseTabPadding();
+      }
+    }
+  }
+
+  setCollapseTabPadding(){
+    let collapseTabHeight = this.collapseTab?.nativeElement?.offsetHeight;
+    if(collapseTabHeight){
+      let pixel = (28 * collapseTabHeight) / 100;
+      this.renderer.setStyle(this.collapseTab.nativeElement, 'padding-bottom', pixel+"px");
+    }else{
+      this.collapseTab.nativeElement.classList.add('pB');
     }
   }
 }

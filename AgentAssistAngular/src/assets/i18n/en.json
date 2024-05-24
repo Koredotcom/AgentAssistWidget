@@ -41,7 +41,7 @@
     "START_OVER" : "Start over",
     "RESTART_CAPTURE" : "Restart with captured inputs",
     "CANCEL" : "Cancel",
-    "INTERRUPT_DIALOG" : "INTERUPTED  DIALOG TASK",
+    "INTERRUPT_DIALOG" : "INTERRUPTED  DIALOG TASK",
     "RUN" : "RUN",
     "RUN_AGENT" : "Run with Agent’s input",
     "STEP" : "Step",
@@ -65,7 +65,7 @@
     "OVERRIDE_CONTINUE" : "Continue with override mode",
     "SUMMARY_TEXT" : "Summary",
     "SUBMIT" : "Submit",
-    "INTERRUPT_OCCURED" : "Interruption Occured",
+    "INTERRUPT_OCCURED" : "Interruption Occurred",
     "IDENTIFIED_INTENT" : "Identified intent",
     "INTERRUPT_DESC" : "Running this would terminate your on going Dialog Task.",
     "ACCEPT_RUN" : "Accept and Run",
@@ -104,7 +104,7 @@
     "PLAYBOOK_EMPTY_DESC" : "AgentAssist is unable to load the playbook due to all available playbooks being dynamic. Click 'Select Playbook' to access the playbook",
     "STAGE" : "Stage", 
     "PROCEED_TO_CLOSE" : "Proceed to close",
-    "RECOMENDED_PLAYBOOK" : "RECOMENDED PLAYBOOK",
+    "RECOMENDED_PLAYBOOK" : "RECOMMENDED PLAYBOOK",
     "PRIMARY_SCRIPTS" : "PRIMARY SCRIPTS",
     "DYNAMIC_SCRIPTS" : "DYNAMIC SCRIPTS",
     "RESUME" : "Resume",
@@ -117,6 +117,8 @@
     "SENTIMENT_AWAITING" : "Awaiting for sentiment",
     "POSITIVE" : "Pos",
     "NEGATIVE" : "Neg",
-    "AGENT_JOINED_CONV": "Agent joined the conversation"
+    "ASSOCIATED_WORK_NOTES": "Past Resolution Notes",
+    "AGENT_JOINED_CONV": "Agent joined the conversation",
+    "AUTOSCROLL_ASSIST" : "Auto-Scroll Assist Tab Content"
 
 }

@@ -97,6 +97,9 @@ export class CommonService {
     if (dialog.traits && dialog.traits?.length > 0){
       connectionDetails.traits = dialog.traits
     }
+    if(dialog.intentName === this.projConstants.DISCARD_ALL && !intent){
+      connectionDetails.isDiscard = true;
+    }
     let assistRequestParams = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
     this.rootService.entitiestValueArray = [];
@@ -212,6 +215,7 @@ export class CommonService {
       payload : message.payload,
       title: message.title,
       contentId : message.contentId,
+      positionId : faq_or_article_obj.positionId ? faq_or_article_obj.positionId : '',
       sessionId: (this.rootService.activeTab == this.projConstants.MYBOT || this.rootService.activeTab == this.projConstants.SEARCH) ? this.rootService.myBotTabSessionId : this.rootService.assistTabSessionId,
     };
     data = this.rootService.addSourceMsgIdToRequestParams(faq_or_article_obj,data);
@@ -255,6 +259,9 @@ export class CommonService {
       }
       if (dialog.traits && dialog.traits?.length > 0){
         connectionDetails.traits = dialog.traits
+      }
+      if(dialog.intentName === this.projConstants.DISCARD_ALL && !intent){
+        connectionDetails.isDiscard = true;
       }
       let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
@@ -405,7 +412,7 @@ export class CommonService {
     return renderResponse;
   }
 
-  formatDialogRunRenderResponse(res, responseId, dialogId, dialogName) {
+  formatDialogRunRenderResponse(res, responseId, dialogId, dialogName, tabName = ProjConstants.ASSIST) {
     let renderResponse = {
       data: res,
       type: this.renderResponseType.AUTOMATION,
@@ -414,12 +421,13 @@ export class CommonService {
       dialogName: dialogName,
       connectionDetails: this.rootService.connectionDetails,
       showAutomation: true,
-      sourceMsgId : res.sourceMsgId || ""
+      sourceMsgId : res.sourceMsgId || "",
+      tab : tabName
     }
     return renderResponse;
   }
 
-  formatAutomationRenderResponse(data, responseId, result, newTemp, dialogPositionId) {
+  formatAutomationRenderResponse(data, responseId, result, newTemp, dialogPositionId, tabName) {
     let renderResponse = {
       data: data,
       type: this.renderResponseType.AUTOMATION,
@@ -431,7 +439,8 @@ export class CommonService {
       responseType: this.renderResponseType.ASSISTRESPONSE,
       errorCount: 0,
       value: data?.buttons[0]?.value,
-      dialogId : dialogPositionId
+      dialogId : dialogPositionId,
+      tab : tabName
     }
     return renderResponse;
   }
@@ -446,7 +455,7 @@ export class CommonService {
     return renderResponse;
   }
 
-  formatSmallTalkRenderResponse(data, responseId, result, newTemp, dialogPositionId?) {
+  formatSmallTalkRenderResponse(data, responseId, result, newTemp, dialogPositionId, tabName) {
     let renderResponse: any = {
       data: data,
       type: this.renderResponseType.SMALLTALK,
@@ -461,7 +470,8 @@ export class CommonService {
       sendData: result?.parsedPayload ? newTemp : data?.buttons[0]?.value,
       dialogId: dialogPositionId,
       responseType: this.renderResponseType.ASSISTRESPONSE,
-      sourceMsgId : data.sourceMsgId || ''
+      sourceMsgId : data.sourceMsgId || '',
+      tab : tabName
     }
     renderResponse.template = this.rootService.getTemplateHtml(renderResponse.templateRender, result);
     return renderResponse;
@@ -611,12 +621,12 @@ export class CommonService {
   }
 
   checkEntityValueDataType(entities, entityName, value){
-    if(entities && Object.keys(entities)?.length > 0 && entities[entityName]){
-      return entities[entityName];
-    }
-    if(value && Array.isArray(value) && value.length > 0){
-      return value[0];
-    }
+    // if(entities && Object.keys(entities)?.length > 0 && entities[entityName]){
+    //   return entities[entityName];
+    // }
+    // if(value && Array.isArray(value) && value.length > 0){
+    //   return value[0];
+    // }
     return value;
   }
 
@@ -712,6 +722,9 @@ export class CommonService {
       automation.agentInputEntityName = automation.data.newEntityDisplayName ? automation.data.newEntityDisplayName : automation.data.newEntityName;
     } else if (automation.data.entityDisplayName || automation.data.entityName) {
       automation.agentInputEntityName = automation.data.entityDisplayName ? automation.data.entityDisplayName : automation.data.entityName;
+    }
+    if(automation?.result?.parsedPayload?.payload?.template_type == 'worknotesTemplate'){
+      automation.isWorkNote = true;
     }
     return automation;
   }

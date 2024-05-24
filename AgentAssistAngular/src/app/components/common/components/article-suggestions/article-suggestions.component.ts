@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChange, ViewChild } from '@angular/core';
 import { RemoveTagFromStringPipe } from 'src/app/pipes/remove-tag-from-string.pipe';
 import { ReplaceTextWithTagPipe } from 'src/app/pipes/replace-text-with-tag.pipe';
-import { ProjConstants } from 'src/app/proj.const';
+import { FeebackConst, ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
@@ -20,6 +20,7 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
   
   subs = new SubSink();
   projConstants: any = ProjConstants;
+  feedbackConst: any = FeebackConst;
   articlesList : any[] = [];
   viewCount = 2;
   moreClick = false;
@@ -96,6 +97,10 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
 
   openurlInBrowser(url){
     this.rootService.openurlInBrowser(url);
+  }
+
+  updateFeedbackProperties(data, articleObj) {
+    articleObj.feedbackData = data;
   }
 }
 

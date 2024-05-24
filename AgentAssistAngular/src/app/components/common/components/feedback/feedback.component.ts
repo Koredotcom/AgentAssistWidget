@@ -3,7 +3,8 @@ import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmi
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { EVENTS } from 'src/app/helpers/events';
-import { FeebackConst, ProjConstants } from 'src/app/proj.const';
+import { FeebackConst, ProjConstants, storageConst } from 'src/app/proj.const';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { RootService } from 'src/app/services/root.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 
@@ -16,24 +17,21 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
   @Input() feedbackData : any = {};
   @Input() agentassistArrayIndex : number;
   @Input() agentassistResponseArray : number;
+  @Input() feedbackType : string;
   @Output() updateFeedbackProperties = new EventEmitter();
 
   feedbackForm : FormGroup;
   feedbackConst : any = FeebackConst;
   feedbackComment : string;
   formTouched : boolean = false;
-  dislikeList : any = {
-    "WRONG_SUGGESTION" : ProjConstants.WRONG_SUGGESTION,
-    "INCORRECT_INTENT" : ProjConstants.INCORRECT_INTENT,
-    "ACCIDENTAL_CLICK" : ProjConstants.ACCIDENTAL_CLICK,
-    "TIME_TAKING" : ProjConstants.TIME_TAKING,
-    "OTHER" : ProjConstants.OTHER,
-  }
+  dislikeList : any = [];
+  showComments : boolean = false;
 
   constructor(private rootService : RootService,
     private websocketService : WebSocketService,
     private cdRef : ChangeDetectorRef,
-    private translate : TranslateService){
+    private translate : TranslateService,
+    private localStorageService : LocalStorageService){
 
   }
 
@@ -51,21 +49,66 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
     })
   }
 
-  createForm(){    
-    this.feedbackForm = new FormGroup(
-      {
-        "botId": new FormControl(this.feedbackData.connectionDetails.botId),
-        "conversationId" : new FormControl(this.feedbackData.connectionDetails.conversationId),
-        "event" : new FormControl(EVENTS.agent_usage_feedback),
-        "interactionType": new FormControl(this.rootService.activeTab == ProjConstants.ASSIST ? 'assist' : 'mybot'),
-        "positionId" : new FormControl(this.feedbackData.dialogPositionId),
-        "taskId" : new FormControl(this.feedbackData.uuid),
-        "taskName" : new FormControl(this.feedbackData.dialogName),
-        "comment" : new FormControl(this.feedbackData.comment),
-        "feedback" : new FormControl(this.feedbackData.feedback,[Validators.required]),
-        "feedbackDetails" : new FormControl(this.feedbackData.feedbackDetails)
+  createForm(){ 
+    let appState = this.localStorageService.getLocalStorageState();   
+    let language = appState[this.feedbackData.connectionDetails.conversationId][storageConst.LANGUAGE];
+    let suggestionList = (this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords[language]) ? 
+    this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords[language] : this.rootService.defaultFeedbackSettings[this.feedbackType]?.negativeKeyWords[language];
+    suggestionList?.forEach(element => {
+      if(element.isEnabled){
+        this.dislikeList.push(element.key);
       }
-    );
+    });
+    this.showComments = this.rootService.settingsData?.feedback[this.feedbackType]?.acceptComment;
+    if(this.feedbackData.suggestionType){
+      this.feedbackForm = new FormGroup(
+        {
+          "botId": new FormControl(this.feedbackData.connectionDetails.botId),
+          "conversationId" : new FormControl(this.feedbackData.connectionDetails.conversationId),
+          "event" : new FormControl(EVENTS.agent_usage_feedback),
+          "interactionType": new FormControl(this.feedbackData.interactionType),
+          "positionId" : new FormControl(this.feedbackData.positionId),
+          "experience" : new FormControl(this.feedbackData.connectionDetails?.channel),
+          "sourceMsgId" : new FormControl(this.feedbackData.sourceMsgId),
+          "type" : new FormControl(this.feedbackData.suggestionType),
+          "comment" : new FormControl(this.feedbackData.comment),
+          "feedback" : new FormControl(this.feedbackData.feedback,[Validators.required]),
+          "feedbackDetails" : new FormControl(this.feedbackData.feedbackDetails),
+          "query" : new FormControl(this.feedbackData.query)
+        }
+      );
+
+      if (this.feedbackData.suggestionType == 'answer') {
+        (this.feedbackForm as FormGroup)?.addControl('title', new FormControl(this.feedbackData.title));
+        (this.feedbackForm as FormGroup)?.addControl('answer', new FormControl(this.feedbackData.answer));
+        (this.feedbackForm as FormGroup)?.addControl('sources', new FormControl(this.feedbackData.sources));
+        (this.feedbackForm as FormGroup)?.addControl('isFromGeneratedSummary', new FormControl(this.feedbackData.isFromGeneratedSummary));
+        (this.feedbackForm as FormGroup)?.addControl('answerType', new FormControl(this.feedbackData.answerType));
+      }else if(this.feedbackData.suggestionType == 'faqs'){
+        (this.feedbackForm as FormGroup)?.addControl('title', new FormControl(this.feedbackData.title));
+        (this.feedbackForm as FormGroup)?.addControl('answer', new FormControl(this.feedbackData.answer));
+      }else if(this.feedbackData.suggestionType == 'article' || this.feedbackData.suggestionType == 'file'){
+        (this.feedbackForm as FormGroup)?.addControl('title', new FormControl(this.feedbackData.title));
+        (this.feedbackForm as FormGroup)?.addControl('answer', new FormControl(this.feedbackData.answer));
+      }
+
+    } else{
+      this.feedbackForm = new FormGroup(
+        {
+          "botId": new FormControl(this.feedbackData.connectionDetails.botId),
+          "conversationId" : new FormControl(this.feedbackData.connectionDetails.conversationId),
+          "event" : new FormControl(EVENTS.agent_usage_feedback),
+          "interactionType": new FormControl(this.rootService.activeTab == ProjConstants.ASSIST ? 'assist' : 'mybot'),
+          "positionId" : new FormControl(this.feedbackData.dialogPositionId),
+          "taskId" : new FormControl(this.feedbackData.uuid),
+          "taskName" : new FormControl(this.feedbackData.dialogName),
+          "comment" : new FormControl(this.feedbackData.comment),
+          "feedback" : new FormControl(this.feedbackData.feedback,[Validators.required]),
+          "feedbackDetails" : new FormControl(this.feedbackData.feedbackDetails),
+          "type": new FormControl('dialog')
+        }
+      );
+    }  
     
     if(this.rootService.isUpdateFeedBackDetailsFlag && this.feedbackData?.feedbackResponse){
       this.updateFeedbackForm(this.feedbackData);
@@ -91,10 +134,14 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
       this.feedbackData.feedback = feedBackFlag;
       (this.feedbackForm.controls?.['feedback']).setValue(feedBackFlag);
       this.formTouched = false;
-      this.rootService.isUpdateFeedBackDetailsFlag = false;
       this.callAgentFeedbackUsage(); 
       this.feedbackData.oldFeedback = (feedBackFlag == this.feedbackConst.LIKE) ? true : false;
-    }    
+      if(feedBackFlag == this.feedbackConst.DISLIKE && this.dislikeList.length == 0 && !this.showComments){
+        this.rootService.isUpdateFeedBackDetailsFlag = true;
+      }else{
+        this.rootService.isUpdateFeedBackDetailsFlag = false;
+      }
+    }  
   }
 
   dislikeFeedbackArrowToggle(){
@@ -111,7 +158,8 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
       this.feedbackData.feedbackDetails.push(suggestion);
     }
     this.feedbackData.oldFeedback =  false;
-    // this.feedbackData.comment = this.feedbackForm.get('comment').value;
+    this.feedbackData.comment = this.feedbackForm.get('comment').value;
+    this.updateFeedbackForm(this.feedbackData);
     // this.feedbackData = structuredClone(this.feedbackData);
     // this.submitFeedback();
   }

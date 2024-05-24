@@ -170,6 +170,7 @@
     margin-left: $form-switch-padding-start * -1;
     background-image: var(--#{$prefix}form-switch-bg);
     background-position: left center;
+    border: 1px solid var(--themeBorderColor);
     @include border-radius($form-switch-border-radius);
     @include transition($form-switch-transition);
     &:focus {
@@ -178,7 +179,7 @@
 
     &:checked {
       background-position: $form-switch-checked-bg-position;
-
+      border-color: var(--themeColor);
       @if $enable-gradients {
         --#{$prefix}form-switch-bg: #{escape-svg($form-switch-checked-bg-image)}, var(--#{$prefix}gradient);
       } @else {

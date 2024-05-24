@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="actions-assist-header">
+                <div class="actions-assist-header" appActiveOrPassive>
                     <div class="sentiment-div-block" *ngIf="showSentiment">
                         <app-sentiment-score></app-sentiment-score>
                     </div>
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="collapse-tab" #collapseTab>
-          <div class="card-body">
+          <div class="card-body" appActiveOrPassive>
                 <div class="card_body_acc_content kore-chat-window">
                     <app-loader [type]="projConstants.WIDGET_LOADER" *ngIf="showSpinner"></app-loader>
                     <!-- <app-tell-customer [automation]="welcomeMsgResponse" [isWelcomeMsg]="true" *ngIf="(welcomeMsgResponse | json) != '{}'" [responseArray]="assistResponseArray" [responseArrayIndex]="0"
@@ -81,14 +81,17 @@
                         </ng-container>
                         <ng-container *ngIf="res.type == renderResponseType.AUTOMATION">
                             <app-dialog [automationData]="res" [agentassistArrayIndex]="i+1"
-                                [agentassistResponseArray]="assistResponseArray"></app-dialog>
+                                [agentassistResponseArray]="assistResponseArray" [feedBackForWn]="feedBackForWn"></app-dialog>
                         </ng-container>
-                        <ng-container *ngIf="res.type == renderResponseType.FEEDBACK">
+                        <ng-container *ngIf="res.type == renderResponseType.FEEDBACK && (rootService?.settingsData?.feedback && rootService?.settingsData?.feedback[feedbackConst.DIALOGS]?.isEnabled)">
                             <app-feedback [feedbackData]="res" (updateFeedbackProperties)="updateFeedbackProperties($event,i)"
-                                [agentassistArrayIndex]="i+1" [agentassistResponseArray]="assistResponseArray"
+                                [agentassistArrayIndex]="i+1" [agentassistResponseArray]="assistResponseArray" [feedbackType]="feedbackConst.DIALOGS"
                                 [ngClass]="{'componentSlideUPAnimation' : (assistResponseArray?.length == i+1), 'grayout-msgs-node' : res.oldFeedback}"
                             ></app-feedback>
                         </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="conversationSummaryObj?.editedSummary?.length > 0">
+                        <app-convesation-summary [conversationSummaryObj]='conversationSummaryObj'></app-convesation-summary>
                     </ng-container>
             </div>
           </div>
@@ -100,7 +103,7 @@
     <ng-container *ngIf="terminateClick && dialogName">
         <app-terminate (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
     </ng-container>
-    <ng-container *ngIf="showInterruptPopup && dialogName">
+    <ng-container *ngIf="showInterruptPopup">
         <app-interrupt (handlePopupEvent)="handlePopupEvent($event)" [currentDialog]="dialogName"></app-interrupt>
     </ng-container>
     <ng-container *ngIf="(showListView) && dialogName">

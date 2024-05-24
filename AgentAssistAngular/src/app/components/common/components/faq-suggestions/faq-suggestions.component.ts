@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
-import { ProjConstants } from 'src/app/proj.const';
+import { FeebackConst, ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
@@ -23,6 +23,7 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
 
   subs = new SubSink();
   projConstants: any = ProjConstants;
+  feedbackConst : any = FeebackConst;
   searchedFAQList : any[] = [];
   viewCount = 2;
   moreClick = false;
@@ -150,5 +151,9 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(){
     this.subs.unsubscribe();
+  }
+
+  updateFeedbackProperties(data, faq) {
+    faq.feedbackData = data;
   }
 }
