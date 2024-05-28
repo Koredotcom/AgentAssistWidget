@@ -925,7 +925,7 @@ export class RootService {
     }
 
     if(data?.attachments) {
-      agent_assist_request['query'] = data?.attachments.url;
+      agent_assist_request['query'] = data?.attachments?.fileURL;
       agent_assist_request['attachments'] = data.attachments;
     }
 
