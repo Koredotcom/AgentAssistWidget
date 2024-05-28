@@ -4164,6 +4164,15 @@ $numbers: 1000;
                 pointer-events: none;
                 cursor: not-allowed;
             }
+            &.ng-touched{
+                &.ng-invalid{
+                    border: 1px solid var(--error-300, #FDA29B) !important;
+                    background: var(--base-white, #FFF);
+                    &:focus{
+                        box-shadow: 0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+                    }
+                }
+            }
             &.error{
                 border: 1px solid var(--error-300, #FDA29B);
                 background: var(--base-white, #FFF);
@@ -4259,18 +4268,20 @@ $numbers: 1000;
                     box-shadow: 0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
                 }
             }
-            &.ng-invalid{
-                border: 1px solid var(--error-300, #FDA29B) !important;
-                background: var(--base-white, #FFF);
-                &:focus{
-                    box-shadow: 0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
-                }
-            }
+            // &.ng-invalid{
+            //     border: 1px solid var(--error-300, #FDA29B) !important;
+            //     background: var(--base-white, #FFF);
+            //     &:focus{
+            //         box-shadow: 0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+            //     }
+            // }
             &.ng-touched{
-                border: 1px solid var(--error-300, #FDA29B) !important;
-                background: var(--base-white, #FFF);
-                &:focus{
-                    box-shadow: 0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+                &.ng-invalid{
+                    border: 1px solid var(--error-300, #FDA29B) !important;
+                    background: var(--base-white, #FFF);
+                    &:focus{
+                        box-shadow: 0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+                    }
                 }
             }
             &:read-only{
