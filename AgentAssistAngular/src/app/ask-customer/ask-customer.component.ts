@@ -32,12 +32,17 @@ export class AskCustomerComponent {
   @ViewChild('askCustNode',{static: false}) private askCustNode : ElementRef;
 
   subs = new SubSink();
-  uploadedfileDetails: any = '';
+  fileObj = {
+    fileName: '',
+    fileType: '',
+    fileId: '',
+    fileURL: ''
+  }
   largeFileFlag = false;
   fileTypeFlag = false;
   uploadInprogress: boolean = false;
+  uploadedFileData: any;
   filePreview: any;
-  // private readonly chunkSize = 1024 * 1024; // 1 MB
 
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
@@ -158,7 +163,12 @@ export class AskCustomerComponent {
   }
 
   handleAgentInput() {
-    if(this.automation.entityValue){
+    if(this.automation?.data?.entityType === 'attachment') {
+      if(this.uploadedFileData?.files && this.uploadedFileData?.files?.length > 0) {
+        this.fileUploadCall(this.uploadedFileData?.files[0]);
+        this.automation.hideOverrideDiv = true;
+      }
+    } else if(this.automation.entityValue){
       this.automation.hideOverrideDiv = true;
       this.automation.userInput = this.projConstants.NO;
       if (this.rootService.activeTab == this.projConstants.ASSIST) {
@@ -166,8 +176,8 @@ export class AskCustomerComponent {
       } else if (this.rootService.activeTab == this.projConstants.MYBOT) {
         this.mybotInputValue(this.automation.entityValue)
       }
-      this.grayOutCurrentAutomation();
     }
+    this.grayOutCurrentAutomation();
   }
 
   assistInputValue(inputValue) {
@@ -178,6 +188,18 @@ export class AskCustomerComponent {
     connectionDetails.childBotId = this.automation.data.childBotId;
     connectionDetails.childBotName = this.automation.data.childBotName;
     connectionDetails.sourceMsgId = this.automation.sourceMsgId || '';
+    if(this.automation?.data?.entityType === 'attachment') {
+      connectionDetails.attachments = [
+        {
+            "fileName": this.fileObj?.fileName || '',
+            "fileType": this.fileObj?.fileType || '',
+            "fileId": this.fileObj.fileId || '',
+            "url": {
+                "fileUrl": this.fileObj.fileURL || ''
+            }
+        }
+      ]
+    }
     let assistRequestParams = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
     this.spinnerUpdate();
@@ -191,6 +213,18 @@ export class AskCustomerComponent {
     connectionDetails.childBotName = this.rootService?.childBotDetails.childBotName;
     connectionDetails.childBotId = this.rootService?.childBotDetails.childBotId;
     connectionDetails.sourceMsgId = this.automation.sourceMsgId || '';
+    if(this.automation?.data?.entityType === 'attachment') {
+      connectionDetails.attachments = [
+        {
+            "fileName": this.fileObj?.fileName || '',
+            "fileType": this.fileObj?.fileType || '',
+            "fileId": this.fileObj.fileId || '',
+            "url": {
+                "fileUrl": this.fileObj.fileURL || ''
+            }
+        }
+      ]
+    }
     let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
     this.spinnerUpdate();
@@ -232,17 +266,24 @@ export class AskCustomerComponent {
   }
 
   // adding the files by selection
-  addFiles(files) {
+  addFiles(event: Event, files) {
+    const inputFile = event.target as HTMLInputElement;
     if(this.automation?.data?.entityType === 'attachment') {
       this.removeFile();
     }
-    this.fileUploadCall(files[0]);
+    this.uploadedFileData = inputFile;
+    // this.fileUploadCall(files[0]);
   }
 
   removeFile() {
     this.largeFileFlag = false;
     this.fileTypeFlag = false;
-    this.uploadedfileDetails = '';
+    this.fileObj = {
+      fileName: '',
+      fileType: '',
+      fileId: '',
+      fileURL: ''
+    }
   }
 
   // file upload method
@@ -259,7 +300,8 @@ export class AskCustomerComponent {
     const self = this;
     var reader = new FileReader();
     reader.readAsText(file);
-    this.uploadedfileDetails = file.name;
+    this.fileObj.fileName = file.name;
+    this.fileObj.fileType = file?.type;
     reader.onload = function (e) {
     };
 
@@ -296,10 +338,8 @@ export class AskCustomerComponent {
           (res : any) => {
             this.largeFileFlag = false;
             this.fileTypeFlag = false;
-            this.uploadedfileDetails = '';
-            
-
-            this.getuploadedFileURL(res.fileId);
+            this.fileObj.fileId = res?.fileId;
+            this.getuploadedFileURL(res?.fileId);
           }, err => {
           });
     }
@@ -311,7 +351,14 @@ export class AskCustomerComponent {
   getuploadedFileURL(fileId){
     this.serviceInvoker.invoke('get.uploadedfile', {'fileId': fileId}, {}, {}, this.rootService?.connectionDetails?.agentassisturl).subscribe((res) => {
       if(res) {
+        this.fileObj.fileURL = res?.fileUrl;
         this.filePreview = res?.fileUrl;
+        this.automation.userInput = this.projConstants.NO;
+        if (this.rootService.activeTab == this.projConstants.ASSIST) {
+          this.assistInputValue(this.automation.entityValue);
+        } else if (this.rootService.activeTab == this.projConstants.MYBOT) {
+          this.mybotInputValue(this.automation.entityValue)
+        }
       }
     })
   }

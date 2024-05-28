@@ -296,6 +296,11 @@ export class RootService {
       agent_assist_agent_request_params['terminateTask'] = data.isDiscard
     }
 
+    if(data?.attachments) {
+      agent_assist_agent_request_params['query'] = data?.attachments.url;
+      agent_assist_agent_request_params['attachments'] = data.attachments;
+    }
+
     agent_assist_agent_request_params = this.addSourceMsgIdToRequestParams(data,agent_assist_agent_request_params)
     
     return agent_assist_agent_request_params;
@@ -915,6 +920,11 @@ export class RootService {
 
     if(data.isDiscard){
       agent_assist_request['terminateTask'] = data.isDiscard
+    }
+
+    if(data?.attachments) {
+      agent_assist_request['query'] = data?.attachments.url;
+      agent_assist_request['attachments'] = data.attachments;
     }
 
     agent_assist_request = this.addSourceMsgIdToRequestParams(data,agent_assist_request)
