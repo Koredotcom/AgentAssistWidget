@@ -70,10 +70,6 @@ export class LocalStorageService {
         appState[conversationId][storageConst.AUTOSCROLL] = storageObject[storageConst.AUTOSCROLL];
       }
 
-      if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.THEME])){
-        appState[conversationId][storageConst.THEME] = storageObject[storageConst.THEME];
-      }
-
       if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.LANGUAGE])){
         appState[conversationId][storageConst.LANGUAGE] = storageObject[storageConst.LANGUAGE];
       }
@@ -105,6 +101,7 @@ export class LocalStorageService {
     let conversationId = connectionDetails?.conversationId;
     if(!appState || !appState[conversationId]){
       if(this.rootService.getConnectionDetails() && conversationId){
+        this.setThemeLocal(storageConst.LIGHT);
         let appState : any =  this.getLocalStorageState();
         appState[conversationId]= {};
         appState[conversationId][ProjConstants.ASSIST] = {};
@@ -122,7 +119,6 @@ export class LocalStorageService {
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] = false;
         appState[conversationId][storageConst.PROACTIVE_MODE] = true;
         appState[conversationId][storageConst.LANGUAGE] = storageConst.ENGLISH;
-        appState[conversationId][storageConst.THEME] = storageConst.AUTO;
         appState[conversationId][storageConst.ACTIVE_TAB] = ProjConstants.ASSIST;
         appState[conversationId][storageConst.SHOWSEND] = true;
         appState[conversationId][storageConst.ENABLEWIDGET] = true;
@@ -208,11 +204,11 @@ export class LocalStorageService {
     return window.localStorage.getItem('lang') as string;
   }
 
-  setTheme(theme: string) {
-    window.localStorage.setItem('theme', theme);
+  setThemeLocal(theme = storageConst.LIGHT){
+    window.localStorage.setItem(storageConst.THEME, theme);
   }
 
-  getTheme(): string {
-    return window.localStorage.getItem('theme') as string;
+  getThemeLocal(): any{
+    return (window.localStorage.getItem(storageConst.THEME)  || storageConst.LIGHT) as string;
   }
 }

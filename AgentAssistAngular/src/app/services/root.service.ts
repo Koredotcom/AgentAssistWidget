@@ -20,7 +20,7 @@ export class RootService {
   userBotHistory$ : Subject<any> = new Subject<any>();
   userBotConversationDetailsSubject : BehaviorSubject<any> = new BehaviorSubject(null);
   disableTheWidget : BehaviorSubject<any> = new BehaviorSubject(null);
-
+  themeChange$ : BehaviorSubject<any> = new BehaviorSubject(null);
   public userBotConversationDetails: any;
 
   projConstants: any = ProjConstants;
@@ -189,7 +189,6 @@ export class RootService {
   internalTransfer : boolean = false;
   internalTransferData : any = {};
   socketConnection : boolean = false;
-
   constructor(private templateRenderClassService: TemplateRenderClassService,
     private dirService : DirService) {
     // this.chatWindowInstance = new chatWindow();
@@ -435,7 +434,8 @@ export class RootService {
               showMoreButton: true,
               showLessButton: false,
               displayName: faq.displayName,
-              sourceMsgId : response.sourceMsgId || ''
+              sourceMsgId : response.sourceMsgId || '',
+              positionId : faq.positionId
             }
             faqObject.answer.push(object);
           }
@@ -648,9 +648,11 @@ export class RootService {
       renderResponse.interactionType = suggestion.intType;
     }else if(suggestionType == 'faqs'){
       let answer = '';
-      suggestion.answer.forEach(element => {
-        answer += element.ans;
-      });
+      if(Array.isArray(suggestion?.answer)){
+        suggestion?.answer?.forEach(element => {
+          answer += element.ans;
+        });
+      }
       renderResponse.title = suggestion.question;
       renderResponse.answer = answer;
     }

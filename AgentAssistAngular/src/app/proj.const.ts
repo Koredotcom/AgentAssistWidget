@@ -107,7 +107,7 @@ export const storageConst = {
     LANGUAGE : 'lang',
     THEME : 'theme',
     ENGLISH : 'en',
-    AUTO : 'auto',
+    LIGHT : 'light',
     ACTIVE_TAB : 'activeTab',
     SHOWSEND : 'showSend',
     ENABLEWIDGET :   'enableWidget',

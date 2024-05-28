@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from './services/local-storage.service';
 import { WebSocketService } from './services/web-socket.service';
@@ -15,6 +15,7 @@ import { finalize } from 'rxjs';
 import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
 import { ProjConstants, storageConst } from './proj.const';
 import { CommonService } from './services/common.service';
+import { DOCUMENT } from '@angular/common';
 
 
 @Component({
@@ -45,7 +46,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private koregenerateUUIDPipe : KoreGenerateuuidPipe,
     private handleSubjectService: HandleSubjectService,
     private sanitizeHTMLPipe : SanitizeHtmlPipe,
-    private commonService : CommonService
+    private commonService : CommonService,
+    @Inject(DOCUMENT) private document: Document
   ) {
     // this.translate.setDefaultLang('en');
   }
@@ -62,10 +64,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.setTheme();
+    this.subs.sink = this.rootService.themeChange$.subscribe((theme)=>{
+      if(theme){
+        this.applyTheme(theme);
+      }
+    });
+
     const lang = this.localStorageService.getLanguage();
     this.dirService.setDirection(lang === 'ar' ? 'rtl' : 'ltr');
 
-    // const theme = this.localStorageService.getTheme();
 
     window.addEventListener('unload', (event) => {
       window.removeEventListener('message', this.receiveMessage);
@@ -80,7 +88,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.rootService.formatConnectionDetails(params);
       this.connectionDetails = this.rootService.getConnectionDetails();
-
       window.addEventListener('message', this.receiveMessage.bind(this), false);
       if (this.connectionDetails && Object.keys(this.connectionDetails)?.length > 1) {
         this.initAgentAssist(this.connectionDetails);
@@ -371,6 +378,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   closeFeedback(){
     this.showFeedback = false;
+  }
+
+  setTheme(){
+    let theme = this.localStorageService.getThemeLocal();
+    this.applyTheme(theme);
+  }
+
+  applyTheme(theme:any = storageConst.LIGHT){
+    if(theme !== storageConst.LIGHT){
+      this.document.body.classList.add('dark');
+    }else{
+      this.document.body.classList.remove('dark');
+    }
   }
 
 }
