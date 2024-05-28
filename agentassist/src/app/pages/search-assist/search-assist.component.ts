@@ -126,6 +126,15 @@ export class SearchAssistComponent implements OnInit {
     });
   }
 
+  domainValidator(event?: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    const regexPattern = /^(?!https?:\/\/).*(?<!\/)$/;
+    
+    // Checks if the value matches the regex pattern
+    this.isDomainValid = regexPattern.test(value);
+
+  }
+
   createSearchFormActivity() {
     this.disableSearchForm = false;
     this.searchFormChangeMode();
@@ -138,6 +147,10 @@ export class SearchAssistComponent implements OnInit {
     if (data && data.searchAssistbotId) {
       this.createForm = false;
       this.actualConfigDetailsObj = Object.assign({}, data);
+      if(data?.domain != '') {
+        const regexPattern = /^(?!https?:\/\/).*(?<!\/)$/;
+      this.isDomainValid = regexPattern.test(data?.domain);
+      } 
       for (let key of this.searchAssistKeys) {
         this.searchAssistConfigDetailsObj[key] = this.actualConfigDetailsObj[key];
       }
