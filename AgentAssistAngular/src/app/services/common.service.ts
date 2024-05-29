@@ -195,7 +195,7 @@ export class CommonService {
     }else if(!automation?.data?.isPrompt){
       payloadForBE.partialMessage = true;
     }
-    if(automation?.data?.endOfTask){
+    if(automation?.data?.errorMsg){
       payloadForBE.skipMsg = true;
     }
     payloadForBE = this.rootService.addSourceMsgIdToRequestParams(automation,payloadForBE);
