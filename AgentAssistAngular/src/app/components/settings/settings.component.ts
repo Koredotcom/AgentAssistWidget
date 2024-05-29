@@ -25,7 +25,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   setting = '';
   languages:any = languages
   defLanguage = 'en';
-  selectedTheme = 'automatic';
+  selectedTheme = 'light' || 'dark';
   projConstants : any = ProjConstants;
   connectionDetails : any;
   proactiveModeEnabled: boolean = this.rootService.proactiveModeStatus;
@@ -55,9 +55,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     } else {
       this.defLanguage = this.rootService.settingsData?.languageSettings?.language ? (this.rootService.settingsData?.languageSettings?.language) : storageConst.ENGLISH;
     }
-    this.selectedTheme = convState[storageConst.THEME] || storageConst.AUTO;
+    this.selectedTheme = this.localStorageService.getThemeLocal();
     this.enableLangChange = (this.rootService.settingsData?.languageSettings?.allowAgentSwitch === false) ? false : true;
-    // this.setProactiveMode(convState);
   }
 
   selectedLang(_event: any){
@@ -72,11 +71,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
 
   chooseTheme() {
-    let storageObject: any = {
-      [storageConst.THEME]: this.selectedTheme
-    }
-    this.localStorageService.setLocalStorageItem(storageObject);
-    // this.localStorageService.setTheme(this.selectedTheme);
+    this.localStorageService.setThemeLocal(this.selectedTheme);
+    this.rootService.themeChange$.next(this.selectedTheme);
   }
 
   //proactive tab toggle click
