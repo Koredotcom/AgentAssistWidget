@@ -144,8 +144,9 @@ export class TemplateRenderClassService {
   // }
 
   prepareTemplateBodyForHistory(elem, parsedPayload){
-    let body = {};
+    let body : any = {};
     body['type'] = elem.cT;
+    body['component'] = {};
     if (!parsedPayload) {
       body['component'] = {
         "type": elem.cT,
@@ -159,7 +160,23 @@ export class TemplateRenderClassService {
       };
 
     } else {
-      body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+
+      // body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+
+      if (parsedPayload.payload) {
+        body.component = parsedPayload.payload;
+      } else if (parsedPayload.text) {
+        body.component.payload = {
+          text: parsedPayload.text
+        }
+        body.component.type = 'template'
+      } else {
+        body.component.payload = {
+          text: parsedPayload
+        }
+        body.component.type = 'text'
+      }
+
       if (parsedPayload?.type === 'message') {
         body['cInfo'] = {
           "body": ''
@@ -178,8 +195,9 @@ export class TemplateRenderClassService {
   }
   
   prepareTemplateBody(elem, parsedPayload){
-    let body = {};
+    let body : any = {};
     body['type'] = elem.type;
+    body['component'] = {};
     if (!parsedPayload) {
       body['component'] = {
         "type": elem.type,
@@ -194,7 +212,21 @@ export class TemplateRenderClassService {
       elem['copyFlag'] = true;
 
     } else {
-      body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+      // body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+      if (parsedPayload.payload) {
+        body.component = parsedPayload.payload;
+      } else if (parsedPayload.text) {
+        body.component.payload = {
+          text: parsedPayload.text
+        }
+        body.component.type = 'template'
+      } else {
+        body.component.payload = {
+          text: parsedPayload
+        }
+        body.component.type = 'text'
+      }
+
       if (parsedPayload?.type === 'message') {
         body['cInfo'] = {
           "body": ''
