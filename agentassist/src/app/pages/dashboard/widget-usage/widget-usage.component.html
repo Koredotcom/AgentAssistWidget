@@ -1,0 +1,68 @@
+<div class="charts-data-containers-wrapper row">
+    <div class="chart-box-info widget-usage col-12">
+        <div class="chart-inner-data">
+            <div class="heading-data-wrapper">
+                <div class="tag-title">PERFORMANCE</div>
+                <div class="toggle-compare">
+                    <label class="kr-sg-toggle">
+                        <input type="checkbox" (click)="changeSlider()" [checked]="showCompare ? true : false">
+                        <div class="slider"></div>
+                    </label>
+                    <p>Compare</p>
+                </div>
+                <div class="widget-usage" *ngIf="(widgetUsageData | json) != '{}' && (widgetUsageData?.currentAvg || widgetUsageData?.percent)">
+                    <h1>{{widgetUsageData?.currentAvg | millisToDurationPipe}}</h1>
+                    <div class="value-data" [ngClass]="{'negtive': widgetUsageData.decrement}" *ngIf="widgetUsageData?.percent">
+                        <i [ngClass]="widgetUsageData.decrement ?  'icon-ast_sortdown' : 'icon-ast_sortup'"></i>
+                        <span>{{widgetUsageData?.percent | number : '1.2-2'}}%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="main-heading-title">Average Widget Usage<i class="icon-sa-help" ngbTooltip='The average time widget is used by Agents. ' placement="bottom-left" tooltipClass="tooltip_dashboard"></i>
+            </div>
+            <ng-container *ngIf="(widgetUsageData | json) != '{}' && (widgetUsageData?.currentData?.length != 0 || widgetUsageData?.previousData?.length != 0)">
+                <div class="usge-chart-div" echarts [options]="chartOptions"></div>
+                <div class="legend-data-info">
+                    <div class="legend-title">
+                        <span></span>
+                        <p>Current</p>
+                        <div>{{widgetUsageData?.currentAvg | millisToDurationPipe}}</div>
+                    </div>
+                    <div class="legend-title" *ngIf="widgetUsageData?.previousData?.length > 0">
+                        <span style="background: #F59E0B;"></span>
+                        <p>Previous</p>
+                        <div>{{widgetUsageData?.previousAvg | millisToDurationPipe}}</div>
+                    </div>
+                </div>
+            </ng-container>
+            <div class="empty-img empty-title" *ngIf="(widgetUsageData | json) == '{}' || (widgetUsageData?.currentData?.length == 0 && widgetUsageData?.previousData?.length == 0)">
+                <!-- <img src="assets/icons/dashboard/empty-automation-per.svg"> -->
+                Not enough data available
+            </div>
+        </div>
+    </div>
+    <div class="chart-box-info usage-suggestion col-4 d-none">
+        <div class="chart-inner-data">
+            <div class="title-text-info">
+                <span class="heading-text">Avg. Suggestions Used/Session</span>
+                <i class="icon-sa-help"></i>
+                <div class="value-data">
+                    <i class="icon-ast_sortup"></i>
+                    <span>2.3%</span>
+                </div>
+            </div>
+            <div class="count-heading">67%</div>
+        </div>
+        <div class="chart-inner-data">
+            <div class="title-text-info">
+                <span class="heading-text">Average Widget Usage</span>
+                <i class="icon-sa-help"></i>
+                <div class="value-data">
+                    <i class="icon-ast_sortup"></i>
+                    <span>2.3%</span>
+                </div>
+            </div>
+            <div class="count-heading">67%</div>
+        </div>
+    </div>
+</div>

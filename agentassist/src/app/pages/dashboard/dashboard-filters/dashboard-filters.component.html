@@ -25,12 +25,12 @@
         <!-- Bot List -->
         <div class="kr-sg-dropdowns channels-drpdowns" ngbDropdown placement="bottom-right">
             <div class="dropdown-open">
-                <button type="button" class="dropdown-toggle before-none dropdown-input" id="repdropdown" ngbDropdownToggle>
+                <button type="button" class="dropdown-toggle before-none dropdown-input" id="repdropdown1" ngbDropdownToggle>
                     <i class="icon-sa-conv-mybot"></i>
                     <span class="title-text">{{( this.selectedBot)}}</span>
                     <!-- <span class="count-channels">2</span> -->
                 </button>
-                <ul class="content-menu" aria-labelledby="repdropdown" ngbDropdownMenu>
+                <ul class="content-menu" aria-labelledby="repdropdown1" ngbDropdownMenu>
                     <perfect-scrollbar>
                         <div class="scroll-data mx-h-280">
                             <li ngbDropdownItem class="channel-name m_b_2" *ngFor="let bot of botList" (click)="changeBot(bot)">
@@ -48,18 +48,21 @@
             </div>
         </div>
         <!-- Channels -->
-        <div class="kr-sg-dropdowns channels-drpdowns d-none" ngbDropdown placement="bottom-right">
+        <div class="kr-sg-dropdowns channels-drpdowns" ngbDropdown placement="bottom-right">
           <div class="dropdown-open">
-              <button type="button" class="dropdown-toggle before-none dropdown-input" id="repdropdown" ngbDropdownToggle>
+              <button type="button" class="dropdown-toggle before-none dropdown-input" id="repdropdown2" ngbDropdownToggle>
                   <i class="icon-ast_channels"></i>
-                  <span class="title-text">{{('DASHBOARD.CHANNEL_' + this.selectedChannel) | translate}}</span>
-                  <span class="count-channels">2</span>
+                  <span class="title-text" *ngIf="selectedChannel.length == 1">{{('DASHBOARD.CHANNEL_' + this.selectedChannel[0]) | translate}}</span>
+                  <span class="title-text" *ngIf="selectedChannel.length == 2">{{'DASHBOARD.CHANNEL' | translate}}</span>
+                  <span class="title-text" *ngIf="selectedChannel.length == 3">{{'DASHBOARD.CHANNELS' | translate}}</span>
+
+                  <span class="count-channels" *ngIf="selectedChannel.length > 1">{{selectedChannel?.length}}</span>
               </button>
-              <ul class="content-menu" aria-labelledby="repdropdown" ngbDropdownMenu>
+              <ul class="content-menu" aria-labelledby="repdropdown2" ngbDropdownMenu>
                   <perfect-scrollbar>
                       <div class="scroll-data mx-h-280">
-                          <li ngbDropdownItem class="channel-name m_b_2" *ngFor="let channel of channelList" (click)="changeChannel(channel)">
-                              <a [ngClass]="selectedChannel == channel ? 'selected' : ''">{{ ('DASHBOARD.CHANNEL_' + channel) | translate}}</a>
+                          <li class="channel-name m_b_2" *ngFor="let channel of channelList" >
+                              <a  (click)="changeChannel(channel)" [ngClass]="(selectedChannel.indexOf(channel) != -1) ? 'selected' : ''">{{ ('DASHBOARD.CHANNEL_' + channel) | translate}}</a>
                           </li>
                           <!-- <li ngbDropdownItem class="channel-name m_b_2">
                               <a>Whatsapp</a>
