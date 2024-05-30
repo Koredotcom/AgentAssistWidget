@@ -747,7 +747,7 @@
                 // addBottomSlider();
                 // window.addEventListener('online', updateOnlineStatus);
                 // window.addEventListener('offline', updateOnlineStatus);
-                // attachEventListener();
+                attachEventListener();
             }
             //converts v1 webhooks url to v2 automatically
             chatWindow.prototype.reWriteWebHookURL = function (chatConfig) {
@@ -802,6 +802,7 @@
         function openModal(template, showClose){
             var chatBodyModal=  $('#chatBodyModal');
             var close = document.getElementsByClassName("closeChatBodyModal")[0];
+            if(close){
                 close.onclick = function () {
                     $('.kore-chat-window').removeClass('modelOpen');
                     var postPayload={
@@ -813,6 +814,7 @@
                     var iframe = chatBodyModal.find('iframe');
                     postMessageToChildIframes(iframe,postPayload);
                 }
+            }
             if(template){
                 chatBodyModal.find('.closeChatBodyModal').css('display','none');
                 chatBodyModal.find('.loading_form').css('z-index',999);
@@ -845,18 +847,18 @@
         function formAction(event){
             if(event && event.action==='formSubmit'){
                openModal();
-               if($('.kore-chat-body .uiformComponent').length){
-                $('.kore-chat-body .uiformComponent').closest('.inlineIframeContainer').css('display', 'none');
+               if($('.kore-chat-window .uiformComponent').length){
+                $('.kore-chat-window .uiformComponent').closest('.inlineIframeContainer').css('display', 'none');
                }
             } else if(event.action==='formCancel'){
                 closeChatModal();
-                if($('.kore-chat-body .uiformComponent').length){
-                    $('.kore-chat-body .uiformComponent').closest('.inlineIframeContainer').css('display', 'none');
+                if($('.kore-chat-window .uiformComponent').length){
+                    $('.kore-chat-window .uiformComponent').closest('.inlineIframeContainer').css('display', 'none');
                    }
             } else if (event.action==='formClose'){
                openModal();
-               if($('.kore-chat-body .uiformComponent').length){
-                $('.kore-chat-body .uiformComponent').closest('.inlineIframeContainer').css('display', 'none');
+               if($('.kore-chat-window .uiformComponent').length){
+                $('.kore-chat-window .uiformComponent').closest('.inlineIframeContainer').css('display', 'none');
                }
             }
         }
@@ -1529,7 +1531,7 @@
                             }
                             if(msgData.message[0].component.payload){
                                 msgData.message[0].component.payload.formData = {
-                                    "formLink": a_link + '&showClose=true',
+                                    "formLink": a_link + '&showClose=true&channel=rtm',
                                     "renderType": "inline",
                                     "name": "form",
                                     "displayName": "testing form",
