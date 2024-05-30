@@ -283,6 +283,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
         }
       }
       // this.handleSubjectService.setSearchResponse(this.searchResponse);
+    }else{
+      this.searchResponse = {};
     }
   }
 
