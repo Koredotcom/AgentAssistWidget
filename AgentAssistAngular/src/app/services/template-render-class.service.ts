@@ -164,12 +164,9 @@ export class TemplateRenderClassService {
       // body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
 
       if (parsedPayload.payload) {
-        body.component = parsedPayload.payload;
+        body.component = parsedPayload;
       } else if (parsedPayload.text) {
-        body.component.payload = {
-          text: parsedPayload.text
-        }
-        body.component.type = 'template'
+        body.component = parsedPayload.text;
       } else {
         body.component.payload = {
           text: parsedPayload
@@ -214,12 +211,9 @@ export class TemplateRenderClassService {
     } else {
       // body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
       if (parsedPayload.payload) {
-        body.component = parsedPayload.payload;
+        body.component = parsedPayload;
       } else if (parsedPayload.text) {
-        body.component.payload = {
-          text: parsedPayload.text
-        }
-        body.component.type = 'template'
+        body.component = parsedPayload.text;
       } else {
         body.component.payload = {
           text: parsedPayload
