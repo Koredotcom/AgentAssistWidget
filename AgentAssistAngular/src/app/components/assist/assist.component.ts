@@ -494,6 +494,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   summeryModalpopup(data){
     this.summaryText = data;
     this.summaryPopupModal = this.modalService.open(this.summaryPopupContent ,{windowClass: 'modal-full-window-popup', centered: true, backdrop:'static', keyboard:false});
+    this.websocketService.handleRespResoltionAck(data);
   }
 
   closeSummaryPopup(){
