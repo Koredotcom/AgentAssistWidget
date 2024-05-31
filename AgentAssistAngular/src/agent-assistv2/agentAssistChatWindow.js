@@ -1529,20 +1529,12 @@
                                } catch (err) {
 
                             }
-                            if(msgData.message[0].component.payload){
-                                msgData.message[0].component.payload.formData = {
-                                    "formLink": a_link + '&showClose=true&channel=rtm',
-                                    "renderType": "inline",
-                                    "name": "form",
-                                    "displayName": "testing form",
-                                    "isSecured": false,
-                                    "formLinkExpiry": 300,
-                                    "submitExpiry": 600
-                                }
-                            }
                             if(msgData && msgData.message && msgData.message[0].component && (msgData.message[0].component.formData || (msgData.message[0].component.payload &&  msgData.message[0].component.payload.formData && msgData.message[0].component.payload.formData.renderType === 'inline'))){
                                 if(msgData.message[0].component.formData){
                                    msgData.message[0].component.payload.formData = msgData.message[0].component.formData;
+                                }
+                                if(msgData.message[0].component.payload.formData.formLink && msgData.message[0].component.payload.formData.renderType === "inline"){
+                                    msgData.message[0].component.payload.formData.formLink = msgData.message[0].component.payload.formData.formLink + '&showClose=true&channel=rtm';
                                 }
                                 me.renderWebForm(msgData);
                                 return;
