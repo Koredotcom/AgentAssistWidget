@@ -1520,10 +1520,6 @@
                     } else if (type == "url" || type == "web_url") {
                         if($(e.target).attr('msgData')!==undefined){
                             var msgData;
-                            var a_link = $(e.target).attr('url');
-                            if (a_link.indexOf("http:") < 0 && a_link.indexOf("https:") < 0) {
-                                a_link = "http:////" + a_link;
-                            }
                             try {
                                 msgData = JSON.parse($(e.target).attr('msgData'));
                                } catch (err) {
@@ -1539,6 +1535,10 @@
                                 me.renderWebForm(msgData);
                                 return;
                             }
+                        }
+                        var a_link = $(e.target).attr('url');
+                        if (a_link.indexOf("http:") < 0 && a_link.indexOf("https:") < 0) {
+                            a_link = "http:////" + a_link;
                         }
                         me.openExternalLink(a_link);
                     }
