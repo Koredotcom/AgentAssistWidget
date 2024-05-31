@@ -1529,7 +1529,7 @@
                                 if(msgData.message[0].component.formData){
                                    msgData.message[0].component.payload.formData = msgData.message[0].component.formData;
                                 }
-                                if(msgData.message[0].component.payload.formData.formLink && msgData.message[0].component.payload.formData.renderType === "inline"){
+                                if(msgData.message[0].component.payload.formData.formLink){
                                     msgData.message[0].component.payload.formData.formLink = msgData.message[0].component.payload.formData.formLink + '&showClose=true&channel=rtm';
                                 }
                                 me.renderWebForm(msgData);
