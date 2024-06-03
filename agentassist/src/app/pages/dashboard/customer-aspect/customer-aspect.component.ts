@@ -127,9 +127,19 @@ export class CustomerAspectComponent implements OnInit {
         }
     });
     } else {
+        if(this.previousTab !== this.customerTabSelection) {
+          this.customerAspectData = [];
+          this.previousTab = this.customerTabSelection;
+        }
         this.payload.dataType = this.customerTabSelection;
         this.payload.sessionType = this.customerDropdownSelection;
-        this.service.invoke('customersLookingfor', params, this.payload).subscribe((data : any) => {
+        let body = {
+          skip : 0,
+          fetched : 0,
+          limit : 4,
+        }
+        body = {...this.payload, ...body};
+        this.service.invoke('customersLookingfor', params, body).subscribe((data : any) => {
           this.updateViewData(data);
         });
 
@@ -140,6 +150,11 @@ export class CustomerAspectComponent implements OnInit {
     this.customerAspectAcutalData = Object.assign({}, resp);
     if(resp && Object.keys(resp).length > 0 && resp[this.customerDropdownSelection]){
       let data = resp[this.customerDropdownSelection];
+      if(data && data?.length > 0){
+        data.forEach(element => {
+          element.title = element.name ? element.name : (element.message ? element.message : '')
+        });
+      }
       if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
         this.customerAspectData = data.length <=4 ? data : data.slice(0,4);
       }else {

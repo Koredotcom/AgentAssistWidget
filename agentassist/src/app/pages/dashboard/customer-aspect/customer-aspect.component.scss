@@ -66,6 +66,10 @@
                     font-size: 12px;
                     line-height: 15px;
                     color: #2D2F33;
+                    max-width: 75%;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
                 }
                 .count-percentage{
                     display: flex;

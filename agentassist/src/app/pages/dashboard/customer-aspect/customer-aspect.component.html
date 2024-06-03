@@ -15,7 +15,7 @@
                             <div class="row-data customer-scroll-data" *ngFor="let data of customerAspectData">
                                 <div class="title-with-count">
                                     <img [src]="customerAspectTabvsImage[data.type]">
-                                    <span class="title">{{data.name}} </span>    
+                                    <span class="title" [container]="'body'" placement="bottom-center" ngbTooltip="{{ data.title }}">{{data.title}} </span>    
                                     <div class="count-percentage">
                                         <span class="percentage">{{data.percent | number : '1.1-1'}}%</span>
                                         <span class="count-">({{data.count}})</span>

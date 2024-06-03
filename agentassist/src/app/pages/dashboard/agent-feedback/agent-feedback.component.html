@@ -231,7 +231,7 @@
                                                     <span class="date-time">{{obj.timestamp | date: 'MMMM d, y, h:mm a'}}</span>
                                                 </div>
                                                 <div class="table-title agent-id">
-                                                    <ng-container *ngIf="obj.agentDetails">
+                                                    <ng-container *ngIf="obj.agentDetails && (obj.agentDetails | json) != '{}'">
                                                         <div class="agent-pic">
                                                             <img src="assets/images/avatar.svg">
                                                         </div>
@@ -240,7 +240,7 @@
                                                             <p *ngIf="obj.agentDetails?.identity">{{obj.agentDetails?.identity}}</p>
                                                         </div>
                                                     </ng-container>
-                                                    <div class="agent-details" *ngIf="!obj.agentDetails">
+                                                    <div class="agent-details" *ngIf="!obj.agentDetails || (obj.agentDetails | json) == '{}'">
                                                         -
                                                     </div>
                                                 </div>
