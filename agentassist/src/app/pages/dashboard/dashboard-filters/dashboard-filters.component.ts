@@ -34,7 +34,7 @@ export class DashboardFiltersComponent implements OnInit {
     ;
   calendarLocale: any;
   channelList : any = CHANNELS;
-  selectedChannel : string = 'all';
+  selectedChannel : any = ['chat', 'voice', 'email'];
   botList: any = {};
   selectedBot: any;
 
@@ -102,8 +102,18 @@ export class DashboardFiltersComponent implements OnInit {
   }
 
   changeChannel(channel){
-    this.filters = { ... this.filters, experience : channel }
-    this.selectedChannel = channel;
+    let index = this.selectedChannel.indexOf(channel)
+    if(index == -1){
+      this.selectedChannel.push(channel);
+    }else{
+      if(this.selectedChannel.length > 1){
+        this.selectedChannel.splice(index, 1);
+      }else{
+        return
+      }
+    }
+    this.filters = { ... this.filters, experience : this.selectedChannel }
+    this.dashboardService.setDashboardFilterUpdated(this.filters);
   }
 
   changeBot(bot) {

@@ -1,13 +1,20 @@
-
 <div class="agent-feedback-wrapper">
     <ng-container *ngIf="(viewType == VIEWTYPELIST.PARTIAL_VIEW)">
+        <div class="automations-tabs">
+            <div class="tab-name" [ngClass]="{'active-tab': tab[0] === feedbackTabSelection}"
+                (click)="changeTabSelection(tab[0])" *ngFor="let tab of feedbackTabsList">
+                <img *ngIf="feedbackTabvsImage[tab[0]]" [src]="feedbackTabvsImage[tab[0]]">
+                <span>{{tab[1]}}</span>
+            </div>
+        </div>
         <div class="cards-data-boards agent-feedback-cards">
             <div class="card-sec max_width_100">
                 <div class="inner-data-sec">
                     <div class="title-text-info">
                         <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_TOTAL_RESPONSE" | translate}}</span>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.totalResp}">{{agentFeedbackData.totalResp ? agentFeedbackData.totalResp : '0'}}</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.totalResp}">
+                        {{agentFeedbackData.totalResp ? agentFeedbackData.totalResp : '0'}}</div>
                 </div>
             </div>
             <div class="card-sec max_width_100">
@@ -16,7 +23,9 @@
                         <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</span>
                         <i class="icon-ast_thumbsup"></i>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.helpfulResp}">{{(agentFeedbackData.helpfulResp ? agentFeedbackData.helpfulResp : '0') | number: '1.0-0'}}%</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.helpfulResp}">
+                        {{(agentFeedbackData.helpfulResp ? agentFeedbackData.helpfulResp : '0') | number: '1.0-0'}}%
+                    </div>
                 </div>
             </div>
             <div class="card-sec max_width_100">
@@ -25,15 +34,18 @@
                         <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</span>
                         <i class="icon-sat_thumsdown"></i>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.nothelpfulResp}">{{(agentFeedbackData.nothelpfulResp ? agentFeedbackData.nothelpfulResp : '0') | number: '1.0-0'}}%</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.nothelpfulResp}">
+                        {{(agentFeedbackData.nothelpfulResp ? agentFeedbackData.nothelpfulResp : '0') | number:
+                        '1.0-0'}}%</div>
                 </div>
             </div>
         </div>
         <div class="table-agent-feedback">
             <div class="table-header row">
-                <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_AUTOMATION_COLUMN" | translate}}</div>
+                <div class="title col-4">{{feedbackTabColMap[feedbackTabSelection]}}</div>
                 <div class="title col-3">{{"DASHBOARD.AGENT_FEEDBACK_RESPONSES_COLUMN" | translate}}</div>
-                <div class="title col-5">{{"DASHBOARD.AGENT_FEEDBACK_LIKE_COLUMN" | translate}}/{{"DASHBOARD.AGENT_FEEDBACK_DISLIKE_COLUMN" | translate}}</div>
+                <div class="title col-5">{{"DASHBOARD.AGENT_FEEDBACK_LIKE_COLUMN" |
+                    translate}}/{{"DASHBOARD.AGENT_FEEDBACK_DISLIKE_COLUMN" | translate}}</div>
             </div>
             <ng-container *ngIf="agentFeedbackPartialTableData && agentFeedbackPartialTableData.length > 0">
                 <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackPartialTableData">
@@ -52,41 +64,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.AGENT_FEEDBACK)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
+                <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.AGENT_FEEDBACK)">
+                    {{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
             </ng-container>
 
             <ng-container *ngIf="!agentFeedbackPartialTableData || agentFeedbackPartialTableData.length == 0">
-                <!-- <div class="table-body-feedback row empty-data" *ngFor="let item of [1,2,3,4]">
-                    <div class="col-4 title">
-                        <span></span>
-                    </div>
-                    <div class="col-3 title">
-                        <span></span>
-                    </div>
-                    <div class="col-5 like-dislike">
-                        <div class="like-count">
-                            <i class="icon-ast_thumbsup"></i>
-                            <span></span>
-                        </div>
-                        <div class="like-count">
-                            <i class="icon-sat_thumsdown"></i>
-                            <span></span>
-                        </div>
-                    </div>
-                </div> -->
                 <div class="table-body-feedback empty-title"> Not enough data Available</div>
             </ng-container>
         </div>
     </ng-container>
     <ng-conatiner *ngIf="(viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW)">
-        <perfect-scrollbar class="scroll-content" (psYReachEnd)="onReachEnd($event)">
-            <div class="body-scroll-data">
+
+        <div class="body-scroll-data">
+            <ng-container *ngIf="!selectedTaskObj?.intentName">
+                <div class="automations-tabs">
+                    <div class="tab-name" [ngClass]="{'active-tab': tab[0] === feedbackTabSelection}"
+                        (click)="changeTabSelection(tab[0])" *ngFor="let tab of feedbackTabsList">
+                        <img *ngIf="feedbackTabvsImage[tab[0]]" [src]="feedbackTabvsImage[tab[0]]">
+                        <span>{{tab[1]}}</span>
+                    </div>
+                </div>
                 <div class="agent-feedback-data-info">
                     <div class="cards-data-boards agent-feedback-cards">
                         <div class="card-sec max_width_100">
                             <div class="inner-data-sec">
                                 <div class="title-text-info">
-                                    <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_TOTAL_RESPONSE" | translate}}</span>
+                                    <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_TOTAL_RESPONSE" |
+                                        translate}}</span>
                                 </div>
                                 <div class="count-heading">{{agentFeedbackData.totalResp}}</div>
                             </div>
@@ -94,7 +98,8 @@
                         <div class="card-sec max_width_100">
                             <div class="inner-data-sec">
                                 <div class="title-text-info">
-                                    <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</span>
+                                    <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" |
+                                        translate}}</span>
                                     <i class="icon-ast_thumbsup"></i>
                                 </div>
                                 <div class="count-heading">{{agentFeedbackData.helpfulResp | number: '1.0-0'}}%</div>
@@ -103,7 +108,8 @@
                         <div class="card-sec max_width_100">
                             <div class="inner-data-sec">
                                 <div class="title-text-info">
-                                    <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</span>
+                                    <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" |
+                                        translate}}</span>
                                     <i class="icon-sat_thumsdown"></i>
                                 </div>
                                 <div class="count-heading">{{agentFeedbackData.nothelpfulResp | number: '1.0-0'}}%</div>
@@ -112,23 +118,191 @@
                     </div>
                     <div class="table-agent-feedback">
                         <div class="table-header row">
-                            <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_INTENT_NAME_COLUMN" | translate}}</div>
-                            <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</div>
-                            <div class="title col-4 text-right">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</div>
+                            <div class="title col-4">{{feedbackTabColMap[feedbackTabSelection]}}</div>
+                            <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}} <i
+                                    class="icon-ast_thumbsup"></i></div>
+                            <div class="title col-4">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}} <i
+                                    class="icon-sat_thumsdown"></i></div>
                         </div>
-                        <ng-container>
-                            <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackTableData">
-                                <div class="col-4 title">{{obj.intentName}}</div>
-                                <div class="col-4 title">{{obj.likedPercent | number: '1.0-0'}}%</div>
-                                <div class="col-4 title text-right">{{obj.dislikedPercent | number: '1.0-0'}}%</div>
-                            </div>
+                        <perfect-scrollbar class="scroll-content" (psYReachEnd)="onReachEnd($event)">
+                            <ng-container *ngIf="agentFeedbackTableData && agentFeedbackTableData.length > 0">
+                                <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackTableData"
+                                    (click)="selectTask(obj)">
+                                    <div class="col-4 title">{{obj.intentName}}</div>
 
+                                    <div class="col-4 title">
+                                        <span class="count">{{obj.liked | number: '1.0-0'}}</span>
+                                        <span class="percentage">({{obj.likedPercent | number: '1.0-0'}}%)</span>
+                                    </div>
+                                    <div class="col-4 title">
+                                        <span class="count">{{obj.disliked | number: '1.0-0'}}</span>
+                                        <span class="percentage">({{obj.dislikedPercent | number: '1.0-0'}}%)</span>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </perfect-scrollbar>
+                        <ng-container *ngIf="!agentFeedbackTableData || agentFeedbackTableData.length == 0">
 
+                            <div class="table-body-feedback empty-title"> Not enough data Available</div>
                         </ng-container>
                     </div>
                 </div>
-            </div>
-        </perfect-scrollbar>
-    </ng-conatiner>
+            </ng-container>
+            <ng-container *ngIf="selectedTaskObj?.intentName">
+                <div class="feedback-helpfull-not-help-wrapper accordion" id="accordionExample">
+                    <div class="help-wrapper">
+                        <div>Helpful <i class="icon-ast_thumbsup"></i></div>
+                        <p>{{selectedTaskObj.liked | number: '1.0-0'}} (<span>{{selectedTaskObj.likedPercent | number: '1.0-0'}}%</span>)</p>
+                    </div>
+                    <div class="accordion_item">
+                        <button class="accordion-button collapsed" type="button" data-toggle="collapse"
+                            data-target="#nothelpfull">
+                            <div class="arrow_icon">
+                                <i class="icon-sa-arrow-down"></i>
+                            </div>
+                            <h2>Not Helpful <i class="icon-sat_thumsdown"></i></h2>
+                            <p>{{selectedTaskObj.disliked | number: '1.0-0'}} (<span>{{selectedTaskObj.dislikedPercent | number: '1.0-0'}}%</span>)</p>
+                        </button>
+                        <div class='init-loading-neg' *ngIf="negFbisLoading">
+                            <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+                        </div>
+                        <div id="nothelpfull" class="accordion-collapse collapse show" aria-labelledby="nothelpfull">
+                            <div class="accordion-body">
+                                <div class="table-list-data-temp">
+                                    <div class="table-header-list">
+                                        <div class="heading-table">RESPONSE</div>
+                                        <div class="heading-table">cOUNTS</div>
+                                        <div class="heading-table text-right">ADDITIONAL COMMENTS</div>
+                                    </div>
+                                    
+                                        <ng-container>
+                                            <div class="table-row-body-data"
+                                                *ngFor="let negFb of (negativeFeedbackTableData?.data) | keyvalue">
+                                                <div class="table-title">{{negFb.key}}</div>
+                                                <div class="table-title count-data">
+                                                    <i class="icon-sa-eye" (click)="negFeedbackTableClick(negFb, 'count')"></i>
+                                                    <span>{{negFb.value.responseCount}} <span *ngIf="negativeFeedbackTableData.totalResponse > 0">({{(negFb.value.responseCount/negativeFeedbackTableData.totalResponse) * 100 | number: '1.0-0'}} %)</span></span>
+                                                </div>
+                                                <div class="table-title additional-cmnt">
+                                                    <i class="icon-sa-eye" (click)="negFeedbackTableClick(negFb, 'comment')"></i>
+                                                    <span>{{negFb.value.additionalCommentsCount}} <span *ngIf="negativeFeedbackTableData.totalResponse > 0">({{(negFb.value.additionalCommentsCount/negativeFeedbackTableData.totalResponse) * 100 | number: '1.0-0'}} %)</span></span>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion_item" *ngIf="showResponseTable">
+                        <div class='init-loading-conv' *ngIf="feedbackisLoading">
+                            <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+                        </div>
+                        <button class="accordion-button collapsed" type="button" data-toggle="collapse"
+                            data-target="#responses1">
+                            <div class="arrow_icon">
+                                <i class="icon-sa-arrow-down"></i>
+                            </div>
+                            <h2>Response ({{negFeedback?.key}})</h2>
+                            <p>{{negFeedback?.value?.additionalCommentsCount}} Comments</p>
+                        </button>
+                        
+                        <div id="responses1" class="accordion-collapse collapse show" aria-labelledby="responses">
+                            <div class="accordion-body">
+                                <div class="table-list-data-temp">
+                                    <div class="kr-sg-input-search">
+                                        <!-- Agent Name, Agent ID or -->
+                                        <input type="text" placeholder="Search Conversation ID"
+                                            class="input-search" [formControl]="searchField" name="searchConv" (keydown.enter)="getConversationSearch()">
+                                        <i class="icon-sa-search search-icon"></i>
+                                    </div>
+                                    <div class="table-header-list">
+                                        <div class="heading-table">Conversation Id</div>
+                                        <div class="heading-table">DATE & TIME</div>
+                                        <div class="heading-table text-right">AGENT ID</div>
+                                    </div>
+                                    <perfect-scrollbar class="scroll-content-conversation" (psYReachEnd)="onReachEndNegFeedback($event)">
+    
+                                        <ng-container *ngFor="let obj of conversationTableData">
+                                            <div class="table-row-body-data convdetails-table">
+                                                <div class="table-title" (click)="showConversationLogs(obj.conversationId)">
+                                                    <div class="conv-id">{{obj.conversationId}}</div>
+                                                </div>
+                                                <div class="table-title">
+                                                    <span class="date-time">{{obj.timestamp | date: 'MMMM d, y, h:mm a'}}</span>
+                                                </div>
+                                                <div class="table-title agent-id">
+                                                    <ng-container *ngIf="obj.agentDetails">
+                                                        <div class="agent-pic">
+                                                            <img src="assets/images/avatar.svg">
+                                                        </div>
+                                                        <div class="agent-details" >
+                                                            <h1 *ngIf="obj.agentDetails?.name">{{obj.agentDetails?.name}}</h1>
+                                                            <p *ngIf="obj.agentDetails?.identity">{{obj.agentDetails?.identity}}</p>
+                                                        </div>
+                                                    </ng-container>
+                                                    <div class="agent-details" *ngIf="!obj.agentDetails">
+                                                        -
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </perfect-scrollbar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="accordion_item" *ngIf="showCommentTable">
+                        <button class="accordion-button collapsed" type="button" data-toggle="collapse"
+                            data-target="#responses">
+                            <div class="arrow_icon">
+                                <i class="icon-sa-arrow-down"></i>
+                            </div>
+                            <h2>Response ({{negFeedback?.key}})</h2>
+                            <p>{{negFeedback?.value?.additionalCommentsCount}} Comments</p>
+                        </button>
+                        <div id="responses" class="accordion-collapse collapse show" aria-labelledby="responses">
+                            <div class="accordion-body">
+                                <div class="table-list-data-temp">
+                                    <div class="kr-sg-input-search">
+                                        <input type="text" placeholder="Search Conversation ID"
+                                            class="input-search" [formControl]="searchField" name="searchConv" (keydown.enter)="getConversationSearch()">
+                                        <i class="icon-sa-search search-icon"></i>
+                                    </div>
+                                    <div class="table-header-list">
+                                        <div class="heading-table">RESPONSE</div>
+                                        <div class="heading-table">CONVERSATION</div>
+                                        <div class="heading-table text-right">DATE & TIME</div>
+                                    </div>
+                                    <perfect-scrollbar class="scroll-content-conversation" (psYReachEnd)="onReachEndNegFeedback($event)">
+
+                                    <ng-container *ngFor="let obj of conversationTableData">
+                                        <div class="table-row-body-data convdetails-table">
+                                            <div class="table-title">
+                                                <div class="response-data">{{obj.comment}} </div>
+                                            </div>
+                                            <div class="table-title" (click)="showConversationLogs(obj.conversationId)">
+                                                <div class="conv-id">{{obj.conversationId}}</div>
+                                            </div>
+                                            <div class="table-title agent-id">
+                                                <div class="agent-details">
+                                                    <span class="date-time">{{obj.timestamp | date: 'MMMM d, y, h:mm a'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    </perfect-scrollbar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </ng-conatiner>
 </div>
+
+<app-slider-component id="convsLogSilder" #newConvSlider='app-slider' class="conv-history-log-slider">
+    <app-convs-history-logs *ngIf="showConversationLogsSlider" (onClose)="closeConvsHistorySlider($event)"
+        [conversationId]="conversationId"></app-convs-history-logs>
+</app-slider-component>

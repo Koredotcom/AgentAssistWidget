@@ -1,7 +1,7 @@
 
 <div class="agent-aspects-wrapper">
     <div [hidden]="((viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) || (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)) || agentAspectData?.actualData?.length == 0">
-        <div #wordCloud class="echart-wordCloudContainer" [ngClass]="{'echart-wordCloudContainer-hide' : (viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)}"></div>
+        <div #wordCloud class="echart-wordCloudContainer" [ngClass]="{'echart-wordCloudContainer-hide' : ((agentAspectData | json) == '{}' || (viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW && dashboardService.agentAspectView == VIEWTYPELIST.TABLE))}"></div>
     </div>
 
 
@@ -95,12 +95,13 @@
     </ng-container>
 
     <div [hidden]="((viewType == VIEWTYPELIST.PARTIAL_VIEW) || (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)) || agentAspectTableData.length == 0 ">
-        <div #wordCloudExhaustive [ngClass]="(viewType == VIEWTYPELIST.PARTIAL_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE) ? 'echart-wordCloudContainer-hide' : 'echart-wordCloudContainer'"></div>
+        <div #wordCloudExhaustive [ngClass]="(viewType == VIEWTYPELIST.PARTIAL_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE || (agentAspectData | json) == '{}') ? 'echart-wordCloudContainer-hide' : 'echart-wordCloudContainer'"></div>
     </div>
 
-    <div class="empty-title" *ngIf="!agentAspectData || agentAspectData?.actualData?.length === 0">Not enough data available</div>
+    <div class="empty-title" *ngIf="!isLoading && (!agentAspectData || (agentAspectData | json) == '{}' || agentAspectData?.actualData?.length === 0)">Not enough data available</div>
 
-    <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.AGENT_ASPECT)" *ngIf="(viewType == VIEWTYPELIST.PARTIAL_VIEW)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
+    <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.AGENT_ASPECT)" *ngIf="(viewType == VIEWTYPELIST.PARTIAL_VIEW) && !isLoading && agentAspectData && (agentAspectData | json) != '{}' && agentAspectData?.actualData?.length != 0"
+    >{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
 
 </div>
 

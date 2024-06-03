@@ -1,5 +1,3 @@
-import { assetUrl } from "src/single-spa/asset-url";
-
 export const DASHBORADCOMPONENTTYPE = {
     AGENT_FEEDBACK : 'AGENT_FEEDBACK',
     AGENT_ASPECT : 'AGENT_ASPECT',
@@ -35,10 +33,35 @@ export const actualvsDisplayTitle = {
     CUSTOMER_ASPECT_DROPDOWN_LIST : ['all','agent', 'agentassist'],
     CUSTOMER_ASPECT_TABS_LIST : ['all', 'article', 'faq', 'dialog'],
     CUSTOMER_ASPECT_TYPE_VS_IMAGE : {
-        'article' : assetUrl('/icons/dashboard/articles.svg'),
-        'faq' : assetUrl('/icons/dashboard/faqs.svg'),
-        'dialog' : assetUrl('/icons/dashboard/automation.svg')
+        'article' : 'assets/icons/dashboard/articles.svg',
+        'faq' : 'assets/icons/dashboard/faqs.svg',
+        'dialog' : 'assets/icons/dashboard/automation.svg'
+    },
+    FEEDBACK_TABS_LIST : {
+        usecases : 'Automations',
+        // answers : 'Answers & Web Pages',
+        // faq : 'FAQs',
+        // files : 'Files'
+    },
+    FEEBDACK_TYPES_VS_IMAGE : {
+        'answers' : 'assets/icons/dashboard/articles.svg',
+        'faq' : 'assets/icons/dashboard/faqs.svg',
+        'usecases' : 'assets/icons/dashboard/automation.svg',
+        'files' : 'assets/icons/dashboard/articles.svg'
+    },
+    FEEDBACK_TABLE_COLNAME : {
+        usecases : 'AUTOMATION NAME',
+        answers : 'ANSWER & WEB PAGE NAME',
+        faq : 'FAQ NAME',
+        files : 'FILE NAME'
+    },
+    NEGATIVE_FEEDBACK_MAP : {
+        'Wrong suggestions' : 'WrongSuggestion',
+        'Incorrect intent' : 'Incorrect intent',
+        'Accidental click' : 'Accidental Click',
+        'Time Taking' : 'Time Taking', 
+        'Others' : 'Others'
     }
 }
 
-export const CHANNELS = ['all', 'chat', 'voice']
+export const CHANNELS = ['chat', 'voice', 'email']

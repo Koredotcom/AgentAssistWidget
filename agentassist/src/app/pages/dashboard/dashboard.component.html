@@ -4,7 +4,7 @@
     </app-exhaustive-representation>
 </app-slider-component>
 
-<div class="dashboard-wraaper-container dashboard-wraaper-container-isunified" id="pdfTable" #pdfTable>
+<div class="dashboard-wraaper-container" id="pdfTable" #pdfTable>
     <div class="header-titles">
         <app-dashboard-filters (exportPdf)="exportPdf($event)"></app-dashboard-filters>
     </div>
@@ -15,9 +15,9 @@
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.TOTAL_SESSIONS" | translate}}</span>
-                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSessions?.increment}">
-                                <i [ngClass]="kpiData?.totalSessions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                                <span>{{kpiData?.totalSessions?.percent ? (kpiData?.totalSessions?.percent | number : '1.0') : '0'}}%</span>
+                            <div class="value-data" [ngClass]="kpiData?.totalSessions?.percent === 0 ? '' : !kpiData?.totalSessions?.increment && kpiData?.totalSessions?.percent !== 0 ? 'negtive' : 'positive'">
+                                <i [ngClass]="kpiData?.totalSessions?.percent === 0 ? '' : kpiData?.totalSessions?.increment && kpiData?.totalSessions?.percent !== 0  ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                                <span>{{kpiData?.totalSessions?.percent ? (kpiData?.totalSessions?.percent | number : '1.0') : '- 0.0'}}%</span>
                             </div>
                         </div>
                         <div>
@@ -30,22 +30,38 @@
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.TOTAL_SUGGESTIONS" | translate}}</span>
-                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSuggestions?.increment}">
-                                <i [ngClass]="kpiData?.totalSuggestions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                                <span>{{kpiData?.totalSuggestions?.percent ? (kpiData?.totalSuggestions?.percent | number : '1.0') : '0'}}%</span>
+                            <div class="value-data" [ngClass]="kpiData?.totalSuggestions?.percent === 0 ? '' : !kpiData?.totalSuggestions?.increment && kpiData?.totalSuggestions?.percent !== 0 ? 'negtive' : 'positive'">
+                                <i [ngClass]="kpiData?.totalSuggestions?.percent === 0 ? '' : kpiData?.totalSuggestions?.increment && kpiData?.totalSuggestions?.percent !== 0 ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                                <span>{{kpiData?.totalSuggestions?.percent ? (kpiData?.totalSuggestions?.percent | number : '1.0') : '- 0.0'}}%</span>
                             </div>
                         </div>
                         <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.totalSuggestions?.count}">{{kpiData?.totalSuggestions?.count ? (kpiData?.totalSuggestions?.count | number : '1.0') : '0'}}</div>
                     </div>
                 </div>
+                <!-- <div class="card-sec">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">{{"DASHBOARD.USED_SUGGESTONS" | translate}}</span>
+                        </div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.avgSuggestions?.count}">{{kpiData?.avgSuggestions?.count ? (kpiData?.avgSuggestions?.count | number : '1.1-1') : '0'}}</div>
+                    </div>
+                </div> -->
                 <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
-                            <span class="heading-text">{{"DASHBOARD.AVG_SUGGESTIONS" | translate}}</span>
+                            <span class="heading-text">{{"DASHBOARD.AVG_SUGGESTIONS" | translate}} </span>
                         </div>
                         <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.avgSuggestions?.count}">{{kpiData?.avgSuggestions?.count ? (kpiData?.avgSuggestions?.count | number : '1.1-1') : '0'}}</div>
                     </div>
                 </div>
+                <!-- <div class="card-sec">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">{{"DASHBOARD.RELEVANT" | translate}} <i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.RELEVANT_SUGGESTIONS_TOOLTIP" | translate}}' placement="bottom-right" tooltipClass="tooltip_dashboard"></i></span>
+                        </div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.avgSuggestions?.count}">{{kpiData?.avgSuggestions?.count ? (kpiData?.avgSuggestions?.count | number : '1.1-1') : '0'}}</div>
+                    </div>
+                </div> -->
                 <!-- <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
@@ -64,15 +80,15 @@
                     <div class="chart-inner-data">
                         <div class="kr-sg-dropdowns agent-intiated-dropdown" ngbDropdown placement="bottom">
                             <div class="dropdown-open">
-                                <button type="button" class="dropdown-toggle before-none dropdown-input" id="repdropdown" ngbDropdownToggle>
+                                <button type="button" class="dropdown-toggle before-none dropdown-input" id="repdropdown3" ngbDropdownToggle>
                                     <span class="title-text">{{("DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_" + customerAspectDropdownSelection) | translate}}</span>
                                     <i class="icon-sa-arrow-down"></i>
                                 </button>
-                                <ul class="content-menu width-200" aria-labelledby="repdropdown" ngbDropdownMenu>
+                                <ul class="content-menu width-200" aria-labelledby="repdropdown3" ngbDropdownMenu>
                                     <perfect-scrollbar>
                                         <div class="scroll-data mx-h-280">
                                             <li ngbDropdownItem class="channel-name m_b_2" *ngFor="let type of customerAspectDropdownList" (click)="changeCustomerAspectDropdown(type)">
-                                                <a  [ngClass]="{'selected': type === customerAspectDropdownSelection}" title='{{("DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_" + type) | translate}}'>{{("DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_" + type) | translate}}</a>
+                                                <a  [ngClass]="{'selected': type === customerAspectDropdownSelection}">{{("DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_" + type) | translate}}</a>
                                             </li>
                                         </div>
                                     </perfect-scrollbar>
@@ -103,6 +119,7 @@
                         <app-agent-aspect [widgetData]="null" [viewType]="VIEWTYPE.PARTIAL_VIEW"  [filters]="filterData" (openSliderChild)="openSlider($event)"></app-agent-aspect>
                     </div>
                 </div>
+               
                 <div class="chart-box-info col-6">
                     <div class="chart-inner-data">
                         <div class="heading-data-wrapper">
@@ -120,6 +137,9 @@
                         <div class="main-heading-title">{{"DASHBOARD.AGENT_FEEDBACK_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AGENT_FEEDBACK_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
                         <app-agent-feedback [widgetData]="null" [viewType]="VIEWTYPE.PARTIAL_VIEW"  [filters]="filterData" (openSliderChild)="openSlider($event)"></app-agent-feedback>
                     </div>
+                </div>
+                <div class="chart-box-info col-12">
+                    <app-widget-usage [filters]="filterData"></app-widget-usage>
                 </div>
                 <div class="chart-box-info col-6 d-none" id="lastele">
                     <div class="chart-inner-data">

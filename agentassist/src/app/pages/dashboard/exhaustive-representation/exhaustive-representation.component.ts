@@ -26,10 +26,15 @@ export class ExhaustiveRepresentationComponent implements OnInit {
   componentTitle : string;
   componentSubTitle : string;
   compData : any;
+  feedbackIntent : string;
 
   constructor(public dashboardService: DashboardService) { }
 
   ngOnInit(): void {
+    this.subscribeEvents();
+  }
+
+  subscribeEvents(){
     this.subs.sink = this.dashboardService.getExhaustiveRep().subscribe((response: any) => {      
       if (response && response.status) {
         this.sliderStatus = response.status;
@@ -38,7 +43,16 @@ export class ExhaustiveRepresentationComponent implements OnInit {
         this.componentSubTitle = COMPONENTVSSUBTITLE[response.type];
         this.compData = response.data;
       }
-    })
+    });
+    this.subs.sink = this.dashboardService.getFeedbackIntentPageSelection().subscribe((data : any) => {
+      if(data){
+        this.feedbackIntent = data.intentName;
+      }
+    });
+  }
+
+  goBackIntentPage(){
+    this.dashboardService.setFeedbackIntentPageSelection({intentName : ''})
   }
 
   ngOnDestroy() {

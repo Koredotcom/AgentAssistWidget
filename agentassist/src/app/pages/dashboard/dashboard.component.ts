@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
   payload: any = {
     "startDate": " ",
     "endDate":" ",
-    "experience" : " ",
+    "experience" : [],
   }
 
   subs = new SubSink();
