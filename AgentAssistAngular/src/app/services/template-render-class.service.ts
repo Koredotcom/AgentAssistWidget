@@ -259,7 +259,7 @@ export class TemplateRenderClassService {
 
     });
 
-    if(res?.formData){
+    if(res?.formData && _msgsResponse?.message && _msgsResponse?.message[0]){
       _msgsResponse.message[0].component = _msgsResponse.message[0].component || {};
       _msgsResponse.message[0].component.formData = res.formData
     }
@@ -371,7 +371,8 @@ export class TemplateRenderClassService {
         }
       }
     });
-    if(res?.formData){
+
+    if(res?.formData && _msgsResponse?.message && _msgsResponse?.message[0]){
       _msgsResponse.message[0].component = _msgsResponse.message[0].component || {};
       _msgsResponse.message[0].component.formData = res.formData
     }
