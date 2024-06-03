@@ -355,8 +355,8 @@ export class RootService {
     if(suggestions?.searchassist && suggestions?.searchassist?.snippets && suggestions?.searchassist?.snippets?.length == 0){
       delete suggestions.searchassist.snippets;
     }
-
-    if(suggestions?.searchassist && Object.keys(suggestions?.searchassist)?.length == 1 && Object.keys(suggestions?.searchassist)[0] == 'searchRequestId'){
+    let searchassistKeys = Object.keys(suggestions?.searchassist || {});
+    if(suggestions?.searchassist && searchassistKeys?.length == 1 && searchassistKeys[0] === 'searchRequestId'){
       suggestions.searchassist = {};
     }
     if(dialoguesArray.length || faqArray.length || snippersArray.length || filesArray.length || (suggestions?.searchassist && Object.keys(suggestions?.searchassist)?.length)){
