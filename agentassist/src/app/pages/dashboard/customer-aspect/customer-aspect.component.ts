@@ -22,9 +22,11 @@ export class CustomerAspectComponent implements OnInit {
   @Output() openSliderChild = new EventEmitter();
 
   public customerAspectTabvsImage  = actualvsDisplayTitle.CUSTOMER_ASPECT_TYPE_VS_IMAGE;
-  customerAspectTabsList : any = actualvsDisplayTitle.CUSTOMER_ASPECT_TABS_LIST;
   public DASHBORADCOMPONENTTYPELIST = DASHBORADCOMPONENTTYPE;
   public VIEWTYPELIST = VIEWTYPE;
+
+  customerAspectTabsList : any = actualvsDisplayTitle.CUSTOMER_ASPECT_TABS_LIST;
+  customerAspectOtherNames = actualvsDisplayTitle.CUSTOMER_ASPECT_OTHERS_NAMES;
 
   customerTabSelection : string = "all";
   customerAspectData : any = [];
@@ -55,6 +57,7 @@ export class CustomerAspectComponent implements OnInit {
   fetched = 0;
 
   subs = new SubSink();
+  typeList : any = ['dialog', 'faq', 'answer'];
 
   constructor(private dashboardService : DashboardService, 
     private service : ServiceInvokerService, 
@@ -71,6 +74,10 @@ export class CustomerAspectComponent implements OnInit {
   }
 
   ngOnChanges(changes : any){
+    if(changes.viewType && changes.viewType.currentValue == this.VIEWTYPELIST.EXHAUSTIVE_VIEW){
+      this.customerTabSelection = this.dashboardService.customerAspectTab;
+      this.previousTab = this.dashboardService.customerAspectTab;
+    }
     if(changes.viewType || changes.filters || changes.customerDropdownSelection || changes.customerTabSelection || !this.onChangeCall) {
       this.payload = { ... this.filters}
       this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
@@ -132,6 +139,7 @@ export class CustomerAspectComponent implements OnInit {
           this.previousTab = this.customerTabSelection;
         }
         this.payload.dataType = this.customerTabSelection;
+        this.dashboardService.customerAspectTab = this.customerTabSelection;
         this.payload.sessionType = this.customerDropdownSelection;
         let body = {
           skip : 0,

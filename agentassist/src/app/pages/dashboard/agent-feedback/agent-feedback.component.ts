@@ -245,7 +245,7 @@ export class AgentFeedbackComponent implements OnInit {
     }
 
     if(convId){
-      body.conversationId = convId;
+      body.searchId = convId;
     }
 
     body = { ...body, ... this.payload };
