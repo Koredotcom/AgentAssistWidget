@@ -352,7 +352,11 @@ export class RootService {
     let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [],response)
     let filesArray = suggestions?.searchassist?.files || [];
     let searchResponse: any = {};
-    if(suggestions?.searchassist && Object.keys(suggestions?.searchassist)?.length == 1 && suggestions?.searchassist?.snippets && suggestions?.searchassist?.snippets?.length == 0){
+    if(suggestions?.searchassist && suggestions?.searchassist?.snippets && suggestions?.searchassist?.snippets?.length == 0){
+      delete suggestions.searchassist.snippets;
+    }
+    let searchassistKeys = Object.keys(suggestions?.searchassist || {});
+    if(suggestions?.searchassist && searchassistKeys?.length == 1 && searchassistKeys[0] === 'searchRequestId'){
       suggestions.searchassist = {};
     }
     if(dialoguesArray.length || faqArray.length || snippersArray.length || filesArray.length || (suggestions?.searchassist && Object.keys(suggestions?.searchassist)?.length)){
