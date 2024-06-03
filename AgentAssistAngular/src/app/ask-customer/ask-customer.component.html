@@ -39,10 +39,15 @@
             [(ngModel)]="automation.entityValue" [disabled]="automation.disableInput || assistAutomationData?.endAutomation" (keyup.enter)="handleAgentInput()" (change)="addFiles($event,entityInput.files)" [placeholder]="automation?.tab === projConstants.ASSIST ? automation.placeholderText : ''">
             <div class="border-outline"></div>
             <div class="actions-inputs">
-                <button class="remove-input" aria-label="Button" ngbTooltip="Agent’s Input" container="body" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">
+                <button class="remove-input" aria-label="Button" ngbTooltip="Agent’s Input" container="body" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount && automation?.data?.entityType !== 'attachment')">
                     <i class="krIocnsFont-agent"></i>
                     <!-- <i class="krIocnsFont-keyboard"></i> -->
                 </button>
+                <!-- *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount && automation?.data?.entityType === 'attachment')" -->
+                <button class="remove-input" aria-label="Button" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount && automation?.data?.entityType === 'attachment')" (click)="previewFile(fileObj)">
+                    <span>view</span>
+                </button>
+                <!-- <button class="remove-input" aria-label="Button" *ngIf="fileObj.fileURL !== ''" (click)="downloadFile(fileObj)">Download File</button> -->
                 <!-- <button class="success-check-input" aria-label="button" *ngIf="automation.userInput == projConstants.YES && !automation.errorCount && rootService.activeTab != projConstants.MYBOT">
                     <i class="krIocnsFont-check-circle"></i>
                 </button> -->
@@ -59,13 +64,32 @@
                 <button class="override-btn" (click)="confirmOverride();entityInput.focus()" *ngIf="!automation.toggleOverride && !automation.hideOverrideDiv">Override</button>
             </div>
         </div>
-        <ng-container *ngIf="!automation.errorCount; else errCount">
+        <ng-container *ngIf="!automation.errorCount && automation?.data?.entityType !== 'attachment'; else attachmentType">
             <!-- <p class="info-entity-text" *ngIf="automation.userInput == projConstants.NO">{{'AGENT_ENTERED' | translate}}</p>
             <p class="info-entity-text" *ngIf="automation.userInput == projConstants.YES">{{'ACCEPT_RESPONSE' | translate}}</p> -->
             <p class="info-entity-text" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">{{inputName | translate}}</p>
         </ng-container>
+        <ng-template #attachmentType>
+            <ng-container *ngIf="(automation?.data?.entityType === 'attachment' && !largeFileFlag); else errCount">
+                <p class="info-entity-text" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">{{inputName | translate}}</p>
+            </ng-container>
+        </ng-template>
         <ng-template #errCount>
-            <p class="info-entity-text">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.expectedFormat}}  <span *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">|  {{'OVERRIDE' | translate}}</span></p>
+            <div>{{!automation.errorCount}}</div>
+            <ng-container *ngIf="largeFileFlag; else errorMsg">
+                <p class="info-entity-text">File size must be within 25MB. Please retry.
+                    <span *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">|  {{'OVERRIDE' | translate}}
+                    </span>
+                </p>
+            </ng-container>
+            <ng-template #errorMsg>
+                <p class="info-entity-text">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.expectedFormat}}  
+                    <span *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">|  {{'OVERRIDE' | translate}}</span>
+                </p>
+            </ng-template>
+            <!-- <div>2 {{largeFileFlag}}</div> -->
+            
+            <!-- <p *ngIf="automation.errorCount && automation?.data?.entityType === 'attachment' && !largeFileFlag" class="info-entity-text">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.expectedFormat}}  <span *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">|  {{'OVERRIDE' | translate}}</span></p> -->
         </ng-template>
         <app-loader [type]="projConstants.INDIVIDUAL_LOADER" *ngIf="automation.showSpinner"></app-loader>
     
@@ -76,14 +100,20 @@
     <div class="entity-mesage-data listView" [ngClass]="{'error-no-reponse' : automation.errorCount, 'grayout-msgs-node' : automation.grayOut}">
         <div class="input-block-entity">
             <p>{{automation.entityName}} : </p>
-            <input type="text" [ngClass]="{'disable-input' : automation.disableInput}" #listEntityInput aria-label="Input" [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
+            <input [type]="automation?.data?.newEntityType === 'attachment' ? 'file' : 'text'" [ngClass]="{'disable-input' : automation.disableInput}" #listEntityInput aria-label="Input" [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
              [(ngModel)]="automation.entityValue" [disabled]="automation.disableInput" (keyup.enter)="handleAgentInput()" [placeholder]="automation?.tab === projConstants.ASSIST ? automation.placeholderText : ''">
             <div class="border-outline"></div>
             <div class="actions-inputs">                
-                <button class="remove-input" aria-label="Button"  ngbTooltip="Agent’s Input" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">
+                <button class="remove-input" aria-label="Button"  ngbTooltip="Agent’s Input" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount) && automation?.data.entityType !== 'attachment'">
                     <!-- <i class="krIocnsFont-keyboard"></i> -->
                     <i class="krIocnsFont-agent"></i>
                 </button>
+                <div>{{automation?.data?.entityType}}</div>
+                <!-- *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount && automation?.data?.entityType === 'attachment')" -->
+                <button class="remove-input" aria-label="Button" *ngIf="(automation?.data?.entityType === 'attachment')">
+                    View - <button *ngIf="fileObj.fileURL !== ''" (click)="downloadFile(fileObj.fileURL)">Download File</button>
+                </button>
+
                 <!-- <button class="success-check-input" aria-label="button" *ngIf="automation.userInput == projConstants.YES && !automation.errorCount">
                     <i class="krIocnsFont-check-circle"></i>
                 </button> -->
@@ -113,3 +143,9 @@
     </div>
 </ng-container>
 
+<ng-container >
+    <div class="preview-index" *ngIf="selectedPreview">
+        <button (click)="cancelFilePreview()">cancel</button>
+        <img [src]="filePreview" width="600" height="400">
+      </div>
+</ng-container>

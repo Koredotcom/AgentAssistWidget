@@ -12,6 +12,7 @@ import { finalize } from 'rxjs/operators';
 import { ChunkFileUploadService } from '../helpers/chunk-file-upload.service';
 import { FileUploadService } from '../helpers/file-chunk-upload.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 const CHUNK_SIZE = 1024 * 1024 * 2;
 @Component({
@@ -37,12 +38,13 @@ export class AskCustomerComponent {
     fileType: '',
     fileId: '',
     fileURL: ''
-  }
+  };
   largeFileFlag = false;
   fileTypeFlag = false;
   uploadInprogress: boolean = false;
   uploadedFileData: any;
-  filePreview: any;
+  filePreview:SafeResourceUrl;
+  selectedPreview = false;
 
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
@@ -50,7 +52,7 @@ export class AskCustomerComponent {
 
   constructor(public rootService: RootService, private websocketService: WebSocketService, private translateService : TranslateService,
     private commonService : CommonService, private handleSubjectService : HandleSubjectService, private serviceInvoker : ServiceInvokerService,
-   private chunkFileUploadService: ChunkFileUploadService, private fileUploadService: FileUploadService) {
+   private chunkFileUploadService: ChunkFileUploadService, private fileUploadService: FileUploadService, private domSanitizer : DomSanitizer) {
 
   }
 
@@ -165,8 +167,8 @@ export class AskCustomerComponent {
   handleAgentInput() {
     if(this.automation?.data?.entityType === 'attachment') {
       if(this.uploadedFileData?.files && this.uploadedFileData?.files?.length > 0) {
-        this.fileUploadCall(this.uploadedFileData?.files[0]);
         this.automation.hideOverrideDiv = true;
+        this.fileUploadCall(this.uploadedFileData?.files[0]);
       }
     } else if(this.automation.entityValue){
       this.automation.hideOverrideDiv = true;
@@ -292,7 +294,9 @@ export class AskCustomerComponent {
       return;
     }
 
-    if(file?.size > 25000000){ // file size restricting to 25MB
+    if(file?.size >= 25000000){ // file size restricting to 25MB
+      this.automation.hideOverrideDiv = false;
+      this.automation.toggleOverride = false;
       this.largeFileFlag = true;
       return;
     }
@@ -351,6 +355,7 @@ export class AskCustomerComponent {
   getuploadedFileURL(fileId){
     this.serviceInvoker.invoke('get.uploadedfile', {'fileId': fileId}, {}, {}, this.rootService?.connectionDetails?.agentassisturl).subscribe((res) => {
       if(res) {
+        this.largeFileFlag = false;
         this.fileObj.fileURL = res?.fileUrl;
         this.filePreview = res?.fileUrl;
         this.automation.userInput = this.projConstants.NO;
@@ -361,5 +366,26 @@ export class AskCustomerComponent {
         }
       }
     })
+  }
+
+  downloadFile(url) {
+    const fileUrl = url.fileURL;
+    // this.serviceInvoker.invoke().subscribe(blob => {
+    //   const a = document.createElement('a');
+    //   const objectUrl = URL.createObjectURL(blob);
+    //   a.href = objectUrl;
+    //   a.download = 'file.pdf'; // Set the file name here
+    //   a.click();
+    //   URL.revokeObjectURL(objectUrl);
+    // });
+  }
+
+  previewFile(url) {
+    this.selectedPreview = true;
+    const fileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(url.fileUrl);
+
+  }
+  cancelFilePreview() {
+    this.selectedPreview = false;
   }
 }
