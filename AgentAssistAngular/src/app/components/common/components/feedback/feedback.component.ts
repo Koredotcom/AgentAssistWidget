@@ -50,8 +50,11 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
   }
 
   createForm(){ 
-    let appState = this.localStorageService.getLocalStorageState();   
-    let language = appState[this.feedbackData.connectionDetails.conversationId][storageConst.LANGUAGE];
+    // let appState = this.localStorageService.getLocalStorageState();   
+    // let language = appState[this.feedbackData.connectionDetails.conversationId][storageConst.LANGUAGE];    
+    let language = this.rootService.connectionDetails?.interactiveLanguage || 'en';
+    language = (FeebackConst.DEFAULT_FEEDBACK_LANGUAGE_LIST.indexOf(language.toLowerCase()) != -1) ? language.toLowerCase() : 'en';
+    
     let suggestionList = (this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords[language]) ? 
     this.rootService.settingsData?.feedback[this.feedbackType]?.negativeKeyWords[language] : this.rootService.defaultFeedbackSettings[this.feedbackType]?.negativeKeyWords[language];
     suggestionList?.forEach(element => {

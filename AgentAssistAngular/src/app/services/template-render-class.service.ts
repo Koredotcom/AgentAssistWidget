@@ -258,6 +258,11 @@ export class TemplateRenderClassService {
       _msgsResponse.parsedPayload = parsedPayload;
 
     });
+
+    if(res?.formData && _msgsResponse?.message && _msgsResponse?.message[0]){
+      _msgsResponse.message[0].component = _msgsResponse.message[0].component || {};
+      _msgsResponse.message[0].component.formData = res.formData
+    }
     
     // if (res.srcChannel && res.srcChannel !== 'msteams') {
     //   if (res.componentType === 'dialogAct') {
@@ -366,6 +371,11 @@ export class TemplateRenderClassService {
         }
       }
     });
+
+    if(res?.formData && _msgsResponse?.message && _msgsResponse?.message[0]){
+      _msgsResponse.message[0].component = _msgsResponse.message[0].component || {};
+      _msgsResponse.message[0].component.formData = res.formData
+    }
     
     // if(res?.srcChannel && res?.srcChannel !== 'msteams'){
     //   if (res?.componentType === 'dialogAct') {

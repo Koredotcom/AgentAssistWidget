@@ -20,7 +20,7 @@ export class RootService {
   userBotHistory$ : Subject<any> = new Subject<any>();
   userBotConversationDetailsSubject : BehaviorSubject<any> = new BehaviorSubject(null);
   disableTheWidget : BehaviorSubject<any> = new BehaviorSubject(null);
-
+  themeChange$ : BehaviorSubject<any> = new BehaviorSubject(null);
   public userBotConversationDetails: any;
 
   projConstants: any = ProjConstants;
@@ -191,7 +191,6 @@ export class RootService {
   internalTransfer : boolean = false;
   internalTransferData : any = {};
   socketConnection : boolean = false;
-
   constructor(private templateRenderClassService: TemplateRenderClassService,
     private dirService : DirService) {
     // this.chatWindowInstance = new chatWindow();

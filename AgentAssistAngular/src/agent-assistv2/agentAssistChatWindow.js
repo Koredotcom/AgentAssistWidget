@@ -747,7 +747,7 @@
                 // addBottomSlider();
                 // window.addEventListener('online', updateOnlineStatus);
                 // window.addEventListener('offline', updateOnlineStatus);
-                // attachEventListener();
+                attachEventListener();
             }
             //converts v1 webhooks url to v2 automatically
             chatWindow.prototype.reWriteWebHookURL = function (chatConfig) {
@@ -802,6 +802,7 @@
         function openModal(template, showClose){
             var chatBodyModal=  $('#chatBodyModal');
             var close = document.getElementsByClassName("closeChatBodyModal")[0];
+            if(close){
                 close.onclick = function () {
                     $('.kore-chat-window').removeClass('modelOpen');
                     var postPayload={
@@ -813,6 +814,7 @@
                     var iframe = chatBodyModal.find('iframe');
                     postMessageToChildIframes(iframe,postPayload);
                 }
+            }
             if(template){
                 chatBodyModal.find('.closeChatBodyModal').css('display','none');
                 chatBodyModal.find('.loading_form').css('z-index',999);
@@ -845,18 +847,18 @@
         function formAction(event){
             if(event && event.action==='formSubmit'){
                openModal();
-               if($('.kore-chat-body .uiformComponent').length){
-                $('.kore-chat-body .uiformComponent').closest('.inlineIframeContainer').css('display', 'none');
+               if($('.kore-chat-window .uiformComponent').length){
+                $('.kore-chat-window .uiformComponent').closest('.inlineIframeContainer').css('display', 'none');
                }
             } else if(event.action==='formCancel'){
                 closeChatModal();
-                if($('.kore-chat-body .uiformComponent').length){
-                    $('.kore-chat-body .uiformComponent').closest('.inlineIframeContainer').css('display', 'none');
+                if($('.kore-chat-window .uiformComponent').length){
+                    $('.kore-chat-window .uiformComponent').closest('.inlineIframeContainer').css('display', 'none');
                    }
             } else if (event.action==='formClose'){
                openModal();
-               if($('.kore-chat-body .uiformComponent').length){
-                $('.kore-chat-body .uiformComponent').closest('.inlineIframeContainer').css('display', 'none');
+               if($('.kore-chat-window .uiformComponent').length){
+                $('.kore-chat-window .uiformComponent').closest('.inlineIframeContainer').css('display', 'none');
                }
             }
         }
@@ -1523,9 +1525,12 @@
                                } catch (err) {
 
                             }
-                            if(msgData && msgData.message && msgData.message[0].component && (msgData.message[0].component.formData || (msgData.message[0].component.payload &&  msgData.message[0].component.payload.formData))){
+                            if(msgData && msgData.message && msgData.message[0].component && (msgData.message[0].component.formData || (msgData.message[0].component.payload &&  msgData.message[0].component.payload.formData && msgData.message[0].component.payload.formData.renderType === 'inline'))){
                                 if(msgData.message[0].component.formData){
                                    msgData.message[0].component.payload.formData = msgData.message[0].component.formData;
+                                }
+                                if(msgData.message[0].component.payload.formData.formLink){
+                                    msgData.message[0].component.payload.formData.formLink = msgData.message[0].component.payload.formData.formLink + '&showClose=true&channel=rtm';
                                 }
                                 me.renderWebForm(msgData);
                                 return;
@@ -3032,6 +3037,37 @@
                     // }else{
                     //     console.log($(`#agentAssistContainer #${runInfoContent} #displayData-${elementID}  li#`).length,"----<============================else=======================>came here out of else main if condition===",$(`${me.config.agentAssist?`#agentAssistContainer #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length,msgData.messageId, msgData.renderType);
                     // }
+
+                    
+
+                    if ($('.kore-chat-window .chat-container li#' + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
+                        var _chatContainer = $('.kore-chat-window').find('.chat-container');
+                        if (msgData.type === "bot_response" && msgData.fromHistorySync) {
+                            var msgTimeStamps = [];
+                            var msgEles = $('.kore-chat-window .chat-container>li');
+                            if (msgEles.length) {
+                                msgEles.each(function (i, ele) {
+                                    msgTimeStamps.push(parseInt($(ele).attr('data-time')));
+                                });
+                                var insertAtIndex = findSortedIndex(msgTimeStamps, msgData.createdOnTimemillis);
+
+                                if (insertAtIndex > 0) {
+                                    var insertAfterEle = msgEles[insertAtIndex];
+                                    if (insertAfterEle) {
+                                        $(messageHtml).insertBefore(insertAfterEle);
+                                    } else {
+                                        _chatContainer.append(messageHtml);
+                                    }
+                                } else {
+                                    _chatContainer.prepend(messageHtml);
+                                }
+                            } else {
+                                _chatContainer.append(messageHtml);
+                            }
+                        } else {
+                            _chatContainer.append(messageHtml);
+                        }
+                    }
                 }
                 me.handleImagePreview();
 

@@ -107,7 +107,7 @@ export const storageConst = {
     LANGUAGE : 'lang',
     THEME : 'theme',
     ENGLISH : 'en',
-    AUTO : 'auto',
+    LIGHT : 'light',
     ACTIVE_TAB : 'activeTab',
     SHOWSEND : 'showSend',
     ENABLEWIDGET :   'enableWidget',
@@ -149,6 +149,7 @@ export const FeebackConst = {
     DIALOGS : 'dialogs',
     FAQS : 'faqs',
     ANSWERS : 'searchassist',
+    DEFAULT_FEEDBACK_LANGUAGE_LIST : ['en', 'ar', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'zh_cn'],
     DEFAULT_SUGGESTION : {
         "dialogs" : {
           en : ["Wrong Suggestion", "Accidental Click", "Time Taking", "Confusing", "Not Satisfactory", "Other"],
