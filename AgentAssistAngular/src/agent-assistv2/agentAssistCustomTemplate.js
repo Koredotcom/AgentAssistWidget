@@ -45,6 +45,7 @@
 			'quick_replies_welcome' : true,
 			'otpValidationTemplate' : true,
 			'bankingFeedbackTemplate' : true,
+			'iframe' : true
 
 		}
     if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "dropdown_template") {
