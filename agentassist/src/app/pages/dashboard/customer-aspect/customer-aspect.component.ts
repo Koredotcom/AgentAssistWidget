@@ -144,7 +144,7 @@ export class CustomerAspectComponent implements OnInit {
         let body = {
           skip : 0,
           fetched : 0,
-          limit : 4,
+          limit : 5,
         }
         body = {...this.payload, ...body};
         this.service.invoke('customersLookingfor', params, body).subscribe((data : any) => {
@@ -164,7 +164,8 @@ export class CustomerAspectComponent implements OnInit {
         });
       }
       if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
-        this.customerAspectData = data.length <=4 ? data : data.slice(0,4);
+        // this.customerAspectData = data.length <=4 ? data : data.slice(0,4);
+        this.customerAspectData = data;
       }else {
         this.exhaustiveAspectData.push(...data);
       }

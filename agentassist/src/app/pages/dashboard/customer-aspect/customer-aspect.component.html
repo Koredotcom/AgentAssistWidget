@@ -12,10 +12,10 @@
             <div class="tab-details-info">
                 <ng-container *ngIf="(viewType == VIEWTYPELIST.PARTIAL_VIEW) && (customerAspectData && customerAspectData.length > 0)">
                     
-                            <div class="row-data customer-scroll-data" *ngFor="let data of customerAspectData">
+                            <div class="row-data customer-scroll-data" *ngFor="let data of (customerAspectData ? customerAspectData.slice(0, 4) : [])">
                                 <div class="title-with-count">
                                     <img [src]="customerAspectTabvsImage[data.type]">
-                                    <span class="title" [container]="'body'" placement="bottom-center" ngbTooltip="{{ data.title }}"><span *ngIf="data.type && !typeList.includes(data.type) && (customerTabSelection == 'all' || customerTabSelection == 'article')">{{customerAspectOtherNames[data.type] ? customerAspectOtherNames[data.type] : (data.type | titlecase)}} - </span>{{data.title}} </span>    
+                                    <span class="title" [container]="'body'" placement="bottom-center" ngbTooltip="{{ data.message ? data.message : data.title }}"><span *ngIf="data.type && !typeList.includes(data.type) && (customerTabSelection == 'all' || customerTabSelection == 'article')">{{customerAspectOtherNames[data.type] ? customerAspectOtherNames[data.type] : (data.type | titlecase)}} - </span>{{data.title}} </span>    
                                     <div class="count-percentage">
                                         <span class="percentage">{{data.percent | number : '1.1-1'}}%</span>
                                         <span class="count-">({{data.count}})</span>
@@ -27,7 +27,7 @@
                             </div>
                        
                         
-                    <div class="view-all-btn" *ngIf="viewType == VIEWTYPELIST.PARTIAL_VIEW" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.CUSTOMER_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
+                    <div class="view-all-btn" *ngIf="viewType == VIEWTYPELIST.PARTIAL_VIEW && customerAspectData?.length > 4" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.CUSTOMER_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
                 </ng-container>
                 <ng-container *ngIf="(viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) && (exhaustiveAspectData && exhaustiveAspectData.length > 0)">
                     <perfect-scrollbar class="customer-scroll-content-data" (psYReachEnd)="onReachEnd($event)">
@@ -35,7 +35,7 @@
                             <div class="row-data customer-scroll-data" *ngFor="let data of exhaustiveAspectData">
                                 <div class="title-with-count">
                                     <img [src]="customerAspectTabvsImage[data.type]">
-                                    <span class="title" placement="bottom-center" ngbTooltip="{{ data.title }}"><span *ngIf="data.type && !typeList.includes(data.type) && (customerTabSelection == 'all' || customerTabSelection == 'article')">{{customerAspectOtherNames[data.type] ? customerAspectOtherNames[data.type] : (data.type | titlecase)}} - </span>{{data.title}} </span>    
+                                    <span class="title" placement="bottom-center" ngbTooltip="{{ data.message ? data.message : data.title }}"><span *ngIf="data.type && !typeList.includes(data.type) && (customerTabSelection == 'all' || customerTabSelection == 'article')">{{customerAspectOtherNames[data.type] ? customerAspectOtherNames[data.type] : (data.type | titlecase)}} - </span>{{data.title}} </span>    
                                     <div class="count-percentage">
                                         <span class="percentage">{{data.percent | number : '1.1-1'}}%</span>
                                         <span class="count-">({{data.count}})</span>
