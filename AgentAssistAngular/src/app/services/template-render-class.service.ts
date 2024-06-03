@@ -217,10 +217,12 @@ export class TemplateRenderClassService {
       } else if (parsedPayload.text) {
         body.component = parsedPayload.text;
       } else {
-        body.component.payload = {
-          text: parsedPayload
+        body.component = {
+          payload : {
+            text: parsedPayload
+          },
+          type : 'text'
         }
-        body.component.type = 'text'
       }
 
       if (parsedPayload?.type === 'message') {
