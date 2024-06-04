@@ -221,7 +221,7 @@ export class CommonService {
     data = this.rootService.addSourceMsgIdToRequestParams(faq_or_article_obj,data);
     if(this.rootService.activeTab == this.projConstants.SEARCH){
       data.skipMsg = this.rootService.sentSearchResponse;
-      data.input = this.rootService.searchedResultData.userInput;
+      data.input = this.rootService.searchedResultData?.userInput || '';
       this.rootService.sentSearchResponse = true;
     }
     if(faq_or_article_obj.subType){
