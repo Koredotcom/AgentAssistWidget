@@ -36,6 +36,34 @@
 
     <perfect-scrollbar (psYReachEnd)="onReachEnd($event)">
         <div class="scroll-data">
+            <div class="summary-wrapper-data-banner">
+                <div class="heading-section">
+                    <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+                        <path d="M9.50004 5.61261V7.81602C9.06269 8.40574 8.48185 8.60732 7.90048 8.60732C6.86594 8.60732 6.14478 7.7281 6.14478 6.72235C6.14478 5.70053 6.86594 4.80469 7.90048 4.80469C8.48185 4.80469 9.06269 5.00948 9.50004 5.61261Z" fill="#111827"/>
+                        <path d="M15.9018 0.107422H3.99349C3.71791 0.107352 3.44501 0.162403 3.19039 0.269433C2.93576 0.376463 2.7044 0.533373 2.50951 0.731203C2.31462 0.929033 2.16002 1.16391 2.05454 1.42241C1.94907 1.68091 1.89478 1.95798 1.89478 2.23779V9.05368C3.47026 9.0601 4.70114 10.2804 4.70114 11.8448C4.70369 12.3595 4.56582 12.8648 4.30279 13.3048H15.9018C16.4582 13.3044 16.9916 13.0798 17.385 12.6804C17.7784 12.2809 17.9996 11.7393 18 11.1744V2.23993C18.0004 1.95997 17.9464 1.68268 17.8411 1.42393C17.7358 1.16519 17.5813 0.930055 17.3864 0.731992C17.1915 0.533928 16.9601 0.376818 16.7054 0.269648C16.4506 0.162478 16.1776 0.107351 15.9018 0.107422ZM11.7018 10.2906H9.73427V9.7433C9.21157 10.0894 8.57505 10.2906 7.81154 10.2906C5.94256 10.2906 4.4282 8.71021 4.4282 6.71253C4.4282 4.68595 5.94256 3.1184 7.81154 3.1184C8.57347 3.1184 9.21157 3.31956 9.73427 3.6657V3.1184H11.7018V10.2906ZM15.4682 10.2906H13.5007V3.1184H15.4708L15.4682 10.2906Z" fill="#111827"/>
+                        <path d="M1.66077 10.397C0.809318 10.397 0.105225 11.0205 0.105225 11.8416C0.105225 12.6813 0.809318 13.3049 1.66077 13.3049C2.53271 13.3049 3.2368 12.6813 3.2368 11.8416C3.2368 11.02 2.53271 10.397 1.66077 10.397Z" fill="#111827"/>
+                    </svg>
+                    <h1>EDITED SUMMARY</h1>
+                    <div class="toggle-show-orginal-summery" data-toggle="collapse" data-target="#collapseSummary" tooltipClass="tooltip-global-styles" ngbTooltip="Click to hide Original Summary" placement="bottom-center">
+                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none" class="eye">
+                            <path d="M12.2004 10.7967C12.2004 12.0121 11.2151 12.9975 9.99967 12.9975C8.78423 12.9975 7.79892 12.0121 7.79892 10.7967C7.79892 9.58127 8.78423 8.59596 9.99967 8.59596C11.2151 8.59596 12.2004 9.58127 12.2004 10.7967Z" stroke="#155EEF" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3 10.7967C3.93479 7.82047 6.71528 5.66162 9.99999 5.66162C13.2847 5.66162 16.0652 7.8205 17 10.7967C16.0652 13.7729 13.2847 15.9318 10 15.9318C6.71527 15.9318 3.93477 13.7729 3 10.7967Z" stroke="#155EEF" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none" class="eye-off">
+                            <path d="M3.39742 3.99219L6.03037 6.62514M16.6019 17.1967L13.9692 14.564M11.375 15.6009C10.9296 15.6853 10.47 15.7295 10 15.7295C6.71527 15.7295 3.93477 13.5707 3 10.5944C3.25448 9.7842 3.64574 9.03455 4.14672 8.37255M8.4435 9.03827C8.84176 8.64002 9.39195 8.39369 9.99967 8.39369C11.2151 8.39369 12.2004 9.379 12.2004 10.5944C12.2004 11.2022 11.9541 11.7523 11.5558 12.1506M8.4435 9.03827L11.5558 12.1506M8.4435 9.03827L6.03037 6.62514M11.5558 12.1506L6.03037 6.62514M11.5558 12.1506L13.9692 14.564M6.03037 6.62514C7.17463 5.88743 8.53732 5.45936 9.99999 5.45936C13.2847 5.45936 16.0652 7.61823 17 10.5945C16.4814 12.2455 15.3948 13.6451 13.9692 14.564" stroke="#155EEF" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="summary-desc-text">The customer complains that their loan repayment amount is excessively high. Customer wants to see if there is a way to reduce loan repayment amount</div>
+                <div class="original-summery-data collapse" id="collapseSummary">
+                    <div class="heading-summery">
+                        <div class="line-border"></div>
+                        <h1>ORIGINAL SUMMARY</h1>
+                        <div class="line-border"></div>
+                    </div>
+                    <p>Customer states that their loan repayment amount is  too high Customer wants to see if there is a way to reduce loan repayment amount</p>
+                </div>
+            </div>
             <ng-container *ngFor="let data of chatHistData">
                 <ng-container *ngIf="data.interruption">
                     <div class="aget-joined">
