@@ -14,6 +14,7 @@ export class ConvsHistoryLogsComponent implements OnInit {
   @Input() sessionId;
   @Input() botId;
   @Input() userId;
+  @Input() conversationSummary:any = {};
   USECASES_LIMIT = 100;
   page = 0;
   dropDownOptions = [
