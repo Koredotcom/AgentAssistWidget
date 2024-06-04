@@ -1,5 +1,5 @@
 <app-slider-component id="convsLogSilder" #newConvSlider='app-slider' class="conv-history-log-slider">
-  <app-convs-history-logs *ngIf="showConversation" (onClose)="closeConvsHistorySlider($event)" [conversationId]="conversationId" [sessionId]="sessionId" [botId]="botId" [userId]="userId"></app-convs-history-logs>
+  <app-convs-history-logs *ngIf="showConversation" (onClose)="closeConvsHistorySlider($event)" [conversationSummary]="conversationSummary" [conversationId]="conversationId" [sessionId]="sessionId" [botId]="botId" [userId]="userId"></app-convs-history-logs>
 </app-slider-component>
 <div class="conversational-logs-wrappper-content">
     <div class="header-info-title">
