@@ -12,6 +12,9 @@
     height: calc(100% - 76px);
     top: 0px;
   }
+  &.attachment-full-popup-backdrop{
+    z-index: 999999 !important;
+  }
   // Fade for backdrop
   &.fade { opacity: 0; }
   &.show { opacity: $backdrop-opacity; }

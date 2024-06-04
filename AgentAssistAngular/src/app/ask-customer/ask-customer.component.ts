@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input,TemplateRef, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
 import { EVENTS } from '../helpers/events';
@@ -13,6 +13,7 @@ import { ChunkFileUploadService } from '../helpers/chunk-file-upload.service';
 import { FileUploadService } from '../helpers/file-chunk-upload.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 const CHUNK_SIZE = 1024 * 1024 * 2;
 @Component({
@@ -45,14 +46,14 @@ export class AskCustomerComponent {
   uploadedFileData: any;
   filePreview:SafeResourceUrl;
   selectedPreview = false;
-
+  attachmentModalView:any;
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
   inputName: string = supportLanguage.AWAITING;
 
   constructor(public rootService: RootService, private websocketService: WebSocketService, private translateService : TranslateService,
     private commonService : CommonService, private handleSubjectService : HandleSubjectService, private serviceInvoker : ServiceInvokerService,
-   private chunkFileUploadService: ChunkFileUploadService, private fileUploadService: FileUploadService, private domSanitizer : DomSanitizer) {
+   private chunkFileUploadService: ChunkFileUploadService, private fileUploadService: FileUploadService, private domSanitizer : DomSanitizer, public modalService: NgbModal) {
 
   }
 
@@ -387,5 +388,14 @@ export class AskCustomerComponent {
   }
   cancelFilePreview() {
     this.selectedPreview = false;
+  }
+
+
+  openAttachmentView(data){
+    this.attachmentModalView = this.modalService.open(data ,{windowClass: 'attachment-full-popup', centered: true, backdrop:'static', keyboard:false, backdropClass: 'attachment-full-popup-backdrop'});
+  }
+
+  closeAttachmentView(){
+    this.attachmentModalView.close();
   }
 }
