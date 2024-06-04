@@ -1,13 +1,4 @@
 <div class="slider-sec-data">
-    <div class="header-sec row m-0 d-none">
-        <div class="lef-sec col-11 p-0">
-          <div class="main-title">{{componentTitle | translate}}</div>
-          <div class="tag-title">{{componentSubTitle | translate}}</div>
-        </div>
-        <div class="close-link col-1 p-0">
-          <img src="assets/images/close.svg" (click)="close()" />
-        </div>
-    </div>
     <div class="header-sec row m-0">
         <div class="lef-sec col-11 p-0">
             <span *ngIf="feedbackIntent" (click)="goBackIntentPage()">
@@ -22,9 +13,9 @@
           <img src="assets/images/close.svg" (click)="close()" />
         </div>
     </div>
-    
+    <div class="scoll-data-body-info">
         <ng-container *ngIf="componentType === DASHBORADCOMPONENTTYPE.CUSTOMER_ASPECT">
-            <app-customer-aspect class="p-l-20 d-inline-block w-100 h-100" [filters]="filters" [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW" [customerDropdownSelection]="customerDropdownSelection" [widgetData]="compData"></app-customer-aspect>
+            <app-customer-aspect class="d-inline-block w-100 h-100" [filters]="filters" [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW" [customerDropdownSelection]="customerDropdownSelection" [widgetData]="compData"></app-customer-aspect>
         </ng-container>
 
         <ng-container *ngIf="componentType === DASHBORADCOMPONENTTYPE.AGENT_FEEDBACK">
@@ -38,5 +29,5 @@
         <ng-container *ngIf="componentType === DASHBORADCOMPONENTTYPE.AUTOMATION_OVERRIDE">
             <app-automation-override-report  [filters]="filters" [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW" [widgetData]="compData"></app-automation-override-report>
         </ng-container>
-       
+    </div>
 </div>
