@@ -121,7 +121,7 @@
             }
             .accordion-content-body {
                 display: flex;
-                padding: 16px 16px 16px 48px;
+                padding: 16px 16px 0px 48px;
                 flex-direction: column;
                 .settings-info-block {
                     display: flex;
@@ -203,6 +203,9 @@
                     gap: 40px;
                     padding: 16px 0px;
                     border-bottom: 1px solid var(--Primary-Colors-Gray-100, #f2f4f7);
+                    &:last-child{
+                        border: 0;
+                    }
                     .content-data-check{
                         width: 100px;
                         .kr-sg-toggle {
@@ -987,6 +990,12 @@
                     gap: 12px;
                     align-items: center;
                     padding-top: 16px;
+                    position: sticky;
+                    bottom: -25px;
+                    padding-bottom: 16px;
+                    border-top: 1px solid var(--Primary-Colors-Gray-100, #f2f4f7);
+                    background: #fff;
+                    z-index: 2;
                 }
             }
         }
