@@ -260,7 +260,11 @@ export class AgentFeedbackComponent implements OnInit {
         this.feedbackSkip = this.feedbackSkip + 1;
         this.feedbackhasMore = response.hasMore;
         response.result?.forEach(element => {
-          element.agentDetails = element.agentDetails ? JSON.parse(element.agentDetails) : {}
+          try {
+            element.agentDetails = element.agentDetails ? JSON.parse(element.agentDetails) : {}
+          }catch{
+            element.agentDetails = {};
+          }
         });
         this.conversationTableData.push(...response.result);        
         this.cdRef.detectChanges();
