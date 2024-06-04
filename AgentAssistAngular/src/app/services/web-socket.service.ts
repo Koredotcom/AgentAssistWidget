@@ -151,7 +151,7 @@ export class WebSocketService {
     }
   }
 
-  emitEvents(eventName : string,requestParams : any) {
+  emitEvents(eventName : string, requestParams : any, keepOldTraceId?) {
     const {fromSAT, source, isCall, autoBotId} = this.rootService.getConnectionDetails()
     let uuids = this.koregenerateUUIDPipe.transform();
     let appState = this.localStorageService.getLocalStorageState();
@@ -161,7 +161,7 @@ export class WebSocketService {
       requestParams.isExtAD = fromSAT ? false : true;
       requestParams.source = source;
       requestParams.experience = this.rootService.connectionDetails?.channel;
-      requestParams.traceId = uuids;
+      requestParams.traceId = (keepOldTraceId && requestParams.traceId) ? requestParams.traceId : uuids;
       requestParams.language = this.rootService.connectionDetails?.interactiveLanguage;
       if(internalTransferDetails && Object.keys(internalTransferDetails)?.length > 0 && internalTransferDetails?.participant){
         requestParams.participant = internalTransferDetails?.participant;
@@ -455,6 +455,10 @@ export class WebSocketService {
       e.preventDefault();
       e.stopPropagation();
     }
+  }
+
+  handleRespResoltionAck(data){
+    this.emitEvents(EVENTS.response_resolution_comments_ack, data, true);
   }
 
 
