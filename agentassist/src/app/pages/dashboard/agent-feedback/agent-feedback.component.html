@@ -231,7 +231,7 @@
                                                     <span class="date-time">{{obj.timestamp | date: 'MMMM d, y, h:mm a'}}</span>
                                                 </div>
                                                 <div class="table-title agent-id">
-                                                    <ng-container *ngIf="obj.agentDetails">
+                                                    <ng-container *ngIf="obj.agentDetails && (obj.agentDetails | json) != '{}'">
                                                         <div class="agent-pic">
                                                             <img src="assets/images/avatar.svg">
                                                         </div>
@@ -240,7 +240,7 @@
                                                             <p *ngIf="obj.agentDetails?.identity">{{obj.agentDetails?.identity}}</p>
                                                         </div>
                                                     </ng-container>
-                                                    <div class="agent-details" *ngIf="!obj.agentDetails">
+                                                    <div class="agent-details" *ngIf="!obj.agentDetails || (obj.agentDetails | json) == '{}'">
                                                         -
                                                     </div>
                                                 </div>
@@ -265,7 +265,7 @@
                             <div class="accordion-body">
                                 <div class="table-list-data-temp">
                                     <div class="kr-sg-input-search">
-                                        <input type="text" placeholder="Search Conversation ID"
+                                        <input type="text" placeholder="Search Agent Name, Agent ID or Conversation ID"
                                             class="input-search" [formControl]="searchField" name="searchConv" (keydown.enter)="getConversationSearch()">
                                         <i class="icon-sa-search search-icon"></i>
                                     </div>

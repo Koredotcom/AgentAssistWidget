@@ -31,11 +31,28 @@ export const COMPONENTVSSUBTITLE = {
 
 export const actualvsDisplayTitle = {
     CUSTOMER_ASPECT_DROPDOWN_LIST : ['all','agent', 'agentassist'],
-    CUSTOMER_ASPECT_TABS_LIST : ['all', 'article', 'faq', 'dialog'],
+    CUSTOMER_ASPECT_TABS_LIST : ['all', 'answer', 'faq', 'dialog', 'article'],
     CUSTOMER_ASPECT_TYPE_VS_IMAGE : {
-        'article' : 'assets/icons/dashboard/articles.svg',
+        'article' : 'assets/icons/dashboard/others.svg',
         'faq' : 'assets/icons/dashboard/faqs.svg',
-        'dialog' : 'assets/icons/dashboard/automation.svg'
+        'dialog' : 'assets/icons/dashboard/automation.svg',
+        'answer' : 'assets/icons/dashboard/articles.svg',
+        'confluencecloud' :  'assets/icons/dashboard/confluencecloud.svg',
+        'confluenceserver' : 'assets/icons/dashboard/conflunceserver.svg',
+        'file' : 'assets/icons/dashboard/safile.svg',
+        'data' : 'assets/icons/dashboard/data.svg',
+        'servicenow' : 'assets/icons/dashboard/servicenow.svg',
+        'web' : 'assets/icons/dashboard/webpage.svg',
+        'safaq' : 'assets/icons/dashboard/faqs.svg'
+    },
+    CUSTOMER_ASPECT_OTHERS_NAMES : {
+        'confluencecloud' : 'ConfluenceCloud',
+        'confluenceserver' : 'ConfluenceServer',
+        'file' : 'Files',
+        'data' : 'Data',
+        'servicenow' : 'ServiceNow',
+        'web' : 'Web Page',
+        'safaq' : 'Faq'
     },
     FEEDBACK_TABS_LIST : {
         usecases : 'Automations',
