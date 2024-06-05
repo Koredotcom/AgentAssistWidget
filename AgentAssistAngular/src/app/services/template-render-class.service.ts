@@ -289,7 +289,7 @@ export class TemplateRenderClassService {
 
     });
 
-    if(res?.formData && _msgsResponse?.message && _msgsResponse?.message[0]){
+    if(res?.formData && res?.formData?.renderType == 'inline' && _msgsResponse?.message && _msgsResponse?.message[0]){
       _msgsResponse.message[0].component = _msgsResponse.message[0].component || {};
       _msgsResponse.message[0].component.formData = res.formData
     }
@@ -402,7 +402,7 @@ export class TemplateRenderClassService {
       }
     });
 
-    if(res?.formData && _msgsResponse?.message && _msgsResponse?.message[0]){
+    if(res?.formData && res?.formData?.renderType == 'inline' && _msgsResponse?.message && _msgsResponse?.message[0]){
       _msgsResponse.message[0].component = _msgsResponse.message[0].component || {};
       _msgsResponse.message[0].component.formData = res.formData
     }
