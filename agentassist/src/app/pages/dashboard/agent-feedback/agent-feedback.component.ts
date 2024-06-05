@@ -245,7 +245,7 @@ export class AgentFeedbackComponent implements OnInit {
     }
 
     if(convId){
-      body.conversationId = convId;
+      body.searchId = convId;
     }
 
     body = { ...body, ... this.payload };
@@ -259,6 +259,13 @@ export class AgentFeedbackComponent implements OnInit {
       if (response && response?.result?.length > 0) {
         this.feedbackSkip = this.feedbackSkip + 1;
         this.feedbackhasMore = response.hasMore;
+        response.result?.forEach(element => {
+          try {
+            element.agentDetails = element.agentDetails ? JSON.parse(element.agentDetails) : {}
+          }catch{
+            element.agentDetails = {};
+          }
+        });
         this.conversationTableData.push(...response.result);        
         this.cdRef.detectChanges();
       }

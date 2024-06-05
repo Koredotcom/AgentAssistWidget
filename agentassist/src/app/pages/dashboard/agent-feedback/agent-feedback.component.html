@@ -193,7 +193,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="accordion_item" *ngIf="showResponseTable">
+                    <div class="accordion_item accordion_item_table_response" *ngIf="showResponseTable">
                         <div class='init-loading-conv' *ngIf="feedbackisLoading">
                             <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
                         </div>
@@ -220,7 +220,7 @@
                                         <div class="heading-table">DATE & TIME</div>
                                         <div class="heading-table text-right">AGENT ID</div>
                                     </div>
-                                    <perfect-scrollbar class="scroll-content-conversation" (psYReachEnd)="onReachEndNegFeedback($event)">
+                                    <div class="scroll-content-conversation" appScrollEnd (scrollEnd)="onReachEndNegFeedback($event)">
     
                                         <ng-container *ngFor="let obj of conversationTableData">
                                             <div class="table-row-body-data convdetails-table">
@@ -231,7 +231,7 @@
                                                     <span class="date-time">{{obj.timestamp | date: 'MMMM d, y, h:mm a'}}</span>
                                                 </div>
                                                 <div class="table-title agent-id">
-                                                    <ng-container *ngIf="obj.agentDetails">
+                                                    <ng-container *ngIf="obj.agentDetails && (obj.agentDetails | json) != '{}'">
                                                         <div class="agent-pic">
                                                             <img src="assets/images/avatar.svg">
                                                         </div>
@@ -240,13 +240,13 @@
                                                             <p *ngIf="obj.agentDetails?.identity">{{obj.agentDetails?.identity}}</p>
                                                         </div>
                                                     </ng-container>
-                                                    <div class="agent-details" *ngIf="!obj.agentDetails">
+                                                    <div class="agent-details" *ngIf="!obj.agentDetails || (obj.agentDetails | json) == '{}'">
                                                         -
                                                     </div>
                                                 </div>
                                             </div>
                                         </ng-container>
-                                    </perfect-scrollbar>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -265,7 +265,7 @@
                             <div class="accordion-body">
                                 <div class="table-list-data-temp">
                                     <div class="kr-sg-input-search">
-                                        <input type="text" placeholder="Search Conversation ID"
+                                        <input type="text" placeholder="Search Agent Name, Agent ID or Conversation ID"
                                             class="input-search" [formControl]="searchField" name="searchConv" (keydown.enter)="getConversationSearch()">
                                         <i class="icon-sa-search search-icon"></i>
                                     </div>

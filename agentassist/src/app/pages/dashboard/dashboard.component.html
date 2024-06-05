@@ -49,19 +49,19 @@
                 <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
+                            <span class="heading-text">{{"DASHBOARD.RELEVANT" | translate}} <i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.RELEVANT_SUGGESTIONS_TOOLTIP" | translate}}' placement="bottom-right" tooltipClass="tooltip_dashboard"></i></span>
+                        </div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.accuracy?.count}">{{kpiData?.accuracy?.count ? (kpiData?.accuracy?.count | number : '1.1-1') : '0'}}%</div>
+                    </div>
+                </div>
+                <div class="card-sec">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.AVG_SUGGESTIONS" | translate}} </span>
                         </div>
                         <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.avgSuggestions?.count}">{{kpiData?.avgSuggestions?.count ? (kpiData?.avgSuggestions?.count | number : '1.1-1') : '0'}}</div>
                     </div>
                 </div>
-                <!-- <div class="card-sec">
-                    <div class="inner-data-sec">
-                        <div class="title-text-info">
-                            <span class="heading-text">{{"DASHBOARD.RELEVANT" | translate}} <i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.RELEVANT_SUGGESTIONS_TOOLTIP" | translate}}' placement="bottom-right" tooltipClass="tooltip_dashboard"></i></span>
-                        </div>
-                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.avgSuggestions?.count}">{{kpiData?.avgSuggestions?.count ? (kpiData?.avgSuggestions?.count | number : '1.1-1') : '0'}}</div>
-                    </div>
-                </div> -->
                 <!-- <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">

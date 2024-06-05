@@ -61,6 +61,7 @@ import { UbEmptyScreensComponent } from '../pages/usecases/uc-main/uc-table-main
 import { ConvsHistoryLogsComponent } from '../pages/conversational-logs/convs-history-logs/convs-history-logs.component';
 import { MillisToDurationPipePipe } from '../helpers/filters/millis-to-duration-pipe.pipe';
 import { MillisecondsToDateAndHourPipe } from '../helpers/filters/milliseconds-to-date-and-hour.pipe';
+import { ScrollEndDirective } from './scroll-end.directive';
 
 const COMPONENTS = [
   SliderComponentComponent,
@@ -115,7 +116,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConnectToBotComponent,
     StrictFilterPipe,
     JsEditorComponent,
-    ConvsHistoryLogsComponent
+    ConvsHistoryLogsComponent,
+    ScrollEndDirective
   ],
   imports: [
     CommonModule,
@@ -182,7 +184,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     StrictFilterPipe,
     AceEditorModule,
     JsEditorComponent,
-    ConvsHistoryLogsComponent
+    ConvsHistoryLogsComponent,
+    ScrollEndDirective
   ],
 })
 export class SharedModule { }
