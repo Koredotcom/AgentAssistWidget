@@ -173,7 +173,7 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
   }
 
   init() {
-    if(!this.inputData.triggerPoints?.hasOwnProperty('isLaunchByMenuVoiceEnabled')){
+    if(this.inputData && !this.inputData.triggerPoints?.hasOwnProperty('isLaunchByMenuVoiceEnabled')){
       this.inputData.triggerPoints = {
         ...this.inputData.triggerPoints,     
         isLaunchByMenuVoiceEnabled: this.inputData.triggerPoints?.isLaunchByMenuEnabled,
