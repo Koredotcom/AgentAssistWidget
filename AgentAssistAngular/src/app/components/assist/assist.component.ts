@@ -311,6 +311,9 @@ export class AssistComponent implements OnInit, OnDestroy {
     if (this.connectionDetails.isCallConversation === true && data.suggestions) {
       this.handleSubjectService.setCallConversationSuggestions({ data: data, uuid: uuids });
     }
+    
+    
+    this.commonService.endSmallTalk(data, this.assistResponseArray);
 
     if (!this.rootService.isAutomationOnGoing && data.suggestions) {
       if (this.rootService.suggestionsAnswerPlaceableIDs.length == 0) {
@@ -416,6 +419,7 @@ export class AssistComponent implements OnInit, OnDestroy {
     }
     this.dialogName = data.intentName;
     this.grayoutOldFeedbacks();
+    this.commonService.endSmallTalk(data, this.assistResponseArray);
     let renderResponse = this.commonService.formatDialogRunRenderResponse(data, uuids, this.dialogPositionId, this.dialogName);
     this.assistResponseArray.push(renderResponse);
     this.assistResponseArray = [...this.assistResponseArray];
@@ -632,6 +636,9 @@ export class AssistComponent implements OnInit, OnDestroy {
         res = this.rootService.formatHistoryResonseToNormalRender(res);
         // res = this.rootService.confirmationNodeRenderForHistoryDataTransform(res);
         let ambiguity = false;
+
+        this.commonService.endSmallTalk(res, this.assistResponseArray);
+
         if ((res.suggestions || res.ambiguityList)) {
   
           res.suggestions?.faqs?.forEach(faq => {
@@ -734,6 +741,7 @@ export class AssistComponent implements OnInit, OnDestroy {
               previousTaskPositionId = currentTaskPositionId;
               previousTaskName = currentTaskName;
               this.grayoutOldFeedbacks();
+              this.commonService.endSmallTalk(res, this.assistResponseArray);
               let renderResponse =  this.commonService.formatDialogRunRenderResponse(res, previousId, currentTaskPositionId, currentTaskName);
 
               this.assistResponseArray.push(renderResponse);

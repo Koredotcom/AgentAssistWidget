@@ -565,6 +565,13 @@ export class CommonService {
     return entityNodes;
   }
 
+  endSmallTalk(data, assistResponseArray){
+    if((this.rootService.isAutomationOnGoing || data?.suggestions || data?.ambiguityList) && assistResponseArray?.length >= 1 && assistResponseArray[assistResponseArray.length -1]?.type == this.renderResponseType.SMALLTALK){
+      assistResponseArray[assistResponseArray.length -1].placeholderText = '';
+      assistResponseArray[assistResponseArray.length -1].hideOverrideDiv = true;
+    }
+  }
+
   formatRunningLastSmallTalkEntityNode(assistResponseArray, renderResponse) {
     if (assistResponseArray?.length > 1 && assistResponseArray[assistResponseArray.length - 1]?.type == this.renderResponseType.SMALLTALK
       && assistResponseArray[assistResponseArray.length - 1]?.data?.isPrompt) {
