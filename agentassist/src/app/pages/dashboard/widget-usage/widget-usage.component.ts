@@ -37,9 +37,13 @@ export class WidgetUsageComponent implements OnInit {
         private decimalPipe : DecimalPipe, private milliPipe : MillisToDurationPipePipe, private milliDate : MillisecondsToDateAndHourPipe) { }
 
     ngOnInit(): void {
-        this.params.streamId = this.authService.smartAssistBots[0]._id;
+        this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
         this.subscribeEvents();
 
+    }
+
+    ngOnDestroy(){
+        this.subs.unsubscribe();
     }
 
     subscribeEvents() {
