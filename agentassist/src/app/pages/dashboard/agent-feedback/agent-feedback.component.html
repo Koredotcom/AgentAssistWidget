@@ -220,7 +220,7 @@
                                         <div class="heading-table">DATE & TIME</div>
                                         <div class="heading-table text-right">AGENT ID</div>
                                     </div>
-                                    <div class="scroll-content-conversation" (psYReachEnd)="onReachEndNegFeedback($event)">
+                                    <div class="scroll-content-conversation" appScrollEnd (scrollEnd)="onReachEndNegFeedback($event)">
     
                                         <ng-container *ngFor="let obj of conversationTableData">
                                             <div class="table-row-body-data convdetails-table">
