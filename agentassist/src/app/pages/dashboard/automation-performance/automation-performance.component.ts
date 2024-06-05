@@ -18,7 +18,6 @@ export class AutomationPerformanceComponent implements OnInit {
   chartOption: EChartOption;
   @Input() filters : IDashboardFilter;
   @Input() viewType : string;
-  onChangeCall : boolean = false;
   automationPerformanceChartData : any = [];
   automationData: any;
   payload: any = {
@@ -39,32 +38,15 @@ export class AutomationPerformanceComponent implements OnInit {
   constructor(public dashboardService : DashboardService, private decimalPipe : DecimalPipe, private service : ServiceInvokerService, private authService : AuthService) { }
 
   ngOnInit(): void {
-    this.params.streamId = this.authService.smartAssistBots[0]._id;
-    this.subscribeEvents();
-    // this.updateAutomationPerformanceData();
+    this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
   }
 
   ngOnChanges(changes : any){
-    if(changes.filters) {
-      this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
+    if(changes.filters && this.filters && Object.keys(this.filters).length > 0){
+      this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
       this.payload = {...this.filters}
       this.updateAutomationPerformanceData();
     }
-    // if( this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall){
-    //   this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
-    //   this.payload = {...this.filters}
-    //   this.updateAutomationPerformanceData();
-    // }
-  }
-
-  subscribeEvents(){
-    this.subs.sink = this.dashboardService.getDashboardFilterUpdated().subscribe((filters : any) => {
-      if(filters && Object.keys(filters).length > 0){
-        this.payload = Object.assign({}, filters);
-        this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
-        this.updateAutomationPerformanceData();
-      }
-    });
   }
 
   updateAutomationPerformanceData(){
@@ -94,34 +76,6 @@ export class AutomationPerformanceComponent implements OnInit {
       }
       this.setDonutChartOptions(this.automationPerformanceChartData);
     });
-    // this.dashboardService.getAutomationPerformanceData().subscribe((data : any) => {
-    //   this.automationPerformanceChartData = [];
-    //   let colorObj : any = {
-    //     "Successfully Completed" : '#47B39C',
-    //     "Terminated" : "#FFC154",
-    //     "Error" : '#EC6B56',
-    //     "Other" : '#003F5C'
-    //   }
-    //   if(data && data.actualData){
-    //     for(let automation of data.actualData){
-    //       let obj : any = {
-    //         name : automation.name,
-    //         value : automation.count,
-    //         percent : automation.percent,
-    //         series : automation.seriesData,
-    //         total : data.total,
-    //         itemStyle : {
-    //           color : colorObj[automation.name]
-    //         }
-    //       }
-    //       this.automationPerformanceChartData.push(obj);
-    //     }
-    //   }
-    //   this.setDonutChartOptions(this.automationPerformanceChartData);
-
-    // })
-
-
   }
 
   setDonutChartOptions(chartData) {

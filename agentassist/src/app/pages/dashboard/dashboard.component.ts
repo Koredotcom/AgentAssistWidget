@@ -21,8 +21,6 @@ export class DashboardComponent implements OnInit {
 
   @ViewChild('newConvSlider', { static: true }) newConvSlider: SliderComponentComponent;
   @ViewChild('pdfTable') pdfTable: ElementRef;
-  @Input() filters : IDashboardFilter;
-  @Input() viewType : string;
   onChangeCall : boolean = false;
 
   sliderId : string = "dashboardSlider";
@@ -53,7 +51,6 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
     this.subscribeEvents();
-    // this.updateKPIData();
   }
 
   checkPermissions(){
@@ -62,20 +59,6 @@ export class DashboardComponent implements OnInit {
     }else if(!this.workflowService.rolePermissions.isTaskEnabled && !this.workflowService.rolePermissions.isDashboardEnabled){
       this.router.navigate(['/config/blank']);
     }
-  }
-
-
-  ngOnChanges(changes : any){
-    if( changes.filters) {
-      this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
-      this.payload = {... this.filters}
-      this.updateKPIData();
-    }
-    // if( this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall ){
-    //   this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
-    //   this.payload = {... this.filters}
-    //   this.updateKPIData();
-    // }
   }
 
   updateKPIData(){
@@ -90,7 +73,6 @@ export class DashboardComponent implements OnInit {
 
   subscribeEvents(){
     this.subs.sink = this.dashboardService.getDashboardFilterUpdated().subscribe((filters : any) => {
-      // console.log(filters, "filters");
       if(filters && Object.keys(filters).length > 0){
         this.filterData = Object.assign({}, filters);
         this.payload = this.filterData;
