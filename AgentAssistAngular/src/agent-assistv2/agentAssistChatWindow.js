@@ -3006,7 +3006,7 @@
 
                 if(msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.sliderView && !msgData.message[0].component.payload.fromHistory){
                     bottomSliderAction('show',messageHtml);
-                }else{
+                }else if(msgData.renderType ==='inline' && msgData.message[0].component.payload.template_type === "iframe"){
                     //ignore message(msgId) if it is already in viewport
                     // if ($(`${me.config.agentAssist?`#agentAssistContainer #${runInfoContent} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
                     //     if (msgData.type === "bot_response" && msgData.fromHistorySync) {
@@ -3039,9 +3039,8 @@
                     // }
 
                     
-
-                    if ($('.kore-chat-window .chat-container li#' + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
-                        var _chatContainer = $('.kore-chat-window').find('.chat-container');
+                    if ($('.kore-chat-window .chat-container li#' + msgData.messageId).length && $('.kore-chat-window ul#' + msgData.messageId + '.inlineIframeContainer').length < 1) {
+                        var _chatContainer = $('.kore-chat-window').find('ul#' + msgData.messageId);
                         if (msgData.type === "bot_response" && msgData.fromHistorySync) {
                             var msgTimeStamps = [];
                             var msgEles = $('.kore-chat-window .chat-container>li');
