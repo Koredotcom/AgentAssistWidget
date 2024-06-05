@@ -61,6 +61,7 @@ export interface UsecaseOb {
         alternates: any []
     },
     oldUtterances?: any;
+    triggerPoints?: any
 }
 
 export class UsecaseParams {

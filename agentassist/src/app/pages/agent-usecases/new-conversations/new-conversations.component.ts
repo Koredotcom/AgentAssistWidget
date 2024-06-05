@@ -51,7 +51,10 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
     "agentGroups": [],
     "isAutoDetectIntentEnabled": false,
     "isLaunchByMenuEnabled": false, 
-    "skillMatchRules": []
+    "skillMatchRules": [],
+    isLaunchByMenuVoiceEnabled: false,
+    isLaunchByMenuChatEnabled: false,
+    isLaunchByMenuEmailEnabled: false
   };
 
   callExp: {
@@ -170,6 +173,14 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
   }
 
   init() {
+    if(!this.inputData.triggerPoints?.hasOwnProperty('isLaunchByMenuVoiceEnabled')){
+      this.inputData.triggerPoints = {
+        ...this.inputData.triggerPoints,     
+        isLaunchByMenuVoiceEnabled: this.inputData.triggerPoints?.isLaunchByMenuEnabled,
+        isLaunchByMenuChatEnabled: this.inputData.triggerPoints?.isLaunchByMenuEnabled,
+        isLaunchByMenuEmailEnabled: this.inputData.triggerPoints?.isLaunchByMenuEnabled
+      }
+    }
     if (this.inputData) this.conv = JSON.parse(JSON.stringify(this.inputData));
 
     if (this.ucType === 'dialog') {

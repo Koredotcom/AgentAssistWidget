@@ -922,3 +922,36 @@
 input.ng-invalid.ng-touched, input.err {
     border: 1px solid $warningRed;
 }
+.during-chat-badge{
+    .checkbox-custom{
+        &:checked{
+            &+.checkbox-custom-label{
+                background: var(--Primary-50, #EFF4FF) !important;
+                color: var(--Primary-700, #004EEB) !important;
+                &::before{
+                    background-color:#155EEF !important;
+                    background-size: 9px !important; 
+                }
+            }
+        }
+    }
+    .checkbox-custom-label{
+        color: var(--Neutral-500, #6B7280);
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        padding: 4px 12px 4px 10px;
+        align-items: center;
+        gap: 4px;
+        border-radius: 16px;
+        background: var(--Gray-100, #F2F4F7);
+        line-height: 20px;
+        &::before{
+            width: 12px;
+            height: 12px;
+            border-radius: 12px;
+            background-color: transparent !important;
+            margin: 0px !important;
+        }
+    }
+}
