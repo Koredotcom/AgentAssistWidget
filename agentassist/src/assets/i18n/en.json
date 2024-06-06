@@ -2480,5 +2480,6 @@
     "FEEDBACK_SUB_TITLE" : "Provides users with the flexibility to specify the range of options available for providing negative feedback",
     "FEEDBACK_TITLE" : "Feedback Settings",
     "SEARCHASSIST_500_STATUSCODE" : "Something went Wrong. Please try again.",
-    "lbl_feedback" : "Feedback Settings"
+    "lbl_feedback" : "Feedback Settings",
+    "DASHBOARD.CHANNEL_email": "Email"
     }
