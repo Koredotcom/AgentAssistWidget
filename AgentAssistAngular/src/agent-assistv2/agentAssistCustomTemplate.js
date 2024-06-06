@@ -146,8 +146,10 @@
             'helpers': this.helpers,
             'extension': this.extension
           });
-          this.advancedListTemplateEvents(messageHtml,msgData);
           $(messageHtml).data(msgData);
+		  setTimeout(() => {
+			  this.advancedListTemplateEvents(messageHtml,msgData);
+		  }, 10);
         } else {
           messageHtml = $(this.getChatTemplate("advancedListTemplate")).tmpl({
             'msgData': msgData,
@@ -156,7 +158,9 @@
             'helpers': this.helpers,
             'extension': this.extension
           });
-          this.advancedListTemplateEvents(messageHtml,msgData);
+			setTimeout(() => {
+				this.advancedListTemplateEvents(messageHtml, msgData);
+			}, 10);
           $(messageHtml).data(msgData);
         }
 
@@ -3927,8 +3931,8 @@ var message= {
 			helpers = this.helpers;
 		}
 		var me = this;
-		var $ele = $(ele);
-		var messageData = $(ele).data();
+		var $ele = $('.kore-chat-window .chat-container');
+		var messageData = $(ele).data() || msgData;
 		if (msgData.message[0].component.payload.listViewType == "nav") {
 			var navHeadersData = msgData.message[0].component.payload.navHeaders;
 			if (msgData.message[0].component.payload.navHeaders && msgData.message[0].component.payload.navHeaders.length) {
@@ -3942,7 +3946,7 @@ var message= {
 			}
 		}
 		$ele.off('click', '.advanced-list-wrapper .callendar-tabs .month-tab').on('click', '.advanced-list-wrapper .callendar-tabs .month-tab', function (e) {
-			var messageData = $(ele).data();
+			var messageData = $(ele).data() || msgData;
 			var selectedTabId = e.currentTarget.id;
 			if (messageData && messageData.message[0].component.payload.listViewType == "nav" && messageData.message[0].component.payload.navHeaders) {
 				var navHeadersData = messageData.message[0].component.payload.navHeaders;
@@ -4065,7 +4069,7 @@ var message= {
 		$ele.off('click', '.advanced-list-wrapper .main-title-text-block .search-block .close_icon').on('click', '.advanced-list-wrapper .main-title-text-block .search-block .close_icon', function (e) {
 			var obj = this;
 			$(obj).parent().find('.input_text').val('');
-			var messageData = $(ele).data();
+			var messageData = $(ele).data() || msgData;
 			if (messageData.message[0].component.payload.listViewType == "nav") {
 				var selectedNav = $(obj).parent().parent().parent().find('.callendar-tabs .month-tab.active-month');
 				var selectedNavId = $(selectedNav).attr('id');
@@ -4087,7 +4091,7 @@ var message= {
 		$ele.off('click', '.advanced-list-wrapper .main-title-text-block .search-block .input_text').on("keyup", '.advanced-list-wrapper .main-title-text-block .search-block .input_text', function (e) {
 			var obj = this;
 			var searchText = $(obj).val().toLowerCase();
-			var messageData = $(ele).data();
+			var messageData = $(ele).data() || msgData;
 			if (messageData.message[0].component.payload.listViewType == "nav") {
 				var selectedNav = $(obj).parent().parent().parent().find('.callendar-tabs .month-tab.active-month');
 				var selectedNavId = $(selectedNav).attr('id');
@@ -4146,7 +4150,7 @@ var message= {
 			}
 		});
 		$ele.off('click', '.advanced-list-wrapper .see-more-data').on("click", '.advanced-list-wrapper .see-more-data', function (e) {
-			var messageData = $(ele).data();
+			var messageData = $(ele).data() || msgData;
 			if (messageData && messageData.message[0] && messageData.message[0].component && messageData.message[0].component.payload && messageData.message[0].component.payload.seeMoreAction === 'slider') {
 				if ($(".list-template-sheet").length !== 0) {
 					$(".list-template-sheet").remove();
