@@ -950,10 +950,14 @@ export class RootService {
   // }
 
 
-  getTemplateHtml(isTemplateRender, result){    
-    let renderedMessage = isTemplateRender ? this.templateRenderClassService?.AgentChatInitialize?.renderMessage(result) : '';
+  getTemplateHtml(isTemplateRender, result){  
+    let renderedMessage = [];
+    if(isTemplateRender){
+      renderedMessage = this.templateRenderClassService?.AgentChatInitialize?.renderMessage(result);
+    }
+    // let renderedMessage = isTemplateRender ? this.templateRenderClassService?.AgentChatInitialize?.renderMessage(result) : '';
     if (renderedMessage && renderedMessage[0]) {
-      let obj =  $(this.templateRenderClassService.AgentChatInitialize.renderMessage(result))[0].outerHTML
+      let obj =  $(renderedMessage)[0].outerHTML
       return (obj);
     }
     return null;
