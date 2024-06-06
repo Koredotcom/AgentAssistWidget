@@ -4,7 +4,7 @@
 <div class="cust-aspects-wrapper">
     <div class="automations-tabs">
         <div class="tab-name" [ngClass]="{'active-tab': tab === customerTabSelection}" (click)="changeTabSelection(tab)" *ngFor="let tab of customerAspectTabsList">
-            <img *ngIf="customerAspectTabvsImage[tab]" src="{{customerAspectTabvsImage[tab]}}" >
+            <img *ngIf="customerAspectTabvsImage[tab]" [src]="isUnifiedPlatform ? unifiedPath + '/' + customerAspectTabvsImage[tab] : customerAspectTabvsImage[tab]" >
             <span>{{("DASHBOARD.CUSTOMER_ASPECT_TABS_" + tab) | translate}}</span>
         </div>
     </div>
@@ -14,7 +14,7 @@
                     
                             <div class="row-data customer-scroll-data" *ngFor="let data of customerAspectData">
                                 <div class="title-with-count">
-                                    <img src="{{customerAspectTabvsImage[data.type]}}">
+                                    <img [src]="isUnifiedPlatform ? unifiedPath + '/' + customerAspectTabvsImage[data.type] : customerAspectTabvsImage[data.type]">
                                     <span class="title">{{data.name}} </span>    
                                     <div class="count-percentage">
                                         <span class="percentage">{{data.percent | number : '1.1-1'}}%</span>
@@ -34,7 +34,7 @@
                         <div class="body-customer-scroll-data">
                             <div class="row-data customer-scroll-data" *ngFor="let data of exhaustiveAspectData">
                                 <div class="title-with-count">
-                                    <img src="{{customerAspectTabvsImage[data.type]}}">
+                                    <img [src]="isUnifiedPlatform ? unifiedPath + '/' + customerAspectTabvsImage[data.type] : customerAspectTabvsImage[data.type]">
                                     <span class="title">{{data.name}} </span>    
                                     <div class="count-percentage">
                                         <span class="percentage">{{data.percent | number : '1.1-1'}}%</span>
