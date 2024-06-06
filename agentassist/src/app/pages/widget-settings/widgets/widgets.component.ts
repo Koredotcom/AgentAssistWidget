@@ -679,6 +679,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         })
       }),
       isAgentPlaybookEnabled: [isUpdate ? (obj.isAgentPlaybookEnabled ?? false) : false],
+      isAutoScrollEnabled : [isUpdate ? (obj.isAutoScrollEnabled ?? true) : true],
       isWidgetLandingEnabled: this.fb.group({
         tab: [isUpdate ? (obj.isWidgetLandingEnabled?.tab??'assist') : 'assist']
       }),
