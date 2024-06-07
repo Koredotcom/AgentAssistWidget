@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ProjConstants, supportLanguage } from 'src/app/proj.const';
+import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
 
 @Component({
@@ -12,6 +13,7 @@ import { RootService } from 'src/app/services/root.service';
 export class SummaryPopupComponent {
 
   @Input() summaryText: any;
+  @Input() initPopup : any;
   @Output() handlePopupEvent = new EventEmitter();
 
   editedSummaryText : any;
@@ -19,7 +21,8 @@ export class SummaryPopupComponent {
   tooltipText : string = supportLanguage.COPY;
   submitEnabled:boolean = false
 
-  constructor(public modal : NgbActiveModal, private translate : TranslateService, private rootService: RootService) { }
+  constructor(public modal : NgbActiveModal, private translate : TranslateService, private rootService: RootService,
+    private handleSubjectService : HandleSubjectService) { }
 
   ngOnInit(): void {
     this.submitEnabled = this.rootService?.settingsData?.summarization?.canSubmit;

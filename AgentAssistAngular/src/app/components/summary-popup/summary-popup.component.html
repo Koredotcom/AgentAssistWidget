@@ -12,12 +12,13 @@
 </div> -->
 
 <div class="summery-popup-data" id="summary">
+    <app-loader [type]="projCnst.INDIVIDUAL_LOADER" *ngIf="initPopup"></app-loader>
     <div class="title-block">
         <h1>{{'SUMMARY_TEXT' | translate}}</h1>
         <div class="ai-block">
             <i class="krIocnsFont-Aimark"></i>
             <span>{{'SUGGESTED' | translate}}</span>
-            <button class="close-summery" (click)="summaryButtonClick(false)">
+            <button class="close-summery" (click)="summaryButtonClick(false)" [disabled]="initPopup">
                 <i class="krIocnsFont-close-md"></i>
             </button>
         </div>
@@ -26,7 +27,7 @@
         <textarea class="form-control" id="summaryText" placeholder="Summary" rows="4" cols="50" [(ngModel)]="editedSummaryText"></textarea>
     </div>
     <div class="actions-footer">
-        <button class="_btn primaryBtn" *ngIf="submitEnabled" id="summarySubmit" (click)="summaryButtonClick(true)">{{'SUBMIT' | translate}}</button>
-        <button class="_btn solidBtn" id="summaryCopy" (click)="handleCopyButton(editedSummaryText)" [disabled]="(tooltipText === projCnst.COPIED)">{{tooltipText | translate}}</button>
+        <button class="_btn primaryBtn" *ngIf="submitEnabled" id="summarySubmit" (click)="summaryButtonClick(true)" [disabled]="initPopup">{{'SUBMIT' | translate}}</button>
+        <button class="_btn solidBtn" id="summaryCopy" (click)="handleCopyButton(editedSummaryText)" [disabled]="(tooltipText === projCnst.COPIED) || initPopup">{{tooltipText | translate}}</button>
     </div>
 </div>
