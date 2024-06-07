@@ -98,6 +98,8 @@ export class SearchComponent implements OnInit, OnDestroy, AfterContentChecked {
         this.secondaryIp = true;
         this.clearSearch();
       }
+    }else if(this.searchText?.length == 0){
+      this.clearSearch();
     }
   }
 
