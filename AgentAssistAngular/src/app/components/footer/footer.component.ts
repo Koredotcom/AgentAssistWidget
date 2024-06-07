@@ -37,8 +37,6 @@ export class FooterComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.subscribeEvents();
-    
   }
 
   @HostListener('document:click', ['$event.target']) onMouseEnter(targetElement) {
@@ -60,7 +58,7 @@ export class FooterComponent implements OnInit, OnDestroy{
     this.subs.sink = this.rootService.socketConnection$.subscribe(res => {
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();        
-        this.updateActiveTab();
+        // this.updateActiveTab();
         if(this.connectionDetails?.isCallConversation){
           this.showTranscript = (this.rootService?.settingsData?.transcripts?.isEnabled === false) ? false : true;
         }
@@ -69,9 +67,9 @@ export class FooterComponent implements OnInit, OnDestroy{
 
     this.subs.sink = this.rootService.activeTab$.subscribe(tab => {
       if(tab){
-        this.selectedTab = (!this.showTranscript && tab === this.projConstants.TRANSCRIPT) ? this.projConstants.ASSIST : tab;
-        this.actionOnButton(this.selectedTab);
-        this.updateLocalStorageForTabSwitch(this.selectedTab);
+        let selectedTab = (!this.showTranscript && tab === this.projConstants.TRANSCRIPT) ? this.projConstants.ASSIST : tab;
+        this.actionOnButton(selectedTab);
+        this.updateLocalStorageForTabSwitch(selectedTab);
       }
     });
 
@@ -79,7 +77,8 @@ export class FooterComponent implements OnInit, OnDestroy{
       if(!this.rootService.connectionDetails.isCallConversation && res && res?.userBotConversationDetails?.sessionId && res?.userBotConversationDetails.sessionId !== ''){
         this.hideUserBotHistory = false;
       }
-    })
+    });
+    this.updateActiveTab();
   }
   
   updateLocalStorageForTabSwitch(tab){
@@ -91,29 +90,31 @@ export class FooterComponent implements OnInit, OnDestroy{
   }
  
   actionOnButton(selectedTab: string){
-    let canvas = this.content;
-    this.selectedTab = selectedTab;
-    let offclickCanvasClass = 'if-assist-click-offcanvas'
-    if(selectedTab === ProjConstants.ASSIST){
-      document.body.classList.add(offclickCanvasClass);
-      return;
-    }else{
-      document.body.classList.remove(offclickCanvasClass);
-    }
-    if(!this.canvas){
-      this.openCanvas(canvas);
-    }
-
-    let className = 'if-maximized-canvas';
-    if(this.selectedTab == ProjConstants.SETTINGS || this.rootService.notLookingForClick){
-      if(this.document.body.classList.contains(className)){
-        this.renderer.removeClass(this.document.body, className);
+    if(this.selectedTab != selectedTab){
+      let canvas = this.content;
+      this.selectedTab = selectedTab;
+      let offclickCanvasClass = 'if-assist-click-offcanvas'
+      if(selectedTab === ProjConstants.ASSIST){
+        document.body.classList.add(offclickCanvasClass);
+        return;
+      }else{
+        document.body.classList.remove(offclickCanvasClass);
       }
-      this.rootService.notLookingForClick = false;
-      this.maxButton = false;
-    }else{
-      this.renderer.addClass(this.document.body, className);
-      this.maxButton = true;
+      if(!this.canvas){
+        this.openCanvas(canvas);
+      }
+  
+      let className = 'if-maximized-canvas';
+      if(this.selectedTab == ProjConstants.SETTINGS || this.rootService.notLookingForClick){
+        if(this.document.body.classList.contains(className)){
+          this.renderer.removeClass(this.document.body, className);
+        }
+        this.rootService.notLookingForClick = false;
+        this.maxButton = false;
+      }else{
+        this.renderer.addClass(this.document.body, className);
+        this.maxButton = true;
+      }
     }
     // let className = 'if-maximized-canvas';
     // this.renderer.removeClass(this.document.body, className);
