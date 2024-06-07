@@ -127,6 +127,12 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
     shiftEnter: true
   }
 
+  channelVsLibraryLaunch : any = {
+    'chat' : 'isLaunchByMenuChatEnabled',
+    'voice' : 'isLaunchByMenuVoiceEnabled',
+    'email' : 'isLaunchByMenuEmailEnabled'
+  }
+
   @Input() inputData: UsecaseOb;
   @Input() tabActive: string = '';
   @Input() ucType: 'faq' | 'dialog' = 'dialog';
@@ -841,6 +847,12 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
       conv.triggerPoints.isVoiceEnabled = false;
       conv.triggerPoints.isLaunchByMenuEnabled = false;
       conv.triggerPoints.isEmailEnabled = false;
+    }
+  }
+
+  updateChannelTriggerPoints(channel, flag, triggerPoints){
+    if(!flag && triggerPoints){
+      triggerPoints[this.channelVsLibraryLaunch[channel]] = false; 
     }
   }
 

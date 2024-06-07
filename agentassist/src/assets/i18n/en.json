@@ -2491,5 +2491,6 @@
         "COACHING_ENCHANCED_MODULE" : "New! Enhanced module",
         "COACHING_ENCHANCE_MODULE_DESC" : "The utterance module is now enhanced with generative AI functionality that will simplify the need for utterance additions.",
         "COACHING_CONVERSATION_NOFOUND" : "No conversation history found.",
-        "SEARCHASSIST_500_STATUSCODE" : "Something went Wrong. Please try again."
+        "SEARCHASSIST_500_STATUSCODE" : "Something went Wrong. Please try again.",
+        "LIBRARY_LAUNCH" : "Launch through Library"
     }
