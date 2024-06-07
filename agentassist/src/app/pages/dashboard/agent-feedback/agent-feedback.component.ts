@@ -9,6 +9,7 @@ import { finalize, debounceTime, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { FormControl } from '@angular/forms';
+import { assetUrl } from 'src/single-spa/asset-url';
 
 @Component({
   selector: 'app-agent-feedback',
@@ -65,6 +66,9 @@ export class AgentFeedbackComponent implements OnInit {
   negFeedback : any = {};
   feedbackSkip = 0;
   feedbackLimit = 15;
+  isUnifiedPlatform =false;
+  unifiedPath = '';
+  assetUrlProc = assetUrl;
 
   constructor(private dashboardService: DashboardService,
     private service: ServiceInvokerService,
@@ -73,6 +77,11 @@ export class AgentFeedbackComponent implements OnInit {
     private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    this.isUnifiedPlatform = this.workflowService.isUnifiedPlatform();
+    if(this.isUnifiedPlatform) {
+      this.unifiedPath = window.location.origin + '/koreagentassist-xo-frame';
+
+    }
     this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
     this.subscribeEvents();
   }

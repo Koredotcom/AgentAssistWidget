@@ -3,7 +3,7 @@
         <div class="automations-tabs">
             <div class="tab-name" [ngClass]="{'active-tab': tab[0] === feedbackTabSelection}"
                 (click)="changeTabSelection(tab[0])" *ngFor="let tab of feedbackTabsList">
-                <img *ngIf="feedbackTabvsImage[tab[0]]" [src]="feedbackTabvsImage[tab[0]]">
+                <img *ngIf="feedbackTabvsImage[tab[0]]" [src]="isUnifiedPlatform ? unifiedPath + '/' + feedbackTabvsImage[tab[0]] : feedbackTabvsImage[tab[0]]">
                 <span>{{tab[1]}}</span>
             </div>
         </div>
@@ -80,7 +80,7 @@
                 <div class="automations-tabs">
                     <div class="tab-name" [ngClass]="{'active-tab': tab[0] === feedbackTabSelection}"
                         (click)="changeTabSelection(tab[0])" *ngFor="let tab of feedbackTabsList">
-                        <img *ngIf="feedbackTabvsImage[tab[0]]" [src]="feedbackTabvsImage[tab[0]]">
+                        <img *ngIf="feedbackTabvsImage[tab[0]]" [src]="isUnifiedPlatform ? unifiedPath + '/' + feedbackTabvsImage[tab[0]] : feedbackTabvsImage[tab[0]]">
                         <span>{{tab[1]}}</span>
                     </div>
                 </div>
@@ -233,7 +233,7 @@
                                                 <div class="table-title agent-id">
                                                     <ng-container *ngIf="obj.agentDetails">
                                                         <div class="agent-pic">
-                                                            <img src="assets/images/avatar.svg">
+                                                            <img [src]="assetUrlProc('assets/images/avatar.svg')">
                                                         </div>
                                                         <div class="agent-details" >
                                                             <h1 *ngIf="obj.agentDetails?.name">{{obj.agentDetails?.name}}</h1>

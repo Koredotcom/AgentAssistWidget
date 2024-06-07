@@ -3,6 +3,8 @@ import { SubSink } from 'subsink';
 import { IDashboardFilter } from '../dashboard-filters/dateFilter.model';
 import { COMPONENTVSSUBTITLE, COMPONENTVSTITLE, DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { DashboardService } from '../dashboard.service';
+import { assetUrl } from 'src/single-spa/asset-url';
+import { workflowService } from '@kore.services/workflow.service';
 
 @Component({
   selector: 'app-exhaustive-representation',
@@ -27,10 +29,18 @@ export class ExhaustiveRepresentationComponent implements OnInit {
   componentSubTitle : string;
   compData : any;
   feedbackIntent : string;
+  assetUrlProc = assetUrl;
+  isUnifiedPlatform =false;
+  unifiedPath = '';
 
-  constructor(public dashboardService: DashboardService) { }
+  constructor(public dashboardService: DashboardService, private workflowService: workflowService) { }
 
   ngOnInit(): void {
+    this.isUnifiedPlatform = this.workflowService.isUnifiedPlatform();
+    if(this.isUnifiedPlatform) {
+      this.unifiedPath = window.location.origin + '/koreagentassist-xo-frame';
+
+    }
     this.subscribeEvents();
   }
 

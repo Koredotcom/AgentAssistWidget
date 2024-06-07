@@ -6,6 +6,7 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { AuthService } from '@kore.services/auth.service';
 import { SubSink } from 'subsink';
 import { finalize, debounceTime, tap } from 'rxjs/operators';
+import { workflowService } from '@kore.services/workflow.service';
 
 @Component({
   selector: 'app-customer-aspect',
@@ -53,15 +54,23 @@ export class CustomerAspectComponent implements OnInit {
   skip = 0
   limit = 30;
   fetched = 0;
+  isUnifiedPlatform =false;
+  unifiedPath = '';
 
   subs = new SubSink();
 
   constructor(private dashboardService : DashboardService, 
     private service : ServiceInvokerService, 
     private authService : AuthService,
-    private cdRef: ChangeDetectorRef) { }
+    private cdRef: ChangeDetectorRef,
+    private workflowService : workflowService) { }
 
   ngOnInit(): void {
+    this.isUnifiedPlatform = this.workflowService.isUnifiedPlatform();
+    if(this.isUnifiedPlatform) {
+      this.unifiedPath = window.location.origin + '/koreagentassist-xo-frame';
+
+    }
     this.params.streamId = this.authService.smartAssistBots[0]._id;
     if(this.params.streamId !== '') {
       // this.updateCustomerAspectData();
