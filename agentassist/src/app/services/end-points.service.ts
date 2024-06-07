@@ -1718,6 +1718,13 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/analytics/aadashboard/:streamId/agentslooking',
       method : 'post'
     }
+
+    // Widget Usage
+    this.serviceList['widgetUsage'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/analytics/aadashboard/:streamId/widgetUsage',
+      method : 'post'
+    }
+    
     // // Dashboard Apis Stops // //
 
     this.serviceList['post.acchecklists'] = {
