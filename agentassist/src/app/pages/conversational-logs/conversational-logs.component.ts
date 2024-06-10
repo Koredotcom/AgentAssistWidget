@@ -148,7 +148,12 @@ export class ConversationalLogsComponent implements OnInit {
     this.botId = data.botId;
     this.userId = data.userId;
     this.sessionId = data.sessionId;
-    this.conversationSummary = data.conversationSummary || {}; 
+    try {
+      this.conversationSummary = JSON.parse(data.conversationSummary || '{}');
+    }
+    catch {
+      this.conversationSummary = {}; 
+    }
   }
 
 

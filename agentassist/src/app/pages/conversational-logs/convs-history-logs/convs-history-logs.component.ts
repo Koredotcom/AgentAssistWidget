@@ -31,6 +31,7 @@ export class ConvsHistoryLogsComponent implements OnInit {
   ) { }
   hasMore = false;
   isLoading = true;
+  eyeClick : boolean = false;
   ngOnInit(): void {
     this.getclickedConversationHistory();
     // this.getConvUserBot();
