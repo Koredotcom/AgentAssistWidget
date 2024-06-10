@@ -52,6 +52,16 @@
             // resize: none;
             max-height: 70vh;
         }
+        .recylin-bin-btn{
+            border: 0;
+            padding: 0;
+            background: #fff;
+            cursor: pointer;
+            z-index: 1;
+            position: absolute;
+            right: 20px;    
+            bottom: 20px;
+        }
     }
     .actions-footer{
         padding: 8px;

@@ -40,11 +40,25 @@ export class FooterComponent implements OnInit, OnDestroy{
   }
 
   @HostListener('document:click', ['$event.target']) onMouseEnter(targetElement) {
-    if(targetElement?.className?.includes('custom-backdrop-off-canvas')){
+    const target = targetElement as HTMLElement;
+    if(this.hasClass(target, 'custom-backdrop-off-canvas')){
       this.selectedTab = this.projConstants.ASSIST;
       this.changeTab(this.selectedTab);
       this.canvas = null;
+    }else{
+      console.log('Element does not have the class');
     }
+  }
+
+  hasClass(element: any, className: string): boolean {
+    if (element?.classList) {
+      // For regular HTML elements
+      return element.classList.contains(className);
+    } else if (element?.className && typeof element.className === 'object' && 'baseVal' in element.className) {
+      // For SVG elements
+      return element.className.baseVal.split(' ').includes(className);
+    }
+    return false;
   }
 
 

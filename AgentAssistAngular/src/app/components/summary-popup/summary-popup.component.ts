@@ -26,12 +26,20 @@ export class SummaryPopupComponent {
 
   ngOnInit(): void {
     this.submitEnabled = this.rootService?.settingsData?.summarization?.canSubmit;
-    this.editedSummaryText = this.summaryText?.summary ? this.summaryText?.summary[0]: '';
+    this.checkSummaryText(this.summaryText);
   }
 
   ngOnChanges(changes){
     if(changes?.summaryText?.currentValue?.summary?.length > 0){
-        this.editedSummaryText = changes.summaryText.currentValue.summary[0]
+        this.checkSummaryText(changes?.summaryText?.currentValue);
+    }
+  }
+
+  checkSummaryText(summaryText){
+    if(summaryText?.isError){
+      this.editedSummaryText = this.translate.instant("SUMMARY_ERROR_TEXT");
+    }else if(summaryText?.summary && summaryText?.summary[0]){
+      this.editedSummaryText = summaryText.summary[0]
     }
   }
 
@@ -54,6 +62,10 @@ export class SummaryPopupComponent {
 
   closeSummary(){
     this.handlePopupEvent.emit({status : false, summary : false, type : ProjConstants.SUMMARY})
+  }
+
+  clearSummary(){
+   this.editedSummaryText = ''; 
   }
 
   
