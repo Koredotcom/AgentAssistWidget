@@ -5,7 +5,7 @@
           <div class="tag-title">{{componentSubTitle | translate}}</div>
         </div>
         <div class="close-link col-1 p-0">
-          <img [src]="assetUrlProc('assets/images/close.svg')" (click)="close()" />
+          <img [src]="assetUrlProc('images/close.svg')" (click)="close()" />
         </div>
     </div>
     <div class="header-sec row m-0">
@@ -13,13 +13,13 @@
             <span *ngIf="feedbackIntent" (click)="goBackIntentPage()">
                 <i class="icon-coaching--left-arrow"></i>
             </span>
-          <div class="main-title" *ngIf="!feedbackIntent">{{componentTitle | translate}} <img [src]="assetUrlProc('assets/icons/dashboard/training-overview.svg')"></div>
-          <div class="main-title" *ngIf="feedbackIntent">{{componentTitle | translate}} - {{feedbackIntent}} <img [src]="assetUrlProc('assets/icons/dashboard/training-overview.svg')"></div>
+          <div class="main-title" *ngIf="!feedbackIntent">{{componentTitle | translate}} <img [src]="assetUrlProc('icons/dashboard/training-overview.svg')"></div>
+          <div class="main-title" *ngIf="feedbackIntent">{{componentTitle | translate}} - {{feedbackIntent}} <img [src]="assetUrlProc('icons/dashboard/training-overview.svg')"></div>
 
           <div class="tag-title">{{componentSubTitle | translate}}</div>
         </div>
         <div class="close-link col-1 p-0">
-          <img [src]="assetUrlProc('assets/images/close.svg')" (click)="close()" />
+          <img [src]="assetUrlProc('images/close.svg')" (click)="close()" />
         </div>
     </div>
     
