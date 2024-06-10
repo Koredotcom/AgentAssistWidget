@@ -90,7 +90,7 @@ export class DynamicChecklistComponent implements OnInit, OnChanges {
       botId,
       searchText: '',
       sortBy: "asc",
-      type: 'dynamic',
+      type: '',
       limit: this.limit,
       page: this.page,
     };
