@@ -118,6 +118,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
   ivrData;
 
   voiceListSub: Subscription;
+  seedDataObj: any;
 
   @ViewChild('searchEle') searchEle: ElementRef;
   constructor(private service: ServiceInvokerService,
@@ -136,6 +137,9 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngOnInit(): void {
+    this.workflowService.seedData$.subscribe(res => {
+      this.seedDataObj = res;
+    });
     this.updatePhNumberSlider = false;
     this.updateIVRSlider = false;
     this.updateCallFlowList = false;
@@ -207,13 +211,11 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
     this.voiceListSub = this.service.invoke('get.voiceList', params, qparams).subscribe(voiceList => {
       this.phoneNumandSipDetailsList = voiceList;
       if(voiceList?.sipTransfers?.length > 0){
-        this.workflowService.seedData$.subscribe(res => {
-          let sipURI = res.agentAssistSeedData.agentAssistSipURI.split(/[:]/);
-          let didNumber = this.phoneNumandSipDetailsList.sipTransfers[0].didNumbers[0].number +'@'+ sipURI[1];
-          sipURI.splice(1,1);
-          sipURI.splice(1,0,didNumber);
-          this.phoneNumandSipDetailsList.sipTransfers[0].sipURI = sipURI.join(':')
-        });
+        let sipURI = this.seedDataObj.agentAssistSeedData.agentAssistSipURI.split(/[:]/);
+        let didNumber = this.phoneNumandSipDetailsList.sipTransfers[0].didNumbers[0].number +'@'+ sipURI[1];
+        sipURI.splice(1,1);
+        sipURI.splice(1,0,didNumber);
+        this.phoneNumandSipDetailsList.sipTransfers[0].sipURI = sipURI.join(':')
         // const sipURI = this.phoneNumandSipDetailsList.sipTransfers[0].sipURI;
         // const didNumber = this.phoneNumandSipDetailsList.sipTransfers[0].didNumbers[0].number;
         // const sipIP = sipURI.split('@')[1].split(':')[0];
