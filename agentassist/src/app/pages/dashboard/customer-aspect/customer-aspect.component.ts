@@ -23,9 +23,11 @@ export class CustomerAspectComponent implements OnInit {
   @Output() openSliderChild = new EventEmitter();
 
   public customerAspectTabvsImage  = actualvsDisplayTitle.CUSTOMER_ASPECT_TYPE_VS_IMAGE;
-  customerAspectTabsList : any = actualvsDisplayTitle.CUSTOMER_ASPECT_TABS_LIST;
   public DASHBORADCOMPONENTTYPELIST = DASHBORADCOMPONENTTYPE;
   public VIEWTYPELIST = VIEWTYPE;
+
+  customerAspectTabsList : any = actualvsDisplayTitle.CUSTOMER_ASPECT_TABS_LIST;
+  customerAspectOtherNames = actualvsDisplayTitle.CUSTOMER_ASPECT_OTHERS_NAMES;
 
   customerTabSelection : string = "all";
   customerAspectData : any = [];
@@ -58,6 +60,7 @@ export class CustomerAspectComponent implements OnInit {
   unifiedPath = '';
 
   subs = new SubSink();
+  typeList : any = ['dialog', 'faq', 'answer'];
 
   constructor(private dashboardService : DashboardService, 
     private service : ServiceInvokerService, 
@@ -80,6 +83,10 @@ export class CustomerAspectComponent implements OnInit {
   }
 
   ngOnChanges(changes : any){
+    if(changes.viewType && changes.viewType.currentValue == this.VIEWTYPELIST.EXHAUSTIVE_VIEW){
+      this.customerTabSelection = this.dashboardService.customerAspectTab;
+      this.previousTab = this.dashboardService.customerAspectTab;
+    }
     if(changes.viewType || changes.filters || changes.customerDropdownSelection || changes.customerTabSelection || !this.onChangeCall) {
       this.payload = { ... this.filters}
       this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
@@ -136,9 +143,20 @@ export class CustomerAspectComponent implements OnInit {
         }
     });
     } else {
+        if(this.previousTab !== this.customerTabSelection) {
+          this.customerAspectData = [];
+          this.previousTab = this.customerTabSelection;
+        }
         this.payload.dataType = this.customerTabSelection;
+        this.dashboardService.customerAspectTab = this.customerTabSelection;
         this.payload.sessionType = this.customerDropdownSelection;
-        this.service.invoke('customersLookingfor', params, this.payload).subscribe((data : any) => {
+        let body = {
+          skip : 0,
+          fetched : 0,
+          limit : 5,
+        }
+        body = {...this.payload, ...body};
+        this.service.invoke('customersLookingfor', params, body).subscribe((data : any) => {
           this.updateViewData(data);
         });
 
@@ -149,8 +167,14 @@ export class CustomerAspectComponent implements OnInit {
     this.customerAspectAcutalData = Object.assign({}, resp);
     if(resp && Object.keys(resp).length > 0 && resp[this.customerDropdownSelection]){
       let data = resp[this.customerDropdownSelection];
+      if(data && data?.length > 0){
+        data.forEach(element => {
+          element.title = element.name ? element.name : (element.message ? element.message : '')
+        });
+      }
       if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
-        this.customerAspectData = data.length <=4 ? data : data.slice(0,4);
+        // this.customerAspectData = data.length <=4 ? data : data.slice(0,4);
+        this.customerAspectData = data;
       }else {
         this.exhaustiveAspectData.push(...data);
       }
