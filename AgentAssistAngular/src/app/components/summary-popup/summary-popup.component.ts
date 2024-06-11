@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ProjConstants, supportLanguage } from 'src/app/proj.const';
+import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
 
 @Component({
@@ -12,6 +13,7 @@ import { RootService } from 'src/app/services/root.service';
 export class SummaryPopupComponent {
 
   @Input() summaryText: any;
+  @Input() initPopup : any;
   @Output() handlePopupEvent = new EventEmitter();
 
   editedSummaryText : any;
@@ -19,16 +21,25 @@ export class SummaryPopupComponent {
   tooltipText : string = supportLanguage.COPY;
   submitEnabled:boolean = false
 
-  constructor(public modal : NgbActiveModal, private translate : TranslateService, private rootService: RootService) { }
+  constructor(public modal : NgbActiveModal, private translate : TranslateService, private rootService: RootService,
+    private handleSubjectService : HandleSubjectService) { }
 
   ngOnInit(): void {
     this.submitEnabled = this.rootService?.settingsData?.summarization?.canSubmit;
-    this.editedSummaryText = this.summaryText?.summary ? this.summaryText?.summary[0]: '';
+    this.checkSummaryText(this.summaryText);
   }
 
   ngOnChanges(changes){
     if(changes?.summaryText?.currentValue?.summary?.length > 0){
-        this.editedSummaryText = changes.summaryText.currentValue.summary[0]
+        this.checkSummaryText(changes?.summaryText?.currentValue);
+    }
+  }
+
+  checkSummaryText(summaryText){
+    if(summaryText?.isError){
+      this.editedSummaryText = this.translate.instant("SUMMARY_ERROR_TEXT");
+    }else if(summaryText?.summary && summaryText?.summary[0]){
+      this.editedSummaryText = summaryText.summary[0]
     }
   }
 
@@ -51,6 +62,10 @@ export class SummaryPopupComponent {
 
   closeSummary(){
     this.handlePopupEvent.emit({status : false, summary : false, type : ProjConstants.SUMMARY})
+  }
+
+  clearSummary(){
+   this.editedSummaryText = ''; 
   }
 
   

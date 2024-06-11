@@ -70,6 +70,7 @@ export class AssistComponent implements OnInit, OnDestroy {
   summaryPopupModal : any;
   showSpinner : boolean = true;
   showSentiment : boolean = true;
+  initPopup : boolean = true;
 
   listViewEntityList : any = [];
   feedBackForWn:any = [];
@@ -187,6 +188,7 @@ export class AssistComponent implements OnInit, OnDestroy {
 
     this.websocketService.responseResolutionCommentsResponse$.subscribe((data: any) => {
       if (data) {
+        this.websocketService.handleRespResoltionAck(data);
         this.handleSubjectService.setSummaryPopup(data);
       }
     });
@@ -496,9 +498,11 @@ export class AssistComponent implements OnInit, OnDestroy {
   }
 
   summeryModalpopup(data){
-    this.summaryText = data;
-    this.summaryPopupModal = this.modalService.open(this.summaryPopupContent ,{windowClass: 'modal-full-window-popup', centered: true, backdrop:'static', keyboard:false});
-    this.websocketService.handleRespResoltionAck(data);
+    this.summaryText = data.initPopup ? {} : data;
+    this.initPopup = data.initPopup ? true : false;
+    if(data.initPopup){
+      this.summaryPopupModal = this.modalService.open(this.summaryPopupContent ,{windowClass: 'modal-full-window-popup', centered: true, backdrop:'static', keyboard:false}); 
+    }
   }
 
   closeSummaryPopup(){
