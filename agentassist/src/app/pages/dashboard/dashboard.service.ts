@@ -7,6 +7,8 @@ import { VIEWTYPE } from './dashboard.cnst';
 })
 export class DashboardService {
 
+  customerAspectTab : string = 'all';
+
   private exhaustiveRepresentation: BehaviorSubject<{}> = new BehaviorSubject(null);
   public agentAspectView: string = VIEWTYPE.WORDCLOUD;
   public dashboardfilterUpdated$ = new Subject();

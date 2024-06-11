@@ -25,11 +25,11 @@ export class DashboardFiltersComponent implements OnInit {
   //Calender
   selected: { startDate: Moment, endDate: Moment };
   ranges: any = {
-    [this.translate.instant('CALENDAR.TODAY')]: [moment().startOf('day'), moment()],
+    [this.translate.instant('CALENDAR.TODAY')]: [moment().startOf('day'), moment().endOf('day')],
     [this.translate.instant('CALENDAR.YESTERDAY')]: [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
-    [this.translate.instant('CALENDAR.LAST_X_DAYS', { x: 7 })]: [moment().subtract(6, 'days').startOf('day'), moment()],
-    [this.translate.instant('CALENDAR.LAST_X_DAYS', { x: 15 })]: [moment().subtract(16, 'days').startOf('day'), moment()],
-    [this.translate.instant('CALENDAR.LAST_X_DAYS', { x: 30 })]: [moment().subtract(29, 'days').startOf('day'), moment()]
+    [this.translate.instant('CALENDAR.LAST_X_DAYS', { x: 7 })]: [moment().subtract(6, 'days').startOf('day'), moment().endOf('day')],
+    [this.translate.instant('CALENDAR.LAST_X_DAYS', { x: 15 })]: [moment().subtract(16, 'days').startOf('day'), moment().endOf('day')],
+    [this.translate.instant('CALENDAR.LAST_X_DAYS', { x: 30 })]: [moment().subtract(29, 'days').startOf('day'), moment().endOf('day')]
   }
     ;
   calendarLocale: any;
@@ -70,7 +70,7 @@ export class DashboardFiltersComponent implements OnInit {
     //   cancelLabel: ('Cancel'),
     //   customRangeLabel: ('Custom Range')
     // }
-    this.selected = { startDate:moment().startOf('day'), endDate:moment() }
+    this.selected = { startDate:moment().startOf('day'), endDate:moment().endOf('day') }
     this.filters = { startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString(), experience : this.selectedChannel }
     this.updateFilters(this.filters);
   }
