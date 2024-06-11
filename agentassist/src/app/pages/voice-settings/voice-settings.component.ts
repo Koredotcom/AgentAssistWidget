@@ -211,11 +211,14 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
     this.voiceListSub = this.service.invoke('get.voiceList', params, qparams).subscribe(voiceList => {
       this.phoneNumandSipDetailsList = voiceList;
       if(voiceList?.sipTransfers?.length > 0){
-        let sipURI = this.seedDataObj.agentAssistSeedData.agentAssistSipURI.split(/[:]/);
-        let didNumber = this.phoneNumandSipDetailsList.sipTransfers[0].didNumbers[0].number +'@'+ sipURI[1];
-        sipURI.splice(1,1);
-        sipURI.splice(1,0,didNumber);
-        this.phoneNumandSipDetailsList.sipTransfers[0].sipURI = sipURI.join(':')
+        let sipURI = this.seedDataObj?.agentAssistSeedData?.agentAssistSipURI.split(/[:]/);
+        let didNumber = this.phoneNumandSipDetailsList?.sipTransfers[0]?.didNumbers[0]?.number +'@'+ sipURI[1];
+        if(sipURI) {
+          sipURI.splice(1,1);
+          sipURI.splice(1,0,didNumber);
+          this.phoneNumandSipDetailsList.sipTransfers[0].sipURI = sipURI.join(':')
+        }
+        
         // const sipURI = this.phoneNumandSipDetailsList.sipTransfers[0].sipURI;
         // const didNumber = this.phoneNumandSipDetailsList.sipTransfers[0].didNumbers[0].number;
         // const sipIP = sipURI.split('@')[1].split(':')[0];
