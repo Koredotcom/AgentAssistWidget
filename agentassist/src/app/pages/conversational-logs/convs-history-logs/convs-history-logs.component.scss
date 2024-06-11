@@ -892,6 +892,11 @@
         &.warning-banner{
             border: 1px solid var(--Component-colors-Utility-Warning-utility-warning-200, #FEDF89);
             background: var(--Component-colors-Utility-Warning-utility-warning-50, #FFFAEB);
+            display: table;
+            margin: 10px auto;
+            .heading-section{
+                margin:0px 0px 8px 0px;
+            }
         }
         .heading-section{
             display: flex;
@@ -963,7 +968,36 @@
                 font-style: italic;
                 font-weight: 400;
                 line-height: 20px;
+                border-radius: 8px;
+                background: var(--Colors-Background-bg-brand-primary_alt, #EFF4FF);
+
             }
+        }
+    }
+    .error-banner-summary{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin: 10px 0;
+        .line-border{
+            width: 100%;
+            background: var(--Gray-200, #EAECF0);
+            height: 1px;
+        }
+        h1{
+            color: #B54708;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 18px;
+            display: flex;
+            padding: 2px 8px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 16px;
+            background: #FFFAEB;
+            margin: 0;
+            flex-shrink: 0;
         }
     }
 }
