@@ -77,7 +77,8 @@ export class FeedbackComponent implements AfterViewInit, AfterViewChecked{
           "comment" : new FormControl(this.feedbackData.comment),
           "feedback" : new FormControl(this.feedbackData.feedback,[Validators.required]),
           "feedbackDetails" : new FormControl(this.feedbackData.feedbackDetails),
-          "query" : new FormControl(this.feedbackData.query)
+          "query" : new FormControl(this.feedbackData.query),
+          "subType" : new FormControl(this.feedbackData.subType)
         }
       );
 
