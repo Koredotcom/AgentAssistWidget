@@ -30,7 +30,7 @@ export class SummaryPopupComponent {
   }
 
   ngOnChanges(changes){
-    if(changes?.summaryText?.currentValue?.summary?.length > 0){
+    if(changes?.summaryText?.currentValue){
         this.checkSummaryText(changes?.summaryText?.currentValue);
     }
   }
