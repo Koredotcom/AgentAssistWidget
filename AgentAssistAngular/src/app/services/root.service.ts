@@ -630,7 +630,8 @@ export class RootService {
       sourceMsgId : suggestion.sourceMsgId || '',
       query : suggestion.userInput,
       suggestionType : suggestionType,
-      dialogPositionId : suggestion.positionId
+      dialogPositionId : suggestion.positionId,
+      subType : suggestion.subType || ''
     }
 
     if(suggestionType == 'answer'){
