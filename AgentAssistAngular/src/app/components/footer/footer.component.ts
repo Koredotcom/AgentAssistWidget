@@ -58,10 +58,10 @@ export class FooterComponent implements OnInit, OnDestroy{
     this.subs.sink = this.rootService.socketConnection$.subscribe(res => {
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();        
-        this.updateActiveTab();
         if(this.connectionDetails?.isCallConversation){
           this.showTranscript = (this.rootService?.settingsData?.transcripts?.isEnabled === false) ? false : true;
         }
+        this.updateActiveTab();
       }
     });
 
