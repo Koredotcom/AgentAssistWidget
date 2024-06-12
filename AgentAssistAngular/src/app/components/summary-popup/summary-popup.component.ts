@@ -30,10 +30,8 @@ export class SummaryPopupComponent {
   }
 
   ngOnChanges(changes){
-    if(changes?.summaryText?.currentValue?.summary?.length > 0){
+    if(changes?.summaryText?.currentValue){
         this.checkSummaryText(changes?.summaryText?.currentValue);
-    }else if(changes?.summaryText?.currentValue?.isError){
-      this.editedSummaryText = this.translate.instant("SUMMARY_ERROR_TEXT");
     }
   }
 
