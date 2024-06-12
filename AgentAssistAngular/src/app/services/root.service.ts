@@ -733,6 +733,7 @@ export class RootService {
     result.intentName = res.tN;
     result._id = res._id;
     result.entityDisplayName = result.newEntityDisplayName ? result.newEntityDisplayName : result.newEntityName;
+    result.entityType = result?.newEntityType ? result?.newEntityType : '';
     if ((result.suggestions || result.ambiguityList)) {
       result.suggestions = (result.suggestions) ? (result.suggestions) : (result.ambiguityList);
       result.faqResponse = res.agentAssistDetails.faqResponse;
