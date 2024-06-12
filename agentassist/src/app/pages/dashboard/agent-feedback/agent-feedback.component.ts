@@ -88,14 +88,14 @@ export class AgentFeedbackComponent implements OnInit {
 
   ngOnChanges(changes : any) {
     if(changes.viewType || changes.filters || !this.onChangeCall) {
-      this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
-      this.payload = {... this.filters}
-      this.handleOnChangeCall();
-      this.feedbackTabSelection = this.widgetData?.tabSelection ? this.widgetData.tabSelection : 'usecases';
-      this.updateAgentFeedbackData(this.feedbackTabSelection);
+      if(this.filters && Object.keys(this.filters).length > 0){
+        this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
+        this.payload = {... this.filters}
+        this.handleOnChangeCall();
+        this.feedbackTabSelection = this.widgetData?.tabSelection ? this.widgetData.tabSelection : 'usecases';
+        this.updateAgentFeedbackData(this.feedbackTabSelection);
+      }
     }
-    // if (this.viewType && this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall) {
-    // }
   }
 
   subscribeEvents(){

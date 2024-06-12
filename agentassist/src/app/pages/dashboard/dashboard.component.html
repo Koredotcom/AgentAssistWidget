@@ -126,7 +126,7 @@
                             <div class="tag-title">{{"DASHBOARD.AUTOMATION_PERFORMANCE_SUBTITLE" | translate}}</div>
                         </div>
                         <div class="main-heading-title">{{"DASHBOARD.AUTOMATION_PERFORMANCE_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AUTOMATION_PERFORMANCE_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
-                        <app-automation-performance></app-automation-performance>
+                        <app-automation-performance [filters]="filterData"></app-automation-performance>
                     </div>
                 </div>
                 <div class="chart-box-info col-6">
