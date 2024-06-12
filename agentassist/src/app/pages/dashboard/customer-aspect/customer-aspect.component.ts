@@ -81,18 +81,13 @@ export class CustomerAspectComponent implements OnInit {
 
   ngOnChanges(changes : any){
     if(changes.viewType || changes.filters || changes.customerDropdownSelection || changes.customerTabSelection || !this.onChangeCall) {
-      this.payload = { ... this.filters}
-      this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
-      this.handleOnChangeCall();
-      this.updateCustomerAspectData();
+      if(this.filters && Object.keys(this.filters).length > 0){
+        this.payload = { ... this.filters}
+        this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
+        this.handleOnChangeCall();
+        this.updateCustomerAspectData();
+      }
     }
-    // if(this.viewType && this.filters && Object.keys(this.filters).length > 0 && this.customerDropdownSelection && !this.onChangeCall){
-    // }
-    // if(changes.customerDropdownSelection) {
-    //   this.handleOnChangeCall();
-    //   this.updateCustomerAspectData();
-    // }
-
   }
 
   handleOnChangeCall(){
