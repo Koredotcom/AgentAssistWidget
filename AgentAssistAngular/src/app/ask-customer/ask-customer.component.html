@@ -33,28 +33,39 @@
     
     <div class="entity-mesage-data" [ngClass]="{'error-no-reponse' : automation.errorCount, 'grayout-msgs-node' : automation.grayOut}">
         <div class="input-block-entity">
-            <ng-container *ngIf="false">
-                <p container="body" ngbTooltip="{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}">{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}</p>
-                <p>:</p>
+            <ng-container *ngIf="!this.automation.toggleOverride">
+                <p container="body" ngbTooltip="{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}">{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}} : {{fileObj?.fileName !== '' ?  fileObj?.fileName : ''}}</p>
+                <!-- <p></p> -->
             </ng-container>
-            <ng-container *ngIf="automation?.data?.entityType === 'attachment'">
+            <ng-container *ngIf="automation?.data?.entityType === 'attachment' && this.automation.toggleOverride">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <path d="M17.6271 9.08296L10.1141 16.596C8.40556 18.3045 5.63546 18.3045 3.92692 16.596C2.21837 14.8874 2.21837 12.1173 3.92692 10.4088L11.4399 2.89578C12.579 1.75675 14.4257 1.75675 15.5647 2.89578C16.7037 4.0348 16.7037 5.88154 15.5647 7.02057L8.34633 14.2389C7.77682 14.8085 6.85345 14.8085 6.28394 14.2389C5.71442 13.6694 5.71442 12.7461 6.28394 12.1766L12.6184 5.84205" stroke="#667085" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span class="attachment-name text-truncate" [class.choose-file]="true" title="">Choose File</span>
+                <!-- <div>{{fileObj?.fileName}} {{ this.automation.toggleOverride}}</div> -->
+                <span class="attachment-name text-truncate" [class.choose-file]="(fileObj?.fileName === '' && this.automation.toggleOverride)" title=""> {{fileObj?.fileName !== '' ?  fileObj?.fileName : 'Choose File'}}</span>
             </ng-container>
-            <input [class.attachment-input]="automation?.data?.entityType === 'attachment'" [type]="automation?.data?.entityType === 'attachment' ? 'file' : 'text'" [ngClass]="{'disable-input' : automation.disableInput || assistAutomationData?.endAutomation}" #entityInput aria-label="Input" [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
-            [(ngModel)]="automation.entityValue" [disabled]="automation.disableInput || assistAutomationData?.endAutomation" (keyup.enter)="handleAgentInput()" (change)="addFiles($event,entityInput.files)" [placeholder]="automation?.tab === projConstants.ASSIST ? automation.placeholderText : ''">
+            <input [class.attachment-input]="automation?.data?.entityType === 'attachment'" [type]="automation?.data?.entityType === 'attachment' ? 'file' : 'text'" 
+            [class.hide-attachment]="(automation?.data?.entityType === 'attachment')" 
+            [class.attachment-input]="(this.automation.toggleOverride && automation?.data?.entityType === 'attachment')" 
+            [class.uploaded-img-attach]="fileObj?.fileName !== ''"
+            [ngClass]="{'disable-input' : (automation.disableInput || assistAutomationData?.endAutomation)}" 
+            #entityInput aria-label="Input" 
+            [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
+            [(ngModel)]="automation.entityValue" 
+            [disabled]="automation.disableInput || assistAutomationData?.endAutomation" 
+            (keyup.enter)="handleAgentInput()" 
+            (change)="addFiles($event,entityInput.files)" 
+            [placeholder]="automation?.tab === projConstants.ASSIST ? automation.placeholderText : ''">
             <div class="border-outline"></div>
             <div class="actions-inputs">
-                <button class="remove-input" aria-label="Button" ngbTooltip="Agent’s Input" container="body" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount && automation?.data?.entityType !== 'attachment')">
-                    <i class="krIocnsFont-agent"></i>
+                <!-- <button class="remove-input" aria-label="Button" ngbTooltip="Agent’s Input" container="body" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount && automation?.data?.entityType !== 'attachment')">
+                    <i class="krIocnsFont-agent"></i> -->
                     <!-- <i class="krIocnsFont-keyboard"></i> -->
-                </button>
+                <!-- </button> -->
                 <!-- *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount && automation?.data?.entityType === 'attachment')" -->
-                <button class="remove-input" aria-label="Button" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount && automation?.data?.entityType === 'attachment')" (click)="previewFile(fileObj)">
+                <!-- <button class="remove-input" aria-label="Button" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount && automation?.data?.entityType === 'attachment')" (click)="previewFile(fileObj)">
                     <span>view</span>
-                </button>
+                </button> -->
                 <!-- <button class="remove-input" aria-label="Button" *ngIf="fileObj.fileURL !== ''" (click)="downloadFile(fileObj)">Download File</button> -->
                 <!-- <button class="success-check-input" aria-label="button" *ngIf="automation.userInput == projConstants.YES && !automation.errorCount && rootService.activeTab != projConstants.MYBOT">
                     <i class="krIocnsFont-check-circle"></i>
@@ -70,7 +81,7 @@
                     <i class="krIocnsFont-check"></i>
                 </button>
                 <button class="override-btn" (click)="confirmOverride();entityInput.focus()" *ngIf="!automation.toggleOverride && !automation.hideOverrideDiv">Override</button>
-                <ng-container *ngIf="false">
+                <ng-container *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount && automation?.data?.entityType === 'attachment')">
                     <button class="override-btn" (click)="openAttachmentView(ImageViewAttachments)">View</button>
                     <i class="krIocnsFont-agent"></i>
                 </ng-container>
@@ -87,7 +98,6 @@
             </ng-container>
         </ng-template>
         <ng-template #errCount>
-            <div>{{!automation.errorCount}}</div>
             <ng-container *ngIf="largeFileFlag; else errorMsg">
                 <p class="info-entity-text">File size must be within 25MB. Please retry.
                     <span *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">|  {{'OVERRIDE' | translate}}
@@ -171,11 +181,11 @@
                     <path d="M11.4214 4.75584C11.7469 4.4304 11.7469 3.90277 11.4214 3.57733C11.096 3.25189 10.5684 3.25189 10.2429 3.57733L4.40961 9.41066C4.08417 9.7361 4.08417 10.2637 4.40961 10.5892L10.2429 16.4225C10.5684 16.7479 11.096 16.7479 11.4214 16.4225C11.7469 16.0971 11.7469 15.5694 11.4214 15.244L7.01071 10.8333L16.6655 10.8333C17.1258 10.8333 17.4989 10.4602 17.4989 9.99992C17.4989 9.53968 17.1258 9.16659 16.6655 9.16659L7.0107 9.16658L11.4214 4.75584Z" fill="#F2F4F7"/>
                 </svg>
             </button>
-            <img src="assets/images/img-attachment.svg">
-            <div class="img-name text-truncate">Acc...2024-04-08 at 7.12.45 PM.jpg</div>
+            <img [src]="filePreview">
+            <div class="img-name text-truncate">{{fileObj?.fileName}}</div>
             <button class="back-btn">
                 <svg width="21" height="20" viewBox="0 0 21 20" fill="none">
-                    <path d="M3.82812 13.5L3.82812 14.375C3.82812 15.8247 5.00338 17 6.45312 17L15.2031 17C16.6529 17 17.8281 15.8247 17.8281 14.375L17.8281 13.5M14.3281 10L10.8281 13.5M10.8281 13.5L7.32812 10M10.8281 13.5L10.8281 3" stroke="#F5F5F5" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- <path d="M3.82812 13.5L3.82812 14.375C3.82812 15.8247 5.00338 17 6.45312 17L15.2031 17C16.6529 17 17.8281 15.8247 17.8281 14.375L17.8281 13.5M14.3281 10L10.8281 13.5M10.8281 13.5L7.32812 10M10.8281 13.5L10.8281 3" stroke="#F5F5F5" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/> -->
                 </svg>
             </button>
             <button class="back-btn" (click)="closeAttachmentView()">
@@ -185,7 +195,7 @@
             </button>
         </div>
         <div class="attachment-body-img">
-            <img src="assets/images/imgeattch.jpg">
+            <img [src]="filePreview">
         </div>
     </div>
 </ng-template>

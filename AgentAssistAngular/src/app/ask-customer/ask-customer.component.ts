@@ -276,6 +276,7 @@ export class AskCustomerComponent {
     }
     this.uploadedFileData = inputFile;
     // this.fileUploadCall(files[0]);
+    this.fileObj.fileName = files[0].name;
   }
 
   removeFile() {
