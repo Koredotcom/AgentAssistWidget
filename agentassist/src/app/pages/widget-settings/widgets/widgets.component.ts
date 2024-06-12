@@ -135,6 +135,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     search : false,
     general : false
   }
+  defaultDocLink : string = "https://docs.kore.ai/agentassist/";
+  defaultFAQLink : string = "https://docs.kore.ai/agentassist/frequently-asked-questions/faq/";
   constructor(
     public workflowService: workflowService,
     private service: ServiceInvokerService,
@@ -212,11 +214,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           isEnabled : [isUpdate ? (obj.showHelp?.isEnabled ?? true) : true],
           documentation : this.fb.group({
             isEnabled : [isUpdate ? (obj.showHelp?.documentation?.isEnabled ?? true) : true],
-            resource : [isUpdate ? (obj.showHelp?.documentation?.resource ?? this.agentAssistSeedData?.defaultDocLink) : this.agentAssistSeedData?.defaultDocLink],
+            resource : [isUpdate ? (obj.showHelp?.documentation?.resource ?? this.defaultDocLink) : this.defaultDocLink],
           }),
           faq : this.fb.group({
             isEnabled : [isUpdate ? (obj.showHelp?.faq?.isEnabled ?? true) : true],
-            resource : [isUpdate ? (obj.showHelp?.faq?.resource ?? this.agentAssistSeedData?.defaultFAQLink) : this.agentAssistSeedData?.defaultFAQLink],
+            resource : [isUpdate ? (obj.showHelp?.faq?.resource ?? this.defaultFAQLink) : this.defaultFAQLink],
           }),
           koreAcademy : this.fb.group({
             isEnabled : [isUpdate ? (obj.showHelp?.koreAcademy?.isEnabled ?? true) : true]
@@ -837,7 +839,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   resetClick(key){
-    let defaultUrl = (key === 'documentation') ? this.agentAssistSeedData?.defaultDocLink : this.agentAssistSeedData?.defaultFAQLink;
+    let defaultUrl = (key === 'documentation') ? this.defaultDocLink : this.defaultFAQLink;
     ((((((this.agentAssistFormGroup as FormGroup)
     .get('agentAssistSettings') as FormGroup))
     .get('showHelp') as FormGroup)
