@@ -117,6 +117,11 @@ export class AskCustomerComponent {
       this.handleOverrideFlag(false, true);
       this.handlePlaceHolderText(false);
     }
+    if(changes?.automation?.currentValue?.attachments) {
+      this.fileObj.fileURL = this.automation?.attachments[0]?.url?.fileUrl;
+      this.fileObj.fileName = this.automation?.attachments[0].fileName;
+      this.filePreview = this.automation?.attachments[0]?.url?.fileUrl;
+    }
   }
 
   hideSendAndCopy(){
@@ -140,7 +145,12 @@ export class AskCustomerComponent {
 
   confirmOverride() {
     if (!this.automation.toggleOverride && this.rootService.activeTab != this.projConstants.MYBOT) {
-      this.inputName = supportLanguage.OVERRIDE;
+      if(this.automation?.data?.entityType === 'attachment') {
+        this.inputName = supportLanguage.OVERRIDE_FILE;
+      } else {
+        this.inputName = supportLanguage.OVERRIDE;
+      }
+      
       this.automation.toggleOverride = true;
       if (!this.rootService.OverRideMode) {
         this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);

@@ -33,6 +33,7 @@
     "SENT" : "Sent",
     "AWAITING" : "Awaiting Response  |  Type to continue",
     "OVERRIDE" : "Type to continue",
+    "OVERRIDE_FILE" : "Attach File to continue",
     "ACCEPT_RESPONSE" : "Response Accepted",
     "AGENT_ENTERED" : "Agent Entered",
     "EXPECTED_FORMAT" : "Expected Format", 

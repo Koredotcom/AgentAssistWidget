@@ -34,7 +34,7 @@
     <div class="entity-mesage-data" [ngClass]="{'error-no-reponse' : automation.errorCount, 'grayout-msgs-node' : automation.grayOut}">
         <div class="input-block-entity">
             <ng-container *ngIf="!this.automation.toggleOverride">
-                <p container="body" ngbTooltip="{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}">{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}} : {{fileObj?.fileName !== '' ?  fileObj?.fileName : ''}}</p>
+                <p container="body" ngbTooltip="{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}">{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}} : {{fileObj?.fileName !== '' ?  automation?.data?.entityValue : ''}}</p>
                 <!-- <p></p> -->
             </ng-container>
             <ng-container *ngIf="automation?.data?.entityType === 'attachment' && this.automation.toggleOverride">
@@ -44,8 +44,7 @@
                 <!-- <div>{{fileObj?.fileName}} {{ this.automation.toggleOverride}}</div> -->
                 <span class="attachment-name text-truncate" [class.choose-file]="(fileObj?.fileName === '' && this.automation.toggleOverride)" title=""> {{fileObj?.fileName !== '' ?  fileObj?.fileName : 'Choose File'}}</span>
             </ng-container>
-            <input [class.attachment-input]="automation?.data?.entityType === 'attachment'" [type]="automation?.data?.entityType === 'attachment' ? 'file' : 'text'" 
-            [class.hide-attachment]="(automation?.data?.entityType === 'attachment')" 
+            <input [class.attachment-input]="automation?.data?.entityType === 'attachment'" [type]="automation?.data?.entityType === 'attachment' && this.automation.toggleOverride ? 'file' : 'text'" 
             [class.attachment-input]="(this.automation.toggleOverride && automation?.data?.entityType === 'attachment')" 
             [class.uploaded-img-attach]="fileObj?.fileName !== ''"
             [ngClass]="{'disable-input' : (automation.disableInput || assistAutomationData?.endAutomation)}" 
@@ -81,8 +80,8 @@
                     <i class="krIocnsFont-check"></i>
                 </button>
                 <button class="override-btn" (click)="confirmOverride();entityInput.focus()" *ngIf="!automation.toggleOverride && !automation.hideOverrideDiv">Override</button>
-                <ng-container *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount && automation?.data?.entityType === 'attachment')">
-                    <button class="override-btn" (click)="openAttachmentView(ImageViewAttachments)">View</button>
+                <ng-container *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount) || automation?.attachments && automation?.attachments?.length > 0">
+                    <button class="override-btn" *ngIf="automation?.attachments && automation?.attachments?.length > 0" (click)="openAttachmentView(ImageViewAttachments)">View</button>
                     <i class="krIocnsFont-agent"></i>
                 </ng-container>
             </div>

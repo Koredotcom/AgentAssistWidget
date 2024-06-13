@@ -738,6 +738,9 @@ export class RootService {
       result.suggestions = (result.suggestions) ? (result.suggestions) : (result.ambiguityList);
       result.faqResponse = res.agentAssistDetails.faqResponse;
     }
+    if(result.entities && result?.entities?.File && result?.entities?.File?.length > 0){
+      result.attachments = result.entities.File;
+    }
     //format buttons
     result.buttons.forEach((element, index) => {
       element.value = res.components[index]?.data?.text
