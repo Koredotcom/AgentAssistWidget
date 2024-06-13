@@ -118,6 +118,7 @@ export class AskCustomerComponent {
       this.handlePlaceHolderText(false);
     }
     if(changes?.automation?.currentValue?.attachments) {
+      this.automation.entityValue = this.automation?.attachments[0].fileName;
       this.fileObj.fileURL = this.automation?.attachments[0]?.url?.fileUrl;
       this.fileObj.fileName = this.automation?.attachments[0].fileName;
       this.filePreview = this.automation?.attachments[0]?.url?.fileUrl;
