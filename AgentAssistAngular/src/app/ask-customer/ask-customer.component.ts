@@ -281,11 +281,13 @@ export class AskCustomerComponent {
   // adding the files by selection
   addFiles(event: Event, files) {
     const inputFile = event.target as HTMLInputElement;
+    if (this.automation.toggleOverride && this.rootService.activeTab === this.projConstants.MYBOT) {
+      this.fileUploadCall(files[0]);
+    }
     if(this.automation?.data?.entityType === 'attachment') {
       this.removeFile();
     }
     this.uploadedFileData = inputFile;
-    // this.fileUploadCall(files[0]);
     this.fileObj.fileName = files[0].name;
   }
 
@@ -366,14 +368,15 @@ export class AskCustomerComponent {
   // get uploaded file preview method
   getuploadedFileURL(fileId){
     this.serviceInvoker.invoke('get.uploadedfile', {'fileId': fileId}, {}, {}, this.rootService?.connectionDetails?.agentassisturl).subscribe((res) => {
+      console.log(res);
       if(res) {
         this.largeFileFlag = false;
         this.fileObj.fileURL = res?.fileUrl;
         this.filePreview = res?.fileUrl;
         this.automation.userInput = this.projConstants.NO;
-        if (this.rootService.activeTab == this.projConstants.ASSIST) {
+        if (this.rootService.activeTab === this.projConstants.ASSIST) {
           this.assistInputValue(this.automation.entityValue);
-        } else if (this.rootService.activeTab == this.projConstants.MYBOT) {
+        } else if (this.rootService.activeTab === this.projConstants.MYBOT) {
           this.mybotInputValue(this.automation.entityValue)
         }
       }
