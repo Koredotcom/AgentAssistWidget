@@ -296,8 +296,8 @@ export class RootService {
     }
 
     if(data?.attachments) {
-      agent_assist_agent_request_params['query'] = data?.attachments.url;
-      agent_assist_agent_request_params['attachments'] = data.attachments;
+      agent_assist_agent_request_params['query'] = data?.attachments[0]?.url?.fileUrl || '';
+      agent_assist_agent_request_params['attachments'] = data?.attachments;
     }
 
     agent_assist_agent_request_params = this.addSourceMsgIdToRequestParams(data,agent_assist_agent_request_params)
