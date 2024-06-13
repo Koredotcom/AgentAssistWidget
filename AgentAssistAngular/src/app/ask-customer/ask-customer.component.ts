@@ -201,11 +201,11 @@ export class AskCustomerComponent {
     connectionDetails.childBotId = this.automation.data.childBotId;
     connectionDetails.childBotName = this.automation.data.childBotName;
     connectionDetails.sourceMsgId = this.automation.sourceMsgId || '';
-    if(this.automation?.data?.entityType === 'attachment') {
+    if(this.automation?.data?.entityType === 'attachment' && this.rootService.activeTab !== this.projConstants.MYBOT) {
       connectionDetails.attachments = [
         {
             "fileName": this.fileObj?.fileName || '',
-            "fileType": this.fileObj?.fileType || '',
+            "fileType": this.fileObj?.fileType,
             "fileId": this.fileObj.fileId || '',
             "url": {
                 "fileUrl": this.fileObj.fileURL || ''
@@ -281,11 +281,11 @@ export class AskCustomerComponent {
   // adding the files by selection
   addFiles(event: Event, files) {
     const inputFile = event.target as HTMLInputElement;
-    if (this.automation.toggleOverride && this.rootService.activeTab === this.projConstants.MYBOT) {
-      this.fileUploadCall(files[0]);
-    }
     if(this.automation?.data?.entityType === 'attachment') {
       this.removeFile();
+    }
+    if (this.automation.toggleOverride && this.rootService.activeTab === this.projConstants.MYBOT) {
+      this.fileUploadCall(files[0]);
     }
     this.uploadedFileData = inputFile;
     this.fileObj.fileName = files[0].name;
