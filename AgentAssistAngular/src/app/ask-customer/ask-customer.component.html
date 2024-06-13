@@ -80,15 +80,13 @@
                     <i class="krIocnsFont-check"></i>
                 </button>
                 <button class="override-btn" (click)="confirmOverride();entityInput.focus()" *ngIf="!automation.toggleOverride && !automation.hideOverrideDiv">Override</button>
-                <ng-container *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount) || automation?.attachments && automation?.attachments?.length > 0">
-                    <button class="override-btn" *ngIf="automation?.attachments && automation?.attachments?.length > 0" (click)="openAttachmentView(ImageViewAttachments)">View</button>
+                <ng-container *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">
+                    <button class="override-btn" *ngIf="(automation?.attachments && automation?.attachments?.length > 0) && (fileObj?.fileType === 'image/png' || fileObj?.fileType === 'image')" (click)="openAttachmentView(ImageViewAttachments)">View</button>
                     <i class="krIocnsFont-agent"></i>
                 </ng-container>
             </div>
         </div>
         <ng-container *ngIf="!automation.errorCount && automation?.data?.entityType !== 'attachment'; else attachmentType">
-            <!-- <p class="info-entity-text" *ngIf="automation.userInput == projConstants.NO">{{'AGENT_ENTERED' | translate}}</p>
-            <p class="info-entity-text" *ngIf="automation.userInput == projConstants.YES">{{'ACCEPT_RESPONSE' | translate}}</p> -->
             <p class="info-entity-text" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">{{inputName | translate}}</p>
         </ng-container>
         <ng-template #attachmentType>
