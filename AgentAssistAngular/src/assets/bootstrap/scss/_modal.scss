@@ -56,6 +56,62 @@
       }
     }
   }
+  &.attachment-full-popup{
+    z-index: 999999 !important;
+    overflow: hidden;
+    .modal-dialog{
+      margin: 0;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      .modal-content{
+        height: 100%;
+        .attachment-info-wrapper{
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          padding: 16px 16px 16px 16px;
+          .attachment-header{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            img{
+              flex-shrink: 0;
+            }
+            .back-btn{
+              padding: 0;
+              width: 20px;
+              flex-shrink: 0;
+              background: transparent;
+              border: 0;
+              height: 20px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .img-name{
+              width: 100%;
+              color: var(--whiteTextColor);
+              font-size: 12px;
+              font-weight: 600;
+              line-height: 16px;
+            }
+          }
+          .attachment-body-img{
+            flex: 1 1 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            img{
+              width: 100%;
+              object-fit: none;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 // Shell div to position the modal with bottom padding

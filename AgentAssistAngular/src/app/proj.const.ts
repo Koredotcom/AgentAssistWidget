@@ -89,7 +89,8 @@ export const supportLanguage = {
     AWAITING : "AWAITING",
     OVERRIDE : "OVERRIDE",
     COPY : "COPY",
-    COPIED : "COPIED"
+    COPIED : "COPIED",
+    OVERRIDE_FILE: "OVERRIDE_FILE"
 }
 
 export const storageConst = {

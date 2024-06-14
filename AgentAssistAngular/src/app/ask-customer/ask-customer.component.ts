@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input,TemplateRef, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
 import { EVENTS } from '../helpers/events';
@@ -7,7 +7,15 @@ import { CommonService } from '../services/common.service';
 import { HandleSubjectService } from '../services/handle-subject.service';
 import { RootService } from '../services/root.service';
 import { WebSocketService } from '../services/web-socket.service';
+import { ServiceInvokerService } from '../services/service-invoker.service';
+import { finalize } from 'rxjs/operators';
+import { ChunkFileUploadService } from '../helpers/chunk-file-upload.service';
+import { FileUploadService } from '../helpers/file-chunk-upload.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+const CHUNK_SIZE = 1024 * 1024 * 2;
 @Component({
   selector: 'app-ask-customer',
   templateUrl: './ask-customer.component.html',
@@ -26,13 +34,26 @@ export class AskCustomerComponent {
   @ViewChild('askCustNode',{static: false}) private askCustNode : ElementRef;
 
   subs = new SubSink();
-
+  fileObj = {
+    fileName: '',
+    fileType: '',
+    fileId: '',
+    fileURL: ''
+  };
+  largeFileFlag = false;
+  fileTypeFlag = false;
+  uploadInprogress: boolean = false;
+  uploadedFileData: any;
+  filePreview:SafeResourceUrl;
+  selectedPreview = false;
+  attachmentModalView:any;
   projConstants: any = ProjConstants;
   renderResponseType: any = RenderResponseType;
   inputName: string = supportLanguage.AWAITING;
 
   constructor(public rootService: RootService, private websocketService: WebSocketService, private translateService : TranslateService,
-    private commonService : CommonService, private handleSubjectService : HandleSubjectService) {
+    private commonService : CommonService, private handleSubjectService : HandleSubjectService, private serviceInvoker : ServiceInvokerService,
+   private chunkFileUploadService: ChunkFileUploadService, private fileUploadService: FileUploadService, private domSanitizer : DomSanitizer, public modalService: NgbModal) {
 
   }
 
@@ -96,6 +117,13 @@ export class AskCustomerComponent {
       this.handleOverrideFlag(false, true);
       this.handlePlaceHolderText(false);
     }
+    if(changes?.automation?.currentValue?.attachments) {
+      this.automation.entityValue = this.automation?.attachments[0].fileName;
+      this.filePreview = this.automation?.attachments[0]?.url?.fileUrl;
+      this.fileObj.fileURL = this.automation?.attachments[0]?.url?.fileUrl;
+      this.fileObj.fileName = this.automation?.attachments[0].fileName;
+      this.fileObj.fileType = this.automation?.attachments[0]?.fileType;
+    }
   }
 
   hideSendAndCopy(){
@@ -119,7 +147,12 @@ export class AskCustomerComponent {
 
   confirmOverride() {
     if (!this.automation.toggleOverride && this.rootService.activeTab != this.projConstants.MYBOT) {
-      this.inputName = supportLanguage.OVERRIDE;
+      if(this.automation?.data?.entityType === 'attachment') {
+        this.inputName = supportLanguage.OVERRIDE_FILE;
+      } else {
+        this.inputName = supportLanguage.OVERRIDE;
+      }
+      
       this.automation.toggleOverride = true;
       if (!this.rootService.OverRideMode) {
         this.handleOverridBtnClick(this.automation.connectionDetails, this.automation.dialogId, this.automation.toggleOverride);
@@ -145,7 +178,12 @@ export class AskCustomerComponent {
   }
 
   handleAgentInput() {
-    if(this.automation.entityValue){
+    if(this.automation?.data?.entityType === 'attachment') {
+      if(this.uploadedFileData?.files && this.uploadedFileData?.files?.length > 0) {
+        this.automation.hideOverrideDiv = true;
+        this.fileUploadCall(this.uploadedFileData?.files[0]);
+      }
+    } else if(this.automation.entityValue){
       this.automation.hideOverrideDiv = true;
       this.automation.userInput = this.projConstants.NO;
       if (this.rootService.activeTab == this.projConstants.ASSIST) {
@@ -153,8 +191,8 @@ export class AskCustomerComponent {
       } else if (this.rootService.activeTab == this.projConstants.MYBOT) {
         this.mybotInputValue(this.automation.entityValue)
       }
-      this.grayOutCurrentAutomation();
     }
+    this.grayOutCurrentAutomation();
   }
 
   assistInputValue(inputValue) {
@@ -165,6 +203,18 @@ export class AskCustomerComponent {
     connectionDetails.childBotId = this.automation.data.childBotId;
     connectionDetails.childBotName = this.automation.data.childBotName;
     connectionDetails.sourceMsgId = this.automation.sourceMsgId || '';
+    if(this.automation?.data?.entityType === 'attachment' && this.rootService.activeTab !== this.projConstants.MYBOT) {
+      connectionDetails.attachments = [
+        {
+            "fileName": this.fileObj?.fileName || '',
+            "fileType": this.fileObj?.fileType,
+            "fileId": this.fileObj.fileId || '',
+            "url": {
+                "fileUrl": this.fileObj.fileURL || ''
+            }
+        }
+      ]
+    }
     let assistRequestParams = this.rootService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
     this.spinnerUpdate();
@@ -178,6 +228,18 @@ export class AskCustomerComponent {
     connectionDetails.childBotName = this.rootService?.childBotDetails.childBotName;
     connectionDetails.childBotId = this.rootService?.childBotDetails.childBotId;
     connectionDetails.sourceMsgId = this.automation.sourceMsgId || '';
+    if(this.automation?.data?.entityType === 'attachment') {
+      connectionDetails.attachments = [
+        {
+            "fileName": this.fileObj?.fileName || '',
+            "fileType": this.fileObj?.fileType || '',
+            "fileId": this.fileObj.fileId || '',
+            "url": {
+                "fileUrl": this.fileObj.fileURL || ''
+            }
+        }
+      ]
+    }
     let agent_assist_agent_request_params = this.rootService.prepareAgentAssistAgentRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
     this.spinnerUpdate();
@@ -216,5 +278,139 @@ export class AskCustomerComponent {
       }
     }
     return sendData;
+  }
+
+  // adding the files by selection
+  addFiles(event: Event, files) {
+    if(files && files.length > 0){
+      const inputFile = event.target as HTMLInputElement;
+      if(this.automation?.data?.entityType === 'attachment') {
+        this.removeFile();
+      }
+      if (this.automation.toggleOverride && this.rootService.activeTab === this.projConstants.MYBOT) {
+        this.fileUploadCall(files[0]);
+      }
+      this.uploadedFileData = inputFile;
+      this.fileObj.fileName = files[0].name;
+    }
+  }
+
+  removeFile() {
+    this.largeFileFlag = false;
+    this.fileTypeFlag = false;
+    this.fileObj = {
+      fileName: '',
+      fileType: '',
+      fileId: '',
+      fileURL: ''
+    }
+  }
+
+  // file upload method
+  fileUploadCall(file){
+    if (!file) {
+      return;
+    }
+
+    if(file?.size >= 25000000){ // file size restricting to 25MB
+      this.automation.hideOverrideDiv = false;
+      this.automation.toggleOverride = false;
+      this.largeFileFlag = true;
+      return;
+    }
+
+    const self = this;
+    var reader = new FileReader();
+    reader.readAsText(file);
+    this.fileObj.fileName = file.name;
+    this.fileObj.fileType = file?.type;
+    reader.onload = function (e) {
+    };
+
+    let chunkUpload = file.size > CHUNK_SIZE;
+    if(chunkUpload){
+      this.chunkFileUploadService.getFileToken().subscribe(token =>{
+        if(token){
+          this.chunkFileUploadService.uploadChunkFile(token, file).subscribe(fileId =>{
+            console.log("fileId received>>>>>>>", fileId);
+            if(fileId){
+              this.getuploadedFileURL(fileId)
+              // this.botDefFileId = fileId;
+            }
+          })
+        }
+      });
+    } else {
+      const self = this;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      let formData: any = new FormData();
+      formData.append('file', file);
+      formData.append('fileContext', 'bulkImport');
+      formData.append('fileExtension', file?.name.substring(file?.name.lastIndexOf('.') + 1));
+      formData.append('Content-Type', file?.type);
+      formData.append('fileName', file?.name)
+
+      self.uploadInprogress = true;
+      this.serviceInvoker.invoke('post.uploadfile', {}, formData, {},  this.rootService?.connectionDetails?.agentassisturl)
+      .pipe(finalize(() => { }))
+        .subscribe(
+          (res : any) => {
+            this.largeFileFlag = false;
+            this.fileTypeFlag = false;
+            this.fileObj.fileId = res?.fileId;
+            this.getuploadedFileURL(res?.fileId);
+          }, err => {
+          });
+    }
+      
+    
+  }
+
+  // get uploaded file preview method
+  getuploadedFileURL(fileId){
+    this.serviceInvoker.invoke('get.uploadedfile', {'fileId': fileId}, {}, {}, this.rootService?.connectionDetails?.agentassisturl).subscribe((res) => {
+      if(res) {
+        this.largeFileFlag = false;
+        this.fileObj.fileURL = res?.fileUrl;
+        this.filePreview = res?.fileUrl;
+        this.automation.userInput = this.projConstants.NO;
+        if (this.rootService.activeTab === this.projConstants.ASSIST) {
+          this.assistInputValue(this.automation.entityValue);
+        } else if (this.rootService.activeTab === this.projConstants.MYBOT) {
+          this.mybotInputValue(this.automation.entityValue)
+        }
+      }
+    })
+  }
+
+  downloadFile(url) {
+    const fileUrl = url.fileURL;
+    // this.serviceInvoker.invoke().subscribe(blob => {
+    //   const a = document.createElement('a');
+    //   const objectUrl = URL.createObjectURL(blob);
+    //   a.href = objectUrl;
+    //   a.download = 'file.pdf'; // Set the file name here
+    //   a.click();
+    //   URL.revokeObjectURL(objectUrl);
+    // });
+  }
+
+  previewFile(url) {
+    this.selectedPreview = true;
+    const fileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(url.fileUrl);
+
+  }
+  cancelFilePreview() {
+    this.selectedPreview = false;
+  }
+
+
+  openAttachmentView(data){
+    this.attachmentModalView = this.modalService.open(data ,{windowClass: 'attachment-full-popup', centered: true, backdrop:'static', keyboard:false, backdropClass: 'attachment-full-popup-backdrop'});
+  }
+
+  closeAttachmentView(){
+    this.attachmentModalView.close();
   }
 }

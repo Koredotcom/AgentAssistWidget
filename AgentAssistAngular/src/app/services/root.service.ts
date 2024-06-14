@@ -297,6 +297,11 @@ export class RootService {
       agent_assist_agent_request_params['terminateTask'] = data.isDiscard
     }
 
+    if(data?.attachments) {
+      agent_assist_agent_request_params['query'] = data?.attachments[0]?.url?.fileUrl || '';
+      agent_assist_agent_request_params['attachments'] = data?.attachments;
+    }
+
     agent_assist_agent_request_params = this.addSourceMsgIdToRequestParams(data,agent_assist_agent_request_params)
     
     return agent_assist_agent_request_params;
@@ -735,9 +740,13 @@ export class RootService {
     result.intentName = res.tN;
     result._id = res._id;
     result.entityDisplayName = result.newEntityDisplayName ? result.newEntityDisplayName : result.newEntityName;
+    result.entityType = result?.newEntityType ? result?.newEntityType : '';
     if ((result.suggestions || result.ambiguityList)) {
       result.suggestions = (result.suggestions) ? (result.suggestions) : (result.ambiguityList);
       result.faqResponse = res.agentAssistDetails.faqResponse;
+    }
+    if(result.entities && result?.entities?.File && result?.entities?.File?.length > 0){
+      result.attachments = result.entities.File;
     }
     //format buttons
     result.buttons.forEach((element, index) => {
@@ -924,6 +933,11 @@ export class RootService {
 
     if(data.isDiscard){
       agent_assist_request['terminateTask'] = data.isDiscard
+    }
+
+    if(data?.attachments) {
+      agent_assist_request['query'] = data?.attachments[0]?.url?.fileUrl || '';
+      agent_assist_request['attachments'] = data?.attachments;
     }
 
     agent_assist_request = this.addSourceMsgIdToRequestParams(data,agent_assist_request)

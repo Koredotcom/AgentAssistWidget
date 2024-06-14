@@ -512,6 +512,9 @@ export class CommonService {
           arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = (tab == this.projConstants.MYBOT) ? false : this.rootService.manualAssistOverrideMode;
           arrEle.automationsArray[arrEle.automationsArray.length - 1].disableInput = (data.isErrorPrompt || showErrorPrompt) ? false : true;
+          if(data.attachments && data.attachments?.length > 0){
+            arrEle.automationsArray[arrEle.automationsArray.length - 1].attachments = data.attachments;
+          }
           if(tab == this.projConstants.MYBOT && data.userInput){
             arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = data.userInput;
             arrEle.automationsArray[arrEle.automationsArray.length - 1].grayOut = true;
@@ -526,6 +529,7 @@ export class CommonService {
             arrEle.automationsArray[arrEle.automationsArray.length - 1].errorCount = 0;
             arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
           }
+         
         } else {
           renderResponse.sourceMsgId = arrEle.sourceMsgId || '';
           arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];

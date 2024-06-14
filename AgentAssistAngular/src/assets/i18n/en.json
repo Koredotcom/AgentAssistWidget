@@ -33,6 +33,7 @@
     "SENT" : "Sent",
     "AWAITING" : "Awaiting Response  |  Type to continue",
     "OVERRIDE" : "Type to continue",
+    "OVERRIDE_FILE" : "Attach File to continue",
     "ACCEPT_RESPONSE" : "Response Accepted",
     "AGENT_ENTERED" : "Agent Entered",
     "EXPECTED_FORMAT" : "Expected Format", 
@@ -120,6 +121,8 @@
     "ASSOCIATED_WORK_NOTES": "Past Resolution Notes",
     "AGENT_JOINED_CONV": "Agent joined the conversation",
     "AUTOSCROLL_ASSIST" : "Auto-Scroll Assist Tab Content",
+    "FILE_SIZE_MSG" : "File size must be within 25MB. Please retry.",
+    "OVERRIDE_BTN" : "Override",
+    "CHOOSE_FILE" : "Choose File",
     "SUMMARY_ERROR_TEXT" : "We're sorry, but there was a problem generating the summary for this conversation.Please create your own summary"
-
 }
