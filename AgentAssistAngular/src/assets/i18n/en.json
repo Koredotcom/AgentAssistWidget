@@ -120,6 +120,8 @@
     "NEGATIVE" : "Neg",
     "ASSOCIATED_WORK_NOTES": "Past Resolution Notes",
     "AGENT_JOINED_CONV": "Agent joined the conversation",
-    "AUTOSCROLL_ASSIST" : "Auto-Scroll Assist Tab Content"
-
+    "AUTOSCROLL_ASSIST" : "Auto-Scroll Assist Tab Content",
+    "FILE_SIZE_MSG" : "File size must be within 25MB. Please retry.",
+    "OVERRIDE_BTN" : "Override",
+    "CHOOSE_FILE" : "Choose File"
 }
