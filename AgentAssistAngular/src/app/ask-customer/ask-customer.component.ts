@@ -282,15 +282,17 @@ export class AskCustomerComponent {
 
   // adding the files by selection
   addFiles(event: Event, files) {
-    const inputFile = event.target as HTMLInputElement;
-    if(this.automation?.data?.entityType === 'attachment') {
-      this.removeFile();
+    if(files && files.length > 0){
+      const inputFile = event.target as HTMLInputElement;
+      if(this.automation?.data?.entityType === 'attachment') {
+        this.removeFile();
+      }
+      if (this.automation.toggleOverride && this.rootService.activeTab === this.projConstants.MYBOT) {
+        this.fileUploadCall(files[0]);
+      }
+      this.uploadedFileData = inputFile;
+      this.fileObj.fileName = files[0].name;
     }
-    if (this.automation.toggleOverride && this.rootService.activeTab === this.projConstants.MYBOT) {
-      this.fileUploadCall(files[0]);
-    }
-    this.uploadedFileData = inputFile;
-    this.fileObj.fileName = files[0].name;
   }
 
   removeFile() {

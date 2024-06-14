@@ -84,6 +84,9 @@
                     <button class="override-btn" *ngIf="(automation?.attachments && automation?.attachments?.length > 0) && (fileObj?.fileType === 'image/png' || fileObj?.fileType === 'image')" (click)="openAttachmentView(ImageViewAttachments)">View</button>
                     <i class="krIocnsFont-agent"></i>
                 </ng-container>
+                <ng-container *ngIf="(!(automation.userInput == projConstants.NO) && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">
+                    <button class="override-btn" *ngIf="(automation?.attachments && automation?.attachments?.length > 0) && (fileObj?.fileType === 'image/png' || fileObj?.fileType === 'image')" (click)="openAttachmentView(ImageViewAttachments)">View</button>
+                </ng-container>
             </div>
         </div>
         <ng-container *ngIf="!automation.errorCount && automation?.data?.entityType !== 'attachment'; else attachmentType">
