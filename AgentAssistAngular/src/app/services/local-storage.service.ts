@@ -157,7 +157,7 @@ export class LocalStorageService {
 
         this.rootService.autoScrollStatus = appState[conversationId][storageConst.AUTOSCROLL];
         this.rootService.proactiveModeStatus = appState[conversationId][storageConst.PROACTIVE_MODE];
-        this.rootService.setActiveTab(appState[conversationId][storageConst.ACTIVE_TAB]);
+        // this.rootService.setActiveTab(appState[conversationId][storageConst.ACTIVE_TAB]);
 
         localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
 

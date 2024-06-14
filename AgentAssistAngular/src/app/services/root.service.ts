@@ -61,6 +61,8 @@ export class RootService {
   isAgentSentRequestOnClick: boolean = false;
   isMyBotAgentSentRequestOnClick: boolean = false;
 
+  sentSearchResponse : boolean = false;
+
   settingsData : any = {};
   bulbClick : boolean = false;
   aaHelpers = null;
@@ -357,7 +359,11 @@ export class RootService {
     let snippersArray = this.formatSnippetResponse(suggestions?.searchassist?.snippets || [],response)
     let filesArray = suggestions?.searchassist?.files || [];
     let searchResponse: any = {};
-    if(suggestions?.searchassist && Object.keys(suggestions?.searchassist)?.length == 1 && suggestions?.searchassist?.snippets && suggestions?.searchassist?.snippets?.length == 0){
+    if(suggestions?.searchassist && suggestions?.searchassist?.snippets && suggestions?.searchassist?.snippets?.length == 0){
+      delete suggestions.searchassist.snippets;
+    }
+    let searchassistKeys = Object.keys(suggestions?.searchassist || {});
+    if(suggestions?.searchassist && searchassistKeys?.length == 1 && searchassistKeys[0] === 'searchRequestId'){
       suggestions.searchassist = {};
     }
     if(dialoguesArray.length || faqArray.length || snippersArray.length || filesArray.length || (suggestions?.searchassist && Object.keys(suggestions?.searchassist)?.length)){
@@ -629,7 +635,8 @@ export class RootService {
       sourceMsgId : suggestion.sourceMsgId || '',
       query : suggestion.userInput,
       suggestionType : suggestionType,
-      dialogPositionId : suggestion.positionId
+      dialogPositionId : suggestion.positionId,
+      subType : suggestion.subType || ''
     }
 
     if(suggestionType == 'answer'){
@@ -959,10 +966,14 @@ export class RootService {
   // }
 
 
-  getTemplateHtml(isTemplateRender, result){    
-    let renderedMessage = isTemplateRender ? this.templateRenderClassService?.AgentChatInitialize?.renderMessage(result) : '';
+  getTemplateHtml(isTemplateRender, result){  
+    let renderedMessage = [];
+    if(isTemplateRender){
+      renderedMessage = this.templateRenderClassService?.AgentChatInitialize?.renderMessage(result);
+    }
+    // let renderedMessage = isTemplateRender ? this.templateRenderClassService?.AgentChatInitialize?.renderMessage(result) : '';
     if (renderedMessage && renderedMessage[0]) {
-      let obj =  $(this.templateRenderClassService.AgentChatInitialize.renderMessage(result))[0].outerHTML
+      let obj =  $(renderedMessage)[0].outerHTML
       return (obj);
     }
     return null;

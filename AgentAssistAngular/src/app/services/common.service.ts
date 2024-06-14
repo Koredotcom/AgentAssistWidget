@@ -72,7 +72,7 @@ export class CommonService {
 
   //dialogue click and agent response handling code.
   AgentAssist_run_click(dialog, dialogPositionId, intent?) {
-    this.assistTabDialogforDashboard(dialog, intent);
+    this.prepareSendCopyEventForRun(dialog, intent);
     let connectionDetails: any = Object.assign({}, this.rootService.connectionDetails);
     connectionDetails.value = dialog.intentName;
     if (dialog.intentName && intent) {
@@ -105,7 +105,7 @@ export class CommonService {
     this.rootService.entitiestValueArray = [];
   }
 
-  assistTabDialogforDashboard(dialog, intent?) {
+  prepareSendCopyEventForRun(dialog, intent?) {
     let payloadForBE: any = Object.assign({}, this.rootService.connectionDetails);
     if (dialog.intentName && intent) {
       payloadForBE.intentName = dialog.intentName;
@@ -113,7 +113,7 @@ export class CommonService {
     }
     payloadForBE.type = 'dialog';
     payloadForBE.input = dialog.userInput;
-    payloadForBE.sessionId = this.rootService.assistTabSessionId;
+    payloadForBE.sessionId = (dialog.suggestionFrom === this.projConstants.ASSIST) ? this.rootService.assistTabSessionId : this.rootService.myBotTabSessionId;
     payloadForBE = this.rootService.addSourceMsgIdToRequestParams(dialog,payloadForBE);
     this.websocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE)
   }
@@ -195,6 +195,9 @@ export class CommonService {
     }else if(!automation?.data?.isPrompt){
       payloadForBE.partialMessage = true;
     }
+    if(automation?.data?.errorMsg){
+      payloadForBE.skipMsg = true;
+    }
     payloadForBE = this.rootService.addSourceMsgIdToRequestParams(automation,payloadForBE);
     this.websocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE);
   }
@@ -217,7 +220,9 @@ export class CommonService {
     };
     data = this.rootService.addSourceMsgIdToRequestParams(faq_or_article_obj,data);
     if(this.rootService.activeTab == this.projConstants.SEARCH){
-      data.input = this.rootService.searchedResultData.userInput;
+      data.skipMsg = this.rootService.sentSearchResponse;
+      data.input = this.rootService.searchedResultData?.userInput || '';
+      this.rootService.sentSearchResponse = true;
     }
     if(faq_or_article_obj.subType){
       data.subType = faq_or_article_obj.subType;
@@ -229,6 +234,7 @@ export class CommonService {
   mybot_run_click(dialog, myBotDialogPositionId, intent?) {
     if (dialog) {
       // this.dialogName = dialog.intentName;
+      this.prepareSendCopyEventForRun(dialog, intent);
       let connectionDetails: any = Object.assign({}, this.rootService.connectionDetails);
       connectionDetails.value = dialog.intentName;
       connectionDetails.isSearch = false;
@@ -393,6 +399,9 @@ export class CommonService {
   //suggestions RenderResponse
 
   formatSuggestionRenderResponse(data, responseId) {
+    if(data && Object.keys(data)?.length > 0){
+      data.suggestionFrom = this.projConstants.ASSIST;
+    }
     let renderResponse = {
       data: data,
       type: this.renderResponseType.SUGGESTIONS,
@@ -558,6 +567,13 @@ export class CommonService {
       });
     }    
     return entityNodes;
+  }
+
+  endSmallTalk(data, assistResponseArray){
+    if((this.rootService.isAutomationOnGoing || data?.suggestions || data?.ambiguityList) && assistResponseArray?.length >= 1 && assistResponseArray[assistResponseArray.length -1]?.type == this.renderResponseType.SMALLTALK){
+      assistResponseArray[assistResponseArray.length -1].placeholderText = '';
+      assistResponseArray[assistResponseArray.length -1].hideOverrideDiv = true;
+    }
   }
 
   formatRunningLastSmallTalkEntityNode(assistResponseArray, renderResponse) {

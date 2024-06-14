@@ -37,16 +37,28 @@ export class FooterComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.subscribeEvents();
-    
   }
 
   @HostListener('document:click', ['$event.target']) onMouseEnter(targetElement) {
-    if(targetElement?.className?.includes('custom-backdrop-off-canvas')){
+    const target = targetElement as HTMLElement;
+    if(this.hasClass(target, 'custom-backdrop-off-canvas')){
       this.selectedTab = this.projConstants.ASSIST;
       this.changeTab(this.selectedTab);
       this.canvas = null;
+    }else{
+      console.log('Element does not have the class');
     }
+  }
+
+  hasClass(element: any, className: string): boolean {
+    if (element?.classList) {
+      // For regular HTML elements
+      return element.classList.contains(className);
+    } else if (element?.className && typeof element.className === 'object' && 'baseVal' in element.className) {
+      // For SVG elements
+      return element.className.baseVal.split(' ').includes(className);
+    }
+    return false;
   }
 
 
@@ -60,18 +72,18 @@ export class FooterComponent implements OnInit, OnDestroy{
     this.subs.sink = this.rootService.socketConnection$.subscribe(res => {
       if(res){
         this.connectionDetails  = this.rootService.getConnectionDetails();        
-        this.updateActiveTab();
         if(this.connectionDetails?.isCallConversation){
           this.showTranscript = (this.rootService?.settingsData?.transcripts?.isEnabled === false) ? false : true;
         }
+        this.updateActiveTab();
       }
     });
 
     this.subs.sink = this.rootService.activeTab$.subscribe(tab => {
       if(tab){
-        this.selectedTab = (!this.showTranscript && tab === this.projConstants.TRANSCRIPT) ? this.projConstants.ASSIST : tab;
-        this.actionOnButton(this.selectedTab);
-        this.updateLocalStorageForTabSwitch(this.selectedTab);
+        let selectedTab = (!this.showTranscript && tab === this.projConstants.TRANSCRIPT) ? this.projConstants.ASSIST : tab;
+        this.actionOnButton(selectedTab);
+        this.updateLocalStorageForTabSwitch(selectedTab);
       }
     });
 
@@ -79,7 +91,7 @@ export class FooterComponent implements OnInit, OnDestroy{
       if(!this.rootService.connectionDetails.isCallConversation && res && res?.userBotConversationDetails?.sessionId && res?.userBotConversationDetails.sessionId !== ''){
         this.hideUserBotHistory = false;
       }
-    })
+    });
   }
   
   updateLocalStorageForTabSwitch(tab){
@@ -91,29 +103,31 @@ export class FooterComponent implements OnInit, OnDestroy{
   }
  
   actionOnButton(selectedTab: string){
-    let canvas = this.content;
-    this.selectedTab = selectedTab;
-    let offclickCanvasClass = 'if-assist-click-offcanvas'
-    if(selectedTab === ProjConstants.ASSIST){
-      document.body.classList.add(offclickCanvasClass);
-      return;
-    }else{
-      document.body.classList.remove(offclickCanvasClass);
-    }
-    if(!this.canvas){
-      this.openCanvas(canvas);
-    }
-
-    let className = 'if-maximized-canvas';
-    if(this.selectedTab == ProjConstants.SETTINGS || this.rootService.notLookingForClick){
-      if(this.document.body.classList.contains(className)){
-        this.renderer.removeClass(this.document.body, className);
+    if(this.selectedTab != selectedTab){
+      let canvas = this.content;
+      this.selectedTab = selectedTab;
+      let offclickCanvasClass = 'if-assist-click-offcanvas'
+      if(selectedTab === ProjConstants.ASSIST){
+        document.body.classList.add(offclickCanvasClass);
+        return;
+      }else{
+        document.body.classList.remove(offclickCanvasClass);
       }
-      this.rootService.notLookingForClick = false;
-      this.maxButton = false;
-    }else{
-      this.renderer.addClass(this.document.body, className);
-      this.maxButton = true;
+      if(!this.canvas){
+        this.openCanvas(canvas);
+      }
+  
+      let className = 'if-maximized-canvas';
+      if(this.selectedTab == ProjConstants.SETTINGS || this.rootService.notLookingForClick){
+        if(this.document.body.classList.contains(className)){
+          this.renderer.removeClass(this.document.body, className);
+        }
+        this.rootService.notLookingForClick = false;
+        this.maxButton = false;
+      }else{
+        this.renderer.addClass(this.document.body, className);
+        this.maxButton = true;
+      }
     }
     // let className = 'if-maximized-canvas';
     // this.renderer.removeClass(this.document.body, className);

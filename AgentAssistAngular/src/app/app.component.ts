@@ -260,9 +260,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           chatHistory: e.data?.payload?.chatHistory
         }
         if(this.widgetSettings?.summarization?.isEnabled) {
-          request_resolution_comments['model'] = this.widgetSettings?.summarization?.model;
-        this.webSocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
+          this.handleSubjectService.setSummaryPopup({initPopup : true});
         }
+        // not depending on summarization enabling in config.
+        request_resolution_comments['model'] = this.widgetSettings?.summarization?.model;
+        this.webSocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
+
         this.webSocketService.emitEvents(EVENTS.end_of_conversation, request_resolution_comments);
         this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
       }

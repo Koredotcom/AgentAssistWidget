@@ -123,5 +123,6 @@
     "AUTOSCROLL_ASSIST" : "Auto-Scroll Assist Tab Content",
     "FILE_SIZE_MSG" : "File size must be within 25MB. Please retry.",
     "OVERRIDE_BTN" : "Override",
-    "CHOOSE_FILE" : "Choose File"
+    "CHOOSE_FILE" : "Choose File",
+    "SUMMARY_ERROR_TEXT" : "We're sorry, but there was a problem generating the summary for this conversation.Please create your own summary"
 }

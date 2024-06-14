@@ -144,8 +144,9 @@ export class TemplateRenderClassService {
   // }
 
   prepareTemplateBodyForHistory(elem, parsedPayload){
-    let body = {};
+    let body : any = {};
     body['type'] = elem.cT;
+    body['component'] = {};
     if (!parsedPayload) {
       body['component'] = {
         "type": elem.cT,
@@ -159,7 +160,22 @@ export class TemplateRenderClassService {
       };
 
     } else {
-      body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+
+      // body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+
+      if (parsedPayload.payload) {
+        body.component = parsedPayload;
+      } else if (parsedPayload.text) {
+        body.component = parsedPayload.text;
+      } else {
+        body.component = {
+          payload : {
+            text: parsedPayload
+          },
+          type : 'text'
+        }
+      }
+
       if (parsedPayload?.type === 'message') {
         body['cInfo'] = {
           "body": ''
@@ -178,8 +194,9 @@ export class TemplateRenderClassService {
   }
   
   prepareTemplateBody(elem, parsedPayload){
-    let body = {};
+    let body : any = {};
     body['type'] = elem.type;
+    body['component'] = {};
     if (!parsedPayload) {
       body['component'] = {
         "type": elem.type,
@@ -194,7 +211,20 @@ export class TemplateRenderClassService {
       elem['copyFlag'] = true;
 
     } else {
-      body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+      // body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+      if (parsedPayload.payload) {
+        body.component = parsedPayload;
+      } else if (parsedPayload.text) {
+        body.component = parsedPayload.text;
+      } else {
+        body.component = {
+          payload : {
+            text: parsedPayload
+          },
+          type : 'text'
+        }
+      }
+
       if (parsedPayload?.type === 'message') {
         body['cInfo'] = {
           "body": ''
@@ -258,6 +288,11 @@ export class TemplateRenderClassService {
       _msgsResponse.parsedPayload = parsedPayload;
 
     });
+
+    if(res?.formData && res?.formData?.renderType == 'inline' && _msgsResponse?.message && _msgsResponse?.message[0]){
+      _msgsResponse.message[0].component = _msgsResponse.message[0].component || {};
+      _msgsResponse.message[0].component.formData = res.formData
+    }
     
     // if (res.srcChannel && res.srcChannel !== 'msteams') {
     //   if (res.componentType === 'dialogAct') {
@@ -366,6 +401,11 @@ export class TemplateRenderClassService {
         }
       }
     });
+
+    if(res?.formData && res?.formData?.renderType == 'inline' && _msgsResponse?.message && _msgsResponse?.message[0]){
+      _msgsResponse.message[0].component = _msgsResponse.message[0].component || {};
+      _msgsResponse.message[0].component.formData = res.formData
+    }
     
     // if(res?.srcChannel && res?.srcChannel !== 'msteams'){
     //   if (res?.componentType === 'dialogAct') {
