@@ -328,12 +328,10 @@ export class AskCustomerComponent {
     let chunkUpload = file.size > CHUNK_SIZE;
     if(chunkUpload){
       this.chunkFileUploadService.getFileToken().subscribe(token =>{
-        console.log(token);
         if(token){
           this.chunkFileUploadService.uploadChunkFile(token, file).subscribe(fileId =>{
             console.log("fileId received>>>>>>>", fileId);
             if(fileId){
-              console.log(fileId);
               this.getuploadedFileURL(fileId)
               // this.botDefFileId = fileId;
             }
@@ -370,7 +368,6 @@ export class AskCustomerComponent {
   // get uploaded file preview method
   getuploadedFileURL(fileId){
     this.serviceInvoker.invoke('get.uploadedfile', {'fileId': fileId}, {}, {}, this.rootService?.connectionDetails?.agentassisturl).subscribe((res) => {
-      console.log(res);
       if(res) {
         this.largeFileFlag = false;
         this.fileObj.fileURL = res?.fileUrl;
