@@ -68,6 +68,27 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        justify-content: end;
+        position: relative;
+        min-height: 52px;
+        .footer-btns-left-sec{
+            position: absolute;
+            z-index: 99;
+            left: 8px;
+            top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        ::ng-deep app-feedback{
+            .dialog-ended-and-feedback{
+                justify-content: flex-end;
+                padding: 0;
+            }
+            .improve-feedback-block{
+                margin-top: 20px;
+            }
+        }
     }
 }
 

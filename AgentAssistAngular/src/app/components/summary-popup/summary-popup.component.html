@@ -32,7 +32,10 @@
         </button>
     </div>
     <div class="actions-footer">
-        <button class="_btn primaryBtn" *ngIf="submitEnabled" id="summarySubmit" (click)="summaryButtonClick(true)" [disabled]="initPopup">{{'SUBMIT' | translate}}</button>
-        <button class="_btn solidBtn" id="summaryCopy" (click)="handleCopyButton(editedSummaryText)" [disabled]="(tooltipText === projCnst.COPIED) || initPopup">{{tooltipText | translate}}</button>
+        <div class="footer-btns-left-sec">
+            <button class="_btn primaryBtn" *ngIf="submitEnabled" id="summarySubmit" (click)="summaryButtonClick(true)" [disabled]="initPopup">{{'SUBMIT' | translate}}</button>
+            <button class="_btn solidBtn" id="summaryCopy" (click)="handleCopyButton(editedSummaryText)" [disabled]="(tooltipText === projCnst.COPIED) || initPopup">{{tooltipText | translate}}</button>
+        </div>
+        <app-feedback [feedbackData]="summaryFeedbackData" (updateFeedbackProperties)="updateFeedbackProperties($event)" [feedbackType]="feedbackConst.SUMMARY"></app-feedback>
     </div>
 </div>

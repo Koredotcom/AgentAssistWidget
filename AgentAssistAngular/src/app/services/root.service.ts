@@ -89,6 +89,10 @@ export class RootService {
     "searchassist": {
       "isEnabled": true,
       "acceptComment": true
+    },
+    "summary" : {
+      "isEnabled" : true,
+      "acceptComment" : true
     }
   }
 

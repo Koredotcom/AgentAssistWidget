@@ -149,6 +149,7 @@ export const FeebackConst = {
     DIALOGS : 'dialogs',
     FAQS : 'faqs',
     ANSWERS : 'searchassist',
+    SUMMARY : 'summary',
     DEFAULT_FEEDBACK_LANGUAGE_LIST : ['en', 'ar', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'zh_cn'],
     DEFAULT_SUGGESTION : {
         "dialogs" : {
@@ -183,7 +184,18 @@ export const FeebackConst = {
           ja : ["間違った提案", "不正確なコンテンツ", "関連のないコンテンツ", "混乱する", "不十分", 'その他'],
           ko : ["잘못된 제안", "부정확한 콘텐츠", "관련 없는 콘텐츠", "혼란스러운", "불만족스러운", "기타"],
           zh_cn : ["错误建议", "不准确内容", "无关内容", "令人困惑", "不令人满意", "其他"]
-        }
+        },
+        'summary' : {
+            en : ["Too Lengthy", "Inaccurate Content", "Not Satisfactory", "Error Prone", "Confusing", "Other"],
+            ar : ["طويل جدًا", "محتوى غير دقيق", "غير مرضٍ", "عرضة للأخطاء", "مربك", "أخرى"],
+            de : ["Zu lang", "Ungenauer Inhalt", "Nicht zufriedenstellend", "Fehleranfällig", "Verwirrend", "Andere"],
+            es : ["Demasiado largo", "Contenido inexacto", "No satisfactorio", "Propenso a errores", "Confuso", "Otro"],
+            fr : ["Trop long", "Contenu inexact", "Non satisfaisant", "Sujet à erreurs", "Confus", "Autre"],
+            it : ["Troppo lungo", "Contenuto impreciso", "Non soddisfacente", "Incline agli errori", "Confuso", "Altro"],
+            ja : ["長すぎる", "不正確な内容", "満足できない", "エラーが発生しやすい", "混乱する", "その他"],
+            ko : ["너무 길다", "부정확한 내용", "만족스럽지 않다", "오류가 발생하기 쉬움", "혼란스러운", "기타"],
+            zh_cn : ["太长", "内容不准确", "不满意", "易出错", "令人困惑", "其他"]
+          }
       }
 }
 

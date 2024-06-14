@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { ProjConstants, supportLanguage } from 'src/app/proj.const';
+import { FeebackConst, ProjConstants, RenderResponseType, supportLanguage } from 'src/app/proj.const';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
 import { RootService } from 'src/app/services/root.service';
 
@@ -20,6 +20,8 @@ export class SummaryPopupComponent {
   projCnst : any = ProjConstants;
   tooltipText : string = supportLanguage.COPY;
   submitEnabled:boolean = false
+  feedbackConst : any = FeebackConst;
+  summaryFeedbackData : any = {};
 
   constructor(public modal : NgbActiveModal, private translate : TranslateService, private rootService: RootService,
     private handleSubjectService : HandleSubjectService) { }
@@ -27,6 +29,7 @@ export class SummaryPopupComponent {
   ngOnInit(): void {
     this.submitEnabled = this.rootService?.settingsData?.summarization?.canSubmit;
     this.checkSummaryText(this.summaryText);
+    this.updateSummaryFeedback();
   }
 
   ngOnChanges(changes){
@@ -68,5 +71,23 @@ export class SummaryPopupComponent {
    this.editedSummaryText = ''; 
   }
 
+  updateFeedbackProperties(data) {
+    this.summaryFeedbackData = data;
+  }
+
+  updateSummaryFeedback(){
+    let renderResponse: any = {
+      type: RenderResponseType.FEEDBACK,
+      connectionDetails: this.rootService.connectionDetails,
+      submitForm: false,
+      feedback: '',
+      feedbackDetails: [],
+      comment: '',
+      sourceMsgId : '',
+      query : '',
+      suggestionType : 'summary'
+    }
+    this.summaryFeedbackData = renderResponse;
+  }
   
 }
