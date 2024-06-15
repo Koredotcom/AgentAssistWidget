@@ -35,7 +35,6 @@
         <div class="input-block-entity">
             <ng-container *ngIf="!this.automation.toggleOverride">
                 <p container="body" ngbTooltip="{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}">{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}} : {{fileObj?.fileName !== '' ?  automation?.data?.entityValue : ''}}</p>
-                <!-- <p></p> -->
             </ng-container>
             <ng-container *ngIf="automation?.data?.entityType === 'attachment' && this.automation.toggleOverride">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -109,9 +108,6 @@
                     <span *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">|  {{'OVERRIDE' | translate}}</span>
                 </p>
             </ng-template>
-            <!-- <div>2 {{largeFileFlag}}</div> -->
-            
-            <!-- <p *ngIf="automation.errorCount && automation?.data?.entityType === 'attachment' && !largeFileFlag" class="info-entity-text">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.expectedFormat}}  <span *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">|  {{'OVERRIDE' | translate}}</span></p> -->
         </ng-template>
         <app-loader [type]="projConstants.INDIVIDUAL_LOADER" *ngIf="automation.showSpinner"></app-loader>
     
@@ -121,20 +117,33 @@
 <ng-container *ngIf="listView && automation && automation.entityName">
     <div class="entity-mesage-data listView" [ngClass]="{'error-no-reponse' : automation.errorCount, 'grayout-msgs-node' : automation.grayOut}">
         <div class="input-block-entity">
-            <p>{{automation.entityName}} : </p>
-            <input [type]="automation?.data?.newEntityType === 'attachment' ? 'file' : 'text'" [ngClass]="{'disable-input' : automation.disableInput}" #listEntityInput aria-label="Input" [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
-             [(ngModel)]="automation.entityValue" [disabled]="automation.disableInput" (keyup.enter)="handleAgentInput()" [placeholder]="automation?.tab === projConstants.ASSIST ? automation.placeholderText : ''">
+            <ng-container *ngIf="!this.automation.toggleOverride">
+                <p container="body" ngbTooltip="{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}">{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}} : {{fileObj?.fileName !== '' ?  automation?.data?.entityValue : ''}}</p>
+            </ng-container>
+            <ng-container *ngIf="automation?.data?.entityType === 'attachment' && this.automation.toggleOverride">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M17.6271 9.08296L10.1141 16.596C8.40556 18.3045 5.63546 18.3045 3.92692 16.596C2.21837 14.8874 2.21837 12.1173 3.92692 10.4088L11.4399 2.89578C12.579 1.75675 14.4257 1.75675 15.5647 2.89578C16.7037 4.0348 16.7037 5.88154 15.5647 7.02057L8.34633 14.2389C7.77682 14.8085 6.85345 14.8085 6.28394 14.2389C5.71442 13.6694 5.71442 12.7461 6.28394 12.1766L12.6184 5.84205" stroke="#667085" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <!-- <div>{{fileObj?.fileName}} {{ this.automation.toggleOverride}}</div> -->
+                <span class="attachment-name text-truncate" [class.choose-file]="(fileObj?.fileName === '' && this.automation.toggleOverride)" title=""> {{fileObj?.fileName !== '' ?  fileObj?.fileName : ('CHOOSE_FILE' | translate ) }}</span>
+            </ng-container>
+            <input [type]="automation?.data?.entityType === 'attachment' && this.automation.toggleOverride ? 'file' : 'text'"
+            [class.attachment-input]="(this.automation.toggleOverride && automation?.data?.entityType === 'attachment')" 
+            [class.uploaded-img-attach]="fileObj?.fileName !== ''"
+            [ngClass]="{'disable-input' : automation.disableInput}" 
+            #listEntityInput aria-label="Input" 
+            [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
+            [(ngModel)]="automation.entityValue" 
+            [disabled]="automation.disableInput" 
+            (keyup.enter)="handleAgentInput()"
+            (change)="addFiles($event,listEntityInput.files)"
+            [placeholder]="automation?.tab === projConstants.ASSIST ? automation.placeholderText : ''">
             <div class="border-outline"></div>
             <div class="actions-inputs">                
-                <button class="remove-input" aria-label="Button"  ngbTooltip="Agent’s Input" *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount) && automation?.data.entityType !== 'attachment'">
-                    <!-- <i class="krIocnsFont-keyboard"></i> -->
-                    <i class="krIocnsFont-agent"></i>
-                </button>
-                <div>{{automation?.data?.entityType}}</div>
                 <!-- *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount && automation?.data?.entityType === 'attachment')" -->
-                <button class="remove-input" aria-label="Button" *ngIf="(automation?.data?.entityType === 'attachment')">
+                <!-- <button class="remove-input" aria-label="Button" *ngIf="(automation?.data?.entityType === 'attachment')">
                     View - <button *ngIf="fileObj.fileURL !== ''" (click)="downloadFile(fileObj.fileURL)">Download File</button>
-                </button>
+                </button> -->
 
                 <!-- <button class="success-check-input" aria-label="button" *ngIf="automation.userInput == projConstants.YES && !automation.errorCount">
                     <i class="krIocnsFont-check-circle"></i>
@@ -150,17 +159,49 @@
                     <i class="krIocnsFont-check"></i>
                 </button>
                 <button class="override-btn" (click)="confirmOverride();listEntityInput.focus()" *ngIf="!automation.toggleOverride && !automation.hideOverrideDiv">Override</button>
-
+                <ng-container *ngIf="(automation.userInput == projConstants.NO && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">
+                    <button class="override-btn" *ngIf="(automation?.attachments && automation?.attachments?.length > 0) && (fileObj?.fileType === 'image/png' || fileObj?.fileType === 'image')" (click)="openAttachmentView(ImageViewAttachments)">View</button>
+                    <i class="krIocnsFont-agent"></i>
+                </ng-container>
+                <ng-container *ngIf="(!(automation.userInput == projConstants.NO) && !automation.errorCount) || (rootService.activeTab == projConstants.MYBOT && !automation.errorCount)">
+                    <button class="override-btn" *ngIf="(automation?.attachments && automation?.attachments?.length > 0) && (fileObj?.fileType === 'image/png' || fileObj?.fileType === 'image')" (click)="openAttachmentView(ImageViewAttachments)">View</button>
+                </ng-container>
             </div>
         </div>
-        <ng-container  *ngIf="!automation.errorCount; else errCount">
-            <!-- <p class="info-entity-text" *ngIf="automation.userInput == projConstants.NO">{{'AGENT_ENTERED' | translate}}</p>
-            <p class="info-entity-text" *ngIf="automation.userInput == projConstants.YES">{{'ACCEPT_RESPONSE' | translate}}</p> -->
+
+        <!--  -->
+        <ng-container *ngIf="!automation.errorCount && automation?.data?.entityType !== 'attachment'; else attachmentType">
+            <p class="info-entity-text" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">{{inputName | translate}}</p>
+        </ng-container>
+        <ng-template #attachmentType>
+            <ng-container *ngIf="(automation?.data?.entityType === 'attachment' && !largeFileFlag); else errCount">
+                <p class="info-entity-text" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">{{inputName | translate}}</p>
+            </ng-container>
+        </ng-template>
+        <ng-template #errCount>
+            <ng-container *ngIf="largeFileFlag; else errorMsg">
+                <p class="info-entity-text">{{'FILE_SIZE_MSG' | translate}}
+                    <span *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">|  {{'OVERRIDE' | translate}}
+                    </span>
+                </p>
+            </ng-container>
+            <ng-template #errorMsg>
+                <p class="info-entity-text">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.expectedFormat}}  
+                    <span *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">|  {{'OVERRIDE' | translate}}</span>
+                </p>
+            </ng-template>
+            <!-- <div>2 {{largeFileFlag}}</div> -->
+            
+            <!-- <p *ngIf="automation.errorCount && automation?.data?.entityType === 'attachment' && !largeFileFlag" class="info-entity-text">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.expectedFormat}}  <span *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">|  {{'OVERRIDE' | translate}}</span></p> -->
+        </ng-template>
+        <!--  -->
+
+        <!-- <ng-container  *ngIf="!automation.errorCount; else errCount">
             <p class="info-entity-text" *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">{{inputName | translate}}</p>
         </ng-container>
         <ng-template #errCount>
             <p class="info-entity-text">{{'EXPECTED_FORMAT' | translate}}: {{automation.data.expectedFormat}} <span *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">|  {{'OVERRIDE' | translate}}</span> </p>
-        </ng-template>
+        </ng-template> -->
         <app-loader [type]="projConstants.INDIVIDUAL_LOADER" *ngIf="automation.showSpinner"></app-loader>
     </div>
 </ng-container>
