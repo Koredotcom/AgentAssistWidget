@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Moment } from 'moment';
@@ -19,6 +19,9 @@ import { workflowService } from '@kore.services/workflow.service';
 export class DashboardFiltersComponent implements OnInit {
 
   @Output() exportPdf = new EventEmitter();
+  @Output() toggleCostView = new EventEmitter();
+
+  @Input() filterType : any;
 
   private filters: IDashboardFilter;
 
@@ -118,4 +121,7 @@ export class DashboardFiltersComponent implements OnInit {
     this.router.navigate([uri]);
   }
 
+  toggleCostSavingsView(event){
+    this.toggleCostView.emit(event);
+  }
 }

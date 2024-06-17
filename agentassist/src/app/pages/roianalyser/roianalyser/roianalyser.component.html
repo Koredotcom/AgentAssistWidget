@@ -1,5 +1,5 @@
 <div class="dashboard-wraaper-container" id="pdfTable" #pdfTable>
     <div class="header-titles">
-        <app-dashboard-filters></app-dashboard-filters>
+        <app-dashboard-filters (toggleCostView)="toggleCostView($event)" [filterType]="'roianalyser'"></app-dashboard-filters>
     </div>
 </div>

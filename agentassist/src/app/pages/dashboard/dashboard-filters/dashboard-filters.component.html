@@ -2,6 +2,21 @@
     <div class="left-title" (click)="navigateTabs('/dashboard')">{{"DASHBOARD.TITLE" | translate}}</div>
     <div class="left-title" (click)="navigateTabs('/roianalyser')">{{"ROI_ANALYSER_TITLE" | translate}}</div>
     <div class="right-sec-actions">
+
+        <!-- toggle cost savigs view -->
+        <div class="toggle-info-data" *ngIf="filterType == 'roianalyser'">
+            <label class="kr-sg-toggle">
+                <input type="checkbox" (change)="toggleCostSavingsView($event)">
+                <div class="slider">
+                    <span class="enabled"></span>
+                    <span class="disabled"></span>
+                </div>
+            </label>
+            <div class="content-data-toggle">
+                <p>COST SAVINGS VIEW</p>
+            </div>
+        </div>
+
       <!-- Calender -->
         <div class="custom_date_picker_sec date-sec-info ngx-daterangepicker-action" (click)="openPicker()">
             <i class="icon-ast_calendar"></i>

@@ -6,7 +6,7 @@
 
 <div class="dashboard-wraaper-container" id="pdfTable" #pdfTable>
     <div class="header-titles">
-        <app-dashboard-filters (exportPdf)="exportPdf($event)"></app-dashboard-filters>
+        <app-dashboard-filters (exportPdf)="exportPdf($event)" [filterType]="'dashboard'"></app-dashboard-filters>
     </div>
     <perfect-scrollbar class="scroll-container" id="scrollContainer">
         <div class="inner-scroll-data" id="innerScroll">
