@@ -1,0 +1,12 @@
+.dashboard-wraaper-container{
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    height: calc(100vh - 59px);
+    // height: auto;
+    .header-titles{
+        display: inline-block;
+        width: 100%;
+        padding: 24px 24px 20px 24px;
+    }
+}

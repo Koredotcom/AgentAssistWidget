@@ -6,7 +6,6 @@ import { AutomationOverrideReportComponent } from '../automation-override-report
 import { AutomationPerformanceComponent } from '../automation-performance/automation-performance.component';
 import { AgentFeedbackComponent } from '../agent-feedback/agent-feedback.component';
 import { ExhaustiveRepresentationComponent } from '../exhaustive-representation/exhaustive-representation.component';
-import { DashboardFiltersComponent } from '../dashboard-filters/dashboard-filters.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from '../dashboard.component';
@@ -19,7 +18,7 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [DashboardComponent, AgentAspectComponent, CustomerAspectComponent, AutomationOverrideReportComponent, AutomationPerformanceComponent, AgentFeedbackComponent,ExhaustiveRepresentationComponent, DashboardFiltersComponent, AutomationIntentvsEntityStringPipe,
+  declarations: [DashboardComponent, AgentAspectComponent, CustomerAspectComponent, AutomationOverrideReportComponent, AutomationPerformanceComponent, AgentFeedbackComponent,ExhaustiveRepresentationComponent, AutomationIntentvsEntityStringPipe,
     WidgetUsageComponent],
   imports: [
     CommonModule,

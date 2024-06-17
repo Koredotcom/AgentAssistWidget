@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Moment } from 'moment';
 import * as moment from 'moment';
@@ -45,7 +45,8 @@ export class DashboardFiltersComponent implements OnInit {
     private route: ActivatedRoute,
     private dashboardService : DashboardService,
     private authService : AuthService,
-    private workflowService : workflowService
+    private workflowService : workflowService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -111,6 +112,10 @@ export class DashboardFiltersComponent implements OnInit {
     this.dashboardService.setSelectedBotDetails(bot);
     this.updateFilters(this.filters);
 
+  }
+
+  navigateTabs(uri){
+    this.router.navigate([uri]);
   }
 
 }

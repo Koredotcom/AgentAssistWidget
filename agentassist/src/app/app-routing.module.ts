@@ -71,6 +71,8 @@ const routes: Routes = [
         ]
       },
       { path: 'dashboard', loadChildren: () => import('./pages/dashboard/agentassist-dashboard/agentassist-dashboard.module').then(m => m.AgentassistDashboardModule)},
+      { path: 'roianalyser', loadChildren: () => import('./pages/roianalyser/roianalyser.module').then(m => m.ROIAnalyserModule)},
+
     ]
   },
 

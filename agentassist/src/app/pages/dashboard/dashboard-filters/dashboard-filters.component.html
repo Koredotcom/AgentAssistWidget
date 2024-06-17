@@ -1,5 +1,6 @@
 <div class="date-channels-container">
-    <div class="left-title">{{"DASHBOARD.TITLE" | translate}}</div>
+    <div class="left-title" (click)="navigateTabs('/dashboard')">{{"DASHBOARD.TITLE" | translate}}</div>
+    <div class="left-title" (click)="navigateTabs('/roianalyser')">{{"ROI_ANALYSER_TITLE" | translate}}</div>
     <div class="right-sec-actions">
       <!-- Calender -->
         <div class="custom_date_picker_sec date-sec-info ngx-daterangepicker-action" (click)="openPicker()">

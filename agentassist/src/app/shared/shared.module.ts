@@ -62,6 +62,7 @@ import { ConvsHistoryLogsComponent } from '../pages/conversational-logs/convs-hi
 import { MillisToDurationPipePipe } from '../helpers/filters/millis-to-duration-pipe.pipe';
 import { MillisecondsToDateAndHourPipe } from '../helpers/filters/milliseconds-to-date-and-hour.pipe';
 import { ScrollEndDirective } from './scroll-end.directive';
+import { DashboardFiltersComponent } from '../pages/dashboard/dashboard-filters/dashboard-filters.component';
 
 const COMPONENTS = [
   SliderComponentComponent,
@@ -117,7 +118,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     StrictFilterPipe,
     JsEditorComponent,
     ConvsHistoryLogsComponent,
-    ScrollEndDirective
+    ScrollEndDirective,
+    DashboardFiltersComponent
   ],
   imports: [
     CommonModule,
@@ -185,7 +187,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AceEditorModule,
     JsEditorComponent,
     ConvsHistoryLogsComponent,
-    ScrollEndDirective
+    ScrollEndDirective,
+    DashboardFiltersComponent
   ],
 })
 export class SharedModule { }
