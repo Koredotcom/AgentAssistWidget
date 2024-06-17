@@ -28,7 +28,8 @@ export class FeedbackSettingsComponent implements OnInit {
   disableSaveButton : any = {
     dialogs : false,
     faqs : false,
-    searchassist : false
+    searchassist : false,
+    summary : false
   }
   selAcc = this.localstorage.getSelectedAccount();
   iId = this.authService?.isLoadingOnSm && this.selAcc && this.selAcc?.instanceBots?.length ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
@@ -51,6 +52,12 @@ export class FeedbackSettingsComponent implements OnInit {
       desc : 'Define the feedback message provided to agents upon viewing of FAQ.',
       enableDesc : 'Enable FAQ Feedback',
       bkey : 'faqs'
+    },
+    {
+      title : 'Summary Feedback',
+      desc : 'Define the feedback message provided to agents upon viewing of Summary.',
+      enableDesc : 'Enable Summary Feedback',
+      bkey : 'summary'
     }
   ]
   showCountWarningMsg : boolean = false;
@@ -59,7 +66,8 @@ export class FeedbackSettingsComponent implements OnInit {
   selectedLang : any = {
     'dialogs' : 'en',
     'faqs' : 'en',
-    'searchassist' : 'en'
+    'searchassist' : 'en',
+    'summary' : 'en'
   };
   suggestionTitle: string = '';
   supportedLanguageSeedData : any = {};
@@ -101,7 +109,7 @@ export class FeedbackSettingsComponent implements OnInit {
           this.supportedLanguageSeedData[element.bkey] = {};
           Object.keys(res?.agentAssistSeedData?.supportedLanguages).forEach((key) => {
             if(res?.agentAssistSeedData?.supportedLanguages[key]?.negativeKeyWords){
-              this.supportedLanguageSeedData[element.bkey][key] = JSON.parse(JSON.stringify(res?.agentAssistSeedData?.supportedLanguages[key]?.negativeKeyWords[element.bkey]));
+              this.supportedLanguageSeedData[element.bkey][key] = res?.agentAssistSeedData?.supportedLanguages[key]?.negativeKeyWords[element.bkey] ? JSON.parse(JSON.stringify(res?.agentAssistSeedData?.supportedLanguages[key]?.negativeKeyWords[element.bkey])) : [];
             }
           });
         });
@@ -187,7 +195,12 @@ createOrUpdateFeedbackForm(obj, isUpdate?) {
             isEnabled: [isUpdate ? (obj?.searchassist?.isEnabled ?? true) : true],
             acceptComment: [isUpdate ? (obj?.searchassist?.acceptComment ?? true) : true],
             negativeKeyWords: this.fb.group(this.getNegativeKeywordsForEachLang('searchassist', obj, isUpdate))
-        })
+        }),
+        summary: this.fb.group({
+          isEnabled: [isUpdate ? (obj?.summary?.isEnabled ?? true) : true],
+          acceptComment: [isUpdate ? (obj?.summary?.acceptComment ?? true) : true],
+          negativeKeyWords: this.fb.group(this.getNegativeKeywordsForEachLang('summary', obj, isUpdate))
+      })
     });
 }
 
@@ -341,15 +354,18 @@ createOrUpdateFeedbackForm(obj, isUpdate?) {
   }
 
   prepareLanguageSpecificList(seedData){
-   seedData = JSON.parse(JSON.stringify(seedData));
-   let acc =  seedData.reduce((accumulator, item, index) => {    
-      accumulator.push({ 
-        isEnabled : index <= 4 ? true : false,
-        key : item
-       });
-      return accumulator;
-    }, [])
-    return acc
+   if(seedData){
+     seedData = JSON.parse(JSON.stringify(seedData));
+     let acc =  seedData.reduce((accumulator, item, index) => {    
+        accumulator.push({ 
+          isEnabled : index <= 4 ? true : false,
+          key : item
+         });
+        return accumulator;
+      }, [])
+      return acc
+   }
+   return [];
   }
 
   asIsOrder(a, b) {
