@@ -31,7 +31,7 @@
     </ng-template>
     
     
-    <div class="entity-mesage-data" [ngClass]="{'error-no-reponse' : automation.errorCount, 'grayout-msgs-node' : automation.grayOut}">
+    <div class="entity-mesage-data" [ngClass]="{'error-no-reponse' : automation.errorCount || largeFileFlag, 'grayout-msgs-node' : automation.grayOut}">
         <div class="input-block-entity">
             <ng-container *ngIf="!this.automation.toggleOverride">
                 <p container="body" ngbTooltip="{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}}">{{automation?.data?.entityDisplayName ? automation?.data?.entityDisplayName : automation?.data?.entityName}} : {{fileObj?.fileName !== '' ?  automation?.data?.entityValue : ''}}</p>
@@ -99,7 +99,7 @@
         </ng-template>
         <ng-template #errCount>
             <ng-container *ngIf="largeFileFlag; else errorMsg">
-                <p class="info-entity-text">{{'FILE_SIZE_MSG' | translate}}
+                <p class="info-entity-text file-size">{{'FILE_SIZE_MSG' | translate}}
                     <span *ngIf="!automation.hideOverrideDiv && automation.toggleOverride">|  {{'OVERRIDE' | translate}}
                     </span>
                 </p>
@@ -119,7 +119,7 @@
 </ng-container>
 
 <ng-container *ngIf="listView && automation && automation.entityName">
-    <div class="entity-mesage-data listView" [ngClass]="{'error-no-reponse' : automation.errorCount, 'grayout-msgs-node' : automation.grayOut}">
+    <div class="entity-mesage-data listView" [ngClass]="{'error-no-reponse' : automation.errorCount || largeFileFlag, 'grayout-msgs-node' : automation.grayOut}">
         <div class="input-block-entity">
             <p>{{automation.entityName}} : </p>
             <input [type]="automation?.data?.newEntityType === 'attachment' ? 'file' : 'text'" [ngClass]="{'disable-input' : automation.disableInput}" #listEntityInput aria-label="Input" [readonly]="!automation.toggleOverride && (!automation.userInput || (automation.userInput && automation.errorCount))"
@@ -181,7 +181,7 @@
                     <path d="M11.4214 4.75584C11.7469 4.4304 11.7469 3.90277 11.4214 3.57733C11.096 3.25189 10.5684 3.25189 10.2429 3.57733L4.40961 9.41066C4.08417 9.7361 4.08417 10.2637 4.40961 10.5892L10.2429 16.4225C10.5684 16.7479 11.096 16.7479 11.4214 16.4225C11.7469 16.0971 11.7469 15.5694 11.4214 15.244L7.01071 10.8333L16.6655 10.8333C17.1258 10.8333 17.4989 10.4602 17.4989 9.99992C17.4989 9.53968 17.1258 9.16659 16.6655 9.16659L7.0107 9.16658L11.4214 4.75584Z" fill="#F2F4F7"/>
                 </svg>
             </button>
-            <img [src]="filePreview">
+            <!-- <img [src]="filePreview"> -->
             <div class="img-name text-truncate">{{fileObj?.fileName}}</div>
             <button class="back-btn">
                 <svg width="21" height="20" viewBox="0 0 21 20" fill="none">
