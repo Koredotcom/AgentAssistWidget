@@ -18,7 +18,7 @@
     "@angular/compiler": "~13.4.0",
     "@angular/core": "~13.4.0",
     "@angular/elements": "~13.4.0",
-    "@angular/flex-layout": "^13.0.0-beta.37",
+    "@angular/flex-layout": "^14.0.0-beta.39",
     "@angular/forms": "~13.4.0",
     "@angular/localize": "^13.4.0",
     "@angular/material": "^13.3.9",
