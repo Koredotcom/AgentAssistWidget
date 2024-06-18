@@ -64,7 +64,7 @@
                     <div class="type-skill-name-block">
                         <div class="kr-sg-dropdowns col-6 p-0">                                       
                             <div class="kr-sg-input-inline-search dropdown dropdown-open line-height-0">
-                                <button class="dropdown-toggle dropdown-input search-with-dropdown" data-toggle="dropdown">{{selectedManager}}</button>    
+                                <button class="dropdown-toggle dropdown-input search-with-dropdown" data-bs-toggle="dropdown">{{selectedManager}}</button>    
                                 <input type="text" #managerSearchTerm (input)="managerSearchTerm.value = $event.target.value" value="{{selectedManager}}" (focus)="showManagersSearchDropdown = true" class="input-search dropdown-toggle dropdown-input" autocomplete="chrome-off" placeholder="{{'PLACEHOLDERS.ADD_GROUP_MANAGER' | translate}}">                                                                                                       
                                 <img src="assets/icons/search.svg" class="search-icon">
                                 <ul class="dropdown-menu content-menu" [class.show]="showManagersSearchDropdown">

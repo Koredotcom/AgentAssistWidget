@@ -11,10 +11,10 @@
             <div class="body-sec-data">
                 <ul class="nav nav-tabs" role="tablist">
                     <li (click)="viewType = 'preview'">
-                        <div class="tab-name active" data-toggle="tab" href="#call"><img src="assets/icons/call-inactive.svg" class="call-inactive"><img src="assets/icons/call-active.svg" class="call-active">{{ "USECASES.CALL_EXPERIENCE" | translate }}</div>
+                        <div class="tab-name active" data-bs-toggle="tab" href="#call"><img src="assets/icons/call-inactive.svg" class="call-inactive"><img src="assets/icons/call-active.svg" class="call-active">{{ "USECASES.CALL_EXPERIENCE" | translate }}</div>
                     </li>
                     <li (click)="viewType = 'preview'">
-                        <div class="tab-name" data-toggle="tab" href="#chat"><img src="assets/icons/comment-active.svg" class="chat-active"><img src="assets/icons/comment-inactive.svg" class="chat-inactive">{{ "USECASES.CHAT_EXPERIENCE" | translate }}</div>
+                        <div class="tab-name" data-bs-toggle="tab" href="#chat"><img src="assets/icons/comment-active.svg" class="chat-active"><img src="assets/icons/comment-inactive.svg" class="chat-inactive">{{ "USECASES.CHAT_EXPERIENCE" | translate }}</div>
                     </li>
                 </ul>
                 <div class="tab-content">
@@ -27,7 +27,7 @@
                                     <img src="assets/icons/copy.svg">{{'USECASES.COPY_FROM_CHAT' | translate}}
                                 </div>
                                 <!-- <div class="dropdown kr-sg-overflow-menu" *ngIf="isEditable">
-                                    <div class="dropdown-toggle" id="menu1" data-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-black.svg"></div>
+                                    <div class="dropdown-toggle" id="menu1" data-bs-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-black.svg"></div>
                                     <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                                         <li (click)="responseObj.viewType = 'edit'"><a><img src="assets/icons/edit-black.svg">{{ "USECASES.EDIT" | translate }}</a></li>
                                         <li (click)="removeAnotherResponse(i, 'phone')" *ngIf="inputData.callExperience.responses.length !== 1"><a><img src="assets/icons/delete-black.svg">{{ "USECASES.DELETE" | translate }}</a></li>
@@ -74,7 +74,7 @@
                                     <img src="assets/icons/copy.svg">{{'USECASES.COPY_FROM_CALL' | translate}}
                                 </div>
                                 <!-- <div class="dropdown kr-sg-overflow-menu" *ngIf="isEditable">
-                                    <div class="dropdown-toggle" id="menu1" data-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-black.svg"></div>
+                                    <div class="dropdown-toggle" id="menu1" data-bs-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-black.svg"></div>
                                     <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                                         <li (click)="responseObj.viewType = 'edit';"><a><img src="assets/icons/edit-black.svg">{{ "USECASES.EDIT" | translate }}</a></li>
                                         <li (click)="removeAnotherResponse(i)" *ngIf="inputData.chatExperience.responses.length !== 1"><a><img src="assets/icons/delete-black.svg">{{ "USECASES.DELETE" | translate }}</a></li>

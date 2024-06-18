@@ -47,7 +47,7 @@
                 <div class="type-skill-name-block">
                     <div class="kr-sg-dropdowns col-6 p-0">                                       
                         <div class="kr-sg-input-inline-search dropdown dropdown-open line-height-0">
-                            <button class="dropdown-toggle dropdown-input search-with-dropdown" data-toggle="dropdown">{{selectedLanguage}}</button>    
+                            <button class="dropdown-toggle dropdown-input search-with-dropdown" data-bs-toggle="dropdown">{{selectedLanguage}}</button>    
                             <input type="text" #langSearchTerm (keyup.enter)="onEnter($event.target.value); langSearchTerm.value = selectedLanguage;" (input)="langSearchTerm.value = $event.target.value" value="{{selectedLanguage}}" (focus)="showLangSearchDropdown = true" class="input-search dropdown-toggle dropdown-input" autocomplete="chrome-off" [placeholder]="'AGENTSETTINGS.SEARCH_LANG_PLACEHOLDER' | translate">                                                                                                       
                             <ul class="dropdown-menu content-menu" [class.show]="showLangSearchDropdown">
                                 <perfect-scrollbar class="country-code-perfect-scroll">

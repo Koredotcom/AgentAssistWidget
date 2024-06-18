@@ -24,7 +24,7 @@
                     <div class="kr-sg-dropdowns col-6 pr-0">
                         <div class="label-text">{{ "AGENTSETTINGS.TIME_ZONE" | translate }}</div>
                         <div class="dropdown dropdown-open">
-                            <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{hoursOperation.timezone}}</button>                                            
+                            <button class="dropdown-toggle dropdown-input" data-bs-toggle="dropdown">{{hoursOperation.timezone}}</button>                                            
                             <ul class="dropdown-menu content-menu">
                                 <li class="search-box">
                                     <input type="text" required #timezoneSearchTerm name="timezoneSearchTerm" placeholder="{{'PLACEHOLDERS.SEARCH' | translate}}" class="seach-input" (input)="timezoneSearchTerm.value = $event.target.value" autocomplete="chrome-off">
@@ -43,13 +43,13 @@
                 </div>
                 <ul class="nav nav-tabs" role="tablist">
                     <li>
-                        <div class="tab-name active" data-toggle="tab" href="#standard-hours">
+                        <div class="tab-name active" data-bs-toggle="tab" href="#standard-hours">
                             <img src="assets/icons/agent-settings/date-time.svg" class="call-inactive">
                             <img src="assets/icons/agent-settings/date-time.svg" class="call-active">{{ "AGENTSETTINGS.STANDARD_HOURS" | translate }}
                         </div>
                     </li>
                     <li>
-                        <div class="tab-name" data-toggle="tab" href="#date-time">
+                        <div class="tab-name" data-bs-toggle="tab" href="#date-time">
                             <img src="assets/icons/agent-settings/calendar.svg" class="call-inactive">
                             <img src="assets/icons/agent-settings/calendar.svg" class="call-active">{{"HOURS_OF_OPERATION.HOLIDAYS_SPECIAL_DAYS" | translate}}                            
                         </div>

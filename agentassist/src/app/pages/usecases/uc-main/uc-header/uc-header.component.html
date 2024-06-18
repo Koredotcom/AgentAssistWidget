@@ -4,7 +4,7 @@
     </div>
     <div class="selections" *ngIf="!usecaseService.isAddUsecase">
         <div class="dropdown">
-            <button *ngIf="currentTab != 'exp'" class="smart-primary-btn" [disabled]="workflowService.appState == 'published'" type="button" data-toggle="dropdown">
+            <button *ngIf="currentTab != 'exp'" class="smart-primary-btn" [disabled]="workflowService.appState == 'published'" type="button" data-bs-toggle="dropdown">
                 <img src="assets/icons/add.svg" class="addPlus">{{ "USECASES.NEW_UC" | translate }}
             </button>
             <button *ngIf="currentTab === 'exp'" class="smart-primary-btn" type="button" (click)="createNewFlow()">

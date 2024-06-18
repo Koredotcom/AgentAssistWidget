@@ -11,7 +11,7 @@
     <div id="accordion" class="body-feedback-data">
         <ng-container *ngFor="let obj of feedbackList; let fbinx = index">
             <div class="welcome-event-accordion childComp" [formGroup]="feedbackForm.get(obj.bkey)" *ngIf="feedbackForm">
-                <div data-toggle="collapse" [attr.href] ="'#configGreetings' + fbinx" class="card_link" aria-expanded="false" (click)="showCountWarningMsg = false;showDuplicateWarning=false;showDisableWarning=false;">
+                <div data-bs-toggle="collapse" [attr.href] ="'#configGreetings' + fbinx" class="card_link" aria-expanded="false" (click)="showCountWarningMsg = false;showDuplicateWarning=false;showDisableWarning=false;">
                     <div class="accordion-content-header">
                         <div class="team-with-profile">
                             <i class="icon-sa-arrow-down arrow-icon"></i>
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="configGreetings{{fbinx}}" class="collapse" data-parent="#accordion">
+                <div id="configGreetings{{fbinx}}" class="collapse" data-bs-parent="#accordion">
                     <div class="accordion-content-body">
                         <div class="enabled-block">
                             <div class="toggle-info-data">

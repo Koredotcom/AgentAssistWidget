@@ -14,7 +14,7 @@
         <!--AgentAssist Widget-->
         <div id="accordion">
             <div class="agentassist-accordion-wrapper">
-                <div data-toggle="collapse" href="#collapse2" class="card_link collapsed"
+                <div data-bs-toggle="collapse" href="#collapse2" class="card_link collapsed"
                     aria-expanded="false">
                     <div class="accordion-content-header">
                         <div class="team-with-profile">
@@ -41,7 +41,7 @@
                         </div> -->
                     </div>
                 </div>
-                <div id="collapse2" class="collapse" data-parent="#accordion" [formGroup]="agentAssistFormGroup.get('agentAssistSettings').get(selectedChannel)">
+                <div id="collapse2" class="collapse" data-bs-parent="#accordion" [formGroup]="agentAssistFormGroup.get('agentAssistSettings').get(selectedChannel)">
                     <div class="accordion-content-body">
                         <div class="settings-info-block">
                             <div class="settings-info-text">
@@ -210,7 +210,7 @@
                                                                                 <!--  -->
                                                                                 <ng-container *ngFor="let automationBot of linkedBotObjs; let autoIndex = index">
                                                                                     <li>
-                                                                                        <div ngbTooltip="{{automationBot?.botName}}" class="multi-dropdown-list" data-toggle="collapse" [attr.data-target]="'#' + convosTransferType + '-' +autoIndex" (click)="selectCustomBot(automationBot?._id)">
+                                                                                        <div ngbTooltip="{{automationBot?.botName}}" class="multi-dropdown-list" data-bs-toggle="collapse" [attr.data-target]="'#' + convosTransferType + '-' +autoIndex" (click)="selectCustomBot(automationBot?._id)">
                                                                                             <span>{{automationBot?.botName}}</span>
                                                                                             <i class="icon-coaching--left-arrow"></i>
                                                                                         </div>
@@ -353,7 +353,7 @@
                                                                 <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
                                                                     <ng-container *ngFor="let automationBot of linkedBotObjs; let indxVal = index">
                                                                         <li>
-                                                                            <div class="multi-dropdown-list" data-toggle="collapse" [attr.data-target]="'#autoSummaryModel-' + indxVal" (click)="selectCustomBot(automationBot?._id)">
+                                                                            <div class="multi-dropdown-list" data-bs-toggle="collapse" [attr.data-target]="'#autoSummaryModel-' + indxVal" (click)="selectCustomBot(automationBot?._id)">
                                                                                 <span ngbTooltip="{{automationBot?.botName}}" placement="bottom-right">{{automationBot?.botName}}</span>
                                                                                 <i class="icon-coaching--left-arrow"></i>
                                                                             </div>
@@ -519,7 +519,7 @@
             </div>
             <!--Knowledge AI Widget-->
             <div class="agentassist-accordion-wrapper">
-                <div data-toggle="collapse" href="#collapse1" class="card_link collapsed"
+                <div data-bs-toggle="collapse" href="#collapse1" class="card_link collapsed"
                     aria-expanded="false">
                     <div class="accordion-content-header">
                         <div class="team-with-profile">
@@ -545,7 +545,7 @@
                         </div> -->
                     </div>
                 </div>
-                <div id="collapse1" class="collapse" data-parent="#accordion" [formGroup]="knowledgeAIFormGroup.get(selectedKAIChannel)">
+                <div id="collapse1" class="collapse" data-bs-parent="#accordion" [formGroup]="knowledgeAIFormGroup.get(selectedKAIChannel)">
                     <div class="accordion-content-body">
                         <div class="settings-info-block">
                             <div class="settings-info-text">
@@ -673,7 +673,7 @@
             </div>
             <!--AgentAssist General Settings Widget-->
             <div class="agentassist-accordion-wrapper">
-                <div data-toggle="collapse" href="#collapse3" class="card_link collapsed"
+                <div data-bs-toggle="collapse" href="#collapse3" class="card_link collapsed"
                     aria-expanded="false">
                     <div class="accordion-content-header">
                         <div class="team-with-profile">
@@ -700,7 +700,7 @@
                         </div> -->
                     </div>
                 </div>
-                <div id="collapse3" class="collapse" [formGroup]="agentAssistFormGroup" data-parent="#accordion">
+                <div id="collapse3" class="collapse" [formGroup]="agentAssistFormGroup" data-bs-parent="#accordion">
                     <div class="accordion-content-body" formGroupName="agentAssistSettings">
                         <div class="settings-info-block">
                             <div class="settings-info-text">

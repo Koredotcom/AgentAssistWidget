@@ -73,14 +73,14 @@
             <div id="accordion">
                 <div class="card_accordion" *ngFor = "let automation of automationOverrideTableData; let i = index">
                   <div class="card_header">
-                    <div class="card-data-header row collapsed" data-toggle="collapse" [attr.href]="'#automationoverride' + i">
+                    <div class="card-data-header row collapsed" data-bs-toggle="collapse" [attr.href]="'#automationoverride' + i">
                         <i class="icon-sa-arrow-down"></i>
                         <div class="title col-4">{{automation.intentName}}</div>
                         <div class="title entity-title col-4">{{automationIntentNamevsEntityList[automation.intentName].length}} entities</div>
                         <div class="title override-count col-4 text-right">{{automation.totalOverides}} overrides</div>
                     </div>
                   </div>
-                  <div [attr.id]="'automationoverride' + i"  class="collapse" data-parent="#accordion">
+                  <div [attr.id]="'automationoverride' + i"  class="collapse" data-bs-parent="#accordion">
                     <div class="card-body">
                         <div class="row-data-info row" *ngFor="let obj of automationIntentNamevsEntityList[automation.intentName]">
                             <div class="title col-6">{{obj.entityName}}</div>

@@ -66,7 +66,7 @@
                                 <path d="M1.66077 10.397C0.809318 10.397 0.105225 11.0205 0.105225 11.8416C0.105225 12.6813 0.809318 13.3049 1.66077 13.3049C2.53271 13.3049 3.2368 12.6813 3.2368 11.8416C3.2368 11.02 2.53271 10.397 1.66077 10.397Z" fill="#111827"/>
                             </svg>
                             <h1>{{conversationSummary.editedSummary && !conversationSummary.isDisabled && !conversationSummary.isError ?  'EDITED SUMMARY' : 'SUMMARY'}}</h1>
-                            <div class="toggle-show-orginal-summery" data-toggle="collapse" data-target="#collapseSummary" tooltipClass="tooltip-global-styles" (click)="eyeClick = !eyeClick" ngbTooltip="{{eyeClick ? 'Click to hide Original Summary' : 'Click to see Original Summary'}}" placement="bottom-center" *ngIf="conversationSummary.editedSummary">
+                            <div class="toggle-show-orginal-summery" data-bs-toggle="collapse" data-target="#collapseSummary" tooltipClass="tooltip-global-styles" (click)="eyeClick = !eyeClick" ngbTooltip="{{eyeClick ? 'Click to hide Original Summary' : 'Click to see Original Summary'}}" placement="bottom-center" *ngIf="conversationSummary.editedSummary">
                                 <svg width="20" height="21" viewBox="0 0 20 21" fill="none" class="eye">
                                     <path d="M12.2004 10.7967C12.2004 12.0121 11.2151 12.9975 9.99967 12.9975C8.78423 12.9975 7.79892 12.0121 7.79892 10.7967C7.79892 9.58127 8.78423 8.59596 9.99967 8.59596C11.2151 8.59596 12.2004 9.58127 12.2004 10.7967Z" stroke="#155EEF" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M3 10.7967C3.93479 7.82047 6.71528 5.66162 9.99999 5.66162C13.2847 5.66162 16.0652 7.8205 17 10.7967C16.0652 13.7729 13.2847 15.9318 10 15.9318C6.71527 15.9318 3.93477 13.7729 3 10.7967Z" stroke="#155EEF" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
@@ -125,7 +125,7 @@
                     </div>
                     <div class="agent-msg-template">
                         <div class="title-agent-msg">{{data.components[0]?.data?.text}}</div>
-                        <!-- <div class="copied-via-agent-assist" data-toggle="collapse" data-target="#agent-selected">
+                        <!-- <div class="copied-via-agent-assist" data-bs-toggle="collapse" data-target="#agent-selected">
                             <img src="assets/images/conv-logs/agent-assist.svg">
                             <span class="text-title">Copied via AgentAssist</span>
                             <i class="icon-sa-arrow-down"></i>
@@ -162,7 +162,7 @@
                 </div>
                 <div class="agent-msg-template">
                     <div class="title-agent-msg">Thank you for your patiences Mark. I’m Charlie. I see that your having some issues with making a trade. How can I help you today?</div>
-                    <div class="copied-via-agent-assist" data-toggle="collapse" data-target="#agent-selected">
+                    <div class="copied-via-agent-assist" data-bs-toggle="collapse" data-target="#agent-selected">
                         <img src="assets/images/conv-logs/agent-assist.svg">
                         <span class="text-title">Copied via AgentAssist</span>
                         <i class="icon-sa-arrow-down"></i>
@@ -208,7 +208,7 @@
                                 <div class="automation-text">Automation running</div>
                             </div>
                         </div>
-                        <div class="copied-via-agent-assist" data-toggle="collapse" data-target="#auto-node">
+                        <div class="copied-via-agent-assist" data-bs-toggle="collapse" data-target="#auto-node">
                             <img src="assets/images/conv-logs/agent-assist.svg">
                             <span class="text-title">via AgentAssist</span>
                             <i class="icon-sa-arrow-down"></i>
@@ -322,7 +322,7 @@
                                 <div class="title">Unused Suggestions (4)</div>
                             </div>
                         </div>
-                        <div class="copied-via-agent-assist" data-toggle="collapse" data-target="#view-sugg">
+                        <div class="copied-via-agent-assist" data-bs-toggle="collapse" data-target="#view-sugg">
                             <span class="text-title">View suggestions</span>
                         </div>
                     </div>
@@ -444,7 +444,7 @@
                 </div>
                 <div class="agent-msg-template">
                     <div class="title-agent-msg">Thank you for your patiences Mark. I’m Charlie. I see that your having some issues with making a trade. How can I help you today?</div>
-                    <div class="copied-via-agent-assist" data-toggle="collapse" data-target="#agent-selected1">
+                    <div class="copied-via-agent-assist" data-bs-toggle="collapse" data-target="#agent-selected1">
                         <img src="assets/images/conv-logs/agent-assist.svg">
                         <span class="text-title">Copied via AgentAssist</span>
                         <i class="icon-sa-arrow-down"></i>
@@ -512,14 +512,14 @@
                             </div>
                             <div class="content-sec">
                                 <div class="title">Feedback for AgentAssist</div>
-                                <div class="feedback-desc">“Not user friendly”, Irrelevant Suggestion, <span data-toggle="collapse" data-target="#feedback">+ 2 others <i class="icon-sa-arrow-down"></i></span></div>
+                                <div class="feedback-desc">“Not user friendly”, Irrelevant Suggestion, <span data-bs-toggle="collapse" data-target="#feedback">+ 2 others <i class="icon-sa-arrow-down"></i></span></div>
                             </div>
                         </div>
                         <div class="thumb-info">
                             <div class="thumb-positive">
                                 <i class="icon-sa-info"></i>
                             </div>
-                            <div class="thumb-negtive active-thumb" data-toggle="collapse" data-target="#feedback">
+                            <div class="thumb-negtive active-thumb" data-bs-toggle="collapse" data-target="#feedback">
                                 <i class="icon-sa-info"></i>
                             </div>
                             <div class="icon_arrow">

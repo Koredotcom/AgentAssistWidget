@@ -15,28 +15,28 @@
             <div class="add-new-agent-container">
                 <ul class="nav nav-tabs" role="tablist">
                     <li>
-                        <div class="tab-name active" data-toggle="tab" href="#config">
+                        <div class="tab-name active" data-bs-toggle="tab" href="#config">
                             <!-- <img src="assets/icons/agent-usecase/configuration.svg" class="call-inactive"> -->
                             <!-- <img src="assets/icons/agent-usecase/configuration-active.svg" class="call-active"> -->
                             General Setup
                         </div>
                     </li>
                     <li *ngIf="!(ucType === 'dialog' || (conv.isAgentAssistOnly))">
-                        <div class="tab-name" data-toggle="tab" href="#call">
+                        <div class="tab-name" data-bs-toggle="tab" href="#call">
                             <!-- <img src="assets/icons/call-inactive.svg" class="call-inactive">
                             <img src="assets/icons/call-active.svg" class="call-active"> -->
                             {{ "USECASES.CALL_EXPERIENCE" | translate }}
                         </div>
                     </li>
                     <li *ngIf="!(ucType === 'dialog' || (conv.isAgentAssistOnly))">
-                        <div class="tab-name" data-toggle="tab" href="#chat">
+                        <div class="tab-name" data-bs-toggle="tab" href="#chat">
                             <!-- <img src="assets/icons/comment-active.svg" class="chat-active">
                             <img src="assets/icons/comment-inactive.svg" class="chat-inactive"> -->
                             {{ "USECASES.CHAT_EXPERIENCE" | translate }}
                         </div>
                     </li>
                     <li *ngIf="ucType === 'dialog' || (conv.isAgentAssistOnly)">
-                        <div class="tab-name" data-toggle="tab" href="#triggersandpermissions">
+                        <div class="tab-name" data-bs-toggle="tab" href="#triggersandpermissions">
                             <!-- <img src="assets/icons/agent-usecase/triggers.svg" class="call-inactive"> -->
                             <img src="assets/icons/agent-usecase/triggers-active.svg" class="call-active">{{"TRIGGER_PERMISSION" | translate}}
                         </div>
@@ -210,7 +210,7 @@
                             <div class="kr-sg-dropdowns mb-2 mt-4">
                                 <div class="label-text labeltext mb-2">{{'USECASES.PRE_TRANSFER_MESSAGE' | translate}}</div>
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{(callExp.preTransferMsgType === 'custom' ? 'USECASES.CUSTOM_MESSAGE' : 'USECASES.DEFAULT_MESSAGE') | translate}}</button>                                            
+                                    <button class="dropdown-toggle dropdown-input" data-bs-toggle="dropdown">{{(callExp.preTransferMsgType === 'custom' ? 'USECASES.CUSTOM_MESSAGE' : 'USECASES.DEFAULT_MESSAGE') | translate}}</button>                                            
                                     <ul class="dropdown-menu content-menu">                                                                          
                                     <li (click)="callExp.preTransferMsgType = 'default'"><a>{{'USECASES.DEFAULT_MESSAGE' | translate}}</a></li>
                                     <li (click)="onClickCustomMsg('callExp', 'preTransferMsgType')"><a>{{'USECASES.CUSTOM_MESSAGE' | translate}}</a></li>
@@ -220,7 +220,7 @@
                             <div class="response-view" *ngIf="callExp.preTransferMsgViewType === 'preview' || callExp.preTransferMsgType === 'default'">
                                 <div class="res-tille">{{(callExp.preTransferMsgType === 'default'? 'USECASES.DEFAULT' : 'USECASES.MESSAGE') | translate}}</div>                       
                                 <div class="dropdown kr-sg-overflow-menu" *ngIf="isEditable">
-                                    <div class="dropdown-toggle" [class.d-none]="callExp.preTransferMsgType === 'default'" id="menu1" data-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-black.svg"></div>
+                                    <div class="dropdown-toggle" [class.d-none]="callExp.preTransferMsgType === 'default'" id="menu1" data-bs-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-black.svg"></div>
                                     <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                                         <li (click)="callExp.preTransferMsgViewType = 'edit'"><a><img src="assets/icons/edit-black.svg">{{'USECASES.EDIT' | translate}}</a></li>
                                         <li class="d-none"><a><img src="assets/icons/delete-black.svg">{{'BUTTONS.DELETE' | translate}}</a></li>
@@ -274,7 +274,7 @@
                                 </div>
                                 <div class="kr-sg-dropdowns mb-2 mt-2">
                                     <div class="dropdown dropdown-open">
-                                        <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{(callExp.chatPreTransferMsgType === 'custom' ? 'USECASES.CUSTOM_MESSAGE' : 'USECASES.DEFAULT_MESSAGE') | translate}}</button>                                            
+                                        <button class="dropdown-toggle dropdown-input" data-bs-toggle="dropdown">{{(callExp.chatPreTransferMsgType === 'custom' ? 'USECASES.CUSTOM_MESSAGE' : 'USECASES.DEFAULT_MESSAGE') | translate}}</button>                                            
                                         <ul class="dropdown-menu content-menu">                                                                          
                                         <li (click)="callExp.chatPreTransferMsgType = 'default'"><a>{{'USECASES.DEFAULT_MESSAGE' | translate}}</a></li>
                                         <li (click)="onClickCustomMsg('callExp', 'chatPreTransferMsgType')"><a>{{'USECASES.CUSTOM_MESSAGE' | translate}}</a></li>
@@ -284,7 +284,7 @@
                                 <div class="response-view" *ngIf="callExp.chatPreTransferMsgViewType === 'preview' || callExp.chatPreTransferMsgType === 'default'">
                                     <div class="res-tille">{{(callExp.chatPreTransferMsgType === 'default'? 'USECASES.DEFAULT' : 'USECASES.MESSAGE') | translate}}</div>                       
                                     <div class="dropdown kr-sg-overflow-menu" *ngIf="isEditable">
-                                        <div class="dropdown-toggle" [class.d-none]="callExp.chatPreTransferMsgType === 'default'" id="menu1" data-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-black.svg"></div>
+                                        <div class="dropdown-toggle" [class.d-none]="callExp.chatPreTransferMsgType === 'default'" id="menu1" data-bs-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-black.svg"></div>
                                         <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                                             <li (click)="callExp.chatPreTransferMsgViewType = 'edit'"><a><img src="assets/icons/edit-black.svg">{{'USECASES.EDIT' | translate}}</a></li>
                                             <li class="d-none"><a><img src="assets/icons/delete-black.svg">{{'USECASES.DELETE' | translate}}</a></li>
@@ -358,7 +358,7 @@
                             <div class="kr-sg-dropdowns mb-2 mt-4">
                                 <div class="label-text labeltext mb-2">{{'USECASES.PRE_TRANSFER_MESSAGE' | translate}}</div>
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{(chatExp.preTransferMsgType === 'custom' ? 'USECASES.CUSTOM_MESSAGE' : 'USECASES.DEFAULT_MESSAGE') | translate}}</button>                                            
+                                    <button class="dropdown-toggle dropdown-input" data-bs-toggle="dropdown">{{(chatExp.preTransferMsgType === 'custom' ? 'USECASES.CUSTOM_MESSAGE' : 'USECASES.DEFAULT_MESSAGE') | translate}}</button>                                            
                                     <ul class="dropdown-menu content-menu">                                                                          
                                     <li (click)="chatExp.preTransferMsgType = 'default'"><a>{{'USECASES.DEFAULT_MESSAGE' | translate}}</a></li>
                                     <li (click)="onClickCustomMsg('chatExp', 'preTransferMsgType')"><a>{{'USECASES.CUSTOM_MESSAGE' | translate}}</a></li>
@@ -368,7 +368,7 @@
                             <div class="response-view" *ngIf="chatExp.preTransferMsgViewType === 'preview' || chatExp.preTransferMsgType === 'default'">
                                 <div class="res-tille">{{(chatExp.preTransferMsgType === 'default'? 'USECASES.DEFAULT' : 'USECASES.MESSAGE') | translate}}</div>                       
                                 <div class="dropdown kr-sg-overflow-menu" *ngIf="isEditable">
-                                    <div class="dropdown-toggle" [class.d-none]="chatExp.preTransferMsgType === 'default'" id="menu1" data-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-black.svg"></div>
+                                    <div class="dropdown-toggle" [class.d-none]="chatExp.preTransferMsgType === 'default'" id="menu1" data-bs-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-black.svg"></div>
                                     <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                                         <li (click)="chatExp.preTransferMsgViewType = 'edit'"><a><img src="assets/icons/edit-black.svg">{{'USECASES.EDIT' | translate}}</a></li>
                                         <li class="d-none"><a><img src="assets/icons/delete-black.svg">{{'USECASES.DELETE' | translate}}</a></li>

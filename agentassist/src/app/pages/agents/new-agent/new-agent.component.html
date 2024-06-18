@@ -19,10 +19,10 @@
 
             <div class="add-new-agent-container">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li><div class="tab-name active" data-toggle="tab" href="#agentprofile"><img src="assets/icons/agent/agent-blue.svg" class="call-inactive"><img src="assets/icons/agent/agent-blue.svg" class="call-active">{{ "AGENTS.AGENT_PROFILE" | translate}}</div></li>
-                    <li><div class="tab-name" data-toggle="tab" href="#chat"><img src="assets/icons/comment-active.svg" class="chat-active"><img src="assets/icons/comment-inactive.svg" class="chat-inactive">{{"AGENTS.CHAT_SUPPORT" | translate}}</div></li>  
-                    <li><div class="tab-name" data-toggle="tab" href="#voice"><img src="assets/icons/agent/voice.svg" class="call-inactive"><img src="assets/icons/agent/voice.svg" class="call-active">{{"AGENTS.VOICE_SUPPORT" | translate}}</div></li>       
-                    <li><div class="tab-name" data-toggle="tab" href="#skill"><img src="assets/icons/agent/skill.svg" class="chat-active"><img src="assets/icons/agent/skill.svg" class="chat-inactive">{{"NAV.SKILLS" | translate}}</div></li>                            
+                    <li><div class="tab-name active" data-bs-toggle="tab" href="#agentprofile"><img src="assets/icons/agent/agent-blue.svg" class="call-inactive"><img src="assets/icons/agent/agent-blue.svg" class="call-active">{{ "AGENTS.AGENT_PROFILE" | translate}}</div></li>
+                    <li><div class="tab-name" data-bs-toggle="tab" href="#chat"><img src="assets/icons/comment-active.svg" class="chat-active"><img src="assets/icons/comment-inactive.svg" class="chat-inactive">{{"AGENTS.CHAT_SUPPORT" | translate}}</div></li>  
+                    <li><div class="tab-name" data-bs-toggle="tab" href="#voice"><img src="assets/icons/agent/voice.svg" class="call-inactive"><img src="assets/icons/agent/voice.svg" class="call-active">{{"AGENTS.VOICE_SUPPORT" | translate}}</div></li>       
+                    <li><div class="tab-name" data-bs-toggle="tab" href="#skill"><img src="assets/icons/agent/skill.svg" class="chat-active"><img src="assets/icons/agent/skill.svg" class="chat-inactive">{{"NAV.SKILLS" | translate}}</div></li>                            
                     <!-- <div *ngIf="isEditMode" class="delete-agent" (click)="deleteAgent()"><img src="assets/icons/settings/delete.svg">{{"AGENTS.DELETE_AGENT" | translate}}</div> -->
                 </ul>            
                 <div class="tab-content">
@@ -73,7 +73,7 @@
                                     <div class="kr-sg-dropdowns col-6 pr-0">
                                         <div class="label-text">{{"AGENTS.ROLE" | translate}}</div>
                                         <div class="dropdown dropdown-open">
-                                            <button class="dropdown-toggle dropdown-input" [ngClass]="{'error' : (submitted && !agent?.roleId)}" data-toggle="dropdown" [disabled]="(selectedAgentGrp?.isDefault && selectedAgent?.role == 'manager')">{{selectedRole || "COMMON.CHOOSE_OPTION" | translate}}</button>                                            
+                                            <button class="dropdown-toggle dropdown-input" [ngClass]="{'error' : (submitted && !agent?.roleId)}" data-bs-toggle="dropdown" [disabled]="(selectedAgentGrp?.isDefault && selectedAgent?.role == 'manager')">{{selectedRole || "COMMON.CHOOSE_OPTION" | translate}}</button>                                            
                                             <ul class="dropdown-menu content-menu">
                                                 <perfect-scrollbar class="country-code-perfect-scroll">
                                                     <li *ngFor="let role of roles" (click)="onRoleSelect(role)"><a>{{role?.role}}</a></li>
@@ -105,7 +105,7 @@
                                     <div class="kr-sg-dropdowns col-6 pl-0">
                                         <div class="label-text">{{"AGENTS.GROUP" | translate}}</div>
                                         <div class="dropdown dropdown-open">
-                                            <button class="dropdown-toggle dropdown-input" [ngClass]="{'error' : (submitted && !agent?.agentGroupId)}" data-toggle="dropdown">{{selectedGroup || "COMMON.CHOOSE_OPTION" | translate}}</button>                                            
+                                            <button class="dropdown-toggle dropdown-input" [ngClass]="{'error' : (submitted && !agent?.agentGroupId)}" data-bs-toggle="dropdown">{{selectedGroup || "COMMON.CHOOSE_OPTION" | translate}}</button>                                            
                                             <ul class="dropdown-menu content-menu">
                                                 <perfect-scrollbar class="country-code-perfect-scroll">
                                                     <li *ngFor="let agentGP of agentGroups" (click)="onGroupSelect(agentGP)"><a>{{agentGP?.name}}</a></li>
@@ -117,7 +117,7 @@
                                     <div class="kr-sg-dropdowns col-6 pr-0">
                                         <div class="label-text">{{"AGENTS.HOURS_OPERATION" | translate}}</div>
                                         <div class="dropdown dropdown-open">
-                                            <button class="dropdown-toggle dropdown-input" [ngClass]="{'error' : (submitted && !agent?.hoursOfOperationId)}" data-toggle="dropdown">{{selectedHoursOperation || "COMMON.CHOOSE_OPTION" | translate}}</button>                                            
+                                            <button class="dropdown-toggle dropdown-input" [ngClass]="{'error' : (submitted && !agent?.hoursOfOperationId)}" data-bs-toggle="dropdown">{{selectedHoursOperation || "COMMON.CHOOSE_OPTION" | translate}}</button>                                            
                                             <ul class="dropdown-menu content-menu">
                                                 <perfect-scrollbar class="country-code-perfect-scroll">
                                                     <li *ngFor="let hourOperation of hoursOperationList" (click)="onHoursOperationSelect(hourOperation)"><a>{{hourOperation?.name}}</a></li>
@@ -269,7 +269,7 @@
                                 <div class="type-skill-name-block">
                                     <div class="kr-sg-dropdowns col-6 p-0">                                       
                                         <div class="kr-sg-input-inline-search dropdown dropdown-open line-height-0">
-                                            <button class="dropdown-toggle dropdown-input search-with-dropdown" data-toggle="dropdown">{{selectedSkill}}</button>    
+                                            <button class="dropdown-toggle dropdown-input search-with-dropdown" data-bs-toggle="dropdown">{{selectedSkill}}</button>    
                                             <input type="text" #skillSearchTerm (keyup.enter)="onEnter($event.target.value); skillSearchTerm.value = selectedSkill" (input)="skillSearchTerm.value = $event.target.value" value="{{selectedSkill}}" (focus)="showSkillSearchDropdown = true" class="input-search dropdown-toggle dropdown-input" autocomplete="chrome-off" [placeholder]="'AGENTS.TYPE_SKILL_PLACEHOLDER' | translate">                                                                                                       
                                             <ul class="dropdown-menu content-menu" [class.show]="showSkillSearchDropdown">
                                                 <perfect-scrollbar class="country-code-perfect-scroll">

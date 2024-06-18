@@ -60,7 +60,7 @@
                 <div class="col-6 kr-sg-dropdowns mb-4 pb-1 pl-0 search-dropdown">
                     <div class="label-text">{{'SETTINGS.COUNTRY' | translate}}</div>
                     <div class="kr-sg-input-inline-search dropdown dropdown-open line-height-0">
-                        <button class="dropdown-toggle dropdown-input search-with-dropdown d-none" data-toggle="dropdown">{{selectedCountryAddress && selectedCountryAddress['country'] || 'SETTINGS.SELECT_A_COUNTRY'}}</button>    
+                        <button class="dropdown-toggle dropdown-input search-with-dropdown d-none" data-bs-toggle="dropdown">{{selectedCountryAddress && selectedCountryAddress['country'] || 'SETTINGS.SELECT_A_COUNTRY'}}</button>    
                         <input type="text" name="countryName" #countryName (input)="countryName.value = $event.target.value" [placeholder]="'SETTINGS.SELECT_A_COUNTRY' | translate" value="{{(selectedCountry?.countryName && selectedPhonenumber?.addressRequirements === 'local') ? selectedCountry?.countryName : selectedCountryAddress && selectedCountryAddress['country']}}" class="input-search dropdown-toggle dropdown-input" [class.readonly]="selectedPhonenumber?.addressRequirements === 'local'" autocomplete="chrome-off" (focus)="showStateSearchDropdown = true">
                         <img src="assets/icons/search.svg" class="search-icon">                                                           
                         <ul class="dropdown-menu content-menu" [class.show]="showCountryAddressDropdown">
@@ -165,7 +165,7 @@
                     <div class="kr-sg-dropdowns mb-2 pb-1">
                         <div class="label-text font-weight-bold">{{"SETTINGS.COUNTRY_NAME" | translate}}</div>
                         <div class="kr-sg-input-inline-search dropdown dropdown-open line-height-0">
-                            <button class="dropdown-toggle dropdown-input search-with-dropdown" data-toggle="dropdown">{{selectedCountry && selectedCountry['country'] || 'Select a Country'}}</button>    
+                            <button class="dropdown-toggle dropdown-input search-with-dropdown" data-bs-toggle="dropdown">{{selectedCountry && selectedCountry['country'] || 'Select a Country'}}</button>    
                             <input type="text" name="countryCodeSearchTerm" #countryCodeSearchTerm (input)="countryCodeSearchTerm.value = $event.target.value" [placeholder]="'SETTINGS.SELECT_A_COUNTRY' | translate" value="{{selectedCountry && selectedCountry['country'] || 'Select a Country'}}" class="input-search dropdown-toggle dropdown-input" autocomplete="chrome-off" (focus)="showCountrySearchDropdown = true">
                             <img src="assets/icons/search.svg" class="search-icon">                                                           
                             <ul class="dropdown-menu content-menu" [class.show]="showCountrySearchDropdown">
@@ -208,7 +208,7 @@
                             <div class="kr-sg-dropdowns mb-2 pb-1" [class.d-none]="phoneNumberType === 'tollFree'" *ngIf="stateCodes.length">
                                 <div class="label-text font-weight-bold">{{'SETTINGS.STATE' | translate}}</div>                            
                                 <div class="kr-sg-input-inline-search dropdown dropdown-open line-height-0">
-                                    <button class="dropdown-toggle dropdown-input search-with-dropdown" data-toggle="dropdown">{{selectedStateCode && selectedStateCode.stateName || 'Choose an option'}}</button>    
+                                    <button class="dropdown-toggle dropdown-input search-with-dropdown" data-bs-toggle="dropdown">{{selectedStateCode && selectedStateCode.stateName || 'Choose an option'}}</button>    
                                     <input type="text" name="countryCodeSearchTerm" name="stateCodeSearchTerm" #stateCodeSearchTerm (input)="stateCodeSearchTerm.value = $event.target.value" [placeholder]="'SETTINGS.SELECT_A_COUNTRY' | translate" value="{{selectedStateCode && selectedStateCode.stateName || 'Choose an option'}}" class="input-search dropdown-toggle dropdown-input" autocomplete="chrome-off" (focus)="showStateSearchDropdown = true">
                                     <img src="assets/icons/search.svg" class="search-icon">                                                           
                                     <ul class="dropdown-menu content-menu" [class.show]="showStateSearchDropdown">
