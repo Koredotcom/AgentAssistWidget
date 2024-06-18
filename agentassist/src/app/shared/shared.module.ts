@@ -54,7 +54,7 @@ import { ConversationConfigComponent } from '../pages/usecases/conversation-conf
 import { ConnectToBotComponent } from '../pages/connect-to-bot/connect-to-bot.component';
 import { StrictFilterPipe } from '../helpers/filters/strict-filter';
 import { JsEditorComponent } from './js-editor/js-editor.component';
-import { AceEditorModule } from 'ng2-ace-editor';
+// import { AceEditorModule } from 'ng2-ace-editor';
 import { PlaceHolderDirective } from '../helpers/directives/placeholder.directive';
 import { LookupPipe } from '../helpers/filters/lookup.pipe';
 import { UbEmptyScreensComponent } from '../pages/usecases/uc-main/uc-table-main/uc-table-view/ub-empty-screens/ub-empty-screens.component';
@@ -140,7 +140,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     NgxDaterangepickerMd.forRoot(),
-    AceEditorModule
+    // AceEditorModule
   ],
   providers: [TitleCasePipe, FilterPipe, MillisToDurationPipePipe, MillisecondsToDateAndHourPipe],
   exports: [
@@ -182,7 +182,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConversationConfigComponent,
     ConnectToBotComponent,
     StrictFilterPipe,
-    AceEditorModule,
+    // AceEditorModule,
     JsEditorComponent,
     ConvsHistoryLogsComponent,
     ScrollEndDirective
