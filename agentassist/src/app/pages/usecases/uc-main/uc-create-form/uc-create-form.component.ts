@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, Rendere
 import { UntypedFormControl, UntypedFormGroup, NgForm, NgModelGroup, Validators } from '@angular/forms';
 import { NewUsecase, PALETTES } from '../uc-header/uc-header.model';
 import { UsecasesMainService } from '../uc-main.service';
-import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatLegacyAutocompleteTrigger as MatAutocompleteTrigger } from '@angular/material/legacy-autocomplete';
 import { ServiceInvokerService } from "@kore.services/service-invoker.service";
 import { workflowService } from '@kore.services/workflow.service';
 import { Category, Usecase } from '../uc-table-main/uc-table-main.model';

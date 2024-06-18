@@ -1,6 +1,6 @@
 import {AfterContentInit, ContentChild, Directive, QueryList, ViewContainerRef} from '@angular/core';
-import {MatAutocompleteTrigger} from '@angular/material/autocomplete';
-import {MatChip, MatChipList} from '@angular/material/chips';
+import {MatLegacyAutocompleteTrigger as MatAutocompleteTrigger} from '@angular/material/legacy-autocomplete';
+import {MatLegacyChip as MatChip, MatLegacyChipList as MatChipList} from '@angular/material/legacy-chips';
 
 
 /**

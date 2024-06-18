@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, ChangeDetec
 import { SideBarService } from '../../services/header.service';
 import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { workflowService } from '@kore.services/workflow.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { BillingPlan } from '../../data/billing.model';

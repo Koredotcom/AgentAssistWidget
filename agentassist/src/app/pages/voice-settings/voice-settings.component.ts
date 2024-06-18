@@ -10,7 +10,7 @@ import { SettingsService } from '../settings/setttings.service';
 import * as _ from 'underscore';
 import { VoiceChannelDataSharingService } from '@kore.services/voice-channel-data-sharing.service';
 import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-confirm/uc-delete-confirm.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { fromEvent, Subscription } from 'rxjs';

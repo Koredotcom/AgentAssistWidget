@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
+import { LegacyProgressSpinnerMode as ProgressSpinnerMode } from '@angular/material/legacy-progress-spinner';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 // import { OpenAIService } from '../../open-ai.service';

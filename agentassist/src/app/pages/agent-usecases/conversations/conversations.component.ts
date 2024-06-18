@@ -9,7 +9,7 @@ import { SubSink } from 'subsink';
 import { UsecaseParams } from '../../usecases/uc-main/uc-table-main/uc-table-main.model';
 import * as _ from 'underscore';
 import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-confirm/uc-delete-confirm.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 @Component({
   selector: 'app-conversations',
   templateUrl: './conversations.component.html',

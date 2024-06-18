@@ -1,15 +1,15 @@
 import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { UsecasesMainService } from '../../../uc-main.service';
 import { Category, UsecaseOb } from '../../uc-table-main.model';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { MatLegacyMenuTrigger as MatMenuTrigger } from '@angular/material/legacy-menu';
 import { UsecasesTableMainService } from '../../uc-table-main.service';
 import { ServiceInvokerService } from "@kore.services/service-invoker.service";
 import { workflowService } from '@kore.services/workflow.service';
 import { NotificationService } from '@kore.services/notification.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { UcDeleteConfirmComponent } from '../../../../../../helpers/components/uc-delete-confirm/uc-delete-confirm.component';
 import { TranslateService } from '@ngx-translate/core';
-import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatLegacyAutocompleteTrigger as MatAutocompleteTrigger } from '@angular/material/legacy-autocomplete';
 
 declare const $: any;
 import * as _ from 'underscore';

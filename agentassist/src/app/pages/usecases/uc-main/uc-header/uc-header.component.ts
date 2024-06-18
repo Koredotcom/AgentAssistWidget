@@ -3,7 +3,7 @@ import { UsecasesMainService } from '../uc-main.service';
 import { NewUsecase } from './uc-header.model';
 import { workflowService } from '@kore.services/workflow.service';
 import { TranslateService } from '@ngx-translate/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { InstallTemplatesComponent } from '../../popUps/install-templates/install-templates.component';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../../services/auth.service';

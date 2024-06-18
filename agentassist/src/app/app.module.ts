@@ -34,7 +34,7 @@ import { EditorUrlDialogComponent } from './helpers/components/editor-url-dialog
 import { MomentModule } from 'ngx-moment';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { RefreshTokenInterceptor } from '@kore.services/inteceptors/refresh-token-interceptor';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
 
 import { channelsConfigService } from '@kore.services/channelsConfig.service';
 import { SafePipe } from './helpers/filters/safe.pipe';

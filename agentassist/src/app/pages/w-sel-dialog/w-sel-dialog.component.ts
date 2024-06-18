@@ -15,7 +15,7 @@ import { AppService } from '@kore.services/app.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpParams } from '@angular/common/http';
 import { OnboardingDialogComponent } from '../onboarding/onboarding-dialog/onboarding-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 declare const $: any;
 

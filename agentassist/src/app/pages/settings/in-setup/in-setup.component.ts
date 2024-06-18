@@ -10,7 +10,7 @@ import { NotificationService } from '@kore.services/notification.service';
 import { SettingsService } from '../setttings.service';
 import { fadeInOutAnimation, fadeInAnimation } from 'src/app/helpers/animations/animations';
 import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-confirm/uc-delete-confirm.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { MixPanelWrapper } from 'src/app/helpers/mixpanel';
 import { TranslateService } from '@ngx-translate/core';
 

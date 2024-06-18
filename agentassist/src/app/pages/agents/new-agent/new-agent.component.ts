@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Agent } from '../agents.model';
 import { AuthService } from '@kore.services/auth.service';
 import { finalize } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-confirm/uc-delete-confirm.component';
 import { AgentsService } from '../agents.service';
 import * as _ from 'underscore';

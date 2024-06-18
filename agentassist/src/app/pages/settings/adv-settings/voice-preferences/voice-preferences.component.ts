@@ -6,7 +6,7 @@ import { NotificationService } from '@kore.services/notification.service';
 import { finalize } from 'rxjs/operators';
 import { fadeInAnimation, fadeInOutAnimation } from 'src/app/helpers/animations/animations';
 import { TranslateService } from '@ngx-translate/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-confirm/uc-delete-confirm.component';
 import { DockStatusService } from '@kore.services/dockstatusService/dock-status.service';
 import { AuthService } from '@kore.services/auth.service';

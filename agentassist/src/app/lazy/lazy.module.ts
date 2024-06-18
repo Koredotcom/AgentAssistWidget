@@ -10,7 +10,7 @@ import { AgentChatHistoryComponent } from './agent-chat-history/agent-chat-histo
 import { SharedModule } from '../shared/shared.module';
 import { MetaTagssComponent } from './meta-tagss/meta-tagss.component';
 import { UnidentifiedUtterComponent } from './unidentified-utter/unidentified-utter.component';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
 import { AgentConverFlowComponent } from './agent-conver-flow/agent-conver-flow.component';
 
 

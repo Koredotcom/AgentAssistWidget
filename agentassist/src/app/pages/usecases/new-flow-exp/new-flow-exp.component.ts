@@ -6,7 +6,7 @@ import { EXPEIRENCEFLOW_MOCKDATA, EXPEIRENCE_MOCKDATA, INewExpeirence } from 'sr
 import { workflowService } from '@kore.services/workflow.service';
 import { AuthService } from '@kore.services/auth.service';
 import { SubSink } from 'subsink';
-import {MatChipInputEvent} from '@angular/material/chips';
+import {MatLegacyChipInputEvent as MatChipInputEvent} from '@angular/material/legacy-chips';
 import {COMMA, E, ENTER} from '@angular/cdk/keycodes';
 import * as _ from 'underscore';
 import { UsecasesMainService } from '../uc-main/uc-main.service';

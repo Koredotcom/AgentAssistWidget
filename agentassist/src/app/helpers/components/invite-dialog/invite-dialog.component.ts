@@ -1,7 +1,7 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { Component, OnInit, Inject } from '@angular/core';
-import {MatChipInputEvent} from '@angular/material/chips';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {MatLegacyChipInputEvent as MatChipInputEvent} from '@angular/material/legacy-chips';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import * as _ from 'underscore';
 import { ProjConstants } from '../../constants/proj.cnts';

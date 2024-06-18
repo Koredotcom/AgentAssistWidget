@@ -3,7 +3,7 @@ import { FormArray, UntypedFormBuilder, FormControl, FormGroup, Validators } fro
 import { MdEditorOption } from 'src/app/helpers/lib/md-editor.types';
 import { UsecaseOb } from '../uc-main/uc-table-main/uc-table-main.model';
 import { workflowService } from '@kore.services/workflow.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-confirm/uc-delete-confirm.component';
 import { TranslateService } from '@ngx-translate/core';
 

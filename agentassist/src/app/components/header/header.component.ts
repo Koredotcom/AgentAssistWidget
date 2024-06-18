@@ -9,7 +9,7 @@ import { kgDataService } from '../../services/componentsServices/kg-data.service
 import { NotificationService } from '@kore.services/notification.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { InviteDialogComponent } from '../../helpers/components/invite-dialog/invite-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
