@@ -11,7 +11,7 @@ import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-c
 import { DockStatusService } from '@kore.services/dockstatusService/dock-status.service';
 import { AuthService } from '@kore.services/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 declare const $: any;
 @Component({
@@ -49,9 +49,9 @@ export class VoicePreferencesComponent implements OnInit {
   addedParams = [];
   // alreadyAdded = [];
   @Output() getNewData = new EventEmitter();
-  newKeyValueForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    value: new FormControl('', [Validators.required])
+  newKeyValueForm = new UntypedFormGroup({
+    name: new UntypedFormControl('', [Validators.required]),
+    value: new UntypedFormControl('', [Validators.required])
   })
   @Input() voicePreferences: VoicePreferencesModel;
   @Output() closed = new EventEmitter();
@@ -65,7 +65,7 @@ export class VoicePreferencesComponent implements OnInit {
     private dockService: DockStatusService,
     private authService: AuthService,
     private modalService: NgbModal,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) { }
 
   ngOnChanges(changes : SimpleChanges){
@@ -120,9 +120,9 @@ export class VoicePreferencesComponent implements OnInit {
   }
 
   openCallControlParameter(newCallControlParameter) {
-    this.newKeyValueForm = new FormGroup({
-      name: new FormControl('', [Validators.required, this.checkDuplcate.bind(this)]),
-      value: new FormControl('', [Validators.required])
+    this.newKeyValueForm = new UntypedFormGroup({
+      name: new UntypedFormControl('', [Validators.required, this.checkDuplcate.bind(this)]),
+      value: new UntypedFormControl('', [Validators.required])
     })
     this.modalService.open(newCallControlParameter, {backdropClass: 'adjust-zindex-above-slider', windowClass: 'call-control-param-modal', centered: true, backdrop: 'static', keyboard: false});
   }

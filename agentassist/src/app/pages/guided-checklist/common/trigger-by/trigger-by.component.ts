@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
@@ -17,10 +17,10 @@ import { CHECKLISTCNST } from '../../checklist.const';
 })
 export class TriggerByComponent implements OnInit, OnChanges {
 
-  @Input() adherenceForm: FormGroup;
+  @Input() adherenceForm: UntypedFormGroup;
   @Input() isChecklist = false;
   @Input() basic: boolean;
-  searchKey = new FormControl('');
+  searchKey = new UntypedFormControl('');
   loaded = false;
   utterances = {};
   openAiUtteranceArray = [];
@@ -50,7 +50,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
     private notificationService: NotificationService,
     private translate: TranslateService,
     private cdRef: ChangeDetectorRef,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private auth: AuthService,
     private local: LocalStoreService
   ) { }
@@ -72,7 +72,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
         }).subscribe((data) => {
           this.utterApiDone = true;
           this.selectedUtterancesArray = [...data];
-          (this.adherenceForm.controls['adherence'] as FormGroup)
+          (this.adherenceForm.controls['adherence'] as UntypedFormGroup)
           .controls['uttCount'].patchValue(this.selectedUtterancesArray.length);
         })
     }
@@ -248,11 +248,11 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.utterances[this.searchKey?.value] = true;
     }
     Object.keys(this.utterances).forEach((item: any) => {
-      ((this.adherenceForm.controls['adherence'] as FormGroup).controls['addUtterances'] as FormArray)
+      ((this.adherenceForm.controls['adherence'] as UntypedFormGroup).controls['addUtterances'] as UntypedFormArray)
       ?.push(
         this.fb.group({
-          utterance: new FormControl(item),
-          language: new FormControl('english'),
+          utterance: new UntypedFormControl(item),
+          language: new UntypedFormControl('english'),
         })
       )
     });
@@ -282,13 +282,13 @@ export class TriggerByComponent implements OnInit, OnChanges {
     // this.selectedNewUtterances.splice(i, 1);
     this.cdRef.detectChanges();
     delete this.utterances[utter];
-    ((this.adherenceForm.controls['adherence'] as FormGroup).controls['addUtterances'] as FormArray)
+    ((this.adherenceForm.controls['adherence'] as UntypedFormGroup).controls['addUtterances'] as UntypedFormArray)
       ?.removeAt(i);
     this.patchCount();
   }
 
   patchCount(){
-    (this.adherenceForm.controls['adherence'] as FormGroup)
+    (this.adherenceForm.controls['adherence'] as UntypedFormGroup)
     .controls['uttCount'].patchValue(this.selectedUtterancesArray.length + (this.adherenceForm.controls['adherence'].value?.addUtterances?.length));
   }
 
@@ -297,30 +297,30 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.deletedUIds[utter._id] = true;
     }
     this.selectedUtterancesArray.splice(i, 1);
-      ((this.adherenceForm.controls['adherence'] as FormGroup).controls['deleteUtterances'] as FormArray)
-      ?.push(new FormControl(utter._id));
+      ((this.adherenceForm.controls['adherence'] as UntypedFormGroup).controls['deleteUtterances'] as UntypedFormArray)
+      ?.push(new UntypedFormControl(utter._id));
     this.patchCount();
   }
 
   changeRadio(event){
     if(event === 'utterance'){
       this.getAddedUtterances();
-      (this.adherenceForm as FormGroup).removeControl('adherence');
-      (this.adherenceForm as FormGroup).addControl(
+      (this.adherenceForm as UntypedFormGroup).removeControl('adherence');
+      (this.adherenceForm as UntypedFormGroup).addControl(
           'adherence', this.fb.group(this.clS.getUtteranceForm('utterance', true))
       );
       this.patchCount();
       this.adherenceForm.updateValueAndValidity();
     }else if(event === 'dialog'){
-      (this.adherenceForm as FormGroup).removeControl('adherence');
-      (this.adherenceForm as FormGroup).addControl(
+      (this.adherenceForm as UntypedFormGroup).removeControl('adherence');
+      (this.adherenceForm as UntypedFormGroup).addControl(
         'adherence', this.fb.group(this.clS.getDialogForm(this.botId)
       ));
-      ((this.adherenceForm as FormGroup).controls['adherence'] as FormGroup)
+      ((this.adherenceForm as UntypedFormGroup).controls['adherence'] as UntypedFormGroup)
       .controls['type'].patchValue('dialog');
       if(this.currentBot.type === 'universalbot' && !this.isSm){
-        (this.adherenceForm.controls['adherence'] as FormGroup)
-        .addControl('lBId', new FormControl('', [Validators.required]));
+        (this.adherenceForm.controls['adherence'] as UntypedFormGroup)
+        .addControl('lBId', new UntypedFormControl('', [Validators.required]));
       }
     }else if(event === 'varibale'){
     }
@@ -328,17 +328,17 @@ export class TriggerByComponent implements OnInit, OnChanges {
 
   isActive(event){
     if(event.target.checked){
-      (this.adherenceForm as FormGroup).removeControl('adherence');
-      (this.adherenceForm as FormGroup)
+      (this.adherenceForm as UntypedFormGroup).removeControl('adherence');
+      (this.adherenceForm as UntypedFormGroup)
       .addControl('adherence', this.fb.group(this.clS.getUtteranceForm('', true)));
     }else {
-      (this.adherenceForm as FormGroup).removeControl('adherence');
-      (this.adherenceForm as FormGroup).addControl('adherence', this.fb.group({}));
+      (this.adherenceForm as UntypedFormGroup).removeControl('adherence');
+      (this.adherenceForm as UntypedFormGroup).addControl('adherence', this.fb.group({}));
     }
   }
 
-  get onlyAdhreForm(): FormGroup{
-    return this.adherenceForm?.controls['adherence'] as FormGroup;
+  get onlyAdhreForm(): UntypedFormGroup{
+    return this.adherenceForm?.controls['adherence'] as UntypedFormGroup;
   }
   standardBots = [];
   useCases = {};
@@ -417,11 +417,11 @@ export class TriggerByComponent implements OnInit, OnChanges {
     if(bot.type === 'universalbot'){
       this.isUniversalSM = true;
       this.getLinkedBotsSM(bot._id);
-      (this.adherenceForm.controls['adherence'] as FormGroup)
-      .addControl('lBId', new FormControl('', [Validators.required]));
+      (this.adherenceForm.controls['adherence'] as UntypedFormGroup)
+      .addControl('lBId', new UntypedFormControl('', [Validators.required]));
     }else{
       this.isUniversalSM = false;
-      (this.adherenceForm.controls['adherence'] as FormGroup)
+      (this.adherenceForm.controls['adherence'] as UntypedFormGroup)
       ?.removeControl('lBId');
     }
     if(click){
@@ -494,12 +494,12 @@ export class TriggerByComponent implements OnInit, OnChanges {
   }
 
   selectUc(uc){
-    ((this.adherenceForm as FormGroup).controls['adherence'] as FormGroup)
+    ((this.adherenceForm as UntypedFormGroup).controls['adherence'] as UntypedFormGroup)
     .controls['taskId'].patchValue(uc.key);
   }
 
   dialogExec(ec){
-    ((this.adherenceForm as FormGroup).controls['adherence'] as FormGroup)
+    ((this.adherenceForm as UntypedFormGroup).controls['adherence'] as UntypedFormGroup)
       .controls['when'].patchValue(ec.key);
   }
 

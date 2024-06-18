@@ -13,7 +13,7 @@ import { fromEvent, Observable } from 'rxjs';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SubSink } from 'subsink';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import * as _ from 'underscore';
 import { Category, UsecaseOb, UsecaseParams } from '../../usecases/uc-main/uc-table-main/uc-table-main.model';
 import { PALETTES } from '../../usecases/uc-main/uc-header/uc-header.model';
@@ -32,7 +32,7 @@ export class ConversationListComponent implements OnInit, OnDestroy {
   usecases: any[] = [];
   categories: any[] = [];
   filteredCategories: Observable<any[]>;
-  categorySearchControl = new FormControl('');
+  categorySearchControl = new UntypedFormControl('');
   selectedPallete: string = '';
   numbers = [];
   showConfigSlider: boolean = false;

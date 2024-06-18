@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { NotificationService } from '@kore.services/notification.service';
@@ -23,7 +23,7 @@ export class FeedbackSettingsComponent implements OnInit {
   subs = new SubSink();
   clonedWidgetSettings:any = {};
   isLoading = false;
-  feedbackForm : FormGroup;
+  feedbackForm : UntypedFormGroup;
 
   disableSaveButton : any = {
     dialogs : false,
@@ -77,7 +77,7 @@ export class FeedbackSettingsComponent implements OnInit {
 
   constructor(private workflowService : workflowService, private service : ServiceInvokerService,
     private authService : AuthService, private notificationService : NotificationService, private translate: TranslateService,
-    private fb: FormBuilder, private localstorage : LocalStoreService, private cdRef : ChangeDetectorRef) { }
+    private fb: UntypedFormBuilder, private localstorage : LocalStoreService, private cdRef : ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -332,7 +332,7 @@ createOrUpdateFeedbackForm(obj, isUpdate?) {
 
   updateLanguageSelection(type, lang) {    
     this.selectedLang[type] = lang;
-    let negativeKeyWordsGroup = this.feedbackForm.get(type)?.get('negativeKeyWords') as FormGroup;
+    let negativeKeyWordsGroup = this.feedbackForm.get(type)?.get('negativeKeyWords') as UntypedFormGroup;
     if (!negativeKeyWordsGroup.get(lang)) {
       let langSpecificList = this.prepareLanguageSpecificList(this.supportedLanguageSeedData[type][lang]);
       negativeKeyWordsGroup.addControl(lang, this.fb.control(langSpecificList));

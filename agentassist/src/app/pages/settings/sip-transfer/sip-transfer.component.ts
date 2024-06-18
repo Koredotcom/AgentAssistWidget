@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
 import { ASSETS } from '../../channels/channels.model';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { workflowService } from '@kore.services/workflow.service';
 import {ServiceInvokerService} from "@kore.services/service-invoker.service";
 import { NotificationService } from '@kore.services/notification.service';
@@ -19,7 +19,7 @@ import { SliderComponentComponent } from 'src/app/shared/slider-component/slider
 export class SipTransferComponent implements OnInit, OnChanges {
 
   assets = ASSETS;
-  sipForm: FormGroup;
+  sipForm: UntypedFormGroup;
   streamId: string;
   deflectSeedData: any;
   sipData: SIPConfig;
@@ -39,12 +39,12 @@ export class SipTransferComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.streamId = this.workflowService.getCurrentBt()._id;
-    this.sipForm = new FormGroup({
-      "sipTransferId": new FormControl(null, Validators.required),
-      "additionalContext": new FormArray([]),
-      "userToUser": new FormGroup({
-        "enabled": new FormControl(false),
-        "payload": new FormControl(null)
+    this.sipForm = new UntypedFormGroup({
+      "sipTransferId": new UntypedFormControl(null, Validators.required),
+      "additionalContext": new UntypedFormArray([]),
+      "userToUser": new UntypedFormGroup({
+        "enabled": new UntypedFormControl(false),
+        "payload": new UntypedFormControl(null)
       })
     });
     this.workflowService.seedData$.subscribe(res =>{
@@ -75,12 +75,12 @@ export class SipTransferComponent implements OnInit, OnChanges {
         if(_.isEmpty(this.sipData)) {
           const sipSeed: SIPConfig = _.findWhere(res.deflectSeedData.supportedLiveAgents.voiceAgents, {key: 'sipTransfer'}).defaultData;
           sipSeed.additionalContext.forEach(val => {
-            const add = new FormGroup({
-              "name": new FormControl(val.name),
-              "value": new FormControl(val.value),
-              "enabled": new FormControl(val.enabled)
+            const add = new UntypedFormGroup({
+              "name": new UntypedFormControl(val.name),
+              "value": new UntypedFormControl(val.value),
+              "enabled": new UntypedFormControl(val.enabled)
             });
-            (<FormArray>self.sipForm.get('additionalContext')).push(add);
+            (<UntypedFormArray>self.sipForm.get('additionalContext')).push(add);
           });
           self.sipForm.get('userToUser').patchValue({
             enabled: sipSeed.userToUser.enabled,
@@ -88,12 +88,12 @@ export class SipTransferComponent implements OnInit, OnChanges {
           });
         } else {
           this.sipData.additionalContext.forEach(val => {
-            const add = new FormGroup({
-              "name": new FormControl(val.name),
-              "value": new FormControl(val.value),
-              "enabled": new FormControl(val.enabled)
+            const add = new UntypedFormGroup({
+              "name": new UntypedFormControl(val.name),
+              "value": new UntypedFormControl(val.value),
+              "enabled": new UntypedFormControl(val.enabled)
             });
-            (<FormArray>self.sipForm.get('additionalContext')).push(add);
+            (<UntypedFormArray>self.sipForm.get('additionalContext')).push(add);
           });
           self.sipForm.get('userToUser').patchValue({
             enabled: this.sipData.userToUser.enabled,
@@ -119,16 +119,16 @@ export class SipTransferComponent implements OnInit, OnChanges {
   }
 
   deleteContext(index: number) {
-    (<FormArray>this.sipForm.controls.additionalContext).removeAt(index);
+    (<UntypedFormArray>this.sipForm.controls.additionalContext).removeAt(index);
   }
 
   onAddHeader() {
-    const h = new FormGroup({
-      "name": new FormControl(null),
-      "value": new FormControl(null),
-      "enabled": new FormControl(false)
+    const h = new UntypedFormGroup({
+      "name": new UntypedFormControl(null),
+      "value": new UntypedFormControl(null),
+      "enabled": new UntypedFormControl(false)
     });
-    (<FormArray>this.sipForm.get('additionalContext')).push(h);
+    (<UntypedFormArray>this.sipForm.get('additionalContext')).push(h);
   }
 
   closeSlider() {

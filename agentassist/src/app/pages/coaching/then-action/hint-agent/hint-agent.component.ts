@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
 import { CoachingService } from '../../coaching.service';
@@ -10,7 +10,7 @@ import { CoachingService } from '../../coaching.service';
 })
 export class HintAgentComponent implements OnInit {
 
-  @Input() form: FormGroup;
+  @Input() form: UntypedFormGroup;
   @Input() index : number;
   @Input() length : number;
   @Input() createOrEdit: string = '';
@@ -46,7 +46,7 @@ export class HintAgentComponent implements OnInit {
   constructor(
     private cdRef : ChangeDetectorRef,
     private coachingService : CoachingService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
   ) { }
 
   ngOnInit(): void {
@@ -95,21 +95,21 @@ export class HintAgentComponent implements OnInit {
 
   submitVariable(){
     this.title = this.hintTitle;
-    (this.form.controls.message as FormGroup).controls.title.setValue(this.title);
+    (this.form.controls.message as UntypedFormGroup).controls.title.setValue(this.title);
   }
 
   submitBody(){
     this.bodyMsg = this.desc;
-    (this.form.controls.message as FormGroup).controls.body.setValue(this.bodyMsg);
+    (this.form.controls.message as UntypedFormGroup).controls.body.setValue(this.bodyMsg);
   }
 
   clickCloseT(closeT){
     this.closeType = closeT;
-    (this.form.controls.message as FormGroup).controls.postAction.setValue(this.closeType);
+    (this.form.controls.message as UntypedFormGroup).controls.postAction.setValue(this.closeType);
     if(closeT === 'doesnot_auto_close'){
-      (this.form.controls?.message as FormGroup)?.removeControl('time');
+      (this.form.controls?.message as UntypedFormGroup)?.removeControl('time');
     }else{
-      (this.form.controls?.message as FormGroup)?.addControl('time', new FormControl(5));
+      (this.form.controls?.message as UntypedFormGroup)?.addControl('time', new UntypedFormControl(5));
     }
     this.resetValidators();
   }
@@ -120,25 +120,25 @@ export class HintAgentComponent implements OnInit {
 
   onEnterTime(e){
     this.time = e ? e : 1;
-    (this.form.controls.message as FormGroup).controls?.time.setValue(this.time);
+    (this.form.controls.message as UntypedFormGroup).controls?.time.setValue(this.time);
   }
 
   resetValidators() {
     if (this.closeType == this.coachingCnst.AUTO_CLOSE) {
       this.time = 5;
-      (this.form.controls?.message as FormGroup)?.controls?.time?.setValidators(Validators.required);
-      (this.form.controls?.message as FormGroup)?.controls?.time?.setValue(this.time);
+      (this.form.controls?.message as UntypedFormGroup)?.controls?.time?.setValidators(Validators.required);
+      (this.form.controls?.message as UntypedFormGroup)?.controls?.time?.setValue(this.time);
     } else {
-      (this.form.controls?.message as FormGroup)?.controls?.time?.clearValidators();
+      (this.form.controls?.message as UntypedFormGroup)?.controls?.time?.clearValidators();
     }
-    (this.form.controls?.message as FormGroup)?.controls?.time?.updateValueAndValidity();
+    (this.form.controls?.message as UntypedFormGroup)?.controls?.time?.updateValueAndValidity();
   }
 
   selectAdherenceClick(type){
     this.selectedAdherence = type;
     this.adherenceClick = true;
     if(!this.form.get('adherence')){
-      (<FormGroup> this.form).addControl('adherence',this.fb.group(this.coachingService.getAdherenceForm()));
+      (<UntypedFormGroup> this.form).addControl('adherence',this.fb.group(this.coachingService.getAdherenceForm()));
     }
     this.cdRef.detectChanges();
   }
@@ -147,7 +147,7 @@ export class HintAgentComponent implements OnInit {
     this.selectedAdherence = null;
     this.adherenceClick = true;
     if(!flag){
-      (<FormGroup> this.form).removeControl('adherence');    
+      (<UntypedFormGroup> this.form).removeControl('adherence');    
     }
   }
 

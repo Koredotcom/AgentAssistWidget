@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -23,7 +23,7 @@ export class NewConversationComponent implements OnInit, OnDestroy {
   streamId: string;
   filteredOptions: Observable<any[]>;
   selectedPallete: string;
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   contextType: 'contacttoagent' | 'agenttocontact' = 'contacttoagent';
 
@@ -44,9 +44,9 @@ export class NewConversationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.streamId = this.workflowService.getCurrentBt()._id;
 
-    this.form = new FormGroup({
-      'usecaseName': new FormControl(null, Validators.required),
-      'category': new FormControl(null, Validators.required)
+    this.form = new UntypedFormGroup({
+      'usecaseName': new UntypedFormControl(null, Validators.required),
+      'category': new UntypedFormControl(null, Validators.required)
     });
     const params = {
       streamId: this.streamId

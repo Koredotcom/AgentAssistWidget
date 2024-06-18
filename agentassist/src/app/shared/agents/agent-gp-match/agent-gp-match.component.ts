@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 
@@ -17,7 +17,7 @@ export class AgentGpMatchComponent implements OnInit {
   @Input('ag') agentGroups: any;
 
   filteredAgentGroups: any = [];
-  itemCtrl = new FormControl();
+  itemCtrl = new UntypedFormControl();
   readonly separatorKeysCodes: number[] = [ENTER, COMMA]; 
 
   constructor(

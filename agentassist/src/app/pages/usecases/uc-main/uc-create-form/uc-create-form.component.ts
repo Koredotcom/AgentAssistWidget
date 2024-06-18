@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, NgForm, NgModelGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, NgForm, NgModelGroup, Validators } from '@angular/forms';
 import { NewUsecase, PALETTES } from '../uc-header/uc-header.model';
 import { UsecasesMainService } from '../uc-main.service';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
@@ -26,7 +26,7 @@ export class UsecasesCreateFormComponent implements OnInit, OnDestroy, AfterView
   streamId: string;
   filteredOptions: Observable<Category[]>;
   selectedPallete: string;
-  ucForm: FormGroup;
+  ucForm: UntypedFormGroup;
   
   @ViewChild('autoCompleteInput') autoComplete: MatAutocompleteTrigger;
   @ViewChild('aComp') autoC: ElementRef; 
@@ -44,9 +44,9 @@ export class UsecasesCreateFormComponent implements OnInit, OnDestroy, AfterView
       ) { }
 
   ngOnInit(): void {
-    this.ucForm = new FormGroup({
-      'usecaseName': new FormControl(null, Validators.required),
-      'category': new FormControl(null, Validators.required)
+    this.ucForm = new UntypedFormGroup({
+      'usecaseName': new UntypedFormControl(null, Validators.required),
+      'category': new UntypedFormControl(null, Validators.required)
     });
     this.usecaseService.usecaseAdd$.next(true);
     this.streamId = this.workflowService.getCurrentBt()._id;

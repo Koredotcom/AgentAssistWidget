@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, UntypedFormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MdEditorOption } from 'src/app/helpers/lib/md-editor.types';
 import { UsecaseOb } from '../uc-main/uc-table-main/uc-table-main.model';
 import { workflowService } from '@kore.services/workflow.service';
@@ -40,7 +40,7 @@ export class FaqConfigComponent implements OnInit {
   @Input() tabActive: string = 'call';
   @Output() closed = new EventEmitter();
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public workflowService: workflowService,
     private dialog: MatDialog,
     private translate: TranslateService

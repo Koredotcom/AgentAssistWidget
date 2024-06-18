@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -56,13 +56,13 @@ export class WelcomeEventsService {
 
     getOnConnectActiveTabFormGroup(data){
       return {
-        "enabled": new FormControl(data?.enabled || false, Validators.required),
-        "usecaseId": new FormControl(data?.usecaseId || '', Validators.required),
-        "refId": new FormControl(data?.refId || '', Validators.required),
-        "dialogId": new FormControl(data?.dialogId || '', Validators.required),
-        "taskRefId": new FormControl(data?.taskRefId || '', Validators.required),
-        "extractIntents": new FormControl(data?.extractIntents || false, Validators.required),
-        "linkedBotId": new FormControl(data?.linkedBotId || '')
+        "enabled": new UntypedFormControl(data?.enabled || false, Validators.required),
+        "usecaseId": new UntypedFormControl(data?.usecaseId || '', Validators.required),
+        "refId": new UntypedFormControl(data?.refId || '', Validators.required),
+        "dialogId": new UntypedFormControl(data?.dialogId || '', Validators.required),
+        "taskRefId": new UntypedFormControl(data?.taskRefId || '', Validators.required),
+        "extractIntents": new UntypedFormControl(data?.extractIntents || false, Validators.required),
+        "linkedBotId": new UntypedFormControl(data?.linkedBotId || '')
       };
     }
 

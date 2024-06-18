@@ -502,7 +502,6 @@
       }
     }
   },
-  "defaultProject": "kore-sales",
   "cli": {
     "analytics": false
   }

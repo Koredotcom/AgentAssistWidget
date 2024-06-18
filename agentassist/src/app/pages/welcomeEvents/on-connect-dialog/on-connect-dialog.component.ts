@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { SubSink } from 'subsink';
 import { WelcomeEventsService } from '../welcome-events.service';
@@ -19,7 +19,7 @@ export class OnConnectDialogComponent implements OnInit {
 
   subs = new SubSink();
 
-  onConnectDialogForm: FormGroup;
+  onConnectDialogForm: UntypedFormGroup;
   onConnectActiveTab: string = 'chat';
 
   conversations: any[] = [];
@@ -55,10 +55,10 @@ export class OnConnectDialogComponent implements OnInit {
   }
 
   initOnConnectDialogForm(welcomeTaskData) {
-    this.onConnectDialogForm = new FormGroup({
-      'name': new FormControl(this.onConnectStr, Validators.required),
-      'enabled': new FormControl(welcomeTaskData[this.onConnectStr]?.enabled || false, Validators.required),
-      [this.onConnectActiveTab]: new FormGroup(this.getOnConnectActiveTabFormGroup(welcomeTaskData?.[this.onConnectStr]?.[this.onConnectActiveTab]))
+    this.onConnectDialogForm = new UntypedFormGroup({
+      'name': new UntypedFormControl(this.onConnectStr, Validators.required),
+      'enabled': new UntypedFormControl(welcomeTaskData[this.onConnectStr]?.enabled || false, Validators.required),
+      [this.onConnectActiveTab]: new UntypedFormGroup(this.getOnConnectActiveTabFormGroup(welcomeTaskData?.[this.onConnectStr]?.[this.onConnectActiveTab]))
     });
     
     if(!(welcomeTaskData?.[this.onConnectStr]?.[this.onConnectActiveTab]?.enabled)){
@@ -155,18 +155,18 @@ export class OnConnectDialogComponent implements OnInit {
   }
 
   updateOnConnectValidators() {
-    for (let key in (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls) {
+    for (let key in (this.onConnectDialogForm.controls[this.onConnectActiveTab] as UntypedFormGroup)?.controls) {
       if (this.onConnectDialogForm.get('enabled').value && this.selectedUseCase != 'none') {
         let validatorList: any = [Validators.required];
         if(key == 'linkedBotId' && this.currentBt.type == this.universalBot ){
-          (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls['linkedBotId'].setValidators(validatorList);
+          (this.onConnectDialogForm.controls[this.onConnectActiveTab] as UntypedFormGroup)?.controls['linkedBotId'].setValidators(validatorList);
         }else if(key != 'linkedBotId'){
-          (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls[key].setValidators(validatorList);
+          (this.onConnectDialogForm.controls[this.onConnectActiveTab] as UntypedFormGroup)?.controls[key].setValidators(validatorList);
         }
       } else {
-        (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls[key].clearValidators();
+        (this.onConnectDialogForm.controls[this.onConnectActiveTab] as UntypedFormGroup)?.controls[key].clearValidators();
       }
-      (this.onConnectDialogForm.controls[this.onConnectActiveTab] as FormGroup)?.controls[key].updateValueAndValidity();
+      (this.onConnectDialogForm.controls[this.onConnectActiveTab] as UntypedFormGroup)?.controls[key].updateValueAndValidity();
     }
   }
 

@@ -7,7 +7,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormBuilder, FormControl, UntypedFormGroup } from "@angular/forms";
 import { AuthService } from "@kore.services/auth.service";
 import { LocalStoreService } from "@kore.services/localstore.service";
 import { workflowService } from "@kore.services/workflow.service";
@@ -37,11 +37,11 @@ export class StagesListComponent implements OnInit {
   @Input() currentCheckList: any = {};
   isStepOpen = false;
   isCheckListOpen = false;
-  checkListForm: FormGroup;
-  stageForm: FormGroup;
-  stepForm: FormGroup;
+  checkListForm: UntypedFormGroup;
+  stageForm: UntypedFormGroup;
+  stepForm: UntypedFormGroup;
   selAcc = this.local.getSelectedAccount();
-  triggerBy: FormGroup;
+  triggerBy: UntypedFormGroup;
   // name = new FormControl("");
   stage = {
     name: "",
@@ -66,7 +66,7 @@ export class StagesListComponent implements OnInit {
   modalRef:any;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private auth: AuthService,
     private local: LocalStoreService,
     private workflowService: workflowService,

@@ -13,7 +13,7 @@ import { LocalStoreService } from '@kore.services/localstore.service';
 import { AuthService } from '@kore.services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from 'src/app/helpers/components/confirmation-dialog/confirmation-dialog.component';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { SkillsRoutingComponent } from '../skills-routing/skills-routing.component';
 import { SkillGpRsp, SkillRsp, SkillsLite } from 'src/app/data/skills.model';
 import { SkillsDdComponent } from '../../usecases/skills-dd/skills-dd.component';
@@ -104,8 +104,8 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
   streamId: string;
   filteredCategories: any[];
 
-  utterancesForm: FormGroup;
-  altUtterances: FormArray;
+  utterancesForm: UntypedFormGroup;
+  altUtterances: UntypedFormArray;
 
 
   saveInProgress: boolean = false;
@@ -157,7 +157,7 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
     private localStoreService: LocalStoreService,
     public authService: AuthService,
     public dialog: MatDialog,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -209,7 +209,7 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
         altUtterances: this.fb.array([])
       });
     }
-    this.altUtterances = ((this.utterancesForm.get('altUtterances')) as FormArray);
+    this.altUtterances = ((this.utterancesForm.get('altUtterances')) as UntypedFormArray);
 
     (this.conv?.utterances?.alternates || []).forEach(utterance => this.addAltUtterance(utterance));
     if (this.altUtterances.length === 0) { this.addAltUtterance('') }
@@ -323,7 +323,7 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
       });
 
       if (utterance.status === 'failed') {
-        formGroup.addControl('reason', new FormControl(utterance.reason));
+        formGroup.addControl('reason', new UntypedFormControl(utterance.reason));
       }
       this.altUtterances.push(formGroup);
     }

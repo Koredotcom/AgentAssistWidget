@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,7 +14,7 @@ import { AgentSettingsService } from '../../agent-settings.service';
 })
 export class AddWidgetComponent implements OnInit, AfterViewInit {
   showVisitParameters: boolean = false;
-  formWidget: FormGroup;
+  formWidget: UntypedFormGroup;
   reg = /^[A-Za-z][A-Za-z\d.+-]*:\/*(?:\w+(?::\w+)?@)?[^\s/]+(?::\d+)?(?:\/[\w#!:.?+=&%@\-/]*)?$/;
   uploadedFileId: string;
   widgetImg: any;
@@ -29,7 +29,7 @@ export class AddWidgetComponent implements OnInit, AfterViewInit {
   @Output() closed = new EventEmitter();
   @ViewChild('widgetTitle', { static: true }) widgetTitle: ElementRef;
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
     private agentService: AgentSettingsService,
     public translate: TranslateService,
     private notificationService: NotificationService,
@@ -59,7 +59,7 @@ export class AddWidgetComponent implements OnInit, AfterViewInit {
   }
 
   get paramsList() {
-    return (<FormArray>this.formWidget.get('metaInfo.params')).controls;
+    return (<UntypedFormArray>this.formWidget.get('metaInfo.params')).controls;
   }
 
   setFormWidgetForm() {
@@ -77,7 +77,7 @@ export class AddWidgetComponent implements OnInit, AfterViewInit {
         key: [this.data.metaInfo.params[i].key],
         path: [this.data.metaInfo.params[i].path]
       });
-      (<FormArray>this.formWidget.get('metaInfo.params')).push(paramsCtrl);
+      (<UntypedFormArray>this.formWidget.get('metaInfo.params')).push(paramsCtrl);
     }
 
     this.widgetImg = this.data.label;
@@ -117,17 +117,17 @@ export class AddWidgetComponent implements OnInit, AfterViewInit {
       key: [""],
       path: [this.selectParameter]
     });
-    (<FormArray>this.formWidget.get('metaInfo.params')).push(paramsCtrl);
+    (<UntypedFormArray>this.formWidget.get('metaInfo.params')).push(paramsCtrl);
   }
 
   selectVar(index, variable) {
-    (<FormArray>this.formWidget.get('metaInfo.params')).at(index).patchValue({
+    (<UntypedFormArray>this.formWidget.get('metaInfo.params')).at(index).patchValue({
       path: variable.name
     });
   }
 
   deleteParam(index) {
-    (<FormArray>this.formWidget.get('metaInfo.params')).removeAt(index);
+    (<UntypedFormArray>this.formWidget.get('metaInfo.params')).removeAt(index);
   }
 
   deleteWidget() {
@@ -227,7 +227,7 @@ export class AddWidgetComponent implements OnInit, AfterViewInit {
   cancel() {
     // (<FormArray>this.formWidget.get('metaInfo.params')).clear();
 
-    const formArray = (<FormArray>this.formWidget.get('metaInfo.params'));
+    const formArray = (<UntypedFormArray>this.formWidget.get('metaInfo.params'));
     while (formArray.length !== 0) {
       formArray.removeAt(0)
     }
@@ -238,7 +238,7 @@ export class AddWidgetComponent implements OnInit, AfterViewInit {
         key: [ this.tempParamsList[i].key],
         path: [ this.tempParamsList[i].path]
       });
-      (<FormArray>this.formWidget.get('metaInfo.params')).push(paramsCtrl);
+      (<UntypedFormArray>this.formWidget.get('metaInfo.params')).push(paramsCtrl);
     }
 
     if (this.tempParamsList.length == 0) {

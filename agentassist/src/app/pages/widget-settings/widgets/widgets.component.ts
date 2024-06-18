@@ -11,9 +11,9 @@ import { ApiAdvancedModelComponent } from '../api-advanced-model/api-advanced-mo
 import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   AbstractControl,
-  FormBuilder,
-  FormGroup,
-  FormControl,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  UntypedFormControl,
   Validators,
 } from '@angular/forms';
 
@@ -75,8 +75,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   clonedWidgetSettings:any = {};
   newRoleModalRef: any = {};
   modalRef: any;  
-  agentAssistFormGroup: FormGroup;
-  knowledgeAIFormGroup: FormGroup;
+  agentAssistFormGroup: UntypedFormGroup;
+  knowledgeAIFormGroup: UntypedFormGroup;
   agentAssistformDirty : boolean = false;
   isV3= false;
   currentBot: any;
@@ -145,24 +145,24 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private localstorage: LocalStoreService,
     private modalService: NgbModal,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
   }
 
   selectTab(tab, key){
-    (((((this.agentAssistFormGroup as FormGroup)
-    .get('agentAssistSettings') as FormGroup)
-    .get(this.selectedChannel) as FormGroup)
-    .get('isWidgetLandingEnabled') as FormGroup)
-    .get('tab') as FormControl)
+    (((((this.agentAssistFormGroup as UntypedFormGroup)
+    .get('agentAssistSettings') as UntypedFormGroup)
+    .get(this.selectedChannel) as UntypedFormGroup)
+    .get('isWidgetLandingEnabled') as UntypedFormGroup)
+    .get('tab') as UntypedFormControl)
     .patchValue(key);
   }
 
   selectLanguage(key){
-    (((((this.agentAssistFormGroup as FormGroup)
-    .get('agentAssistSettings') as FormGroup))
-    .get('languageSettings') as FormGroup)
-    .get('language') as FormControl)
+    (((((this.agentAssistFormGroup as UntypedFormGroup)
+    .get('agentAssistSettings') as UntypedFormGroup))
+    .get('languageSettings') as UntypedFormGroup)
+    .get('language') as UntypedFormControl)
     .patchValue(key);
   }
 
@@ -237,12 +237,12 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           urlOpenType = key;
         }
       }
-      (((this.agentAssistFormGroup.get('agentAssistSettings') as FormGroup).get('urlOpenBehaviour')as FormGroup)
-      .get('urlOpenType') as FormControl)
+      (((this.agentAssistFormGroup.get('agentAssistSettings') as UntypedFormGroup).get('urlOpenBehaviour')as UntypedFormGroup)
+      .get('urlOpenType') as UntypedFormControl)
       .patchValue(urlOpenType);
 
       if(obj.dialogsDisplayNameParser?.mode === 'advance') {
-        ((this.agentAssistFormGroup.get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup).addControl('config', this.fb.group({
+        ((this.agentAssistFormGroup.get('agentAssistSettings') as UntypedFormGroup).get('dialogsDisplayNameParser') as UntypedFormGroup).addControl('config', this.fb.group({
           script: [obj.dialogsDisplayNameParser.config.script || '']
         }))
         this.advanceDialogTaskModeScript = (obj.dialogsDisplayNameParser?.config?.script.length > 0) ? obj.dialogsDisplayNameParser?.config?.script : '';
@@ -537,9 +537,9 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       this.modalRef.componentInstance.data = scriptFrom;
       this.modalRef.result.then(emitedValue => {
         this.advancedModeScript = emitedValue;
-          ((((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
-        .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
-          ((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup).get('integrations').updateValueAndValidity();
+          ((((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as UntypedFormGroup).get('searchAssistConfig') as UntypedFormGroup) as UntypedFormGroup).get('integrations') as UntypedFormGroup)
+        .get('config') as UntypedFormGroup).get('script') as UntypedFormControl).patchValue(emitedValue);
+          ((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as UntypedFormGroup).get('searchAssistConfig') as UntypedFormGroup).get('integrations').updateValueAndValidity();
           if(this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value?.searchAssistConfig?.integrations?.type === 'advance' && emitedValue?.length !== 0) {
             this.knowledgeAIFormGroup.markAsDirty();
             // this.isApiConfigured = true;
@@ -558,8 +558,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         try {
           if(JSON.parse(emitedValue)) {
             this.advanceDialogTaskModeScript = emitedValue;
-            (((((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup)
-            .get('config') as FormGroup).get('script') as FormControl).patchValue(emitedValue);
+            (((((this.agentAssistFormGroup as UntypedFormGroup).get('agentAssistSettings') as UntypedFormGroup).get('dialogsDisplayNameParser') as UntypedFormGroup)
+            .get('config') as UntypedFormGroup).get('script') as UntypedFormControl).patchValue(emitedValue);
             if(this.agentAssistFormGroup?.value?.agentAssistSettings?.dialogsDisplayNameParser?.mode === 'advance' && emitedValue?.length !== 0) {
               this.knowledgeAIFormGroup.markAsDirty();
               this.isApiConfigured = true;
@@ -582,15 +582,15 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   // update the AutoSuggestions keys
   selectedSuggestionType(e, val) {
-    ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup)
-    .get('showAutoSuggestions') as FormControl)
+    ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as UntypedFormGroup).get('searchAssistConfig') as UntypedFormGroup) as UntypedFormGroup)
+    .get('showAutoSuggestions') as UntypedFormControl)
     .patchValue((val.type === 'On') ? true : false);
   }
 
   selectLines(key){
     if(key){
-      ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup)
-      .get('displayLines') as FormControl)
+      ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as UntypedFormGroup).get('searchAssistConfig') as UntypedFormGroup) as UntypedFormGroup)
+      .get('displayLines') as UntypedFormControl)
       .patchValue(parseFloat(key));
     }
   }
@@ -599,10 +599,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   dialogConfigType(e, configType) {
     this.advanceDialogTaskModeScript = this.agentAssistFormGroup?.value?.agentAssistSettings?.dialogsDisplayNameParser?.config?.script;
     this.isApiConfigured = true;
-    (((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup).removeControl('config');
+    (((this.agentAssistFormGroup as UntypedFormGroup).get('agentAssistSettings') as UntypedFormGroup).get('dialogsDisplayNameParser') as UntypedFormGroup).removeControl('config');
     if(configType.type === 'advance') {
       this.currentAdvMode =  'advancemode';
-      (((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('dialogsDisplayNameParser') as FormGroup).addControl('config',this.fb.group({
+      (((this.agentAssistFormGroup as UntypedFormGroup).get('agentAssistSettings') as UntypedFormGroup).get('dialogsDisplayNameParser') as UntypedFormGroup).addControl('config',this.fb.group({
         script: ['',[Validators.required]],
       }));
       this.apiAdvancedMode();
@@ -613,11 +613,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   selectedIntegrationType(e, integrate) {
     this.advancedModeScript = this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value?.searchAssistConfig?.integrations?.config?.script;
     this.isApiConfigured = true;
-    ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
+    ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as UntypedFormGroup).get('searchAssistConfig') as UntypedFormGroup) as UntypedFormGroup).get('integrations') as UntypedFormGroup)
     .removeControl('config');
     if(integrate.type === 'advance') {
       this.currentAdvMode = integrate.type;
-      ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup).get('integrations') as FormGroup)
+      ((((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as UntypedFormGroup).get('searchAssistConfig') as UntypedFormGroup) as UntypedFormGroup).get('integrations') as UntypedFormGroup)
       .addControl('config', this.fb.group({
         script: ['',[Validators.required]],
       }));
@@ -633,8 +633,8 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       isXODependant: false
     };
     obj[this.knowledgeAIFormGroup.get(this.selectedKAIChannel)?.value.searchAssistConfig.criteria] = true;
-    ((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup)
-    .get('searchAssistConfig') as FormGroup)
+    ((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as UntypedFormGroup)
+    .get('searchAssistConfig') as UntypedFormGroup)
     .patchValue(obj);
     
 /*     (((this.knowledgeAIFormGroup.get(this.selectedKAIChannel) as FormGroup).get('searchAssistConfig') as FormGroup) as FormGroup)
@@ -685,7 +685,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }
     if(isUpdate && obj?.summarization?.model?.type === 'customTask') {
 
-      ((settingsForm.summarization as FormGroup).get('model') as FormGroup).addControl('customTaskConfig', this.fb.group({
+      ((settingsForm.summarization as UntypedFormGroup).get('model') as UntypedFormGroup).addControl('customTaskConfig', this.fb.group({
         usecaseId: obj?.summarization?.model?.customTaskConfig?.usecaseId,
         refId: obj?.summarization?.model?.customTaskConfig?.refId,
         dialogId: obj?.summarization?.model?.customTaskConfig?.dialogId,
@@ -703,7 +703,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
     if(isUpdate) {
       if( obj?.transferConfigs?.cold?.actionType === 'task') {
-        ((settingsForm.transferConfigs as FormGroup).get('cold') as FormGroup).addControl('taskConfigs', this.fb.group({
+        ((settingsForm.transferConfigs as UntypedFormGroup).get('cold') as UntypedFormGroup).addControl('taskConfigs', this.fb.group({
           usecaseId: obj?.transferConfigs?.cold?.taskConfigs?.usecaseId || '',
           refId: obj?.transferConfigs?.cold?.taskConfigs?.refId || '',
           dialogId: obj?.transferConfigs?.cold?.taskConfigs?.dialogId || '',
@@ -718,7 +718,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         }
       }
       if( obj?.transferConfigs?.warm?.actionType === 'task') {
-        ((settingsForm.transferConfigs as FormGroup).get('warm') as FormGroup).addControl('taskConfigs', this.fb.group({
+        ((settingsForm.transferConfigs as UntypedFormGroup).get('warm') as UntypedFormGroup).addControl('taskConfigs', this.fb.group({
           usecaseId: obj?.transferConfigs?.warm?.taskConfigs?.usecaseId || '',
           refId: obj?.transferConfigs?.warm?.taskConfigs?.refId || '',
           dialogId: obj?.transferConfigs?.warm?.taskConfigs?.dialogId || '',
@@ -760,7 +760,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
       })
     };
 
-    let integrations: FormGroup;
+    let integrations: UntypedFormGroup;
     if(isUpdate && searchObj?.integrations?.type === 'advance'){
       integrations = this.fb.group({
         type: ['advance'],
@@ -773,7 +773,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         type: ['basic'],
       });
     }
-    (KAIObj['searchAssistConfig'] as FormGroup).addControl('integrations', integrations);   
+    (KAIObj['searchAssistConfig'] as UntypedFormGroup).addControl('integrations', integrations);   
     return KAIObj;
 
   }
@@ -804,13 +804,13 @@ export class WidgetsComponent implements OnInit, OnDestroy {
     }
     obj[val] = true;
     obj.urlOpenType = val;
-    (((this.agentAssistFormGroup as FormGroup).get('agentAssistSettings') as FormGroup).get('urlOpenBehaviour') as FormGroup).patchValue(obj);
+    (((this.agentAssistFormGroup as UntypedFormGroup).get('agentAssistSettings') as UntypedFormGroup).get('urlOpenBehaviour') as UntypedFormGroup).patchValue(obj);
   }
 
   resetValidations(value, key){
-    const FormGroup = (this.agentAssistFormGroup.get('agentAssistSettings.showHelp') as FormGroup);
+    const FormGroup = (this.agentAssistFormGroup.get('agentAssistSettings.showHelp') as UntypedFormGroup);
     if(FormGroup){
-      const resourceParentGroup = FormGroup.get(key) as FormGroup;
+      const resourceParentGroup = FormGroup.get(key) as UntypedFormGroup;
       if(resourceParentGroup){        
         const resourceFormControl = resourceParentGroup.get('resource');
         if(resourceFormControl){          
@@ -826,7 +826,7 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   }
 
   transcriptControlChange(event){
-    let selectedLandingTab = (this.agentAssistFormGroup as FormGroup).get('agentAssistSettings').value[this.selectedChannel]?.isWidgetLandingEnabled?.tab; 
+    let selectedLandingTab = (this.agentAssistFormGroup as UntypedFormGroup).get('agentAssistSettings').value[this.selectedChannel]?.isWidgetLandingEnabled?.tab; 
     if(!event.target.checked && selectedLandingTab === 'transcript'){
       this.selectTab(this.selectedChannel ,'assist');
     }
@@ -834,21 +834,21 @@ export class WidgetsComponent implements OnInit, OnDestroy {
 
   resetClick(key){
     let defaultUrl = (key === 'documentation') ? this.defaultDocLink : this.defaultFAQLink;
-    ((((((this.agentAssistFormGroup as FormGroup)
-    .get('agentAssistSettings') as FormGroup))
-    .get('showHelp') as FormGroup)
-    .get(key) as FormGroup)
-    .get('resource') as FormControl)
+    ((((((this.agentAssistFormGroup as UntypedFormGroup)
+    .get('agentAssistSettings') as UntypedFormGroup))
+    .get('showHelp') as UntypedFormGroup)
+    .get(key) as UntypedFormGroup)
+    .get('resource') as UntypedFormControl)
     .patchValue(defaultUrl);
   }
 
   autoSummaryEnabled(evt) {
     if(evt.target.checked) {
-      (((((this.agentAssistFormGroup as FormGroup)
-      .get('agentAssistSettings') as FormGroup)
-      .get(this.selectedChannel) as FormGroup)
-      .get('summarization') as FormGroup)
-      .get('model') as FormGroup).patchValue({
+      (((((this.agentAssistFormGroup as UntypedFormGroup)
+      .get('agentAssistSettings') as UntypedFormGroup)
+      .get(this.selectedChannel) as UntypedFormGroup)
+      .get('summarization') as UntypedFormGroup)
+      .get('model') as UntypedFormGroup).patchValue({
         type: 'kore'
       })
     }
@@ -892,19 +892,19 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   
 
   selectedSummaryModelType(event, model) {
-    ((((((this.agentAssistFormGroup as FormGroup)
-      .get('agentAssistSettings') as FormGroup)
-      .get(this.selectedChannel) as FormGroup)
-      .get('summarization') as FormGroup)
-      .get('model') as FormGroup)
-      .get('type') as FormControl).patchValue(model.type);
+    ((((((this.agentAssistFormGroup as UntypedFormGroup)
+      .get('agentAssistSettings') as UntypedFormGroup)
+      .get(this.selectedChannel) as UntypedFormGroup)
+      .get('summarization') as UntypedFormGroup)
+      .get('model') as UntypedFormGroup)
+      .get('type') as UntypedFormControl).patchValue(model.type);
 
       if(model.type === 'customTask') {
-        ((((((this.agentAssistFormGroup as FormGroup)
-          .get('agentAssistSettings') as FormGroup)
-          .get(this.selectedChannel) as FormGroup)
-          .get('summarization') as FormGroup)
-          .get('model') as FormGroup)
+        ((((((this.agentAssistFormGroup as UntypedFormGroup)
+          .get('agentAssistSettings') as UntypedFormGroup)
+          .get(this.selectedChannel) as UntypedFormGroup)
+          .get('summarization') as UntypedFormGroup)
+          .get('model') as UntypedFormGroup)
           .addControl('customTaskConfig', this.fb.group({
             usecaseId: '',
             refId: ['', [Validators.required]],
@@ -913,23 +913,23 @@ export class WidgetsComponent implements OnInit, OnDestroy {
             linkedBotId: ''
           })))
       } else if(model.type === 'kore'){
-        ((((((this.agentAssistFormGroup as FormGroup)
-        .get('agentAssistSettings') as FormGroup)
-        .get(this.selectedChannel) as FormGroup)
-        .get('summarization') as FormGroup)
-        .get('model') as FormGroup).removeControl('customTaskConfig'));
+        ((((((this.agentAssistFormGroup as UntypedFormGroup)
+        .get('agentAssistSettings') as UntypedFormGroup)
+        .get(this.selectedChannel) as UntypedFormGroup)
+        .get('summarization') as UntypedFormGroup)
+        .get('model') as UntypedFormGroup).removeControl('customTaskConfig'));
       }
   }
 
   selectCustomDialog(dialog, from, bot?, transferType?) {
     const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
     if(from === 'convosTransfer') {
-      const taskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
-      .get('agentAssistSettings') as FormGroup)
-      .get(this.selectedChannel) as FormGroup)
-      .get('transferConfigs') as FormGroup)
-      .get(selectedFormGroup) as FormGroup)
-      .get('taskConfigs') as FormGroup));
+      const taskConfigFormGroup = (((((((this.agentAssistFormGroup as UntypedFormGroup)
+      .get('agentAssistSettings') as UntypedFormGroup)
+      .get(this.selectedChannel) as UntypedFormGroup)
+      .get('transferConfigs') as UntypedFormGroup)
+      .get(selectedFormGroup) as UntypedFormGroup)
+      .get('taskConfigs') as UntypedFormGroup));
 
       if (taskConfigFormGroup) {
         taskConfigFormGroup.patchValue({
@@ -940,11 +940,11 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           linkedBotId: bot?._id || ''
         });
       } else {
-        (((((((this.agentAssistFormGroup as FormGroup)
-        .get('agentAssistSettings') as FormGroup)
-        .get(this.selectedChannel) as FormGroup)
-        .get('transferConfigs') as FormGroup)
-        .get(selectedFormGroup) as FormGroup)
+        (((((((this.agentAssistFormGroup as UntypedFormGroup)
+        .get('agentAssistSettings') as UntypedFormGroup)
+        .get(this.selectedChannel) as UntypedFormGroup)
+        .get('transferConfigs') as UntypedFormGroup)
+        .get(selectedFormGroup) as UntypedFormGroup)
         .addControl('taskConfigs', this.fb.group({
           usecaseId: dialog?._id || '',
           refId: [dialog?.refId ||  '', [Validators.required]],
@@ -957,12 +957,12 @@ export class WidgetsComponent implements OnInit, OnDestroy {
         this.closeDropdown('convosTransfer');
       }
     } else if( from === 'summaryModel') {
-      const customTaskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
-                                      .get('agentAssistSettings') as FormGroup)
-                                      .get(this.selectedChannel) as FormGroup)
-                                      .get('summarization') as FormGroup)
-                                      .get('model') as FormGroup)
-                                      .get('customTaskConfig') as FormGroup));
+      const customTaskConfigFormGroup = (((((((this.agentAssistFormGroup as UntypedFormGroup)
+                                      .get('agentAssistSettings') as UntypedFormGroup)
+                                      .get(this.selectedChannel) as UntypedFormGroup)
+                                      .get('summarization') as UntypedFormGroup)
+                                      .get('model') as UntypedFormGroup)
+                                      .get('customTaskConfig') as UntypedFormGroup));
       if (customTaskConfigFormGroup) {
         customTaskConfigFormGroup.patchValue({
           usecaseId: dialog?._id || '',
@@ -972,18 +972,18 @@ export class WidgetsComponent implements OnInit, OnDestroy {
           linkedBotId: bot?._id || ''
         });
       } else {
-        const newFormGroup = new FormGroup({
-          usecaseId: new FormControl(dialog?._id || ''),
-          refId: new FormControl(dialog?.refId || ''),
-          dialogId: new FormControl(dialog?.dialogId || ''),
-          taskRefId: new FormControl(dialog?.taskRefId || ''),
-          linkedBotId: new FormControl(bot?._id || '')
+        const newFormGroup = new UntypedFormGroup({
+          usecaseId: new UntypedFormControl(dialog?._id || ''),
+          refId: new UntypedFormControl(dialog?.refId || ''),
+          dialogId: new UntypedFormControl(dialog?.dialogId || ''),
+          taskRefId: new UntypedFormControl(dialog?.taskRefId || ''),
+          linkedBotId: new UntypedFormControl(bot?._id || '')
         });
-        (((((((this.agentAssistFormGroup as FormGroup)
-        .get('agentAssistSettings') as FormGroup)
-        .get(this.selectedChannel) as FormGroup)
-        .get('summarization') as FormGroup)
-        .get('model') as FormGroup)
+        (((((((this.agentAssistFormGroup as UntypedFormGroup)
+        .get('agentAssistSettings') as UntypedFormGroup)
+        .get(this.selectedChannel) as UntypedFormGroup)
+        .get('summarization') as UntypedFormGroup)
+        .get('model') as UntypedFormGroup)
         .addControl('customTaskConfig', newFormGroup)));
     }
     if(bot) {
@@ -1033,26 +1033,26 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   
   getActionType(setting, transferType) {
     const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
-    (((((((this.agentAssistFormGroup as FormGroup)
-    .get('agentAssistSettings') as FormGroup)
-    .get(this.selectedChannel) as FormGroup)
-    .get('transferConfigs') as FormGroup)
-    .get(selectedFormGroup) as FormGroup)
-    .get('actionType') as FormControl).patchValue(setting));
+    (((((((this.agentAssistFormGroup as UntypedFormGroup)
+    .get('agentAssistSettings') as UntypedFormGroup)
+    .get(this.selectedChannel) as UntypedFormGroup)
+    .get('transferConfigs') as UntypedFormGroup)
+    .get(selectedFormGroup) as UntypedFormGroup)
+    .get('actionType') as UntypedFormControl).patchValue(setting));
 
     if(setting !== 'task') {
-      const taskConfigFormGroup = (((((((this.agentAssistFormGroup as FormGroup)
-      .get('agentAssistSettings') as FormGroup)
-      .get(this.selectedChannel) as FormGroup)
-      .get('transferConfigs') as FormGroup)
-      .get(selectedFormGroup) as FormGroup)
-      .get('taskConfigs') as FormGroup));
+      const taskConfigFormGroup = (((((((this.agentAssistFormGroup as UntypedFormGroup)
+      .get('agentAssistSettings') as UntypedFormGroup)
+      .get(this.selectedChannel) as UntypedFormGroup)
+      .get('transferConfigs') as UntypedFormGroup)
+      .get(selectedFormGroup) as UntypedFormGroup)
+      .get('taskConfigs') as UntypedFormGroup));
       if(taskConfigFormGroup) {
-        (((((((this.agentAssistFormGroup as FormGroup)
-        .get('agentAssistSettings') as FormGroup)
-        .get(this.selectedChannel) as FormGroup)
-        .get('transferConfigs') as FormGroup)
-        .get(selectedFormGroup) as FormGroup)
+        (((((((this.agentAssistFormGroup as UntypedFormGroup)
+        .get('agentAssistSettings') as UntypedFormGroup)
+        .get(this.selectedChannel) as UntypedFormGroup)
+        .get('transferConfigs') as UntypedFormGroup)
+        .get(selectedFormGroup) as UntypedFormGroup)
         .removeControl('taskConfigs')));
       }
     }
@@ -1063,22 +1063,22 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   // Extract intents from the Dialog
   toggleExtractIntents(event, transferType) {    
     const selectedFormGroup = transferType === 'cold' ? 'cold' : 'warm';
-    const taskConfigs = (((((((this.agentAssistFormGroup as FormGroup)
-                        .get('agentAssistSettings') as FormGroup)
-                        .get(this.selectedChannel) as FormGroup)
-                        .get('transferConfigs') as FormGroup)
-                        .get(selectedFormGroup) as FormGroup)
-                        .get('taskConfigs') as FormGroup));
+    const taskConfigs = (((((((this.agentAssistFormGroup as UntypedFormGroup)
+                        .get('agentAssistSettings') as UntypedFormGroup)
+                        .get(this.selectedChannel) as UntypedFormGroup)
+                        .get('transferConfigs') as UntypedFormGroup)
+                        .get(selectedFormGroup) as UntypedFormGroup)
+                        .get('taskConfigs') as UntypedFormGroup));
     if (taskConfigs) {
       taskConfigs.patchValue({
         extractIntents: event.target.checked
       })
     } else {
-      const intentExtract = (((((((this.agentAssistFormGroup as FormGroup)
-                        .get('agentAssistSettings') as FormGroup)
-                        .get(this.selectedChannel) as FormGroup)
-                        .get('transferConfigs') as FormGroup)
-                        .get(selectedFormGroup) as FormGroup)));
+      const intentExtract = (((((((this.agentAssistFormGroup as UntypedFormGroup)
+                        .get('agentAssistSettings') as UntypedFormGroup)
+                        .get(this.selectedChannel) as UntypedFormGroup)
+                        .get('transferConfigs') as UntypedFormGroup)
+                        .get(selectedFormGroup) as UntypedFormGroup)));
       intentExtract.addControl('taskConfigs', this.fb.group({
         'extractIntents': event.target.checked
       }))

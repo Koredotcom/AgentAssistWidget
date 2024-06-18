@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Usecase, UsecaseOb } from '../uc-main/uc-table-main/uc-table-main.model';
 import { workflowService } from '@kore.services/workflow.service';
 
@@ -14,8 +14,8 @@ declare const $: any;
 export class UserUtterancesComponent implements OnInit {
 
   usecase: string;
-  utterancesForm: FormGroup;
-  altUtterances: FormArray;
+  utterancesForm: UntypedFormGroup;
+  altUtterances: UntypedFormArray;
   utterances: { usecase: string, primaryUtterance: any, altUtterances: string[] };
 
   saveInProgress: boolean = false;
@@ -29,7 +29,7 @@ export class UserUtterancesComponent implements OnInit {
   @Input() inputData: UsecaseOb;
   @Input() usecaseType: 'faq' | 'dialog' = "faq";
   @Output() closed = new EventEmitter();
-  constructor(private fb: FormBuilder, public workflowService: workflowService) { }
+  constructor(private fb: UntypedFormBuilder, public workflowService: workflowService) { }
 
   ngOnInit(): void {
     this.init();
@@ -57,7 +57,7 @@ export class UserUtterancesComponent implements OnInit {
       });
     }
 
-    this.altUtterances = ((this.utterancesForm.get('altUtterances')) as FormArray);
+    this.altUtterances = ((this.utterancesForm.get('altUtterances')) as UntypedFormArray);
     (this.utterances.altUtterances || []).forEach(utterance => this.addAltUtterance(utterance));
     if (this.altUtterances.length === 0) { this.addAltUtterance('') }
   }
@@ -78,7 +78,7 @@ export class UserUtterancesComponent implements OnInit {
       });
 
       if (utterance.status === 'failed') {
-        formGroup.addControl('reason', new FormControl(utterance.reason));
+        formGroup.addControl('reason', new UntypedFormControl(utterance.reason));
       }
       this.altUtterances.push(formGroup);
     }

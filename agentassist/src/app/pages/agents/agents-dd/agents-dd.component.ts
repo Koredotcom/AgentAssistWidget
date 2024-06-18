@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { AuthService } from '@kore.services/auth.service';
@@ -23,7 +23,7 @@ declare const $: any;
 })
 export class AgentsDdComponent implements OnInit, OnDestroy, OnChanges {
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  agentCtrl = new FormControl();
+  agentCtrl = new UntypedFormControl();
   filteredAgents: Observable<string[]>;
 
   subs = new SubSink();

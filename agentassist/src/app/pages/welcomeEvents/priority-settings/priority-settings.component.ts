@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { SubSink } from 'subsink';
 import { WelcomeEventsService } from '../welcome-events.service';
 
@@ -16,7 +16,7 @@ export class PrioritySettingsComponent implements OnInit {
   welcomeTaskPreviousData: any = {};
 
 
-  priorityForm: FormGroup;
+  priorityForm: UntypedFormGroup;
 
   onConnectEnable: boolean = false;
   greetingEnable: boolean = false;
@@ -47,8 +47,8 @@ export class PrioritySettingsComponent implements OnInit {
   }
 
   updatePriorityForm(priorityData) {
-    this.priorityForm = new FormGroup({
-      event : new FormControl(priorityData?.event || false, Validators.required)
+    this.priorityForm = new UntypedFormGroup({
+      event : new UntypedFormControl(priorityData?.event || false, Validators.required)
     });
 
     this.priorityForm.valueChanges.subscribe((data)=> {

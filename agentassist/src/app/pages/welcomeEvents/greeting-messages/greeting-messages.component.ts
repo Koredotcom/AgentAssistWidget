@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { workflowService } from '@kore.services/workflow.service';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
@@ -23,7 +23,7 @@ export class GreetingMessagesComponent implements OnInit {
   welcomeTaskData: any = {};
   welcomeTaskPreviousData: any = {};
 
-  greetingForm: FormGroup;
+  greetingForm: UntypedFormGroup;
   greetingActiveTab: string = 'chat';
   greetingLocaleMap: any = {};
   selectedLocale: any;
@@ -57,7 +57,7 @@ export class GreetingMessagesComponent implements OnInit {
     'zh_cn': 'Chinese (Simplified) - Zh-Cn'
   }
 
-  constructor(private modalService: NgbModal, private fb: FormBuilder, private welcomeEventService: WelcomeEventsService,
+  constructor(private modalService: NgbModal, private fb: UntypedFormBuilder, private welcomeEventService: WelcomeEventsService,
     private workflowService : workflowService) { }
 
   ngOnInit(): void {
@@ -115,8 +115,8 @@ export class GreetingMessagesComponent implements OnInit {
 
   initGreetingForm(welcomeTaskData) {
     this.greetingForm = this.fb.group({
-      'name': new FormControl(this.greetMsgStr, Validators.required),
-      'enabled': new FormControl(welcomeTaskData[this.greetMsgStr]?.enabled || false, Validators.required),
+      'name': new UntypedFormControl(this.greetMsgStr, Validators.required),
+      'enabled': new UntypedFormControl(welcomeTaskData[this.greetMsgStr]?.enabled || false, Validators.required),
       'config': this.fb.group({
         [this.greetingActiveTab]: this.fb.group(this.getGreetMsgActiveTabFormGroup(welcomeTaskData[this.greetMsgStr]?.config[this.greetingActiveTab]))
       })
@@ -128,8 +128,8 @@ export class GreetingMessagesComponent implements OnInit {
 
   getGreetMsgActiveTabFormGroup(data) {
     let activeTabGroup: any = {
-      "randomMsg": new FormControl(data?.randomMsg || false, Validators.required),
-      "locale": new FormControl(this.greetingLocaleMap || {})
+      "randomMsg": new UntypedFormControl(data?.randomMsg || false, Validators.required),
+      "locale": new UntypedFormControl(this.greetingLocaleMap || {})
     };
     return activeTabGroup;
   }

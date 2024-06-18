@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
 
@@ -11,7 +11,7 @@ import { COACHINGCNST } from '../../coaching.cnst';
 export class UtteranceComponent implements OnInit {
 
   constructor(private cdRef : ChangeDetectorRef) { }
-  @Input() form:FormGroup;
+  @Input() form:UntypedFormGroup;
   @Input() index : number;
   @Input() length : number;
   @Input() createOrEdit: string = '';
@@ -59,7 +59,7 @@ export class UtteranceComponent implements OnInit {
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       this.form?.controls?.operator?.setValue(COACHINGCNST.AND_OPERATOR);
       this.selectedOperator = this.form.controls.operator.value;
-      (this.form.controls.frequency as FormGroup).controls?.every.setValue(this.timer);
+      (this.form.controls.frequency as UntypedFormGroup).controls?.every.setValue(this.timer);
       this.updateInConversationVariables(this.form.value);
     }
   }
@@ -82,17 +82,17 @@ export class UtteranceComponent implements OnInit {
         let utteranceConvSelectionList = COACHINGCNST.UTTERANCE_CONV_REMOVE_LIST[item];
         if (item != type) {
           for (let param of utteranceConvSelectionList) {
-            (<FormGroup>this.form.controls.frequency).removeControl(param);
+            (<UntypedFormGroup>this.form.controls.frequency).removeControl(param);
           }
         } else {
           addConvSelectionList = COACHINGCNST.UTTERANCE_CONV_REMOVE_LIST[item];
         }
       }
       for (let param of addConvSelectionList) {
-        (<FormGroup>this.form.controls.frequency).addControl(param, new FormControl(COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION[param], [Validators.required]));
+        (<UntypedFormGroup>this.form.controls.frequency).addControl(param, new UntypedFormControl(COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION[param], [Validators.required]));
         this.selectedList[param] = COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION[param];
       }
-      (this.form.controls.frequency as FormGroup).controls?.duration?.setValue(type);
+      (this.form.controls.frequency as UntypedFormGroup).controls?.duration?.setValue(type);
       this.resetFormValuesBasedOnConvSelection(type);
     }
   }
@@ -108,8 +108,8 @@ export class UtteranceComponent implements OnInit {
   onEnterPeriod(e){
     this.inconvList.period = e;
     this.selectedList.period = e;
-    if((this.form.controls.frequency as FormGroup).controls?.period){
-      (this.form.controls.frequency as FormGroup).controls?.period.setValue(this.inconvList.period);
+    if((this.form.controls.frequency as UntypedFormGroup).controls?.period){
+      (this.form.controls.frequency as UntypedFormGroup).controls?.period.setValue(this.inconvList.period);
     }    
   }
 
@@ -120,8 +120,8 @@ export class UtteranceComponent implements OnInit {
     }
     this.inconvList.nSeconds = e;
     this.selectedList.nSeconds = e;
-    if((this.form.controls.frequency as FormGroup).controls?.nSeconds){
-      (this.form.controls.frequency as FormGroup).controls?.nSeconds.setValue(this.inconvList.nSeconds);
+    if((this.form.controls.frequency as UntypedFormGroup).controls?.nSeconds){
+      (this.form.controls.frequency as UntypedFormGroup).controls?.nSeconds.setValue(this.inconvList.nSeconds);
     }
   }
 
@@ -131,8 +131,8 @@ export class UtteranceComponent implements OnInit {
     }
     this.inconvList.nMessages = e;
     this.selectedList.nMessages = e;
-    if((this.form.controls.frequency as FormGroup).controls?.nMessages){
-      (this.form.controls.frequency as FormGroup).controls?.nMessages.setValue(this.inconvList.nMessages);
+    if((this.form.controls.frequency as UntypedFormGroup).controls?.nMessages){
+      (this.form.controls.frequency as UntypedFormGroup).controls?.nMessages.setValue(this.inconvList.nMessages);
     }
   }
 
@@ -143,7 +143,7 @@ export class UtteranceComponent implements OnInit {
 
   clickOcc(occ){
     this.selOcc = occ;
-    (this.form.controls.frequency as FormGroup).controls.nOccurrences.setValue(occ);
+    (this.form.controls.frequency as UntypedFormGroup).controls.nOccurrences.setValue(occ);
   }
 
   changeOperator(op){

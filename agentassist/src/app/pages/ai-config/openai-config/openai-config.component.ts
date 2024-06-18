@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -16,7 +16,7 @@ export class OpenaiConfigComponent implements OnInit, OnChanges {
   @Input() integrations: any = {};
   @Output() closeEvent = new EventEmitter();
   @Output() saveSuccess = new EventEmitter();
-  apiKey = new FormControl('', Validators.required);
+  apiKey = new UntypedFormControl('', Validators.required);
   mode = 'create';
   constructor(
     private authService: AuthService,

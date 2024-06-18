@@ -8,7 +8,7 @@ import { AuthService } from '@kore.services/auth.service';
 import { finalize, debounceTime, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-agent-feedback',
@@ -59,7 +59,7 @@ export class AgentFeedbackComponent implements OnInit {
   feedbackhasMore: boolean = false;
   negativeFeedbackTableData : any = {};
   conversationTableData : any = [];
-  searchField = new FormControl();
+  searchField = new UntypedFormControl();
   conversationId : string = '';  
   selectedTaskObj : any = {};
   negFeedback : any = {};

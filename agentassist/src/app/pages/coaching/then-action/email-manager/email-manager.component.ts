@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { COACHINGCNST } from '../../coaching.cnst';
 
 @Component({
@@ -9,7 +9,7 @@ import { COACHINGCNST } from '../../coaching.cnst';
 })
 export class EmailManagerComponent implements OnInit {
 
-  @Input() form: FormGroup;
+  @Input() form: UntypedFormGroup;
   @Input() index : number;
   @Input() length : number;
   @Input() createOrEdit: string = '';
@@ -63,12 +63,12 @@ export class EmailManagerComponent implements OnInit {
 
   submitTitle(){
     this.title = this.emailTitle;
-    (this.form.controls.message as FormGroup).controls.title.setValue(this.title);
+    (this.form.controls.message as UntypedFormGroup).controls.title.setValue(this.title);
   }
 
   submitBody(){
     this.bodyMsg = this.emailBody;
-    (this.form.controls.message as FormGroup).controls.body.setValue(this.bodyMsg);
+    (this.form.controls.message as UntypedFormGroup).controls.body.setValue(this.bodyMsg);
   }
 
   deleteActionRule(){
