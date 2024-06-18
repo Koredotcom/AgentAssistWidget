@@ -12,7 +12,7 @@ import { finalize } from 'rxjs/operators';
 import { IncomingSetupModel } from '../../settings.model';
 import { AuthService } from '@kore.services/auth.service';
 import { fromEvent, Subscription } from 'rxjs';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
+// import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { event } from 'd3';
 declare const $: any;
 @Component({
