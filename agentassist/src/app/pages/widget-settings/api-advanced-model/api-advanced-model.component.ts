@@ -1,8 +1,6 @@
 import { Component, Inject, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NotificationService } from '@kore.services/notification.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import * as ace from "ace-builds";
 @Component({
   selector: 'app-api-advanced-model',
   templateUrl: './api-advanced-model.component.html',
