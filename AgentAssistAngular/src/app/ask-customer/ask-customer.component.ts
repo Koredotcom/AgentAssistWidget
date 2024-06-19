@@ -149,6 +149,9 @@ export class AskCustomerComponent {
     if (!this.automation.toggleOverride && this.rootService.activeTab != this.projConstants.MYBOT) {
       if(this.automation?.data?.entityType === 'attachment') {
         this.inputName = supportLanguage.OVERRIDE_FILE;
+        if(this.largeFileFlag) {
+          this.largeFileFlag = !this.largeFileFlag;
+        }
       } else {
         this.inputName = supportLanguage.OVERRIDE;
       }
@@ -163,6 +166,7 @@ export class AskCustomerComponent {
 
   cancelOverride() {
     if (this.rootService.activeTab != this.projConstants.MYBOT) {
+      this.removeFile();
       this.inputName = supportLanguage.AWAITING;
       this.automation.toggleOverride = false;
       this.automation.entityValue = this.automation.errorCount ? this.automation.entityValue : '';
