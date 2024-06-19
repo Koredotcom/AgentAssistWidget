@@ -53,10 +53,10 @@ export class WidgetsComponent implements OnInit, OnDestroy {
   multiLanguageList = {
     en : 'English',
     ar : 'Arabic',
-    kr : 'Korean',
-    jp : 'Japanese',
-    sp : 'Spanish',
-    ge : 'German',
+    ko : 'Korean',
+    ja : 'Japanese',
+    es : 'Spanish',
+    de : 'German',
     fr : 'French'
   }
   numberOfLineList = {
