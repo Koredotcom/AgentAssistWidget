@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, SimpleChange, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, QueryList, SimpleChange, ViewChild, ViewChildren } from '@angular/core';
 import { FeebackConst, ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
 import { HandleSubjectService } from 'src/app/services/handle-subject.service';
@@ -13,7 +13,9 @@ import { SubSink } from 'subsink';
 export class FileSuggestionsComponent {
   @Input() searchResponse : any;
 
-  @ViewChild('fileContent',{static: false}) private fileContent : ElementRef;
+  // @ViewChild('fileContent',{static: false}) private fileContent : ElementRef;
+  @ViewChildren('fileContent') fileContent!: QueryList<ElementRef>;
+
 
   
   subs = new SubSink();
@@ -69,10 +71,16 @@ export class FileSuggestionsComponent {
     }
   }
 
-  handleSendCopyButton(actionType, fileObj, selectType){
+  handleSendCopyButton(actionType, fileObj, selectType, inx){
+    let fileTemplate : any;
+    this.fileContent.forEach((element, index) => {
+      if(index === inx){
+        fileTemplate = element
+      }
+    });
     fileObj.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
-    fileObj.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(this.fileContent.nativeElement) : (fileObj.content);
+    fileObj.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(fileTemplate?.nativeElement) : (fileObj.content);
     this.commonService.handleSendCopyButton(actionType, fileObj, selectType)
   }
 

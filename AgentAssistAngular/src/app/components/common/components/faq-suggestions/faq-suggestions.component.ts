@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, SimpleChange, ViewChild, ViewChildren } from '@angular/core';
 import { EVENTS } from 'src/app/helpers/events';
 import { FeebackConst, ProjConstants } from 'src/app/proj.const';
 import { CommonService } from 'src/app/services/common.service';
@@ -19,7 +19,9 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
   @Input() searchResponse : any;
   @Input() from : string;
 
-  @ViewChild('faqcontent',{static: false}) private faqcontent : ElementRef;
+  // @ViewChild('faqcontent',{static: false}) private faqcontent : ElementRef;
+  @ViewChildren('fileContent') fileContent!: QueryList<ElementRef>;
+
 
   subs = new SubSink();
   projConstants: any = ProjConstants;
@@ -86,11 +88,17 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
     }
   }
 
-  handleSendCopyButton(actionType, faq, selectType, sourceMsgId){   
+  handleSendCopyButton(actionType, faq, selectType, sourceMsgId, inx){   
+    let fileTemplate : any;
+    this.fileContent.forEach((element, index) => {
+      if(index === inx){
+        fileTemplate = element
+      }
+    });
     faq.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     faq.sourceMsgId = sourceMsgId;
     let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
-    faq.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(this.faqcontent.nativeElement) : (faq.answer || faq.ans);    
+    faq.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(fileTemplate?.nativeElement) : (faq.answer || faq.ans);    
     this.commonService.handleSendCopyButton(actionType, faq, selectType)
   }
 
