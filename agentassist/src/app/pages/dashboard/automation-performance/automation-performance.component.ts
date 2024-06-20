@@ -92,6 +92,8 @@ export class AutomationPerformanceComponent implements OnInit {
         },
         formatter : (params : any) => {
           let tooltipString  = '';
+          let index = 0; 
+          let title = (params.data.series?.length < 5) ? params.data.series.length : 5;
           // let tooltipSeriesList = this.dashboardService.formatterData[params.data.name];
           tooltipString = tooltipString + `<div class="automation-per-tooltip">
             <div class="title-indication">
@@ -104,12 +106,15 @@ export class AutomationPerformanceComponent implements OnInit {
               </div>
               <div class="right-title">${this.decimalPipe.transform((params.data?.percent ? params.data?.percent : '0'),'1.1-1')}%</div>
             </div>
-            <div class="lable-heading">TOP 3</div>`
+            <div class="lable-heading"> TOP ` + title + `</div>`
             for(let item of params.data?.series){
-              tooltipString = tooltipString +  `<div class="row-labels">
-              <div class="left-title">${item.key}</div>
-              <div class="right-title">${this.decimalPipe.transform(((item.value * 100) / params.data?.value), '1.1-1')}%</div>
-            </div>`
+              if(index < 5){
+                tooltipString = tooltipString +  `<div class="row-labels">
+                <div class="left-title">${item.key}</div>
+                <div class="right-title">${this.decimalPipe.transform(((item.value * 100) / params.data?.value), '1.1-1')}%</div>
+              </div>`
+              }
+              index++;
             }
 
           return tooltipString

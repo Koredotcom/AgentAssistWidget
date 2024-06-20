@@ -51,6 +51,7 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
   skip = 0
   limit = 30;
   fetched = 0;
+  subs = new SubSink();
 
 
   constructor(public dashboardService: DashboardService, private cdr: ChangeDetectorRef,
@@ -58,6 +59,7 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
+    this.subscribeEvents();
   }
 
   ngOnChanges(changes : any){
@@ -69,6 +71,20 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
         this.updateAgentAspectData();
       }
     }
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
+
+  subscribeEvents(){
+    this.subs.sink = this.dashboardService.getAgentAspectView().subscribe((agentaspectView)=> {   
+      if(agentaspectView === VIEWTYPE.WORDCLOUD && this.wordCloudChart){
+        setTimeout(() => {
+          this.wordCloudChart.resize();
+        }, 100);
+      }
+    })
   }
 
   handleOnChangeCall(){

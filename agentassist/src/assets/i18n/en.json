@@ -2079,7 +2079,7 @@
     "DASHBOARD.AUTOMATION_PERFORMANCE_TOOLTIP" : "Depicts the performance of your automations by execution status.",
     "DASHBOARD.AGENT_FEEDBACK_TOOLTIP" : "Feedback report for the automations used by the agents.",
     "DASHBOARD.AUTOMATION_OVERRIDE_TOOLTIP" : "Report on inputs within automations which were overridden by agents.",
-    "DASHBOARD.RELEVANT_SUGGESTIONS_TOOLTIP" : "(Total Used suggestions/total suggestion)100",
+    "DASHBOARD.RELEVANT_SUGGESTIONS_TOOLTIP" : "(Total Used suggestions/total suggestion)*100",
     "ATTACHED_BOTS": "Attached bots",
     "ADD_BOT": "Add Bot",
     "ATTACH_BOT": "Attach a bot from library",

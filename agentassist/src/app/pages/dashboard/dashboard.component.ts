@@ -133,7 +133,7 @@ export class DashboardComponent implements OnInit {
   }
 
   changeAgentAspectView(viewType){
-    this.dashboardService.agentAspectView = viewType
+    this.dashboardService.setAgentAspectView(viewType);
   }
 
   changeCustomerAspectDropdown(selection){

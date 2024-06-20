@@ -10,6 +10,7 @@ export class DashboardService {
   customerAspectTab : string = 'all';
 
   private exhaustiveRepresentation: BehaviorSubject<{}> = new BehaviorSubject(null);
+  private agentAspectViewSubject$= new Subject();
   public agentAspectView: string = VIEWTYPE.WORDCLOUD;
   public dashboardfilterUpdated$ = new Subject();
   public dashboardSelectedBot;
@@ -100,6 +101,15 @@ export class DashboardService {
 
   getExhaustiveRep(): Observable<{}> {
     return this.exhaustiveRepresentation.asObservable();
+  }
+
+  setAgentAspectView(type){
+    this.agentAspectView = type;
+    this.agentAspectViewSubject$.next(type);
+  }
+
+  getAgentAspectView(){
+    return this.agentAspectViewSubject$.asObservable();
   }
 
   setDashboardFilterUpdated(filters){
