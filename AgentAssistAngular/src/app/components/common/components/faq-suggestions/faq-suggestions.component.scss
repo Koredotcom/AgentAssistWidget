@@ -370,10 +370,10 @@
 }
 
 ::ng-deep .selection-on-snippet-color{
-    background: #EFF4FF;
+    background: var(--backgroundColorMsgNode);
     ul{
         li{
-            background: #EFF4FF;
+            background: var(--backgroundColorMsgNode);
         }
     }
     .source-count-num{
