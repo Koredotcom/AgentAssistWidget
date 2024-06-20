@@ -146,7 +146,7 @@ export class CoachingService {
       }),
       frequency: this.fb.group({
         nOccurrences: [1, Validators.required],
-        duration : ['', [Validators.required]]
+        duration : [this.coachingCnst.TRIGGER_ANYTIME, [Validators.required]]
       })
     }
   }
