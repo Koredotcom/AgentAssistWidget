@@ -1,5 +1,5 @@
 
-<ng-container *ngFor="let article of articlesList | slice : 0 : viewCount;">
+<ng-container *ngFor="let article of articlesList | slice : 0 : viewCount;let inx = index">
   <div class="faq-suggestions-wrapper" [ngClass]="{'grayout-msgs-node' : article?.send}">
     <div class="faq-s-header">
         <div class="titles-info-heading">
@@ -10,10 +10,10 @@
         </div>
         <div class="faq-actions" *ngIf="!hideActionButtons && article?.content && !article.internalFlag" [ngClass]="{'faq-actions-top' : !article?.title}">
             <ng-container>
-                <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)" *ngIf="!hideCopyButton">
+                <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE, inx)" *ngIf="!hideCopyButton">
                     <i class="krIocnsFont-copy"></i>
                 </button>
-                <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, article , projConstants.ARTICLE)" *ngIf="!hideSendButton">{{ 'SEND'  | translate }}</button>
+                <button class="solidbtn" aria-label="button" (click)="handleSendCopyButton(projConstants.SEND, article , projConstants.ARTICLE, inx)" *ngIf="!hideSendButton">{{ 'SEND'  | translate }}</button>
             </ng-container>
         </div>
     </div>

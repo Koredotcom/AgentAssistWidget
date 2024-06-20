@@ -833,17 +833,19 @@ export class RootService {
 
   extractTextFromElement(element: HTMLElement): string {
     let text = '';
-    const extractText = (node: Node) => {
-        if (node.nodeType === Node.TEXT_NODE) {
-            text += node.textContent;
-        } else if (node.nodeType === Node.ELEMENT_NODE) {
-            const childNodes = node.childNodes;
-            for (let i = 0; i < childNodes.length; i++) {
-                extractText(childNodes[i]);
-            }
-        }
-    };
-    extractText(element);
+    if(element){
+      const extractText = (node: Node) => {
+          if (node.nodeType === Node.TEXT_NODE) {
+              text += node.textContent;
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+              const childNodes = node.childNodes;
+              for (let i = 0; i < childNodes.length; i++) {
+                  extractText(childNodes[i]);
+              }
+          }
+      };
+      extractText(element);
+    }
     return text.trim();
 }
 

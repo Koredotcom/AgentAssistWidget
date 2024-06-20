@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChange, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, QueryList, SimpleChange, ViewChild, ViewChildren } from '@angular/core';
 import { RemoveTagFromStringPipe } from 'src/app/pipes/remove-tag-from-string.pipe';
 import { ReplaceTextWithTagPipe } from 'src/app/pipes/replace-text-with-tag.pipe';
 import { FeebackConst, ProjConstants } from 'src/app/proj.const';
@@ -16,7 +16,9 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
 
   @Input() searchResponse : any;
 
-  @ViewChild('articleContent',{static: false}) private articleContent : ElementRef;
+  // @ViewChild('articleContent',{static: false}) private articleContent : ElementRef;
+  @ViewChildren('articleContent') articleContent!: QueryList<ElementRef>;
+
   
   subs = new SubSink();
   projConstants: any = ProjConstants;
@@ -70,10 +72,11 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
     }
   }
 
-  handleSendCopyButton(actionType, articleObj, selectType){
+  handleSendCopyButton(actionType, articleObj, selectType, inx){
+    let articleTemplate = this.articleContent.find((element, index) => index === inx);
     articleObj.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
-    articleObj.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(this.articleContent.nativeElement) : (articleObj.content);
+    articleObj.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(articleTemplate?.nativeElement) : (articleObj.content);
     this.commonService.handleSendCopyButton(actionType, articleObj, selectType)
   }
 
