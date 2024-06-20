@@ -73,12 +73,7 @@ export class ArticleSuggestionsComponent implements OnInit, OnDestroy{
   }
 
   handleSendCopyButton(actionType, articleObj, selectType, inx){
-    let articleTemplate : any;
-    this.articleContent.forEach((element, index) => {
-      if(index === inx){
-        articleTemplate = element
-      }
-    });
+    let articleTemplate = this.articleContent.find((element, index) => index === inx);
     articleObj.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
     articleObj.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(articleTemplate?.nativeElement) : (articleObj.content);

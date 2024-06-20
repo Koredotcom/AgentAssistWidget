@@ -20,7 +20,7 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
   @Input() from : string;
 
   // @ViewChild('faqcontent',{static: false}) private faqcontent : ElementRef;
-  @ViewChildren('fileContent') fileContent!: QueryList<ElementRef>;
+  @ViewChildren('faqcontent') faqcontent!: QueryList<ElementRef>;
 
 
   subs = new SubSink();
@@ -89,16 +89,11 @@ export class FaqSuggestionsComponent implements OnInit, OnDestroy{
   }
 
   handleSendCopyButton(actionType, faq, selectType, sourceMsgId, inx){   
-    let fileTemplate : any;
-    this.fileContent.forEach((element, index) => {
-      if(index === inx){
-        fileTemplate = element
-      }
-    });
+    let faqTemplate = this.faqcontent.find((element, index) => index === inx);
     faq.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     faq.sourceMsgId = sourceMsgId;
     let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
-    faq.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(fileTemplate?.nativeElement) : (faq.answer || faq.ans);    
+    faq.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(faqTemplate?.nativeElement) : (faq.answer || faq.ans);    
     this.commonService.handleSendCopyButton(actionType, faq, selectType)
   }
 

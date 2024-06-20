@@ -72,12 +72,7 @@ export class FileSuggestionsComponent {
   }
 
   handleSendCopyButton(actionType, fileObj, selectType, inx){
-    let fileTemplate : any;
-    this.fileContent.forEach((element, index) => {
-      if(index === inx){
-        fileTemplate = element
-      }
-    });
+    let fileTemplate = this.fileContent.find((element, index) => index === inx);
     fileObj.send = actionType === this.projConstants.SEND ? 'send' : 'copied';
     let format = this.rootService?.settingsData?.agentActions?.sharingFormat ? this.rootService?.settingsData?.agentActions?.sharingFormat : 'plainString';
     fileObj.sendContent = (format == 'plainString') ? this.rootService.extractTextFromElement(fileTemplate?.nativeElement) : (fileObj.content);
