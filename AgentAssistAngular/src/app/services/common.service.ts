@@ -667,6 +667,12 @@ export class CommonService {
           let entityName = arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.entityDisplayName ? arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.entityDisplayName : arrEle.automationsArray[arrEle.automationsArray.length - 1].data.entityName;          
           arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = this.checkEntityValueDataType(data.entities, entityName, data.entityValue || data.userInput);
           arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput = userInput ? userInput : ProjConstants.YES;
+          if(data.entities[data.enitityName][0]?.fileId){
+            arrEle.automationArray[arrEle.automationsArray.length - 1].attachments = data?.entities[data.enitityName][0];
+          }
+          // if(data.attachments && data.attachments?.length > 0) {
+          //   arrEle.automationArray[arrEle.automationsArray.length - 1].attachments = data?.attachments;
+          // }
           this.grayOutPreviousAutomation(assistResponseArray, arrEle.automationsArray.length, index);
           if(!showErrorPrompt){
             arrEle.automationsArray[arrEle.automationsArray.length - 1].errorCount = 0;
