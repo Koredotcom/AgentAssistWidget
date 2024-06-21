@@ -12,7 +12,7 @@ import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
 import { finalize } from 'rxjs/operators';
-import { IframeService } from '@kore.services/iframe.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-guided-checklist',
@@ -29,8 +29,9 @@ export class GuidedChecklistComponent implements OnInit {
   @ViewChild('checkList2') checkList2: DynamicChecklistComponent;
   loading = false;
   subs = new SubSink();
-  selAcc = this.local.getSelectedAccount();
+  publishInprogress = false;
   isUnifiedPlatform = false;
+  selAcc = this.local.getSelectedAccount();
   isAgentPlayBookEnabled: boolean = true;
   constructor(
     private modalService : NgbModal,
@@ -41,12 +42,13 @@ export class GuidedChecklistComponent implements OnInit {
     private clS: ChecklistService,
     private notificationService: NotificationService,
     private translate: TranslateService,
-    private iframeEvents: IframeService
+    private authService: AuthService,
+    private router: Router
   ) { }
   @ViewChild('checklistCreation') checklistCreation: ElementRef;
   ngOnInit(): void {
-    this.isUnifiedPlatform =this.workflowService.isUnifiedPlatform();
     // this.getAgentAssistSettings();
+    this.isUnifiedPlatform =this.workflowService.isUnifiedPlatform();
     this.getConfigDetails();
     this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
       if (ele) {
@@ -73,6 +75,53 @@ export class GuidedChecklistComponent implements OnInit {
     })
   }
 
+  getAgentAssistSettings() {
+    this.loading = true
+    let botId = this.workflowService?.getCurrentBtSmt(true)._id
+    let params = {
+      orgId: this.authService?.getOrgId(),
+    };
+    let body = {
+      botId
+    }
+    this.service.invoke("get.agentAssistSettings", params, body)
+    .pipe(
+      finalize(()=>{
+        this.loading = false;
+      })
+    )
+    .subscribe(
+      (res) => {
+        if (res) {
+          this.isAgentPlayBookEnabled = res.agentAssistSettings.isAgentPlaybookEnabled;
+          if(this.isAgentPlayBookEnabled){
+            this.getConfigDetails();
+            this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
+              if (ele) {
+                this.getConfigDetails();
+                if(this.checkListType === 'primary'){
+                  this.checkList1.getPrimaryList(true);
+                }else{
+                  this.checkList2.getDynamicList(true);
+                }
+              }
+            });
+          }
+        }
+      },
+      (err) => {
+        this.notificationService.showError(
+          err,
+          this.translate.instant("FALLBACK_ERROR_MSG")
+        );
+      }
+    );
+  }
+
+  redirectToAASettings() {
+    this.router.navigate(['/config/widget-settings']);
+  }
+
   getConfigDetails() {
     let params: any = {
       userId: this.auth.getUserId(),
@@ -93,7 +142,6 @@ export class GuidedChecklistComponent implements OnInit {
     this.currentCheckList = {};
     this.createOrUpdate = 'create';
     this.modalFlowCreateRef = this.modalService.open(checklistCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
-    this.iframeEvents.expand('#frameAgentAssistContainer');
   }
 
 
@@ -104,7 +152,6 @@ export class GuidedChecklistComponent implements OnInit {
       this.checkList2.getDynamicList(true);
     }
     this.modalFlowCreateRef.close();
-    this.iframeEvents.collapse('#frameAgentAssistContainer');
     this.isStageListOpen = false;
   }
 
@@ -124,18 +171,17 @@ export class GuidedChecklistComponent implements OnInit {
       this.isStageListOpen = true;
       this.createOrUpdate = 'update';
       this.modalFlowCreateRef = this.modalService.open(this.checklistCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
-      this.iframeEvents.expand('#frameAgentAssistContainer');
       this.currentCheckList = {...data[0]};
     });
   }
 
   publush(){
-    this.loading = true;
+    this.publishInprogress = true;
     let botId = this.workflowService.getCurrentBtSmt(true)._id;
     this.service.invoke('publish.checklist', {}, {botId})
     .pipe(
       finalize(()=>{
-        this.loading = false;
+        this.publishInprogress = false;
       })
     )
     .subscribe((data)=>{
