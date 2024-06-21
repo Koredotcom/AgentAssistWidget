@@ -30,9 +30,9 @@ export class GuidedChecklistComponent implements OnInit {
   loading = false;
   subs = new SubSink();
   publishInprogress = false;
-  isUnifiedPlatform = false;
   selAcc = this.local.getSelectedAccount();
   isAgentPlayBookEnabled: boolean = true;
+  isUnifiedPlatform = false;
   constructor(
     private modalService : NgbModal,
     private auth: AuthService,
