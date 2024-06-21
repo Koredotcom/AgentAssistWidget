@@ -668,7 +668,7 @@ export class CommonService {
           arrEle.automationsArray[arrEle.automationsArray.length - 1].entityValue = this.checkEntityValueDataType(data.entities, entityName, data.entityValue || data.userInput);
           arrEle.automationsArray[arrEle.automationsArray.length - 1].userInput = userInput ? userInput : ProjConstants.YES;
           if(data.entities[data.entityName][0]?.fileId){
-            arrEle.automationArray[arrEle.automationsArray.length - 1].attachments = data?.entities[data.enitityName][0];
+            arrEle.automationArray[arrEle.automationsArray.length - 1].attachments = data?.entities[data.entityName][0];
           }
           // if(data.attachments && data.attachments?.length > 0) {
           //   arrEle.automationArray[arrEle.automationsArray.length - 1].attachments = data?.attachments;
